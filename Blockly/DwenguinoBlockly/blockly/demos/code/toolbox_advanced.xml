@@ -1,0 +1,279 @@
+<category id="catLogic" colour="0" name='Logic'>
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+    <block type="logic_null"></block>
+</category>
+<category id="catLoops" colour="180" name='Loops'>
+    <block type="controls_for">
+        <value name="FROM">
+            <shadow type="char_type">
+                <field name="BITMASK">0</field>
+            </shadow>
+        </value>
+        <value name="TO">
+            <shadow type="char_type">
+                <field name="BITMASK">10</field>
+            </shadow>
+        </value>
+        <value name="BY">
+            <shadow type="char_type">
+                <field name="BITMASK">1</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="controls_whileUntil"></block>
+    <block type="base_delay">
+        <value name="DELAY_TIME">
+            <shadow type="char_type">
+                <field name="BITMASK">100</field>
+            </shadow>
+        </value>
+    </block>
+</category>
+<category id="catMath" colour="45" name='Math'>
+    <block type="char_type">
+        <field name="BITMASK">1</field>
+    </block>
+    <block type="math_arithmetic">
+        <value name="A">
+            <shadow type="char_type">
+                <field name="BITMASK">1</field>
+            </shadow>
+        </value>
+        <value name="B">
+            <shadow type="char_type">
+                <field name="BITMASK">1</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="math_number_property">
+        <value name="NUMBER_TO_CHECK">
+            <shadow type="char_type">
+                <field name="BITMASK">0</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="math_change">
+        <value name="DELTA">
+            <shadow type="char_type">
+                <field name="BITMASK">1</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="math_round">
+        <value name="NUM">
+            <shadow type="char_type">
+                <field name="BITMASK">3.1</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="math_map">
+        <value name="VALUE">
+            <shadow type="char_type">
+                <field name="BITMASK">512</field>
+            </shadow>
+        </value>
+        <value name="FROM_LOW">
+            <shadow type="char_type">
+                <field name="BITMASK">0</field>
+            </shadow>
+        </value>
+        <value name="FROM_HIGH">
+            <shadow type="char_type">
+                <field name="BITMASK">1023</field>
+            </shadow>
+        </value>
+        <value name="TO_LOW">
+            <shadow type="char_type">
+                <field name="BITMASK">0</field>
+            </shadow>
+        </value>
+        <value name="TO_HIGH">
+            <shadow type="char_type">
+                <field name="BITMASK">179</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="math_modulo">
+        <value name="DIVIDEND">
+            <shadow type="char_type">
+                <field name="BITMASK">64</field>
+            </shadow>
+        </value>
+        <value name="DIVISOR">
+            <shadow type="char_type">
+                <field name="BITMASK">10</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="math_random_int">
+        <value name="FROM">
+            <shadow type="char_type">
+                <field name="BITMASK">1</field>
+            </shadow>
+        </value>
+        <value name="TO">
+            <shadow type="char_type">
+                <field name="BITMASK">100</field>
+            </shadow>
+        </value>
+    </block>
+</category>
+<category id="catText" colour="225" name="Text">
+    <block type="text"></block>
+    <block type="text_join"></block>
+</category>
+<category id="catVariables" colour="90" name="Variables">
+    <block type="variables_declare"></block>
+    <block type="variables_set"></block>
+    <block type="variables_declare_set_with_type"></block>
+    <block type="variables_get"></block>
+</category>
+<category id="catFunctions" colour="270" custom="PROCEDURE"></category>
+<sep></sep>
+<category id="catBoardIO" colour="135" name="IO">
+    <block type="inout_highlow"></block>
+    <block type="base_pins_list">/</block>
+    <block type="inout_digital_write_pin">
+        <value name="PIN">
+            <block type="base_pins_list">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+        <value name="STATE">
+            <block type="inout_highlow">
+                <field name="BOOL">LOW</field>
+            </block>
+        </value>
+    </block>
+    <block type="inout_digital_read_pin">
+        <value name="PIN">
+            <block type="base_pins_list">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="inout_analog_write_pin">
+        <value name="PIN">
+            <block type="base_pins_list">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+        <value name="NUM">
+            <block type="char_type">
+                <field name="BITMASK">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="inout_analog_read_pin">
+        <value name="PIN">
+            <block type="base_pins_list">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="serial_print">
+        <value name="CONTENT">
+            <block type="text">
+                <field name="TEXT"></field>
+            </block>
+        </value>
+    </block>
+    
+        
+</category>
+<category id="catDwenguino" colour="315" name="Dwenguino">
+    <block type="setup_loop_structure"></block>
+    <block type="set_leds">
+        <value name="register value">
+            <block type="char_type" id="18">
+                <field name="BITMASK">0b10101010</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_constants"></block>
+    <block type="char_type"></block>
+    <block type="dc_motor">
+        <value name="channel">
+            <block type="math_number" id="32">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+        <value name="speed">
+            <block type="math_number" id="37">
+                <field name="NUM">100</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_lcd">
+        <value name="text">
+            <block type="text" id="48">
+                <field name="TEXT">Hallo Dwenguino</field>
+            </block>
+        </value>
+        <value name="line_number">
+            <block type="math_number" id="53">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+        <value name="character_number">
+            <block type="math_number" id="58">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+    </block>
+    <block type="clear_lcd"></block>
+    <block type="sonar_sensor">
+        <value name="trig">
+            <block type="math_number" id="72">
+                <field name="NUM">11</field>
+            </block>
+        </value>
+        <value name="echo">
+            <block type="math_number" id="77">
+                <field name="NUM">12</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_servo">
+        <value name="channel">
+            <block type="math_number" id="111">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+        <value name="angle">
+            <block type="math_number" id="116">
+                <field name="NUM">45</field>
+            </block>
+        </value>
+    </block>
+    <block type="inout_tone_pin">
+        <value name="PIN">
+            <block type="base_pins_list">
+                <field name="PIN">BUZZER</field>
+            </block>
+        </value>
+        <value name="NUM">
+            <block type="char_type">
+                <field name="BITMASK">440</field>
+            </block>
+        </value>
+    </block>
+    <block type="inout_notone_pin">
+        <value name="PIN">
+            <block type="base_pins_list">
+                <field name="PIN">BUZZER</field>
+            </block>
+        </value>
+    </block>
+    <block type="inout_buildin_led">
+        <value name="STATE">
+            <block type="inout_highlow">
+                <field name="BOOL">LOW</field>
+            </block>
+        </value>
+    </block>
+</category>
