@@ -199,7 +199,7 @@ Blockly.Blocks['variables_declare_set_with_type'] = {
      */
     init: function () {
         this.jsonInit({
-            "message0": "Set %1 to %2 with type %3",
+            "message0": "Set %1 globally to %2 with type %3",
             "args0": [
                 {
                     "type": "field_variable",
