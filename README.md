@@ -11,4 +11,4 @@ This plugin consists of two main elements:
 
 ## Installation
 
-For detailed instructions on how to install and use the plugin, we refer to the Dwengo website: [www.dwengo.org](http://www.dwengo.org)
+For detailed instructions on how to install and use the plugin, we refer to the Dwengo website: [www.dwengo.org](http://www.dwengo.org/blockly)
