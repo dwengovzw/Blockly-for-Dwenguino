@@ -19,6 +19,10 @@ import javafx.application.Platform;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javax.swing.SwingUtilities;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import processing.app.EditorTab;
 import processing.app.Editor;
 
 /**
@@ -102,7 +106,22 @@ public class DwenguinoBlocklyServer {
 
             @Override
             public void run() {
-                DwenguinoBlocklyArduinoPlugin.editor.setText(code);
+                try{
+                    java.lang.reflect.Method method;
+                    Class ed = DwenguinoBlocklyArduinoPlugin.editor.getClass();
+                    Class[] cArg = new Class[1];
+                    cArg[0] = String.class;
+                    method = ed.getMethod("setText", cArg);
+                    method.invoke(editor, code);
+                }catch(NoSuchMethodException e) {
+ 			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
+ 		} catch (IllegalAccessException e) {
+ 			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
+ 		} catch (SecurityException e) {
+ 			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
+ 		} catch (InvocationTargetException e) {
+ 			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
+ 		}
         
                 System.out.println("handleExport");
 

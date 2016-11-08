@@ -9,9 +9,9 @@ import javax.swing.JApplet;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import processing.app.Editor;
 
 import processing.app.tools.Tool;
-import processing.app.Editor;
 
 /**
  *
@@ -27,7 +27,7 @@ public class DwenguinoBlocklyArduinoPlugin implements Tool {
     public static void main(String[] args) {
         DwenguinoBlocklyArduinoPlugin.startApplication();
     }
-    
+
     public static void startApplication(){
         SwingUtilities.invokeLater(new Runnable() {
 
@@ -55,7 +55,7 @@ public class DwenguinoBlocklyArduinoPlugin implements Tool {
         });
     }
 
-  
+
 
     @Override
     public void run() {
