@@ -1,0 +1,128 @@
+body{
+    min-height: 100vh;
+}
+
+.db_header{
+    position: relative;
+    height: 55px;
+    border-bottom: solid #8bab42 5px;
+}
+
+.db_logo{
+    box-sizing: border-box;
+    width: 15%;
+    display: inline-block;
+    position: absolute;
+    height: 100%;
+}
+
+.db_menu{
+    box-sizing: border-box;
+    width: 85%;
+    left: 15%;
+    display: inline-block;
+    position: absolute;
+    height: 100%;
+}
+
+.db_logo img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.db_menu_item{
+    padding: 10px;
+    float: right;
+    height: 100%;
+    font-size: 30px;
+    vertical-align: center;
+}
+
+.db_diff_icon{
+    font-size: 20px;
+    padding: 15px;
+}
+
+#db_menu_item_difficulty{
+    width: 200px;
+    height: 30px;
+    padding:10px;
+}
+
+#db_menu_item_difficulty_slider{
+    display: inline-block;
+    width: 100%;
+}
+
+#db_menu_item_language_selection{
+    width: 200px;
+    font-size: 20px;
+    margin: 15px 0;
+}
+
+#db_menu_item_language{
+    float: right;
+}
+
+#db_menu_item_language_selection option{
+    font-size: 20px;
+}
+
+.db_content{
+    position:absolute;
+    top:50px;
+    bottom:0;
+    left:0;
+    right:0;
+    overflow:hidden;
+}
+
+#db_blockly{
+    float:left;
+    height:100%;
+    width:50%;
+    max-width: 100vw;
+}
+
+#db_infopane{
+    height:100%;
+    width:auto;
+    overflow: hidden;
+}
+
+.ui-resizable-handle{
+    background-color: #8bab42;
+}
+
+
+#db_simulator_pane{
+    height: 50%;
+    border-bottom: solid black 3px;
+}
+
+#content_arduino{
+    height: 100%;
+}
+
+#db_code_pane{
+    height: 50%;
+}
+
+#db_menu_item_dwengo_robot_teacher_image{
+    padding: 10px;
+    max-height: 100%;
+    float: right;
+}
+
+.dropdownmenuitem{
+        padding: 2px 7px;
+}
+
+.dropdownmenuitem:hover{
+    background-color: rgb(133, 196, 65);
+    cursor: pointer;
+}
+
+.db_question_input_field {
+    width: 30px !important;
+}
