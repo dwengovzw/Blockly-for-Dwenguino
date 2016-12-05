@@ -155,6 +155,14 @@ Blockly.Arduino.dwenguino_digital_read = function() {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino.dwenguino_digital_write = function() {
+  var value_pin = Blockly.Arduino.valueToCode(this, "PIN", Blockly.Arduino.ORDER_ATOMIC);
+  var value_num = Blockly.Arduino.valueToCode(this, "NUM", Blockly.Arduino.ORDER_ATOMIC);
+  Blockly.Arduino.setups_['setup_output'+value_pin] = 'pinMode('+value_pin+', OUTPUT);';
+  var code = "digitalWrite(" + value_pin + ", " + value_num + ");\n";
+  return code;
+};
+
 
 Blockly.Arduino.dwenguino_highlow = function() {
   // Boolean values HIGH and LOW.

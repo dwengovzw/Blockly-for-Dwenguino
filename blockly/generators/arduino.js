@@ -109,7 +109,7 @@ Blockly.Arduino.init = function(workspace) {
   Blockly.Arduino.definitions_ = Object.create(null);
   // Create a dictionary of setups to be printed before the code.
   Blockly.Arduino.setups_ = Object.create(null);
-  
+
   //Create a dictionary for variable types and names
     if (!Blockly.Arduino.variableDB_) {
             Blockly.Arduino.variableDB_ =
@@ -128,9 +128,9 @@ Blockly.Arduino.init = function(workspace) {
  */
 Blockly.Arduino.finish = function(code) {
   //If code is empty and no function definitions, don't return any code
-  if (code == '' && Object.keys(Blockly.Arduino.definitions_).length === 0 ){
+  /*if (code == '' && Object.keys(Blockly.Arduino.definitions_).length === 0 ){
       return "";
-  }    
+  }*/
   // Indent every line.
   code = '  ' + code.replace(/\n/g, '\n  ');
   code = code.replace(/\n\s+$/, '\n');
@@ -197,8 +197,10 @@ Blockly.Arduino.quote_ = function(string) {
  */
 Blockly.Arduino.scrub_ = function(block, code) {
     //Do not translate non connectet top bocks except for the setup_loop block and the function definition blocks.
-    if (block === block.getRootBlock() && !(block.type == 'setup_loop_structure' 
-            || block.type == 'procedures_defnoreturn' 
+    if (block === block.getRootBlock()
+        && !(block.type == 'setup_loop_structure'
+            || block.type == 'setup_loop_structure_arduino'
+            || block.type == 'procedures_defnoreturn'
             || block.type == 'procedures_defreturn')){
         return "";
     }

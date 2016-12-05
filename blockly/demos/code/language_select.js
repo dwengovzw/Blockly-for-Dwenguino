@@ -1,6 +1,6 @@
-var DwenguinoBlockly = {};
+var DwenguinoBlocklyLanguageSettings = {};
 //only use english and dutch for now
-DwenguinoBlockly.LANGUAGE_NAME = {
+DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'en': 'English',
       'nl': 'Nederlands',
   };
@@ -12,7 +12,7 @@ DwenguinoBlockly.LANGUAGE_NAME = {
 * @param {string} defaultValue Value to return if paramater not found.
 * @return {string} The parameter value or the default value if not found.
 */
-function getStringParamFromUrl(name, defaultValue) {
+DwenguinoBlocklyLanguageSettings.getStringParamFromUrl = function(name, defaultValue) {
 var val = location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
 return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
 };
@@ -21,9 +21,9 @@ return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
  * Get the language of this user from the URL.
  * @return {string} User's language.
  */
-function getLang() {
-  var lang = getStringParamFromUrl('lang', '');
-  if (DwenguinoBlockly.LANGUAGE_NAME[lang] === undefined) {
+DwenguinoBlocklyLanguageSettings.getLang = function() {
+  var lang = DwenguinoBlocklyLanguageSettings.getStringParamFromUrl('lang', '');
+  if (DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME[lang] === undefined) {
     // Default to English.
     lang = 'en';
   }
@@ -31,6 +31,6 @@ function getLang() {
 };
 
 // Load the Code demo's language strings.
-document.write('<script src="msg/' + getLang() + '.js"></script>\n');
+document.write('<script src="msg/' + DwenguinoBlocklyLanguageSettings.getLang() + '.js"></script>\n');
 // Load Blockly's language strings.
-document.write('<script src="../../msg/js/' + getLang() + '.js"></script>\n');
+document.write('<script src="../../msg/js/' + DwenguinoBlocklyLanguageSettings.getLang() + '.js"></script>\n');

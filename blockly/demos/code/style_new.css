@@ -80,7 +80,7 @@ body{
 #db_blockly{
     float:left;
     height:100%;
-    width:50%;
+    width:100%;
     max-width: 100vw;
 }
 
@@ -125,4 +125,8 @@ body{
 
 .db_question_input_field {
     width: 30px !important;
+}
+
+.code_highlight_new {
+  background-color: rgba(255, 204, 51, 0.5); /* Arduino yellow 50% */
 }

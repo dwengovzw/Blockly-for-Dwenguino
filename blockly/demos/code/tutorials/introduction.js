@@ -67,6 +67,6 @@ tutorials.introduction =    {
     ],
     onEnd: function(){
         console.log("introduction tutorial ended");
-        endTutorial();
+        DwenguinoBlockly.endTutorial();
     }
     };

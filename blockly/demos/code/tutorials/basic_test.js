@@ -31,7 +31,7 @@ tutorials.basic_test =    {
     ],
     onEnd: function(){
         console.log("Basic test ended");
-        endTutorial();
-        workspace.clear();
+        DwenguinoBlockly.endTutorial();
+        DwenguinoBlockly.workspace.clear();
     }
 };

@@ -1,27 +1,67 @@
+var DwenguinoBlockly = {
+    simButtonStateClicked: false,
 
-    var simButtonStateClicked = true;
+    workspace: null,
+    recording: "",
+    sessionId: null,
+    tutorialId: null,
 
-    var workspace = null;
-    var recording = "";
-    var sessionId = null;
-    function initDwenguinoBlockly(){
-        sessionId = window.sessionStorage.loadOnceSessionId;
+    //General settings for this session, these are used for data logging during experiments
+    agegroupSetting: "",
+    genderSetting: "",  //TODO: add this to the modal dialog
+    activityIdSetting: "",
+    tutorialIdSetting: "",
+
+    initDwenguinoBlockly: function(){
+        //set keypress event listerner to show test environment window
+        var keys = {};
+
+        $(document).keydown(function (e) {
+            keys[e.which] = true;
+            if (keys[69] && keys[83] && keys[84]){
+                console.log("starting test environment");
+                $('#myModal').modal('show');
+                var db_now = new Date();
+
+                var db_day = ("0" + db_now.getDate()).slice(-2);
+                var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
+
+                var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
+                $('#activity_date').val(db_today);
+            }
+        });
+
+        $(document).keyup(function (e) {
+            delete keys[e.which];
+        });
+
+        //code to init the bootstrap modal dialog
+        $("#submit_modal_dialog_button").click(function(){
+            DwenguinoBlockly.agegroupSetting = $("input[name=optradio]:checked").val();
+            DwenguinoBlockly.activityIdSetting = $("#activity_identifier").val();
+            var activity_date = $("#activity_date").val();
+            console.log("[act;" + (DwenguinoBlockly.agegroupSetting || "")
+                + ";" + (DwenguinoBlockly.activityIdSetting || "")
+                + ";" + (activity_date || "") + "]");
+        });
+
+
+        DwenguinoBlockly.sessionId = window.sessionStorage.loadOnceSessionId;
         delete window.sessionStorage.loadOnceSessionId;
-        if (!sessionId){
+        if (!DwenguinoBlockly.sessionId){
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/session_id.json"}
+                url: "http://localhost:3000/sessions/newId"}
             ).done(function(data){
                 console.log(data);
-                sessionId = data;
+                DwenguinoBlockly.sessionId = data;
             }).fail(function(data)  {
                 console.log(data);
-                alert("Sorry. Server unavailable. ");
             });
         }
 
-        recording = window.sessionStorage.loadOnceRecording || "<startApplication/>";
+        DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "<startApplication/>";
         delete window.sessionStorage.loadOnceRecording;
         //appendToRecording("<startApplication/>");
         //init slider control
@@ -31,8 +71,8 @@
             max: 4,
             step: 1,
             slide: function( event, ui ) {
-                setDifficultyLevel(ui.value);
-                appendToRecording("<setDifficultyLevel_" + ui.value + "/>");
+                DwenguinoBlockly.setDifficultyLevel(ui.value);
+                DwenguinoBlockly.appendToRecording("<setDifficultyLevel_" + ui.value + "/>");
             }
         });
         $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
@@ -41,24 +81,56 @@
         $( "#db_blockly" ).resizable({
             handles: "e",
             resize: function(event, ui){
-                onresize();
-                Blockly.svgResize(workspace);
+                DwenguinoBlockly.onresize();
+                Blockly.svgResize(DwenguinoBlockly.workspace);
             }
         });
 
         //show/hide simulator
         $("#db_menu_item_simulator").click(function(){
-            if (simButtonStateClicked){
+            if (this.simButtonStateClicked){
                 $("#db_blockly").width('100%');
-                simButtonStateClicked = false;
-                appendToRecording("<stopSimulator/>");
+                this.simButtonStateClicked = false;
+                DwenguinoBlockly.appendToRecording("<stopSimulator/>");
             }else{
                 $("#db_blockly").width('50%');
-                simButtonStateClicked = true;
-                appendToRecording("<startSimulator/>");
+                this.simButtonStateClicked = true;
+                DwenguinoBlockly.appendToRecording("<startSimulator/>");
             }
-            onresize();
-            Blockly.svgResize(workspace);
+            DwenguinoBlockly.onresize();
+            Blockly.svgResize(DwenguinoBlockly.workspace);
+        });
+
+        //save/upload buttons
+        $("#db_menu_item_run").click(function(){
+            if (dwenguinoBlocklyServer){
+                var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+                dwenguinoBlocklyServer.uploadCode(code);
+            }
+        });
+
+        $("#db_menu_item_upload").click(function(){
+            if (dwenguinoBlocklyServer){
+                try {
+                    var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer.loadBlocks());
+                } catch (e) {
+                    return;
+                }
+                var count = DwenguinoBlockly.workspace.getAllBlocks().length;
+                //if (count && confirm('Replace existing blocks?\n"Cancel" will merge.')) {
+                    DwenguinoBlockly.workspace.clear();
+                //}
+                //Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+                Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
+            }
+        });
+
+        $("#db_menu_item_download").click(function(){
+            if (dwenguinoBlocklyServer){
+                var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+                var data = Blockly.Xml.domToText(xml);
+                dwenguinoBlocklyServer.saveBlocks(data);
+            }
         });
 
         //dropdown menu code
@@ -66,88 +138,129 @@
 
          //dropdown link behaviors
          $("#tutsIntroduction").click(function(){
+             DwenguinoBlockly.tutorialId = "Introduction";
+             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
              hopscotch.startTour(tutorials.introduction);
-             appendToRecording("<startIntroductionTutorial/>");
+             DwenguinoBlockly.appendToRecording('<startIntroductionTutorial time="' + $.now() + '"/>');
          });
 
          $("#tutsBasicTest").click(function(){
+             DwenguinoBlockly.tutorialId = "BasicTest"
+             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
              hopscotch.startTour(tutorials.basic_test);
-             appendToRecording("<startBasicTestTutorial/>");
+             DwenguinoBlockly.appendToRecording('<startBasicTestTutorial time="' + $.now() + '"/>');
+         });
+
+         $("#tutsTheremin").click(function(){
+             DwenguinoBlockly.tutorialId  = "Theremin";
+             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
+             hopscotch.startTour(tutorials.theremin);
+             DwenguinoBlockly.appendToRecording('<startTheremin time="' + $.now() + '"/>');
          });
 
          //following event listener is only a test --> remove later!
          $("#db_menu_item_dwengo_robot_teacher_image").click(function(){
-            takeSnapshotOfWorkspace();
+            DwenguinoBlockly.takeSnapshotOfWorkspace();
          });
 
-    };
+    },
 
-    function endTutorial(){
-        appendToRecording("<endTutorial/>")
-    }
+    endTutorial: function(){
+        DwenguinoBlockly.appendToRecording('<endTutorial time="' + $.now() + '"/>');
+        DwenguinoBlockly.submitRecordingToServer();
+    },
 
-    function appendToRecording(text){
-            recording = recording + "\n" + text;
-            console.log(sessionId);
-            console.log(recording);
-            $.ajax({
-                type: "POST",
-                url: "http://localhost:8080/log.html",
-                data: sessionId + "\n" + recording
-            }
-            ).done(function(data){
-                console.log(data);
-            }).fail(function(data)  {
-                console.log(data);
-                alert("Sorry. Server unavailable. ");
-            });
-    };
+    appendToRecording: function(text){
+            DwenguinoBlockly.recording = DwenguinoBlockly.recording + "\n" + text;
+    },
 
-    var prevWorkspaceXml = "";
+
+    submitRecordingToServer: function(){
+        //online code submission
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:3000/sessions/update",
+            data: { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityIdSetting, timestamp: $.now(), tutorialId: DwenguinoBlockly.tutorialIdSetting , logData: DwenguinoBlockly.recording },
+
+        }
+        ).done(function(data){
+            console.log(data);
+        }).fail(function(data)  {
+            console.log(data);
+        });
+        // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
+        if (dwenguinoBlocklyServer){
+            dwenguinoBlocklyServer.saveToLog(
+                JSON.stringify({ _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityIdSetting, timestamp: $.now(), tutorialId: DwenguinoBlockly.tutorialIdSetting , logData: DwenguinoBlockly.recording })
+            );
+        }
+    },
+
+    prevWorkspaceXml: "",
     /**
     *   Take a snapshot of the current blocks in the workspace.
     */
-    function takeSnapshotOfWorkspace(){
-        var xml = Blockly.Xml.workspaceToDom(workspace);
+    takeSnapshotOfWorkspace: function(){
+        var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         var text = Blockly.Xml.domToText(xml);
-        if (text != prevWorkspaceXml){
-            appendToRecording(text);
-            prevWorkspaceXml = text;
+        if (text != DwenguinoBlockly.prevWorkspaceXml){
+            DwenguinoBlockly.appendToRecording(text);
+            DwenguinoBlockly.prevWorkspaceXml = text;
         }
-    }
+    },
 
     /**
     *   Log the code changes of the user
     */
-    function logCodeChange(event){
-        takeSnapshotOfWorkspace();
-    };
+    logCodeChange: function(event){
+        DwenguinoBlockly.takeSnapshotOfWorkspace();
+    },
 
+    previouslyRenderedCode: null,
     /**
      * Populate the currently selected pane with content generated from the blocks.
      */
-    function renderCode() {
+    renderCode: function() {
         var arduino_content = document.getElementById("content_arduino");
         //var xml_content = document.getElementById("content_xml");
 
         // Write code to code window
-        var code = Blockly.Arduino.workspaceToCode(workspace);
-        arduino_content.textContent = code;
-        if (typeof prettyPrintOne == 'function'){
-            code = arduino_content.innerHTML;
-            code = prettyPrintOne(code, 'c');
-            arduino_content.innerHTML = code;
+        var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+        if (DwenguinoBlockly.previouslyRenderedCode == null){
+            document.getElementById('content_arduino').innerHTML =
+                prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
+                DwenguinoBlockly.previouslyRenderedCode = code;
         }
-    };
+        else if (code !== DwenguinoBlockly.previouslyRenderedCode) {
+            var diff = JsDiff.diffWords(DwenguinoBlockly.previouslyRenderedCode, code);
+            var resultStringArray = [];
+            for (var i = 0; i < diff.length; i++) {
+              if (!diff[i].removed) {
+                var escapedCode = diff[i].value.replace(/</g, "&lt;")
+                                               .replace(/>/g, "&gt;");
+                if (diff[i].added) {
+                  resultStringArray.push(
+                      '<span class="code_highlight_new">' + escapedCode + '</span>');
+                } else {
+                  resultStringArray.push(escapedCode);
+                }
+              }
+            }
+            document.getElementById('content_arduino').innerHTML =
+                prettyPrintOne(resultStringArray.join(''), 'cpp', false);
+                DwenguinoBlockly.previouslyRenderedCode = code;
+          }
 
-    function setDifficultyLevel(level){
+    },
+
+    setDifficultyLevel: function(level){
         $("#toolbox").load("levels/lvl" + level + ".xml", function(){
-            doTranslation();
-            workspace.updateToolbox(document.getElementById("toolbox"));
+            DwenguinoBlockly.doTranslation();
+            DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
         });
-    };
+    },
 
-    function onresize(){
+    onresize: function(){
         var blocklyArea = document.getElementById('db_blockly');
         var blocklyDiv = document.getElementById('blocklyDiv');
         // Compute the absolute coordinates and dimensions of blocklyArea.
@@ -164,38 +277,38 @@
         blocklyDiv.style.top = y + 'px';
         blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
         blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-    };
+    },
 
-    function injectBlockly(){
+    injectBlockly: function(){
         var blocklyArea = document.getElementById('db_blockly');
         var blocklyDiv = document.getElementById('blocklyDiv');
-        workspace = Blockly.inject(blocklyDiv,
+        DwenguinoBlockly.workspace = Blockly.inject(blocklyDiv,
             {
                 toolbox: document.getElementById('toolbox'),
                 media: "./img/",
                 zoom: {controls: true, wheel: true}
             });
-        window.addEventListener('resize', onresize, false);
-        onresize();
-        Blockly.svgResize(workspace);
-        workspace.addChangeListener(renderCode);
-        workspace.addChangeListener(logCodeChange);
+        window.addEventListener('resize', DwenguinoBlockly.onresize, false);
+        DwenguinoBlockly.onresize();
+        Blockly.svgResize(DwenguinoBlockly.workspace);
+        DwenguinoBlockly.workspace.addChangeListener(DwenguinoBlockly.renderCode);
+        DwenguinoBlockly.workspace.addChangeListener(DwenguinoBlockly.logCodeChange);
         //load setup loop block to workspace
         //Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
-    };
+    },
 
-    function changeLanguage() {
+    changeLanguage: function() {
         // Store the blocks for the duration of the reload.
         // This should be skipped for the index page, which has no blocks and does
         // not load Blockly.
         // Also store the recoring up till now.
         // MSIE 11 does not support sessionStorage on file:// URLs.
         if (typeof Blockly != 'undefined' && window.sessionStorage) {
-            var xml = Blockly.Xml.workspaceToDom(workspace);
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
             var text = Blockly.Xml.domToText(xml);
             window.sessionStorage.loadOnceBlocks = text;
-            window.sessionStorage.loadOnceRecording = recording;
-            window;sessionStorage.loadOnceSessionId = sessionId;
+            window.sessionStorage.loadOnceRecording = DwenguinoBlockly.recording;
+            window;sessionStorage.loadOnceSessionId = DwenguinoBlockly.sessionId;
         }
 
         var languageMenu = document.getElementById('db_menu_item_language_selection');
@@ -211,31 +324,31 @@
 
         window.location = window.location.protocol + '//' +
         window.location.host + window.location.pathname + search;
-    };
+    },
 
     /**
      * User's language (e.g. "en").
      * @type {string}
      */
-    var LANG = getLang();
+    LANG: DwenguinoBlocklyLanguageSettings.getLang(),
 
-    function isRtl(){
+    isRtl: function(){
         return false;
-    };
+    },
 
     /**
      * Initialize the page language.
      */
-    function initLanguage() {
+    initLanguage: function() {
       // Set the HTML's language and direction.
-      var rtl = isRtl();
+      var rtl = DwenguinoBlockly.isRtl();
       document.dir = rtl ? 'rtl' : 'ltr';
-      document.head.parentElement.setAttribute('lang', LANG);
+      document.head.parentElement.setAttribute('lang', DwenguinoBlockly.LANG);
 
       // Sort languages alphabetically.
       var languages = [];
-      for (var lang in DwenguinoBlockly.LANGUAGE_NAME) {
-        languages.push([DwenguinoBlockly.LANGUAGE_NAME[lang], lang]);
+      for (var lang in DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME) {
+        languages.push([DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME[lang], lang]);
       }
       var comp = function(a, b) {
         // Sort based on first argument ('English', 'Русский', '简体字', etc).
@@ -251,16 +364,16 @@
         var tuple = languages[i];
         var lang = tuple[tuple.length - 1];
         var option = new Option(tuple[0], lang);
-        if (lang == LANG) {
+        if (lang == DwenguinoBlockly.LANG) {
           option.selected = true;
         }
         languageMenu.options.add(option);
       }
-      languageMenu.addEventListener('change', changeLanguage, true);
+      languageMenu.addEventListener('change', DwenguinoBlockly.changeLanguage, true);
 
-    };
+  },
 
-    function doTranslation() {
+    doTranslation: function() {
         // Inject language strings.
         document.title += ' ' + MSG['title'];
         //document.getElementById('title').textContent = MSG['title'];
@@ -282,7 +395,7 @@
         }
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
-            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino'];
+            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catArduino'];
         for (var i = 0, cat; cat = categories[i]; i++) {
             var element = document.getElementById(cat);
             if (element) {
@@ -298,13 +411,13 @@
         for (var i = 0, listVar; listVar = listVars[i]; i++) {
             listVar.textContent = MSG['listVariable'];
         }
-    }
+    },
 
     /**
      * Load blocks saved on App Engine Storage or in session/local storage.
      * @param {string} defaultXml Text representation of default blocks.
      */
-    function loadBlocks(defaultXml) {
+    loadBlocks: function(defaultXml) {
       try {
         var loadOnce = window.sessionStorage.loadOnceBlocks;
       } catch(e) {
@@ -319,41 +432,44 @@
         // Language switching stores the blocks during the reload.
         delete window.sessionStorage.loadOnceBlocks;
         var xml = Blockly.Xml.textToDom(loadOnce);
-        Blockly.Xml.domToWorkspace(xml, workspace);
+        Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
       } else if (defaultXml) {
         // Load the editor with default starting blocks.
         var xml = Blockly.Xml.textToDom(defaultXml);
-        Blockly.Xml.domToWorkspace(xml, workspace);
+        Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
         // Set empty recording
-        recording = "";
+        DwenguinoBlockly.recording = "";
       } else if ('BlocklyStorage' in window) {
         // Restore saved blocks in a separate thread so that subsequent
         // initialization is not affected from a failed load.
         window.setTimeout(BlocklyStorage.restoreBlocks, 0);
       }
-    };
+  },
 
-    function setWorkspaceBlockFromXml(xml){
-        workspace.clear();
+  //TODO: remove following function: not used anywhere
+    setWorkspaceBlockFromXml: function(xml){
+        DwenguinoBlockly.workspace.clear();
         try {
             var xmlDom = Blockly.Xml.textToDom(xml);
         } catch (e) {
             console.log("invalid xml");
             return;
         }
-        Blockly.Xml.domToWorkspace(xmlDom, workspace);
-    };
+        Blockly.Xml.domToWorkspace(xmlDom, DwenguinoBlockly.workspace);
+    },
 
-    function setupEnvironment(){
-        initLanguage();
-        doTranslation();
-        injectBlockly();
-        loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
-        initDwenguinoBlockly();
-        doTranslation();
-    };
+    setupEnvironment: function(){
+        DwenguinoBlockly.initLanguage();
+        //DwenguinoBlockly.doTranslation();   TODO: remove line!
+        DwenguinoBlockly.injectBlockly();
+        DwenguinoBlockly.loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
+        DwenguinoBlockly.initDwenguinoBlockly();
+        DwenguinoBlockly.doTranslation();
+        DwenguinoBlockly.setDifficultyLevel(0);
+        setInterval(function(){ DwenguinoBlockly.submitRecordingToServer(); }, 10000);
+    },
 
-
+};
 $(document).ready(function(){
-    setupEnvironment();
+    DwenguinoBlockly.setupEnvironment();
 });

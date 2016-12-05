@@ -17,6 +17,7 @@ var MSG = {
   catColour: "Kleur",
   catVariables: "Variabelen",
   catFunctions: "Functies",
+  catArduino: "Arduino",
   catDwenguino: "Dwenguino",
   catBoardIO: "IO",
   listVariable: "lijst",
@@ -46,6 +47,9 @@ var MSG = {
   sonarTooltip: "Deze blok leest de afstand in van een sonar sensor",
   miliseconds: "ms",
   digitalRead: "Lees digitale waarde van",
+  digitalWriteToPin: "Schrijf op",
+  digitalWriteValue: "de waarde",
+  digitalWriteTooltip: "Schrijf hoog of laag naar een pin van de Dwenguino",
   digitalReadTooltip: "Lees een digitale waarde (1/hoog of 0/laag) vanaf een bepaalde pin",
   high: "HOOG",
   low: "LAAG",
@@ -97,4 +101,17 @@ MSG.tutorials.basic_test = {
     step2ContentB: "Wat is de waarde die in b zit?",
     stepEndTitle: "Goed zo!",
     stepEndContent: "Je hebt de quiz successvol afgelegd, op naar de volgende!"
+};
+
+MSG.tutorials.theremin = {
+    step1Title: "Voorwoord",
+    step1Content: "Vandaag de dag zijn elektronische apparaten niet meer weg te denken. Veel van deze apparaten worden aangestuurd door microcontrollers. In dit boekje verkennen we stap voor stap de prachtige wereld van de microcontrollers. Op het einde van dit boekje kan je zelf jouw eigen digitale piano programmeren. Hiermee heb je jouw eerste ingebed systeem ontwikkeld: een digitaal systeem dat in staat is te interageren met zijn omgeving.\
+We doen dit met behulp van de Dwenguino, een eenvoudig, multi-functioneel microcontrollerplatform. De Dwenguino is voorzien van tal van handigheidjes zodat jouw eerste stappen vlot verlopen. Dankzij de compatibiliteit met Arduino IDE gebeurt dit met behulp van goed doordachte tools die zowel grafisch als tekstueel programmeren mogelijk maken.\
+Experimenteren met microcontrollers kan zowel thuis als in de klas. Dit boekje is in de eerste plaats bedoeld voor leerkrachten die in het kader van hun lessen omgaan met informatica, elektronica of techniek. Maar jongeren kunnen dit boekje ook zelfstandig ontdekken. Dat maakt hun leer-ervaring nog intenser.\
+Veel succes!",
+    step2Title: "Overal microcontrollers",
+    step2Content: "De voorbije decennia nam het aantal digitale apparaten in huis, tuin en werkomgeving exponentieel toe. Het begon met de introductie van eenvoudige zaken zoals wekkerradio's en elektrische tandenborstels maar ondertussen is zo goed als elk apparaat intelligent. Misschien heb je thuis wel een grasmaai- of stofzuigrobot, of zelfs een zelfrijdende auto, deze zijn de dag van vandaag zeker geen science fiction meer!\
+Sterker nog, al deze apparaten worden steeds meer verbonden met het internet en vormen zo samen het Internet of Things (IoT). Studies schatten dat tegen 2020 meer dan 50 miljard apparaten verbonden zullen zijn met het internet. We spreken dan niet alleen over smartphones en tablets maar ook over bijvoorbeeld slimme rookmelders, intelligente koelkasten en robots.\
+De basis van al deze apparaten zijn digitale rekensystemen die instaan voor de nodige intelligentie. Een voorbeeld hiervan is de microcontroller, deze omvat al het nodige om sensorgegevens te verwerken, berekeningen uit te voeren en acties te ondernemen.",
+    step3Title: "Het bord",
 };

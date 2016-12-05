@@ -3,6 +3,27 @@
     <block type="logic_compare"></block>
     <block type="logic_operation"></block>
     <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+</category>
+<category id="catLoops" colour="180" name="Loops">
+  <block type="controls_for">
+    <value name="FROM">
+      <shadow type="char_type">
+        <field name="BITMASK">0</field>
+      </shadow>
+    </value>
+      <value name="TO">
+      <shadow type="char_type">
+        <field name="BITMASK">10</field>
+      </shadow>
+    </value>
+    <value name="BY">
+      <shadow type="char_type">
+        <field name="BITMASK">1</field>
+      </shadow>
+    </value>
+  </block>
+  <block type="controls_whileUntil"></block>
 </category>
 <category id="catMath" colour="45" name='Math'>
     <block type="char_type">
@@ -43,6 +64,30 @@
         <value name="character_number">
             <block type="char_type" id="58">
                 <field name="BITMASK">5</field>
+            </block>
+        </value>
+    </block>
+    <block type="dc_motor">
+        <value name="channel">
+            <block type="math_number" id="32">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+        <value name="speed">
+            <block type="math_number" id="37">
+                <field name="NUM">100</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_servo">
+        <value name="channel">
+            <block type="math_number" id="111">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+        <value name="angle">
+            <block type="math_number" id="116">
+                <field name="NUM">45</field>
             </block>
         </value>
     </block>
@@ -89,4 +134,7 @@
         </value>
     </block>
 
+</category>
+<category id="catArduino" colour="100" name='arduino'>
+    <block type="setup_loop_structure_arduino"></block>
 </category>
