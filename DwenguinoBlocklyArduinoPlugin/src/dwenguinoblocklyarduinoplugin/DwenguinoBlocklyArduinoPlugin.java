@@ -13,6 +13,8 @@ import processing.app.Editor;
 
 import processing.app.tools.Tool;
 
+
+
 /**
  *
  * @author Tom
@@ -20,6 +22,8 @@ import processing.app.tools.Tool;
 public class DwenguinoBlocklyArduinoPlugin implements Tool {
 
     public static Editor editor;
+    
+    public static long startTimestamp = 0;
 
     /**
      * @param args the command line arguments
@@ -64,16 +68,18 @@ public class DwenguinoBlocklyArduinoPlugin implements Tool {
     // Fill in author.name, author.url, tool.prettyVersion and
         // project.prettyName in build.properties for them to be auto-replaced here.
         DwenguinoBlocklyArduinoPlugin.startApplication();
+        
     }
 
     @Override
     public String getMenuTitle() {
-        return "DwenguinoBlockly";
+        return "DwenguinoBlockly2.0";
     }
 
     @Override
     public void init(Editor editor) {
         DwenguinoBlocklyArduinoPlugin.editor = editor;
+        
     }
 
 }

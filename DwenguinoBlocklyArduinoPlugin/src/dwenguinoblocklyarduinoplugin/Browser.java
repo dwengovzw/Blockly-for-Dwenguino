@@ -34,6 +34,7 @@ class Browser extends Region {
  
     final WebView browser = new WebView();
     final WebEngine webEngine = browser.getEngine();
+    public DwenguinoBlocklyServer serverObject;
      
     public Browser(Editor editor) {
         //apply the styles
@@ -47,9 +48,10 @@ class Browser extends Region {
                     State oldState, State newState) {   
                     if (newState == State.SUCCEEDED) {
                         // The JavaAppp class implements the JavaScript to Java bindings
+                        serverObject = new DwenguinoBlocklyServer(editor, Browser.this.getScene().getWindow());
                             JSObject win = 
                                 (JSObject) webEngine.executeScript("window");
-                                win.setMember("dwenguinoBlocklyServer", new DwenguinoBlocklyServer(editor, Browser.this.getScene().getWindow()));
+                                win.setMember("dwenguinoBlocklyServer", serverObject);
                         }
                     }
                 }
@@ -83,7 +85,7 @@ class Browser extends Region {
 //        System.out.println("Loading file:");
 //        System.out.println(baseurl + "DwenguinoBlockly/blockly/demos/code/index.html");
         
-        webEngine.load(baseurl + "DwenguinoBlockly/blockly/demos/code/index.html");
+        webEngine.load(baseurl + "DwenguinoBlockly/blockly/demos/code/index_new.html");
         //webEngine.load(baseurl + "/Documents/Arduino/tools/DwenguinoBlocklyArduinoPlugin/tool/DwenguinoBlockly/blockly/demos/code/index.html");
 
         //add the web view to the scene

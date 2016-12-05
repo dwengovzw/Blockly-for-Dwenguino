@@ -21,8 +21,8 @@ import processing.app.Editor;
 public class StartupApplet extends JApplet {
 
     private JFXPanel fxContainer;
-    private final int JFXPANEL_WIDTH_INT = 800;
-    private final int JFXPANEL_HEIGHT_INT = 600;
+    private final int JFXPANEL_WIDTH_INT = 1100;
+    private final int JFXPANEL_HEIGHT_INT = 700;
     private Editor editor;
 
     public StartupApplet(Editor editor){
@@ -31,6 +31,7 @@ public class StartupApplet extends JApplet {
     
     @Override
     public void init() {
+        DwenguinoBlocklyArduinoPlugin.startTimestamp = System.currentTimeMillis();
         fxContainer = new JFXPanel();
         fxContainer.setPreferredSize(new Dimension(JFXPANEL_WIDTH_INT, JFXPANEL_HEIGHT_INT));
         add(fxContainer, BorderLayout.CENTER);
