@@ -29,6 +29,9 @@
     <script src="tutorials/basic_test.js"></script>
     <script src="tutorials/theremin.js"></script>
 
+
+    <script src="../../generators/arduino.js"></script>
+
     <!-- Blockly block definitions -->
     <script src="../../blocks/logic.js"></script>
     <script src="../../blocks/loops.js"></script>
@@ -43,7 +46,7 @@
     <!-- <script src="../../blocks/base.js"></script>-->
 
     <!-- Blockly translators to c++ code -->
-    <script src="../../generators/arduino.js"></script>
+
     <script src="../../generators/arduino/logic.js"></script>
     <script src="../../generators/arduino/loops.js"></script>
     <script src="../../generators/arduino/math.js"></script>
@@ -178,12 +181,12 @@
                 </value>
                 <value name="line_number">
                     <block type="char_type" id="53">
-                        <field name="BITMASK">1</field>
+                        <field name="BITMASK">0</field>
                     </block>
                 </value>
                 <value name="character_number">
                     <block type="char_type" id="58">
-                        <field name="BITMASK">5</field>
+                        <field name="BITMASK">0</field>
                     </block>
                 </value>
             </block>
@@ -233,13 +236,7 @@
                     </block>
                 </value>
             </block>
-            <block type="dwenguino_digital_read">
-                <value name="PIN">
-                    <block type="dwenguino_pins">
-                        <field name="PIN">BUZZER</field>
-                    </block>
-                </value>
-            </block>
+            <block type="dwenguino_digital_read_switch"></block>
             <block type="dwenguino_highlow"></block>
             <block type="sonar_sensor">
                 <value name="trig">
@@ -253,7 +250,20 @@
                     </block>
                 </value>
             </block>
-
+            <block type="dwenguino_set_led">
+                <value name="LED">
+                    <block type="dwenguino_led_pins">
+                        <field name="LED_NUMBER">13</field>
+                    </block>
+                </value>
+                <value name="LED_STATE">
+                    <block type="dwenguino_on_off">
+                        <field name="LED_ON_OFF">ON</field>
+                    </block>
+                </value>
+            </block>
+            <block type="dwenguino_led_pins"></block>
+            <block type="dwenguino_on_off"></block>
         </category>
 
     </xml>

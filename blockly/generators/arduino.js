@@ -87,6 +87,10 @@ var profile = {
               ["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"], ["BUZZER", "BUZZER"]],
     analog: [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"], ["A6", "A6"], ["A7", "A7"]],
     serial: 9600,
+    leds: [["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]
+        , ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["13", "13"]],
+    switches: [["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"]]
+
   },
   arduino_mega: {
     description: "Arduino Mega-compatible board"

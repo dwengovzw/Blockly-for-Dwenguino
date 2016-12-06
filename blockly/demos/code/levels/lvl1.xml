@@ -120,6 +120,19 @@
             </block>
         </value>
     </block>
+    <block type="dwenguino_digital_read_switch"></block>
+    <block type="dwenguino_digital_write">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">1</field>
+            </block>
+        </value>
+        <value name="NUM">
+            <block type="dwenguino_highlow">
+                <field name="BOOL">HIGH</field>
+            </block>
+        </value>
+    </block>
     <block type="dwenguino_highlow"></block>
     <block type="sonar_sensor">
         <value name="trig">
@@ -130,6 +143,39 @@
         <value name="echo">
             <block type="char_type" id="77">
                 <field name="BITMASK">12</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_set_led">
+        <value name="LED">
+            <block type="dwenguino_led_pins">
+                <field name="LED_NUMBER">13</field>
+            </block>
+        </value>
+        <value name="LED_STATE">
+            <block type="dwenguino_on_off">
+                <field name="LED_ON_OFF">ON</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_led_pins"></block>
+    <block type="dwenguino_on_off"></block>
+    <block type="dwenguino_analog_read">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">A0</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_analog_write">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">A0</field>
+            </block>
+        </value>
+        <value name="VAL">
+            <block type="char_type">
+                <field name="BITMASK">128</field>
             </block>
         </value>
     </block>
