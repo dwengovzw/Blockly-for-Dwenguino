@@ -162,6 +162,16 @@ var DwenguinoBlockly = {
          $("#db_menu_item_dwengo_robot_teacher_image").click(function(){
             DwenguinoBlockly.takeSnapshotOfWorkspace();
          });
+         
+         $("#language1").click(function(){
+            DwenguinoBlockly.language = "cpp";
+            DwenguinoBlockly.renderCode();
+         });
+         
+         $("#language2").click(function(){
+            DwenguinoBlockly.language = "js";
+            DwenguinoBlockly.renderCode();
+         });
 
     },
 
@@ -217,6 +227,7 @@ var DwenguinoBlockly = {
     },
 
     previouslyRenderedCode: null,
+    language: "js",
     /**
      * Populate the currently selected pane with content generated from the blocks.
      */
@@ -224,8 +235,15 @@ var DwenguinoBlockly = {
         var arduino_content = document.getElementById("content_arduino");
         //var xml_content = document.getElementById("content_xml");
 
-        // Write code to code window
-        var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+        // transform code
+        if (DwenguinoBlockly.language == "cpp") {
+            var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+        }
+        else if (DwenguinoBlockly.language == "js") {
+            var code = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+        }
+
+        // display code
         if (DwenguinoBlockly.previouslyRenderedCode == null){
             document.getElementById('content_arduino').innerHTML =
                 prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
@@ -249,7 +267,7 @@ var DwenguinoBlockly = {
             document.getElementById('content_arduino').innerHTML =
                 prettyPrintOne(resultStringArray.join(''), 'cpp', false);
                 DwenguinoBlockly.previouslyRenderedCode = code;
-          }
+         }
 
     },
 

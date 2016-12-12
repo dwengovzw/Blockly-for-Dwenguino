@@ -130,3 +130,12 @@ body{
 .code_highlight_new {
   background-color: rgba(255, 204, 51, 0.5); /* Arduino yellow 50% */
 }
+
+.language {
+    display:inline;
+    padding-left: 10px;
+}
+
+.language:hover {
+    text-decoration: underline;
+}

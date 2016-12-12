@@ -19,6 +19,7 @@
     <script src="jquery/jquery-3.1.1.min.js"></script>
 
     <script src="../../blockly_uncompressed.js"></script>
+    <!-- <script src="../../javascript_compressed.js"></script> -->
 
     <script src="language_select.js"></script>
 
@@ -53,6 +54,16 @@
     <script src="../../generators/arduino/dwenguino.js"></script>
     <script src="../../generators/arduino/arduino.js"></script>
     <!-- <script src="../../generators/arduino/base.js"></script> -->
+    
+    <!-- Blockly translators to javascript code -->
+    <script src="../../generators/javascript.js"></script>
+    <script src="../../generators/javascript/logic.js"></script>
+    <script src="../../generators/javascript/loops.js"></script>
+    <script src="../../generators/javascript/math.js"></script>
+    <script src="../../generators/javascript/text.js"></script>
+    <script src="../../generators/javascript/variables.js"></script>
+    <script src="../../generators/javascript/procedures.js"></script>
+    <script src="../../generators/javascript/dwenguino.js"></script>
 
     <!--<script src="../../msg/js/en.js"></script>
     <script src="msg/en.js"></script>-->
@@ -106,6 +117,8 @@
         <div id="db_infopane">
             <div id="db_simulator_pane"></div>
             <div id="db_code_pane">
+                <div id="language1" class="language">C++</div>
+                <div id="language2" class="language">JavaScript</div>
                 <pre id="content_arduino" class="content"></pre>
             </div>
         </div>
