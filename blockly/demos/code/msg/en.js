@@ -79,6 +79,9 @@ var MSG = {
   south: "South",
   west: "West",
   center: "Center",
+  ledsReg: "LEDS",
+  dwenguinoLedsRegTooltip: "You can turn leds 0 to 7 on using a binary number. For example 0b00001111 will turn leds 0 to 3 on and the rest off",
+
 };
 
 MSG.tutorials = {
