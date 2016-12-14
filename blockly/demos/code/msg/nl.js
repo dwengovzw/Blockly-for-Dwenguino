@@ -80,6 +80,9 @@ var MSG = {
   south: "Zuid",
   west: "West",
   center: "Center",
+  ledsReg: "LEDS",
+  dwenguinoLedsRegTooltip: "Met deze blok kan je leds 0 tot 7 met één binair getal aan of af zetten. Bijvoorbeeld: 0b00001111 zal leds 0 tot 3 aanzetten en de rest uit.",
+  
 };
 
 MSG.tutorials = {

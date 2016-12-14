@@ -5,6 +5,9 @@ DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'nl': 'Nederlands',
   };
 
+//Set default language setting
+DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'nl';
+
 /**
 * Extracts a parameter from the URL.
 * If the parameter is absent default_value is returned.
@@ -25,7 +28,7 @@ DwenguinoBlocklyLanguageSettings.getLang = function() {
   var lang = DwenguinoBlocklyLanguageSettings.getStringParamFromUrl('lang', '');
   if (DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME[lang] === undefined) {
     // Default to English.
-    lang = 'en';
+    lang = DwenguinoBlocklyLanguageSettings.DEFAULT_LANG;
   }
   return lang;
 };

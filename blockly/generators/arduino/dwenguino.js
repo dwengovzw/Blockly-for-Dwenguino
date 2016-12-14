@@ -216,3 +216,10 @@ Blockly.Arduino.dwenguino_digital_read_switch = function(){
 
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
+
+Blockly.Arduino.dwenguino_leds_reg = function(){
+    var bitmask = Blockly.Arduino.valueToCode(this, "MASK", Blockly.Arduino.ORDER_ATOMIC);
+    var code = 'LEDS = ' + bitmask + ';\n';
+
+    return code;
+};

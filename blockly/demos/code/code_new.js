@@ -204,6 +204,7 @@ var DwenguinoBlockly = {
         var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         var text = Blockly.Xml.domToText(xml);
         if (text != DwenguinoBlockly.prevWorkspaceXml){
+            text = "<changedWorkspace timestamp='" + $.now() + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'>" + text + "</changedWorkspace>";
             DwenguinoBlockly.appendToRecording(text);
             DwenguinoBlockly.prevWorkspaceXml = text;
         }
@@ -467,6 +468,10 @@ var DwenguinoBlockly = {
         DwenguinoBlockly.doTranslation();
         DwenguinoBlockly.setDifficultyLevel(0);
         setInterval(function(){ DwenguinoBlockly.submitRecordingToServer(); }, 10000);
+        $(window).resize(function(){
+            DwenguinoBlockly.onresize();
+            Blockly.svgResize(DwenguinoBlockly.workspace);
+        });
     },
 
 };

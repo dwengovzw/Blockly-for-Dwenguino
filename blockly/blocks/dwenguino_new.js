@@ -520,3 +520,26 @@ Blockly.Blocks['dwenguino_analog_read'] = {
         this.jsonInit(dwenguino_analog_read);
     }
 };
+
+var dwenguino_leds_reg = {
+    "id": "dwenguino_leds_reg",
+    "message0": MSG.ledsReg + " %1",
+    "args0":[
+        {
+            "type": "input_value",
+            "name": "MASK",
+            "check": "Number"
+        }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.dwenguinoLedsRegTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_leds_reg'] = {
+    init: function(){
+        this.jsonInit(dwenguino_leds_reg);
+    }
+};
