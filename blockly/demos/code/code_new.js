@@ -141,21 +141,21 @@ var DwenguinoBlockly = {
              DwenguinoBlockly.tutorialId = "Introduction";
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
              hopscotch.startTour(tutorials.introduction);
-             DwenguinoBlockly.appendToRecording('<startIntroductionTutorial time="' + $.now() + '"/>');
+             //DwenguinoBlockly.appendToRecording('<startIntroductionTutorial time="' + $.now() + '"/>');
          });
 
          $("#tutsBasicTest").click(function(){
              DwenguinoBlockly.tutorialId = "BasicTest"
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
              hopscotch.startTour(tutorials.basic_test);
-             DwenguinoBlockly.appendToRecording('<startBasicTestTutorial time="' + $.now() + '"/>');
+             //DwenguinoBlockly.appendToRecording('<startBasicTestTutorial time="' + $.now() + '"/>');
          });
 
          $("#tutsTheremin").click(function(){
              DwenguinoBlockly.tutorialId  = "Theremin";
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
              hopscotch.startTour(tutorials.theremin);
-             DwenguinoBlockly.appendToRecording('<startTheremin time="' + $.now() + '"/>');
+             //DwenguinoBlockly.appendToRecording('<startTheremin time="' + $.now() + '"/>');
          });
 
          //following event listener is only a test --> remove later!
@@ -166,7 +166,9 @@ var DwenguinoBlockly = {
     },
 
     endTutorial: function(){
-        DwenguinoBlockly.appendToRecording('<endTutorial time="' + $.now() + '"/>');
+        DwenguinoBlockly.tutorialId = "";
+        DwenguinoBlockly.tutorialIdSetting = "";
+        //DwenguinoBlockly.appendToRecording('<endTutorial time="' + $.now() + '"/>');
         DwenguinoBlockly.submitRecordingToServer();
     },
 
@@ -177,10 +179,11 @@ var DwenguinoBlockly = {
 
     submitRecordingToServer: function(){
         //online code submission
+        var serverSubmission = { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityId, timestamp: $.now(), logData: DwenguinoBlockly.recording };
         $.ajax({
             type: "POST",
             url: "http://localhost:3000/sessions/update",
-            data: { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityIdSetting, timestamp: $.now(), tutorialId: DwenguinoBlockly.tutorialIdSetting , logData: DwenguinoBlockly.recording },
+            data: serverSubmission,
 
         }
         ).done(function(data){
@@ -191,7 +194,7 @@ var DwenguinoBlockly = {
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
         if (dwenguinoBlocklyServer){
             dwenguinoBlocklyServer.saveToLog(
-                JSON.stringify({ _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityIdSetting, timestamp: $.now(), tutorialId: DwenguinoBlockly.tutorialIdSetting , logData: DwenguinoBlockly.recording })
+                JSON.stringify(serverSubmission);
             );
         }
     },
