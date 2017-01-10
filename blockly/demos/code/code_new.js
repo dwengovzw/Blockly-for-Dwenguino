@@ -64,7 +64,7 @@ var DwenguinoBlockly = {
         }
 
         //Restore recording after language change
-        DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "<startApplication/>";
+        DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "";
         delete window.sessionStorage.loadOnceRecording;
 
         //init slider control
@@ -75,7 +75,8 @@ var DwenguinoBlockly = {
             step: 1,
             slide: function( event, ui ) {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
-                DwenguinoBlockly.appendToRecording("<setDifficultyLevel_" + ui.value + "/>");
+                DwenguinoBlockly.takeSnapshotOfWorkspace();
+                //DwenguinoBlockly.appendToRecording("<setDifficultyLevel_" + ui.value + "/>"); // Diff is now attribute of workspaceupdate tag
             }
         });
         $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
@@ -95,13 +96,14 @@ var DwenguinoBlockly = {
                 $("#db_blockly").width('100%');
                 this.simButtonStateClicked = false;
                 DwenguinoBlockly.simulatorState = "off";
-                DwenguinoBlockly.appendToRecording("<stopSimulator/>");
+                //DwenguinoBlockly.appendToRecording("<stopSimulator/>"); // Now attribute of workspace update tag
             }else{
                 $("#db_blockly").width('50%');
                 this.simButtonStateClicked = true;
                 DwenguinoBlockly.simulatorState = "on";
-                DwenguinoBlockly.appendToRecording("<startSimulator/>");
+                //DwenguinoBlockly.appendToRecording("<startSimulator/>"); // Now attribute of workspace update tag
             }
+            DwenguinoBlockly.takeSnapshotOfWorkspace();
             DwenguinoBlockly.onresize();
             Blockly.svgResize(DwenguinoBlockly.workspace);
         });
@@ -146,6 +148,7 @@ var DwenguinoBlockly = {
              DwenguinoBlockly.tutorialId = "Introduction";
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
              hopscotch.startTour(tutorials.introduction);
+             DwenguinoBlockly.takeSnapshotOfWorkspace();
              //DwenguinoBlockly.appendToRecording('<startIntroductionTutorial time="' + $.now() + '"/>');
          });
 
@@ -153,6 +156,7 @@ var DwenguinoBlockly = {
              DwenguinoBlockly.tutorialId = "BasicTest"
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
              hopscotch.startTour(tutorials.basic_test);
+             DwenguinoBlockly.takeSnapshotOfWorkspace();
              //DwenguinoBlockly.appendToRecording('<startBasicTestTutorial time="' + $.now() + '"/>');
          });
 
@@ -160,6 +164,7 @@ var DwenguinoBlockly = {
              DwenguinoBlockly.tutorialId  = "Theremin";
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
              hopscotch.startTour(tutorials.theremin);
+             DwenguinoBlockly.takeSnapshotOfWorkspace();
              //DwenguinoBlockly.appendToRecording('<startTheremin time="' + $.now() + '"/>');
          });
 
@@ -174,11 +179,11 @@ var DwenguinoBlockly = {
         DwenguinoBlockly.tutorialId = "";
         DwenguinoBlockly.tutorialIdSetting = "";
         //DwenguinoBlockly.appendToRecording('<endTutorial time="' + $.now() + '"/>');
-        DwenguinoBlockly.submitRecordingToServer();
+        //DwenguinoBlockly.submitRecordingToServer();
     },
 
-    appendToRecording: function(text){
-            DwenguinoBlockly.recording = DwenguinoBlockly.recording + "\n" + text;
+    appendToRecording: function(tag){
+            DwenguinoBlockly.recording = DwenguinoBlockly.recording + tag;
     },
 
 
@@ -220,6 +225,7 @@ var DwenguinoBlockly = {
     *   Log the code changes of the user
     */
     logCodeChange: function(event){
+        console.log("logging code change");
         DwenguinoBlockly.takeSnapshotOfWorkspace();
     },
 
@@ -476,6 +482,7 @@ var DwenguinoBlockly = {
         DwenguinoBlockly.initDwenguinoBlockly();
         DwenguinoBlockly.doTranslation();
         DwenguinoBlockly.setDifficultyLevel(0);
+        DwenguinoBlockly.takeSnapshotOfWorkspace();
         setInterval(function(){ DwenguinoBlockly.submitRecordingToServer(); }, 10000);
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
