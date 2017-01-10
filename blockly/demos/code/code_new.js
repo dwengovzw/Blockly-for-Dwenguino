@@ -11,6 +11,8 @@ var DwenguinoBlockly = {
     genderSetting: "",  //TODO: add this to the modal dialog
     activityIdSetting: "",
     tutorialIdSetting: "",
+    difficultyLevel: 1,
+    simulatorState: "off",
 
     initDwenguinoBlockly: function(){
         //set keypress event listerner to show test environment window
@@ -61,9 +63,10 @@ var DwenguinoBlockly = {
             });
         }
 
+        //Restore recording after language change
         DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "<startApplication/>";
         delete window.sessionStorage.loadOnceRecording;
-        //appendToRecording("<startApplication/>");
+
         //init slider control
         $( "#db_menu_item_difficulty_slider" ).slider({
             value:0,
@@ -91,10 +94,12 @@ var DwenguinoBlockly = {
             if (this.simButtonStateClicked){
                 $("#db_blockly").width('100%');
                 this.simButtonStateClicked = false;
+                DwenguinoBlockly.simulatorState = "off";
                 DwenguinoBlockly.appendToRecording("<stopSimulator/>");
             }else{
                 $("#db_blockly").width('50%');
                 this.simButtonStateClicked = true;
+                DwenguinoBlockly.simulatorState = "on";
                 DwenguinoBlockly.appendToRecording("<startSimulator/>");
             }
             DwenguinoBlockly.onresize();
@@ -193,9 +198,7 @@ var DwenguinoBlockly = {
         });
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
         if (dwenguinoBlocklyServer){
-            dwenguinoBlocklyServer.saveToLog(
-                JSON.stringify(serverSubmission);
-            );
+            dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
         }
     },
 
@@ -207,9 +210,9 @@ var DwenguinoBlockly = {
         var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         var text = Blockly.Xml.domToText(xml);
         if (text != DwenguinoBlockly.prevWorkspaceXml){
-            text = "<changedWorkspace timestamp='" + $.now() + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'>" + text + "</changedWorkspace>";
-            DwenguinoBlockly.appendToRecording(text);
             DwenguinoBlockly.prevWorkspaceXml = text;
+            text = "<changedWorkspace timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'>" + text + "</changedWorkspace>";
+            DwenguinoBlockly.appendToRecording(text);
         }
     },
 
@@ -236,6 +239,11 @@ var DwenguinoBlockly = {
                 DwenguinoBlockly.previouslyRenderedCode = code;
         }
         else if (code !== DwenguinoBlockly.previouslyRenderedCode) {
+            //When the redered code changed log the block structures
+            //Do this because when the user moves blocks we do not want to log anything
+            //We want to log code progression not code movement
+            DwenguinoBlockly.logCodeChange();
+
             var diff = JsDiff.diffWords(DwenguinoBlockly.previouslyRenderedCode, code);
             var resultStringArray = [];
             for (var i = 0; i < diff.length; i++) {
@@ -258,6 +266,7 @@ var DwenguinoBlockly = {
     },
 
     setDifficultyLevel: function(level){
+        DwenguinoBlockly.difficultyLevel = level;
         $("#toolbox").load("levels/lvl" + level + ".xml", function(){
             DwenguinoBlockly.doTranslation();
             DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
@@ -296,9 +305,6 @@ var DwenguinoBlockly = {
         DwenguinoBlockly.onresize();
         Blockly.svgResize(DwenguinoBlockly.workspace);
         DwenguinoBlockly.workspace.addChangeListener(DwenguinoBlockly.renderCode);
-        DwenguinoBlockly.workspace.addChangeListener(DwenguinoBlockly.logCodeChange);
-        //load setup loop block to workspace
-        //Blockly.Xml.domToWorkspace(document.getElementById('startBlocks'), workspace);
     },
 
     changeLanguage: function() {
