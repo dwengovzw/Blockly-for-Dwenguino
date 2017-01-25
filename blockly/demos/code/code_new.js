@@ -184,6 +184,7 @@ var DwenguinoBlockly = {
 
     appendToRecording: function(tag){
             DwenguinoBlockly.recording = DwenguinoBlockly.recording + tag;
+            console.log(DwenguinoBlockly.recording);
     },
 
 
@@ -212,6 +213,7 @@ var DwenguinoBlockly = {
     *   Take a snapshot of the current blocks in the workspace.
     */
     takeSnapshotOfWorkspace: function(){
+        console.log("taking snapshot");
         var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         var text = Blockly.Xml.domToText(xml);
         if (text != DwenguinoBlockly.prevWorkspaceXml){
@@ -225,7 +227,6 @@ var DwenguinoBlockly = {
     *   Log the code changes of the user
     */
     logCodeChange: function(event){
-        console.log("logging code change");
         DwenguinoBlockly.takeSnapshotOfWorkspace();
     },
 

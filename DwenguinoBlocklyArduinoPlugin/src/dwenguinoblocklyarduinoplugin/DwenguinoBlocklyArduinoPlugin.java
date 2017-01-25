@@ -43,10 +43,20 @@ public class DwenguinoBlocklyArduinoPlugin implements Tool {
                 }
 
                 JFrame frame = new JFrame("DwenguinoBlockly");
-                frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+                
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
                 JApplet applet = new StartupApplet(editor);
                 applet.init();
+                
+                
+                frame.addWindowListener(new java.awt.event.WindowAdapter() {
+                    @Override
+                    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                        // Dispose of the current Blockly instance
+                        applet.stop();
+                    }
+                });
 
                 frame.setContentPane(applet.getContentPane());
 
@@ -64,8 +74,8 @@ public class DwenguinoBlocklyArduinoPlugin implements Tool {
     @Override
     public void run() {
 
-    DwenguinoBlocklyArduinoPlugin.editor.toFront();
-    // Fill in author.name, author.url, tool.prettyVersion and
+        DwenguinoBlocklyArduinoPlugin.editor.toFront();
+        // Fill in author.name, author.url, tool.prettyVersion and
         // project.prettyName in build.properties for them to be auto-replaced here.
         DwenguinoBlocklyArduinoPlugin.startApplication();
         
