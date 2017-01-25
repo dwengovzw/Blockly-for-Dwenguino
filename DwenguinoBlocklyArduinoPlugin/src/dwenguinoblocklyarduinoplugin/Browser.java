@@ -32,8 +32,8 @@ import javafx.scene.web.WebEvent;
  */
 class Browser extends Region {
  
-    final WebView browser = new WebView();
-    final WebEngine webEngine = browser.getEngine();
+    public final WebView browser = new WebView();
+    public final WebEngine webEngine = browser.getEngine();
     public DwenguinoBlocklyServer serverObject;
      
     public Browser(Editor editor) {
