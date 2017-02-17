@@ -26,7 +26,7 @@ Blockly.JavaScript['setup_loop_structure'] = function (block) {
     var statements_setup = Blockly.JavaScript.statementToCode(block, 'SETUP');
     var statements_loop = Blockly.JavaScript.statementToCode(block, 'LOOP');
     // Assemble Javascript into code variable.
-    Blockly.JavaScript.setups_['userSetupCode'] = 'initDwenguino();\n' + statements_setup + "\n";
+    Blockly.JavaScript.setups_['userSetupCode'] = 'DwenguinoSimulation.initDwenguino();\n' + statements_setup + "\nloop();\n";
     
     return statements_loop;
 };
@@ -52,7 +52,7 @@ Blockly.JavaScript['dc_motor'] = function (block) {
 
 Blockly.JavaScript.dwenguino_delay = function() {
   var delay_time = Blockly.JavaScript.valueToCode(this, 'DELAY_TIME', Blockly.JavaScript.ORDER_ATOMIC) || '1000'
-  var code = 'delay(' + delay_time + ');\n';
+  var code = 'DwenguinoSimulation.sleep(' + delay_time + ');\n';
   return code;
 };
 
@@ -61,14 +61,13 @@ Blockly.JavaScript['dwenguino_lcd'] = function (block) {
     var value_line_number = Blockly.JavaScript.valueToCode(block, 'line_number', Blockly.JavaScript.ORDER_ATOMIC);
     var value_character_number = Blockly.JavaScript.valueToCode(block, 'character_number', Blockly.JavaScript.ORDER_ATOMIC);
     // Assemble JavaScript into code variable.
-    var code = 'dwenguinoLCD.setCursor(' + value_character_number + ',' + value_line_number + ');\n';
-    code = code + 'dwenguinoLCD.print(' + value_text + ');\n'
+    var code = 'DwenguinoSimulation.writeLcd(' + value_text + ', '+ value_line_number + ', '+ value_character_number + ');\n'
     return code;
 };
 
 Blockly.JavaScript['clear_lcd'] = function (block) {
     //  Assemble JavaScript into code variable.
-    var code = 'dwenguinoLCD.clear();\n';
+    var code = 'DwenguinoSimulation.clearLcd();\n';
     return code;
 };
 

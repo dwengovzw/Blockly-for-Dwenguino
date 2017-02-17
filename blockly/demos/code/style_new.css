@@ -139,3 +139,62 @@ body{
 .language:hover {
     text-decoration: underline;
 }
+
+.sim_item {
+    padding: 5px;
+}
+
+.sim_item:hover {
+    text-decoration: underline;
+}
+
+#sim_board {
+    background-color: #2a7709;
+    width: 40vmin;
+    height: 25vmin;
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#sim_lcds {
+    position: relative;
+    top: 25%;
+    left: 5%;
+    height: 30%;
+    width: 80%;
+    background-color: #7aaf64;    
+}
+
+.sim_lcd {
+    height: 50%;
+    padding: 5px;
+    font-size: 16px;
+    letter-spacing: 3px;
+    word-spacing: 6px;
+}
+
+#sim_lights {
+    position: relative;
+    top:35%;
+    left: 5%;
+    height: 20%;
+    width: 60%;
+}
+
+.sim_light {
+    border-radius: 50%;
+    height: 15px;
+    width: 15px;
+    float: left;
+    margin-left: 5px;
+}
+
+.sim_light_off {
+    background-color: #d85050;
+}
+
+.sim_light_on {
+    background-color: #e80d0d;
+}

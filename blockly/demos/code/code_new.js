@@ -172,7 +172,6 @@ var DwenguinoBlockly = {
             DwenguinoBlockly.language = "js";
             DwenguinoBlockly.renderCode();
          });
-
     },
 
     endTutorial: function(){
@@ -488,6 +487,88 @@ var DwenguinoBlockly = {
     },
 
 };
+
+var DwenguinoSimulation = {
+    lcdContent: new Array(2),
+    runSimulation: false,
+    
+    
+    initDwenguinoSimulation: function(){
+        $("#sim_start").click(function(){
+            if (!DwenguinoSimulation.runSimulation) {
+              DwenguinoSimulation.runSimulation = true;
+              $("div#sim_start").text("Stop");
+              DwenguinoSimulation.startSimulation();
+            } else {
+              DwenguinoSimulation.runSimulation = false;
+              $("div#sim_start").text("Start");
+            }
+        });
+    },
+    
+    startSimulation: function() {
+      var code = document.getElementById('content_arduino').textContent;
+      console.log(code);
+      code = DwenguinoSimulation.transformSleeps(code);
+      console.log(code);
+      eval(code);
+    },
+    
+    transformSleeps: function(code) {
+      var result = "";
+      var end = "";
+      var id = 0;
+      code.split("\n").forEach(function(entry) {
+          if (entry.trim().startsWith("DwenguinoSimulation.sleep(")) {
+            result += "\nsetTimeout(l"+id+", "+entry.replace( /\D+/g, '')+");";
+            result += "\nfunction l"+id+"() {";
+            end += "}";
+            id++;
+          } else if (entry.trim().startsWith("function")) {
+            result += end + "\n"+entry;
+            end = "";
+          } else {
+            result += "\n"+entry;
+          }
+      });
+      return result+end;
+    },
+    
+    initDwenguino: function() {
+       DwenguinoSimulation.clearLcd();
+    },
+
+    clearLcd: function() {
+        for (var i = 0; i < 2; i++) {
+          DwenguinoSimulation.lcdContent[i] = " ".repeat(16);
+          DwenguinoSimulation.writeLcd(" ".repeat(16), i, 1);
+        }
+    },
+    
+    writeLcd: function(text, row, column) {
+      text = DwenguinoSimulation.lcdContent[row].substr(0,column)
+              + text.substring(0,16-column) 
+              + DwenguinoSimulation.lcdContent[row].substr(text.length+column, 16);
+      DwenguinoSimulation.lcdContent[row] = text;
+      $("#sim_lcd_row"+row).text(text);
+      document.getElementById('sim_lcd_row'+row).innerHTML = 
+              document.getElementById('sim_lcd_row'+row).innerHTML.replace(/ /g, '&nbsp;');
+      
+      // repaint
+      var element = document.getElementById("sim_lcds");
+      element.style.display='none';
+      element.offsetHeight;
+      element.style.display='block';
+    },
+  
+    setupEnvironment: function(){
+        DwenguinoSimulation.initDwenguinoSimulation();
+    },
+};
+
 $(document).ready(function(){
     DwenguinoBlockly.setupEnvironment();
+    DwenguinoSimulation.setupEnvironment();
 });
+
+
