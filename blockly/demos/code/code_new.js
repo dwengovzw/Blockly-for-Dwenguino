@@ -496,7 +496,9 @@ var DwenguinoBlockly = {
 var DwenguinoSimulation = {
     lcdContent: new Array(2),
     runSimulation: false,
-    
+    osc: null,
+    audiocontext: null,
+    tonePlaying: false,
     
     initDwenguinoSimulation: function(){
         $("#sim_start").click(function(){
@@ -507,6 +509,7 @@ var DwenguinoSimulation = {
             } else {
               DwenguinoSimulation.runSimulation = false;
               $("div#sim_start").text("Start");
+              DwenguinoSimulation.resetDwenguino();
             }
         });
     },
@@ -519,6 +522,8 @@ var DwenguinoSimulation = {
       eval(code);
     },
     
+    // to augment the readability of the javascript code 
+    // the sleeps() are only transformed into executable code when executing
     transformSleeps: function(code) {
       var result = "";
       var end = "";
@@ -540,10 +545,25 @@ var DwenguinoSimulation = {
     },
     
     initDwenguino: function() {
+      DwenguinoSimulation.resetDwenguino();
+    },
+    
+    resetDwenguino: function() {
+      // stop sound
+      if (DwenguinoSimulation.tonePlaying) {
+        DwenguinoSimulation.noTone("BUZZER");
+      }
+      // clearn lcd
        DwenguinoSimulation.clearLcd();
+       // turn all lights out
+       for (var i=0; i < 8; i++) {
+         document.getElementById('sim_light_'+i).className = "sim_light sim_light_off";
+       }
+       document.getElementById('sim_light_13').className = "sim_light sim_light_off";
     },
 
     clearLcd: function() {
+        // clear lcd by writing spaces to it
         for (var i = 0; i < 2; i++) {
           DwenguinoSimulation.lcdContent[i] = " ".repeat(16);
           DwenguinoSimulation.writeLcd(" ".repeat(16), i, 1);
@@ -551,10 +571,13 @@ var DwenguinoSimulation = {
     },
     
     writeLcd: function(text, row, column) {
+      // replace text in current content (if text is hello and then a is written this gives aello)
       text = DwenguinoSimulation.lcdContent[row].substr(0,column)
               + text.substring(0,16-column) 
               + DwenguinoSimulation.lcdContent[row].substr(text.length+column, 16);
       DwenguinoSimulation.lcdContent[row] = text;
+      
+      // write new text to lcd screen and replace spaces with &nbsp;
       $("#sim_lcd_row"+row).text(text);
       document.getElementById('sim_lcd_row'+row).innerHTML = 
               document.getElementById('sim_lcd_row'+row).innerHTML.replace(/ /g, '&nbsp;');
@@ -564,6 +587,55 @@ var DwenguinoSimulation = {
       element.style.display='none';
       element.offsetHeight;
       element.style.display='block';
+    },
+    
+    digitalWrite: function(pinNumber, state) {
+      // turns light on or off
+      if ((pinNumber >= 32 && pinNumber <= 39) || pinNumber === 13) {
+        if (pinNumber >= 32 && pinNumber <= 39) {
+          pinNumber -= 32;
+        }
+        if (state === 'HIGH') {
+          document.getElementById('sim_light_'+pinNumber).className = "sim_light sim_light_on";
+        } else {
+          document.getElementById('sim_light_'+pinNumber).className = "sim_light sim_light_off";
+        }
+      }
+    },
+    
+    tone: function(pin, frequency) {
+      if ( pin === "BUZZER") {
+        document.getElementById('sim_buzzer').className = "sim_buzzer_on";
+        
+        if (DwenguinoSimulation.osc === null) {
+          // initiate sound object
+          DwenguinoSimulation.audiocontext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        
+        if (DwenguinoSimulation.tonePlaying) {
+          DwenguinoSimulation.osc.stop();
+        }
+        
+        // a new oscilliator for each round
+        DwenguinoSimulation.osc = DwenguinoSimulation.audiocontext.createOscillator(); // instantiate an oscillator
+        DwenguinoSimulation.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+
+        // start tone
+        DwenguinoSimulation.osc.frequency.value = frequency; // Hz
+        DwenguinoSimulation.osc.connect(DwenguinoSimulation.audiocontext.destination); // connect it to the destination
+        DwenguinoSimulation.osc.start(); // start the oscillator
+        
+        DwenguinoSimulation.tonePlaying = true;
+      }
+    },
+    
+    noTone: function(pin) {
+      if ( pin === "BUZZER") {
+        // stop tone
+        DwenguinoSimulation.tonePlaying = false;
+        document.getElementById('sim_buzzer').className = "sim_buzzer_off";
+        DwenguinoSimulation.osc.stop();
+      }
     },
   
     setupEnvironment: function(){

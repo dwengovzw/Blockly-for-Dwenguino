@@ -96,7 +96,7 @@ body{
 
 
 #db_simulator_pane{
-    height: 0%; // 50%; //hide = set to 0%
+    height: 50%;
     border-bottom: solid black 3px;
 }
 
@@ -105,7 +105,7 @@ body{
 }
 
 #db_code_pane{
-    height: 100%; //50%;
+    height: 50%;
 }
 
 #db_menu_item_dwengo_robot_teacher_image{
@@ -183,6 +183,12 @@ body{
     width: 60%;
 }
 
+#sim_light_13 {
+    position: relative;
+    top:10%;
+    left: 5%;
+}
+
 .sim_light {
     border-radius: 50%;
     height: 15px;
@@ -192,9 +198,26 @@ body{
 }
 
 .sim_light_off {
-    background-color: #d85050;
+    background-color: #d05050;
 }
 
 .sim_light_on {
     background-color: #e80d0d;
+}
+
+#sim_buzzer {
+    position: relative;
+    top:10%;
+    left: 35%;
+    border-radius: 50%;
+    height: 20px;
+    width: 20px;
+}
+
+.sim_buzzer_off {
+    background-color: #5e5e5e;
+}
+
+.sim_buzzer_on {
+    background-color: #000000;
 }

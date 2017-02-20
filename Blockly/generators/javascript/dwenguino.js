@@ -25,7 +25,7 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
 Blockly.JavaScript['setup_loop_structure'] = function (block) {
     var statements_setup = Blockly.JavaScript.statementToCode(block, 'SETUP');
     var statements_loop = Blockly.JavaScript.statementToCode(block, 'LOOP');
-    // Assemble Javascript into code variable.
+    // Assemble JavaScript into code variable.
     Blockly.JavaScript.setups_['userSetupCode'] = 'DwenguinoSimulation.initDwenguino();\n' + statements_setup + "\nloop();\n";
     
     return statements_loop;
@@ -81,7 +81,7 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
     //define sonar sensor
     Blockly.JavaScript.definitions_['define_sonar_sensor_' + value_trig + value_echo] = "var sonar"+ value_trig + value_echo +
             " = NewPing(TRIGGER_PIN_" + value_trig + ", ECHO_PIN_" + value_echo + ", MAX_DISTANCE);\n";
-    //  Assemble Arduino into code variable.
+    //  Assemble JavaScript into code variable.
     var code = "sonar" + value_trig + value_echo + '.ping_cm()';
 
     return [code, Blockly.JavaScript.ORDER_NONE];
@@ -104,7 +104,7 @@ Blockly.JavaScript['dwenguino_servo'] = function (block) {
 Blockly.JavaScript['dwenguino_controls_while'] = function (block) {
     var value_condition = Blockly.JavaScript.valueToCode(block, 'CONDITION', Blockly.JavaScript.ORDER_ATOMIC);
     var statements_looped_code = Blockly.JavaScript.statementToCode(block, 'LOOPED_CODE');
-    //  Assemble Arduino into code variable.
+    //  Assemble JavaScript into code variable.
     var code = 'while(' + value_condition + '){\n'
             + statements_looped_code + '\n}';
     return code;
@@ -124,15 +124,15 @@ Blockly.JavaScript.dwenguino_pins = function() {
 Blockly.JavaScript.dwenguino_tone_on_pin = function() {
   var value_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
   var value_num = Blockly.JavaScript.valueToCode(this, "NUM", Blockly.JavaScript.ORDER_ATOMIC);
-  Blockly.JavaScript.setups_['setup_output'+value_pin] = 'pinMode('+value_pin+', OUTPUT);\n';
-  var code = "tone(" + value_pin + ", " + value_num + ");\n";
+  //Blockly.JavaScript.setups_['setup_output'+value_pin] = 'pinMode('+value_pin+', OUTPUT);\n';
+  var code = "DwenguinoSimulation.tone(\"" + value_pin + "\", " + value_num + ");\n";
   return code;
 };
 
 Blockly.JavaScript.dwenguino_no_tone_on_pin = function() {
   var dropdown_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
-  Blockly.JavaScript.setups_['setup_output'+dropdown_pin] = 'pinMode('+dropdown_pin+', OUTPUT);\n';
-  var code = "noTone(" + dropdown_pin + ");\n";
+  //Blockly.JavaScript.setups_['setup_output'+dropdown_pin] = 'pinMode('+dropdown_pin+', OUTPUT);\n';
+  var code = "DwenguinoSimulation.noTone(\"" + dropdown_pin + "\");\n";
   return code;
 };
 
@@ -151,9 +151,62 @@ Blockly.JavaScript.dwenguino_digital_write = function() {
   return code;
 };
 
-
 Blockly.JavaScript.dwenguino_highlow = function() {
   // Boolean values HIGH and LOW.
   var code = (this.getFieldValue('BOOL') == 'HIGH') ? 'HIGH' : 'LOW';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript.dwenguino_on_off = function() {
+  // Boolean values HIGH and LOW.
+  var code = (this.getFieldValue('LED_ON_OFF') == 'ON') ? 'HIGH' : 'LOW';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript.dwenguino_led_pins = function() {
+  var dropdown_value = this.getFieldValue('LED_NUMBER');
+  if (dropdown_value != '13'){
+      dropdown_value = parseInt(dropdown_value) + 32;
+  }
+  return [dropdown_value, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript.dwenguino_set_led = function(){
+    var pin_number = Blockly.JavaScript.valueToCode(this, "LED", Blockly.JavaScript.ORDER_ATOMIC);
+    var led_state = Blockly.JavaScript.valueToCode(this, "LED_STATE", Blockly.JavaScript.ORDER_ATOMIC);
+    //Blockly.JavaScript.setups_['setup_output_'+pin_number] = 'pinMode('+pin_number+', OUTPUT);';
+
+    var code = 'DwenguinoSimulation.digitalWrite(' + pin_number + ', "' + led_state + '");\n'
+    return code;
+};
+
+Blockly.JavaScript.dwenguino_analog_write = function(){
+    var pin_number = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
+    var pin_value = Blockly.JavaScript.valueToCode(this, "VAL", Blockly.JavaScript.ORDER_ATOMIC);
+    Blockly.JavaScript.setups_['setup_output_' + pin_number] = 'pinMode(' + pin_number + ', OUTPUT);';
+
+    var code = 'analogWrite(' + pin_number + ', ' + pin_value + ');\n';
+    return code;
+};
+
+Blockly.JavaScript.dwenguino_analog_read = function(){
+    var pin_number = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
+    Blockly.JavaScript.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);';
+
+    var code = 'analogRead(' + pin_number + ')';
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript.dwenguino_digital_read_switch = function(){
+    var switch_number = this.getFieldValue('SWITCH');
+    var code = 'digitalRead(' + switch_number + ')';
+
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript.dwenguino_leds_reg = function(){
+    var bitmask = Blockly.JavaScript.valueToCode(this, "MASK", Blockly.JavaScript.ORDER_ATOMIC);
+    var code = 'LEDS = ' + bitmask + ';\n';
+
+    return code;
 };
