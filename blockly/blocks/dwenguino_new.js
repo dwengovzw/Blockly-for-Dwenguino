@@ -23,6 +23,7 @@
 goog.provide('Blockly.Blocks.dwenguino');
 
 goog.require('Blockly.Blocks');
+goog.require('Blockly.Arduino');
 
 
 var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
@@ -87,7 +88,7 @@ var clear_lcd_json = {
   "colour": Blockly.Blocks.dwenguino.HUE,
   "tooltip": "",
   "helpUrl": DwenguinoHelpUrl
-}
+};
 
 Blockly.Blocks['clear_lcd'] = {
   init: function() {
@@ -259,6 +260,31 @@ Blockly.Blocks['dwenguino_digital_read'] = {
   }
 };
 
+var dwenguino_digital_read_switch = {
+    "id": "dwenguino_digital_read_switch",
+    "message0": MSG.digitalReadSwitch,
+    "args0": [
+        {
+            "type": "field_dropdown",
+            "name": "SWITCH",
+            "check": "Number",
+            "options": [[MSG.north, "SW_N"], [MSG.east, "SW_E"], [MSG.south, "SW_S"], [MSG.west, "SW_W"], [MSG.center, "SW_C"]]
+
+        }
+    ],
+    "output": "Number",
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.digitalReadSwitchTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_digital_read_switch'] = {
+    init: function(){
+        this.jsonInit(dwenguino_digital_read_switch);
+    }
+};
+
+
 Blockly.Blocks['dwenguino_digital_write'] = {
     init: function(){
         this.setHelpUrl(DwenguinoHelpUrl);
@@ -289,7 +315,7 @@ Blockly.Blocks['dwenguino_highlow'] = {
 
 var dc_motor_json = {
   "id": "dc_motor",
-  "message0": "DC Motor %1 %2 %3 channel %4 speed %5",
+  "message0": MSG.dwenguinoDCMotorBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -318,13 +344,13 @@ var dc_motor_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Blocks.dwenguino.HUE,
-  "tooltip": "",
+  "tooltip": MSG.dwenguinoDCMotorBlockTooltip,
   "helpUrl": "http://www.dwengo.org/tutorials"
 };
 
 var dwenguino_servo_json = {
   "id": "dwenguino_servo",
-  "message0": "Dwenguino Servo %1 %2 %3 chann # %4 angle %5",
+  "message0": MSG.dwenguinoServoBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -353,7 +379,7 @@ var dwenguino_servo_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Blocks.dwenguino.HUE,
-  "tooltip": "",
+  "tooltip": MSG.dwenguinoServoBlockTooltip,
   "helpUrl": "http://www.dwengo.org/tutorials"
 };
 
@@ -369,4 +395,151 @@ Blockly.Blocks['dc_motor'] = {
   init: function() {
     this.jsonInit(dc_motor_json);
   }
+};
+
+var dwenguino_set_led = {
+    "id": "dwenguin_set_led",
+    "message0": MSG.setLedState,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "LED",
+        "check": "Number"
+      },
+      {
+        "type": "input_value",
+        "name": "LED_STATE",
+        "check": "Number"
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.setLedStateTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_set_led'] = {
+    init: function(){
+        this.jsonInit(dwenguino_set_led);
+    }
+};
+
+var dwenguino_led_pins = {
+    "id": "dwenguino_led_pins",
+    "message0": "LED %1 ",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "LED_NUMBER",
+        "options": profile.dwenguino.leds
+      }
+    ],
+    "output": "Number",
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.ledPinsTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_led_pins'] = {
+    init: function(){
+        this.jsonInit(dwenguino_led_pins);
+    }
+};
+
+var dwenguino_on_off = {
+    "id": "dwenguino_on_off",
+    "message0": "%1",
+    "args0": [
+      {
+        "type": "field_dropdown",
+        "name": "LED_ON_OFF",
+        "check": "Number",
+        "options": [[MSG.dwenguinoOn, 'ON'], [MSG.dwenguinoOff, 'OFF']]
+      }
+    ],
+    "output": "Number",
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.dwenguinoOnOffTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_on_off'] = {
+    init: function(){
+        this.jsonInit(dwenguino_on_off);
+    }
+};
+
+var dwenguino_analog_write = {
+    "id": "dwenguino_analog_wirte",
+    "message0": MSG.dwenguinoAnalogWrite,
+    "args0":[
+        {
+            "type": "input_value",
+            "name": "PIN",
+            "check": "Number"
+        },
+        {
+            "type": "input_value",
+            "name": "VAL",
+            "check": "Number"
+        }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.dwenguinoAnalogWriteTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_analog_write'] = {
+    init: function(){
+        this.jsonInit(dwenguino_analog_write);
+    }
+};
+
+var dwenguino_analog_read = {
+    "id": "dwenguino_analog_read",
+    "message0": MSG.dwenguinoAnalogRead,
+    "args0": [
+        {
+            "type": "input_value",
+            "name": "PIN",
+            "check": "Number"
+        }
+    ],
+    "output": "Number",
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.dwenguinoAnalogWriteTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+Blockly.Blocks['dwenguino_analog_read'] = {
+    init: function(){
+        this.jsonInit(dwenguino_analog_read);
+    }
+};
+
+var dwenguino_leds_reg = {
+    "id": "dwenguino_leds_reg",
+    "message0": MSG.ledsReg + " %1",
+    "args0":[
+        {
+            "type": "input_value",
+            "name": "MASK",
+            "check": "Number"
+        }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.dwenguinoLedsRegTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_leds_reg'] = {
+    init: function(){
+        this.jsonInit(dwenguino_leds_reg);
+    }
 };

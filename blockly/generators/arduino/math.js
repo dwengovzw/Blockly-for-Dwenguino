@@ -49,7 +49,7 @@ Blockly.Arduino.math_arithmetic = function() {
   var code;
   if (!operator) {
     Blockly.Arduino.definitions_['define_math_h'] = '#include <math.h>\n';
-    code = 'Math.pow(' + argument0 + ', ' + argument1 + ')';
+    code = 'pow(' + argument0 + ', ' + argument1 + ')';
     return [code, Blockly.Arduino.ORDER_UNARY_POSTFIX];
   }
   code = argument0 + operator + argument1;
@@ -67,7 +67,7 @@ Blockly.Arduino.math_arithmetic.OPERATORS = {
 };
 
 Blockly.Arduino.math_number_property = function(block){
-  var property = block.getFieldValue('PROPERTY');  
+  var property = block.getFieldValue('PROPERTY');
   var number = Blockly.Arduino.valueToCode(block, 'NUMBER_TO_CHECK', Blockly.Arduino.ORDER_ATOMIC);
   console.log(property);
   console.log(number);
@@ -96,10 +96,10 @@ Blockly.Arduino.math_change = function(block){
 
 Blockly.Arduino.math_round = function(block){
     Blockly.Arduino.definitions_['define_math_h'] = '#include <math.h>\n';
-    
-    var roundType = block.getFieldValue('OP');  
+
+    var roundType = block.getFieldValue('OP');
     var value = Blockly.Arduino.valueToCode(block, 'NUM', Blockly.Arduino.ORDER_ATOMIC);
-    
+
     if (roundType == 'ROUND'){
         return ['Math.round(' + value + ')', Blockly.Arduino.ORDER_NONE];
     }else if (roundType == 'ROUNDUP'){
@@ -113,14 +113,14 @@ Blockly.Arduino.math_round = function(block){
 
 Blockly.Arduino.math_map = function(block){
     //Blockly.Arduino.definitions_['define_math_h'] = '#include <math.h>\n';
-    
-    //var value = block.getFieldValue('VALUE');  
+
+    //var value = block.getFieldValue('VALUE');
     var value = Blockly.Arduino.valueToCode(block, 'VALUE', Blockly.Arduino.ORDER_ATOMIC);
     var fromLow = Blockly.Arduino.valueToCode(block, 'FROM_LOW', Blockly.Arduino.ORDER_ATOMIC);
     var fromHigh = Blockly.Arduino.valueToCode(block, 'FROM_HIGH', Blockly.Arduino.ORDER_ATOMIC);
     var toLow = Blockly.Arduino.valueToCode(block, 'TO_LOW', Blockly.Arduino.ORDER_ATOMIC);
     var toHigh = Blockly.Arduino.valueToCode(block, 'TO_HIGH', Blockly.Arduino.ORDER_ATOMIC);
-    
+
      return ["map(" + value + ", " + fromLow + ", " + fromHigh + ", " + toLow + ", " + toHigh + ")", Blockly.Arduino.ORDER_NONE];
 };
 
