@@ -140,7 +140,9 @@ body{
     text-decoration: underline;
 }
 
-.sim_item {
+#sim_menu * {
+    float: left;
+    margin-top: 5px;
     padding: 5px;
 }
 
@@ -186,7 +188,7 @@ body{
 #sim_light_13 {
     position: relative;
     top:10%;
-    left: 5%;
+    left: -55%;
 }
 
 .sim_light {
