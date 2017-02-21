@@ -26,7 +26,7 @@ Blockly.JavaScript['setup_loop_structure'] = function (block) {
     var statements_setup = Blockly.JavaScript.statementToCode(block, 'SETUP');
     var statements_loop = Blockly.JavaScript.statementToCode(block, 'LOOP');
     // Assemble JavaScript into code variable.
-    Blockly.JavaScript.setups_['userSetupCode'] = 'DwenguinoSimulation.initDwenguino();\n' + statements_setup + "\nloop();\n";
+    Blockly.JavaScript.setups_['userSetupCode'] = 'DwenguinoSimulation.initDwenguino();\n' + statements_setup + "\nloop0();\n";
     
     return statements_loop;
 };

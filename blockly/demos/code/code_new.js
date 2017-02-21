@@ -498,7 +498,10 @@ var DwenguinoSimulation = {
     runSimulation: false,
     osc: null,
     audiocontext: null,
-    tonePlaying: false,
+    tonePlaying: 0,
+    speedDelay: 300,
+    line: 0,
+    code: "",
     
     initDwenguinoSimulation: function(){
         $("#sim_start").click(function(){
@@ -515,11 +518,32 @@ var DwenguinoSimulation = {
     },
     
     startSimulation: function() {
-      var code = document.getElementById('content_arduino').textContent;
-      console.log(code);
-      code = DwenguinoSimulation.transformSleeps(code);
-      console.log(code);
-      eval(code);
+      //set speed
+      DwenguinoSimulation.setSpeed();
+      
+      // transform code
+      DwenguinoSimulation.code = document.getElementById('content_arduino').textContent;
+      console.log(DwenguinoSimulation.code);
+      DwenguinoSimulation.code = DwenguinoSimulation.transformSleeps(DwenguinoSimulation.code);
+      console.log(DwenguinoSimulation.code);
+      eval(DwenguinoSimulation.code);
+    },
+    
+    setSpeed: function() {
+      var e = document.getElementById("sim_speed");
+      var option = e.options[e.selectedIndex].value;
+      
+      switch (option) {
+        case "slow":
+          DwenguinoSimulation.speedDelay = 800;
+          break;
+        case "medium":
+          DwenguinoSimulation.speedDelay = 500;
+          break;
+        case "fast":
+          DwenguinoSimulation.speedDelay = 200;
+          break;
+      }
     },
     
     // to augment the readability of the javascript code 
@@ -527,17 +551,29 @@ var DwenguinoSimulation = {
     transformSleeps: function(code) {
       var result = "";
       var end = "";
-      var id = 0;
+      var id = 1;
+      var code2 ="";
+      
+      // insert a sleep between each step to regulate the speed of the execution
       code.split("\n").forEach(function(entry) {
+        if (entry.endsWith(";") && !entry.includes("DwenguinoSimulation.initDwenguino()")) {
+          code2 += "\nDwenguinoSimulation.sleep("+DwenguinoSimulation.speedDelay+");" + "\n"+entry; 
+        } else {
+           code2 += "\n"+entry;
+        }
+      });
+      
+      // transform sleeps into setTimeout
+      code2.split("\n").forEach(function(entry) {
           if (entry.trim().startsWith("DwenguinoSimulation.sleep(")) {
-            result += "\nsetTimeout(l"+id+", "+entry.replace( /\D+/g, '')+");";
-            result += "\nfunction l"+id+"() {";
-            end += "}";
+            result += "\nsetTimeout(loop"+id+", "+entry.replace( /\D+/g, '')+");";
+            result += end + "\nfunction loop"+id+"() {\n  if (DwenguinoSimulation.runSimulation) {";
+            end = "  }\n}";
             id++;
           } else if (entry.trim().startsWith("function")) {
             result += end + "\n"+entry;
-            end = "";
-          } else {
+            end = "  }\n}";
+          } else if (!entry.includes('}')){
             result += "\n"+entry;
           }
       });
@@ -550,7 +586,7 @@ var DwenguinoSimulation = {
     
     resetDwenguino: function() {
       // stop sound
-      if (DwenguinoSimulation.tonePlaying) {
+      if (DwenguinoSimulation.tonePlaying !== 0) {
         DwenguinoSimulation.noTone("BUZZER");
       }
       // clearn lcd
@@ -611,28 +647,28 @@ var DwenguinoSimulation = {
           // initiate sound object
           DwenguinoSimulation.audiocontext = new (window.AudioContext || window.webkitAudioContext)();
         }
-        
-        if (DwenguinoSimulation.tonePlaying) {
+        if (DwenguinoSimulation.tonePlaying !== 0 && DwenguinoSimulation.tonePlaying !== frequency) {
           DwenguinoSimulation.osc.stop();
         }
-        
-        // a new oscilliator for each round
-        DwenguinoSimulation.osc = DwenguinoSimulation.audiocontext.createOscillator(); // instantiate an oscillator
-        DwenguinoSimulation.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+        if (DwenguinoSimulation.tonePlaying !== frequency) {
+          // a new oscilliator for each round
+          DwenguinoSimulation.osc = DwenguinoSimulation.audiocontext.createOscillator(); // instantiate an oscillator
+          DwenguinoSimulation.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
 
-        // start tone
-        DwenguinoSimulation.osc.frequency.value = frequency; // Hz
-        DwenguinoSimulation.osc.connect(DwenguinoSimulation.audiocontext.destination); // connect it to the destination
-        DwenguinoSimulation.osc.start(); // start the oscillator
-        
-        DwenguinoSimulation.tonePlaying = true;
+          // start tone
+          DwenguinoSimulation.osc.frequency.value = frequency; // Hz
+          DwenguinoSimulation.osc.connect(DwenguinoSimulation.audiocontext.destination); // connect it to the destination
+          DwenguinoSimulation.osc.start(); // start the oscillator
+
+          DwenguinoSimulation.tonePlaying = frequency;
       }
+    }
     },
     
     noTone: function(pin) {
       if ( pin === "BUZZER") {
         // stop tone
-        DwenguinoSimulation.tonePlaying = false;
+        DwenguinoSimulation.tonePlaying = 0;
         document.getElementById('sim_buzzer').className = "sim_buzzer_off";
         DwenguinoSimulation.osc.stop();
       }
