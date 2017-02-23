@@ -176,8 +176,10 @@ Blockly.JavaScript.init = function(workspace) {
 Blockly.JavaScript.finish = function(code) {
   code = code.replace(/\n\s+$/, '\n');
   code = code.replace(/\n\n+/g, '\n');
-  code = code.replace(/  /g, '    ');
-  code = 'function loop0() {\n  if (DwenguinoSimulation.runSimulation) {\n' + code + '    loop0();\n  }\n}';
+  if (code !== "") {
+    //code = 'while(true) {\n' + code + '}';
+    code = 'function loop0() {\n' + code + '  loop0();\n}\n\nloop0();';
+  }
   // Convert the definitions dictionary into a list.
   var definitions = [];
   for (var name in Blockly.JavaScript.definitions_) {

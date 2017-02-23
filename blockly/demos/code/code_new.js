@@ -1,3 +1,7 @@
+if (!window.dwenguinoBlocklyServer) {
+  dwenguinoBlocklyServer = false
+}
+
 var DwenguinoBlockly = {
     simButtonStateClicked: false,
 
@@ -5,6 +9,9 @@ var DwenguinoBlockly = {
     recording: "",
     sessionId: null,
     tutorialId: null,
+    
+    serverUrl: 'http://localhost:3000',
+    serverUrl: '',
 
     //General settings for this session, these are used for data logging during experiments
     agegroupSetting: "",
@@ -52,12 +59,12 @@ var DwenguinoBlockly = {
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
-                url: "http://localhost:3000/sessions/newId"}
+                url: this.serverUrl + "/sessions/newId"}
             ).done(function(data){
-                console.log(data);
+                console.debug('sessionId is set to', data);
                 DwenguinoBlockly.sessionId = data;
-            }).fail(function(data)  {
-                console.log(data);
+            }).fail(function(response, status)  {
+                console.warn('Failed to fetch sessionId:', status);
             });
         }
 
@@ -188,14 +195,14 @@ var DwenguinoBlockly = {
         //online code submission
         $.ajax({
             type: "POST",
-            url: "http://localhost:3000/sessions/update",
+            url: this.serverUrl + "/sessions/update",
             data: { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityIdSetting, timestamp: $.now(), tutorialId: DwenguinoBlockly.tutorialIdSetting , logData: DwenguinoBlockly.recording },
 
         }
         ).done(function(data){
-            console.log(data);
-        }).fail(function(data)  {
-            console.log(data);
+            console.debug('Recording submitted', data);
+        }).fail(function(response, status)  {
+            console.warn('Failed to submit recording:', status);
         });
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
         if (dwenguinoBlocklyServer){
@@ -495,12 +502,12 @@ var DwenguinoBlockly = {
 
 var DwenguinoSimulation = {
     lcdContent: new Array(2),
-    runSimulation: false,
+    DwenguinoSimulation: false,
     osc: null,
     audiocontext: null,
     tonePlaying: 0,
-    speedDelay: 300,
-    line: 0,
+    debuggerjs: null,
+    speedDelay: 500,
     code: "",
     
     initDwenguinoSimulation: function(){
@@ -518,15 +525,57 @@ var DwenguinoSimulation = {
     },
     
     startSimulation: function() {
-      //set speed
+      // initialize simulation
       DwenguinoSimulation.setSpeed();
+      DwenguinoSimulation.initDwenguino();
       
-      // transform code
+      // get code
       DwenguinoSimulation.code = document.getElementById('content_arduino').textContent;
       console.log(DwenguinoSimulation.code);
-      DwenguinoSimulation.code = DwenguinoSimulation.transformSleeps(DwenguinoSimulation.code);
-      console.log(DwenguinoSimulation.code);
-      eval(DwenguinoSimulation.code);
+      //DwenguinoSimulation.code = DwenguinoSimulation.transformSleeps(DwenguinoSimulation.code);
+      //console.log(DwenguinoSimulation.code);
+      
+      // create debugger
+      DwenguinoSimulation.debuggerjs = debugjs.createDebugger({
+        iframeParentElement: document.getElementById('debug'),
+        // declare context that should be available in debugger
+        sandbox: {
+          DwenguinoSimulation: DwenguinoSimulation
+        }
+      });
+
+      DwenguinoSimulation.debuggerjs.machine.on('error', function (err) {
+        console.error(err.message);
+      });
+
+      var filename = 'simulation';
+      DwenguinoSimulation.debuggerjs.load(DwenguinoSimulation.code, filename);
+      
+      // run debugger
+      DwenguinoSimulation.step();
+    },
+    
+    step : function() {
+      if (!DwenguinoSimulation.debuggerjs.machine.halted 
+              && !DwenguinoSimulation.debuggerjs.machine.paused
+              && DwenguinoSimulation.runSimulation) {
+        
+        DwenguinoSimulation.debuggerjs.machine.step();
+        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line;
+        
+        // check if end of function
+        if (DwenguinoSimulation.code.split("\n")[line] === '}') {
+          DwenguinoSimulation.step();
+        }
+        // check if current line is not a sleep
+        else if (!DwenguinoSimulation.code.split("\n")[line-1].trim().startsWith("DwenguinoSimulation.sleep")) {
+          setTimeout(DwenguinoSimulation.step, DwenguinoSimulation.speedDelay);
+        } else {
+          // sleep
+          setTimeout(DwenguinoSimulation.step, 
+              DwenguinoSimulation.speedDelay + Number(DwenguinoSimulation.code.split("\n")[line-1].replace( /\D+/g, '')));
+        }
+      }
     },
     
     setSpeed: function() {
@@ -546,42 +595,9 @@ var DwenguinoSimulation = {
       }
     },
     
-    // to augment the readability of the javascript code 
-    // the sleeps() are only transformed into executable code when executing
-    transformSleeps: function(code) {
-      var result = "";
-      var end = "";
-      var id = 1;
-      var code2 ="";
-      
-      // insert a sleep between each step to regulate the speed of the execution
-      code.split("\n").forEach(function(entry) {
-        if (entry.endsWith(";") && !entry.includes("DwenguinoSimulation.initDwenguino()")) {
-          code2 += "\nDwenguinoSimulation.sleep("+DwenguinoSimulation.speedDelay+");" + "\n"+entry; 
-        } else {
-           code2 += "\n"+entry;
-        }
-      });
-      
-      // transform sleeps into setTimeout
-      code2.split("\n").forEach(function(entry) {
-          if (entry.trim().startsWith("DwenguinoSimulation.sleep(")) {
-            result += "\nsetTimeout(loop"+id+", "+entry.replace( /\D+/g, '')+");";
-            result += end + "\nfunction loop"+id+"() {\n  if (DwenguinoSimulation.runSimulation) {";
-            end = "  }\n}";
-            id++;
-          } else if (entry.trim().startsWith("function")) {
-            result += end + "\n"+entry;
-            end = "  }\n}";
-          } else if (!entry.includes('}')){
-            result += "\n"+entry;
-          }
-      });
-      return result+end;
-    },
-    
     initDwenguino: function() {
       DwenguinoSimulation.resetDwenguino();
+      
     },
     
     resetDwenguino: function() {
@@ -596,6 +612,10 @@ var DwenguinoSimulation = {
          document.getElementById('sim_light_'+i).className = "sim_light sim_light_off";
        }
        document.getElementById('sim_light_13').className = "sim_light sim_light_off";
+    },
+    
+    sleep: function(delay) {
+      // sleep is regulated inside step funtion
     },
 
     clearLcd: function() {
