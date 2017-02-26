@@ -500,40 +500,111 @@ var DwenguinoBlockly = {
 
 };
 
+
+
 var DwenguinoSimulation = {
     lcdContent: new Array(2),
-    DwenguinoSimulation: false,
+    isRunning: false,
+    isPaused: false,
     osc: null,
     audiocontext: null,
     tonePlaying: 0,
     debuggerjs: null,
     speedDelay: 500,
     code: "",
+    lastBlocks: [null, null],
+    lastColours: [-1,-1],
+    blockMapping: {},
     
     initDwenguinoSimulation: function(){
         $("#sim_start").click(function(){
-            if (!DwenguinoSimulation.runSimulation) {
-              DwenguinoSimulation.runSimulation = true;
-              $("div#sim_start").text("Stop");
+            // start
+            if (!DwenguinoSimulation.isRunning && !DwenguinoSimulation.isPaused) {
+              DwenguinoSimulation.isRunning = true;
+              DwenguinoSimulation.setButtonsStart();
               DwenguinoSimulation.startSimulation();
-            } else {
-              DwenguinoSimulation.runSimulation = false;
-              $("div#sim_start").text("Start");
-              DwenguinoSimulation.resetDwenguino();
+            // resume
+            } else if (!DwenguinoSimulation.isRunning) {
+              DwenguinoSimulation.isRunning = true;
+              DwenguinoSimulation.isPaused = false;
+              DwenguinoSimulation.setButtonsStart();
+              DwenguinoSimulation.resumeSimulation();
+            }
+        });
+        
+        $("#sim_pause").click(function(){
+            if (DwenguinoSimulation.isRunning) {
+              DwenguinoSimulation.isRunning = false;
+              DwenguinoSimulation.isPaused = true;
+              DwenguinoSimulation.setButtonsPause();
+            }
+        });
+        
+        $("#sim_stop").click(function(){
+          DwenguinoSimulation.isRunning = false;
+          DwenguinoSimulation.isPaused = false;
+          DwenguinoSimulation.setButtonsStop();
+          DwenguinoSimulation.resetDwenguino();
+        });
+        
+        $("#sim_step").click(function(){
+            if (!DwenguinoSimulation.isPaused && !DwenguinoSimulation.isRunning) {
+              DwenguinoSimulation.isPaused = true;
+              DwenguinoSimulation.setButtonsStep();
+              DwenguinoSimulation.initDebugger();
+              DwenguinoSimulation.oneStep();
+            } else if (!DwenguinoSimulation.isRunning) {
+              DwenguinoSimulation.setButtonsStep();
+              DwenguinoSimulation.oneStep();
             }
         });
     },
     
-    startSimulation: function() {
+    setButtonsStart: function() {
+      // enable pauze and stop
+      document.getElementById('sim_pause').className = "sim_item";
+      document.getElementById('sim_stop').className = "sim_item";
+      // disable start and step
+      document.getElementById('sim_start').className = "sim_item disabled";
+      document.getElementById('sim_step').className = "sim_item disabled";
+    },
+    
+    setButtonsPause: function() {
+      // enable start, stop and step
+      document.getElementById('sim_start').className = "sim_item";
+      document.getElementById('sim_step').className = "sim_item";
+      document.getElementById('sim_stop').className = "sim_item";
+      // disable pause
+      document.getElementById('sim_pause').className = "sim_item disabled";
+    },
+    
+    setButtonsStop: function() {
+      // enable start, stop and step
+      document.getElementById('sim_start').className = "sim_item";
+      document.getElementById('sim_step').className = "sim_item";
+      // disable pause
+      document.getElementById('sim_stop').className = "sim_item disabled";
+      document.getElementById('sim_pause').className = "sim_item disabled";
+    },
+    
+    setButtonsStep: function() {
+      // enable start, stop and step
+      document.getElementById('sim_start').className = "sim_item";
+      document.getElementById('sim_step').className = "sim_item";
+      document.getElementById('sim_stop').className = "sim_item";
+      // disable pause
+      document.getElementById('sim_pause').className = "sim_item disabled";
+    },
+    
+    
+    initDebugger: function() {
       // initialize simulation
       DwenguinoSimulation.setSpeed();
       DwenguinoSimulation.initDwenguino();
       
       // get code
       DwenguinoSimulation.code = document.getElementById('content_arduino').textContent;
-      console.log(DwenguinoSimulation.code);
-      //DwenguinoSimulation.code = DwenguinoSimulation.transformSleeps(DwenguinoSimulation.code);
-      //console.log(DwenguinoSimulation.code);
+      DwenguinoSimulation.mapBlocksToCode();
       
       // create debugger
       DwenguinoSimulation.debuggerjs = debugjs.createDebugger({
@@ -551,29 +622,127 @@ var DwenguinoSimulation = {
       var filename = 'simulation';
       DwenguinoSimulation.debuggerjs.load(DwenguinoSimulation.code, filename);
       
+      DwenguinoSimulation.oneStep();
+    },
+    
+    startSimulation: function() {
+      console.log(DwenguinoBlockly.workspace);
+      DwenguinoSimulation.initDebugger()
       // run debugger
       DwenguinoSimulation.step();
     },
     
+    resumeSimulation :function() {
+      DwenguinoSimulation.step();
+    },
+    
+    /*
+     * While the simulation is running steps keep being called with speeddelay timeouts in between
+     */
     step : function() {
       if (!DwenguinoSimulation.debuggerjs.machine.halted 
               && !DwenguinoSimulation.debuggerjs.machine.paused
-              && DwenguinoSimulation.runSimulation) {
+              && DwenguinoSimulation.isRunning) {
         
         DwenguinoSimulation.debuggerjs.machine.step();
         var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line;
         
-        // check if end of function
-        if (DwenguinoSimulation.code.split("\n")[line] === '}') {
-          DwenguinoSimulation.step();
-        }
+        // highlight the current block
+        DwenguinoSimulation.updateBlocklyColour();
+        
         // check if current line is not a sleep
-        else if (!DwenguinoSimulation.code.split("\n")[line-1].trim().startsWith("DwenguinoSimulation.sleep")) {
+        if (!DwenguinoSimulation.code.split("\n")[line-1].trim().startsWith("DwenguinoSimulation.sleep")) {
           setTimeout(DwenguinoSimulation.step, DwenguinoSimulation.speedDelay);
         } else {
           // sleep
           setTimeout(DwenguinoSimulation.step, 
               DwenguinoSimulation.speedDelay + Number(DwenguinoSimulation.code.split("\n")[line-1].replace( /\D+/g, '')));
+        }
+      }
+    },
+    
+    
+    
+    oneStep: function() {
+      DwenguinoSimulation.debuggerjs.machine.step();
+      DwenguinoSimulation.updateBlocklyColour();
+    },
+    
+    // maps line numbers to blocks
+    mapBlocksToCode: function() {
+      var setup_block = DwenguinoBlockly.workspace.getAllBlocks()[0];
+      
+      var line = 0;
+      var lines = DwenguinoSimulation.code.split("\n");
+      var loopBlocks = [];
+      
+      // update variables in while loop when searching for a match between block and line
+      function updateBlocks() {
+        // special structure for loop blocks -> look at children
+        if (lines[line].trim() === Blockly.JavaScript.blockToCode(block).split('\n')[0] 
+              && (lines[line].trim().startsWith("for") || lines[line].trim().startsWith("while")
+              || lines[line].trim().startsWith("if"))) {
+          loopBlocks.push(block);
+          DwenguinoSimulation.blockMapping[line] = block;
+          block = block.getInputTargetBlock('DO') || block.getInputTargetBlock('DO0');
+        }
+        else if (lines[line].trim() === Blockly.JavaScript.blockToCode(block).split('\n')[0]) {
+          DwenguinoSimulation.blockMapping[line] = block;
+          block = block.getNextBlock();
+        // end of loop structure
+        } else if (lines[line].trim() === '}' && loopBlocks.length > 0) {
+          var parentBlock = loopBlocks.pop();
+          block = parentBlock.getNextBlock();
+          line++;
+        }
+        
+        line++;
+      };
+      
+      // look at blocks before while
+      var block = setup_block.getInputTargetBlock('SETUP');
+      while (block !== null && line < lines.length) {
+        updateBlocks();
+      }
+      
+      while (loopBlocks.length > 0) {
+        loopBlocks.pop();
+        line++;
+      }
+      
+      // look at while
+      while (line < lines.length && lines[line] !== "while (true) {") {
+          line++;
+      }
+      DwenguinoSimulation.blockMapping[line] = setup_block;
+      line++;
+      
+      // look at blocks after while
+      block = setup_block.getInputTargetBlock('LOOP');
+      while (block !== null && line < lines.length) {
+        updateBlocks();
+      }
+    },
+    
+    updateBlocklyColour: function() {
+      var highlight_colour = 210;
+      
+      if (DwenguinoSimulation.code !== "") {
+        // reset old block
+        if (DwenguinoSimulation.lastBlocks[0] !== null) {
+          DwenguinoSimulation.lastBlocks[0].setColour(DwenguinoSimulation.lastColours[0]);
+        }
+        
+        DwenguinoSimulation.lastBlocks[0] = DwenguinoSimulation.lastBlocks[1];
+        DwenguinoSimulation.lastColours[0] = DwenguinoSimulation.lastColours[1];
+        
+        // highlight current block
+        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line-1;
+        DwenguinoSimulation.lastBlocks[1] = DwenguinoSimulation.blockMapping[line];
+        DwenguinoSimulation.lastColours[1] = DwenguinoSimulation.blockMapping[line].getColour();
+        
+        if (DwenguinoSimulation.lastBlocks[0] !== null) {
+          DwenguinoSimulation.lastBlocks[0].setColour(highlight_colour);
         }
       }
     },
@@ -597,10 +766,21 @@ var DwenguinoSimulation = {
     
     initDwenguino: function() {
       DwenguinoSimulation.resetDwenguino();
-      
     },
     
     resetDwenguino: function() {
+      // delete debugger
+      DwenguinoSimulation.debuggerjs = null;
+      DwenguinoSimulation.blockMapping = {};
+      
+      // reset colours
+      if (DwenguinoSimulation.lastColours[0] !== -1) {
+        DwenguinoSimulation.lastBlocks[0].setColour(DwenguinoSimulation.lastColours[0]);
+        DwenguinoSimulation.lastColours = [-1,-1];
+        DwenguinoSimulation.lastBlocks = [null,null];
+        
+      }
+      
       // stop sound
       if (DwenguinoSimulation.tonePlaying !== 0) {
         DwenguinoSimulation.noTone("BUZZER");
