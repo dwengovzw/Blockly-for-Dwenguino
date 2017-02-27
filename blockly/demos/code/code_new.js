@@ -622,11 +622,15 @@ var DwenguinoSimulation = {
       var filename = 'simulation';
       DwenguinoSimulation.debuggerjs.load(DwenguinoSimulation.code, filename);
       
-      DwenguinoSimulation.oneStep();
+      var min = Math.min.apply(null,Object.keys(DwenguinoSimulation.blockMapping))
+      var line = 0;
+      while (line <= min) {
+        DwenguinoSimulation.oneStep();
+        line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line; 
+      }
     },
     
     startSimulation: function() {
-      console.log(DwenguinoBlockly.workspace);
       DwenguinoSimulation.initDebugger()
       // run debugger
       DwenguinoSimulation.step();
@@ -649,6 +653,7 @@ var DwenguinoSimulation = {
         
         // highlight the current block
         DwenguinoSimulation.updateBlocklyColour();
+        DwenguinoSimulation.handleScope();
         
         // check if current line is not a sleep
         if (!DwenguinoSimulation.code.split("\n")[line-1].trim().startsWith("DwenguinoSimulation.sleep")) {
@@ -659,13 +664,34 @@ var DwenguinoSimulation = {
               DwenguinoSimulation.speedDelay + Number(DwenguinoSimulation.code.split("\n")[line-1].replace( /\D+/g, '')));
         }
       }
+      DwenguinoSimulation.checkForEnd();
     },
     
     
     
     oneStep: function() {
       DwenguinoSimulation.debuggerjs.machine.step();
+      DwenguinoSimulation.handleScope();
       DwenguinoSimulation.updateBlocklyColour();
+      DwenguinoSimulation.checkForEnd();
+    },
+    
+    handleScope: function() {
+      var scope = DwenguinoSimulation.debuggerjs.machine.getCurrentStackFrame().scope;
+      for (var i in scope) {
+        var item = scope[i];
+        var value = DwenguinoSimulation.debuggerjs.machine.$runner.gen.stackFrame.evalInScope(item.name);
+        console.log(item.name, value);
+      }
+    },
+    
+    checkForEnd: function() {
+      if ((DwenguinoSimulation.isRunning || DwenguinoSimulation.isPaused)
+                && DwenguinoSimulation.debuggerjs.machine.halted) {
+          DwenguinoSimulation.isRunning = false;
+          DwenguinoSimulation.isPaused = false;
+          DwenguinoSimulation.setButtonsPause();
+      }
     },
     
     // maps line numbers to blocks
@@ -690,7 +716,8 @@ var DwenguinoSimulation = {
           DwenguinoSimulation.blockMapping[line] = block;
           block = block.getNextBlock();
         // end of loop structure
-        } else if (lines[line].trim() === '}' && loopBlocks.length > 0) {
+        }
+        if (block === null && loopBlocks.length > 0) {
           var parentBlock = loopBlocks.pop();
           block = parentBlock.getNextBlock();
           line++;
@@ -714,8 +741,10 @@ var DwenguinoSimulation = {
       while (line < lines.length && lines[line] !== "while (true) {") {
           line++;
       }
-      DwenguinoSimulation.blockMapping[line] = setup_block;
-      line++;
+      if (line < lines.length) {
+        DwenguinoSimulation.blockMapping[line] = setup_block;
+        line++;
+      }
       
       // look at blocks after while
       block = setup_block.getInputTargetBlock('LOOP');
@@ -727,7 +756,8 @@ var DwenguinoSimulation = {
     updateBlocklyColour: function() {
       var highlight_colour = 210;
       
-      if (DwenguinoSimulation.code !== "") {
+      var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line-1;
+      if (DwenguinoSimulation.code !== "" && typeof DwenguinoSimulation.blockMapping[line] !== 'undefined') {
         // reset old block
         if (DwenguinoSimulation.lastBlocks[0] !== null) {
           DwenguinoSimulation.lastBlocks[0].setColour(DwenguinoSimulation.lastColours[0]);
@@ -737,7 +767,6 @@ var DwenguinoSimulation = {
         DwenguinoSimulation.lastColours[0] = DwenguinoSimulation.lastColours[1];
         
         // highlight current block
-        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line-1;
         DwenguinoSimulation.lastBlocks[1] = DwenguinoSimulation.blockMapping[line];
         DwenguinoSimulation.lastColours[1] = DwenguinoSimulation.blockMapping[line].getColour();
         
@@ -776,10 +805,9 @@ var DwenguinoSimulation = {
       // reset colours
       if (DwenguinoSimulation.lastColours[0] !== -1) {
         DwenguinoSimulation.lastBlocks[0].setColour(DwenguinoSimulation.lastColours[0]);
-        DwenguinoSimulation.lastColours = [-1,-1];
-        DwenguinoSimulation.lastBlocks = [null,null];
-        
       }
+      DwenguinoSimulation.lastColours = [-1,-1];
+      DwenguinoSimulation.lastBlocks = [null,null];
       
       // stop sound
       if (DwenguinoSimulation.tonePlaying !== 0) {
