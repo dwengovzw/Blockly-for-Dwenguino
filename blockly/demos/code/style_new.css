@@ -141,8 +141,9 @@ body{
 }
 
 #sim_menu {
-    width: 100%;
+    width: 80%;
     height: 15%;
+    float: left;
 }
 
 #sim_menu * {
@@ -156,52 +157,54 @@ body{
 }
 
 #sim_board {
-    background-color: #2a7709;
-    width: 40vmin;
+    /*background-color: #2a7709; */
+    background-image: url("img/board/dwenguino.png");
+    background-size: 100% 100%;
+    width: 30vmin;
     height: 25vmin;
     position: relative;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
 #sim_lcds {
-    position: relative;
-    top: 25%;
-    left: 5%;
-    height: 30%;
-    width: 80%;
-    background-color: #7aaf64;    
+    position: absolute;
+    top: 43%;
+    left: 18%;
+    height: 25%;
+    width: 70%;
+    /*background-color: #7aaf64;*/
 }
 
 .sim_lcd {
-    height: 50%;
-    padding: 5px;
-    font-size: 16px;
-    letter-spacing: 3px;
-    word-spacing: 6px;
+    height: 20px;
+    padding: 2px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    word-spacing: 4px;
 }
 
 #sim_lights {
-    position: relative;
-    top:35%;
-    left: 5%;
+    position: absolute;
+    top:80%;
+    left: 10%;
     height: 20%;
     width: 60%;
 }
 
 #sim_light_13 {
-    position: relative;
-    top:10%;
-    left: 5%;
+    position: absolute;
+    top:20%;
+    left: 10%;
 }
 
 .sim_light {
     border-radius: 50%;
-    height: 15px;
-    width: 15px;
+    height: 11px;
+    width: 11px;
     float: left;
-    margin-left: 5px;
+    margin-left: 3px;
 }
 
 .sim_light_off {
@@ -212,21 +215,44 @@ body{
     background-color: #e80d0d;
 }
 
-#sim_buzzer {
-    position: relative;
-    top:10%;
-    left: 35%;
-    border-radius: 50%;
-    height: 20px;
-    width: 20px;
+#sim_buttons {
+    position: absolute;
+    width: 30%;
+    height: 25%;
+    top: 75%;
+    left: 70%;
 }
 
-.sim_buzzer_off {
-    background-color: #5e5e5e;
+#sim_buttons * {
+    height: 13px;
+    margin-bottom: 2px;
 }
 
-.sim_buzzer_on {
-    background-color: #000000;
+#sim_buttons_top * {
+    margin-left: 15px;
+}
+
+#sim_buttons_middle * {
+    margin-right: 2px;
+}
+
+#sim_buttons_bottom * {
+    margin-left: 15px;
+}
+
+
+#sim_button_reset {
+    position: absolute;
+    top:90%;
+    left: 30%;
+}
+
+.sim_button {
+    background-image: url("img/board/button.png");
+    background-size: 100% 100%;
+    width: 13px;
+    height: 13px;
+    float:left;
 }
 
 .disabled {
@@ -235,4 +261,49 @@ body{
 
 .disabled:hover {
     text-decoration: none;
+}
+
+#sim_components_menu {
+    float:right;
+    position:relative;
+    padding: 5px;
+}
+
+#sim_components {
+    position: relative;
+    top: -5%;
+    left: 72%;
+    height: 25%;
+    width: 25%;
+}
+
+.sim_servo {
+    background: #2e4286;
+    height: 25px;
+    width: 50px;
+    margin-right: 10px;
+    float: left;
+}
+
+.sim_servo_mov {
+    background-image: url("img/board/servo_movement.png");
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%; 
+}
+
+#sim_motors {
+    clear: right;
+    height: 50px;
+    width: 75%;
+}
+
+.sim_motor {
+    height: 35px;
+    width: 35px;
+    margin-right: 10px;
+    float: left;
+    background-image: url("img/board/dc_motor.png");
+    background-size: 100% 100%;
+    margin-bottom: 15px;
 }

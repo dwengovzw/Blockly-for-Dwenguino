@@ -126,15 +126,25 @@
                     <div id="sim_step" class="sim_item">1 Step</div>
                     <div>Speed:</div>
                     <select id="sim_speed">
+                        <option value="veryslow">Very slow</option>
                         <option value="slow">Slow</option>
                         <option value="medium" selected>Medium</option>
                         <option value="fast">Fast</option>
+                        <option value="veryfast">Very fast</option>
                     </select>
+                </div>
+                <div id="sim_components_menu">
+                    <div id="sim_components_select" class="sim_item">Select <br> components:</div>
+                    <div id="sim_components_options">
+                        <input type="checkbox" id="servo1" value="servo1">Servo 1<br>
+                        <input type="checkbox" id="servo2" value="servo2">Servo 2<br>
+                        <input type="checkbox" id="motor1" value="motor1">Motor 1<br>
+                        <input type="checkbox" id="motor2" value="motor2">Motor 2<br>
+                    </div>
                 </div>
                 <div id="debug"></div>
                 <div id="sim_board">
                     <div class="sim_light sim_light_off" id ="sim_light_13"></div>
-                    <div class="sim_buzzer_off" id ="sim_buzzer"></div>
                     <div id="sim_lcds">
                         <div class="sim_lcd" id="sim_lcd_row0"></div>
                         <div class="sim_lcd" id="sim_lcd_row1"></div>
@@ -148,6 +158,34 @@
                         <div class="sim_light sim_light_off" id ="sim_light_2"></div>
                         <div class="sim_light sim_light_off" id ="sim_light_1"></div>
                         <div class="sim_light sim_light_off" id ="sim_light_0"></div>
+                    </div>
+                    <div id="sim_buttons">
+                        <div id="sim_buttons_top">
+                            <div id="sim_button_0" class="sim_button"></div>
+                        </div>
+                        <div id="sim_buttons_middle">
+                            <div id="sim_button_1" class="sim_button"></div>
+                            <div id="sim_button_2" class="sim_button"></div>
+                            <div id="sim_button_3" class="sim_button"></div>
+                        </div>
+                        <div id="sim_buttons_bottom">
+                            <div id="sim_button_4" class="sim_button"></div>
+                        </div>
+                    </div>
+                    <div id="sim_button_reset" class="sim_button"></div>
+                </div>
+                <div id="sim_components">
+                    <div id="sim_motors">
+                        <div id="sim_motor1" class="sim_motor"></div>
+                        <div id="sim_motor2" class="sim_motor"></div>
+                    </div>
+                    <div id="sim_servos">
+                        <div id="sim_servo1" class="sim_servo">
+                            <div id="sim_servo1_mov" class="sim_servo_mov"></div>
+                        </div>
+                        <div id="sim_servo2" class="sim_servo">
+                            <div id="sim_servo2_mov" class="sim_servo_mov"></div>
+                        </div>
                     </div>
                 </div>
             </div>

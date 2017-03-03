@@ -504,59 +504,107 @@ var DwenguinoBlockly = {
 
 var DwenguinoSimulation = {
     lcdContent: new Array(2),
-    isRunning: false,
-    isPaused: false,
-    osc: null,
-    audiocontext: null,
-    tonePlaying: 0,
+    isSimulationRunning: false,
+    isSimulationPaused: false,
+    oscBuzzer: null,
+    audiocontextBuzzer: null,
+    tonePlayingBuzzer: 0,
     debuggerjs: null,
-    speedDelay: 500,
+    speedDelaySimulation: 500,
     code: "",
     lastBlocks: [null, null],
     lastColours: [-1,-1],
     blockMapping: {},
+    servoAngles: [0,0],
+    motorSpeeds: [0,0],
     
     initDwenguinoSimulation: function(){
         $("#sim_start").click(function(){
             // start
-            if (!DwenguinoSimulation.isRunning && !DwenguinoSimulation.isPaused) {
-              DwenguinoSimulation.isRunning = true;
+            if (!DwenguinoSimulation.isSimulationRunning && !DwenguinoSimulation.isSimulationPaused) {
+              DwenguinoSimulation.isSimulationRunning = true;
               DwenguinoSimulation.setButtonsStart();
               DwenguinoSimulation.startSimulation();
             // resume
-            } else if (!DwenguinoSimulation.isRunning) {
-              DwenguinoSimulation.isRunning = true;
-              DwenguinoSimulation.isPaused = false;
+            } else if (!DwenguinoSimulation.isSimulationRunning) {
+              DwenguinoSimulation.isSimulationRunning = true;
+              DwenguinoSimulation.isSimulationPaused = false;
               DwenguinoSimulation.setButtonsStart();
               DwenguinoSimulation.resumeSimulation();
             }
         });
         
         $("#sim_pause").click(function(){
-            if (DwenguinoSimulation.isRunning) {
-              DwenguinoSimulation.isRunning = false;
-              DwenguinoSimulation.isPaused = true;
+            if (DwenguinoSimulation.isSimulationRunning) {
+              DwenguinoSimulation.isSimulationRunning = false;
+              DwenguinoSimulation.isSimulationPaused = true;
               DwenguinoSimulation.setButtonsPause();
             }
         });
         
         $("#sim_stop").click(function(){
-          DwenguinoSimulation.isRunning = false;
-          DwenguinoSimulation.isPaused = false;
+          DwenguinoSimulation.isSimulationRunning = false;
+          DwenguinoSimulation.isSimulationPaused = false;
           DwenguinoSimulation.setButtonsStop();
           DwenguinoSimulation.resetDwenguino();
         });
         
         $("#sim_step").click(function(){
-            if (!DwenguinoSimulation.isPaused && !DwenguinoSimulation.isRunning) {
-              DwenguinoSimulation.isPaused = true;
+            if (!DwenguinoSimulation.isSimulationPaused && !DwenguinoSimulation.isSimulationRunning) {
+              DwenguinoSimulation.isSimulationPaused = true;
               DwenguinoSimulation.setButtonsStep();
               DwenguinoSimulation.initDebugger();
               DwenguinoSimulation.oneStep();
-            } else if (!DwenguinoSimulation.isRunning) {
+            } else if (!DwenguinoSimulation.isSimulationRunning) {
               DwenguinoSimulation.setButtonsStep();
               DwenguinoSimulation.oneStep();
             }
+        });
+        
+        // jquery to create select list with checkboxes that hide
+        $("#sim_components_select").on('click', function() {
+          if (!$("#sim_components_options").is(":visible")) {
+            $("#sim_components_options").show();
+          } else {
+            $("#sim_components_options").hide();
+          }
+        });
+        
+        // enable show hide for dwenguino components
+        $("#sim_servo1").hide();
+        $("#servo1").on('change', function() {
+          if (document.getElementById("servo1").checked) {
+            $("#sim_servo1").show();
+          } else {
+            $("#sim_servo1").hide();
+          }
+        });
+        
+        $("#sim_servo2").hide();
+        $("#servo2").on('change', function() {
+          if (document.getElementById("servo2").checked) {
+            $("#sim_servo2").show();
+          } else {
+            $("#sim_servo2").hide();
+          }
+        });
+        
+        $("#sim_motor1").hide();
+        $("#motor1").on('change', function() {
+          if (document.getElementById("motor1").checked) {
+            $("#sim_motor1").show();
+          } else {
+            $("#sim_motor1").hide();
+          }
+        });
+        
+        $("#sim_motor2").hide();
+        $("#motor2").on('change', function() {
+          if (document.getElementById("motor2").checked) {
+            $("#sim_motor2").show();
+          } else {
+            $("#sim_motor2").hide();
+          }
         });
     },
     
@@ -646,7 +694,7 @@ var DwenguinoSimulation = {
     step : function() {
       if (!DwenguinoSimulation.debuggerjs.machine.halted 
               && !DwenguinoSimulation.debuggerjs.machine.paused
-              && DwenguinoSimulation.isRunning) {
+              && DwenguinoSimulation.isSimulationRunning) {
         
         DwenguinoSimulation.debuggerjs.machine.step();
         var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line;
@@ -657,11 +705,11 @@ var DwenguinoSimulation = {
         
         // check if current line is not a sleep
         if (!DwenguinoSimulation.code.split("\n")[line-1].trim().startsWith("DwenguinoSimulation.sleep")) {
-          setTimeout(DwenguinoSimulation.step, DwenguinoSimulation.speedDelay);
+          setTimeout(DwenguinoSimulation.step, DwenguinoSimulation.speedDelaySimulation);
         } else {
           // sleep
           setTimeout(DwenguinoSimulation.step, 
-              DwenguinoSimulation.speedDelay + Number(DwenguinoSimulation.code.split("\n")[line-1].replace( /\D+/g, '')));
+              DwenguinoSimulation.speedDelaySimulation + Number(DwenguinoSimulation.code.split("\n")[line-1].replace( /\D+/g, '')));
         }
       }
       DwenguinoSimulation.checkForEnd();
@@ -686,10 +734,10 @@ var DwenguinoSimulation = {
     },
     
     checkForEnd: function() {
-      if ((DwenguinoSimulation.isRunning || DwenguinoSimulation.isPaused)
+      if ((DwenguinoSimulation.isSimulationRunning || DwenguinoSimulation.isSimulationPaused)
                 && DwenguinoSimulation.debuggerjs.machine.halted) {
-          DwenguinoSimulation.isRunning = false;
-          DwenguinoSimulation.isPaused = false;
+          DwenguinoSimulation.isSimulationRunning = false;
+          DwenguinoSimulation.isSimulationPaused = false;
           DwenguinoSimulation.setButtonsPause();
       }
     },
@@ -781,14 +829,20 @@ var DwenguinoSimulation = {
       var option = e.options[e.selectedIndex].value;
       
       switch (option) {
+        case "veryslow":
+          DwenguinoSimulation.speedDelaySimulation = 900;
+          break;
         case "slow":
-          DwenguinoSimulation.speedDelay = 800;
+          DwenguinoSimulation.speedDelaySimulation = 700;
           break;
         case "medium":
-          DwenguinoSimulation.speedDelay = 500;
+          DwenguinoSimulation.speedDelaySimulation = 500;
           break;
         case "fast":
-          DwenguinoSimulation.speedDelay = 200;
+          DwenguinoSimulation.speedDelaySimulation = 300;
+          break;
+        case "veryfast":
+          DwenguinoSimulation.speedDelaySimulation = 100;
           break;
       }
     },
@@ -810,7 +864,7 @@ var DwenguinoSimulation = {
       DwenguinoSimulation.lastBlocks = [null,null];
       
       // stop sound
-      if (DwenguinoSimulation.tonePlaying !== 0) {
+      if (DwenguinoSimulation.tonePlayingBuzzer !== 0) {
         DwenguinoSimulation.noTone("BUZZER");
       }
       // clearn lcd
@@ -820,6 +874,16 @@ var DwenguinoSimulation = {
          document.getElementById('sim_light_'+i).className = "sim_light sim_light_off";
        }
        document.getElementById('sim_light_13').className = "sim_light sim_light_off";
+       
+       // reset servo
+       DwenguinoSimulation.servoAngles = [0,0]
+       $("#sim_servo1_mov").css("transform", "rotate(0deg)");
+       $("#sim_servo2_mov").css("transform", "rotate(0deg)");
+       
+       // reset motors
+       DwenguinoSimulation.motorSpeeds = [0,0]
+       $("#sim_motor1").css("transform", "rotate(0deg)");
+       $("#sim_motor2").css("transform", "rotate(0deg)");
     },
     
     sleep: function(delay) {
@@ -871,24 +935,24 @@ var DwenguinoSimulation = {
       if ( pin === "BUZZER") {
         document.getElementById('sim_buzzer').className = "sim_buzzer_on";
         
-        if (DwenguinoSimulation.osc === null) {
+        if (DwenguinoSimulation.oscBuzzer === null) {
           // initiate sound object
-          DwenguinoSimulation.audiocontext = new (window.AudioContext || window.webkitAudioContext)();
+          DwenguinoSimulation.audiocontextBuzzer = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (DwenguinoSimulation.tonePlaying !== 0 && DwenguinoSimulation.tonePlaying !== frequency) {
-          DwenguinoSimulation.osc.stop();
+        if (DwenguinoSimulation.tonePlayingBuzzer !== 0 && DwenguinoSimulation.tonePlayingBuzzer !== frequency) {
+          DwenguinoSimulation.oscBuzzer.stop();
         }
-        if (DwenguinoSimulation.tonePlaying !== frequency) {
+        if (DwenguinoSimulation.tonePlayingBuzzer !== frequency) {
           // a new oscilliator for each round
-          DwenguinoSimulation.osc = DwenguinoSimulation.audiocontext.createOscillator(); // instantiate an oscillator
-          DwenguinoSimulation.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+          DwenguinoSimulation.oscBuzzer = DwenguinoSimulation.audiocontextBuzzer.createOscillator(); // instantiate an oscillator
+          DwenguinoSimulation.oscBuzzer.type = 'sine'; // this is the default - also square, sawtooth, triangle
 
           // start tone
-          DwenguinoSimulation.osc.frequency.value = frequency; // Hz
-          DwenguinoSimulation.osc.connect(DwenguinoSimulation.audiocontext.destination); // connect it to the destination
-          DwenguinoSimulation.osc.start(); // start the oscillator
+          DwenguinoSimulation.oscBuzzer.frequency.value = frequency; // Hz
+          DwenguinoSimulation.oscBuzzer.connect(DwenguinoSimulation.audiocontextBuzzer.destination); // connect it to the destination
+          DwenguinoSimulation.oscBuzzer.start(); // start the oscillator
 
-          DwenguinoSimulation.tonePlaying = frequency;
+          DwenguinoSimulation.tonePlayingBuzzer = frequency;
       }
     }
     },
@@ -896,9 +960,76 @@ var DwenguinoSimulation = {
     noTone: function(pin) {
       if ( pin === "BUZZER") {
         // stop tone
-        DwenguinoSimulation.tonePlaying = 0;
+        DwenguinoSimulation.tonePlayingBuzzer = 0;
         document.getElementById('sim_buzzer').className = "sim_buzzer_off";
-        DwenguinoSimulation.osc.stop();
+        DwenguinoSimulation.oscBuzzer.stop();
+      }
+    },
+    
+    servo: function(channel, angle) {
+      //set angle
+      if (angle > 180) {
+        angle = 180;
+      }
+      if (angle < 0) {
+        angle = 0;
+      }
+      
+      if (angle !== DwenguinoSimulation.servoAngles[channel-1]) {
+        DwenguinoSimulation.servoAngles[channel-1] = angle;
+        DwenguinoSimulation.servoRotate(channel, angle);
+      }
+    },
+    
+    servoRotate: function(channel, angle) {
+      var maxMovement = 10;
+      if (angle === DwenguinoSimulation.servoAngles[channel-1]) {
+        var prevAngle = DwenguinoSimulation.getAngle($("#sim_servo"+channel+"_mov").css("transform"));
+        // set 10 degrees closer at a time to create rotate effect
+        if (Math.abs(angle - prevAngle) > maxMovement) {
+          var direction = ((angle - prevAngle)>0)?1:-1;
+          $("#sim_servo"+channel+"_mov").css("transform", "rotate("+(prevAngle+direction*maxMovement)+"deg)");
+          setTimeout(function(){DwenguinoSimulation.servoRotate(channel, angle);}, 15);
+        } else {
+          $("#sim_servo"+channel+"_mov").css("transform", "rotate("+angle+"deg)");
+        }
+      }
+    },
+    
+    getAngle: function(matrix) {
+      if (matrix !== "none") {
+        var values = matrix.split('(')[1];
+        values = values.split(')')[0];
+        values = values.split(',');
+        var a = values[0];
+        var b = values[1];
+        return Math.round(Math.atan2(b, a) * (180/Math.PI));
+      }
+      return 0;
+    },
+    
+    startDcMotor: function(channel, speed) {
+      //set angle
+      if (speed > 255) {
+        speed = 255;
+      }
+      if (speed < 0) {
+        speed = 0;
+      }
+      
+      if (speed !== DwenguinoSimulation.motorSpeeds[channel-1]) {
+        DwenguinoSimulation.motorSpeeds[channel-1] = speed;
+        DwenguinoSimulation.dcMotorRotate(channel, speed);
+      }
+    },
+    
+    dcMotorRotate: function(channel, speed) {
+      var maxMovement = speed/20 + 5;
+      if (speed === DwenguinoSimulation.motorSpeeds[channel-1] && speed !== 0) {
+        var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor"+channel).css("transform"));
+        // rotate x degrees at a time based on speed
+        $("#sim_motor"+channel).css("transform", "rotate("+((prevAngle+maxMovement)%360)+"deg)");
+        setTimeout(function(){DwenguinoSimulation.dcMotorRotate(channel, speed);}, 15);
       }
     },
   

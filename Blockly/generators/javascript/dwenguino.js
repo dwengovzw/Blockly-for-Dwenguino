@@ -44,10 +44,8 @@ Blockly.JavaScript['set_leds'] = function (block) {
 Blockly.JavaScript['dc_motor'] = function (block) {
     var value_channel = Blockly.JavaScript.valueToCode(block, 'channel', Blockly.JavaScript.ORDER_ATOMIC);
     var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC);
-    // declare motor on chosen channel
-    Blockly.JavaScript.definitions_['declare_dc_motor_on_channel_' + value_channel] = 'var dcMotor' + value_channel + ' = DCMotor(MOTOR_' + value_channel + '_0, MOTOR_' + value_channel + '_1);\n';
     //start motor
-    var code = 'dcMotor' + value_channel + '.setSpeed(' + value_speed + ');\n';
+    var code = 'DwenguinoSimulation.startDcMotor(' + value_channel + ', ' + value_speed + ');\n';
     return code;
 };
 
@@ -91,14 +89,8 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
 Blockly.JavaScript['dwenguino_servo'] = function (block) {
     var value_channel = Blockly.JavaScript.valueToCode(block, 'channel', Blockly.JavaScript.ORDER_ATOMIC);
     var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
-
-    //define sonar settings
-    Blockly.JavaScript.definitions_['define_servo_' + value_channel] = "var servo" + value_channel + ";\n";
-
-    Blockly.JavaScript.setups_['define_dwenguino_servo' + value_channel] = 'servo' + value_channel + '.attach(SERVO_' + value_channel + ');\n';
-
     // Assemble JavaScript into code variable.
-    var code = 'servo' + value_channel + '.write(' + value_angle + ');';
+    var code = 'DwenguinoSimulation.servo(' + value_channel + ', ' + value_angle + ');\n';
     return code;
 };
 
