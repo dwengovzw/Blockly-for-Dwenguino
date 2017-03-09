@@ -82,7 +82,7 @@ var MSG = {
   center: "Center",
   ledsReg: "LEDS",
   dwenguinoLedsRegTooltip: "Met deze blok kan je leds 0 tot 7 met één binair getal aan of af zetten. Bijvoorbeeld: 0b00001111 zal leds 0 tot 3 aanzetten en de rest uit.",
-  
+
 };
 
 MSG.tutorials = {
@@ -102,9 +102,9 @@ MSG.tutorials.introduction = {
         step3Title: "Taal instellen",
         step3Content: "Hier kan je een andere taal selecteren",
         step4Title: "De moeilijkheidsgraad",
-        step4Content: "Deze schuifbalk kan je gebruiken om De moeilijkheidsgraad in te stellen. Op hogere niveaus heb je meer geavanceerde blokken. Om deze te gebruiken Beheers je best eerst de blokken op lagere niveaus.",
+        step4Content: "Deze schuifbalk kan je gebruiken om De moeilijkheidsgraad in te stellen. Op hogere niveaus heb je meer geavanceerde blokken. Om deze te gebruiken Beheers je best eerst de blokken op lagere niveaus. Voorlopig zijn er maar twee niveaus die blokjes bevatten, in de toekomst komen er meer.",
         step5Title: "Dwengobooks",
-        step5Content: "Dwengobooks zijn interactieve tutorials die je stap voor stap uitlgeen hoe je een programma moet schrijven. Je leerkracht kan her zelf ook lessen aan toevoegen zodat je makkelijk de lessen kan volgen.",
+        step5Content: "Dwengobooks zijn interactieve tutorials die je stap voor stap uitlegen hoe je een programma moet schrijven. Je leerkracht kan hier zelf ook lessen aan toevoegen zodat je makkelijk de lessen kan volgen.",
         step6Title: "Je code uploaden naar het Dwenguino bord",
         step6Content: "Als je denkt dat je programma af is kan je het uploaden naar het Dwenguino bord door op deze knop te drukken. (Vergeet niet om eerst het bord aan te sluiten op de computer met de usb kabel)",
         step7Title: "Openen",
@@ -112,7 +112,7 @@ MSG.tutorials.introduction = {
         step8Title: "Opslaan",
         step8Content: "Met deze knop kan je de blokken opslaan naar een lokaal bestand",
         step9Title: "De simulator",
-        step9Content: "Met deze knop kan je de simulator openen, deze kan je gebruiken om je code eerst te testen voor je ze naar het bord upload."
+        step9Content: "Met deze knop kan je in de toekomst de simulator openen, deze kan je gebruiken om je code eerst te testen voor je ze naar het bord upload."
 
 };
 
