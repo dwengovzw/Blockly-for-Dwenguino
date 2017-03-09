@@ -71,10 +71,11 @@ var DwenguinoBlockly = {
         $( "#db_menu_item_difficulty_slider" ).slider({
             value:0,
             min: 0,
-            max: 4,
+            max: 1,
             step: 1,
             slide: function( event, ui ) {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
+                console.log(ui.value);
                 DwenguinoBlockly.takeSnapshotOfWorkspace();
                 //DwenguinoBlockly.appendToRecording("<setDifficultyLevel_" + ui.value + "/>"); // Diff is now attribute of workspaceupdate tag
             }
@@ -110,14 +111,14 @@ var DwenguinoBlockly = {
 
         //save/upload buttons
         $("#db_menu_item_run").click(function(){
-            if (dwenguinoBlocklyServer){
+            if ((typeof dwenguinoBlocklyServer) != 'undefined'){
                 var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
                 dwenguinoBlocklyServer.uploadCode(code);
             }
         });
 
         $("#db_menu_item_upload").click(function(){
-            if (dwenguinoBlocklyServer){
+            if ((typeof dwenguinoBlocklyServer) != 'undefined'){
                 try {
                     var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer.loadBlocks());
                 } catch (e) {
@@ -133,7 +134,7 @@ var DwenguinoBlockly = {
         });
 
         $("#db_menu_item_download").click(function(){
-            if (dwenguinoBlocklyServer){
+            if ((typeof dwenguinoBlocklyServer) != 'undefined'){
                 var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
                 var data = Blockly.Xml.domToText(xml);
                 dwenguinoBlocklyServer.saveBlocks(data);
@@ -203,7 +204,7 @@ var DwenguinoBlockly = {
             console.log(data);
         });
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
-        if (dwenguinoBlocklyServer){
+        if ((typeof dwenguinoBlocklyServer) != 'undefined'){
             dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
         }
     },

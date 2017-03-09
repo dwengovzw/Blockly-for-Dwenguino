@@ -91,8 +91,25 @@ MSG.tutorials = {
 };
 
 MSG.tutorials.introduction = {
-        step1Title: "Welcome to DwenguinoBlockly",
-        step1Content: "In this tutorial you will learn the basics of our interface.",
-        step2Title: "The Blockly code area",
-        step2Content: "This is the blockly code area."
+  step1Title: "Welkom to DwenguinoBlockly",
+  step1Content: "Hi, my name is Dwenguino! I will help you to get to know the interface!",
+  step2aTitle: "The Blockly code area",
+  step2aContent: "In this area you put your code blocks. You should put your blocks inside the setup-loop block if you want them to be executed.",
+  step2bTitle: "The Blockly toolbox",
+  step2bContent: "This is the toolbox, it contains all the blocks you can use to create your program. You can explore the different cathegories to find out what your Dwenguino can do.",
+  step3Title: "Language selection",
+  step3Content: "Use this to change the language",
+  step4Title: "Difficulty",
+  step4Content: "This slider lets you set the difficulyt level. For now we only provide beginner and advanced levels.",
+  step5Title: "Dwengobooks",
+  step5Content: "Dwengobooks are interactive tutorials which guide you through the different physical computing challenges.",
+  step6Title: "Upload code",
+  step6Content: "When your code is complete, you can upload it to the Dwenguino board by clicking this button. Make sure you fist select the right board and port inside the Arduino ide.",
+  step7Title: "Open",
+  step7Content: "This button lets you open a previously saved program.",
+  step8Title: "Save",
+  step8Content: "With this button you can save your code to a local file.",
+  step9Title: "The simulator",
+  step9Content: "In the future you will be able to use this button to open the simulator. You can use it to test your code before uploading."
+
 };
