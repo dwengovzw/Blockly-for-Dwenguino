@@ -166,6 +166,8 @@ body{
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
 }
 
 #sim_lcds {
@@ -253,6 +255,10 @@ body{
     width: 13px;
     height: 13px;
     float:left;
+}
+
+.sim_button_pushed {
+    background-image: url("img/board/button_pushed.png");
 }
 
 .disabled {

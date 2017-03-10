@@ -29,7 +29,7 @@ Blockly.Arduino['setup_loop_structure'] = function (block) {
     var statements_setup = Blockly.Arduino.statementToCode(block, 'SETUP');
     var statements_loop = Blockly.Arduino.statementToCode(block, 'LOOP');
     // Assemble Arduino into code variable.
-    //Blockly.Arduino.setups_['userSetupCode'] = 'initDwenguino();\n' + statements_setup + "\n";
+    Blockly.Arduino.setups_['userSetupCode'] = 'initDwenguino();\n' + statements_setup + "\n";
 
     return statements_loop;
 

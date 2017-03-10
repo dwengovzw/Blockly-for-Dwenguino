@@ -606,6 +606,15 @@ var DwenguinoSimulation = {
             $("#sim_motor2").hide();
           }
         });
+        
+        // push buttons
+        $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('click', function() {
+          if (document.getElementById(this.id).className === "sim_button") {
+            document.getElementById(this.id).className = "sim_button sim_button_pushed";
+          } else {
+            document.getElementById(this.id).className = "sim_button";
+          }
+        });
     },
     
     setButtonsStart: function() {
@@ -676,6 +685,7 @@ var DwenguinoSimulation = {
         DwenguinoSimulation.oneStep();
         line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line; 
       }
+      
     },
     
     startSimulation: function() {
@@ -763,14 +773,13 @@ var DwenguinoSimulation = {
         else if (lines[line].trim() === Blockly.JavaScript.blockToCode(block).split('\n')[0]) {
           DwenguinoSimulation.blockMapping[line] = block;
           block = block.getNextBlock();
-        // end of loop structure
         }
+        // end of loop structure
         if (block === null && loopBlocks.length > 0) {
           var parentBlock = loopBlocks.pop();
           block = parentBlock.getNextBlock();
           line++;
         }
-        
         line++;
       };
       
@@ -909,7 +918,6 @@ var DwenguinoSimulation = {
       $("#sim_lcd_row"+row).text(text);
       document.getElementById('sim_lcd_row'+row).innerHTML = 
               document.getElementById('sim_lcd_row'+row).innerHTML.replace(/ /g, '&nbsp;');
-      
       // repaint
       var element = document.getElementById("sim_lcds");
       element.style.display='none';
@@ -931,13 +939,25 @@ var DwenguinoSimulation = {
       }
     },
     
+    digitalRead: function(pin) {
+      // read value from buttons
+      if (pin.startsWith("SW_")) {
+        return document.getElementById("sim_button_"+pin[3]).className === "sim_button"?1:0;
+      }
+    },
+    
     tone: function(pin, frequency) {
       if ( pin === "BUZZER") {
-        document.getElementById('sim_buzzer').className = "sim_buzzer_on";
-        
         if (DwenguinoSimulation.oscBuzzer === null) {
           // initiate sound object
-          DwenguinoSimulation.audiocontextBuzzer = new (window.AudioContext || window.webkitAudioContext)();
+          document.getElementById('sim_lcd_row0').innerHTML = "test0";
+          try {
+            DwenguinoSimulation.audiocontextBuzzer = new (window.AudioContext || window.webkitAudioContext)();
+          } catch(e) {
+            alert('Web Audio API is not supported in this browser');
+          }
+          document.getElementById('sim_lcd_row0').innerHTML = "test1";
+          //DwenguinoSimulation.audiocontextBuzzer = new AudioContext();
         }
         if (DwenguinoSimulation.tonePlayingBuzzer !== 0 && DwenguinoSimulation.tonePlayingBuzzer !== frequency) {
           DwenguinoSimulation.oscBuzzer.stop();
@@ -953,15 +973,14 @@ var DwenguinoSimulation = {
           DwenguinoSimulation.oscBuzzer.start(); // start the oscillator
 
           DwenguinoSimulation.tonePlayingBuzzer = frequency;
+        }
       }
-    }
     },
     
     noTone: function(pin) {
       if ( pin === "BUZZER") {
         // stop tone
         DwenguinoSimulation.tonePlayingBuzzer = 0;
-        document.getElementById('sim_buzzer').className = "sim_buzzer_off";
         DwenguinoSimulation.oscBuzzer.stop();
       }
     },
@@ -1043,4 +1062,18 @@ $(document).ready(function(){
     DwenguinoSimulation.setupEnvironment();
 });
 
+
+// initialise js functions if version older than 2015
+if (!String.prototype.repeat) {
+  String.prototype.repeat = function( num ) {
+    return new Array( num + 1 ).join( this );
+  };
+}
+
+if (!String.prototype.startsWith) {
+  String.prototype.startsWith = function (searchString, position) {
+      position = position || 0;
+      return this.substr(position, searchString.length) === searchString;
+  };
+}
 
