@@ -519,6 +519,28 @@ var DwenguinoSimulation = {
     motorSpeeds: [0,0],
     
     initDwenguinoSimulation: function(){
+        // translation
+        document.getElementById('sim_start').textContent = MSG.simulator['start'];
+        document.getElementById('sim_stop').textContent = MSG.simulator['stop'];
+        document.getElementById('sim_pause').textContent = MSG.simulator['pause'];
+        document.getElementById('sim_step').textContent = MSG.simulator['step'];
+        document.getElementById('sim_speedTag').textContent = MSG.simulator['speed'];
+        
+        document.getElementById('sim_speed_verySlow').textContent = MSG.simulator['speedVerySlow'];
+        document.getElementById('sim_speed_slow').textContent = MSG.simulator['speedSlow'];
+        document.getElementById('sim_speed_medium').textContent = MSG.simulator['speedMedium'];
+        document.getElementById('sim_speed_fast').textContent = MSG.simulator['speedFast'];
+        document.getElementById('sim_speed_veryFast').textContent = MSG.simulator['speedVeryFast'];
+        document.getElementById('sim_speed_realTime').textContent = MSG.simulator['speedRealTime'];
+        
+        document.getElementById('sim_components_select').textContent = MSG.simulator['components'] + ":";
+        document.getElementById('servo1').textContent = MSG.simulator['servo'] + " 1";
+        document.getElementById('servo2').textContent = MSG.simulator['servo'] + " 2";
+        document.getElementById('motor1').textContent = MSG.simulator['motor'] + " 1";
+        document.getElementById('motor2').textContent = MSG.simulator['motor'] + " 2";
+        
+        
+        // start/stop/pause
         $("#sim_start").click(function(){
             // start
             if (!DwenguinoSimulation.isSimulationRunning && !DwenguinoSimulation.isSimulationPaused) {
@@ -702,9 +724,7 @@ var DwenguinoSimulation = {
      * While the simulation is running steps keep being called with speeddelay timeouts in between
      */
     step : function() {
-      if (!DwenguinoSimulation.debuggerjs.machine.halted 
-              && !DwenguinoSimulation.debuggerjs.machine.paused
-              && DwenguinoSimulation.isSimulationRunning) {
+      if (DwenguinoSimulation.isSimulationRunning) {
         
         DwenguinoSimulation.debuggerjs.machine.step();
         var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line;
@@ -852,6 +872,8 @@ var DwenguinoSimulation = {
           break;
         case "veryfast":
           DwenguinoSimulation.speedDelaySimulation = 100;
+        case "realtime":
+          DwenguinoSimulation.speedDelaySimulation = 10;
           break;
       }
     },
@@ -893,6 +915,14 @@ var DwenguinoSimulation = {
        DwenguinoSimulation.motorSpeeds = [0,0]
        $("#sim_motor1").css("transform", "rotate(0deg)");
        $("#sim_motor2").css("transform", "rotate(0deg)");
+       
+       //reset buttons
+      document.getElementById("sim_button_N").className = "sim_button";
+      document.getElementById("sim_button_W").className = "sim_button";
+      document.getElementById("sim_button_C").className = "sim_button";
+      document.getElementById("sim_button_E").className = "sim_button";
+      document.getElementById("sim_button_S").className = "sim_button";
+      
     },
     
     sleep: function(delay) {
