@@ -3,7 +3,7 @@ var MSG = {
   blocks: "Blokken",
   linkTooltip: "Opslaan en koppelen naar blokken.",
   runTooltip: "Voer het programma uit dat met de blokken in de werkruimte is gemaakt.",
-  loadBlocksFileTooltip: "Laadt een block bestand in dat je eerder hebt opgeslagen.",
+  loadBlocksFileTooltip: "Laad een block bestand in dat je eerder hebt opgeslagen.",
   saveBlocksFileTooltip: "Sla de blokken op naar een lokaal bestand.",
   toggleSimulator: "Open of sluit het simulatorvenster.",
   badCode: "Programmafout:\n%1",
@@ -82,7 +82,23 @@ var MSG = {
   center: "Center",
   ledsReg: "LEDS",
   dwenguinoLedsRegTooltip: "Met deze blok kan je leds 0 tot 7 met één binair getal aan of af zetten. Bijvoorbeeld: 0b00001111 zal leds 0 tot 3 aanzetten en de rest uit.",
-  
+};
+
+MSG.simulator = {
+  start: "Start",
+  stop: "Stop",
+  pause: "Pauze",
+  step: "1 Stap",
+  speed: "Snelheid",
+  speedVerySlow: "Zeer traag",
+  speedSlow: "Traag",
+  speedMedium: "Medium",
+  speedFast: "Snel",
+  speedVeryFast: "Zeer snel",
+  speedRealTime: "Real-time",
+  components: "Selecteer onderdelen",
+  servo: "Servo",
+  motor: "Motor"
 };
 
 MSG.tutorials = {

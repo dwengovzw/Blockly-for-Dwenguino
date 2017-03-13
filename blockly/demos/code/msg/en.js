@@ -84,6 +84,23 @@ var MSG = {
 
 };
 
+
+MSG.simulator = {
+  start: "Start",
+  stop: "Stop",
+  pause: "Pause",
+  step: "1 Step",
+  speed: "Speed",
+  speedVerySlow: "Very slow",
+  speedSlow: "Slow",
+  speedMedium: "Medium",
+  speedFast: "Fast",
+  speedVeryFast: "Very fast",
+  speedRealTime: "Real-time",
+  components: "Select components",
+  servo: "Servo",
+  motor: "Motor"
+};
 MSG.tutorials = {
     introduction: {},
     theremin: {},

@@ -273,6 +273,7 @@ body{
     float:right;
     position:relative;
     padding: 5px;
+    max-width: 80px;
 }
 
 #sim_components {
