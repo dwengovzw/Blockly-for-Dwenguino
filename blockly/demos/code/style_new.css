@@ -273,7 +273,7 @@ body{
     float:right;
     position:relative;
     padding: 5px;
-    max-width: 80px;
+    max-width: 100px;
 }
 
 #sim_components {
@@ -282,6 +282,17 @@ body{
     left: 72%;
     height: 25%;
     width: 25%;
+}
+
+#sim_scope_name {
+    padding-top: 10px;
+}
+
+#sim_scope {
+    padding-top: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height:150px;
 }
 
 .sim_servo {
