@@ -164,7 +164,7 @@ body{
     height: 25vmin;
     position: relative;
     top: 50%;
-    left: 50%;
+    left: 30%;
     transform: translate(-50%, -50%);
     -webkit-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
@@ -277,11 +277,11 @@ body{
 }
 
 #sim_components {
-    position: relative;
-    top: -5%;
-    left: 72%;
-    height: 25%;
-    width: 25%;
+    position: absolute;
+    top: 25%;
+    left: 75%;
+    height: 100px;
+    width: 120px;
 }
 
 #sim_scope_name {

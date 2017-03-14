@@ -726,6 +726,8 @@ var DwenguinoSimulation = {
     step : function() {
       if (DwenguinoSimulation.isSimulationRunning) {
         
+        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line-1;
+        
         DwenguinoSimulation.debuggerjs.machine.step();
         
         // highlight the current block
@@ -733,7 +735,6 @@ var DwenguinoSimulation = {
         DwenguinoSimulation.handleScope();
         
         // check if current line is not a sleep
-        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line-2;
         var code = DwenguinoSimulation.code.split("\n")[line] === undefined? '':DwenguinoSimulation.code.split("\n")[line];
         
         if (!code.trim().startsWith("DwenguinoSimulation.sleep")) {
@@ -876,7 +877,7 @@ var DwenguinoSimulation = {
         case "veryfast":
           DwenguinoSimulation.speedDelaySimulation = 100;
         case "realtime":
-          DwenguinoSimulation.speedDelaySimulation = 10;
+          DwenguinoSimulation.speedDelaySimulation = 20;
           break;
       }
     },
