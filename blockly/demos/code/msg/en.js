@@ -99,7 +99,8 @@ MSG.simulator = {
   speedRealTime: "Real-time",
   components: "Select components",
   servo: "Servo",
-  motor: "Motor"
+  motor: "Motor",
+  scope: "Variables"
 };
 MSG.tutorials = {
     introduction: {},

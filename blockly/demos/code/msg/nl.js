@@ -98,7 +98,8 @@ MSG.simulator = {
   speedRealTime: "Real-time",
   components: "Selecteer onderdelen",
   servo: "Servo",
-  motor: "Motor"
+  motor: "Motor",
+  scope: "Waarden"
 };
 
 MSG.tutorials = {

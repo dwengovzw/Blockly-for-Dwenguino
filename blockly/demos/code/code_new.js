@@ -538,6 +538,7 @@ var DwenguinoSimulation = {
         document.getElementById('servo2').textContent = MSG.simulator['servo'] + " 2";
         document.getElementById('motor1').textContent = MSG.simulator['motor'] + " 1";
         document.getElementById('motor2').textContent = MSG.simulator['motor'] + " 2";
+        document.getElementById('sim_scope_name').textContent = MSG.simulator['scope'] + ":";
         
         
         // start/stop/pause
@@ -707,7 +708,6 @@ var DwenguinoSimulation = {
         DwenguinoSimulation.oneStep();
         line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line; 
       }
-      
     },
     
     startSimulation: function() {
@@ -727,19 +727,21 @@ var DwenguinoSimulation = {
       if (DwenguinoSimulation.isSimulationRunning) {
         
         DwenguinoSimulation.debuggerjs.machine.step();
-        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line;
         
         // highlight the current block
         DwenguinoSimulation.updateBlocklyColour();
         DwenguinoSimulation.handleScope();
         
         // check if current line is not a sleep
-        if (!DwenguinoSimulation.code.split("\n")[line-1].trim().startsWith("DwenguinoSimulation.sleep")) {
+        var line = DwenguinoSimulation.debuggerjs.machine.getCurrentLoc().start.line-2;
+        var code = DwenguinoSimulation.code.split("\n")[line] === undefined? '':DwenguinoSimulation.code.split("\n")[line];
+        
+        if (!code.trim().startsWith("DwenguinoSimulation.sleep")) {
           setTimeout(DwenguinoSimulation.step, DwenguinoSimulation.speedDelaySimulation);
         } else {
           // sleep
           setTimeout(DwenguinoSimulation.step, 
-              DwenguinoSimulation.speedDelaySimulation + Number(DwenguinoSimulation.code.split("\n")[line-1].replace( /\D+/g, '')));
+              DwenguinoSimulation.speedDelaySimulation + Number(DwenguinoSimulation.code.split("\n")[line].replace( /\D+/g, '')));
         }
       }
       DwenguinoSimulation.checkForEnd();
@@ -749,17 +751,18 @@ var DwenguinoSimulation = {
     
     oneStep: function() {
       DwenguinoSimulation.debuggerjs.machine.step();
-      DwenguinoSimulation.handleScope();
       DwenguinoSimulation.updateBlocklyColour();
+      DwenguinoSimulation.handleScope();
       DwenguinoSimulation.checkForEnd();
     },
     
     handleScope: function() {
       var scope = DwenguinoSimulation.debuggerjs.machine.getCurrentStackFrame().scope;
+      document.getElementById('sim_scope').innerHTML = "";
       for (var i in scope) {
         var item = scope[i];
         var value = DwenguinoSimulation.debuggerjs.machine.$runner.gen.stackFrame.evalInScope(item.name);
-        console.log(item.name, value);
+        document.getElementById('sim_scope').innerHTML = document.getElementById('sim_scope').innerHTML + item.name + " = " + value + "<br>";
       }
     },
     
@@ -908,21 +911,17 @@ var DwenguinoSimulation = {
        
        // reset servo
        DwenguinoSimulation.servoAngles = [0,0]
-       $("#sim_servo1_mov").css("transform", "rotate(0deg)");
-       $("#sim_servo2_mov").css("transform", "rotate(0deg)");
+       $("#sim_servo1_mov, #sim_servo2_mov").css("transform", "rotate(0deg)");
        
        // reset motors
        DwenguinoSimulation.motorSpeeds = [0,0]
-       $("#sim_motor1").css("transform", "rotate(0deg)");
-       $("#sim_motor2").css("transform", "rotate(0deg)");
+       $("#sim_motor1, #sim_motor2").css("transform", "rotate(0deg)");
        
        //reset buttons
-      document.getElementById("sim_button_N").className = "sim_button";
-      document.getElementById("sim_button_W").className = "sim_button";
-      document.getElementById("sim_button_C").className = "sim_button";
-      document.getElementById("sim_button_E").className = "sim_button";
-      document.getElementById("sim_button_S").className = "sim_button";
+      $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").removeClass().addClass('sim_button');
       
+      // clear scope
+      document.getElementById('sim_scope').innerHTML = "";
     },
     
     sleep: function(delay) {
@@ -980,13 +979,11 @@ var DwenguinoSimulation = {
       if ( pin === "BUZZER") {
         if (DwenguinoSimulation.oscBuzzer === null) {
           // initiate sound object
-          document.getElementById('sim_lcd_row0').innerHTML = "test0";
           try {
             DwenguinoSimulation.audiocontextBuzzer = new (window.AudioContext || window.webkitAudioContext)();
           } catch(e) {
             alert('Web Audio API is not supported in this browser');
           }
-          document.getElementById('sim_lcd_row0').innerHTML = "test1";
           //DwenguinoSimulation.audiocontextBuzzer = new AudioContext();
         }
         if (DwenguinoSimulation.tonePlayingBuzzer !== 0 && DwenguinoSimulation.tonePlayingBuzzer !== frequency) {
@@ -1087,12 +1084,6 @@ var DwenguinoSimulation = {
     },
 };
 
-$(document).ready(function(){
-    DwenguinoBlockly.setupEnvironment();
-    DwenguinoSimulation.setupEnvironment();
-});
-
-
 // initialise js functions if version older than 2015
 if (!String.prototype.repeat) {
   String.prototype.repeat = function( num ) {
@@ -1107,3 +1098,7 @@ if (!String.prototype.startsWith) {
   };
 }
 
+$(document).ready(function(){
+    DwenguinoBlockly.setupEnvironment();
+    DwenguinoSimulation.setupEnvironment();
+});
