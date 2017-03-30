@@ -80,6 +80,7 @@
     showCloseButton: true,
     showPrevButton:  false,
     showNextButton:  true,
+    showMinimizeButton: true,
     bubbleWidth:     280,
     bubblePadding:   15,
     arrowWidth:      20,
@@ -612,7 +613,6 @@
 
   HopscotchBubble.prototype = {
     isShowing: false,
-
     currStep: undefined,
 
     /**
@@ -804,6 +804,7 @@
           showPrev: (utils.valOrDefault(step.showPrevButton, this.opt.showPrevButton) && (this._getStepNum(idx) > 0)),
           showNext: utils.valOrDefault(step.showNextButton, this.opt.showNextButton),
           showCTA: utils.valOrDefault((step.showCTAButton && step.ctaLabel), false),
+          showMinimize: utils.valOrDefault(step.showMinimizeButton, this.opt.showMinimizeButton),
           ctaLabel: step.ctaLabel,
           showClose: utils.valOrDefault(this.opt.showCloseButton, true)
         },
@@ -1026,6 +1027,7 @@
          if(utils.hasClass(el, 'hopscotch-next')){ return 'next'; }
          if(utils.hasClass(el, 'hopscotch-prev')){ return 'prev'; }
          if(utils.hasClass(el, 'hopscotch-close')){ return 'close'; }
+         if(utils.hasClass(el, 'hopscotch-minimize')){return 'minimize'; }
          /*else*/ return findMatchRecur(el.parentElement);
       }
 
@@ -1043,12 +1045,15 @@
         }
       }
       else if (action === 'next'){
+        Hopscotch.wasMinimized = false;
         winHopscotch.nextStep(true);
       }
       else if (action === 'prev'){
+        Hopscotch.wasMinimized = false;
         winHopscotch.prevStep(true);
       }
       else if (action === 'close'){
+        Hopscotch.wasMinimized = false;
         if (this.opt.isTourBubble){
           var currStepNum   = winHopscotch.getCurrStepNum(),
               currTour      = winHopscotch.getCurrTour(),
@@ -1072,6 +1077,10 @@
         }
 
         utils.evtPreventDefault(evt);
+      }else if (action === 'minimize'){
+        Hopscotch.savedPosition = hopscotch.getCurrStepNum();
+        Hopscotch.wasMinimized = true;
+        winHopscotch.endTour(true, false);
       }
       //Otherwise, do nothing. We didn't click on anything relevant.
     },
@@ -1096,6 +1105,7 @@
       opt = {
         showPrevButton: defaultOpts.showPrevButton,
         showNextButton: defaultOpts.showNextButton,
+        showMinimizeButton: defaultOpts.showMinimizeButton,
         bubbleWidth:    defaultOpts.bubbleWidth,
         bubblePadding:  defaultOpts.bubblePadding,
         arrowWidth:     defaultOpts.arrowWidth,
@@ -1322,6 +1332,8 @@
         cookieTourStep,
         cookieSkippedSteps = [],
         _configure,
+        wasMinimized = false,
+        savedPosition = 0,
 
     /**
      * getBubble
@@ -1872,7 +1884,7 @@
       // loadTour if we are calling startTour directly. (When we call startTour
       // from window onLoad handler, we'll use currTour)
       if (!currTour) {
-        
+
         // Sanity check! Is there a tour?
         if(!tour){
           throw new Error('Tour data is required for startTour.');
@@ -1913,7 +1925,9 @@
       else if (!currStepNum) {
         currStepNum = 0;
       }
-
+      if (Hopscotch.wasMinimized === true){
+        currStepNum = Hopscotch.savedPosition;
+      }
       // Find the current step we should begin the tour on, and then actually start the tour.
       findStartingStep(currStepNum, skippedSteps, function(stepNum) {
         var target = (stepNum !== -1) && utils.getStepTarget(currTour.steps[stepNum]);
@@ -2457,7 +2471,7 @@ var _ = {};
  */
 _.escape = function(str){
   if(customEscape){ return customEscape(str); }
-  
+
   if(str == null) return '';
   return ('' + str).replace(new RegExp('[&<>"\']', 'g'), function(match){
     if(match == '&'){ return '&amp;' }
@@ -2524,6 +2538,11 @@ __p += '<button class="hopscotch-nav-button next hopscotch-next">' +
 '</button>';
  } ;
 __p += '\n  </div>\n  ';
+if (buttons.showMinimize){
+  __p += '<button class="hopscotch-bubble-minimize hopscotch-minimize">' +
+  ((__t = ( i18n.closeTooltip )) == null ? '' : __t) +
+  '</button>';
+}
  if(buttons.showClose){ ;
 __p += '<button class="hopscotch-bubble-close hopscotch-close">' +
 ((__t = ( i18n.closeTooltip )) == null ? '' : __t) +

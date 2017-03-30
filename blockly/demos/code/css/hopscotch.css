@@ -420,6 +420,28 @@ div.hopscotch-bubble .hopscotch-bubble-close.hide,
 div.hopscotch-bubble .hopscotch-bubble-close.hide-all {
   display: none;
 }
+div.hopscotch-bubble .hopscotch-bubble-minimize {
+  border: 0;
+  color: #000;
+  background: url(../img/icon-minus.png) no-repeat;
+  background-size: 16px;
+  background-position: center;
+  display: block;
+  padding: 8px;
+  margin-right: 16px;
+  position: absolute;
+  text-decoration: none;
+  text-indent: -9999px;
+  width: 8px;
+  height: 8px;
+  top: 0;
+  right: 0;
+}
+div.hopscotch-bubble .hopscotch-bubble-minimize.hide,
+div.hopscotch-bubble .hopscotch-bubble-minimize.hide-all {
+  display: none;
+}
+
 div.hopscotch-bubble .hopscotch-bubble-number {
   background: transparent url(../img/sprite-green.png) 0 0 no-repeat;
   color: #fff;

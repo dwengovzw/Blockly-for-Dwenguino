@@ -1,6 +1,7 @@
 var DwengoBotId = "db_menu_item_dwengo_robot_teacher_image";
 tutorials.basic_test =    {
     id: "db_basic_test",
+    label: MSG.tutsBasicTest,
     steps: [
         {
             title: MSG.tutorials.basic_test.step1Title,

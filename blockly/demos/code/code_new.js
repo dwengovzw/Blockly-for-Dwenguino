@@ -17,7 +17,6 @@ var DwenguinoBlockly = {
     initDwenguinoBlockly: function(){
         //set keypress event listerner to show test environment window
         var keys = {};
-
         $(document).keydown(function (e) {
             keys[e.which] = true;
             if (keys[69] && keys[83] && keys[84]){
@@ -46,7 +45,6 @@ var DwenguinoBlockly = {
                 + ";" + (DwenguinoBlockly.activityIdSetting || "")
                 + ";" + (activity_date || "") + "]");
         });
-
 
         DwenguinoBlockly.sessionId = window.sessionStorage.loadOnceSessionId;
         delete window.sessionStorage.loadOnceSessionId;
@@ -77,7 +75,6 @@ var DwenguinoBlockly = {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
                 console.log(ui.value);
                 DwenguinoBlockly.takeSnapshotOfWorkspace();
-                //DwenguinoBlockly.appendToRecording("<setDifficultyLevel_" + ui.value + "/>"); // Diff is now attribute of workspaceupdate tag
             }
         });
         $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
@@ -97,12 +94,10 @@ var DwenguinoBlockly = {
                 $("#db_blockly").width('100%');
                 this.simButtonStateClicked = false;
                 DwenguinoBlockly.simulatorState = "off";
-                //DwenguinoBlockly.appendToRecording("<stopSimulator/>"); // Now attribute of workspace update tag
             }else{
                 $("#db_blockly").width('50%');
                 this.simButtonStateClicked = true;
                 DwenguinoBlockly.simulatorState = "on";
-                //DwenguinoBlockly.appendToRecording("<startSimulator/>"); // Now attribute of workspace update tag
             }
             DwenguinoBlockly.takeSnapshotOfWorkspace();
             DwenguinoBlockly.onresize();
@@ -115,6 +110,7 @@ var DwenguinoBlockly = {
                 var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
                 dwenguinoBlocklyServer.uploadCode(code);
             }
+            appendToRecording("<runClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></runClicked>")
         });
 
         $("#db_menu_item_upload").click(function(){
@@ -131,6 +127,7 @@ var DwenguinoBlockly = {
                 //Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
                 Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
             }
+            appendToRecording("<uploadClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></uploadClicked>")
         });
 
         $("#db_menu_item_download").click(function(){
@@ -140,33 +137,18 @@ var DwenguinoBlockly = {
                 dwenguinoBlocklyServer.saveBlocks(data);
             }
         });
-
         //dropdown menu code
          $(".dropdown-toggle").dropdown();
-
-         //dropdown link behaviors
-         $("#tutsIntroduction").click(function(){
-             DwenguinoBlockly.tutorialId = "Introduction";
+         $.each(tutorials, function(index, arrayElement){
+           var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
+           newLi.click(function(){
+             DwenguinoBlockly.tutorialId = arrayElement.id;
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
-             hopscotch.startTour(tutorials.introduction);
+             hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
+             hopscotch.startTour(arrayElement);
              DwenguinoBlockly.takeSnapshotOfWorkspace();
-             //DwenguinoBlockly.appendToRecording('<startIntroductionTutorial time="' + $.now() + '"/>');
-         });
-
-         $("#tutsBasicTest").click(function(){
-             DwenguinoBlockly.tutorialId = "BasicTest"
-             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
-             hopscotch.startTour(tutorials.basic_test);
-             DwenguinoBlockly.takeSnapshotOfWorkspace();
-             //DwenguinoBlockly.appendToRecording('<startBasicTestTutorial time="' + $.now() + '"/>');
-         });
-
-         $("#tutsTheremin").click(function(){
-             DwenguinoBlockly.tutorialId  = "Theremin";
-             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId ;
-             hopscotch.startTour(tutorials.theremin);
-             DwenguinoBlockly.takeSnapshotOfWorkspace();
-             //DwenguinoBlockly.appendToRecording('<startTheremin time="' + $.now() + '"/>');
+           });
+           $("#dropdownMenuTuts").append(newLi);
          });
 
          //following event listener is only a test --> remove later!
@@ -179,8 +161,7 @@ var DwenguinoBlockly = {
     endTutorial: function(){
         DwenguinoBlockly.tutorialId = "";
         DwenguinoBlockly.tutorialIdSetting = "";
-        //DwenguinoBlockly.appendToRecording('<endTutorial time="' + $.now() + '"/>');
-        //DwenguinoBlockly.submitRecordingToServer();
+        DwenguinoBlockly.takeSnapshotOfWorkspace();
     },
 
     appendToRecording: function(tag){
@@ -188,21 +169,26 @@ var DwenguinoBlockly = {
             console.log(DwenguinoBlockly.recording);
     },
 
-
+    /*
+     * This function sends all logged data to the server or saves it to a local log file.
+     * It is called at a set interval of 10 seconds.
+     */
     submitRecordingToServer: function(){
         //online code submission
         var serverSubmission = { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityId, timestamp: $.now(), logData: DwenguinoBlockly.recording };
-        $.ajax({
-            type: "POST",
-            url: "http://localhost:3000/sessions/update",
-            data: serverSubmission,
+        if (DwenguinoBlockly.sessionId !== undefined){
+          $.ajax({
+              type: "POST",
+              url: "http://localhost:3000/sessions/update",
+              data: serverSubmission,
 
+          }
+          ).done(function(data){
+              console.log(data);
+          }).fail(function(data)  {
+              console.log(data);
+          });
         }
-        ).done(function(data){
-            console.log(data);
-        }).fail(function(data)  {
-            console.log(data);
-        });
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
         if ((typeof dwenguinoBlocklyServer) != 'undefined'){
             dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
@@ -211,7 +197,7 @@ var DwenguinoBlockly = {
 
     prevWorkspaceXml: "",
     /**
-    *   Take a snapshot of the current blocks in the workspace.
+    *   Take a snapshot of the current timestamp, simulatorstate, selectedDifficulty, activeTutorial and blocks in the workspace.
     */
     takeSnapshotOfWorkspace: function(){
         console.log("taking snapshot");
@@ -326,7 +312,7 @@ var DwenguinoBlockly = {
             var text = Blockly.Xml.domToText(xml);
             window.sessionStorage.loadOnceBlocks = text;
             window.sessionStorage.loadOnceRecording = DwenguinoBlockly.recording;
-            window;sessionStorage.loadOnceSessionId = DwenguinoBlockly.sessionId;
+            window.sessionStorage.loadOnceSessionId = DwenguinoBlockly.sessionId;
         }
 
         var languageMenu = document.getElementById('db_menu_item_language_selection');
@@ -475,17 +461,19 @@ var DwenguinoBlockly = {
         }
         Blockly.Xml.domToWorkspace(xmlDom, DwenguinoBlockly.workspace);
     },
+    tearDownEnvironment: function(){
+      DwenguinoBlockly.submitRecordingToServer();
+    },
 
     setupEnvironment: function(){
         DwenguinoBlockly.initLanguage();
-        //DwenguinoBlockly.doTranslation();   TODO: remove line!
         DwenguinoBlockly.injectBlockly();
         DwenguinoBlockly.loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
         DwenguinoBlockly.initDwenguinoBlockly();
         DwenguinoBlockly.doTranslation();
         DwenguinoBlockly.setDifficultyLevel(0);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
-        setInterval(function(){ DwenguinoBlockly.submitRecordingToServer(); }, 10000);
+        //setInterval(function(){ DwenguinoBlockly.submitRecordingToServer(); }, 20000);
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
             Blockly.svgResize(DwenguinoBlockly.workspace);
@@ -493,6 +481,10 @@ var DwenguinoBlockly = {
     },
 
 };
+
+
+
 $(document).ready(function(){
+  console.log("ready");
     DwenguinoBlockly.setupEnvironment();
 });
