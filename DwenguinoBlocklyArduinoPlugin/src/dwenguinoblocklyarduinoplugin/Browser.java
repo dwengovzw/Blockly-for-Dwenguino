@@ -5,6 +5,7 @@
  */
 package dwenguinoblocklyarduinoplugin;
 
+import java.awt.Window;
 import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -32,30 +33,34 @@ import javafx.scene.web.WebEvent;
  */
 class Browser extends Region {
  
-    public final WebView browser = new WebView();
-    public final WebEngine webEngine = browser.getEngine();
+    public WebView browser = new WebView();
+    public WebEngine webEngine = browser.getEngine();
     public DwenguinoBlocklyServer serverObject;
+    public ChangeListener<State> changeListener;
      
     public Browser(Editor editor) {
         //apply the styles
         getStyleClass().add("browser");
         
-        // process page loading
-        webEngine.getLoadWorker().stateProperty().addListener(
-            new ChangeListener<State>() {
+        
+        
+        changeListener = new ChangeListener<State>() {
                 @Override
                 public void changed(ObservableValue<? extends State> ov,
                     State oldState, State newState) {   
                     if (newState == State.SUCCEEDED) {
                         // The JavaAppp class implements the JavaScript to Java bindings
                         serverObject = new DwenguinoBlocklyServer(editor, Browser.this.getScene().getWindow());
-                            JSObject win = 
-                                (JSObject) webEngine.executeScript("window");
-                                win.setMember("dwenguinoBlocklyServer", serverObject);
-                        }
+                            JSObject win = (JSObject) webEngine.executeScript("window");
+                            win.setMember("dwenguinoBlocklyServer", serverObject);
+                            //win.call("ready"); // execute callback
+                        }else{
                     }
-                }
-        );
+                    }
+                };
+        
+        // process page loading
+        webEngine.getLoadWorker().stateProperty().addListener(changeListener);
         
         webEngine.setOnAlert(new EventHandler<WebEvent<String>>() {
 
@@ -79,23 +84,12 @@ class Browser extends Region {
         baseurl = baseurl.replace("\\", "/");
         baseurl = baseurl.replace("DwenguinoBlocklyArduinoPlugin.jar", "");
         
-//        System.out.println("baseurl");
-//        System.out.println(baseurl);
-//        
-//        System.out.println("Loading file:");
-//        System.out.println(baseurl + "DwenguinoBlockly/blockly/demos/code/index.html");
         
         webEngine.load(baseurl + "DwenguinoBlockly/blockly/demos/code/index_new.html");
-        //webEngine.load(baseurl + "/Documents/Arduino/tools/DwenguinoBlocklyArduinoPlugin/tool/DwenguinoBlockly/blockly/demos/code/index.html");
 
         //add the web view to the scene
         getChildren().add(browser);
  
-    }
-    private Node createSpacer() {
-        Region spacer = new Region();
-        HBox.setHgrow(spacer, Priority.ALWAYS);
-        return spacer;
     }
  
     @Override protected void layoutChildren() {
@@ -111,4 +105,5 @@ class Browser extends Region {
     @Override protected double computePrefHeight(double width) {
         return 500;
     }
+   
 }

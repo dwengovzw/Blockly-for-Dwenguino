@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -20,9 +21,11 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javax.swing.SwingUtilities;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import processing.app.EditorTab;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
+import org.apache.commons.io.FilenameUtils;
 import processing.app.Editor;
 
 /**
@@ -47,32 +50,28 @@ public class DwenguinoBlocklyServer {
      * @param xml The xml structure of the created block program.
      */
     public void saveBlocks(String xml) {
-        System.out.println("saving blocks");
-        System.out.println(lastOpenedLocation);
+        //System.out.println("saving blocks");
+        
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(lastOpenedLocation));
         fileChooser.setTitle("Save");
-        System.out.println("select file");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
         File selectedFile = fileChooser.showSaveDialog(ownerWindow);
-        System.out.println("file selected");
         if (selectedFile != null) {
-            System.out.println("saving open location");
+            if (selectedFile.getName().matches("^.*\\.xml$")) {
+                // filename is OK as-is
+            } else {
+                selectedFile = new File(selectedFile.toString() + ".xml");  // append .xml if "foo.jpg.xml" is OK
+            }
             lastOpenedLocation = selectedFile.getParent();
             try {
-                System.out.println("creating wirter");
                 BufferedWriter bWriter = new BufferedWriter(new FileWriter(selectedFile));
-                System.out.println("write");
                 bWriter.write(xml);
-                System.out.println("flush");
                 bWriter.flush();
-                System.out.println("close");
                 bWriter.close();
-                System.out.println("done");
             } catch (IOException ex) {
-                System.out.println("error while wirting blocks");
                 Logger.getLogger(DwenguinoBlocklyServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -85,29 +84,37 @@ public class DwenguinoBlocklyServer {
      * @param code The Arduino c code generated from the blocks.
      */
     public void saveCode(String code) {
-        System.out.println("Saving code");
+        //System.out.println("Saving code");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(lastOpenedLocation));
         fileChooser.setTitle("Save");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Arduino files", "*.ino", "*.c", "*.cpp")
         );
-        System.out.println("Show file chooser");
-        File selectedFile = fileChooser.showSaveDialog(ownerWindow);
-        System.out.println("File has been selected");
-        if (selectedFile != null) {
+        //System.out.println("Show file chooser");
+        File file = fileChooser.showSaveDialog(ownerWindow);
+        File selectedFile = null;
+        //System.out.println("File has been selected");
+        if (file != null) {
+            if (!file.getName().matches("*.xml")) {
+                // filename is OK as-is
+                selectedFile = file;
+            } else {
+                selectedFile = new File(file.toString() + ".xml");  // append .xml if "foo.jpg.xml" is OK
+            }
+            //System.out.println(selectedFile);
             lastOpenedLocation = selectedFile.getParent();
-            System.out.println("saved open location");
+            //System.out.println("saved open location");
             try {
-                System.out.println("trying to writ to file");
-                BufferedWriter bWriter = new BufferedWriter(new FileWriter(selectedFile));
-                System.out.println("start writing");
+                //System.out.println("trying to writ to file");
+                BufferedWriter bWriter = new BufferedWriter(new FileWriter(file));
+                //System.out.println("start writing");
                 bWriter.write(code);
                 bWriter.flush();
                 bWriter.close();
-                System.out.println("writing done");
+                //System.out.println("writing done");
             } catch (IOException ex) {
-                System.out.println("error while writing file!");
+                //System.out.println("error while writing file!");
                 Logger.getLogger(DwenguinoBlocklyServer.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
@@ -124,13 +131,11 @@ public class DwenguinoBlocklyServer {
         
         File logfile = new File(System.getProperty("user.home"), "db_logfile" + DwenguinoBlocklyArduinoPlugin.startTimestamp + ".txt");
         try {
-            System.out.println("Writing to log:");
-            System.out.println(log);
-            BufferedWriter bWriter = new BufferedWriter(new FileWriter(logfile));
+            BufferedWriter bWriter = new BufferedWriter(new PrintWriter(logfile));
             bWriter.write(log);
             bWriter.flush();
             bWriter.close();
-            System.out.println("Done writing to log.");
+            
         } catch (IOException ex) {
             Logger.getLogger(DwenguinoBlocklyServer.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -148,39 +153,39 @@ public class DwenguinoBlocklyServer {
             
             @Override
             public void run() {
-                System.out.println("code upload run method stared");
+                //System.out.println("code upload run method stared");
                 try{
-                    System.out.println("make method");
+                    //System.out.println("make method");
                     java.lang.reflect.Method method;
-                    System.out.println("get DwenguinoBlocklyArduinoPlugin class");
+                    //System.out.println("get DwenguinoBlocklyArduinoPlugin class");
                     Class ed = DwenguinoBlocklyArduinoPlugin.editor.getClass();
-                    System.out.println("get args");
+                    //System.out.println("get args");
                     Class[] cArg = new Class[1];
-                    System.out.println("set first arg as string");
+                    //System.out.println("set first arg as string");
                     cArg[0] = String.class;
-                    System.out.println("get setText method");
+                    //System.out.println("get setText method");
                     method = ed.getMethod("setText", cArg);
-                    System.out.println("invoke method");
+                    //System.out.println("invoke method");
                     method.invoke(editor, code);
                 }catch(NoSuchMethodException e) {
-                    System.out.println("nosuchmethod");
+                    //System.out.println("nosuchmethod");
  			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
  		} catch (IllegalAccessException e) {
-                    System.out.println("illegalaccess");
+                    //System.out.println("illegalaccess");
  			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
  		} catch (SecurityException e) {
-                    System.out.println("security");
+                    //System.out.println("security");
  			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
  		} catch (InvocationTargetException e) {
-                    System.out.println("invocationtarget");
+                    //System.out.println("invocationtarget");
  			DwenguinoBlocklyArduinoPlugin.editor.getCurrentTab().setText(code);
  		}
         
-                System.out.println("handleExport");
+                //System.out.println("handleExport");
 
                 DwenguinoBlocklyArduinoPlugin.editor.handleExport(false);
 
-                System.out.println("Done handling export");
+                //System.out.println("Done handling export");
             }
         });
         
@@ -194,7 +199,7 @@ public class DwenguinoBlocklyServer {
      * @return xml data for the block structure.
      */
     public String loadBlocks() {
-        System.out.println("loading blocks");
+        //System.out.println("loading blocks");
         String blockData = "";
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(new File(lastOpenedLocation));
@@ -203,19 +208,19 @@ public class DwenguinoBlocklyServer {
                 new FileChooser.ExtensionFilter("XML files", "*.xml")
         );
         File selectedFile = fileChooser.showOpenDialog(ownerWindow);
-        System.out.println("file selected");
+        //System.out.println("file selected");
         if (selectedFile != null) {
             lastOpenedLocation = selectedFile.getParent();
-            System.out.println("saved last opened location");
+            //System.out.println("saved last opened location");
             try {
                 BufferedReader fReader = new BufferedReader(new FileReader(selectedFile));
                 blockData = fReader.lines().collect(Collectors.joining());
                 fReader.close();
             } catch (FileNotFoundException ex) {
-                System.out.println("filenotfoundexception");
+                //System.out.println("filenotfoundexception");
                 Logger.getLogger(DwenguinoBlocklyServer.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                System.out.println("ioexception");
+                //System.out.println("ioexception");
                 Logger.getLogger(DwenguinoBlocklyServer.class.getName()).log(Level.SEVERE, null, ex);
             }
 
@@ -225,7 +230,7 @@ public class DwenguinoBlocklyServer {
     }
 
     public void discard() {
-        System.out.println("Are you sure you want to discard your blocks?");
+        //System.out.println("Are you sure you want to discard your blocks?");
     }
 
     public void exit() {

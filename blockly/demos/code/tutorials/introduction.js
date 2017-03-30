@@ -1,17 +1,20 @@
 
-tutorials.introduction =    {
-      id: "hello-dwenguinoblockly",
+tutorials.introduction = {
+      id: "tutsIntroduction",
+      label: MSG.tutsIntroduction,
       steps: [
         {
           title: MSG.tutorials.introduction.step1Title,
           content: MSG.tutorials.introduction.step1Content,
-          target: "db_menu_item_dwengo_robot_teacher_image",
-          placement: "left"
+          target: tutorialTargets.dwenguino,
+          placement: "left",
+          showCloseButton:"true",
+          width: 400,
       },
       {
         title: MSG.tutorials.introduction.step2aTitle,
         content: MSG.tutorials.introduction.step2aContent,
-        target: "blocklyDiv",
+        target: tutorialTargets.workspaceArea,
         placement: "top",
         xOffset: "center",
         yOffset: "center"

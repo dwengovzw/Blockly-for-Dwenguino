@@ -1,6 +1,7 @@
 var DwengoBotId = "db_menu_item_dwengo_robot_teacher_image";
 tutorials.theremin =    {
     id: "theremin",
+    label: MSG.tutsTheremin,
     steps: [
         {
             title: MSG.tutorials.theremin.step1Title,

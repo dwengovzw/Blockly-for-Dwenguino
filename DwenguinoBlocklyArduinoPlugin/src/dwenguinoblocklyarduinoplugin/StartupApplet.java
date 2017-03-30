@@ -8,13 +8,12 @@ package dwenguinoblocklyarduinoplugin;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javax.swing.JApplet;
+import javax.swing.SwingUtilities;
 import processing.app.Editor;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -39,15 +38,7 @@ public class StartupApplet extends JApplet {
         fxContainer = new JFXPanel();
         fxContainer.setPreferredSize(new Dimension(JFXPANEL_WIDTH_INT, JFXPANEL_HEIGHT_INT));
         add(fxContainer, BorderLayout.CENTER);
-        // create JavaFX scene
-        /*Task<Void> task = new Task<Void>() {
-            @Override protected Void call() throws Exception {
-                createScene();
-                return null;
-            }
-        };
-        activeThread = new Thread(task);
-        activeThread.start();*/
+        Platform.setImplicitExit(false);
         Runnable activeRunnable = new Runnable() {
 
             @Override
@@ -55,7 +46,7 @@ public class StartupApplet extends JApplet {
                 createScene();
             }
         };
-        Platform.setImplicitExit(false);
+        
         Platform.runLater(activeRunnable);
     }
 
@@ -64,12 +55,14 @@ public class StartupApplet extends JApplet {
         fxContainer.setScene(new Scene(browser, 750, 500, Color.web("#666970")));
     }
     
-    public void stop(){
-        Platform.runLater(() -> {
-            browser.webEngine.load(null);
+    @Override
+    public void stop() {
+        browser.webEngine.executeScript("DwenguinoBlockly.tearDownEnvironment()");
+        browser.webEngine.load("about:blank");
+        SwingUtilities.invokeLater(() -> {
             fxContainer.removeNotify();
         });
-        
+
     }
 
 }
