@@ -517,7 +517,11 @@ var DwenguinoSimulation = {
     blockMapping: {},
     servoAngles: [0,0],
     motorSpeeds: [0,0],
+    blocklyWidth: 0,
     
+    /*
+     * inits the right actions to handle the simulation
+     */
     initDwenguinoSimulation: function(){
         // translation
         document.getElementById('sim_start').textContent = MSG.simulator['start'];
@@ -576,6 +580,7 @@ var DwenguinoSimulation = {
             if (!DwenguinoSimulation.isSimulationPaused && !DwenguinoSimulation.isSimulationRunning) {
               DwenguinoSimulation.isSimulationPaused = true;
               DwenguinoSimulation.setButtonsStep();
+              DwenguinoSimulation.startDebuggingView();
               DwenguinoSimulation.initDebugger();
               DwenguinoSimulation.oneStep();
             } else if (!DwenguinoSimulation.isSimulationRunning) {
@@ -638,8 +643,14 @@ var DwenguinoSimulation = {
             document.getElementById(this.id).className = "sim_button";
           }
         });
+        
+        // size while debugging
+        DwenguinoSimulation.blocklyWidth = document.getElementById('blocklyDiv').style.width;
     },
     
+    /*
+     * Adjust css when simulation is started
+     */
     setButtonsStart: function() {
       // enable pauze and stop
       document.getElementById('sim_pause').className = "sim_item";
@@ -649,6 +660,9 @@ var DwenguinoSimulation = {
       document.getElementById('sim_step').className = "sim_item disabled";
     },
     
+    /*
+     * Adjust css when simulation is paused
+     */
     setButtonsPause: function() {
       // enable start, stop and step
       document.getElementById('sim_start').className = "sim_item";
@@ -658,6 +672,9 @@ var DwenguinoSimulation = {
       document.getElementById('sim_pause').className = "sim_item disabled";
     },
     
+    /*
+     * Adjust css when simulation is stopped
+     */
     setButtonsStop: function() {
       // enable start, stop and step
       document.getElementById('sim_start').className = "sim_item";
@@ -665,8 +682,13 @@ var DwenguinoSimulation = {
       // disable pause
       document.getElementById('sim_stop').className = "sim_item disabled";
       document.getElementById('sim_pause').className = "sim_item disabled";
+      DwenguinoSimulation.stopSimulation();
+      
     },
     
+    /*
+     * Adjust css when simulation is run step by step
+     */
     setButtonsStep: function() {
       // enable start, stop and step
       document.getElementById('sim_start').className = "sim_item";
@@ -676,12 +698,15 @@ var DwenguinoSimulation = {
       document.getElementById('sim_pause').className = "sim_item disabled";
     },
     
-    
+    /*
+     * initialize the debugging environment
+     */
     initDebugger: function() {
       // initialize simulation
       DwenguinoSimulation.setSpeed();
       DwenguinoSimulation.initDwenguino();
       
+
       // get code
       DwenguinoSimulation.code = document.getElementById('content_arduino').textContent;
       DwenguinoSimulation.mapBlocksToCode();
@@ -710,18 +735,30 @@ var DwenguinoSimulation = {
       }
     },
     
+    /*
+     * Starts the simulation for the current code
+     */
     startSimulation: function() {
+      DwenguinoSimulation.startDebuggingView();
       DwenguinoSimulation.initDebugger()
       // run debugger
       DwenguinoSimulation.step();
     },
     
+    stopSimulation: function() {
+      DwenguinoSimulation.stopDebuggingView();
+      DwenguinoSimulation.resetDwenguino();
+    },
+    
+    /*
+     * resumes a simulation that was paused
+     */
     resumeSimulation :function() {
       DwenguinoSimulation.step();
     },
     
     /*
-     * While the simulation is running steps keep being called with speeddelay timeouts in between
+     * While the simulation is running, this function keeps being called with "speeddelay" timeouts in between
      */
     step : function() {
       if (DwenguinoSimulation.isSimulationRunning) {
@@ -749,7 +786,9 @@ var DwenguinoSimulation = {
     },
     
     
-    
+    /*
+     * Lets the simulator run one step
+     */
     oneStep: function() {
       DwenguinoSimulation.debuggerjs.machine.step();
       DwenguinoSimulation.updateBlocklyColour();
@@ -757,6 +796,9 @@ var DwenguinoSimulation = {
       DwenguinoSimulation.checkForEnd();
     },
     
+    /*
+     * Displays the values of the variables during the simulation
+     */
     handleScope: function() {
       var scope = DwenguinoSimulation.debuggerjs.machine.getCurrentStackFrame().scope;
       document.getElementById('sim_scope').innerHTML = "";
@@ -767,13 +809,39 @@ var DwenguinoSimulation = {
       }
     },
     
+    /*
+     * Checks if the simulation has been interrupted
+     */
     checkForEnd: function() {
       if ((DwenguinoSimulation.isSimulationRunning || DwenguinoSimulation.isSimulationPaused)
                 && DwenguinoSimulation.debuggerjs.machine.halted) {
           DwenguinoSimulation.isSimulationRunning = false;
           DwenguinoSimulation.isSimulationPaused = false;
-          DwenguinoSimulation.setButtonsPause();
+          //DwenguinoSimulation.setButtonsStop();
       }
+    },
+    
+    /*
+     * Adjusts the view during simulation
+     * disables the programming and makes the simulation pane biggger
+     */
+    startDebuggingView: function() {
+      var alertMessage = '<div class ="alertDebug">'+MSG.simulator['alertDebug']+'</div>'
+      $('#db_body').append(alertMessage);
+      document.getElementsByClassName('alertDebug')[0].style.width = document.getElementById("blocklyDiv").style.width;
+      document.getElementById('blocklyDiv').style.opacity = "0.5";
+      document.getElementById('blocklyDiv').style.pointerEvents = "none";
+      document.getElementById('db_simulator_pane').style.height = "100%";
+    },
+    
+    /*
+     * Returns to normal view when debugging is finished
+     */
+    stopDebuggingView: function() {
+      document.getElementById('blocklyDiv').style.opacity = "1";
+      document.getElementById('blocklyDiv').style.pointerEvents = "auto";
+      document.getElementById('db_simulator_pane').style.height = "50%";
+      document.getElementsByClassName("alertDebug")[0].remove();
     },
     
     // maps line numbers to blocks
@@ -834,6 +902,10 @@ var DwenguinoSimulation = {
       }
     },
     
+    /*
+     * Changes the color of the blocks at each iteration of the simulator
+     * The block that was previously executed is highlighted (=blue)
+     */
     updateBlocklyColour: function() {
       var highlight_colour = 210;
       
@@ -857,6 +929,9 @@ var DwenguinoSimulation = {
       }
     },
     
+    /*
+     * updates the speed of the simulation
+     */
     setSpeed: function() {
       var e = document.getElementById("sim_speed");
       var option = e.options[e.selectedIndex].value;
@@ -882,10 +957,16 @@ var DwenguinoSimulation = {
       }
     },
     
+    /*
+     * Makes the simulation ready (draw the board)
+     */
     initDwenguino: function() {
       DwenguinoSimulation.resetDwenguino();
     },
     
+    /*
+     * Resets the dwenguino (drawing) to its initial state (remove text, no sound etc)
+     */
     resetDwenguino: function() {
       // delete debugger
       DwenguinoSimulation.debuggerjs = null;

@@ -100,7 +100,8 @@ MSG.simulator = {
   components: "Select components",
   servo: "Servo",
   motor: "Motor",
-  scope: "Variables"
+  scope: "Variables",
+  alertDebug: "Stop the simulation before resuming to program"
 };
 MSG.tutorials = {
     introduction: {},

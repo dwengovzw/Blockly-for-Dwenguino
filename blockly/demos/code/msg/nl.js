@@ -99,7 +99,8 @@ MSG.simulator = {
   components: "Selecteer onderdelen",
   servo: "Servo",
   motor: "Motor",
-  scope: "Waarden"
+  scope: "Waarden",
+  alertDebug: "Stop de simulatie voordat je terug kan programmeren"
 };
 
 MSG.tutorials = {
