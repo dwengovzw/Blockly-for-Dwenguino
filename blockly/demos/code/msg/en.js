@@ -101,7 +101,8 @@ MSG.simulator = {
   servo: "Servo",
   motor: "Motor",
   scope: "Variables",
-  alertDebug: "Stop the simulation before resuming to program"
+  alertDebug: "Stop the simulation before resuming to program",
+  distance: "distance"
 };
 MSG.tutorials = {
     introduction: {},

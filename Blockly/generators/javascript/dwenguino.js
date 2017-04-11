@@ -74,14 +74,9 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
     var value_trig = Blockly.JavaScript.valueToCode(block, 'trig', Blockly.JavaScript.ORDER_NONE);
     var value_echo = Blockly.JavaScript.valueToCode(block, 'echo', Blockly.JavaScript.ORDER_NONE);
     //define sonar settings
-    Blockly.JavaScript.definitions_['define_sonar_trig_' + value_trig] = "var TRIGGER_PIN_ " + value_trig + " = " + value_trig + ";\n";
-    Blockly.JavaScript.definitions_['define_sonar_echo_ ' + value_echo] = "var ECHO_PIN_" + value_echo + " = " + value_echo + ";\n";
-    Blockly.JavaScript.definitions_['define_sonar_max_distance'] = "var MAX_DISTANCE = 200;\n";
-    //define sonar sensor
-    Blockly.JavaScript.definitions_['define_sonar_sensor_' + value_trig + value_echo] = "var sonar"+ value_trig + value_echo +
-            " = NewPing(TRIGGER_PIN_" + value_trig + ", ECHO_PIN_" + value_echo + ", MAX_DISTANCE);\n";
+   
     //  Assemble JavaScript into code variable.
-    var code = "sonar" + value_trig + value_echo + '.ping_cm()';
+    var code = "DwenguinoSimulation.sonar(" + value_trig +', ' + value_echo + ')';
 
     return [code, Blockly.JavaScript.ORDER_NONE];
 };

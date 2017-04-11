@@ -520,7 +520,7 @@ var DwenguinoSimulation = {
     blocklyWidth: 0,
     
     /*
-     * inits the right actions to handle the simulation
+     * inits the right actions to handle the simulation view
      */
     initDwenguinoSimulation: function(){
         // translation
@@ -543,6 +543,9 @@ var DwenguinoSimulation = {
         document.getElementById('motor1').textContent = MSG.simulator['motor'] + " 1";
         document.getElementById('motor2').textContent = MSG.simulator['motor'] + " 2";
         document.getElementById('sim_scope_name').textContent = MSG.simulator['scope'] + ":";
+        document.getElementById('sim_sonar_distance').textContent = "Sonar "+MSG.simulator['distance'] + ":";
+        document.getElementById('sonar_input').value= '50'; 
+
         
         
         // start/stop/pause
@@ -573,13 +576,14 @@ var DwenguinoSimulation = {
           DwenguinoSimulation.isSimulationRunning = false;
           DwenguinoSimulation.isSimulationPaused = false;
           DwenguinoSimulation.setButtonsStop();
-          DwenguinoSimulation.resetDwenguino();
+          DwenguinoSimulation.stopSimulation();
         });
         
         $("#sim_step").click(function(){
             if (!DwenguinoSimulation.isSimulationPaused && !DwenguinoSimulation.isSimulationRunning) {
               DwenguinoSimulation.isSimulationPaused = true;
               DwenguinoSimulation.setButtonsStep();
+              DwenguinoSimulation.stopDebuggingView();
               DwenguinoSimulation.startDebuggingView();
               DwenguinoSimulation.initDebugger();
               DwenguinoSimulation.oneStep();
@@ -635,6 +639,21 @@ var DwenguinoSimulation = {
           }
         });
         
+        $("#sim_sonar").hide();
+        $("#sim_sonar_distance").hide();
+        $("#sim_sonar_input").hide();
+        $("#sonar").on('change', function() {
+          if (document.getElementById("sonar").checked) {
+            $("#sim_sonar").show();
+            $("#sim_sonar_distance").show();
+            $("#sim_sonar_input").show();
+          } else {
+            $("#sim_sonar").hide();
+            $("#sim_sonar_distance").hide();
+            $("#sim_sonar_input").hide();
+          }
+        });
+        
         // push buttons
         $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('click', function() {
           if (document.getElementById(this.id).className === "sim_button") {
@@ -681,9 +700,7 @@ var DwenguinoSimulation = {
       document.getElementById('sim_step').className = "sim_item";
       // disable pause
       document.getElementById('sim_stop').className = "sim_item disabled";
-      document.getElementById('sim_pause').className = "sim_item disabled";
-      DwenguinoSimulation.stopSimulation();
-      
+      document.getElementById('sim_pause').className = "sim_item disabled";     
     },
     
     /*
@@ -739,6 +756,7 @@ var DwenguinoSimulation = {
      * Starts the simulation for the current code
      */
     startSimulation: function() {
+      DwenguinoSimulation.stopDebuggingView();
       DwenguinoSimulation.startDebuggingView();
       DwenguinoSimulation.initDebugger()
       // run debugger
@@ -817,7 +835,7 @@ var DwenguinoSimulation = {
                 && DwenguinoSimulation.debuggerjs.machine.halted) {
           DwenguinoSimulation.isSimulationRunning = false;
           DwenguinoSimulation.isSimulationPaused = false;
-          //DwenguinoSimulation.setButtonsStop();
+          DwenguinoSimulation.setButtonsStep();
       }
     },
     
@@ -831,7 +849,7 @@ var DwenguinoSimulation = {
       document.getElementsByClassName('alertDebug')[0].style.width = document.getElementById("blocklyDiv").style.width;
       document.getElementById('blocklyDiv').style.opacity = "0.5";
       document.getElementById('blocklyDiv').style.pointerEvents = "none";
-      document.getElementById('db_simulator_pane').style.height = "100%";
+      //document.getElementById('db_simulator_pane').style.height = "100%";
     },
     
     /*
@@ -840,8 +858,10 @@ var DwenguinoSimulation = {
     stopDebuggingView: function() {
       document.getElementById('blocklyDiv').style.opacity = "1";
       document.getElementById('blocklyDiv').style.pointerEvents = "auto";
-      document.getElementById('db_simulator_pane').style.height = "50%";
-      document.getElementsByClassName("alertDebug")[0].remove();
+      //document.getElementById('db_simulator_pane').style.height = "50%";
+      if (document.getElementsByClassName("alertDebug").length !== 0) {
+        document.getElementsByClassName("alertDebug")[0].remove();
+      }
     },
     
     // maps line numbers to blocks
@@ -1159,6 +1179,10 @@ var DwenguinoSimulation = {
         $("#sim_motor"+channel).css("transform", "rotate("+((prevAngle+maxMovement)%360)+"deg)");
         setTimeout(function(){DwenguinoSimulation.dcMotorRotate(channel, speed);}, 15);
       }
+    },
+    
+    sonar: function(tripPin, echoPin) {
+      return parseInt(document.getElementById('sonar_input').value);
     },
   
     setupEnvironment: function(){
