@@ -140,6 +140,19 @@ body{
     text-decoration: underline;
 }
 
+.alertDebug {
+    position: absolute;
+    left: 0px;
+    top: 50px;
+    width: inherit;
+    height: 50px;
+    font-weight: bold;
+    text-align: center;
+    font-size: medium;
+    vertical-align: middle;
+    line-height: 600px;
+}
+
 #sim_menu {
     width: 80%;
     height: 15%;
@@ -279,7 +292,7 @@ body{
 #sim_components {
     position: absolute;
     top: 25%;
-    left: 75%;
+    left: 80%;
     height: 100px;
     width: 120px;
 }
