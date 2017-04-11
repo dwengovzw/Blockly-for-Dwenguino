@@ -100,7 +100,8 @@ MSG.simulator = {
   servo: "Servo",
   motor: "Motor",
   scope: "Waarden",
-  alertDebug: "Stop de simulatie voordat je terug kan programmeren"
+  alertDebug: "Stop de simulatie voordat je terug kan programmeren",
+  distance: "afstand"
 };
 
 MSG.tutorials = {

@@ -137,10 +137,11 @@
                 <div id="sim_components_menu">
                     <div id="sim_components_select" class="sim_item">Select components:</div>
                     <div id="sim_components_options">
-                        <input type="checkbox" id="servo1" value="servo1">Servo 1<br>
-                        <input type="checkbox" id="servo2" value="servo2">Servo 2<br>
                         <input type="checkbox" id="motor1" value="motor1">Motor 1<br>
                         <input type="checkbox" id="motor2" value="motor2">Motor 2<br>
+                        <input type="checkbox" id="servo1" value="servo1">Servo 1<br>
+                        <input type="checkbox" id="servo2" value="servo2">Servo 2<br>
+                        <input type="checkbox" id="sonar" value="sonar">Sonar<br>
                     </div>
                     <div id="sim_scope_name">Variables:</div>
                     <div id="sim_scope"></div>
@@ -190,6 +191,9 @@
                             <div id="sim_servo2_mov" class="sim_servo_mov"></div>
                         </div>
                     </div>
+                    <div id="sim_sonar" class="sim_sonar"></div>
+                    <div id="sim_sonar_distance" class="sim_sonar_distance"></div>
+                    <div id="sim_sonar_input"><input type="text" id="sonar_input" name="sim_sonar_input" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>&nbsp;cm</div>
                 </div>
             </div>
             <div id="db_code_pane">

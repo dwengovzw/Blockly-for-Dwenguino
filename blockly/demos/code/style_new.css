@@ -291,7 +291,7 @@ body{
 
 #sim_components {
     position: absolute;
-    top: 25%;
+    top: 20%;
     left: 80%;
     height: 100px;
     width: 120px;
@@ -309,10 +309,10 @@ body{
 }
 
 .sim_servo {
-    background: #2e4286;
+    background: #0a3c7a;
     height: 25px;
     width: 50px;
-    margin-right: 10px;
+    margin-right: 8px;
     float: left;
 }
 
@@ -337,4 +337,16 @@ body{
     background-image: url("img/board/dc_motor.png");
     background-size: 100% 100%;
     margin-bottom: 15px;
+}
+
+.sim_sonar {
+    height: 50px;
+    width: 85px;
+    background-image: url("img/board/sonar.png");
+    background-size: 100% 100%;
+    margin-top: 40px;
+}
+
+#sonar_input {
+    width: 40px;
 }
