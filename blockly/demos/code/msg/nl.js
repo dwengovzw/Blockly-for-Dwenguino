@@ -101,7 +101,11 @@ MSG.simulator = {
   motor: "Motor",
   scope: "Waarden",
   alertDebug: "Stop de simulatie voordat je terug kan programmeren",
-  distance: "afstand"
+  distance: "afstand",
+  scenario: "Scenario",
+  scenario_default: "Normale bord",
+  scenario_moving: "Bewegende robot",
+  scenario_wall: "Bewegende robot met muur"
 };
 
 MSG.tutorials = {
