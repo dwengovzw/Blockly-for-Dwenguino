@@ -55,7 +55,7 @@ var DwenguinoBlockly = {
 
         DwenguinoBlockly.sessionId = window.sessionStorage.loadOnceSessionId;
         delete window.sessionStorage.loadOnceSessionId;
-        if (!DwenguinoBlockly.sessionId){
+        if (!DwenguinoBlockly.sessionId && dwenguinoBlocklyServer){
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
@@ -117,26 +117,22 @@ var DwenguinoBlockly = {
         });
 
         $("#db_menu_item_upload").click(function(){
-            if (dwenguinoBlocklyServer){
-                try {
-                    var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer.loadBlocks());
-                } catch (e) {
-                    return;
-                }
-                var count = DwenguinoBlockly.workspace.getAllBlocks().length;
-                //if (count && confirm('Replace existing blocks?\n"Cancel" will merge.')) {
-                    DwenguinoBlockly.workspace.clear();
-                //}
-                //Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
+            try {
+                var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer ? dwenguinoBlocklyServer.loadBlocks() : localStorage.workspaceXml);
+                DwenguinoBlockly.workspace.clear();
+                console.log(xml)
                 Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
-            }
+            } catch (e) {}           
         });
 
         $("#db_menu_item_download").click(function(){
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var data = Blockly.Xml.domToText(xml);
             if (dwenguinoBlocklyServer){
-                var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-                var data = Blockly.Xml.domToText(xml);
                 dwenguinoBlocklyServer.saveBlocks(data);
+            } else {
+                console.log(data)
+                localStorage.workspaceXml = data;
             }
         });
 
@@ -192,6 +188,9 @@ var DwenguinoBlockly = {
 
 
     submitRecordingToServer: function(){
+        if (!dwenguinoBlocklyServer) {
+            return;
+        }
         //online code submission
         $.ajax({
             type: "POST",
@@ -517,7 +516,6 @@ var DwenguinoSimulation = {
     blockMapping: {},
     servoAngles: [0,0],
     motorSpeeds: [0,0],
-    blocklyWidth: 0,
     
     /*
      * inits the right actions to handle the simulation view
@@ -528,7 +526,7 @@ var DwenguinoSimulation = {
         document.getElementById('sim_stop').textContent = MSG.simulator['stop'];
         document.getElementById('sim_pause').textContent = MSG.simulator['pause'];
         document.getElementById('sim_step').textContent = MSG.simulator['step'];
-        document.getElementById('sim_speedTag').textContent = MSG.simulator['speed'];
+        document.getElementById('sim_speedTag').textContent = MSG.simulator['speed'] + ":";
         
         document.getElementById('sim_speed_verySlow').textContent = MSG.simulator['speedVerySlow'];
         document.getElementById('sim_speed_slow').textContent = MSG.simulator['speedSlow'];
@@ -536,6 +534,11 @@ var DwenguinoSimulation = {
         document.getElementById('sim_speed_fast').textContent = MSG.simulator['speedFast'];
         document.getElementById('sim_speed_veryFast').textContent = MSG.simulator['speedVeryFast'];
         document.getElementById('sim_speed_realTime').textContent = MSG.simulator['speedRealTime'];
+        
+        document.getElementById('sim_scenarioTag').textContent = MSG.simulator['scenario'] + ":";
+        document.getElementById('sim_scenario_default').textContent = MSG.simulator['scenario_default'];
+        document.getElementById('sim_scenario_moving').textContent = MSG.simulator['scenario_moving'];
+        document.getElementById('sim_scenario_wall').textContent = MSG.simulator['scenario_wall'];
         
         document.getElementById('sim_components_select').textContent = MSG.simulator['components'] + ":";
         document.getElementById('servo1').textContent = MSG.simulator['servo'] + " 1";
@@ -663,8 +666,14 @@ var DwenguinoSimulation = {
           }
         });
         
-        // size while debugging
-        DwenguinoSimulation.blocklyWidth = document.getElementById('blocklyDiv').style.width;
+        // change speed of simulation
+        $("#sim_speed").on('change', function() {
+          DwenguinoSimulation.setSpeed();
+        });
+        
+        $("#sim_scenario").on('change', function() {
+          DwenguinoSimulation.changeScenarioView();
+        });
     },
     
     /*
@@ -720,7 +729,6 @@ var DwenguinoSimulation = {
      */
     initDebugger: function() {
       // initialize simulation
-      DwenguinoSimulation.setSpeed();
       DwenguinoSimulation.initDwenguino();
       
 
@@ -849,7 +857,6 @@ var DwenguinoSimulation = {
       document.getElementsByClassName('alertDebug')[0].style.width = document.getElementById("blocklyDiv").style.width;
       document.getElementById('blocklyDiv').style.opacity = "0.5";
       document.getElementById('blocklyDiv').style.pointerEvents = "none";
-      //document.getElementById('db_simulator_pane').style.height = "100%";
     },
     
     /*
@@ -858,9 +865,38 @@ var DwenguinoSimulation = {
     stopDebuggingView: function() {
       document.getElementById('blocklyDiv').style.opacity = "1";
       document.getElementById('blocklyDiv').style.pointerEvents = "auto";
-      //document.getElementById('db_simulator_pane').style.height = "50%";
       if (document.getElementsByClassName("alertDebug").length !== 0) {
         document.getElementsByClassName("alertDebug")[0].remove();
+      }
+    },
+    
+    changeScenarioView: function() {
+      var e = document.getElementById("sim_scenario");
+      var option = e.options[e.selectedIndex].value;
+      
+      switch (option) {
+        case "default":
+          document.getElementById('db_code_pane').style.display = "inline";
+          document.getElementById('db_robot_pane').style.display = "none";
+          break;
+        case "moving":
+          document.getElementById('db_code_pane').style.display = "none";
+          document.getElementById('db_robot_pane').style.display = "inline";
+          document.getElementById('sim_container').style.border = "none";
+          document.getElementById('sim_container').style.height = "50%";
+          document.getElementById('sim_container').style.marginTop = "initial";
+          document.getElementById('sim_container').style.left = "initial";
+          document.getElementById('sim_container').style.width = "100%";
+          break;
+        case "wall": {
+          document.getElementById('db_code_pane').style.display = "none";
+          document.getElementById('db_robot_pane').style.display = "inline";
+          document.getElementById('sim_container').style.border = "2px solid grey";
+          document.getElementById('sim_container').style.height = "40%";
+          document.getElementById('sim_container').style.marginTop = "5%";
+          document.getElementById('sim_container').style.left = "5%";
+          document.getElementById('sim_container').style.width = "90%";
+        }
       }
     },
     
@@ -1024,6 +1060,13 @@ var DwenguinoSimulation = {
       
       // clear scope
       document.getElementById('sim_scope').innerHTML = "";
+      
+      // reset moving car
+      var car = document.getElementById('sim_animation');
+      car.style.top = "50%";
+      car.style.left = "20%";
+      $("#sim_animation").css("transform", "translate(-20%, -50%) rotate(0deg)");
+      
     },
     
     sleep: function(delay) {
@@ -1132,7 +1175,7 @@ var DwenguinoSimulation = {
     servoRotate: function(channel, angle) {
       var maxMovement = 10;
       if (angle === DwenguinoSimulation.servoAngles[channel-1]) {
-        var prevAngle = DwenguinoSimulation.getAngle($("#sim_servo"+channel+"_mov").css("transform"));
+        var prevAngle = DwenguinoSimulation.getAngle($("#sim_servo"+channel+"_mov"));
         // set 10 degrees closer at a time to create rotate effect
         if (Math.abs(angle - prevAngle) > maxMovement) {
           var direction = ((angle - prevAngle)>0)?1:-1;
@@ -1144,7 +1187,12 @@ var DwenguinoSimulation = {
       }
     },
     
-    getAngle: function(matrix) {
+    getAngle: function(obj) {
+      var matrix = obj.css("-webkit-transform") ||
+      obj.css("-moz-transform")    ||
+      obj.css("-ms-transform")     ||
+      obj.css("-o-transform")      ||
+      obj.css("transform");
       if (matrix !== "none") {
         var values = matrix.split('(')[1];
         values = values.split(')')[0];
@@ -1155,7 +1203,7 @@ var DwenguinoSimulation = {
       }
       return 0;
     },
-    
+     
     startDcMotor: function(channel, speed) {
       //set angle
       if (speed > 255) {
@@ -1165,23 +1213,126 @@ var DwenguinoSimulation = {
         speed = 0;
       }
       
+      // change view of motor
       if (speed !== DwenguinoSimulation.motorSpeeds[channel-1]) {
         DwenguinoSimulation.motorSpeeds[channel-1] = speed;
         DwenguinoSimulation.dcMotorRotate(channel, speed);
+      }
+      
+      // change view of driving robot
+      var e = document.getElementById("sim_scenario");
+      var option = e.options[e.selectedIndex].value;
+      
+      if (option === "moving") {
+        DwenguinoSimulation.drawMovingRobot(DwenguinoSimulation.motorSpeeds[0], DwenguinoSimulation.motorSpeeds[1], false);
+      } else if (option === "wall") {
+        
+        DwenguinoSimulation.drawMovingRobot(DwenguinoSimulation.motorSpeeds[0], DwenguinoSimulation.motorSpeeds[1], true);
       }
     },
     
     dcMotorRotate: function(channel, speed) {
       var maxMovement = speed/20 + 5;
       if (speed === DwenguinoSimulation.motorSpeeds[channel-1] && speed !== 0) {
-        var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor"+channel).css("transform"));
+        var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor"+channel));
         // rotate x degrees at a time based on speed
         $("#sim_motor"+channel).css("transform", "rotate("+((prevAngle+maxMovement)%360)+"deg)");
         setTimeout(function(){DwenguinoSimulation.dcMotorRotate(channel, speed);}, 15);
       }
     },
     
-    sonar: function(tripPin, echoPin) {
+    /*
+     * int speed1: the speed of motor 1
+     * int speed2: the speed of motor 2
+     * boolean wall: true if the car is surrounded by a wall
+     */
+    drawMovingRobot: function(speed1, speed2, wall) {
+      if (speed1 === DwenguinoSimulation.motorSpeeds[0] && speed2 === DwenguinoSimulation.motorSpeeds[1] && (speed1 !== 0 || speed2 !== 0)) {
+        var car = document.getElementById('sim_animation');
+        var x = 100 * parseFloat($('#sim_animation').css('left')) / parseFloat($('#sim_animation').parent().css('width'));
+        var y = 100 * parseFloat($('#sim_animation').css('top')) / parseFloat($('#sim_animation').parent().css('height'));
+        
+        // decide on angle and speed based on 2 motor speeds
+        var speed = (speed1+speed2)/300+0.5;
+        var angle = DwenguinoSimulation.getAngle($("#sim_animation"));
+        
+        if (speed1 !== speed2) {
+          angle += (speed2 - speed1)/30;
+        }
+        
+        x += speed * Math.cos(Math.PI/180 * angle);
+        y += speed * Math.sin(Math.PI/180 * angle);
+        
+        if (!wall) {
+          if (x > 100) x = 2;
+          if (y > 100) y = 2;
+          if (x < 2) x = 100;
+          if (y < 2) y = 100;
+        } else {
+          if (x > 100) x = 100;
+          if (y > 100) y = 100;
+          if (x < 0) x = 0;
+          if (y < 0) y = 0;
+        }
+
+        car.style.left = x+"%";
+        car.style.top = y+"%";
+        $("#sim_animation").css("transform", "translate(-"+String(parseInt(x))+"%, -"+String(parseInt(y))+"%) rotate("+angle+"deg)");
+        $("#sim_debug").text(JSON.stringify({
+          x, y
+        }, null, 2))
+
+
+        setTimeout(function(){DwenguinoSimulation.drawMovingRobot(speed1,speed2, wall);}, DwenguinoSimulation.speedDelaySimulation);
+      }
+    },
+    
+    sonar: function(trigPin, echoPin) {
+      // adjust sonar value based on wall
+      var e = document.getElementById("sim_scenario");
+      var option = e.options[e.selectedIndex].value;
+      
+      if (option === "wall") {
+        // calculate distance between front of car and wall
+        // todo get real value of width and height before rotation
+        var height = 40;
+        var width = 50;
+        var x0 = parseFloat($('#sim_animation').css('left'));
+        var y0 = parseFloat($('#sim_animation').css('top')) + height;
+        var angle = (-1*DwenguinoSimulation.getAngle($("#sim_animation")))%360;
+        var directionX = 1;
+        var directionY = 1;
+        
+        //calculate angle and direction
+        if (angle >= 90 && angle < 180) {
+          angle = 180 - angle;
+          directionX = -1;
+          directionY = 1;
+        } else if (angle >= 180 && angle < 270) {
+          angle = angle -180;
+          directionX = -1;
+          directionY = -1;
+        } else if (angle >= 270 && angle < 360) {
+          angle = 360 - angle;
+          directionX = 1;
+          directionY = -1;
+        }
+        
+        //find the coordinates of the front corners
+        // based on formula a/sinA = b/sinB = c/sinC
+        //In any triangle, the ratio of a side length to the sine of its opposite angle is the same for all three sides.
+        var xCorner1 = x0 + directionX * width * (Math.sin(Math.PI/180 * (90-angle)))/Math.sin(Math.PI/180 * 90);
+        var yCorner1 = y0 - directionY * width * (Math.sin(Math.PI/180 * (angle)))/Math.sin(Math.PI/180 * 90);
+        var xCorner2 = xCorner1 - directionX * height*(Math.sin(Math.PI/180 * (angle)))/Math.sin(Math.PI/180 * 90);
+        var yCorner2 = yCorner1 + directionY * height*(Math.sin(Math.PI/180 * (90-angle)))/Math.sin(Math.PI/180 * 90);
+        
+        
+        console.log(xCorner1, yCorner1, xCorner2, yCorner2);
+        
+        //document.getElementById('sonar_input').value = 
+      }
+      
+      
       return parseInt(document.getElementById('sonar_input').value);
     },
   

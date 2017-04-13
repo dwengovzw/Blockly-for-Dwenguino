@@ -133,6 +133,14 @@
                         <option id="sim_speed_veryFast" value="veryfast">Very fast</option>
                         <option id="sim_speed_realTime" value="realtime">Real Time</option>
                     </select>
+                    <div class="sim_menu_next_line">
+                    <div id="sim_scenarioTag">Scenario:</div>
+                    <select id="sim_scenario">
+                        <option id="sim_scenario_default" value="default">Normal board</option>
+                        <option id="sim_scenario_moving" value="moving">Moving robot</option>
+                        <option id="sim_scenario_wall" value="wall">Moving robot with wall</option>
+                    </select>
+                    </div>
                 </div>
                 <div id="sim_components_menu">
                     <div id="sim_components_select" class="sim_item">Select components:</div>
@@ -200,6 +208,12 @@
                 <div id="language1" class="language">C++</div>
                 <div id="language2" class="language">JavaScript</div>
                 <pre id="content_arduino" class="content"></pre>
+            </div>
+            <div id="db_robot_pane">
+                <div id="sim_debug">debug</div> 
+                <div id="sim_container">
+                    <div id="sim_animation"></div>
+                </div>
             </div>
         </div>
     </div>

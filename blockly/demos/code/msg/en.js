@@ -102,7 +102,11 @@ MSG.simulator = {
   motor: "Motor",
   scope: "Variables",
   alertDebug: "Stop the simulation before resuming to program",
-  distance: "distance"
+  distance: "distance",
+  scenario: "Scenario",
+  scenario_default: "Normal board",
+  scenario_moving: "Moving robot",
+  scenario_wall: "Moving robot with wall"
 };
 MSG.tutorials = {
     introduction: {},

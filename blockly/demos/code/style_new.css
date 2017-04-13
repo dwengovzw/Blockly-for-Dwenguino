@@ -108,6 +108,34 @@ body{
     height: 50%;
 }
 
+#db_robot_pane{
+    height: 50%;
+    display: none;
+}
+
+#sim_container {
+    position: relative;
+    width: 100%;
+    height: 50%;
+}
+#sim_debug {
+    position: absolute;
+    right: 1rem;
+    top:1rem;
+}
+#sim_animation {
+    width: 50px;
+    height: 40px;
+    position: absolute;
+    background-image: url("img/board/robot.png");
+    background-size: 100% 100%;
+    top: 50%;
+    left: 20%;
+    transform: translate(-20%, -50%) rotate(0deg);
+    -webkit-transform: translate(-20%, -50%) rotate(0deg);
+    -ms-transform: translate(-20%, -50%) rotate(0deg);
+}
+
 #db_menu_item_dwengo_robot_teacher_image{
     padding: 10px;
     max-height: 100%;
@@ -349,4 +377,13 @@ body{
 
 #sonar_input {
     width: 40px;
+}
+
+.sim_menu_next_line {
+    clear: left;
+    margin-top: -5px !important;
+}
+
+#sim_start {
+    padding-left: 10px;
 }
