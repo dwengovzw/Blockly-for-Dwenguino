@@ -122,18 +122,29 @@ body{
     position: absolute;
     right: 1rem;
     top:1rem;
+    opacity: .5;
+    white-space: pre-wrap;
+    font-size: 12px;
+    line-height: 16px;
+    max-height: 100%;
+    min-width: 50%;
+    overflow: auto;
 }
 #sim_animation {
     width: 50px;
     height: 40px;
+    margin-left: -25px;
+    margin-top: -20px;
     position: absolute;
     background-image: url("img/board/robot.png");
-    background-size: 100% 100%;
-    top: 50%;
-    left: 20%;
-    transform: translate(-20%, -50%) rotate(0deg);
-    -webkit-transform: translate(-20%, -50%) rotate(0deg);
-    -ms-transform: translate(-20%, -50%) rotate(0deg);
+    background-size: 100%;
+    /*outline: 1px solid red;*/
+}
+#sim_point {
+    width: 2px;
+    height: 2px;
+    position: absolute;
+    background: red;
 }
 
 #db_menu_item_dwengo_robot_teacher_image{

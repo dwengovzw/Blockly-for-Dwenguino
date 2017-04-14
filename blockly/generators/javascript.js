@@ -1,3 +1,5 @@
+/* global Blockly, goog */
+
 /**
  * @license
  * Visual Blocks Language
@@ -238,10 +240,10 @@ Blockly.JavaScript.quote_ = function(string) {
 Blockly.JavaScript.scrub_ = function(block, code) {
   //Do not translate non connectet top bocks except for the setup_loop block and the function definition blocks.
   if (block === block.getRootBlock()
-      && !(block.type == 'setup_loop_structure'
-          || block.type == 'setup_loop_structure_arduino'
-          || block.type == 'procedures_defnoreturn'
-          || block.type == 'procedures_defreturn')){
+      && !(block.type === 'setup_loop_structure'
+          || block.type === 'setup_loop_structure_arduino'
+          || block.type === 'procedures_defnoreturn'
+          || block.type === 'procedures_defreturn')){
       return "";
   }
   //alert(block === block.getRootBlock() && !(block.));
@@ -268,7 +270,7 @@ Blockly.JavaScript.scrub_ = function(block, code) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+      if (block.inputList[i].type === Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.JavaScript.allNestedComments(childBlock);

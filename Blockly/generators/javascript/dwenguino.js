@@ -1,3 +1,5 @@
+/* global Blockly, goog */
+
 /**
  * @fileoverview Generating Dwenguino blocks.
  * @author tom.neutens@UGent.be     (Tom Neutens)
@@ -19,7 +21,7 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
 
     //Blockly.JavaScript.setups_['initDwenguino'] = 'initDwenguino();';
     //var code = 'initDwenguino();';
-    return code;
+    return "";
 };
 
 Blockly.JavaScript['setup_loop_structure'] = function (block) {
@@ -50,7 +52,7 @@ Blockly.JavaScript['dc_motor'] = function (block) {
 };
 
 Blockly.JavaScript.dwenguino_delay = function() {
-  var delay_time = Blockly.JavaScript.valueToCode(this, 'DELAY_TIME', Blockly.JavaScript.ORDER_ATOMIC) || '1000'
+  var delay_time = Blockly.JavaScript.valueToCode(this, 'DELAY_TIME', Blockly.JavaScript.ORDER_ATOMIC) || '1000';
   var code = 'DwenguinoSimulation.sleep(' + delay_time + ');\n';
   return code;
 };
@@ -60,7 +62,7 @@ Blockly.JavaScript['dwenguino_lcd'] = function (block) {
     var value_line_number = Blockly.JavaScript.valueToCode(block, 'line_number', Blockly.JavaScript.ORDER_ATOMIC);
     var value_character_number = Blockly.JavaScript.valueToCode(block, 'character_number', Blockly.JavaScript.ORDER_ATOMIC);
     // Assemble JavaScript into code variable.
-    var code = 'DwenguinoSimulation.writeLcd(' + value_text + ', '+ value_line_number + ', '+ value_character_number + ');\n'
+    var code = 'DwenguinoSimulation.writeLcd(' + value_text + ', '+ value_line_number + ', '+ value_character_number + ');\n';
     return code;
 };
 
@@ -145,21 +147,21 @@ Blockly.JavaScript.dwenguino_digital_write = function() {
 // TODO
 Blockly.JavaScript.dwenguino_highlow = function() {
   // Boolean values HIGH and LOW.
-  var code = (this.getFieldValue('BOOL') == 'HIGH') ? 'HIGH' : 'LOW';
+  var code = (this.getFieldValue('BOOL') === 'HIGH') ? 'HIGH' : 'LOW';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 // TODO
 Blockly.JavaScript.dwenguino_on_off = function() {
   // Boolean values HIGH and LOW.
-  var code = (this.getFieldValue('LED_ON_OFF') == 'ON') ? 'HIGH' : 'LOW';
+  var code = (this.getFieldValue('LED_ON_OFF') === 'ON') ? 'HIGH' : 'LOW';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 // TODO
 Blockly.JavaScript.dwenguino_led_pins = function() {
   var dropdown_value = this.getFieldValue('LED_NUMBER');
-  if (dropdown_value != '13'){
+  if (dropdown_value !== '13'){
       dropdown_value = parseInt(dropdown_value) + 32;
   }
   return [dropdown_value, Blockly.JavaScript.ORDER_ATOMIC];
@@ -171,7 +173,7 @@ Blockly.JavaScript.dwenguino_set_led = function(){
     var led_state = Blockly.JavaScript.valueToCode(this, "LED_STATE", Blockly.JavaScript.ORDER_ATOMIC);
     //Blockly.JavaScript.setups_['setup_output_'+pin_number] = 'pinMode('+pin_number+', OUTPUT);';
 
-    var code = 'DwenguinoSimulation.digitalWrite(' + pin_number + ', "' + led_state + '");\n'
+    var code = 'DwenguinoSimulation.digitalWrite(' + pin_number + ', "' + led_state + '");\n';
     return code;
 };
 
