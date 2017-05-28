@@ -94,7 +94,7 @@ MSG.simulator = {
   speedSlow: "20 keer trager",
   speedMedium: "10 keer trager",
   speedFast: "5 keer trager",
-  speedVeryFast: "3 keer trager",
+  speedVeryFast: "2 keer trager",
   speedRealTime: "Real-time",
   components: "Selecteer onderdelen",
   servo: "Servo",
