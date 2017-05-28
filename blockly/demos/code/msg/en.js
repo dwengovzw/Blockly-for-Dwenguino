@@ -95,7 +95,7 @@ MSG.simulator = {
   speedSlow: "20 times as slow",
   speedMedium: "10 times as slow",
   speedFast: "5 times as slow",
-  speedVeryFast: "3 times as slow",
+  speedVeryFast: "2 times as slow",
   speedRealTime: "Real-time",
   components: "Select components",
   servo: "Servo",
