@@ -409,3 +409,9 @@ Blockly.JavaScript['math_random_float'] = function(block) {
   // Random fraction between 0 and 1.
   return ['Math.random()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
+
+Blockly.JavaScript['char_type'] = function (block) {
+    var text_bitmask = block.getFieldValue('BITMASK');
+    var code = text_bitmask;
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};

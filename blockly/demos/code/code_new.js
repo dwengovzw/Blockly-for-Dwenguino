@@ -1,3 +1,9 @@
+/* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
+
+if (!window.dwenguinoBlocklyServer) {
+  dwenguinoBlocklyServer = false;
+}
+
 var DwenguinoBlockly = {
     simButtonStateClicked: false,
 
@@ -5,6 +11,9 @@ var DwenguinoBlockly = {
     recording: "",
     sessionId: null,
     tutorialId: null,
+    
+    serverUrl: 'http://localhost:3000',
+    serverUrl: '',
 
     //General settings for this session, these are used for data logging during experiments
     agegroupSetting: "",
@@ -48,16 +57,16 @@ var DwenguinoBlockly = {
 
         DwenguinoBlockly.sessionId = window.sessionStorage.loadOnceSessionId;
         delete window.sessionStorage.loadOnceSessionId;
-        if (!DwenguinoBlockly.sessionId){
+        if (!DwenguinoBlockly.sessionId && dwenguinoBlocklyServer){
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
-                url: "http://localhost:3000/sessions/newId"}
+                url: this.serverUrl + "/sessions/newId"}
             ).done(function(data){
-                console.log(data);
+                console.debug('sessionId is set to', data);
                 DwenguinoBlockly.sessionId = data;
-            }).fail(function(data)  {
-                console.log(data);
+            }).fail(function(response, status)  {
+                console.warn('Failed to fetch sessionId:', status);
             });
         }
 
@@ -114,31 +123,31 @@ var DwenguinoBlockly = {
         });
 
         $("#db_menu_item_upload").click(function(){
-            if ((typeof dwenguinoBlocklyServer) != 'undefined'){
-                try {
-                    var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer.loadBlocks());
-                } catch (e) {
-                    return;
-                }
-                var count = DwenguinoBlockly.workspace.getAllBlocks().length;
-                //if (count && confirm('Replace existing blocks?\n"Cancel" will merge.')) {
-                    DwenguinoBlockly.workspace.clear();
-                //}
-                //Blockly.Xml.domToWorkspace(Blockly.mainWorkspace, xml);
-                Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
-            }
-            appendToRecording("<uploadClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></uploadClicked>")
+		try {
+			var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer ? dwenguinoBlocklyServer.loadBlocks() : localStorage.workspaceXml);
+			DwenguinoBlockly.workspace.clear();
+			console.log(xml);
+			Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
+		    } catch (e) {}  
+		var count = DwenguinoBlockly.workspace.getAllBlocks().length;
+		appendToRecording("<uploadClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></uploadClicked>")
         });
 
+
+
         $("#db_menu_item_download").click(function(){
-            if ((typeof dwenguinoBlocklyServer) != 'undefined'){
-                var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-                var data = Blockly.Xml.domToText(xml);
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var data = Blockly.Xml.domToText(xml);
+            if (dwenguinoBlocklyServer){
                 dwenguinoBlocklyServer.saveBlocks(data);
+            } else {
+                console.log(data);
+                localStorage.workspaceXml = data;
             }
         });
         //dropdown menu code
          $(".dropdown-toggle").dropdown();
+
          $.each(tutorials, function(index, arrayElement){
            var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
            newLi.click(function(){
@@ -155,7 +164,16 @@ var DwenguinoBlockly = {
          $("#db_menu_item_dwengo_robot_teacher_image").click(function(){
             DwenguinoBlockly.takeSnapshotOfWorkspace();
          });
-
+         
+         $("#language1").click(function(){
+            DwenguinoBlockly.language = "cpp";
+            DwenguinoBlockly.renderCode();
+         });
+         
+         $("#language2").click(function(){
+            DwenguinoBlockly.language = "js";
+            DwenguinoBlockly.renderCode();
+         });
     },
 
     endTutorial: function(){
@@ -174,21 +192,22 @@ var DwenguinoBlockly = {
      * It is called at a set interval of 10 seconds.
      */
     submitRecordingToServer: function(){
+        if (!dwenguinoBlocklyServer) {
+            return;
+        }
         //online code submission
         var serverSubmission = { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityId, timestamp: $.now(), logData: DwenguinoBlockly.recording };
         if (DwenguinoBlockly.sessionId !== undefined){
           $.ajax({
               type: "POST",
-              url: "http://localhost:3000/sessions/update",
+              url: this.serverUrl + "/sessions/update",
               data: serverSubmission,
-
           }
-          ).done(function(data){
-              console.log(data);
-          }).fail(function(data)  {
-              console.log(data);
-          });
-        }
+        ).done(function(data){
+            console.debug('Recording submitted', data);
+        }).fail(function(response, status)  {
+            console.warn('Failed to submit recording:', status);
+        });
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
         if ((typeof dwenguinoBlocklyServer) != 'undefined'){
             dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
@@ -212,12 +231,14 @@ var DwenguinoBlockly = {
 
     /**
     *   Log the code changes of the user
+    *   @param {type} event 
     */
     logCodeChange: function(event){
         DwenguinoBlockly.takeSnapshotOfWorkspace();
     },
 
     previouslyRenderedCode: null,
+    language: "js",
     /**
      * Populate the currently selected pane with content generated from the blocks.
      */
@@ -225,9 +246,16 @@ var DwenguinoBlockly = {
         var arduino_content = document.getElementById("content_arduino");
         //var xml_content = document.getElementById("content_xml");
 
-        // Write code to code window
-        var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-        if (DwenguinoBlockly.previouslyRenderedCode == null){
+        // transform code
+        if (DwenguinoBlockly.language === "cpp") {
+            var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+        }
+        else if (DwenguinoBlockly.language === "js") {
+            var code = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+        }
+
+        // display code
+        if (DwenguinoBlockly.previouslyRenderedCode === null){
             document.getElementById('content_arduino').innerHTML =
                 prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
                 DwenguinoBlockly.previouslyRenderedCode = code;
@@ -255,7 +283,7 @@ var DwenguinoBlockly = {
             document.getElementById('content_arduino').innerHTML =
                 prettyPrintOne(resultStringArray.join(''), 'cpp', false);
                 DwenguinoBlockly.previouslyRenderedCode = code;
-          }
+         }
 
     },
 
@@ -307,7 +335,7 @@ var DwenguinoBlockly = {
         // not load Blockly.
         // Also store the recoring up till now.
         // MSIE 11 does not support sessionStorage on file:// URLs.
-        if (typeof Blockly != 'undefined' && window.sessionStorage) {
+        if (typeof Blockly !== 'undefined' && window.sessionStorage) {
             var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
             var text = Blockly.Xml.domToText(xml);
             window.sessionStorage.loadOnceBlocks = text;
@@ -368,7 +396,7 @@ var DwenguinoBlockly = {
         var tuple = languages[i];
         var lang = tuple[tuple.length - 1];
         var option = new Option(tuple[0], lang);
-        if (lang == DwenguinoBlockly.LANG) {
+        if (lang === DwenguinoBlockly.LANG) {
           option.selected = true;
         }
         languageMenu.options.add(option);
@@ -478,13 +506,10 @@ var DwenguinoBlockly = {
             DwenguinoBlockly.onresize();
             Blockly.svgResize(DwenguinoBlockly.workspace);
         });
-    },
-
+    }
 };
 
 
-
-$(document).ready(function(){
-  console.log("ready");
-    DwenguinoBlockly.setupEnvironment();
+$(document).ready(function() {
+  DwenguinoBlockly.setupEnvironment();
 });
