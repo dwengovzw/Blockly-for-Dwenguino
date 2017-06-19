@@ -84,6 +84,30 @@ var MSG = {
 
 };
 
+
+MSG.simulator = {
+  start: "Start",
+  stop: "Stop",
+  pause: "Pause",
+  step: "1 Step",
+  speed: "Speed",
+  speedVerySlow: "40 times as slow",
+  speedSlow: "20 times as slow",
+  speedMedium: "10 times as slow",
+  speedFast: "5 times as slow",
+  speedVeryFast: "2 times as slow",
+  speedRealTime: "Real-time",
+  components: "Select components",
+  servo: "Servo",
+  motor: "Motor",
+  scope: "Variables",
+  alertDebug: "Stop the simulation before resuming to program",
+  distance: "distance",
+  scenario: "Scenario",
+  scenario_default: "Normal board",
+  scenario_moving: "Moving robot",
+  scenario_wall: "Moving robot with wall"
+};
 MSG.tutorials = {
     introduction: {},
     theremin: {},

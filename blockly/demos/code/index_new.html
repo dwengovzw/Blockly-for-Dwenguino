@@ -19,6 +19,7 @@
     <script src="jquery/jquery-3.1.1.min.js"></script>
 
     <script src="../../blockly_uncompressed.js"></script>
+    <!-- <script src="../../javascript_compressed.js"></script> -->
 
     <script src="language_select.js"></script>
 
@@ -56,6 +57,16 @@
     <script src="../../generators/arduino/dwenguino.js"></script>
     <script src="../../generators/arduino/arduino.js"></script>
     <!-- <script src="../../generators/arduino/base.js"></script> -->
+    
+    <!-- Blockly translators to javascript code -->
+    <script src="../../generators/javascript.js"></script>
+    <script src="../../generators/javascript/logic.js"></script>
+    <script src="../../generators/javascript/loops.js"></script>
+    <script src="../../generators/javascript/math.js"></script>
+    <script src="../../generators/javascript/text.js"></script>
+    <script src="../../generators/javascript/variables.js"></script>
+    <script src="../../generators/javascript/procedures.js"></script>
+    <script src="../../generators/javascript/dwenguino.js"></script>
 
     <!--<script src="../../msg/js/en.js"></script>
     <script src="msg/en.js"></script>-->
@@ -107,9 +118,102 @@
         <div id="db_blockly" class="resize-drag">
         </div>
         <div id="db_infopane">
-            <div id="db_simulator_pane"></div>
+            <div id="db_simulator_pane">
+                <div id="sim_menu">
+                    <div id="sim_start" class="sim_item">Start</div>
+                    <div id="sim_pause" class="sim_item disabled" >Pause</div>
+                    <div id="sim_stop" class="sim_item disabled" >Stop</div>
+                    <div id="sim_step" class="sim_item">1 Step</div>
+                    <div id="sim_speedTag">Speed:</div>
+                    <select id="sim_speed">
+                        <option id="sim_speed_verySlow" value="veryslow">Very slow</option>
+                        <option id="sim_speed_slow" value="slow">Slow</option>
+                        <option id="sim_speed_medium" value="medium">Medium</option>
+                        <option id="sim_speed_fast" value="fast">Fast</option>
+                        <option id="sim_speed_veryFast" value="veryfast">Very fast</option>
+                        <option id="sim_speed_realTime" value="realtime" selected>Real Time</option>
+                    </select>
+                    <div class="sim_menu_next_line">
+                    <div id="sim_scenarioTag">Scenario:</div>
+                    <select id="sim_scenario">
+                        <option id="sim_scenario_default" value="default">Normal board</option>
+                        <option id="sim_scenario_moving" value="moving">Moving robot</option>
+                        <option id="sim_scenario_wall" value="wall">Moving robot with wall</option>
+                    </select>
+                    </div>
+                </div>
+                <div id="sim_components_menu">
+                    <div id="sim_components_select" class="sim_item">Select components:</div>
+                    <div id="sim_components_options">
+                        <input type="checkbox" id="motor1" value="motor1">Motor 1<br>
+                        <input type="checkbox" id="motor2" value="motor2">Motor 2<br>
+                        <input type="checkbox" id="servo1" value="servo1">Servo 1<br>
+                        <input type="checkbox" id="servo2" value="servo2">Servo 2<br>
+                        <input type="checkbox" id="sonar" value="sonar">Sonar<br>
+                    </div>
+                    <div id="sim_scope_name">Variables:</div>
+                    <div id="sim_scope"></div>
+                </div>
+                <div id="debug"></div>
+                <div id="sim_board">
+                    <div class="sim_light sim_light_off" id ="sim_light_13"></div>
+                    <div id="sim_lcds">
+                        <div class="sim_lcd" id="sim_lcd_row0"></div>
+                        <div class="sim_lcd" id="sim_lcd_row1"></div>
+                    </div>
+                    <div id="sim_lights">
+                        <div class="sim_light sim_light_off" id ="sim_light_7"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_6"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_5"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_4"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_3"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_2"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_1"></div>
+                        <div class="sim_light sim_light_off" id ="sim_light_0"></div>
+                    </div>
+                    <div id="sim_buttons">
+                        <div id="sim_buttons_top">
+                            <div id="sim_button_N" class="sim_button"></div>
+                        </div>
+                        <div id="sim_buttons_middle">
+                            <div id="sim_button_E" class="sim_button"></div>
+                            <div id="sim_button_C" class="sim_button"></div>
+                            <div id="sim_button_S" class="sim_button"></div>
+                        </div>
+                        <div id="sim_buttons_bottom">
+                            <div id="sim_button_W" class="sim_button"></div>
+                        </div>
+                    </div>
+                    <div id="sim_button_reset" class="sim_button"></div>
+                </div>
+                <div id="sim_components">
+                    <div id="sim_motors">
+                        <div id="sim_motor1" class="sim_motor"></div>
+                        <div id="sim_motor2" class="sim_motor"></div>
+                    </div>
+                    <div id="sim_servos">
+                        <div id="sim_servo1" class="sim_servo">
+                            <div id="sim_servo1_mov" class="sim_servo_mov"></div>
+                        </div>
+                        <div id="sim_servo2" class="sim_servo">
+                            <div id="sim_servo2_mov" class="sim_servo_mov"></div>
+                        </div>
+                    </div>
+                    <div id="sim_sonar" class="sim_sonar"></div>
+                    <div id="sim_sonar_distance" class="sim_sonar_distance"></div>
+                    <div id="sim_sonar_input"><input type="text" id="sonar_input" name="sim_sonar_input" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>&nbsp;cm</div>
+                </div>
+            </div>
             <div id="db_code_pane">
+                <div id="language1" class="language">C++</div>
+                <div id="language2" class="language">JavaScript</div>
                 <pre id="content_arduino" class="content"></pre>
+            </div>
+            <div id="db_robot_pane">
+                <div id="sim_container">
+                    <div id="sim_animation"></div>
+                <div id="sim_debug"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -313,7 +417,10 @@
       </div>
     </div>
 
-
+    
+    <script src="debugjs.js"></script>
     <script src="code_new.js"></script>
+    <script src="simulator.js"></script>
+    
     </body>
     </html>

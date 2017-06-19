@@ -96,7 +96,7 @@ body{
 
 
 #db_simulator_pane{
-    height: 0%; // 50%; //hide = set to 0%
+    height: 50%;
     border-bottom: solid black 3px;
 }
 
@@ -105,7 +105,46 @@ body{
 }
 
 #db_code_pane{
-    height: 100%; //50%;
+    height: 50%;
+}
+
+#db_robot_pane{
+    height: 50%;
+    display: none;
+}
+
+#sim_container {
+    position: relative;
+    width: 100%;
+    height: 50%;
+}
+#sim_debug {
+    position: absolute;
+    right: 1rem;
+    top:1rem;
+    opacity: .5;
+    white-space: pre-wrap;
+    font-size: 12px;
+    line-height: 16px;
+    max-height: 100%;
+    min-width: 50%;
+    overflow: auto;
+}
+#sim_animation {
+    width: 50px;
+    height: 40px;
+    margin-left: -25px;
+    margin-top: -20px;
+    position: absolute;
+    background-image: url("img/board/robot.png");
+    background-size: 100%;
+    /*outline: 1px solid red;*/
+}
+#sim_point {
+    width: 2px;
+    height: 2px;
+    position: absolute;
+    background: red;
 }
 
 #db_menu_item_dwengo_robot_teacher_image{
@@ -129,4 +168,233 @@ body{
 
 .code_highlight_new {
   background-color: rgba(255, 204, 51, 0.5); /* Arduino yellow 50% */
+}
+
+.language {
+    display:inline;
+    padding-left: 10px;
+}
+
+.language:hover {
+    text-decoration: underline;
+}
+
+.alertDebug {
+    position: absolute;
+    left: 0px;
+    top: 50px;
+    width: inherit;
+    height: 50px;
+    font-weight: bold;
+    text-align: center;
+    font-size: medium;
+    vertical-align: middle;
+    line-height: 600px;
+}
+
+#sim_menu {
+    width: 80%;
+    height: 15%;
+    float: left;
+}
+
+#sim_menu * {
+    float: left;
+    margin-top: 5px;
+    padding: 5px;
+}
+
+.sim_item:hover {
+    text-decoration: underline;
+}
+
+#sim_board {
+    /*background-color: #2a7709; */
+    background-image: url("img/board/dwenguino.png");
+    background-size: 100% 100%;
+    width: 30vmin;
+    height: 25vmin;
+    position: relative;
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+}
+
+#sim_lcds {
+    position: absolute;
+    top: 43%;
+    left: 18%;
+    height: 25%;
+    width: 70%;
+    /*background-color: #7aaf64;*/
+}
+
+.sim_lcd {
+    height: 20px;
+    padding: 2px;
+    font-size: 12px;
+    letter-spacing: 2px;
+    word-spacing: 4px;
+}
+
+#sim_lights {
+    position: absolute;
+    top:80%;
+    left: 10%;
+    height: 20%;
+    width: 60%;
+}
+
+#sim_light_13 {
+    position: absolute;
+    top:20%;
+    left: 10%;
+}
+
+.sim_light {
+    border-radius: 50%;
+    height: 11px;
+    width: 11px;
+    float: left;
+    margin-left: 3px;
+}
+
+.sim_light_off {
+    background-color: #d05050;
+}
+
+.sim_light_on {
+    background-color: #e80d0d;
+}
+
+#sim_buttons {
+    position: absolute;
+    width: 30%;
+    height: 25%;
+    top: 75%;
+    left: 70%;
+}
+
+#sim_buttons * {
+    height: 13px;
+    margin-bottom: 2px;
+}
+
+#sim_buttons_top * {
+    margin-left: 15px;
+}
+
+#sim_buttons_middle * {
+    margin-right: 2px;
+}
+
+#sim_buttons_bottom * {
+    margin-left: 15px;
+}
+
+
+#sim_button_reset {
+    position: absolute;
+    top:90%;
+    left: 30%;
+}
+
+.sim_button {
+    background-image: url("img/board/button.png");
+    background-size: 100% 100%;
+    width: 13px;
+    height: 13px;
+    float:left;
+}
+
+.sim_button_pushed {
+    background-image: url("img/board/button_pushed.png");
+}
+
+.disabled {
+    color: darkgrey;
+}
+
+.disabled:hover {
+    text-decoration: none;
+}
+
+#sim_components_menu {
+    float:right;
+    position:relative;
+    padding: 5px;
+    max-width: 100px;
+}
+
+#sim_components {
+    position: absolute;
+    top: 20%;
+    left: 80%;
+    height: 100px;
+    width: 120px;
+}
+
+#sim_scope_name {
+    padding-top: 10px;
+}
+
+#sim_scope {
+    padding-top: 5px;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height:150px;
+}
+
+.sim_servo {
+    background: #0a3c7a;
+    height: 25px;
+    width: 50px;
+    margin-right: 8px;
+    float: left;
+}
+
+.sim_servo_mov {
+    background-image: url("img/board/servo_movement.png");
+    background-size: 100% 100%;
+    height: 100%;
+    width: 100%; 
+}
+
+#sim_motors {
+    clear: right;
+    height: 50px;
+    width: 75%;
+}
+
+.sim_motor {
+    height: 35px;
+    width: 35px;
+    margin-right: 10px;
+    float: left;
+    background-image: url("img/board/dc_motor.png");
+    background-size: 100% 100%;
+    margin-bottom: 15px;
+}
+
+.sim_sonar {
+    height: 50px;
+    width: 85px;
+    background-image: url("img/board/sonar.png");
+    background-size: 100% 100%;
+    margin-top: 40px;
+}
+
+#sonar_input {
+    width: 40px;
+}
+
+.sim_menu_next_line {
+    clear: left;
+    margin-top: -5px !important;
+}
+
+#sim_start {
+    padding-left: 10px;
 }

@@ -48,14 +48,12 @@ class Browser extends Region {
                 @Override
                 public void changed(ObservableValue<? extends State> ov,
                     State oldState, State newState) {   
-                    if (newState == State.SUCCEEDED) {
-                        // The JavaAppp class implements the JavaScript to Java bindings
-                        serverObject = new DwenguinoBlocklyServer(editor, Browser.this.getScene().getWindow());
-                            JSObject win = (JSObject) webEngine.executeScript("window");
-                            win.setMember("dwenguinoBlocklyServer", serverObject);
-                            //win.call("ready"); // execute callback
-                        }else{
-                    }
+                    	if (newState == State.SUCCEEDED) {
+                        	// The JavaAppp class implements the JavaScript to Java bindings
+                        	serverObject = new DwenguinoBlocklyServer(editor, Browser.this.getScene().getWindow());
+	            		JSObject win = (JSObject) webEngine.executeScript("window");
+	               		win.setMember("dwenguinoBlocklyServer", serverObject);
+                        }
                     }
                 };
         

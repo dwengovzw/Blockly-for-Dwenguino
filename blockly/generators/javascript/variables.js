@@ -44,3 +44,14 @@ Blockly.JavaScript['variables_set'] = function(block) {
       block.getFieldValue('VAR'), Blockly.Variables.NAME_TYPE);
   return varName + ' = ' + argument0 + ';\n';
 };
+
+Blockly.JavaScript.variables_declare_set = function() {
+  // Variable setter.
+  var varValue = Blockly.JavaScript.valueToCode(this, 'VALUE',
+      Blockly.JavaScript.ORDER_ASSIGNMENT) || '0';
+  var varName = Blockly.JavaScript.variableDB_.getName(this.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  //Blockly.JavaScript.definitions_[varName] = 'var ' + varName + ';\n';
+
+  return varName + ' = ' + varValue + ';\n';
+};

@@ -1,3 +1,5 @@
+/* global Blockly, goog */
+
 /**
  * @license
  * Visual Blocks Language
@@ -139,12 +141,16 @@ Blockly.JavaScript.ORDER_OVERRIDES = [
  * @param {!Blockly.Workspace} workspace Workspace to generate code from.
  */
 Blockly.JavaScript.init = function(workspace) {
-  // Create a dictionary of definitions to be printed before the code.
+  //save reference to workspace
+  Blockly.JavaScript.workspace = workspace;
+  // Create a dictionary of definitions to be printed before setups.
   Blockly.JavaScript.definitions_ = Object.create(null);
-  // Create a dictionary mapping desired function names in definitions_
+  // Create a dictionary of setups to be printed before the code.
+  Blockly.JavaScript.setups_ = Object.create(null);
   // to actual function names (to avoid collisions with user functions).
   Blockly.JavaScript.functionNames_ = Object.create(null);
 
+  //Create a dictionary for variable types and names
   if (!Blockly.JavaScript.variableDB_) {
     Blockly.JavaScript.variableDB_ =
         new Blockly.Names(Blockly.JavaScript.RESERVED_WORDS_);
@@ -160,7 +166,7 @@ Blockly.JavaScript.init = function(workspace) {
           Blockly.Variables.NAME_TYPE);
     }
     Blockly.JavaScript.definitions_['variables'] =
-        'var ' + defvars.join(', ') + ';';
+        'var ' + defvars.join(', ') + ';\n';
   }
 };
 
@@ -170,16 +176,30 @@ Blockly.JavaScript.init = function(workspace) {
  * @return {string} Completed code.
  */
 Blockly.JavaScript.finish = function(code) {
+  code = code.replace(/\n\s+$/, '\n');
+  code = code.replace(/\n\n+/g, '\n');
+  if (code !== "") {
+    code = 'while (true) {\n' + code + '}';
+    //code = 'function loop0() {\n' + code + '  loop0();\n}\n\nloop0();';
+  }
   // Convert the definitions dictionary into a list.
   var definitions = [];
   for (var name in Blockly.JavaScript.definitions_) {
     definitions.push(Blockly.JavaScript.definitions_[name]);
   }
+  // Convert the setups dictionary into a list.
+  var setups = [];
+  for (var name in Blockly.JavaScript.setups_) {
+    setups.push(Blockly.JavaScript.setups_[name].replace(/\n\s+/g, '\n'));
+  }
+  var allDefs = definitions.join('') + '\n\n'+setups.join('');
+  
   // Clean up temporary data.
   delete Blockly.JavaScript.definitions_;
   delete Blockly.JavaScript.functionNames_;
   Blockly.JavaScript.variableDB_.reset();
-  return definitions.join('\n\n') + '\n\n\n' + code;
+ 
+  return allDefs.replace(/\n\n+/g, '\n\n').replace(/\n*$/, '\n\n') + code;
 };
 
 /**
@@ -218,6 +238,19 @@ Blockly.JavaScript.quote_ = function(string) {
  * @private
  */
 Blockly.JavaScript.scrub_ = function(block, code) {
+  //Do not translate non connectet top bocks except for the setup_loop block and the function definition blocks.
+  if (block === block.getRootBlock()
+      && !(block.type === 'setup_loop_structure'
+          || block.type === 'setup_loop_structure_arduino'
+          || block.type === 'procedures_defnoreturn'
+          || block.type === 'procedures_defreturn')){
+      return "";
+  }
+  //alert(block === block.getRootBlock() && !(block.));
+  if (code === null) {
+    // Block has handled code generation itself.
+    return '';
+  }
   var commentCode = '';
   // Only collect comments for blocks that aren't inline.
   if (!block.outputConnection || !block.outputConnection.targetConnection) {
@@ -237,7 +270,7 @@ Blockly.JavaScript.scrub_ = function(block, code) {
     // Collect comments for all value arguments.
     // Don't collect comments for nested statements.
     for (var i = 0; i < block.inputList.length; i++) {
-      if (block.inputList[i].type == Blockly.INPUT_VALUE) {
+      if (block.inputList[i].type === Blockly.INPUT_VALUE) {
         var childBlock = block.inputList[i].connection.targetBlock();
         if (childBlock) {
           var comment = Blockly.JavaScript.allNestedComments(childBlock);
