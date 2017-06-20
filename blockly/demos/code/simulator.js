@@ -14,13 +14,14 @@ var DwenguinoSimulation = {
     buttons: [1,1,1,1,1],
     sonarDistance: 50
   },
-  
+
   isSimulationRunning: false,
   isSimulationPaused: false,
   speedDelay: 16,
   debuggingView: false,
+  scenarios: ["default", "moving", "wall"],
   scenarioView: "default",
-  
+
   debugger: {
     debuggerjs: null,
     code: "",
@@ -30,7 +31,7 @@ var DwenguinoSimulation = {
       blockMapping: {}
     }
   },
-  
+
   field: {
     width: 200,
     height: 200,
@@ -56,7 +57,7 @@ var DwenguinoSimulation = {
       radius: 25
     }]
   },
-  
+
   /*
    * Initializes the environment when loading page
    */
@@ -68,6 +69,12 @@ var DwenguinoSimulation = {
    * inits the right actions to handle the simulation view
    */
   initDwenguinoSimulation: function() {
+    //Add scenarios to the dropdown
+    $("sim_scenario").empty();
+    $.each(DwenguinoSimulation.scenarios, function(index, value){
+      $("sim_scenario").append($("<option>").attr("id", "sim_scenario_" + value).attr("value", value));
+    });
+
     // translation
     document.getElementById('sim_start').textContent = MSG.simulator['start'];
     document.getElementById('sim_stop').textContent = MSG.simulator['stop'];
@@ -83,9 +90,10 @@ var DwenguinoSimulation = {
     document.getElementById('sim_speed_realTime').textContent = MSG.simulator['speedRealTime'];
 
     document.getElementById('sim_scenarioTag').textContent = MSG.simulator['scenario'] + ":";
-    document.getElementById('sim_scenario_default').textContent = MSG.simulator['scenario_default'];
-    document.getElementById('sim_scenario_moving').textContent = MSG.simulator['scenario_moving'];
-    document.getElementById('sim_scenario_wall').textContent = MSG.simulator['scenario_wall'];
+
+    $.each(DwenguinoSimulation.scenarios, function(index, value){
+        document.getElementById('sim_scenario_' + value).textContent = MSG.simulator['scenario_' + value];
+    });
 
     document.getElementById('sim_components_select').textContent = MSG.simulator['components'] + ":";
     document.getElementById('servo1').textContent = MSG.simulator['servo'] + " 1";
@@ -255,7 +263,7 @@ var DwenguinoSimulation = {
       DwenguinoSimulation.scenarioView = e.options[e.selectedIndex].value;
       DwenguinoSimulation.changeScenarioView();
     });
-    
+
     DwenguinoSimulation.renderScenario();
   },
 
@@ -268,7 +276,7 @@ var DwenguinoSimulation = {
     // run debugger
     DwenguinoSimulation.step();
   },
-  
+
   /*
    * Starts the simulation for the current code with 1 step
    */
@@ -297,10 +305,10 @@ var DwenguinoSimulation = {
     } else if (DwenguinoSimulation.scenarioView === "wall") {
       DwenguinoSimulation.adjustMovingRobot(DwenguinoSimulation.board.motorSpeeds[0], DwenguinoSimulation.board.motorSpeeds[1], true);
     }
-    
+
     DwenguinoSimulation.step();
   },
-  
+
   /*
    * initialize the debugging environment
    */
@@ -309,7 +317,7 @@ var DwenguinoSimulation = {
     DwenguinoSimulation.initDwenguino();
 
     // get code
-    DwenguinoSimulation.debugger.code = document.getElementById('content_arduino').textContent;
+    DwenguinoSimulation.debugger.code = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
     DwenguinoSimulation.mapBlocksToCode();
 
 
@@ -375,7 +383,7 @@ var DwenguinoSimulation = {
     } else if (DwenguinoSimulation.scenarioView === "wall") {
       DwenguinoSimulation.adjustMovingRobot(DwenguinoSimulation.board.motorSpeeds[0], DwenguinoSimulation.board.motorSpeeds[1], true);
     }
-    
+
     DwenguinoSimulation.debugger.debuggerjs.machine.step();
     DwenguinoSimulation.updateBlocklyColour();
     DwenguinoSimulation.handleScope();
@@ -601,7 +609,7 @@ var DwenguinoSimulation = {
       DwenguinoSimulation.writeLcd(" ".repeat(16), i, 1);
     }
   },
-  
+
   /*
    * Writes text to the lcd on the given row starting fro position column
    * @param {string} text: text to write
@@ -647,9 +655,9 @@ var DwenguinoSimulation = {
       }
     }
   },
-  
+
   analogWrite: function(pinNumber, state) {
-    
+
   },
 
   /*
@@ -662,7 +670,7 @@ var DwenguinoSimulation = {
     if (pin.startsWith("SW_")) {
       return document.getElementById("sim_button_" + pin[3]).className === "sim_button" ? 1 : 0;
     }
-    
+
     pin = Number(pin);
     if ((pin >= 32 && pin <= 39) || pin === 13) {
       if (pin >= 32 && pin <= 39) {
@@ -673,11 +681,11 @@ var DwenguinoSimulation = {
 
     return 1;
   },
-  
+
   analogRead: function(pin) {
     return 0;
   },
-  
+
   /*
    * Changes the state of all eight lights
    * @param {String} bin "0b00000000" to turn all lights off, "0b11111111" to turn all lights on
@@ -722,7 +730,7 @@ var DwenguinoSimulation = {
       DwenguinoSimulation.board.buzzer.tonePlaying = frequency;
     }
   },
-  
+
   /*
    * Stops the buzzer
    * @param {string} id of the pin "BUZZER"
@@ -743,7 +751,7 @@ var DwenguinoSimulation = {
   servo: function(channel, angle) {
     $("#sim_servo"+channel).show();
     document.getElementById("servo"+channel).checked = true;
-    
+
     //set angle
     if (angle > 180) {
       angle = 180;
@@ -811,7 +819,7 @@ var DwenguinoSimulation = {
   startDcMotor: function(channel, speed) {
     $("#sim_motor"+channel).show();
     document.getElementById("motor"+channel).checked = true;
-    
+
     //set angle
     if (speed > 255) {
       speed = 255;
@@ -870,7 +878,7 @@ var DwenguinoSimulation = {
             || DwenguinoSimulation.isSimulationPaused) {
       return;
     }
-    
+
     var x = DwenguinoSimulation.robot.position.x;
     var y = DwenguinoSimulation.robot.position.y;
     var angle = DwenguinoSimulation.robot.position.angle;
@@ -910,7 +918,7 @@ var DwenguinoSimulation = {
 
     DwenguinoSimulation.renderScenario();
 
-    
+
     setTimeout(function() {
       DwenguinoSimulation.adjustMovingRobot(speed1, speed2, wall);
     }, DwenguinoSimulation.speedDelay);
@@ -927,7 +935,7 @@ var DwenguinoSimulation = {
     $("#sim_sonar_distance").show();
     $("#sim_sonar_input").show();
     document.getElementById("sonar").checked = true;
-        
+
     // adjust sonar value based on wall
     var e = document.getElementById("sim_scenario");
     var option = e.options[e.selectedIndex].value;
@@ -938,10 +946,10 @@ var DwenguinoSimulation = {
       var xMiddle = DwenguinoSimulation.robot.position.x;
       var yMiddle = DwenguinoSimulation.robot.position.y;
       var angle = DwenguinoSimulation.robot.position.angle;
-      
+
       var xFront = xMiddle + (DwenguinoSimulation.robot.image.width/2) * Math.cos(Math.PI / 180 * angle);
       var yFront = yMiddle + (DwenguinoSimulation.robot.image.width/2) * Math.sin(Math.PI / 180 * angle);
-      
+
       // coordinates of line
       lineX = 0;
       lineY = 0;
@@ -953,7 +961,7 @@ var DwenguinoSimulation = {
         lineX = DwenguinoSimulation.field.width;
       }
       angle = DwenguinoSimulation.robot.position.angle;
-      
+
       var distanceX = Math.cos(Math.PI / 180 * angle) !== 0? (lineX-xFront)/(Math.cos(Math.PI / 180 * angle)) : DwenguinoSimulation.field.width*2;
       var distanceY = Math.sin(Math.PI / 180 * angle) !== 0? (lineY-yFront)/(Math.sin(Math.PI / 180 * angle)) : DwenguinoSimulation.field.height*2;
 
@@ -974,7 +982,7 @@ var DwenguinoSimulation = {
     // Update field size
     DwenguinoSimulation.field.width = $("#sim_container").width();
     DwenguinoSimulation.field.height = $("#sim_container").height();
-    
+
     $robot
       .css('top', robot.position.y + 'px')
       .css('left', robot.position.x + 'px')
@@ -985,7 +993,7 @@ var DwenguinoSimulation = {
       robot
     }, null, 2));*/
   },
-  
+
   /*
    * Adjust css when simulation is started
    */
@@ -1033,7 +1041,7 @@ var DwenguinoSimulation = {
     // disable pause
     document.getElementById('sim_pause').className = "sim_item disabled";
   },
-  
+
   /*
    * Adjusts the view during simulation
    * disables the programming and makes the simulation pane biggger

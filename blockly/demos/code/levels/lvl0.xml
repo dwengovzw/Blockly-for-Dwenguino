@@ -139,6 +139,13 @@
             </block>
         </value>
     </block>
+    <block type="dwenguino_leds_reg">
+        <value name="MASK">
+            <block type="char_type">
+                <field name="BITMASK">0b01010101</field>
+            </block>
+        </value>
+    </block>
     <block type="dwenguino_led_pins"></block>
     <block type="dwenguino_on_off"></block>
 </category>

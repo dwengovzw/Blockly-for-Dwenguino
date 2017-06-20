@@ -58,6 +58,9 @@ var MSG = {
   tutsTheremin: "Theremin",
   tutsRobot: "Robot",
   tutsBasicTest: "Basis test",
+  tutsHelloDwenguino: "Hallo Dwenguino!",
+  tutsBlink: "Blink",
+  tutsHelloRobot: "Rijdende Robot",
   simulator: "Simulator",
   setLedState: "Zet %1 %2",
   setLedStateTooltip: "Zet een LED op het arduino bord aan of uit",
@@ -112,7 +115,10 @@ MSG.tutorials = {
     introduction: {},
     theremin: {},
     robot: {},
-    basic_test: {}
+    basic_test: {},
+    hello_dwenguino: {},
+    blink: {},
+    hello_robot: {},
 };
 
 MSG.tutorials.introduction = {
@@ -135,7 +141,7 @@ MSG.tutorials.introduction = {
         step8Title: "Opslaan",
         step8Content: "Met deze knop kan je de blokken opslaan naar een lokaal bestand",
         step9Title: "De simulator",
-        step9Content: "Met deze knop kan je in de toekomst de simulator openen, deze kan je gebruiken om je code eerst te testen voor je ze naar het bord upload."
+        step9Content: "Met deze knop kan je de simulator openen, deze kan je gebruiken om je code eerst te testen voor je ze naar het bord upload."
 
 };
 
@@ -160,4 +166,50 @@ Veel succes!",
 Sterker nog, al deze apparaten worden steeds meer verbonden met het internet en vormen zo samen het Internet of Things (IoT). Studies schatten dat tegen 2020 meer dan 50 miljard apparaten verbonden zullen zijn met het internet. We spreken dan niet alleen over smartphones en tablets maar ook over bijvoorbeeld slimme rookmelders, intelligente koelkasten en robots.\
 De basis van al deze apparaten zijn digitale rekensystemen die instaan voor de nodige intelligentie. Een voorbeeld hiervan is de microcontroller, deze omvat al het nodige om sensorgegevens te verwerken, berekeningen uit te voeren en acties te ondernemen.",
     step3Title: "Het bord",
+};
+
+
+MSG.tutorials.hello_dwenguino = {
+  step1Title: "Hallo Dwenguino!",
+  step1Content: "In deze tutorial schrijf je je eerste Dwenguino programma. Dit programma schrijft de tekst 'Hallo Dwenguino' naar het LCD scherm van het bord.",
+  step2Title: "De simulator",
+  step2Content: "Klik op de simulator knop om deze te openen.",
+  step3Title: "Blokjes slepen uit de toolbox",
+  step3Content: "Neem nu onderstaande blok uit de toolbox en plaats deze onder de tekst <em><b>zet klaar bij start</b></em>. </br><img src='img/helloDwenguino/dwenguinoLCD.png' alt='Image of the dwenguino LCD block' style='max-width:100%'/>",
+  step4Title: "Je code uitvoeren",
+  step4Content: "Om je code uit te voeren in de simulator druk je op de <em><b>Start</b></em> knop.</br>Wat zie je ?</br>Met de <em><b>Stop</b></em> knop kan je de uitvoering in de simulator stoppen.</br>Merk op dat je de code niet kan aanpassen terwijl deze aan het uitvoeren is.",
+  step5Title: "Het 'zet klaar, herhaal'-blok",
+  step5Content: "De code die onder het tekstje <em><b>zet klaar bij start</b></em> staat zal één keer uitgevoerd worden bij het begin van het programma. De code onder het tekstje <em><b>herhaal</b></em> blijft oneindig lang herhalen.</br>Is er een verschil wanneer je het <em><b>Dwenguino LCD</b></em> blok in het <em><b>zet klaar bij start</b></em> gedeelte of het <em><b>herhaal</b></em> gedeelte zet?",
+  step6Title: "Nu zelf!",
+  step6Content: "Probeer het nu zelf! Verander de tekst die op het scherm komt eens door je eigen naam. </br> Probeer ook eens om de tekst op de tweede lijn van het scherm te laten verschijnen.",
+};
+
+MSG.tutorials.blink = {
+  step1Title: "Knipperlicht",
+  step1Content: "In deze tutorial schrijven we een programma die LED 13 afwisselend aan en uit zet. We zorgen ervoor dat de LED twee keer per seconde aan en uit gaat.",
+  step2Title: "De simulator",
+  step2Content: "Klik op de simulator knop om deze te openen.",
+  step3Title: "Blokjes slepen uit de toolbox",
+  step3Content: "Gebruik de volgende blokken om je programma te schrijven: </br><img src='img/blink/requiredBlocks.png' alt='Image of the blocks required for the blink exercise' style='max-width:100%'/></br><b>Tip:</b> De tijd in het <em><b>wacht</b></em> blokje staat in miliseconden.</br> 1 seconde = 1000 miliseconden.",
+  step4Title: "Je code uitvoeren",
+  step4Content: "Om je code uit te voeren in de simulator druk je op de <em><b>Start</b></em> knop.</br>Wat zie je ?</br>Met de <em><b>Stop</b></em> knop kan je de uitvoering in de simulator stoppen.</br>Merk op dat je de code niet kan aanpassen terwijl deze aan het uitvoeren is.",
+  step5Title: "Werkt je code correct?",
+  step5Content: "Als je code nog niet correct werkt kan je de fout proberen achterhalen door blokje voor blokje door je code te stappen. Dit doe je door in de simulator op de knop <em><b>1 stap</b></em> te drukken.</br>Als je code nu al correct werkt, dikke duim!",
+  step6Title: "Nu zelf!",
+  step6Content: "Probeer het nu zelf!</br><ul><li>Verander de knippersneleid zodat de LED 1 keer per seconde aan en uit gaat.</li><li>Kies eens een andere LED om aan en uit te zetten.</li><li>Probeer eens meerdere LEDs aan en uit te zetten.</li></ul>",
+};
+
+MSG.tutorials.hello_robot = {
+  step1Title: "Rijdende robot",
+  step1Content: "In deze tutorial programmeer je een tweewielige rijdende robot. Je zel de opdracht krijgen om vershillende patronen te rijden met de robot.",
+  step2Title: "De simulator",
+  step2Content: "Klik op de simulator knop om deze te openen.",
+  step3Title: "Scenario kiezen",
+  step3Content: "Om onze rijdende robot te kunnen programmeren moet je in de simulator kiezen voor het scenario <em><b>Bewegende robot</b></em>.",
+  step4Title: "Vooruit rijden",
+  step4Content: "Als eerste opdracht moet je de robot gewoon rechtdoor laten rijden. Elk wiel van de robot is verbonden met een DC-motor. Om deze motoren te programmeren gebruik je de volgende blok:</br><img src='img/helloRobot/DCMotor.png' alt='Motor block' style='max-width:100%'/></br>Door het <em><b>nummer</b></em> te veranderen kan je motor 1 of 2 laten draaien.</br>De <em><b>snelheid</b></em> is een getal tussen -255 en 255. (-255 = maximale sneleid achteruit, 0 = niet draaien, 255 = maximale snelheid vooruit.)",
+  step5Title: "Een bocht",
+  step5Content: "Denk na hoe je je robot een rechte hoek kan laten maken. </br><b>Tip:</b> laat de wielen in tegengestelde richting draaien om de robot een bocht te laten namen.",
+  step6Title: "Een vierkant",
+  step6Content: "Nu je erin geslaagd bent om de robot een bocht van 90° te laten nemen kan je eens proberen om hem in een vierkant te laten rijden.",
 };

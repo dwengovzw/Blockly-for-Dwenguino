@@ -11,7 +11,7 @@ var DwenguinoBlockly = {
     recording: "",
     sessionId: null,
     tutorialId: null,
-    
+
     serverUrl: 'http://localhost:3000',
     serverUrl: '',
 
@@ -128,7 +128,7 @@ var DwenguinoBlockly = {
 			DwenguinoBlockly.workspace.clear();
 			console.log(xml);
 			Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
-		    } catch (e) {}  
+		    } catch (e) {}
 		var count = DwenguinoBlockly.workspace.getAllBlocks().length;
 		appendToRecording("<uploadClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></uploadClicked>")
         });
@@ -164,12 +164,12 @@ var DwenguinoBlockly = {
          $("#db_menu_item_dwengo_robot_teacher_image").click(function(){
             DwenguinoBlockly.takeSnapshotOfWorkspace();
          });
-         
+
          $("#language1").click(function(){
             DwenguinoBlockly.language = "cpp";
             DwenguinoBlockly.renderCode();
          });
-         
+
          $("#language2").click(function(){
             DwenguinoBlockly.language = "js";
             DwenguinoBlockly.renderCode();
@@ -202,12 +202,12 @@ var DwenguinoBlockly = {
               type: "POST",
               url: this.serverUrl + "/sessions/update",
               data: serverSubmission,
-          }
-        ).done(function(data){
-            console.debug('Recording submitted', data);
-        }).fail(function(response, status)  {
-            console.warn('Failed to submit recording:', status);
-        });
+          }).done(function(data){
+              console.debug('Recording submitted', data);
+          }).fail(function(response, status)  {
+              console.warn('Failed to submit recording:', status);
+          });
+        }
         // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
         if ((typeof dwenguinoBlocklyServer) != 'undefined'){
             dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
@@ -231,14 +231,14 @@ var DwenguinoBlockly = {
 
     /**
     *   Log the code changes of the user
-    *   @param {type} event 
+    *   @param {type} event
     */
     logCodeChange: function(event){
         DwenguinoBlockly.takeSnapshotOfWorkspace();
     },
 
     previouslyRenderedCode: null,
-    language: "js",
+    language: "cpp",
     /**
      * Populate the currently selected pane with content generated from the blocks.
      */
@@ -418,7 +418,7 @@ var DwenguinoBlockly = {
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
         //document.getElementById('trashButton').title = MSG['trashTooltip'];
 
-        var tutorials = ['tutsIntroduction', 'tutsTheremin', 'tutsRobot', 'tutsBasicTest'];
+        var tutorials = ['tutsIntroduction', 'tutsHelloDwenguino', 'tutsBlink', 'tutsHelloRobot'];
         for (var i = 0; i < tutorials.length ; i++){
             var element = document.getElementById(tutorials[i]);
             if (element){
