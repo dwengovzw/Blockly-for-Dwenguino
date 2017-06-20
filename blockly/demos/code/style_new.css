@@ -105,18 +105,22 @@ body{
 }
 
 #db_code_pane{
-    height: 50%;
+    height: 100%;
 }
 
 #db_robot_pane{
-    height: 50%;
+    height: 100%;
     display: none;
+}
+
+#db_simulator_bottom_pane{
+  height: 50%;
 }
 
 #sim_container {
     position: relative;
     width: 100%;
-    height: 50%;
+    height: 100%;
 }
 #sim_debug {
     position: absolute;
@@ -359,7 +363,7 @@ body{
     background-image: url("img/board/servo_movement.png");
     background-size: 100% 100%;
     height: 100%;
-    width: 100%; 
+    width: 100%;
 }
 
 #sim_motors {

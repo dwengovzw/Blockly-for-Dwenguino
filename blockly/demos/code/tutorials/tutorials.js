@@ -1,3 +1,7 @@
+/*
+ * Links interface locations to interface ids.
+ */
+
 var tutorialTargets = {
   dwenguino: "db_menu_item_dwengo_robot_teacher_image",
   workspaceArea: "blocklyDiv",
@@ -11,6 +15,14 @@ var tutorialTargets = {
   saveButton: "db_menu_item_download",
   simulatorButton: "db_menu_item_simulator",
   codeArea: "db_code_pane",
-  simulatorArea: "db_simulator_pane"
+  simulatorArea: "db_simulator_pane",
+  simulatorStartButton: "sim_start",
+  simulatorStopButton: "sim_stop",
+  simulatorScenarioTag: "sim_scenarioTag",
+  simulatorPane: "db_robot_pane",
 };
+
+/*
+ * See other tutoiral files for the implementation of the specific tutorials
+ */
 var tutorials = {};

@@ -57,6 +57,7 @@ var MSG = {
   tutsIntroduction: "Introduction",
   tutsTheremin: "Theremin",
   tutsRobot: "Robot",
+  tutsHelloDwenguino: "Hello Dwenguino!",
   simulator: "Simulator",
   setLedState: "Turn %1 %2",
   setLedStateTooltip: "Turn an LED on the Dwenguino board on or off",
@@ -111,7 +112,8 @@ MSG.simulator = {
 MSG.tutorials = {
     introduction: {},
     theremin: {},
-    robot: {}
+    robot: {},
+    hello_dwenguino: {},
 };
 
 MSG.tutorials.introduction = {
@@ -136,4 +138,8 @@ MSG.tutorials.introduction = {
   step9Title: "The simulator",
   step9Content: "In the future you will be able to use this button to open the simulator. You can use it to test your code before uploading."
 
+};
+
+MSG.tutorials.hello_dwenguino = {
+  label: "Hello World!",
 };
