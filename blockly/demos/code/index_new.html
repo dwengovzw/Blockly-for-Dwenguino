@@ -206,8 +206,14 @@
                 </div>
             </div>
             <div id="db_simulator_bottom_pane">
+              <div id="db_simulator_tab_selection">
+                <ul class='tabs'>
+                  <li><a href="#db_code_pane">Code</a></li>
+                  <li id="robot_pane_tab" style="display:none"><a href="#db_robot_pane">Robot</a></li>
+                </ul>
+              </div>
               <div id="db_code_pane">
-                  <div id="language1" class="language">C++</div>
+                  <!--<div id="language1" class="language">C++</div>-->
                   <!-- No need to see javascript code, irrelevant for the children -->
                   <!--<div id="language2" class="language">JavaScript</div>-->
                   <pre id="content_arduino" class="content"></pre>

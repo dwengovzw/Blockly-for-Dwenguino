@@ -107,7 +107,8 @@ MSG.simulator = {
   scenario: "Scenario",
   scenario_default: "Normal board",
   scenario_moving: "Moving robot",
-  scenario_wall: "Moving robot with wall"
+  scenario_wall: "Moving robot with wall",
+  code: "Code",
 };
 MSG.tutorials = {
     introduction: {},

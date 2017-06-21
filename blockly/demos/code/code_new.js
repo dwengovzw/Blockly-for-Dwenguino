@@ -90,21 +90,24 @@ var DwenguinoBlockly = {
 
         //init resizable panels
         $( "#db_blockly" ).resizable({
-            handles: "e",
-            resize: function(event, ui){
-                DwenguinoBlockly.onresize();
-                Blockly.svgResize(DwenguinoBlockly.workspace);
-            }
+            handles: "e"
+        });
+
+        $( "#db_blockly" ).resize(function(){
+          DwenguinoBlockly.onresize();
+          Blockly.svgResize(DwenguinoBlockly.workspace);
         });
 
         //show/hide simulator
         $("#db_menu_item_simulator").click(function(){
             if (this.simButtonStateClicked){
                 $("#db_blockly").width('100%');
+                //$("#db_blockly").animate({width: "+=0.05%%"}, {duration: 1000});
                 this.simButtonStateClicked = false;
                 DwenguinoBlockly.simulatorState = "off";
             }else{
                 $("#db_blockly").width('50%');
+                //$("#db_blockly").animate({width: "-=0.05%"}, {duration: 1000});
                 this.simButtonStateClicked = true;
                 DwenguinoBlockly.simulatorState = "on";
             }

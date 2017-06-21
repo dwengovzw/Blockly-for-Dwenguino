@@ -104,7 +104,8 @@ var DwenguinoSimulation = {
     document.getElementById('sim_sonar_distance').textContent = "Sonar " + MSG.simulator['distance'] + ":";
     document.getElementById('sonar_input').value = DwenguinoSimulation.board.sonarDistance;
 
-
+    $("a[href$='#db_robot_pane']").text(MSG.simulator['scenario']);
+    $("a[href$='#db_code_pane']").text(MSG.simulator['code']);
 
     // start/stop/pause
     $("#sim_start").click(function() {
@@ -262,6 +263,43 @@ var DwenguinoSimulation = {
       var e = document.getElementById("sim_scenario");
       DwenguinoSimulation.scenarioView = e.options[e.selectedIndex].value;
       DwenguinoSimulation.changeScenarioView();
+    });
+
+    var toggleSimulatorPaneView = function(currentPane, otherPane, e){
+      $content = $(otherPane.attr("href"));
+      otherPane.removeClass("active");
+      $content.hide();
+
+      $(currentPane).addClass("active");
+      $(currentPane.hash).show();
+
+      e.preventDefault();
+    }
+
+    $("a[href$='#db_code_pane']").click(function(e){
+      toggleSimulatorPaneView(this, $("a[href$='#db_robot_pane']"), e);
+    });
+
+    $("a[href$='#db_robot_pane']").click(function(e){
+      toggleSimulatorPaneView(this, $("a[href$='#db_code_pane']"), e);
+    });
+
+    $("ul.tabs").each(function(){
+      // For each set of tabs, we want to keep track of
+      // which tab is active and its associated content
+      var $active, $content, $links = $(this).find('a');
+
+      // If the location.hash matches one of the links, use that as the active tab.
+      // If no match is found, use the first link as the initial active tab.
+      $active = $($links.filter('[href="'+location.hash+'"]')[0] || $links[0]);
+      $active.addClass('active');
+
+      $content = $($active[0].hash);
+
+      // Hide the remaining content
+      $links.not($active).each(function () {
+        $(this.hash).hide();
+      });
     });
 
     DwenguinoSimulation.renderScenario();
@@ -988,10 +1026,6 @@ var DwenguinoSimulation = {
       .css('left', robot.position.x + 'px')
       .css('transform', 'rotate(' + robot.position.angle + 'deg)');
 
-    /*$("#sim_debug").text(JSON.stringify({
-      field,
-      robot
-    }, null, 2));*/
   },
 
   /*
@@ -1075,24 +1109,37 @@ var DwenguinoSimulation = {
       case "default":
         document.getElementById('db_code_pane').style.display = "inline";
         document.getElementById('db_robot_pane').style.display = "none";
+        $("a[href$='#db_code_pane']").addClass('active');
+        $("a[href$='#db_robot_pane']").removeClass('active');
+        $("#robot_pane_tab").hide();
         break;
       case "moving":
+        $("#robot_pane_tab").show();
+        $("a[href$='#db_code_pane']").removeClass('active');
+        $("a[href$='#db_robot_pane']").addClass('active');
         document.getElementById('db_code_pane').style.display = "none";
-        document.getElementById('db_robot_pane').style.display = "inline";
+        document.getElementById('db_robot_pane').style.display = "inline-block";
+        document.getElementById('db_robot_pane').style.width = "100%";
+        document.getElementById('db_robot_pane').style.height = "100%";
         document.getElementById('sim_container').style.border = "none";
-        document.getElementById('sim_container').style.height = "50%";
-        document.getElementById('sim_container').style.marginTop = "initial";
-        document.getElementById('sim_container').style.left = "initial";
+        document.getElementById('db_robot_pane').style.padding = "0";
+        //document.getElementById('sim_container').style.height = "50%";
+        //document.getElementById('sim_container').style.marginTop = "initial";
+        //document.getElementById('sim_container').style.left = "initial";
         document.getElementById('sim_container').style.width = "100%";
         break;
       case "wall":
+        $("#robot_pane_tab").show();
+        $("a[href$='#db_code_pane']").removeClass('active');
+        $("a[href$='#db_robot_pane']").addClass('active');
         document.getElementById('db_code_pane').style.display = "none";
-        document.getElementById('db_robot_pane').style.display = "inline";
+        document.getElementById('db_robot_pane').style.display = "inline-block";
+        document.getElementById('db_robot_pane').style.padding = "20px";
+        document.getElementById('db_robot_pane').style.width = "100%";
+        document.getElementById('db_robot_pane').style.height = "100%";
         document.getElementById('sim_container').style.border = "2px solid grey";
-        document.getElementById('sim_container').style.height = "40%";
-        document.getElementById('sim_container').style.marginTop = "5%";
-        document.getElementById('sim_container').style.left = "5%";
-        document.getElementById('sim_container').style.width = "90%";
+        document.getElementById('sim_container').style.display = "inline-block";
+        document.getElementById('sim_container').style.boxSizing = "border-box";
     }
   }
 };
@@ -1111,11 +1158,6 @@ if (!String.prototype.startsWith) {
   };
 }
 
-/*if (typeof console === 'undefined' || true) {
-  window.console = {
-    log: function (message) { $('#debug').text(message); }
-  };
-}*/
 
 $(document).ready(function() {
   DwenguinoSimulation.setupEnvironment();
