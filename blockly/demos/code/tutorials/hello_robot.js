@@ -36,7 +36,7 @@ tutorials.helloRobot = {
     {
       title: MSG.tutorials.hello_robot.step4Title,
       content: MSG.tutorials.hello_robot.step4Content,
-      target: tutorialTargets.simulatorPane,
+      target: tutorialTargets.simulatorBottomPane,
       yOffset: -350,
       arrowOffset: "380",
       placement: "left",

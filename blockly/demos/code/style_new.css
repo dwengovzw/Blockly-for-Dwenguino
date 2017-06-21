@@ -110,6 +110,7 @@ body{
 
 #db_robot_pane{
     height: 100%;
+    box-sizing: border-box;
     display: none;
 }
 
@@ -401,4 +402,29 @@ body{
 
 #sim_start {
     padding-left: 10px;
+}
+
+.tabs{
+  height: 30px;
+  margin-top: -32px;
+  margin-bottom: 0px;
+  padding-left: 20px;
+}
+
+.tabs li {
+	list-style:none;
+	display:inline;
+}
+
+.tabs a {
+	padding:5px 10px;
+	display:inline-block;
+	background:#666;
+	color:#fff;
+	text-decoration:none;
+}
+
+.tabs a.active {
+	background:#8bab42;
+	color:#000;
 }
