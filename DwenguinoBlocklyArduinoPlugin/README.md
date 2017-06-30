@@ -1,0 +1,1 @@
+This folder contains the java plugin for the arduino IDE. This plugin runs the blockly environment inside a JavaFX webview and handles the communication between the javascript application and the arduino IDE.

@@ -85,7 +85,7 @@ class Browser extends Region {
         baseurl = baseurl.replace("DwenguinoBlocklyArduinoPlugin.jar", "");
         
         
-        webEngine.load(baseurl + "DwenguinoBlockly/blockly/demos/code/index_new.html");
+        webEngine.load(baseurl + "DwenguinoBlockly/DwenguinoIDE/index.html");
 
         //add the web view to the scene
         getChildren().add(browser);

@@ -146,7 +146,7 @@ body{
     margin-left: -25px;
     margin-top: -20px;
     position: absolute;
-    background-image: url("img/board/robot.png");
+    background-image: url("../img/board/robot.png");
     background-size: 100%;
     /*outline: 1px solid red;*/
 }
@@ -220,7 +220,7 @@ body{
 
 #sim_board {
     /*background-color: #2a7709; */
-    background-image: url("img/board/dwenguino.png");
+    background-image: url("../img/board/dwenguino.png");
     background-size: 100% 100%;
     width: 30vmin;
     height: 25vmin;
@@ -312,7 +312,7 @@ body{
 }
 
 .sim_button {
-    background-image: url("img/board/button.png");
+    background-image: url("../img/board/button.png");
     background-size: 100% 100%;
     width: 13px;
     height: 13px;
@@ -320,7 +320,7 @@ body{
 }
 
 .sim_button_pushed {
-    background-image: url("img/board/button_pushed.png");
+    background-image: url("../img/board/button_pushed.png");
 }
 
 .disabled {
@@ -366,7 +366,7 @@ body{
 }
 
 .sim_servo_mov {
-    background-image: url("img/board/servo_movement.png");
+    background-image: url("../img/board/servo_movement.png");
     background-size: 100% 100%;
     height: 100%;
     width: 100%;
@@ -383,7 +383,7 @@ body{
     width: 35px;
     margin-right: 10px;
     float: left;
-    background-image: url("img/board/dc_motor.png");
+    background-image: url("../img/board/dc_motor.png");
     background-size: 100% 100%;
     margin-bottom: 15px;
 }
@@ -391,7 +391,7 @@ body{
 .sim_sonar {
     height: 50px;
     width: 85px;
-    background-image: url("img/board/sonar.png");
+    background-image: url("../img/board/sonar.png");
     background-size: 100% 100%;
     margin-top: 40px;
 }
