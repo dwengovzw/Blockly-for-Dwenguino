@@ -110,6 +110,7 @@ var DwenguinoBlockly = {
                 //$("#db_blockly").animate({width: "-=0.05%"}, {duration: 1000});
                 this.simButtonStateClicked = true;
                 DwenguinoBlockly.simulatorState = "on";
+                DwenguinoSimulation.setupEnvironment();
             }
             DwenguinoBlockly.takeSnapshotOfWorkspace();
             DwenguinoBlockly.onresize();

@@ -81,6 +81,21 @@
     <script src="js/prettify.js"></script>
     <script src="js/diff.js"></script>
 
+    <!-- libs -->
+   <script type="text/javascript" src="js/matterjs/decomp.js"></script>
+   <script type="text/javascript" src="js/matterjs/pathseg.js"></script>
+
+   <!-- Matter -->
+   <script src="js/matterjs/matter-dev.js"></script>
+
+   <!--<!-- MatterTools
+   <script src="js/matterjs/matter-tools.gui.js"></script>
+   <script src="js/matterjs/matter-tools.inspector.js"></script>
+   <script src="js/matterjs/matter-tools.demo.js"></script>
+
+   <!-- Plugins
+   <script src="js/matterjs/matter-wrap.js"></script>-->
+
 </head>
 <body id="db_body">
     <div class="db_header">
@@ -140,6 +155,7 @@
                         <option id="sim_scenario_default" value="default">Normal board</option>
                         <option id="sim_scenario_moving" value="moving">Moving robot</option>
                         <option id="sim_scenario_wall" value="wall">Moving robot with wall</option>
+                        <option id="sim_scenario_spyrograph" value="spyrograph">Moving robot with wall</option>
                     </select>
                     </div>
                 </div>
@@ -210,6 +226,7 @@
                 <ul class='tabs'>
                   <li><a href="#db_code_pane">Code</a></li>
                   <li id="robot_pane_tab" style="display:none"><a href="#db_robot_pane">Robot</a></li>
+                  <li id="matterjs_pane_tab"><a href="#db_matterjs_pane">Matter</a></li>
                 </ul>
               </div>
               <div id="db_code_pane">
@@ -219,10 +236,12 @@
                   <pre id="content_arduino" class="content"></pre>
               </div>
               <div id="db_robot_pane">
-                  <div id="sim_container">
-                      <div id="sim_animation"></div>
-                  <div id="sim_debug"></div>
+                    <div id="sim_container">
+                        <div id="sim_animation"></div>
+                        <div id="sim_debug"></div>
                   </div>
+              </div>
+              <div id="db_matterjs_pane">
               </div>
             </div>
         </div>

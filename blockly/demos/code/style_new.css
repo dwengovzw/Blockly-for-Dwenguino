@@ -113,6 +113,11 @@ body{
     box-sizing: border-box;
     display: none;
 }
+#db_matterjs_pane{
+  height: 100%;
+  box-sizing: border-box;
+  display: none;
+}
 
 #db_simulator_bottom_pane{
   height: 50%;
