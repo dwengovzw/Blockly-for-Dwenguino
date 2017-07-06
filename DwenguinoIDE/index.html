@@ -135,10 +135,10 @@
                     <div class="sim_menu_next_line">
                     <div id="sim_scenarioTag">Scenario:</div>
                     <select id="sim_scenario">
-                        <option id="sim_scenario_default" value="default">Normal board</option>
+                        <!--<option id="sim_scenario_default" value="default">Normal board</option>
                         <option id="sim_scenario_moving" value="moving">Moving robot</option>
                         <option id="sim_scenario_wall" value="wall">Moving robot with wall</option>
-                        <option id="sim_scenario_spyrograph" value="spyrograph">Moving robot with wall</option>
+                        <option id="sim_scenario_spyrograph" value="spyrograph">Moving robot with wall</option>-->
                     </select>
                     </div>
                 </div>
@@ -208,8 +208,7 @@
               <div id="db_simulator_tab_selection">
                 <ul class='tabs'>
                   <li><a href="#db_code_pane">Code</a></li>
-                  <li id="robot_pane_tab" style="display:none"><a href="#db_robot_pane">Robot</a></li>
-                  <li id="matterjs_pane_tab"><a href="#db_matterjs_pane">Matter</a></li>
+                  <li id="robot_pane_tab"><a href="#db_robot_pane">Robot</a></li>
                 </ul>
               </div>
               <div id="db_code_pane">
@@ -435,11 +434,14 @@
 
       </div>
     </div>
-
-
+    <script src="js/lib/ResizeSensor.js"></script>
+    <script src="js/lib/ElementQueries.js"></script>
     <script src="js/lib/debugjs.js"></script>
+    <script src="js/src/DwenguinoSimulationScenario.js"></script>
+    <script src="js/src/DwenguinoSimulationScenarioRidingRobot.js"></script>
     <script src="js/src/DwenguinoBlockly.js"></script>
-    <script src="js/src/simulator.js"></script>
+    <script src="js/src/DwenguinoSimulation.js"></script>
+
 
     </body>
     </html>

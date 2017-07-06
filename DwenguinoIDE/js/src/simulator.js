@@ -34,6 +34,7 @@ var DwenguinoSimulation = {
   spyrograph:{
     motor1: null,
     motor2: null,
+    engine: null
   },
   field: {
     width: 200,
@@ -81,8 +82,14 @@ var DwenguinoSimulation = {
     Bodies = Matter.Bodies,
     Body = Matter.Body;
 
+    if (DwenguinoSimulation.spyrograph.engine){
+      World.clear(DwenguinoSimulation.spyrograph.engine.world);
+      Engine.clear(DwenguinoSimulation.spyrograph.engine);
+    }
+
     // create engine
-    var engine = Engine.create(), world = engine.world;
+    engine = Engine.create(), world = engine.world;
+    DwenguinoSimulation.spyrograph.engine = engine;
 
     //set gravity to zero
     engine.world.gravity.y = 0;
@@ -281,6 +288,11 @@ var DwenguinoSimulation = {
     Composite.addConstraint(spyrograph, axel1);
     Composite.addConstraint(spyrograph, axel2);
 
+    var bodies = Composite.allBodies(spyrograph);
+    for (var i = 0 ; i < bodies.length ; i++){
+      DwenguinoSimulation.removePartFriction(bodies[i]);
+    }
+
     // Add the composite body to the world
     World.add(world, spyrograph);
 
@@ -296,8 +308,16 @@ var DwenguinoSimulation = {
       }
     });
 
-    Matter.Body.setAngularVelocity(DwenguinoSimulation.spyrograph.motor1, 10);
 
+  },
+
+  removePartFriction:function(part){
+    part.friction = 0;
+    part.mass = 0.0001;
+    part.inertia = 0.0001;
+    part.density = 0.0001;
+    //part.inverseMass = part.inverseInertia = Infinity;
+    part.frictionAir = 0;
   },
 
   /*
@@ -878,6 +898,11 @@ var DwenguinoSimulation = {
         angle: DwenguinoSimulation.robot.start.angle
       };
       DwenguinoSimulation.renderScenario();
+
+      // Reset the spyrograph
+      //DwenguinoSimulation.initMatterJsEnvironment();
+      //Stop timeer
+      //clearTimeout(DwenguinoSimulation.timeout);
     },
 
     /*
@@ -1136,6 +1161,8 @@ var DwenguinoSimulation = {
         DwenguinoSimulation.adjustMovingRobot(DwenguinoSimulation.board.motorSpeeds[0], DwenguinoSimulation.board.motorSpeeds[1], false);
       } else if (option === "wall") {
         DwenguinoSimulation.adjustMovingRobot(DwenguinoSimulation.board.motorSpeeds[0], DwenguinoSimulation.board.motorSpeeds[1], true);
+      }else if (option === "spyrograph"){
+        DwenguinoSimulation.adjustSpyrograph(DwenguinoSimulation.board.motorSpeeds[0], DwenguinoSimulation.board.motorSpeeds[1]);
       }
     },
 
@@ -1152,7 +1179,8 @@ var DwenguinoSimulation = {
       var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor" + channel));
       // rotate x degrees at a time based on speed
       $("#sim_motor" + channel).css("transform", "rotate(" + ((prevAngle + maxMovement) % 360) + "deg)");
-      setTimeout(function() {
+
+      DwenguinoSimulation.timeout = setTimeout(function() {
         DwenguinoSimulation.dcMotorRotate(channel, speed);
       }, 20);
     },
@@ -1164,8 +1192,12 @@ var DwenguinoSimulation = {
      */
 
     adjustSpyrograph: function(speed1, speed2){
-      Matter.Body.setAngularVelocity(DwenguinoSimulation.spyrograph.motor1, speed1);
-      Matter.Body.setAngularVelocity(DwenguinoSimulation.spyrograph.motor2, speed2);
+      Matter.Body.setAngularVelocity(DwenguinoSimulation.spyrograph.motor1, speed1/100);
+      Matter.Body.setAngularVelocity(DwenguinoSimulation.spyrograph.motor2, speed2/100);
+
+      DwenguinoSimulation.timeout = setTimeout(function() {
+        DwenguinoSimulation.adjustSpyrograph(speed1, speed2);
+      }, DwenguinoSimulation.speedDelay);
     },
 
 
