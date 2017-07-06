@@ -44,7 +44,7 @@ DwenguinoSimulationScenario.prototype.initSimulationDisplay = function(container
  *
  */
 DwenguinoSimulationScenario.prototype.updateScenario = function(dwenguinoState){
-
+  return dwenguinoState;
 };
 
 /* @brief updates the simulation state

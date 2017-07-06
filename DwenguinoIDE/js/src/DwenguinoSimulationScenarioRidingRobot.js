@@ -86,10 +86,13 @@ DwenguinoSimulationScenarioRidingRobot.prototype.initSimulationDisplay = functio
    container.append(simulationContainer);
 
    // Set new element styles
+   $(containerIdSelector).css("position", "relative")
+
    $("#sim_container")
     .css("position", "relative")
     .css("width", "100%")
-    .css("height", "100%");
+    .css("height", "100%")
+    .css("box-sizing", "border-box");
 
    $("#sim_animation")
     .css("width", this.robot.image.width + "px")
@@ -147,11 +150,6 @@ DwenguinoSimulationScenarioRidingRobot.prototype.updateScenarioState = function(
   var speed2 = dwenguinoState.motorSpeeds[1];
 
 
-  // This code shoud be in the DwenguinoSimulation file to
-  /*if (!(speed1 === DwenguinoSimulation.board.motorSpeeds[0] && speed2 === DwenguinoSimulation.board.motorSpeeds[1] && (speed1 !== 0 || speed2 !== 0))
-  || DwenguinoSimulation.isSimulationPaused) {
-    return;
-  }*/
   // Save the current state of the robot into local variables.
   var x = this.robot.position.x;
   var y = this.robot.position.y;

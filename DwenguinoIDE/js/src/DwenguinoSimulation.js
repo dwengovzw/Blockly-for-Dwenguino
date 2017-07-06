@@ -16,11 +16,15 @@ var DwenguinoSimulation = {
   isSimulationRunning: false,
   isSimulationPaused: false,
   speedDelay: 16,
+  baseSpeedDelay: 16,
   debuggingView: false,
-  scenarios: {"moving": new DwenguinoSimulationScenarioRidingRobot() /*, "moving", "wall", "spyrograph"*/},
+  scenarios: {
+    "moving": new DwenguinoSimulationScenarioRidingRobot(),
+    "wall": new DwenguinoSimulationScenarioRidingRobotWithWall() /*, "moving", "wall", "spyrograph"*/
+  },
   currentScenario: null,
   scenarioView: "moving",
-
+  simulationViewContainerId: "#db_robot_pane",
   debugger: {
     debuggerjs: null,
     code: "",
@@ -87,7 +91,7 @@ var DwenguinoSimulation = {
     DwenguinoSimulation.translateSimulatorInterface();
 
     //Init the current scenario view
-    DwenguinoSimulation.currentScenario.initSimulationDisplay();
+    DwenguinoSimulation.currentScenario.initSimulationDisplay(DwenguinoSimulation.simulationViewContainerId);
 
     // start/stop/pause
     $("#sim_start").click(function() {
@@ -244,10 +248,8 @@ var DwenguinoSimulation = {
       var e = document.getElementById("sim_scenario");
       DwenguinoSimulation.scenarioView = e.options[e.selectedIndex].value;
       DwenguinoSimulation.currentScenario = DwenguinoSimulation.scenarios[DwenguinoSimulation.scenarioView];
-      DwenguinoSimulation.currentScenario.initSimulationDisplay();
-      //Change the current active tab to the simulation view pane
-      $("a[href$='#db_code_pane']").removeClass('active');
-      $("a[href$='#db_robot_pane']").addClass('active');
+      DwenguinoSimulation.currentScenario.initSimulationDisplay(DwenguinoSimulation.simulationViewContainerId);
+
     });
 
     var toggleSimulatorPaneView = function(currentPane, otherPanes, e){
@@ -358,12 +360,9 @@ var DwenguinoSimulation = {
     var filename = 'DwenguinoSimulation';
     DwenguinoSimulation.debugger.debuggerjs.load(DwenguinoSimulation.debugger.code, filename);
 
-    var min = Math.min.apply(null, Object.keys(DwenguinoSimulation.debugger.blocks.blockMapping));
-    var line = 0;
-    while (line <= min) {
-      DwenguinoSimulation.oneStep();
-      line = DwenguinoSimulation.debugger.debuggerjs.machine.getCurrentLoc().start.line;
-    }
+    // Performs a single step to start the debugging process, hihglights the setup loop block.
+    DwenguinoSimulation.debugger.debuggerjs.machine.step();
+    DwenguinoSimulation.updateBlocklyColour();
   },
 
   /*
@@ -381,22 +380,42 @@ var DwenguinoSimulation = {
     DwenguinoSimulation.updateBlocklyColour();
     DwenguinoSimulation.handleScope();
 
-    // check if current line is not a sleep
+    // Get current line
     var code = DwenguinoSimulation.debugger.code.split("\n")[line] === undefined ? '' : DwenguinoSimulation.debugger.code.split("\n")[line];
 
     // Update the scenario View
     DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
 
+    // check if current line is not a sleep
     if (!code.trim().startsWith("DwenguinoSimulation.sleep")) {
       setTimeout(DwenguinoSimulation.step, DwenguinoSimulation.speedDelay);
     } else {
       // sleep
-      // TODO: change this so the simulation keeps running during the delay time
-      setTimeout(DwenguinoSimulation.step,
-        DwenguinoSimulation.speedDelay + (Number(DwenguinoSimulation.debugger.code.split("\n")[line].replace(/\D+/g, '')))
-      );
+      var delayTime = Number(DwenguinoSimulation.debugger.code.split("\n")[line].replace(/\D+/g, ''));
+      DwenguinoSimulation.delayStepsTaken = 0;
+      DwenguinoSimulation.delayStepsToTake = Math.floor(delayTime/DwenguinoSimulation.baseSpeedDelay);
+      DwenguinoSimulation.delayRemainingAfterSteps = delayTime % DwenguinoSimulation.baseSpeedDelay;
+      DwenguinoSimulation.performDelayLoop(DwenguinoSimulation.step);
     }
     DwenguinoSimulation.checkForEnd();
+  },
+  /*
+   *  This function iterates until the delay has passed
+   */
+  performDelayLoop: function(returnCallback){
+    // Here we want the simulation to keep running but not let the board state update.
+    // To do so we execute the updateScenario() function of the current scenario delay/speedDelay times
+    // with an interval of speedDelay.
+    if (DwenguinoSimulation.delayStepsTaken < DwenguinoSimulation.delayStepsToTake){
+      // Update the scenario View
+      DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
+      DwenguinoSimulation.delayStepsTaken++;
+      setTimeout(function(){
+        DwenguinoSimulation.performDelayLoop(returnCallback);
+      }, DwenguinoSimulation.speedDelay);
+    } else {
+      setTimeout(returnCallback, DwenguinoSimulation.delayRemainingAfterSteps);
+    }
   },
 
   /*
@@ -407,11 +426,28 @@ var DwenguinoSimulation = {
     // Update the scenario View
     DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
 
+    // Get current line
+    var line = DwenguinoSimulation.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
+    var code = DwenguinoSimulation.debugger.code.split("\n")[line] === undefined ? '' : DwenguinoSimulation.debugger.code.split("\n")[line];
+
     DwenguinoSimulation.debugger.debuggerjs.machine.step();
     DwenguinoSimulation.updateBlocklyColour();
     DwenguinoSimulation.handleScope();
     DwenguinoSimulation.checkForEnd();
+
+    // check if current line is not a sleep
+    if (code.trim().startsWith("DwenguinoSimulation.sleep")) {
+      // sleep
+      var delayTime = Number(DwenguinoSimulation.debugger.code.split("\n")[line].replace(/\D+/g, ''));
+      DwenguinoSimulation.delayStepsTaken = 0;
+      DwenguinoSimulation.delayStepsToTake = Math.floor(delayTime/DwenguinoSimulation.baseSpeedDelay);
+      DwenguinoSimulation.delayRemainingAfterSteps = delayTime % DwenguinoSimulation.baseSpeedDelay;
+      DwenguinoSimulation.performDelayLoop(function(){/*Do nothing after delay loop*/});
+    }
+
+
   },
+
 
   /*
   * Displays the values of the variables during the simulation
@@ -557,7 +593,7 @@ var DwenguinoSimulation = {
   initDwenguino: function() {
     //Reset the Dwenguino board display
     DwenguinoSimulation.resetDwenguino();
-    DwenguinoSimulation.currentScenario.initSimulationDisplay("#db_robot_pane");
+    DwenguinoSimulation.currentScenario.initSimulationDisplay(DwenguinoSimulation.simulationViewContainerId);
   },
 
   /*
