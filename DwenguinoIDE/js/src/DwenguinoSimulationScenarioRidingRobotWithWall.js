@@ -127,27 +127,43 @@ DwenguinoSimulationScenarioRidingRobotWithWall.prototype.updateScenarioState = f
   var xMiddle = x;
   var yMiddle = y;
 
+  angle = ((angle % 360)+360)%360;  // Normalize angle
+
   var xFront = xMiddle + (this.robot.image.width/2) * Math.cos(Math.PI / 180 * angle);
   var yFront = yMiddle + (this.robot.image.width/2) * Math.sin(Math.PI / 180 * angle);
 
-  // coordinates of line
-  lineX = 0;
-  lineY = 0;
-  var angle = ((this.robot.position.angle % 360)+360)%360;
-  if (angle <= 180) {
-    lineY = this.containerHeight;
-  }
-  if (angle <= 90 || angle >= 270) {
-    lineX = this.containerWidth;
-  }
-  angle = this.robot.position.angle;
 
-  var distanceX = Math.cos(Math.PI / 180 * angle) !== 0? (lineX-xFront)/(Math.cos(Math.PI / 180 * angle)) : this.containerWidth*2;
-  var distanceY = Math.sin(Math.PI / 180 * angle) !== 0? (lineY-yFront)/(Math.sin(Math.PI / 180 * angle)) : this.containerHeight*2;
+  //Calculate the intersection point between the two possible intersecting horizontal and vertical lines
+  // and the line through the robot with a slope defined by its angle.
+  var intersectionPoint = [0, 0];
+  var intersectionLiness = [[this.containerWidth, this.containerHeight], [0, this.containerHeight], [0, 0], [this.containerWidth, 0]];
+  var intersectionPointX = [0, 0];
+  var intersectionPointY = [0, 0];
 
-  dwenguinoState.sonarDistance = parseInt(distanceX < distanceY? distanceX/2 : distanceY/2);
+  // do edge cases first
+  if (angle == 90){
+    intersectionPointX = intersectionPointY = [xFront, this.containerHeight];
+  } else if (angle == 270){
+    intersectionPointX = intersectionPointY = [xFront, 0];
+  } else if (angle == 180){
+    intersectionPointX = intersectionPointY = [0, yFront];
+  } else if (angle == 0){
+    intersectionPointX = intersectionPointY = [this.containerWidth, yFront];
+  } else {
+    var slope = Math.tan(angle);
+    var intersectionLines = intersectionLiness[Math.floor(angle/90)%4];
+    intersectionPointX = [intersectionLines[0], Math.tan(angle*Math.PI / 180) * (intersectionLines[0] - xFront) + yFront];
+    intersectionPointY = [(intersectionLines[1] - yFront) / Math.tan(angle*Math.PI / 180) + xFront, intersectionLines[1]];
+  }
+
+  // Pick the distance to the closest intersecting line.
+  var D = Math.min(this.calcDistanceBetweenPoints(intersectionPointX, [xFront, yFront]),
+      this.calcDistanceBetweenPoints(intersectionPointY, [xFront, yFront]));
+
+  dwenguinoState.sonarDistance = Math.abs(D - 25); // Compensate for borders
 
   console.log(dwenguinoState.sonarDistance);
+
 
   this.robot.position = {
     x: x,
@@ -156,6 +172,10 @@ DwenguinoSimulationScenarioRidingRobotWithWall.prototype.updateScenarioState = f
   };
 
   return dwenguinoState;
+};
+
+DwenguinoSimulationScenarioRidingRobotWithWall.prototype.calcDistanceBetweenPoints = function(p1, p2){
+  return Math.sqrt((p2[0] - p1[0])*(p2[0] - p1[0])+(p2[1] - p1[1])*(p2[1] - p1[1]));
 };
 
 /* @brief updates the simulation display

@@ -920,10 +920,7 @@ var DwenguinoSimulation = {
       $("#sim_sonar_distance").show();
       $("#sim_sonar_input").show();
       document.getElementById("sonar").checked = true;
-
-      // adjust sonar value based on wall
-      var e = document.getElementById("sim_scenario");
-      var option = e.options[e.selectedIndex].value;
+      document.getElementById('sonar_input').value = DwenguinoSimulation.board.sonarDistance;
       return this.board.sonarDistance;
     },
 
