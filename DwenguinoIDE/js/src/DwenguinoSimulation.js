@@ -20,7 +20,8 @@ var DwenguinoSimulation = {
   debuggingView: false,
   scenarios: {
     "moving": new DwenguinoSimulationScenarioRidingRobot(),
-    "wall": new DwenguinoSimulationScenarioRidingRobotWithWall() /*, "moving", "wall", "spyrograph"*/
+    "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(),
+    "spyrograph": new DwenguinoSimulationScenarioSpyrograph() /*, "moving", "wall", "spyrograph"*/
   },
   currentScenario: null,
   scenarioView: "moving",

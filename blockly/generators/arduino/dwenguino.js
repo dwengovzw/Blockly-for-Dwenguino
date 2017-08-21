@@ -170,6 +170,12 @@ Blockly.Arduino.dwenguino_highlow = function() {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino.dwenguino_pressed = function() {
+  // Boolean values PRESSED and NOT PRESSED.
+  var code = (this.getFieldValue('BOOL') == 'PRESSED') ? 'PRESSED' : '!PRESSED';
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
+
 Blockly.Arduino.dwenguino_on_off = function() {
   // Boolean values HIGH and LOW.
   var code = (this.getFieldValue('LED_ON_OFF') == 'ON') ? 'HIGH' : 'LOW';

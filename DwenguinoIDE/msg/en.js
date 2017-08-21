@@ -82,7 +82,9 @@ var MSG = {
   center: "Center",
   ledsReg: "LEDS",
   dwenguinoLedsRegTooltip: "You can turn leds 0 to 7 on using a binary number. For example 0b00001111 will turn leds 0 to 3 on and the rest off",
-
+  pressed: "PRESSED",
+  notPressed: "NOT PRESSED",
+  pressedTooltip: "Represents the state of a button. Use these values to compare to the actual button state",
 };
 
 

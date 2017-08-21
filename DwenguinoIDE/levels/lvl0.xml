@@ -114,6 +114,7 @@
         </value>
     </block>
     <block type="dwenguino_digital_read_switch"></block>
+    <block type="dwenguino_pressed"></block>
     <block type="dwenguino_highlow"></block>
     <block type="sonar_sensor">
         <value name="trig">

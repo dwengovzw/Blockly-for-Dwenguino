@@ -209,7 +209,7 @@ Blockly.Blocks['char_type'] = {
 
 var sonar_sensor_json = {
   "id": "sonar_sensor",
-  "message0": "Sonar %1 %2 %3" + MSG.trig + "%4" + MSG.echo + "%5",
+  "message0": "sonar %1 %2 %3" + MSG.trig + "%4" + MSG.echo + "%5",
   "args0": [
     {
       "type": "input_dummy"
@@ -310,6 +310,17 @@ Blockly.Blocks['dwenguino_highlow'] = {
         .appendField(new Blockly.FieldDropdown([[MSG.high, "HIGH"], [MSG.low, "LOW"]]), 'BOOL')
     this.setOutput(true, 'Number');
     this.setTooltip(MSG.highLowTooltip);
+  }
+};
+
+Blockly.Blocks['dwenguino_pressed'] = {
+  init: function() {
+    this.setHelpUrl(DwenguinoHelpUrl);
+    this.setColour(Blockly.Blocks.dwenguino.HUE);
+    this.appendDummyInput()
+        .appendField(new Blockly.FieldDropdown([[MSG.pressed, "PRESSED"], [MSG.notPressed, "NOT_PRESSED"]]), 'BOOL')
+    this.setOutput(true, 'Number');
+    this.setTooltip(MSG.pressedTooltip);
   }
 };
 
