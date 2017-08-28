@@ -21,7 +21,7 @@ var DwenguinoSimulation = {
   scenarios: {
     "moving": new DwenguinoSimulationScenarioRidingRobot(),
     "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(),
-    "spyrograph": new DwenguinoSimulationScenarioSpyrograph() /*, "moving", "wall", "spyrograph"*/
+    //"spyrograph": new DwenguinoSimulationScenarioSpyrograph() /*, "moving", "wall", "spyrograph"*/
   },
   currentScenario: null,
   scenarioView: "moving",
@@ -82,7 +82,7 @@ var DwenguinoSimulation = {
   */
   initDwenguinoSimulation: function() {
     //Add scenarios to the dropdown
-    $("sim_scenario").empty();
+    $("#sim_scenario").empty();
     $.each(Object.keys(DwenguinoSimulation.scenarios), function(index, value){
       var newOpt = $("<option></option>").attr("id", "sim_scenario_" + value).attr("value", value).text(value);
       $("#sim_scenario").append(newOpt);
