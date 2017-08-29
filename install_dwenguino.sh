@@ -44,6 +44,8 @@ mv DwenguinoBlocklyArduinoPlugin /opt/arduino/tools/
 wget --continue https://raw.githubusercontent.com/dwengovzw/Blockly-for-Dwenguino/version2.2/preferences.txt
 rm /home/${SUDO_USER}/.arduino15/preferences.txt
 mv preferences.txt /home/${SUDO_USER}/.arduino15/
+chown dwengo:dwengo /home/${SUDO_USER}/.arduino15/preferences.txt
+chmod 644 /home/${SUDO_USER}/.arduino15/preferences.txt
 
 # wallpaper
 wget http://ptr.be/dwengo/dwengo.jpg
@@ -79,5 +81,7 @@ chmod +x /home/${SUDO_USER}/Desktop/Dwengo*.desktop
 wget https://github.com/google/blockly-games/raw/offline/generated/blockly-games-nl.zip
 unzip blockly-games-nl.zip
 sudo mv /root/blockly-games /home/${SUDO_USER}/Bureaublad/
+sudo chown dwengo:dwengo -R /home/${SUDO_USER}/Bureaublad/blockly-games/
 
+echo "Reboot your system for the changes to take effect!!"
 
