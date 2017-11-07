@@ -12,8 +12,7 @@ var DwenguinoBlockly = {
     sessionId: null,
     tutorialId: null,
 
-    serverUrl: 'http://localhost:3000',
-    serverUrl: '',
+    serverUrl: 'http://localhost:8991',
 
     //General settings for this session, these are used for data logging during experiments
     agegroupSetting: "",
@@ -118,13 +117,7 @@ var DwenguinoBlockly = {
         });
 
         //save/upload buttons
-        $("#db_menu_item_run").click(function(){
-            if ((typeof dwenguinoBlocklyServer) != 'undefined'){
-                var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-                dwenguinoBlocklyServer.uploadCode(code);
-            }
-            appendToRecording("<runClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></runClicked>")
-        });
+        $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
 
         $("#db_menu_item_upload").click(function(){
 		try {
@@ -166,7 +159,10 @@ var DwenguinoBlockly = {
 
          //following event listener is only a test --> remove later!
          $("#db_menu_item_dwengo_robot_teacher_image").click(function(){
-            DwenguinoBlockly.takeSnapshotOfWorkspace();
+            //DwenguinoBlockly.takeSnapshotOfWorkspace();
+            //DwenguinoBlockly.build("void setup() {} void loop() {}");
+            //DwenguinoBlockly.build("void main() {}");
+            DwenguinoBlockly.listPorts();
          });
 
          $("#language1").click(function(){
@@ -216,6 +212,16 @@ var DwenguinoBlockly = {
         if ((typeof dwenguinoBlocklyServer) != 'undefined'){
             dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
         }
+    },
+
+    runEventHandler: function(){
+      var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+      if ((typeof dwenguinoBlocklyServer) != 'undefined' && dwenguinoBlocklyServer){
+          dwenguinoBlocklyServer.uploadCode(code);
+      }
+      console.log(code.replace(/\r?\n|\r/g, "\n"));
+      DwenguinoBlockly.build(code.replace(/\r?\n|\r/g, "\\n"));
+      DwenguinoBlockly.appendToRecording("<runClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></runClicked>")
     },
 
     prevWorkspaceXml: "",
@@ -480,6 +486,83 @@ var DwenguinoBlockly = {
         // initialization is not affected from a failed load.
         window.setTimeout(BlocklyStorage.restoreBlocks, 0);
       }
+  },
+
+
+  build: function(sketchCode){
+    $("#db_menu_item_run").off("click");
+    $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/gear_animation.gif");
+    console.log('{"Code": "' + sketchCode + '"}');
+    $.ajax({
+        type: 'POST',
+        url: DwenguinoBlockly.serverUrl + "/build",
+        contentType: "application/json",
+        async: true,
+        data: '{"Code": "' + sketchCode + '"}',
+        error: function(msg){
+          $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
+          $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/dwengo_robot_plain.svg");
+          console.log(msg);
+        },
+        success: function(msg){
+          console.log(msg);
+          if (msg.base64HexCode != ""){
+            console.log("compilation succesful, uploading");
+            DwenguinoBlockly.upload(msg.base64HexCode);
+          }
+        }
+    });
+  },
+  listPorts: function(compilationResult){
+    $.ajax({
+        type: 'GET',
+        url: DwenguinoBlockly.serverUrl + "/listPorts",
+        error: function(msg){
+          console.log(msg);
+        },
+        success: function(msg){
+          console.log(msg);
+        }
+    });
+  },
+
+  upload: function(base64HexCode){
+    var requestData = '{"port": "' + '/dev/ttyACM0' + '", "base64HexCode": "' + base64HexCode + '"}';
+    if (window["WebSocket"]) {
+       conn = new WebSocket("wss://localhost:8991/ws");
+       conn.onclose = function(evt) {
+           appendLog($("<div><b>Connection closed.</b></div>"))
+       }
+       conn.onmessage = function(evt) {
+           appendLog($("<div/>").text(evt.data))
+       }
+
+       if (!conn) {
+            return false;
+        }
+        conn.send("open /dev/ttyACM0 57600");
+        msg.val("");
+   } else {
+       appendLog($("<div><b>Your browser does not support WebSockets.</b></div>"))
+   }
+    console.log(requestData);
+    $.ajax({
+        type: 'POST',
+        url: DwenguinoBlockly.serverUrl + "/uploadToDwenguino",
+        contentType: "application/json",
+        async: true,
+        data: requestData,
+        error: function(msg){
+          $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
+          $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/dwengo_robot_plain.svg");
+          console.log(msg);
+        },
+        success: function(msg){
+          $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
+          $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/dwengo_robot_plain.svg");
+          console.log(msg);
+        }
+    });
   },
 
   //TODO: remove following function: not used anywhere

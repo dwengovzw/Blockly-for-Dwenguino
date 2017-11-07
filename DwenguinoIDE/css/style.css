@@ -38,6 +38,10 @@ body{
     vertical-align: center;
 }
 
+.db_menu_item:hover{
+  color: #8bab42;
+}
+
 .db_diff_icon{
     font-size: 20px;
     padding: 15px;
@@ -138,6 +142,7 @@ body{
 
 .dropdownmenuitem{
         padding: 2px 7px;
+        color: #333;
 }
 
 .dropdownmenuitem:hover{
