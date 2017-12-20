@@ -120,14 +120,15 @@ var DwenguinoBlockly = {
         $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
 
         $("#db_menu_item_upload").click(function(){
+          var xml = "";
       		try {
-      			var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer ? dwenguinoBlocklyServer.loadBlocks() : localStorage.workspaceXml);
+      			xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer ? dwenguinoBlocklyServer.loadBlocks() : localStorage.workspaceXml);
       			DwenguinoBlockly.workspace.clear();
       			console.log(xml);
       			Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
       		    } catch (e) {}
       		var count = DwenguinoBlockly.workspace.getAllBlocks().length;
-      		DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("uploadClicked", ""));
+      		DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("uploadClicked", xml));
         });
 
 
@@ -294,6 +295,9 @@ var DwenguinoBlockly = {
         $("#db_menu_item_run").css({color: "black"});
         $("#db_menu_item_run").hover(function() {
           $(this).css({color: "#8bab42"});
+        });
+        $("#db_menu_item_run").mouseleave(function() {
+          $(this).css({color: "black"});
         });
         $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px", maxHeight: "100%", float: "right"});
         $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/dwengo_robot_plain.svg");

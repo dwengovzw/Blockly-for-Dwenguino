@@ -141,7 +141,7 @@ Blockly.JavaScript.dwenguino_highlow = function() {
 
 Blockly.JavaScript.dwenguino_pressed = function() {
   // Boolean values PRESSED and NOT PRESSED.
-  var code = (this.getFieldValue('BOOL') === 'PRESSED') ? 1 : 0;
+  var code = (this.getFieldValue('BOOL') === 'PRESSED') ? 0 : 1;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 

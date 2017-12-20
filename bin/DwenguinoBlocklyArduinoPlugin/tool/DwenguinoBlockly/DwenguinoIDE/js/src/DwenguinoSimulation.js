@@ -203,43 +203,47 @@ var DwenguinoSimulation = {
     });
 
     // push buttons
-    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('click', function() {
+    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mousedown', function() {
       if (document.getElementById(this.id).className === "sim_button") {
         document.getElementById(this.id).className = "sim_button sim_button_pushed";
         // update state of buttons
         switch(this.id) {
-          case "#sim_button_N":
+          case "sim_button_N":
           DwenguinoSimulation.board.buttons[0] = 0;
           break;
-          case "#sim_button_W":
+          case "sim_button_W":
           DwenguinoSimulation.board.buttons[1] = 0;
           break;
-          case "#sim_button_C":
+          case "sim_button_C":
           DwenguinoSimulation.board.buttons[2] = 0;
           break;
-          case "#sim_button_E":
+          case "sim_button_E":
           DwenguinoSimulation.board.buttons[3] = 0;
           break;
-          case "#sim_button_S":
+          case "sim_button_S":
           DwenguinoSimulation.board.buttons[4] = 0;
         }
-      } else {
+      }
+    });
+
+    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mouseup', function() {
+      if (document.getElementById(this.id).className === "sim_button sim_button_pushed") {
         document.getElementById(this.id).className = "sim_button";
         // update state of buttons
         switch(this.id) {
-          case "#sim_button_N":
+          case "sim_button_N":
           DwenguinoSimulation.board.buttons[0] = 1;
           break;
-          case "#sim_button_W":
+          case "sim_button_W":
           DwenguinoSimulation.board.buttons[1] = 1;
           break;
-          case "#sim_button_C":
+          case "sim_button_C":
           DwenguinoSimulation.board.buttons[2] = 1;
           break;
-          case "#sim_button_E":
+          case "sim_button_E":
           DwenguinoSimulation.board.buttons[3] = 1;
           break;
-          case "#sim_button_S":
+          case "sim_button_S":
           DwenguinoSimulation.board.buttons[4] = 1;
         }
       }
