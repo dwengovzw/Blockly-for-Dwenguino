@@ -101,8 +101,10 @@ var DwenguinoSimulation = {
       if (!DwenguinoSimulation.isSimulationRunning && !DwenguinoSimulation.isSimulationPaused) {
         DwenguinoSimulation.isSimulationRunning = true;
         DwenguinoSimulation.startSimulation();
+        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simStart", ""));
         // resume
       } else if (!DwenguinoSimulation.isSimulationRunning) {
+        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simResume", ""));
         DwenguinoSimulation.isSimulationPaused = false;
         DwenguinoSimulation.isSimulationRunning = true;
         DwenguinoSimulation.resumeSimulation();
@@ -110,12 +112,14 @@ var DwenguinoSimulation = {
     });
 
     $("#sim_pause").click(function() {
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simPause", ""));
       DwenguinoSimulation.isSimulationRunning = false;
       DwenguinoSimulation.isSimulationPaused = true;
       DwenguinoSimulation.setButtonsPause();
     });
 
     $("#sim_stop").click(function() {
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simStop", ""));
       DwenguinoSimulation.isSimulationRunning = false;
       DwenguinoSimulation.isSimulationPaused = false;
       DwenguinoSimulation.setButtonsStop();
@@ -124,6 +128,7 @@ var DwenguinoSimulation = {
 
     $("#sim_step").click(function() {
       DwenguinoSimulation.setButtonsStep();
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simStep", ""));
       // step 1
       if (!DwenguinoSimulation.isSimulationPaused && !DwenguinoSimulation.isSimulationRunning) {
         DwenguinoSimulation.startStepSimulation();
@@ -198,43 +203,47 @@ var DwenguinoSimulation = {
     });
 
     // push buttons
-    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('click', function() {
+    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mousedown', function() {
       if (document.getElementById(this.id).className === "sim_button") {
         document.getElementById(this.id).className = "sim_button sim_button_pushed";
         // update state of buttons
         switch(this.id) {
-          case "#sim_button_N":
+          case "sim_button_N":
           DwenguinoSimulation.board.buttons[0] = 0;
           break;
-          case "#sim_button_W":
+          case "sim_button_W":
           DwenguinoSimulation.board.buttons[1] = 0;
           break;
-          case "#sim_button_C":
+          case "sim_button_C":
           DwenguinoSimulation.board.buttons[2] = 0;
           break;
-          case "#sim_button_E":
+          case "sim_button_E":
           DwenguinoSimulation.board.buttons[3] = 0;
           break;
-          case "#sim_button_S":
+          case "sim_button_S":
           DwenguinoSimulation.board.buttons[4] = 0;
         }
-      } else {
+      }
+    });
+
+    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mouseup', function() {
+      if (document.getElementById(this.id).className === "sim_button sim_button_pushed") {
         document.getElementById(this.id).className = "sim_button";
         // update state of buttons
         switch(this.id) {
-          case "#sim_button_N":
+          case "sim_button_N":
           DwenguinoSimulation.board.buttons[0] = 1;
           break;
-          case "#sim_button_W":
+          case "sim_button_W":
           DwenguinoSimulation.board.buttons[1] = 1;
           break;
-          case "#sim_button_C":
+          case "sim_button_C":
           DwenguinoSimulation.board.buttons[2] = 1;
           break;
-          case "#sim_button_E":
+          case "sim_button_E":
           DwenguinoSimulation.board.buttons[3] = 1;
           break;
-          case "#sim_button_S":
+          case "sim_button_S":
           DwenguinoSimulation.board.buttons[4] = 1;
         }
       }
@@ -250,7 +259,7 @@ var DwenguinoSimulation = {
       DwenguinoSimulation.scenarioView = e.options[e.selectedIndex].value;
       DwenguinoSimulation.currentScenario = DwenguinoSimulation.scenarios[DwenguinoSimulation.scenarioView];
       DwenguinoSimulation.currentScenario.initSimulationDisplay(DwenguinoSimulation.simulationViewContainerId);
-
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("changedScenario", DwenguinoSimulation.scenarioView));
     });
 
     var toggleSimulatorPaneView = function(currentPane, otherPanes, e){
@@ -566,6 +575,8 @@ var DwenguinoSimulation = {
   setSpeed: function() {
     var e = document.getElementById("sim_speed");
     var option = e.options[e.selectedIndex].value;
+
+    DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("setSpeed", option));
 
     switch (option) {
       case "veryslow":

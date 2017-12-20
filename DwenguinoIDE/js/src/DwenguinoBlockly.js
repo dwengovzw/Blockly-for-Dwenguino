@@ -12,7 +12,7 @@ var DwenguinoBlockly = {
     sessionId: null,
     tutorialId: null,
 
-    serverUrl: 'http://localhost:8991',
+    serverUrl: 'http://localhost:8081',
 
     //General settings for this session, these are used for data logging during experiments
     agegroupSetting: "",
@@ -56,7 +56,7 @@ var DwenguinoBlockly = {
 
         DwenguinoBlockly.sessionId = window.sessionStorage.loadOnceSessionId;
         delete window.sessionStorage.loadOnceSessionId;
-        if (!DwenguinoBlockly.sessionId && dwenguinoBlocklyServer){
+        if (!DwenguinoBlockly.sessionId /*&& dwenguinoBlocklyServer*/){
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
@@ -82,7 +82,7 @@ var DwenguinoBlockly = {
             slide: function( event, ui ) {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
                 console.log(ui.value);
-                DwenguinoBlockly.takeSnapshotOfWorkspace();
+                DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("setDifficultyLevel", ui.value));
             }
         });
         $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
@@ -111,7 +111,7 @@ var DwenguinoBlockly = {
                 DwenguinoBlockly.simulatorState = "on";
                 DwenguinoSimulation.setupEnvironment();
             }
-            DwenguinoBlockly.takeSnapshotOfWorkspace();
+            DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simButtonStateClicked", DwenguinoBlockly.simulatorState));
             DwenguinoBlockly.onresize();
             Blockly.svgResize(DwenguinoBlockly.workspace);
         });
@@ -120,14 +120,15 @@ var DwenguinoBlockly = {
         $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
 
         $("#db_menu_item_upload").click(function(){
-		try {
-			var xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer ? dwenguinoBlocklyServer.loadBlocks() : localStorage.workspaceXml);
-			DwenguinoBlockly.workspace.clear();
-			console.log(xml);
-			Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
-		    } catch (e) {}
-		var count = DwenguinoBlockly.workspace.getAllBlocks().length;
-		appendToRecording("<uploadClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></uploadClicked>")
+          var xml = "";
+      		try {
+      			xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer ? dwenguinoBlocklyServer.loadBlocks() : localStorage.workspaceXml);
+      			DwenguinoBlockly.workspace.clear();
+      			console.log(xml);
+      			Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
+      		    } catch (e) {}
+      		var count = DwenguinoBlockly.workspace.getAllBlocks().length;
+      		DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("uploadClicked", xml));
         });
 
 
@@ -141,6 +142,7 @@ var DwenguinoBlockly = {
                 console.log(data);
                 localStorage.workspaceXml = data;
             }
+            DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("downloadClicked", ""));
         });
         //dropdown menu code
          $(".dropdown-toggle").dropdown();
@@ -152,7 +154,7 @@ var DwenguinoBlockly = {
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
              hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
              hopscotch.startTour(arrayElement);
-             DwenguinoBlockly.takeSnapshotOfWorkspace();
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
            });
            $("#dropdownMenuTuts").append(newLi);
          });
@@ -162,7 +164,7 @@ var DwenguinoBlockly = {
             //DwenguinoBlockly.takeSnapshotOfWorkspace();
             //DwenguinoBlockly.build("void setup() {} void loop() {}");
             //DwenguinoBlockly.build("void main() {}");
-            DwenguinoBlockly.listPorts();
+            //DwenguinoBlockly.listPorts();
          });
 
          $("#language1").click(function(){
@@ -174,54 +176,139 @@ var DwenguinoBlockly = {
             DwenguinoBlockly.language = "js";
             DwenguinoBlockly.renderCode();
          });
+
+         // Process blockly events and log them
+         DwenguinoBlockly.workspace.addChangeListener(function(event){
+           console.log("blockly event");
+           if (event.type == Blockly.Events.CHANGE){
+             var data = {
+               element: event.element,
+               name: event.name,
+               oldValue: event.oldValue,
+               newValue: event.newValue
+             };
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyChange", data));
+           } else if (event.type == Blockly.Events.BLOCK_CREATE){
+             var data = {
+               xml: event.xml,
+               ids: event.ids
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockCreate", data));
+           } else if (event.type == Blockly.Events.BLOCK_DELETE){
+             var data = {
+               oldXml: event.oldXml,
+               ids: event.ids
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockDelete", data));
+           } else if (event.type == Blockly.Events.BLOCK_MOVE){
+             var data = {
+               oldParentId: event.oldParentId,
+               oldInputName: event.oldInputName,
+               oldCoordinate: event.oldCoordinate,
+               newParentId: event.newParentId,
+               newInputName: event.newInputName,
+               newCoordinate: event.newCoordinate
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockMove", data));
+           } else if (event.type == Blockly.Events.VAR_CREATE){
+             var data = {
+               varType: event.varType,
+               varName: event.varName,
+               varId: event.varId
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarCreate", data));
+           } else if (event.type == Blockly.Events.VAR_DELETE){
+             var data = {
+               varType: event.varType,
+               varName: event.varName,
+               varId: event.varId
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarDelete", data));
+           } else if (event.type == Blockly.Events.VAR_RENAME){
+             var data = {
+               oldName: event.oldName,
+               newName: event.newName,
+               varId: event.varId
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarRename", data));
+           } else if (event.type == Blockly.Events.UI){
+             var data = {
+               element: event.element,
+               oldValue: event.oldValue,
+               newValue: event.newValue
+             }
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyUI", data));
+           }
+         });
+
+    },
+    createEvent: function(eventName, data){
+      var event = {
+        "name": eventName,
+        "timestamp": $.now(),
+        "simulatorState": DwenguinoBlockly.simulatorState,
+        "selectedDifficulty": DwenguinoBlockly.difficultyLevel,
+        "activeTutorial": DwenguinoBlockly.tutorialIdSetting,
+        "data": data
+      };
+      return event;
     },
 
     endTutorial: function(){
         DwenguinoBlockly.tutorialId = "";
         DwenguinoBlockly.tutorialIdSetting = "";
-        DwenguinoBlockly.takeSnapshotOfWorkspace();
+        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("endTutorial", ""));
     },
-
-    appendToRecording: function(tag){
-            DwenguinoBlockly.recording = DwenguinoBlockly.recording + tag;
-            console.log(DwenguinoBlockly.recording);
-    },
-
     /*
-     * This function sends all logged data to the server or saves it to a local log file.
-     * It is called at a set interval of 10 seconds.
-     */
-    submitRecordingToServer: function(){
-        if (!dwenguinoBlocklyServer) {
-            return;
-        }
-        //online code submission
-        var serverSubmission = { _id: DwenguinoBlockly.sessionId, agegroup: DwenguinoBlockly.agegroupSetting, gender: DwenguinoBlockly.genderSetting, activityId: DwenguinoBlockly.activityId, timestamp: $.now(), logData: DwenguinoBlockly.recording };
-        if (DwenguinoBlockly.sessionId !== undefined){
-          $.ajax({
-              type: "POST",
-              url: this.serverUrl + "/sessions/update",
-              data: serverSubmission,
-          }).done(function(data){
-              console.debug('Recording submitted', data);
-          }).fail(function(response, status)  {
-              console.warn('Failed to submit recording:', status);
-          });
-        }
-        // local file submission (Dwenguinoblockly saves the log to a local file in the user home dir)
-        if ((typeof dwenguinoBlocklyServer) != 'undefined'){
-            dwenguinoBlocklyServer.saveToLog(JSON.stringify(serverSubmission));
-        }
+    * This function submits an event to the python logging server.
+    */
+    recordEvent: function(eventToRecord){
+      var serverSubmission = {
+        "sessionId": DwenguinoBlockly.sessionId,
+        "agegroup": DwenguinoBlockly.agegroupSetting,
+        "gender": DwenguinoBlockly.genderSetting,
+        "activityId": DwenguinoBlockly.activityId,
+        "timestamp": $.now(),
+        "event": eventToRecord
+      };
+      if (DwenguinoBlockly.sessionId !== undefined){
+        $.ajax({
+            type: "POST",
+            url: this.serverUrl + "/sessions/update",
+            data: {"logEntry": JSON.stringify(serverSubmission)},
+        }).done(function(data){
+            console.debug('Recording submitted', data);
+        }).fail(function(response, status)  {
+            console.warn('Failed to submit recording:', status);
+        });
+      }
     },
 
     runEventHandler: function(){
+      $("#db_menu_item_run").off("click");
+      $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/gear_animation.gif");
+      $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px 25px", maxHeight: "100%", float: "right"});
+      $("#db_menu_item_run").css({color: "gray"});
+      setTimeout(function(){
+        console.log("timeout")
+        $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
+        $("#db_menu_item_run").css({color: "black"});
+        $("#db_menu_item_run").hover(function() {
+          $(this).css({color: "#8bab42"});
+        });
+        $("#db_menu_item_run").mouseleave(function() {
+          $(this).css({color: "black"});
+        });
+        $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px", maxHeight: "100%", float: "right"});
+        $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/dwengo_robot_plain.svg");
+      }, 5000);
       var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
       if ((typeof dwenguinoBlocklyServer) != 'undefined' && dwenguinoBlocklyServer){
           dwenguinoBlocklyServer.uploadCode(code);
       }
       console.log(code.replace(/\r?\n|\r/g, "\n"));
-      DwenguinoBlockly.build(code.replace(/\r?\n|\r/g, "\\n"));
-      DwenguinoBlockly.appendToRecording("<runClicked timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'></runClicked>")
+      //DwenguinoBlockly.build(code.replace(/\r?\n|\r/g, "\\n"));
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("runClicked", ""));
     },
 
     prevWorkspaceXml: "",
@@ -234,8 +321,7 @@ var DwenguinoBlockly = {
         var text = Blockly.Xml.domToText(xml);
         if (text != DwenguinoBlockly.prevWorkspaceXml){
             DwenguinoBlockly.prevWorkspaceXml = text;
-            text = "<changedWorkspace timestamp='" + $.now() + "' simulatorState='" + DwenguinoBlockly.simulatorState + "' selectedDifficulty='" + DwenguinoBlockly.difficultyLevel + "' activeTutorial='" + DwenguinoBlockly.tutorialIdSetting + "'>" + text + "</changedWorkspace>";
-            DwenguinoBlockly.appendToRecording(text);
+            DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("changedWorkspace", text));
         }
     },
 
@@ -576,9 +662,6 @@ var DwenguinoBlockly = {
         }
         Blockly.Xml.domToWorkspace(xmlDom, DwenguinoBlockly.workspace);
     },
-    tearDownEnvironment: function(){
-      DwenguinoBlockly.submitRecordingToServer();
-    },
 
     setupEnvironment: function(){
         DwenguinoBlockly.initLanguage();
@@ -588,12 +671,14 @@ var DwenguinoBlockly = {
         DwenguinoBlockly.doTranslation();
         DwenguinoBlockly.setDifficultyLevel(0);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
-        //setInterval(function(){ DwenguinoBlockly.submitRecordingToServer(); }, 20000);
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
             Blockly.svgResize(DwenguinoBlockly.workspace);
         });
-    }
+    },
+    tearDownEnvironment: function(){
+      // Called from the aruino IDE on close. For now do nothing.
+    },
 };
 
 

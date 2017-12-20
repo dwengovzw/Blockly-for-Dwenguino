@@ -3,10 +3,13 @@ var DwenguinoBlocklyLanguageSettings = {};
 DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'en': 'English',
       'nl': 'Nederlands',
+      'it': 'Italiano',
+      'fr': 'français',
+      'my': 'Malay',
   };
 
 //Set default language setting
-DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'nl';
+DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'en';
 
 /**
 * Extracts a parameter from the URL.

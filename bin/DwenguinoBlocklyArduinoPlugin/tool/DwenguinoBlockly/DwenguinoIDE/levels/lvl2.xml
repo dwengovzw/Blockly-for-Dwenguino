@@ -1,0 +1,4 @@
+<category id="catLogic" colour="0" name='Logic'>
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+</category>

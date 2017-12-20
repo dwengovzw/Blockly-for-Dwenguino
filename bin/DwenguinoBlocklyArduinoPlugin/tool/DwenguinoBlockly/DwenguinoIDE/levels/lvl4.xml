@@ -1,0 +1,8 @@
+<category id="catLogic" colour="0" name='Logic'>
+    <block type="controls_if"></block>
+    <block type="logic_compare"></block>
+</category>
+<category id="catLoops" colour="0" name='Loops'>
+    <block type="controls_whileUntil"></block>
+    <block type="controls_for"></block>
+</category>
