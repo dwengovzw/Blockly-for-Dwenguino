@@ -34,7 +34,7 @@ dwenguino_main_program_structure: "Kod dalam blok persediaan dilaksanakan sekali
 catDwenguino: "Dwenguino",
 delay_help: "Tunggu sebilangan milisecond tertentu (1 milisecond = 1000 saat)",
 kelewatan: "kelewatan",
-jelasLCD: "Clear LCD",
+clearLCD: "Clear LCD",
 dwenguinoLCD: "Dwenguino LCD %1 %2 %3 Tulis teks: %4 Pada baris: %5 Bermula dari lajur: %6",
 pin: "pin",
 toneOnPin: "Mainkan nada",
