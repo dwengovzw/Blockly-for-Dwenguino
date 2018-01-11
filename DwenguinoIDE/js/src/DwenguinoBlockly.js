@@ -146,6 +146,7 @@ var DwenguinoBlockly = {
         });
         //dropdown menu code
          $(".dropdown-toggle").dropdown();
+         console.log(tutorials);
 
          $.each(tutorials, function(index, arrayElement){
            var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
@@ -249,6 +250,7 @@ var DwenguinoBlockly = {
         "simulatorState": DwenguinoBlockly.simulatorState,
         "selectedDifficulty": DwenguinoBlockly.difficultyLevel,
         "activeTutorial": DwenguinoBlockly.tutorialIdSetting,
+        "groupId": DwenguinoBlockly.activityIdSetting,
         "data": data
       };
       return event;
@@ -391,6 +393,29 @@ var DwenguinoBlockly = {
         });
     },
 
+    /*
+      The following functions load the contents of a block xml file into the workspace.
+    */
+    loadBlocksFile: function(filename){
+      DwenguinoBlockly.loadBlocksFileContent(filename);
+    },
+
+    loadFileXmlIntoWorkspace: function(xml_content){
+      console.log("loading into workspace");
+      DwenguinoBlockly.setWorkspaceBlockFromXml(xml_content);
+    },
+
+    loadBlocksFileContent: function(filename){
+      $.ajax({
+        url: filename,
+        success: function (data){
+          var serializedToString = (new XMLSerializer()).serializeToString(data);
+          DwenguinoBlockly.loadFileXmlIntoWorkspace(serializedToString);
+        }
+      });
+    },
+
+
     onresize: function(){
         var blocklyArea = document.getElementById('db_blockly');
         var blocklyDiv = document.getElementById('blocklyDiv');
@@ -512,9 +537,11 @@ var DwenguinoBlockly = {
         document.getElementById('db_menu_item_upload').title = MSG['loadBlocksFileTooltip'];
         document.getElementById('db_menu_item_download').title = MSG['saveBlocksFileTooltip'];
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
-        //document.getElementById('trashButton').title = MSG['trashTooltip'];
+        //document.getElementById('t
 
-        var tutorials = ['tutsIntroduction', 'tutsHelloDwenguino', 'tutsBlink', 'tutsHelloRobot'];
+        var tutorials = ['tutsIntroduction', 'tutsHelloDwenguino', 'tutsBlink', 'tutsHelloRobot',
+        'tutsNameOnLcd', 'tutsBlinkLED', 'tutsLedOnButtonPress', 'tutsBitPatternOnLeds',
+      'tutsAllButtons', 'tutsDriveForward', 'tutsRideInSquare', 'tutsRideToWall', 'tutsAvoidWall'];
         for (var i = 0; i < tutorials.length ; i++){
             var element = document.getElementById(tutorials[i]);
             if (element){

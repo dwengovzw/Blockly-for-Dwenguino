@@ -58,6 +58,15 @@ var MSG = {
   tutsTheremin: "Theremin",
   tutsRobot: "Robot",
   tutsHelloDwenguino: "Hello Dwenguino!",
+  tutsNameOnLcd: "Name on LCD",
+  tutsBlinkLED: "Blink LED",
+  tutsLedOnButtonPress: "LED on button press",
+  tutsBitPatternOnLeds: "Bit pattern on leds",
+  tutsAllButtons: "All buttons",
+  tutsDriveForward: "Drive forward",
+  tutsRideInSquare: "Ride a square",
+  tutsRideToWall: "Ride to wall",
+  tutsAvoidWall: "Avoid wall",
   simulator: "Simulator",
   setLedState: "Turn %1 %2",
   setLedStateTooltip: "Turn an LED on the Dwenguino board on or off",
@@ -141,6 +150,93 @@ MSG.tutorials.introduction = {
   step9Title: "The simulator",
   step9Content: "In the future you will be able to use this button to open the simulator. You can use it to test your code before uploading."
 
+};
+
+MSG.tutorials.nameOnLcd = {
+  step1Title: "Name on lcd-screen",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Name on lcd-screen",
+  step2Content: "Change the program so your name appears on the first line of the lcd-screen.",
+};
+
+MSG.tutorials.blinkLED = {
+  step1Title: "Blink LED",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Blink LED",
+  step2Content: "Change the program so the LED turns on for one second and then turns off the LED for one second. This sequence is repeated indefinitely.",
+  step3Title: "Extra",
+  step3Content: "Make another LED turn on and off.",
+};
+
+MSG.tutorials.ledOnButtonPress = {
+  step1Title: "LED on button press",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "LED on button press",
+  step2Content: "Change the program so the LED turns on when you press the north button.",
+  step3Title: "Extra",
+  step3Content: "Make sure the LED turns off when you release the north button.",
+};
+
+MSG.tutorials.bitPatternOnLeds = {
+  step1Title: "Pattern on LEDs",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Pattern on LEDs",
+  step2Content: "The code you have is very long. Can you get the same result using less blocks? Try to get the same result by using less blocks!",
+  step3Title: "Pattern on LEDs",
+  step3Content: "When you succeeded in reducing the number of blocks, call one of the tutors to get feedback on your solution.",
+};
+
+
+MSG.tutorials.allButtons = {
+  step1Title: "All buttons",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "All buttons",
+  step2Content: "This code should turn on a led when one of the buttons is pressed. Look at the program. Do all buttons work? Try to correct the code for the buttons that do not work.",
+  step3Title: "Extra",
+  step3Content: "Change the code so the LED turns off when the button is released.",
+};
+
+MSG.tutorials.driveForward = {
+  step1Title: "Drive forward",
+  step1Content: "Open the simulator view.",
+  step2Title: "Drive forward",
+  step2Content: "Select the scenario view and test the code. What do you see?",
+  step3Title: "Drive forward",
+  step3Content: "Does the car drive forward? Correct the code so the car drives forward.",
+};
+
+MSG.tutorials.rideInSquare = {
+  step1Title: "Ride into square",
+  step1Content: "Open the simulator view.",
+  step2Title: "Ride into square",
+  step2Content: "Select the scenario view and test the code. What do you see?",
+  step3Title: "Ride into square",
+  step3Content: "Does the car ride in a square? Correct the code so the car ride in a square.",
+  step4Title: "Extra",
+  step4Content: "The code is long, can you make it shorter while maintaining the same behaviour?",
+};
+
+MSG.tutorials.rideToWall = {
+  step1Title: "Ride to wall",
+  step1Content: "Open the simulator view.",
+  step2Title: "Ride to wall",
+  step2Content: "Select the scenario view.",
+  step3Title: "Ride to wall",
+  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step4Title: "Ride to wall",
+  step4Content: "Does the car ride to the wall? Does it stop at the wall? Change the code so the car stop near the wall.",
+};
+
+
+MSG.tutorials.avoidWall = {
+  step1Title: "Avoid wall",
+  step1Content: "Open the simulator view.",
+  step2Title: "Avoid wall",
+  step2Content: "Select the scenario view.",
+  step3Title: "Avoid wall",
+  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step4Title: "Avoid wall",
+  step4Content: "Does the car avoid the wall by turning before it reaches it? Change the code so the car keeps driving but never hits a wall.",
 };
 
 /*MSG.tutorials.hello_dwenguino = {

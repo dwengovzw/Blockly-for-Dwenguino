@@ -9,7 +9,7 @@ DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
   };
 
 //Set default language setting
-DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'en';
+DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'my';
 
 /**
 * Extracts a parameter from the URL.

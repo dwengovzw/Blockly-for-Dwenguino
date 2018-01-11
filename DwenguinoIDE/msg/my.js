@@ -58,6 +58,15 @@ tutsIntroduction: "Pengenalan",
 tutsTheremin: "Theremin",
 tutsRobot: "Robot",
 tutsHelloDwenguino: "Hello Dwenguino!",
+tutsNameOnLcd: "Name on LCD",
+tutsBlinkLED: "Blink LED",
+tutsLedOnButtonPress: "LED on button press",
+tutsBitPatternOnLeds: "Bit pattern on leds",
+tutsAllButtons: "All buttons",
+tutsDriveForward: "Drive forward",
+tutsRideInSquare: "Ride a square",
+tutsRideToWall: "Ride to wall",
+tutsAvoidWall: "Avoid wall",
 simulator: "Simulator",
 setLedState: "Putaran %1 %2",
 setLedStateTooltip: "Hidupkan atau matikan papan pada papan Dwenguino",
@@ -138,4 +147,91 @@ step8Title: "Simpan",
 step8Content: "Dengan butang ini anda boleh menyimpan kod anda ke fail setempat.",
 step9Title: "simulator",
 step9Content: "Pada masa akan datang anda akan dapat menggunakan butang ini untuk membuka simulator. Anda boleh menggunakannya untuk menguji kod sebelum memuat naik."
+};
+
+MSG.tutorials.nameOnLcd = {
+  step1Title: "Nama Atas Skrin",
+  step1Content: "Buka pandangan simulator. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step2Title: "Nama Atas Skrin",
+  step2Content: "Tukar program supaya nama anda muncul pada baris pertama skrin lcd.",
+};
+
+MSG.tutorials.blinkLED = {
+  step1Title: "LED Berkedip",
+  step1Content: "Buka pandangan simulator. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step2Title: "LED Berkedip",
+  step2Content: "Tukar program supaya LED bertukar untuk satu saat dan kemudian mematikan LED selama satu saat. Urutan ini diulangi selama-lamanya.",
+  step3Title: "Tambahan",
+  step3Content: "Buat satu lagi nyalakan LED dan matikan. ",
+};
+
+MSG.tutorials.ledOnButtonPress = {
+  step1Title: "LED atas semua butang tekan ",
+  step1Content: "Buka pandangan simulator. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step2Title: "LED atas semua butang tekan ",
+  step2Content: "Tukar program supaya LED dihidupkan apabila anda menekan butang utara.",
+  step3Title: "Tambahan",
+  step3Content: "Pastikan LED dimatikan apabila anda melepaskan butang utara. Petunjuk: anda boleh menukar blok jika dengan mengklik butang gear: Tukar ke tempat yang lain blok untuk mematikan belakang LED",
+};
+
+MSG.tutorials.bitPatternOnLeds = {
+  step1Title: " Cora katas LEDs",
+  step1Content: "Buka pandangan simulator. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step2Title: " Cora katas LEDs",
+  step2Content: "Kod yang anda ada sangat panjang. Bolehkah anda mendapatkan hasil yang sama menggunakan kurang blok? Cuba dapatkan hasil yang sama dengan menggunakan kurang blok!",
+  step3Title: " Cora katas LEDs",
+  step3Content: "Apabila anda berjaya mengurangkan bilangan blok, hubungi salah seorang tutor untuk mendapatkan maklum balas mengenai penyelesaian anda.",
+};
+
+
+MSG.tutorials.allButtons = {
+  step1Title: "Semua Butang",
+  step1Content: "Buka pandangan simulator. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step2Title: "Semua Butang",
+  step2Content: "Kod ini perlu dihidupkan apabila salah satu butang ditekan. Lihatlah program ini. Adakah semua butang berfungsi? Cuba untuk membetulkan kod untuk butang yang tidak berfungsi.",
+  step3Title: "Tambahan",
+  step3Content: "Tukar kod supaya LED dimatikan apabila butang dibebaskan.",
+};
+
+MSG.tutorials.driveForward = {
+  step1Title: "Pandu ke hadapan",
+  step1Content: "Buka pandangan simulator.",
+  step2Title: "Pandu ke hadapan",
+  step2Content: "Klik pada senario Robot. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step3Title: "Pandu ke hadapan",
+  step3Content: "Adakah kereta memandu ke hadapan? Betulkan kod supaya kereta memandu ke hadapan.",
+};
+
+MSG.tutorials.rideInSquare = {
+  step1Title: "Naik ke square",
+  step1Content: "Buka pandangan simulator.",
+  step2Title: "Naik ke square",
+  step2Content: "Klik pada senario Robot. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step3Title: "Naik ke square",
+  step3Content: "Adakah menaiki kereta di lapangan? Betulkan kod itu sehingga menaiki kereta di lapangan",
+  step4Title: "Tambahan",
+  step4Content: "The code you have is very long. Can you get the same result using less blocks? Try to get the same result by using less blocks!",
+};
+
+MSG.tutorials.rideToWall = {
+  step1Title: "Naik ke dinding",
+  step1Content: "Buka pandangan simulator.",
+  step2Title: "Naik ke dinding",
+  step2Content: "Klik pada senario.",
+  step3Title: "Naik ke dinding",
+  step3Content: "Klik pada senario Memindahkan robot dengan dinding. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step4Title: "Naik ke dinding",
+  step4Content: "Adakah menaiki kereta ke dinding? Adakah ia berhenti di dinding? Tukar kod supaya kereta berhenti di dekat dinding.",
+};
+
+
+MSG.tutorials.avoidWall = {
+  step1Title: "Elak Dinding",
+  step1Content: "Buka pandangan simulator.",
+  step2Title: "Elak Dinding",
+  step2Content: "Tukar senario .",
+  step3Title: "Elak Dinding",
+  step3Content: "Klik pada senario Memindahkan robot dengan dinding.",
+  step4Title: "Elak Dinding",
+  step4Content: "Adakah kereta mengelakkan dinding dengan memutar sebelum sampai? Tukar kod supaya kereta terus memandu tetapi tidak pernah memukul dinding.",
 };
