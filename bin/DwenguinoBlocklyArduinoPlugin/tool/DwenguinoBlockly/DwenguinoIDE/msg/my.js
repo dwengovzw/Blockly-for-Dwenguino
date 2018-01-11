@@ -217,9 +217,9 @@ MSG.tutorials.rideToWall = {
   step1Title: "Naik ke dinding",
   step1Content: "Buka pandangan simulator.",
   step2Title: "Naik ke dinding",
-  step2Content: "Klik pada senario Memindahkan robot dengan dinding.",
+  step2Content: "Klik pada senario.",
   step3Title: "Naik ke dinding",
-  step3Content: "Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
+  step3Content: "Klik pada senario Memindahkan robot dengan dinding. Jalankan program dengan mengklik Start di dalam simulator. Lihat apa yang berlaku.",
   step4Title: "Naik ke dinding",
   step4Content: "Adakah menaiki kereta ke dinding? Adakah ia berhenti di dinding? Tukar kod supaya kereta berhenti di dekat dinding.",
 };
