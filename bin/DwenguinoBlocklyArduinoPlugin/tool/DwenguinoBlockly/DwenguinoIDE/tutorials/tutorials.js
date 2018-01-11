@@ -20,6 +20,8 @@ var tutorialTargets = {
   simulatorStopButton: "sim_stop",
   simulatorScenarioTag: "sim_scenarioTag",
   simulatorBottomPane: "db_simulator_bottom_pane",
+  simulatorScenarioTab: "robot_pane_tab",
+  simulatorScenarioSelection: "sim_scenario",
 };
 
 /*
