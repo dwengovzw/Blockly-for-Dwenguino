@@ -77,7 +77,7 @@ var DwenguinoBlockly = {
         $( "#db_menu_item_difficulty_slider" ).slider({
             value:0,
             min: 0,
-            max: 1,
+            max: 2,
             step: 1,
             slide: function( event, ui ) {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
@@ -104,6 +104,7 @@ var DwenguinoBlockly = {
                 //$("#db_blockly").animate({width: "+=0.05%%"}, {duration: 1000});
                 this.simButtonStateClicked = false;
                 DwenguinoBlockly.simulatorState = "off";
+                DwenguinoSimulation.handleSimulationStop();
             }else{
                 $("#db_blockly").width('50%');
                 //$("#db_blockly").animate({width: "-=0.05%"}, {duration: 1000});
@@ -178,30 +179,28 @@ var DwenguinoBlockly = {
             DwenguinoBlockly.renderCode();
          });
 
+         $("#blocklyDiv").click(function(){
+           DwenguinoSimulation.handleSimulationStop();
+         });
+
          // Process blockly events and log them
          DwenguinoBlockly.workspace.addChangeListener(function(event){
+           // Stop de simulator
+           DwenguinoSimulation.handleSimulationStop();
            console.log("blockly event");
-           if (event.type == Blockly.Events.CHANGE){
-             var data = {
-               element: event.element,
-               name: event.name,
-               oldValue: event.oldValue,
-               newValue: event.newValue
-             };
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyChange", data));
-           } else if (event.type == Blockly.Events.BLOCK_CREATE){
+           if (event.type == "create"){
              var data = {
                xml: event.xml,
                ids: event.ids
              }
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockCreate", data));
-           } else if (event.type == Blockly.Events.BLOCK_DELETE){
+           } else if (event.type == "delete"){
              var data = {
                oldXml: event.oldXml,
                ids: event.ids
              }
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockDelete", data));
-           } else if (event.type == Blockly.Events.BLOCK_MOVE){
+           } else if (event.type == "move"){
              var data = {
                oldParentId: event.oldParentId,
                oldInputName: event.oldInputName,
@@ -211,14 +210,14 @@ var DwenguinoBlockly = {
                newCoordinate: event.newCoordinate
              }
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockMove", data));
-           } else if (event.type == Blockly.Events.VAR_CREATE){
+           } else if (event.type == "createVar"){
              var data = {
                varType: event.varType,
                varName: event.varName,
                varId: event.varId
              }
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarCreate", data));
-           } else if (event.type == Blockly.Events.VAR_DELETE){
+           } else if (event.type == "deleteVar"){
              var data = {
                varType: event.varType,
                varName: event.varName,
@@ -239,6 +238,14 @@ var DwenguinoBlockly = {
                newValue: event.newValue
              }
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyUI", data));
+           } else if (event.type == Blockly.Events.CHANGE){
+             var data = {
+               element: event.element,
+               name: event.name,
+               oldValue: event.oldValue,
+               newValue: event.newValue
+             };
+             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyChange", data));
            }
          });
 

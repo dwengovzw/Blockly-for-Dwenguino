@@ -64,12 +64,13 @@ var DwenguinoSimulation = {
       $('#sim_scenario_' + value).text(MSG.simulator['scenario_' + value]);
     });
 
-    document.getElementById('sim_components_select').textContent = MSG.simulator['components'] + ":";
-    document.getElementById('servo1').textContent = MSG.simulator['servo'] + " 1";
-    document.getElementById('servo2').textContent = MSG.simulator['servo'] + " 2";
-    document.getElementById('motor1').textContent = MSG.simulator['motor'] + " 1";
-    document.getElementById('motor2').textContent = MSG.simulator['motor'] + " 2";
-    document.getElementById('sim_scope_name').textContent = MSG.simulator['scope'] + ":";
+    //document.getElementById('sim_components_select').textContent = MSG.simulator['components'] + ":";
+    //document.getElementById('servo1').textContent = MSG.simulator['servo'] + " 1";
+    //document.getElementById('servo2').textContent = MSG.simulator['servo'] + " 2";
+    //document.getElementById('motor1').textContent = MSG.simulator['motor'] + " 1";
+    //document.getElementById('motor2').textContent = MSG.simulator['motor'] + " 2";
+    //document.getElementById('sim_scope_name').textContent = MSG.simulator['scope'] + ":";
+    //TODO: put back sonar input
     document.getElementById('sim_sonar_distance').textContent = "Sonar " + MSG.simulator['distance'] + ":";
     document.getElementById('sonar_input').value = DwenguinoSimulation.board.sonarDistance;
 
@@ -119,11 +120,8 @@ var DwenguinoSimulation = {
     });
 
     $("#sim_stop").click(function() {
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simStop", ""));
-      DwenguinoSimulation.isSimulationRunning = false;
-      DwenguinoSimulation.isSimulationPaused = false;
-      DwenguinoSimulation.setButtonsStop();
-      DwenguinoSimulation.stopSimulation();
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simStopButtonClicked", ""));
+      DwenguinoSimulation.handleSimulationStop();
     });
 
     $("#sim_step").click(function() {
@@ -142,16 +140,16 @@ var DwenguinoSimulation = {
     });
 
     // jquery to create select list with checkboxes that hide
-    $("#sim_components_select").on('click', function() {
+    /*$("#sim_components_select").on('click', function() {
       if (!$("#sim_components_options").is(":visible")) {
         $("#sim_components_options").show();
       } else {
         $("#sim_components_options").hide();
       }
-    });
+    });*/
 
     // enable show hide for dwenguino components
-    $("#sim_servo1").hide();
+    /*$("#sim_servo1").hide();
     $("#servo1").on('change', function() {
       if (document.getElementById("servo1").checked) {
         $("#sim_servo1").show();
@@ -185,12 +183,10 @@ var DwenguinoSimulation = {
       } else {
         $("#sim_motor2").hide();
       }
-    });
+    });*/
 
-    $("#sim_sonar").hide();
-    $("#sim_sonar_distance").hide();
-    $("#sim_sonar_input").hide();
-    $("#sonar").on('change', function() {
+    DwenguinoSimulation.hideSonar();
+    /*$("#sonar").on('change', function() {
       if (document.getElementById("sonar").checked) {
         $("#sim_sonar").show();
         $("#sim_sonar_distance").show();
@@ -200,7 +196,7 @@ var DwenguinoSimulation = {
         $("#sim_sonar_distance").hide();
         $("#sim_sonar_input").hide();
       }
-    });
+    });*/
 
     // push buttons
     $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mousedown', function() {
@@ -302,6 +298,36 @@ var DwenguinoSimulation = {
     });
 
 
+  },
+
+  /*
+  * Simulator event handlers
+  */
+
+  handleSimulationStop: function(){
+    DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simStop", ""));
+    DwenguinoSimulation.isSimulationRunning = false;
+    DwenguinoSimulation.isSimulationPaused = false;
+    DwenguinoSimulation.setButtonsStop();
+    DwenguinoSimulation.stopSimulation();
+    DwenguinoSimulation.hideSonar();
+    DwenguinoSimulation.lcdBacklightOff();
+  },
+  showSonar: function(){
+    $("#sim_sonar").show();
+    $("#sim_sonar_distance").show();
+    $("#sim_sonar_input").show();
+  },
+  hideSonar: function(){
+    $("#sim_sonar").hide();
+    $("#sim_sonar_distance").hide();
+    $("#sim_sonar_input").hide();
+  },
+  lcdBacklightOn: function(){
+    $("#sim_lcds").addClass("on");
+  },
+  lcdBacklightOff: function(){
+    $("#sim_lcds").removeClass("on");
   },
 
   /* -------------------------------------------------------------------------
@@ -464,11 +490,11 @@ var DwenguinoSimulation = {
   */
   handleScope: function() {
     var scope = DwenguinoSimulation.debugger.debuggerjs.machine.getCurrentStackFrame().scope;
-    document.getElementById('sim_scope').innerHTML = "";
+    //document.getElementById('sim_scope').innerHTML = "";
     for (var i in scope) {
       var item = scope[i];
       var value = DwenguinoSimulation.debugger.debuggerjs.machine.$runner.gen.stackFrame.evalInScope(item.name);
-      document.getElementById('sim_scope').innerHTML = document.getElementById('sim_scope').innerHTML + item.name + " = " + value + "<br>";
+      //document.getElementById('sim_scope').innerHTML = document.getElementById('sim_scope').innerHTML + item.name + " = " + value + "<br>";
     }
   },
 
@@ -639,18 +665,18 @@ var DwenguinoSimulation = {
 
     // reset servo
     DwenguinoSimulation.board.servoAngles = [0, 0];
-    $("#sim_servo1_mov, #sim_servo2_mov").css("transform", "rotate(0deg)");
+    //$("#sim_servo1_mov, #sim_servo2_mov").css("transform", "rotate(0deg)");
 
     // reset motors
     DwenguinoSimulation.board.motorSpeeds = [0, 0];
-    $("#sim_motor1, #sim_motor2").css("transform", "rotate(0deg)");
+    //$("#sim_motor1, #sim_motor2").css("transform", "rotate(0deg)");
 
     //reset buttons
     DwenguinoSimulation.board.buttons = [1,1,1,1,1];
     $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").removeClass().addClass('sim_button');
 
     // clear scope
-    document.getElementById('sim_scope').innerHTML = "";
+    //document.getElementById('sim_scope').innerHTML = "";
   },
   /*
     * function called by the delay block to delay the simulation
@@ -679,6 +705,7 @@ var DwenguinoSimulation = {
     * @param {int} column: 0-15: the start position on the given row
     */
     writeLcd: function(text, row, column) {
+      DwenguinoSimulation.lcdBacklightOn();
       // replace text in current content (if text is hello and then a is written this gives aello)
       text = DwenguinoSimulation.board.lcdContent[row].substr(0, column) +
       text.substring(0, 16 - column) +
@@ -811,8 +838,8 @@ var DwenguinoSimulation = {
     * @param {int} angle between 0 and 180
     */
     servo: function(channel, angle) {
-      $("#sim_servo"+channel).show();
-      document.getElementById("servo"+channel).checked = true;
+      //$("#sim_servo"+channel).show();
+      //document.getElementById("servo"+channel).checked = true;
 
       //set angle
       if (angle > 180) {
@@ -838,9 +865,9 @@ var DwenguinoSimulation = {
       if (angle !== DwenguinoSimulation.board.servoAngles[channel - 1]) {
         return;
       }
-      var prevAngle = DwenguinoSimulation.getAngle($("#sim_servo" + channel + "_mov"));
+      //var prevAngle = DwenguinoSimulation.getAngle($("#sim_servo" + channel + "_mov"));
       // set 10 degrees closer at a time to create rotate effect
-      if (Math.abs(angle - prevAngle) > maxMovement) {
+      /*if (Math.abs(angle - prevAngle) > maxMovement) {
         var direction = ((angle - prevAngle) > 0) ? 1 : -1;
         $("#sim_servo" + channel + "_mov").css("transform", "rotate(" + (prevAngle + direction * maxMovement) + "deg)");
         setTimeout(function() {
@@ -848,7 +875,7 @@ var DwenguinoSimulation = {
         }, 20);
       } else {
         $("#sim_servo" + channel + "_mov").css("transform", "rotate(" + angle + "deg)");
-      }
+      }*/
     },
 
     /*
@@ -879,8 +906,8 @@ var DwenguinoSimulation = {
     * @param {int} speed between 0 and 255
     */
     startDcMotor: function(channel, speed) {
-      $("#sim_motor"+channel).show();
-      document.getElementById("motor"+channel).checked = true;
+      //$("#sim_motor"+channel).show();
+      //document.getElementById("motor"+channel).checked = true;
 
       //set angle
       if (speed > 255) {
@@ -913,9 +940,9 @@ var DwenguinoSimulation = {
       if (speed !== DwenguinoSimulation.board.motorSpeeds[channel - 1] && speed !== 0) {
         return;
       }
-      var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor" + channel));
+      //var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor" + channel));
       // rotate x degrees at a time based on speed
-      $("#sim_motor" + channel).css("transform", "rotate(" + ((prevAngle + maxMovement) % 360) + "deg)");
+      //$("#sim_motor" + channel).css("transform", "rotate(" + ((prevAngle + maxMovement) % 360) + "deg)");
 
       DwenguinoSimulation.timeout = setTimeout(function() {
         DwenguinoSimulation.dcMotorRotate(channel, speed);
@@ -928,10 +955,8 @@ var DwenguinoSimulation = {
     * @returns {int} distance in cm
     */
     sonar: function(trigPin, echoPin) {
-      $("#sim_sonar").show();
-      $("#sim_sonar_distance").show();
-      $("#sim_sonar_input").show();
-      document.getElementById("sonar").checked = true;
+      DwenguinoSimulation.showSonar();
+      //document.getElementById("sonar").checked = true;
       document.getElementById('sonar_input').value = DwenguinoSimulation.board.sonarDistance;
       return this.board.sonarDistance;
     },
@@ -995,7 +1020,7 @@ var DwenguinoSimulation = {
       $('#db_body').append(alertMessage);
       document.getElementsByClassName('alertDebug')[0].style.width = document.getElementById("blocklyDiv").style.width;
       document.getElementById('blocklyDiv').style.opacity = "0.5";
-      document.getElementById('blocklyDiv').style.pointerEvents = "none";
+      //document.getElementById('blocklyDiv').style.pointerEvents = "none";
     },
     /*
     * Returns to normal view when debugging is finished

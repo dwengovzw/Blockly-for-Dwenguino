@@ -1,3 +1,9 @@
+@font-face{
+ font-family:'lcd-matrix-font';
+ src: url('../fonts/repet.ttf');
+}
+
+
 body{
     min-height: 100vh;
 }
@@ -94,6 +100,8 @@ body{
     overflow: hidden;
 }
 
+
+
 .ui-resizable-handle{
     background-color: #8bab42;
 }
@@ -101,7 +109,7 @@ body{
 
 #db_simulator_pane{
     height: 50%;
-    border-bottom: solid black 3px;
+    position: relative;
 }
 
 #content_arduino{
@@ -125,6 +133,12 @@ body{
 
 #db_simulator_bottom_pane{
   height: 50%;
+  position: relative;
+  width: 100%;
+}
+
+#db_simulator_tab_selection{
+  border-bottom: solid black 2px;
 }
 
 #sim_point {
@@ -194,37 +208,50 @@ body{
 
 .sim_item:hover {
     text-decoration: underline;
+    cursor: pointer;
 }
 
 #sim_board {
     /*background-color: #2a7709; */
     background-image: url("../img/board/dwenguino.png");
     background-size: 100% 100%;
-    width: 30vmin;
-    height: 25vmin;
-    position: relative;
+    width: 44vmin;
+    height: 35vmin;
+    position: absolute;
     top: 50%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-    -webkit-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
+    /*left: 30%;*/
+    right: 50px;
+    transform: translate(0%, -50%);
+    -webkit-transform: translate(0%, -50%);
+    -ms-transform: translate(0%, -50%);
 }
 
 #sim_lcds {
     position: absolute;
-    top: 43%;
-    left: 18%;
-    height: 25%;
-    width: 70%;
+    top: 32.6%;
+    left: 16.4%;
+    height: 24.65%;
+    width: 70.7%;
     /*background-color: #7aaf64;*/
 }
 
+#sim_lcds.on{
+  background-color: rgb(83, 170, 31);
+}
+
 .sim_lcd {
-    height: 20px;
-    padding: 2px;
-    font-size: 12px;
+    height: 46%;
+    width: 100%;
+    padding: 1%;
+    font-size: 3vh;
+    font-family: lcd-matrix-font;
     letter-spacing: 2px;
     word-spacing: 4px;
+    position: absolute;
+}
+
+#sim_lcd_row1{
+  margin-top: 14%;
 }
 
 #sim_lights {
@@ -237,14 +264,16 @@ body{
 
 #sim_light_13 {
     position: absolute;
-    top:20%;
+    top:5%;
     left: 10%;
 }
 
 .sim_light {
     border-radius: 50%;
-    height: 11px;
-    width: 11px;
+    /*width: 20px;
+    height: 20px;*/
+    width: 2vh;
+    height: 2vh;
     float: left;
     margin-left: 3px;
 }
@@ -266,12 +295,12 @@ body{
 }
 
 #sim_buttons * {
-    height: 13px;
+    height: 26px;
     margin-bottom: 2px;
 }
 
 #sim_buttons_top * {
-    margin-left: 15px;
+    margin-left: 27px;
 }
 
 #sim_buttons_middle * {
@@ -279,7 +308,7 @@ body{
 }
 
 #sim_buttons_bottom * {
-    margin-left: 15px;
+    margin-left: 27px;
 }
 
 
@@ -292,8 +321,8 @@ body{
 .sim_button {
     background-image: url("../img/board/button.png");
     background-size: 100% 100%;
-    width: 13px;
-    height: 13px;
+    width: 26px;
+    height: 26px;
     float:left;
 }
 
@@ -310,7 +339,7 @@ body{
 }
 
 #sim_components_menu {
-    float:right;
+    float:left;
     position:relative;
     padding: 5px;
     max-width: 100px;
@@ -319,7 +348,7 @@ body{
 #sim_components {
     position: absolute;
     top: 20%;
-    left: 80%;
+    left: 20%;
     height: 100px;
     width: 120px;
 }

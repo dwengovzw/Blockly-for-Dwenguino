@@ -132,3 +132,64 @@ Blockly.Blocks['variables_declare_set'] = {
     contextMenuType_: 'variables_get',
     customContextMenu: Blockly.Blocks['variables_get'].customContextMenu
 };
+
+
+
+var variables_declare_json =
+        {
+            "type": "variables_declare",
+            "message0": MSG.create + " %1 %2" + MSG.with_type + " %3",
+            "args0": [
+                {
+                    "type": "field_variable",
+                    "name": "VAR",
+                    "variable": "item"
+                },
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "field_dropdown",
+                    "name": "TYPE",
+                    "options": [
+                        [
+                            "int",
+                            "int"
+                        ],
+                        [
+                            "double",
+                            "double"
+                        ],
+                        [
+                            "String",
+                            "String"
+                        ],
+                        [
+                            "char",
+                            "char"
+                        ],
+                        [
+                            "unsigned int",
+                            "unsigned int"
+                        ],
+                        [
+                            "unsigned char",
+                            "unsigned char"
+                        ]
+                    ]
+                }
+            ],
+            "inputsInline": true,
+            "previousStatement": null,
+            "nextStatement": null,
+            "tooltip": "",
+            "colour": Blockly.Blocks.variables.HUE,
+            "helpUrl": "http://www.dwengo.org/"
+        };
+
+
+Blockly.Blocks['variables_declare'] = {
+    init: function () {
+        this.jsonInit(variables_declare_json);
+    }
+};

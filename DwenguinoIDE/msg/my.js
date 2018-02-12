@@ -33,7 +33,7 @@ loop: "gelung",
 dwenguino_main_program_structure: "Kod dalam blok persediaan dilaksanakan sekali pada permulaan program. Kod dalam gelung diulangi sehingga program berhenti.",
 catDwenguino: "Dwenguino",
 delay_help: "Tunggu sebilangan milisecond tertentu (1 milisecond = 1000 saat)",
-kelewatan: "kelewatan",
+delay: "kelewatan",
 clearLCD: "Clear LCD",
 dwenguinoLCD: "Dwenguino LCD %1 %2 %3 Tulis teks: %4 Pada baris: %5 Bermula dari lajur: %6",
 pin: "pin",
@@ -94,6 +94,8 @@ dwenguinoLedsRegTooltip: "Anda boleh menghidupkan 0 hingga 7 dengan menggunakan 
 pressed: "DITERIMA",
 notPressed: "TIDAK BERTINGKAT",
 pressedTooltip: "Merupakan keadaan butang. Gunakan nilai ini untuk membandingkan dengan keadaan butang sebenar",
+create: "Create",
+with_type: "with type",
 };
 
 

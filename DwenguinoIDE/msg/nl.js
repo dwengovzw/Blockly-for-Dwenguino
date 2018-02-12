@@ -59,8 +59,16 @@ var MSG = {
   tutsRobot: "Robot",
   tutsBasicTest: "Basis test",
   tutsHelloDwenguino: "Hallo Dwenguino!",
-  tutsBlink: "Blink",
+  tutsBlinkLED: "Knipperlicht",
   tutsHelloRobot: "Rijdende Robot",
+  tutsLedOnButtonPress: "LED bij knop ingedrukt",
+  tutsBitPatternOnLeds: "Bit patroon op leds",
+  tutsAllButtons: "Alle knoppen",
+  tutsDriveForward: "Vooruit rijden",
+  tutsRideInSquare: "In vierkant rijden",
+  tutsRideToWall: "Naar muur rijden",
+  tutsAvoidWall: "Muur ontwijken",
+  tutsNameOnLcdBasic: "Je naam op het LCD-scherm",
   simulator: "Simulator",
   setLedState: "zet %1 %2",
   setLedStateTooltip: "Zet een LEdwenguinoDCMotorBlock op het arduino bord aan of uit",
@@ -87,7 +95,10 @@ var MSG = {
   dwenguinoLedsRegTooltip: "Met deze blok kan je leds 0 tot 7 met één binair getal aan of af zetten. Bijvoorbeeld: 0b00001111 zal leds 0 tot 3 aanzetten en de rest uit.",
   pressed: "INGEDRUKT",
   notPressed: "NIET INGEDRUKT",
-  pressedTooltip: "Stelt de waarde van de knop voor. Vergelijk deze waarde met de waarde die je leest van een bepaalde knop."
+  pressedTooltip: "Stelt de waarde van de knop voor. Vergelijk deze waarde met de waarde die je leest van een bepaalde knop.",
+  sureYouWantToChangeTutorial: "Ben je zeker dat je dit boek wil starten?\n De blokken op het huidige werkblad zullen vervangen worden!",
+  create: "Maak",
+  with_type: "met type",
 };
 
 MSG.simulator = {
@@ -124,6 +135,11 @@ MSG.tutorials = {
     hello_dwenguino: {},
     blink: {},
     hello_robot: {},
+};
+
+MSG.tutorials.general = {
+  sureTitle: "Ben je zeker?",
+  sureText: "Wanneer je op 'Volgende' klikt dan worden de blokken op het werkblad vervangen.",
 };
 
 MSG.tutorials.introduction = {
@@ -217,4 +233,114 @@ MSG.tutorials.hello_robot = {
   step5Content: "Denk na hoe je je robot een rechte hoek kan laten maken. </br><b>Tip:</b> laat de wielen in tegengestelde richting draaien om de robot een bocht te laten nemen.",
   step6Title: "Een vierkant",
   step6Content: "Nu je erin geslaagd bent om de robot een bocht van 90° te laten nemen, kan je eens proberen om hem in een vierkant te laten rijden.",
+};
+
+//TODO: translate
+MSG.tutorials.nameOnLcd = {
+  step1Title: "Name on lcd-screen",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Name on lcd-screen",
+  step2Content: "Change the program so your name appears on the first line of the lcd-screen.",
+};
+
+//TODO: translate
+MSG.tutorials.blinkLED = {
+  step1Title: "Blink LED",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Blink LED",
+  step2Content: "Change the program so the LED turns on for one second and then turns off the LED for one second. This sequence is repeated indefinitely.",
+  step3Title: "Extra",
+  step3Content: "Make another LED turn on and off.",
+};
+
+
+//TODO: translate
+MSG.tutorials.ledOnButtonPress = {
+  step1Title: "LED on button press",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "LED on button press",
+  step2Content: "Change the program so the LED turns on when you press the north button.",
+  step3Title: "Extra",
+  step3Content: "Make sure the LED turns off when you release the north button.",
+};
+
+//TODO: translate
+MSG.tutorials.bitPatternOnLeds = {
+  step1Title: "Pattern on LEDs",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Pattern on LEDs",
+  step2Content: "The code you have is very long. Can you get the same result using less blocks? Try to get the same result by using less blocks!",
+  step3Title: "Pattern on LEDs",
+  step3Content: "When you succeeded in reducing the number of blocks, call one of the tutors to get feedback on your solution.",
+};
+
+//TODO: translate
+MSG.tutorials.allButtons = {
+  step1Title: "All buttons",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "All buttons",
+  step2Content: "This code should turn on a led when one of the buttons is pressed. Look at the program. Do all buttons work? Try to correct the code for the buttons that do not work.",
+  step3Title: "Extra",
+  step3Content: "Change the code so the LED turns off when the button is released.",
+};
+
+//TODO: trnalsate
+MSG.tutorials.driveForward = {
+  step1Title: "Drive forward",
+  step1Content: "Open the simulator view.",
+  step2Title: "Drive forward",
+  step2Content: "Select the scenario view and test the code. What do you see?",
+  step3Title: "Drive forward",
+  step3Content: "Does the car drive forward? Correct the code so the car drives forward.",
+};
+
+//TODO: translate
+MSG.tutorials.rideInSquare = {
+  step1Title: "Ride into square",
+  step1Content: "Open the simulator view.",
+  step2Title: "Ride into square",
+  step2Content: "Select the scenario view and test the code. What do you see?",
+  step3Title: "Ride into square",
+  step3Content: "Does the car ride in a square? Correct the code so the car ride in a square.",
+  step4Title: "Extra",
+  step4Content: "The code is long, can you make it shorter while maintaining the same behaviour?",
+};
+
+//TODO: translate
+MSG.tutorials.rideToWall = {
+  step1Title: "Ride to wall",
+  step1Content: "Open the simulator view.",
+  step2Title: "Ride to wall",
+  step2Content: "Select the scenario view.",
+  step3Title: "Ride to wall",
+  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step4Title: "Ride to wall",
+  step4Content: "Does the car ride to the wall? Does it stop at the wall? Change the code so the car stop near the wall.",
+};
+
+//TODO: translate
+MSG.tutorials.avoidWall = {
+  step1Title: "Avoid wall",
+  step1Content: "Open the simulator view.",
+  step2Title: "Avoid wall",
+  step2Content: "Select the scenario view.",
+  step3Title: "Avoid wall",
+  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step4Title: "Avoid wall",
+  step4Content: "Does the car avoid the wall by turning before it reaches it? Change the code so the car keeps driving but never hits a wall.",
+};
+
+MSG.tutorials.nameOnLcdBasic = {
+  step1Title: "Naam op LCD-scherm",
+  step1Content: "In deze tutorial plaats je je naam op het LCD-scherm. Je ziet een voorbeeld van hoe dat moet.</br> Bekijk de code en probeer te begrijpen wat het doet.",
+  step2Title: "Testen op het bord",
+  step2Content: "Test de code door het Dwenguino bord aan de computer te schakelen met de usb-kabel en op de play knop te drukken.",
+  step3Title: "Je eigen naam",
+  step3Content: "Momenteel zie je de naam 'Tom' op het scherm verschijnen. Pas de code aan zodat je jouw naam ziet.",
+  step4Title: "Twee rijen",
+  step4Content: "Het LCD-scherm heeft twee rijen. Verander de rij waarop je naam staat van 0 naar 1.",
+  step5Title: "Test",
+  step5Content: "Test je code.",
+  step6Title: "Proficiat",
+  step6Content: "Goed zo! Je weet nu hoe je tekst op het LCD-scherm kan plaatsen.",
 };

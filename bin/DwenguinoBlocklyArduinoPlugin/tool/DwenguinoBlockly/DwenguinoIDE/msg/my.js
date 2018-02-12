@@ -94,6 +94,8 @@ dwenguinoLedsRegTooltip: "Anda boleh menghidupkan 0 hingga 7 dengan menggunakan 
 pressed: "DITERIMA",
 notPressed: "TIDAK BERTINGKAT",
 pressedTooltip: "Merupakan keadaan butang. Gunakan nilai ini untuk membandingkan dengan keadaan butang sebenar",
+create: "Create",
+with_type: "with type",
 };
 
 

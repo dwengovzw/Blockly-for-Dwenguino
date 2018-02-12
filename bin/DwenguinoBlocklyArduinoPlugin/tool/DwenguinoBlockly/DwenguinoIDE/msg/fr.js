@@ -23,5 +23,7 @@ var MSG = {
   hashError: "Désolé, '%1' ne correspond à aucun programme sauvegardé.",
   xmlError: "Impossible de charger le fichier de sauvegarde.  Peut être a t-il été créé avec une autre version de Blockly?",
   badXml: "Erreur d’analyse du XML :\n%1\n\nSélectionner 'OK' pour abandonner vos modifications ou 'Annuler' pour continuer à modifier le XML.",
-  pressed: "PRESSE"
+  pressed: "PRESSE",
+  create: "Créer",
+  with_type: "avec type",
 };

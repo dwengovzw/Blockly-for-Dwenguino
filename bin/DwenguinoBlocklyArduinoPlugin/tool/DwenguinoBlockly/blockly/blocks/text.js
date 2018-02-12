@@ -73,6 +73,22 @@ Blockly.Blocks['text'] = {
   }
 };
 
+Blockly.Blocks['char'] = {
+  /**
+   * Block for text value.
+   * @this Blockly.Block
+   */
+  init: function() {
+    this.setColour(Blockly.Blocks.texts.HUE);
+    this.appendDummyInput()
+        .appendField("'")
+        .appendField(new Blockly.FieldTextInput(''), 'CHAR')
+        .appendField("'");
+    this.setOutput(true, 'Number');
+    // Assign 'this' to a variable for use in the tooltip closure below.
+  }
+};
+
 Blockly.Blocks['text_join'] = {
   /**
    * Block for creating a string made up of any number of elements of any type.

@@ -34,6 +34,11 @@ Blockly.Arduino.text = function() {
   return ["String(" + code + ")", Blockly.Arduino.ORDER_ATOMIC];
 };
 
+Blockly.Arduino.char = function() {
+  // Character value.
+  var code = this.getFieldValue('CHAR');
+  return ["'" + code + "'", Blockly.Arduino.ORDER_ATOMIC];
+};
 
 Blockly.Arduino.text_append = function(){
     

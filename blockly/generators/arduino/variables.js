@@ -35,6 +35,7 @@ Blockly.Arduino.variables_get = function() {
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
+
 Blockly.Arduino.variables_declare = function() {
   // Variable setter.
   var varType = this.getFieldValue('TYPE');

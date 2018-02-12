@@ -5,7 +5,6 @@
  */
 package dwenguinoblocklyarduinoplugin;
 
-import java.awt.Window;
 import java.util.Optional;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,11 +12,8 @@ import javafx.concurrent.Worker.State;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.web.PromptData;
 import javafx.scene.web.WebEngine;
@@ -26,6 +22,8 @@ import netscape.javascript.JSObject;
 import processing.app.Editor;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.web.WebEvent;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 
 /**
  *
@@ -78,7 +76,18 @@ class Browser extends Region {
             prompt.setTitle("DwenguinoBlockly");
             Optional<String> result = prompt.showAndWait();
             return result.orElse("");
-            });
+        });
+        
+        
+        webEngine.setConfirmHandler( (String message) -> {
+            Dialog<ButtonType> confirm = new Dialog<>();
+            confirm.getDialogPane().setContentText(message);
+            confirm.getDialogPane().getButtonTypes().addAll(ButtonType.YES, ButtonType.NO);
+            boolean result = confirm.showAndWait().filter(ButtonType.YES::equals).isPresent();
+
+            return result ;
+        });
+        
         //String baseurl = "file:/" + System.getProperty("user.home");
         String baseurl = "file:" + getClass().getProtectionDomain().getCodeSource().getLocation().getPath();
         baseurl = baseurl.replace("\\", "/");

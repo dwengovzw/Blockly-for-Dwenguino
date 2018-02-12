@@ -22,7 +22,6 @@
     <script src="js/lib/hopscotch.js"></script>
     <script src="tutorials/tutorials.js"></script>
     <script src="tutorials/introduction.js"></script>
-    <script src="tutorials/name_on_lcd.js"></script>
     <script src="tutorials/blink_led.js"></script>
     <script src="tutorials/led_on_button_press.js"></script>
     <script src="tutorials/bit_pattern_on_leds.js"></script>
@@ -31,6 +30,7 @@
     <script src="tutorials/ride_in_square.js"></script>
     <script src="tutorials/ride_to_wall.js"></script>
     <script src="tutorials/avoid_wall.js"></script>
+    <script src="tutorials/name_lcd_basic.js"></script>
     <!--<script src="tutorials/hello_dwenguino.js"></script>
     <script src="tutorials/blink.js"></script>
     <script src="tutorials/hello_robot.js"></script>-->
@@ -151,7 +151,7 @@
                     </select>
                     </div>
                 </div>
-                <div id="sim_components_menu">
+                <!--<div id="sim_components_menu">
                     <div id="sim_components_select" class="sim_item">Select components:</div>
                     <div id="sim_components_options">
                         <input type="checkbox" id="motor1" value="motor1">Motor 1<br>
@@ -162,8 +162,13 @@
                     </div>
                     <div id="sim_scope_name">Variables:</div>
                     <div id="sim_scope"></div>
-                </div>
+                </div>-->
                 <div id="debug"></div>
+                <div id="sim_components">
+                    <div id="sim_sonar" class="sim_sonar"></div>
+                    <div id="sim_sonar_distance" class="sim_sonar_distance"></div>
+                    <div id="sim_sonar_input"><input type="text" id="sonar_input" name="sim_sonar_input" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>&nbsp;cm</div>
+                </div>
                 <div id="sim_board">
                     <div class="sim_light sim_light_off" id ="sim_light_13"></div>
                     <div id="sim_lcds">
@@ -195,7 +200,7 @@
                     </div>
                     <div id="sim_button_reset" class="sim_button"></div>
                 </div>
-                <div id="sim_components">
+                <!--<div id="sim_components">
                     <div id="sim_motors">
                         <div id="sim_motor1" class="sim_motor"></div>
                         <div id="sim_motor2" class="sim_motor"></div>
@@ -211,9 +216,9 @@
                     <div id="sim_sonar" class="sim_sonar"></div>
                     <div id="sim_sonar_distance" class="sim_sonar_distance"></div>
                     <div id="sim_sonar_input"><input type="text" id="sonar_input" name="sim_sonar_input" onkeypress='return event.charCode >= 48 && event.charCode <= 57'>&nbsp;cm</div>
-                </div>
+                </div>-->
             </div>
-            <div id="db_simulator_bottom_pane">
+            <div id="db_simulator_bottom_pane" class="resize-sensor">
               <div id="db_simulator_tab_selection">
                 <ul class='tabs'>
                   <li><a href="#db_code_pane">Code</a></li>
@@ -226,7 +231,7 @@
                   <!--<div id="language2" class="language">JavaScript</div>-->
                   <pre id="content_arduino" class="content"></pre>
               </div>
-              <div id="db_robot_pane">
+              <div id="db_robot_pane" class="resize-sensor">
                     <div id="sim_container">
                         <div id="sim_animation"></div>
                         <div id="sim_debug"></div>

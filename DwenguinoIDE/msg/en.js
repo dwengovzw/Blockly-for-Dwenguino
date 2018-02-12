@@ -67,6 +67,7 @@ var MSG = {
   tutsRideInSquare: "Ride a square",
   tutsRideToWall: "Ride to wall",
   tutsAvoidWall: "Avoid wall",
+  tutsNameOnLcdBasic: "Your name on LCD",
   simulator: "Simulator",
   setLedState: "Turn %1 %2",
   setLedStateTooltip: "Turn an LED on the Dwenguino board on or off",
@@ -94,14 +95,18 @@ var MSG = {
   pressed: "PRESSED",
   notPressed: "NOT PRESSED",
   pressedTooltip: "Represents the state of a button. Use these values to compare to the actual button state",
+  sureYouWantToChangeTutorial: "Are you sure you want to start this tutorial?\n All the blocks in the current workspace will be removed.",
+  create: "Create",
+  with_type: "with type",
 };
+
 
 
 MSG.simulator = {
   start: "Start",
   stop: "Stop",
   pause: "Pause",
-  step: "1 Step",
+  step: "Step",
   speed: "Speed",
   speedVerySlow: "40 times as slow",
   speedSlow: "20 times as slow",
@@ -113,7 +118,7 @@ MSG.simulator = {
   servo: "Servo",
   motor: "Motor",
   scope: "Variables",
-  alertDebug: "Stop the simulation before resuming to program",
+  alertDebug: "The simulation stops when you resume programming.",
   distance: "distance",
   scenario: "Scenario",
   scenario_default: "Normal board",
@@ -237,6 +242,25 @@ MSG.tutorials.avoidWall = {
   step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
   step4Title: "Avoid wall",
   step4Content: "Does the car avoid the wall by turning before it reaches it? Change the code so the car keeps driving but never hits a wall.",
+};
+
+
+//TODO: Translate
+MSG.tutorials.nameOnLcdBasic = {
+  step0Title: "Ben je zeker?",
+  step0Content: "Ben je zeker? Waneer je op volgende klikt zullen de blokken op het werkblad vervangen worden.",
+  step1Title: "Naam op LCD-scherm",
+  step1Content: "In deze tutorial plaats je je naam op het LCD-scherm. Je ziet een voorbeeld van hoe dat moet.",
+  step2Title: "Testen op het bord",
+  step2Content: "Test de code door het Dwenguino bord aan de computer te schakelen met de usb-kabel en op de play knop te drukken.",
+  step3Title: "Je eigen naam",
+  step3Content: "Momenteel zie je de naam 'Tom' op het scherm verschijnen. Pas de code aan zodat je jouw naam ziet.",
+  step4Title: "Twee rijen",
+  step4Content: "Het LCD-scherm heeft twee rijen. Verander de rij waarop je naam staat van 0 naar 1.",
+  step5Title: "Test",
+  step5Content: "Test je code.",
+  step6Title: "Great!",
+  step6Content: "Well done! Now you know how to display your name on the LCD-screen.",
 };
 
 /*MSG.tutorials.hello_dwenguino = {

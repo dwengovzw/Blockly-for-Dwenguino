@@ -22,10 +22,6 @@ import javafx.stage.Window;
 import javax.swing.SwingUtilities;
 
 import java.lang.reflect.InvocationTargetException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Worker.State;
-import org.apache.commons.io.FilenameUtils;
 import processing.app.Editor;
 
 /**
