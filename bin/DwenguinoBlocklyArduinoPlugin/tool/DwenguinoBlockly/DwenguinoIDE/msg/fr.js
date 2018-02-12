@@ -23,7 +23,245 @@ var MSG = {
   hashError: "Désolé, '%1' ne correspond à aucun programme sauvegardé.",
   xmlError: "Impossible de charger le fichier de sauvegarde.  Peut être a t-il été créé avec une autre version de Blockly?",
   badXml: "Erreur d’analyse du XML :\n%1\n\nSélectionner 'OK' pour abandonner vos modifications ou 'Annuler' pour continuer à modifier le XML.",
+  setup: "setup",
+  loop: "loop",
+  dwenguino_main_program_structure: "The code in the setup block is executed once at the start of the program. The code in the loop is repeated until the program stops.",
+  catDwenguino: "Dwenguino",
+  delay_help: "Wait a specified amount of miliseconds (1 milisecond = 1000 seconds)",
+  delay: "delay",
+  clearLCD: "Clear LCD",
+  dwenguinoLCD: "Dwenguino LCD %1 %2 %3 Write text: %4 On row: %5 Starting from column: %6",
+  pin: "pin",
+  toneOnPin: "Play tone on ",
+  frequency: "with frequency",
+  noToneOnPin: "Stop tone on",
+  toneOnPinTooltip: "Play tone with specific frequency on specified pin",
+  noToneOnPinTooltip: "Stop tone on pin",
+  trig: "trig pin number",
+  echo: "echo pin number",
+  sonarTooltip: "This sensor reads the distance from a sonar sensor",
+  miliseconds: "ms",
+  digitalRead: "Read digital value from",
+  digitalWriteToPin: "Write on",
+  digitalWriteValue: "digital value",
+  digitalWriteTooltip: "Write high or low value to a digital pin of the Dwenguino board",
+  digitalReadTooltip: "Read a digital value (1/high or 0/low) from a specified pin",
+  high: "HIGH",
+  low: "LOW",
+  highLowTooltip: "Represents a high (1) or low (0) value on a pin.",
+  tutsIntroduction: "Introduction",
+  tutsTheremin: "Theremin",
+  tutsRobot: "Robot",
+  tutsHelloDwenguino: "Hello Dwenguino!",
+  tutsNameOnLcd: "Name on LCD",
+  tutsBlinkLED: "Blink LED",
+  tutsLedOnButtonPress: "LED on button press",
+  tutsBitPatternOnLeds: "Bit pattern on leds",
+  tutsAllButtons: "All buttons",
+  tutsDriveForward: "Drive forward",
+  tutsRideInSquare: "Ride a square",
+  tutsRideToWall: "Ride to wall",
+  tutsAvoidWall: "Avoid wall",
+  tutsNameOnLcdBasic: "Your name on LCD",
+  simulator: "Simulator",
+  setLedState: "Turn %1 %2",
+  setLedStateTooltip: "Turn an LED on the Dwenguino board on or off",
+  ledPinsTooltip: "Pic a led you want to control",
+  dwenguinoOn: "ON",
+  dwenguinoOff: 'OFF',
+  dwenguinoOnOffTooltip: "Select a value to turn an LED ON or OFF",
+  dwenguinoServoBlock: "Servo motor %1 %2 %3 channel # %4 angle %5",
+  dwenguinoServoBlockTooltip: "Set one of the servo's connected to the Dwenguino to a specified angle between 0 and 180 degrees",
+  dwenguinoDCMotorBlock: "DC Motor %1 %2 %3 channel %4 speed %5",
+  dwenguinoDCMotorBlockTooltip: "Set the speed of one of the two dwenguino motors. Speed = value between -255 (full speed backwards) and 255 (full speed forwards)",
+  dwenguinoAnalogWrite: "Write to %1 analog value %2",
+  dwenguinoAnalogWriteTooltip: "Write an analog value between 0 and 255 to the specified pin",
+  dwenguinoAnalogRead: "Read analog value from %1",
+  dwenguinoAnalogWriteTooltip: "Read a value beteween 0 and 255 from the specified pin",
+  digitalReadSwitch: "Read switch %1",
+  digitalReadSwitchTooltip: "Read value from one of the dwenguino switches",
+  north: "North",
+  east:"East",
+  south: "South",
+  west: "West",
+  center: "Center",
+  ledsReg: "LEDS",
+  dwenguinoLedsRegTooltip: "You can turn leds 0 to 7 on using a binary number. For example 0b00001111 will turn leds 0 to 3 on and the rest off",
   pressed: "PRESSE",
-  create: "Créer",
-  with_type: "avec type",
+  notPressed: "PAS PRESSE",
+  pressedTooltip: "Represents the state of a button. Use these values to compare to the actual button state",
+  sureYouWantToChangeTutorial: "Are you sure you want to start this tutorial?\n All the blocks in the current workspace will be removed.",
+  create: "Create",
+  with_type: "with type",
+  
 };
+
+//TODO: Translate
+
+MSG.simulator = {
+  start: "Start",
+  stop: "Stop",
+  pause: "Pause",
+  step: "Step",
+  speed: "Speed",
+  speedVerySlow: "40 times as slow",
+  speedSlow: "20 times as slow",
+  speedMedium: "10 times as slow",
+  speedFast: "5 times as slow",
+  speedVeryFast: "2 times as slow",
+  speedRealTime: "Real-time",
+  components: "Select components",
+  servo: "Servo",
+  motor: "Motor",
+  scope: "Variables",
+  alertDebug: "The simulation stops when you resume programming.",
+  distance: "distance",
+  scenario: "Scenario",
+  scenario_default: "Normal board",
+  scenario_moving: "Moving robot",
+  scenario_wall: "Moving robot with wall",
+  code: "Code",
+};
+
+MSG.tutorials = {
+    introduction: {},
+    /*theremin: {},
+    robot: {},
+    hello_dwenguino: {},*/
+};
+
+MSG.tutorials.general = {
+  sureTitle: "Es-tu sûr?",
+  sureText: "Lorsque vous cliquez sur 'Suivant', les blocs de la feuille de calcul sont remplacés.",
+};
+
+MSG.tutorials.introduction = {
+  step1Title: "Welkom to DwenguinoBlockly",
+  step1Content: "Hi, my name is Dwenguino! I will help you to get to know the interface!",
+  step2aTitle: "The Blockly code area",
+  step2aContent: "In this area you put your code blocks. You should put your blocks inside the setup-loop block if you want them to be executed.",
+  step2bTitle: "The Blockly toolbox",
+  step2bContent: "This is the toolbox, it contains all the blocks you can use to create your program. You can explore the different cathegories to find out what your Dwenguino can do.",
+  step3Title: "Language selection",
+  step3Content: "Use this to change the language",
+  step4Title: "Difficulty",
+  step4Content: "This slider lets you set the difficulyt level. For now we only provide beginner and advanced levels.",
+  step5Title: "Dwengobooks",
+  step5Content: "Dwengobooks are interactive tutorials which guide you through the different physical computing challenges.",
+  step6Title: "Upload code",
+  step6Content: "When your code is complete, you can upload it to the Dwenguino board by clicking this button. Make sure you fist select the right board and port inside the Arduino ide.",
+  step7Title: "Open",
+  step7Content: "This button lets you open a previously saved program.",
+  step8Title: "Save",
+  step8Content: "With this button you can save your code to a local file.",
+  step9Title: "The simulator",
+  step9Content: "In the future you will be able to use this button to open the simulator. You can use it to test your code before uploading."
+
+};
+
+MSG.tutorials.nameOnLcd = {
+  step1Title: "Name on lcd-screen",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Name on lcd-screen",
+  step2Content: "Change the program so your name appears on the first line of the lcd-screen.",
+};
+
+MSG.tutorials.blinkLED = {
+  step1Title: "Blink LED",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Blink LED",
+  step2Content: "Change the program so the LED turns on for one second and then turns off the LED for one second. This sequence is repeated indefinitely.",
+  step3Title: "Extra",
+  step3Content: "Make another LED turn on and off.",
+};
+
+MSG.tutorials.ledOnButtonPress = {
+  step1Title: "LED on button press",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "LED on button press",
+  step2Content: "Change the program so the LED turns on when you press the north button.",
+  step3Title: "Extra",
+  step3Content: "Make sure the LED turns off when you release the north button.",
+};
+
+MSG.tutorials.bitPatternOnLeds = {
+  step1Title: "Pattern on LEDs",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "Pattern on LEDs",
+  step2Content: "The code you have is very long. Can you get the same result using less blocks? Try to get the same result by using less blocks!",
+  step3Title: "Pattern on LEDs",
+  step3Content: "When you succeeded in reducing the number of blocks, call one of the tutors to get feedback on your solution.",
+};
+
+
+MSG.tutorials.allButtons = {
+  step1Title: "All buttons",
+  step1Content: "Open the simulator view and test the code. What do you see?",
+  step2Title: "All buttons",
+  step2Content: "This code should turn on a led when one of the buttons is pressed. Look at the program. Do all buttons work? Try to correct the code for the buttons that do not work.",
+  step3Title: "Extra",
+  step3Content: "Change the code so the LED turns off when the button is released.",
+};
+
+MSG.tutorials.driveForward = {
+  step1Title: "Drive forward",
+  step1Content: "Open the simulator view.",
+  step2Title: "Drive forward",
+  step2Content: "Select the scenario view and test the code. What do you see?",
+  step3Title: "Drive forward",
+  step3Content: "Does the car drive forward? Correct the code so the car drives forward.",
+};
+
+MSG.tutorials.rideInSquare = {
+  step1Title: "Ride into square",
+  step1Content: "Open the simulator view.",
+  step2Title: "Ride into square",
+  step2Content: "Select the scenario view and test the code. What do you see?",
+  step3Title: "Ride into square",
+  step3Content: "Does the car ride in a square? Correct the code so the car ride in a square.",
+  step4Title: "Extra",
+  step4Content: "The code is long, can you make it shorter while maintaining the same behaviour?",
+};
+
+MSG.tutorials.rideToWall = {
+  step1Title: "Ride to wall",
+  step1Content: "Open the simulator view.",
+  step2Title: "Ride to wall",
+  step2Content: "Select the scenario view.",
+  step3Title: "Ride to wall",
+  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step4Title: "Ride to wall",
+  step4Content: "Does the car ride to the wall? Does it stop at the wall? Change the code so the car stop near the wall.",
+};
+
+
+MSG.tutorials.avoidWall = {
+  step1Title: "Avoid wall",
+  step1Content: "Open the simulator view.",
+  step2Title: "Avoid wall",
+  step2Content: "Select the scenario view.",
+  step3Title: "Avoid wall",
+  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step4Title: "Avoid wall",
+  step4Content: "Does the car avoid the wall by turning before it reaches it? Change the code so the car keeps driving but never hits a wall.",
+};
+
+
+
+MSG.tutorials.nameOnLcdBasic = {
+  step0Title: "Ben je zeker?",
+  step0Content: "Ben je zeker? Waneer je op volgende klikt zullen de blokken op het werkblad vervangen worden.",
+  step1Title: "Naam op LCD-scherm",
+  step1Content: "In deze tutorial plaats je je naam op het LCD-scherm. Je ziet een voorbeeld van hoe dat moet.",
+  step2Title: "Testen op het bord",
+  step2Content: "Test de code door het Dwenguino bord aan de computer te schakelen met de usb-kabel en op de play knop te drukken.",
+  step3Title: "Je eigen naam",
+  step3Content: "Momenteel zie je de naam 'Tom' op het scherm verschijnen. Pas de code aan zodat je jouw naam ziet.",
+  step4Title: "Twee rijen",
+  step4Content: "Het LCD-scherm heeft twee rijen. Verander de rij waarop je naam staat van 0 naar 1.",
+  step5Title: "Test",
+  step5Content: "Test je code.",
+  step6Title: "Great!",
+  step6Content: "Well done! Now you know how to display your name on the LCD-screen.",
+};
+

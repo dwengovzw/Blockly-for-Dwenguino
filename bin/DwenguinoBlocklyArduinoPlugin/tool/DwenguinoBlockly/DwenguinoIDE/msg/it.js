@@ -116,6 +116,11 @@ MSG.tutorials = {
     introduction: {},
 };
 
+MSG.tutorials.general = {
+  sureTitle: "Are you sure?",
+  sureText: "When you click 'Next' all blocks in the workspace will be removed.",
+};
+
 MSG.tutorials.introduction = {
   step1Title: "Benvenuto in DwenguinoBlockly",
   step1Content: "Ciao! Il mio nome è Dwenguino! Ti aiuterò a conoscere questa interfaccia di programmazione!",

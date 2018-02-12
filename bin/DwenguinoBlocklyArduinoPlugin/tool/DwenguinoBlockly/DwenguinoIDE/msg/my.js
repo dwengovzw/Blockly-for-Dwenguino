@@ -128,6 +128,11 @@ MSG.tutorials = {
 introduction: {},
 };
 
+MSG.tutorials.general = {
+  sureTitle: "Are you sure?",
+  sureText: "When you click 'Next' all blocks in the workspace will be removed.",
+};
+
 MSG.tutorials.introduction = {
 step1Title: "Welkom to DwenguinoBlockly",
 step1Content: "Hai, nama saya Dwenguino! Saya akan membantu anda untuk mengenali antara muka!",
