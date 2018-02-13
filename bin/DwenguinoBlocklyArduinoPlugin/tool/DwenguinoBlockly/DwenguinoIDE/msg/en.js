@@ -98,6 +98,7 @@ var MSG = {
   sureYouWantToChangeTutorial: "Are you sure you want to start this tutorial?\n All the blocks in the current workspace will be removed.",
   create: "Create",
   with_type: "with type",
+  create_global: "Create global",
 };
 
 

@@ -99,6 +99,7 @@ var MSG = {
   sureYouWantToChangeTutorial: "Ben je zeker dat je dit boek wil starten?\n De blokken op het huidige werkblad zullen vervangen worden!",
   create: "Maak",
   with_type: "met type",
+  create_global: "Maak globaal",
 };
 
 MSG.simulator = {

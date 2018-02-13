@@ -46,6 +46,16 @@ Blockly.Arduino.variables_declare = function() {
   return varType + ' ' + varName + ';\n';
 };
 
+Blockly.Arduino.variables_declare_global = function() {
+  // Variable setter.
+  var varType = this.getFieldValue('TYPE');
+  //TODO: settype to variable
+  var varName = Blockly.Arduino.variableDB_.getName(this.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  Blockly.Arduino.definitions_[varName + '_' + varType] = varType + ' ' + varName + ';\n';
+  return "";
+};
+
 Blockly.Arduino.variables_set = function() {
   // Variable setter.
   var argument0 = Blockly.Arduino.valueToCode(this, 'VALUE',

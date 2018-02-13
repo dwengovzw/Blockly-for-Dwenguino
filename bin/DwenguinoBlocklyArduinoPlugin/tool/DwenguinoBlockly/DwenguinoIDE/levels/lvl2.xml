@@ -9,6 +9,8 @@
     <block type="procedures_defnoreturn"></block>
     <block type="procedures_defreturn"></block>
     <block type="procedures_callreturn"></block>
+    <block type="procedures_defnoreturn_typed"></block>
+    
 </category>
 <category id="catLoops" colour="180" name="Loops">
   <block type="controls_for">
@@ -44,7 +46,9 @@
 </category>
 <category id="catVariables" colour="90" name='Math'>
     <block type="variables_declare"></block>
+    <block type="variables_declare_global"></block>
     <block type="variables_set"></block>
+    <block type="variables_get"></block>
 </category>
 <category id="catDwenguino" colour="315" name='Dwenguino'>
     <block type="setup_loop_structure"></block>

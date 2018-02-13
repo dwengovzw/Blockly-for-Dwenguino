@@ -91,7 +91,7 @@ Blockly.Blocks['variables_set'] = {
       "nextStatement": null,
       "colour": Blockly.Blocks.variables.HUE,
       "tooltip": Blockly.Msg.VARIABLES_SET_TOOLTIP,
-      "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL
+      "helpUrl": Blockly.Msg.VARIABLES_SET_HELPURL,
     });
     this.contextMenuMsg_ = Blockly.Msg.VARIABLES_SET_CREATE_GET;
   },
@@ -193,3 +193,66 @@ Blockly.Blocks['variables_declare'] = {
         this.jsonInit(variables_declare_json);
     }
 };
+
+var variables_declare_global_json =
+        {
+            "type": "variables_declare_global",
+            "message0": MSG.create_global + " %1 %2" + MSG.with_type + " %3",
+            "args0": [
+                {
+                    "type": "field_variable",
+                    "name": "VAR",
+                    "variable": "item"
+                },
+                {
+                    "type": "input_dummy"
+                },
+                {
+                    "type": "field_dropdown",
+                    "name": "TYPE",
+                    "options": [
+                        [
+                            "int",
+                            "int"
+                        ],
+                        [
+                            "double",
+                            "double"
+                        ],
+                        [
+                            "String",
+                            "String"
+                        ],
+                        [
+                            "char",
+                            "char"
+                        ],
+                        [
+                            "unsigned int",
+                            "unsigned int"
+                        ],
+                        [
+                            "unsigned char",
+                            "unsigned char"
+                        ]
+                    ]
+                }
+            ],
+            "inputsInline": true,
+            "previousStatement": null,
+            "nextStatement": null,
+            "tooltip": "",
+            "colour": Blockly.Blocks.variables.HUE,
+            "helpUrl": "http://www.dwengo.org/"
+        };
+
+
+Blockly.Blocks['variables_declare_global'] = {
+    init: function () {
+        this.jsonInit(variables_declare_global_json);
+    }
+};
+
+
+
+

@@ -96,6 +96,7 @@ notPressed: "TIDAK BERTINGKAT",
 pressedTooltip: "Merupakan keadaan butang. Gunakan nilai ini untuk membandingkan dengan keadaan butang sebenar",
 create: "Create",
 with_type: "with type",
+create_global: "Create global",
 };
 
 

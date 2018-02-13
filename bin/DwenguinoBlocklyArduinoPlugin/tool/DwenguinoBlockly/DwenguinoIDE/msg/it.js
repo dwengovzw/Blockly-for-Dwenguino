@@ -85,6 +85,7 @@ var MSG = {
   pressed: "PREMUTO",
   notPressed: "NON PREMUTO",
   pressedTooltip: "Rappresenta lo stato del pulsante. Usa questi valori per confrontare lo stato attuale di uno o più pulsanti.",
+  create_global: "Create global",
 };
 
 

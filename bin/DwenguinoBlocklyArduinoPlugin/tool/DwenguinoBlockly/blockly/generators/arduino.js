@@ -121,6 +121,7 @@ Blockly.Arduino.init = function(workspace) {
     } else {
             Blockly.Arduino.variableDB_.reset();
     }
+    
 };
 
 
@@ -172,6 +173,7 @@ Blockly.Arduino.finish = function(code) {
  * @return {string} Legal line of code.
  */
 Blockly.Arduino.scrubNakedValue = function(line) {
+  console.log(line);
   return line + ';\n';
 };
 
