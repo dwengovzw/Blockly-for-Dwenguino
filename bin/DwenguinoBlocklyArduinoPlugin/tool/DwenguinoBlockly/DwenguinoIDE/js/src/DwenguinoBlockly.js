@@ -19,6 +19,8 @@ var DwenguinoBlockly = {
     genderSetting: "",  //TODO: add this to the modal dialog
     activityIdSetting: "",
     tutorialIdSetting: "",
+    computerId: "-1",
+    workshopId: "-1",
     difficultyLevel: 1,
     simulatorState: "off",
 
@@ -258,6 +260,8 @@ var DwenguinoBlockly = {
         "selectedDifficulty": DwenguinoBlockly.difficultyLevel,
         "activeTutorial": DwenguinoBlockly.tutorialIdSetting,
         "groupId": DwenguinoBlockly.activityIdSetting,
+        "computerId": DwenguinoBlockly.computerId,
+        "workshopId": DwenguinoBlockly.workshopId,
         "data": data
       };
       return event;
