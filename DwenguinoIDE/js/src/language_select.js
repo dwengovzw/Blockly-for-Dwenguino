@@ -6,6 +6,7 @@ DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'it': 'Italiano',
       'fr': 'français',
       'my': 'Malay',
+      'el': 'Ελληνικά',
   };
 
 //Set default language setting
