@@ -66,6 +66,7 @@ var MSG = {
   tutsRideInSquare: "Τετράγωνη τροχιά",
   tutsRideToWall: "Προσέγγιση τοίχου",
   tutsAvoidWall: "Αποφυγή τοίχου",
+  tutsNameOnLcdBasic: "Όνομα στην οθόνη LCD",
   simulator: "Προσομοιωτής",
   setLedState: "Ενεργοποίηση ή απενεργοποίηση LED %1 %2",
   setLedStateTooltip: "Ενεργοποίηση ή απενεργοποίηση ενός LED του Dwenguino",
@@ -83,6 +84,7 @@ var MSG = {
   dwenguinoAnalogWriteTooltip: "Ανάγνωση αναλογικής τιμής μεταξύ 0 και 255 από τον καθορισμένο ακροδέκτη",
   digitalReadSwitch: "Ανάγνωση ψηφιακής τιμής του διακόπτη %1",
   digitalReadSwitchTooltip: "Ανάγνωση ψηφιακής τιμής από έναν από τους διακόπτες του Dwenguino",
+  waitForSwitch: "περίμενε μέχρι να πατηθεί το κουμπί %1",
   north: "Βορράς",
   east:"Ανατολή",
   south: "Νότος",
@@ -93,7 +95,12 @@ var MSG = {
   pressed: "Πιεσμένο",
   notPressed: "Μη πιεσμένο",
   pressedTooltip: "Αντιπροσωπεύει την κατάσταση ενός κουμπιού. Χρησιμοποίησε αυτές τις τιμές για να τις συγκρίνεις με την τρέχουσα κατάσταση του κουμπιού",
+  sureYouWantToChangeTutorial: "Είσαι σίγουρος ότι θες να ξεκινήσεις αυτό το μάθημα;\n Όλα τα μπλοκ στην επιφάνεια εργασίας θα χαθούν.",
+  create: "Δημιουργία",
+  with_type: "με τύπο",
+  create_global: "Δημιουργία καθολικής",
 };
+
 
 MSG.simulator = {
   start: "Εκκίνηση",
@@ -120,18 +127,20 @@ MSG.simulator = {
   code: "Κώδικας",
 };
 
+
 MSG.tutorials = {
-  step1Title: "Εισαγωγή",
-//   step1Content: "Vandaag de dag zijn elektronische apparaten niet meer weg te denken. Veel van deze apparaten worden aangestuurd door microcontrollers. In dit boekje verkennen we stap voor stap de prachtige wereld van de microcontrollers. Op het einde van dit boekje kan je zelf jouw eigen digitale piano programmeren. Hiermee heb je jouw eerste ingebed systeem ontwikkeld: een digitaal systeem dat in staat is te interageren met zijn omgeving.\
-// We doen dit met behulp van de Dwenguino, een eenvoudig, multi-functioneel microcontrollerplatform. De Dwenguino is voorzien van tal van handigheidjes zodat jouw eerste stappen vlot verlopen. Dankzij de compatibiliteit met Arduino IDE gebeurt dit met behulp van goed doordachte tools die zowel grafisch als tekstueel programmeren mogelijk maken.\
-// Experimenteren met microcontrollers kan zowel thuis als in de klas. Dit boekje is in de eerste plaats bedoeld voor leerkrachten die in het kader van hun lessen omgaan met informatica, elektronica of techniek. Maar jongeren kunnen dit boekje ook zelfstandig ontdekken. Dat maakt hun leer-ervaring nog intenser.\
-// Veel succes!",
-//   step2Title: "Overal microcontrollers",
-//   step2Content: "De voorbije decennia nam het aantal digitale apparaten in huis, tuin en werkomgeving exponentieel toe. Het begon met de introductie van eenvoudige zaken zoals wekkerradio's en elektrische tandenborstels maar ondertussen is zo goed als elk apparaat intelligent. Misschien heb je thuis wel een grasmaai- of stofzuigrobot, of zelfs een zelfrijdende auto, deze zijn de dag van vandaag zeker geen science fiction meer!\
-// Sterker nog, al deze apparaten worden steeds meer verbonden met het internet en vormen zo samen het Internet of Things (IoT). Studies schatten dat tegen 2020 meer dan 50 miljard apparaten verbonden zullen zijn met het internet. We spreken dan niet alleen over smartphones en tablets maar ook over bijvoorbeeld slimme rookmelders, intelligente koelkasten en robots.\
-// De basis van al deze apparaten zijn digitale rekensystemen die instaan voor de nodige intelligentie. Een voorbeeld hiervan is de microcontroller, deze omvat al het nodige om sensorgegevens te verwerken, berekeningen uit te voeren en acties te ondernemen.",
-//   step3Title: "Het bord",
+  introduction: {},
+  /*theremin: {},
+  robot: {},
+  hello_dwenguino: {},*/
 };
+
+
+MSG.tutorials.general = {
+  sureTitle: "Είσαι σίγουρος;",
+  sureText: "Αν πατήσεις 'Next' όλα τα μπλοκ στην επιφάνεια εργασίας θα χαθούν.",
+};
+
 
 MSG.tutorials.introduction = {
   step1Title: "Καλωσήρθατε στο DwenguinoBlockly",
@@ -156,12 +165,14 @@ MSG.tutorials.introduction = {
   step9Content: "Με αυτό το κουμπί ενεργοποιούμε τον προσομοιωτή. Μπορούμε επίσης να το χρησιμοποιούμε για να δοκιμάζουμε το πρόγραμμά μας πριν το ανεβάσουμε στο Dwenguino."
 };
 
+
 MSG.tutorials.nameOnLcd = {
   step1Title: "Όνομα στην οθόνη LCD",
   step1Content: "Ενεργοποίησε την προβολή προσομοιωτή και τρέξε τον κώδικα. Τι παρατηρείς;",
   step2Title: "Όνομα στην οθόνη LCD",
   step2Content: "Μπορείς να τροποποιήσεις τον κώδικα ώστε να εμφανίζεται το όνομά σου στην πρώτη γραμμή της οθόνης LCD;",
 };
+
 
 MSG.tutorials.blinkLED = {
   step1Title: "Αναβόσβημα των LED",
@@ -172,6 +183,7 @@ MSG.tutorials.blinkLED = {
   step3Content: "Μπορείς να κάνεις κάποιο άλλο LED να αναβοσβήνει;",
 };
 
+
 MSG.tutorials.ledOnButtonPress = {
   step1Title: "Ενεργοποίηση LED με πάτημα κουμπιού",
   step1Content: "Ενεργοποίησε την προβολή προσομοιωτή και τρέξε τον κώδικα. Τι παρατηρείς;",
@@ -180,6 +192,7 @@ MSG.tutorials.ledOnButtonPress = {
   step3Title: "Επιπλέον",
   step3Content: "Μπορείς να κάνεις το LED να σβήνει όταν αφήνεις το κουμπί βορρά;",
 };
+
 
 MSG.tutorials.bitPatternOnLeds = {
   step1Title: "Δυαδικό μοτίβο και LED",
@@ -190,6 +203,7 @@ MSG.tutorials.bitPatternOnLeds = {
   step3Content: "Μόλις καταφέρεις να μειώσεις τον αριθμό των μπλοκ, κάλεσε τον δάσκαλό/δασκάλα σου να δει πώς το κατάφερες!",
 };
 
+
 MSG.tutorials.allButtons = {
   step1Title: "Όλα τα κουμπιά",
   step1Content: "Ενεργοποίησε την προβολή προσομοιωτή και τρέξε τον κώδικα. Τι παρατηρείς;",
@@ -199,6 +213,7 @@ MSG.tutorials.allButtons = {
   step3Content: "Μπορείς να τροποποιήσεις τον κώδικα ώστε το LED να σβήνει όταν το κουμπί δεν πατιέται πια;",
 };
 
+
 MSG.tutorials.driveForward = {
   step1Title: "Κίνηση εμπρός",
   step1Content: "Ενεργοποίησε την προβολή προσομοιωτή.",
@@ -207,6 +222,7 @@ MSG.tutorials.driveForward = {
   step3Title: "Κίνηση εμπρός",
   step3Content: "Πηγαίνει όντως το ρομπότ εμπρός; Μπορείς να διορθώσεις τον κώδικα ώστε το ρομπότ να πηγαίνει εμπρός;",
 };
+
 
 MSG.tutorials.rideInSquare = {
   step1Title: "Τετράγωνη τροχιά",
@@ -219,6 +235,7 @@ MSG.tutorials.rideInSquare = {
   step4Content: "Ο παρακάτω κώδικας είναι πολύ μακρύς. Μπορείς να πετύχεις το ίδιο αποτέλεσμα χρησιμοποιώντας λιγότερα μπλοκ;",
 };
 
+
 MSG.tutorials.rideToWall = {
   step1Title: "Προσέγγιση τοίχου",
   step1Content: "Ενεργοποίησε την προβολή προσομοιωτή.",
@@ -230,6 +247,7 @@ MSG.tutorials.rideToWall = {
   step4Content: "Προσεγγίζει τελικά το ρομπότ τον τοίχο; Σταματάει στον τοίχο; Μπορείς να τροποποιήσεις τον κώδικα ώστε το ρομπότ να σταματάει δίπλα στον τοίχο;",
 };
 
+
 MSG.tutorials.avoidWall = {
   step1Title: "Αποφυγή τοίχου",
   step1Content: "Ενεργοποίησε την προβολή προσομοιωτή.",
@@ -239,4 +257,23 @@ MSG.tutorials.avoidWall = {
   step3Content: "Άλλαξε το σενάριο στο «Κινούμενο ρομπότ και τοίχος» και τρέξε τον κώδικα. Τι παρατηρείς;",
   step4Title: "Αποφυγή τοίχου",
   step4Content: "Καταφέρνει το ρομπότ να αποφύγει τον τοίχο στρίβοντας λίγο πριν τον φτάσει; Μπορείς να τροποποιήσεις τον κώδικα ώστε το ρομπότ να συνεχίσει να κινείται χωρίς ποτέ να προσκρούει στον τοίχο;",
+};
+
+
+//TODO: Translate
+MSG.tutorials.nameOnLcdBasic = {
+  step0Title: "Ben je zeker?",
+  step0Content: "Ben je zeker? Waneer je op volgende klikt zullen de blokken op het werkblad vervangen worden.",
+  step1Title: "Naam op LCD-scherm",
+  step1Content: "In deze tutorial plaats je je naam op het LCD-scherm. Je ziet een voorbeeld van hoe dat moet.",
+  step2Title: "Testen op het bord",
+  step2Content: "Test de code door het Dwenguino bord aan de computer te schakelen met de usb-kabel en op de play knop te drukken.",
+  step3Title: "Je eigen naam",
+  step3Content: "Momenteel zie je de naam 'Tom' op het scherm verschijnen. Pas de code aan zodat je jouw naam ziet.",
+  step4Title: "Twee rijen",
+  step4Content: "Het LCD-scherm heeft twee rijen. Verander de rij waarop je naam staat van 0 naar 1.",
+  step5Title: "Test",
+  step5Content: "Test je code.",
+  step6Title: "Great!",
+  step6Content: "Well done! Now you know how to display your name on the LCD-screen.",
 };

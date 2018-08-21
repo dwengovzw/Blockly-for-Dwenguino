@@ -27,12 +27,11 @@ var MSG = {
   hashError: "Sorry, '%1' doesn't correspond with any saved program.",
   xmlError: "Could not load your saved file. Perhaps it was created with a different version of Blockly?",
   badXml: "Error parsing XML:\n%1\n\nSelect 'OK' to abandon your changes or 'Cancel' to further edit the XML.",
-  pressed: "PRESSED",
   setup: "setup",
   loop: "loop",
   dwenguino_main_program_structure: "The code in the setup block is executed once at the start of the program. The code in the loop is repeated until the program stops.",
   catDwenguino: "Dwenguino",
-  delay_help: "Wait a specified amount of miliseconds (1 milisecond = 1000 seconds)",
+  delay_help: "Wait a specified amount of milliseconds (1 second = 1000 milliseconds)",
   delay: "delay",
   clearLCD: "Clear LCD",
   dwenguinoLCD: "Dwenguino LCD %1 %2 %3 Write text: %4 On row: %5 Starting from column: %6",
@@ -61,7 +60,7 @@ var MSG = {
   tutsNameOnLcd: "Name on LCD",
   tutsBlinkLED: "Blink LED",
   tutsLedOnButtonPress: "LED on button press",
-  tutsBitPatternOnLeds: "Bit pattern on leds",
+  tutsBitPatternOnLeds: "Bit pattern on LEDs",
   tutsAllButtons: "All buttons",
   tutsDriveForward: "Drive forward",
   tutsRideInSquare: "Ride a square",
@@ -71,21 +70,21 @@ var MSG = {
   simulator: "Simulator",
   setLedState: "Turn %1 %2",
   setLedStateTooltip: "Turn an LED on the Dwenguino board on or off",
-  ledPinsTooltip: "Pic a led you want to control",
+  ledPinsTooltip: "Pick a LED you want to control",
   dwenguinoOn: "ON",
   dwenguinoOff: 'OFF',
   dwenguinoOnOffTooltip: "Select a value to turn an LED ON or OFF",
   dwenguinoServoBlock: "Servo motor %1 %2 %3 channel # %4 angle %5",
-  dwenguinoServoBlockTooltip: "Set one of the servo's connected to the Dwenguino to a specified angle between 0 and 180 degrees",
+  dwenguinoServoBlockTooltip: "Set one of the servos connected to the Dwenguino to a specified angle between 0 and 180 degrees",
   dwenguinoDCMotorBlock: "DC Motor %1 %2 %3 channel %4 speed %5",
-  dwenguinoDCMotorBlockTooltip: "Set the speed of one of the two dwenguino motors. Speed = value between -255 (full speed backwards) and 255 (full speed forwards)",
+  dwenguinoDCMotorBlockTooltip: "Set the speed of one of the two Dwenguino motors. Speed = value between -255 (full speed backwards) and 255 (full speed forwards)",
   dwenguinoAnalogWrite: "Write to %1 analog value %2",
   dwenguinoAnalogWriteTooltip: "Write an analog value between 0 and 255 to the specified pin",
   dwenguinoAnalogRead: "Read analog value from %1",
-  dwenguinoAnalogWriteTooltip: "Read a value beteween 0 and 255 from the specified pin",
+  dwenguinoAnalogWriteTooltip: "Read a value between 0 and 255 from the specified pin",
   digitalReadSwitch: "Read switch %1",
+  digitalReadSwitchTooltip: "Read value from one of the Dwenguino switches",
   waitForSwitch: "wait until button %1 is pressed",
-  digitalReadSwitchTooltip: "Read value from one of the dwenguino switches",
   north: "North",
   east:"East",
   south: "South",
@@ -101,7 +100,6 @@ var MSG = {
   with_type: "with type",
   create_global: "Create global",
 };
-
 
 
 MSG.simulator = {
@@ -128,29 +126,33 @@ MSG.simulator = {
   scenario_wall: "Moving robot with wall",
   code: "Code",
 };
+
+
 MSG.tutorials = {
-    introduction: {},
-    /*theremin: {},
-    robot: {},
-    hello_dwenguino: {},*/
+  introduction: {},
+  /*theremin: {},
+  robot: {},
+  hello_dwenguino: {},*/
 };
+
 
 MSG.tutorials.general = {
   sureTitle: "Are you sure?",
   sureText: "When you click 'Next' all blocks in the workspace will be removed.",
 };
 
+
 MSG.tutorials.introduction = {
-  step1Title: "Welkom to DwenguinoBlockly",
+  step1Title: "Welcome to DwenguinoBlockly",
   step1Content: "Hi, my name is Dwenguino! I will help you to get to know the interface!",
   step2aTitle: "The Blockly code area",
   step2aContent: "In this area you put your code blocks. You should put your blocks inside the setup-loop block if you want them to be executed.",
   step2bTitle: "The Blockly toolbox",
-  step2bContent: "This is the toolbox, it contains all the blocks you can use to create your program. You can explore the different cathegories to find out what your Dwenguino can do.",
+  step2bContent: "This is the toolbox, it contains all the blocks you can use to create your program. You can explore the different categories to find out what your Dwenguino can do.",
   step3Title: "Language selection",
   step3Content: "Use this to change the language",
   step4Title: "Difficulty",
-  step4Content: "This slider lets you set the difficulyt level. For now we only provide beginner and advanced levels.",
+  step4Content: "This slider lets you set the difficulty level. For now we only provide beginner and advanced levels.",
   step5Title: "Dwengobooks",
   step5Content: "Dwengobooks are interactive tutorials which guide you through the different physical computing challenges.",
   step6Title: "Upload code",
@@ -160,16 +162,17 @@ MSG.tutorials.introduction = {
   step8Title: "Save",
   step8Content: "With this button you can save your code to a local file.",
   step9Title: "The simulator",
-  step9Content: "In the future you will be able to use this button to open the simulator. You can use it to test your code before uploading."
-
+  step9Content: "With this button to open the simulator. You can use it to test your code before uploading."
 };
+
 
 MSG.tutorials.nameOnLcd = {
-  step1Title: "Name on lcd-screen",
+  step1Title: "Name on LCD-screen",
   step1Content: "Open the simulator view and test the code. What do you see?",
-  step2Title: "Name on lcd-screen",
-  step2Content: "Change the program so your name appears on the first line of the lcd-screen.",
+  step2Title: "Name on LCD-screen",
+  step2Content: "Change the program so your name appears on the first line of the LCD-screen.",
 };
+
 
 MSG.tutorials.blinkLED = {
   step1Title: "Blink LED",
@@ -180,6 +183,7 @@ MSG.tutorials.blinkLED = {
   step3Content: "Make another LED turn on and off.",
 };
 
+
 MSG.tutorials.ledOnButtonPress = {
   step1Title: "LED on button press",
   step1Content: "Open the simulator view and test the code. What do you see?",
@@ -188,6 +192,7 @@ MSG.tutorials.ledOnButtonPress = {
   step3Title: "Extra",
   step3Content: "Make sure the LED turns off when you release the north button.",
 };
+
 
 MSG.tutorials.bitPatternOnLeds = {
   step1Title: "Pattern on LEDs",
@@ -203,10 +208,11 @@ MSG.tutorials.allButtons = {
   step1Title: "All buttons",
   step1Content: "Open the simulator view and test the code. What do you see?",
   step2Title: "All buttons",
-  step2Content: "This code should turn on a led when one of the buttons is pressed. Look at the program. Do all buttons work? Try to correct the code for the buttons that do not work.",
+  step2Content: "This code should turn on a LED when one of the buttons is pressed. Look at the program. Do all buttons work? Try to correct the code for the buttons that do not work.",
   step3Title: "Extra",
   step3Content: "Change the code so the LED turns off when the button is released.",
 };
+
 
 MSG.tutorials.driveForward = {
   step1Title: "Drive forward",
@@ -216,6 +222,7 @@ MSG.tutorials.driveForward = {
   step3Title: "Drive forward",
   step3Content: "Does the car drive forward? Correct the code so the car drives forward.",
 };
+
 
 MSG.tutorials.rideInSquare = {
   step1Title: "Ride into square",
@@ -228,13 +235,14 @@ MSG.tutorials.rideInSquare = {
   step4Content: "The code is long, can you make it shorter while maintaining the same behaviour?",
 };
 
+
 MSG.tutorials.rideToWall = {
   step1Title: "Ride to wall",
   step1Content: "Open the simulator view.",
   step2Title: "Ride to wall",
   step2Content: "Select the scenario view.",
   step3Title: "Ride to wall",
-  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
+  step3Content: "Change the scenario to «Moving robot with wall» and test the code. What do you see?",
   step4Title: "Ride to wall",
   step4Content: "Does the car ride to the wall? Does it stop at the wall? Change the code so the car stop near the wall.",
 };
@@ -269,6 +277,7 @@ MSG.tutorials.nameOnLcdBasic = {
   step6Title: "Great!",
   step6Content: "Well done! Now you know how to display your name on the LCD-screen.",
 };
+
 
 /*MSG.tutorials.hello_dwenguino = {
   label: "Hello World!",

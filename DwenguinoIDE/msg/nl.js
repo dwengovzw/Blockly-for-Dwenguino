@@ -32,7 +32,7 @@ var MSG = {
   loop: "herhaal",
   dwenguino_main_program_structure: "Het eerste stukje code wordt maar een keer uitgevoerd bij het starten van het programma. De code in de 'herhaal' wordt steeds opnieuw herhaalt tot het programma stopt (bv. wanneer je de stekker uit het bordje trekt).",
   catDwenguino: "Dwenguino",
-  delay_help: "Wacht een opgegeven aantal miliseconden. (1 miliseconde = 1000 seconden)",
+  delay_help: "Wacht een opgegeven aantal miliseconden. (1 seconde = 1000 miliseconden)",
   delay: "wacht",
   clearLCD: "maak lcd-scherm leeg",
   dwenguinoLCD: "lcd-scherm %1 %2 %3 schrijf tekst: %4 op rij %5 vanaf kolom %6",
@@ -109,6 +109,7 @@ var MSG = {
   create_global: "Maak globaal",
 };
 
+
 MSG.simulator = {
   start: "Start",
   stop: "Stop",
@@ -135,6 +136,7 @@ MSG.simulator = {
   code: "Code",
 };
 
+
 MSG.tutorials = {
     introduction: {},
     theremin: {},
@@ -143,18 +145,16 @@ MSG.tutorials = {
     hello_dwenguino: {},
     blink: {},
     hello_robot: {},
-
 };
+
 
 MSG.tutorials.general = {
   sureTitle: "Ben je zeker?",
   sureText: "Wanneer je op 'Volgende' klikt dan worden de blokken op het werkblad vervangen.",
 };
 
-MSG.tutorials.introduction =
 
-{
-
+MSG.tutorials.introduction = {
   stepTitles: [
     "Welkom bij DwenguinoBlockly",
     "Het Blockly codegebied",
@@ -181,27 +181,29 @@ MSG.tutorials.introduction =
   ],
 };
 
+
 MSG.tutorials.basic_test = {
-    step1Title: "Test je basiskennis van Dwenguino",
-    step1Content: "Wanneer je nog nooit een programma hebt geschreven voor de Dwenguino kan je deze test gebruiken om te kijken hoe ver je al staat",
-    step2Title: "Sequentie",
-    step2ContentA: "Bekijk de code die je ziet de blockly workspace. Wat is na het uitvoeren van de code de waarde die in a zit?",
-    step2ContentB: "Wat is de waarde die in b zit?",
-    stepEndTitle: "Goed zo!",
-    stepEndContent: "Je hebt de quiz successvol afgelegd, op naar de volgende!"
+  step1Title: "Test je basiskennis van Dwenguino",
+  step1Content: "Wanneer je nog nooit een programma hebt geschreven voor de Dwenguino kan je deze test gebruiken om te kijken hoe ver je al staat",
+  step2Title: "Sequentie",
+  step2ContentA: "Bekijk de code die je ziet de blockly workspace. Wat is na het uitvoeren van de code de waarde die in a zit?",
+  step2ContentB: "Wat is de waarde die in b zit?",
+  stepEndTitle: "Goed zo!",
+  stepEndContent: "Je hebt de quiz successvol afgelegd, op naar de volgende!"
 };
 
+
 MSG.tutorials.theremin = {
-    step1Title: "Voorwoord",
-    step1Content: "Vandaag de dag zijn elektronische apparaten niet meer weg te denken. Veel van deze apparaten worden aangestuurd door microcontrollers. In dit boekje verkennen we stap voor stap de prachtige wereld van de microcontrollers. Op het einde van dit boekje kan je zelf jouw eigen digitale piano programmeren. Hiermee heb je jouw eerste ingebed systeem ontwikkeld: een digitaal systeem dat in staat is te interageren met zijn omgeving.\
+  step1Title: "Voorwoord",
+  step1Content: "Vandaag de dag zijn elektronische apparaten niet meer weg te denken. Veel van deze apparaten worden aangestuurd door microcontrollers. In dit boekje verkennen we stap voor stap de prachtige wereld van de microcontrollers. Op het einde van dit boekje kan je zelf jouw eigen digitale piano programmeren. Hiermee heb je jouw eerste ingebed systeem ontwikkeld: een digitaal systeem dat in staat is te interageren met zijn omgeving.\
 We doen dit met behulp van de Dwenguino, een eenvoudig, multi-functioneel microcontrollerplatform. De Dwenguino is voorzien van tal van handigheidjes zodat jouw eerste stappen vlot verlopen. Dankzij de compatibiliteit met Arduino IDE gebeurt dit met behulp van goed doordachte tools die zowel grafisch als tekstueel programmeren mogelijk maken.\
 Experimenteren met microcontrollers kan zowel thuis als in de klas. Dit boekje is in de eerste plaats bedoeld voor leerkrachten die in het kader van hun lessen omgaan met informatica, elektronica of techniek. Maar jongeren kunnen dit boekje ook zelfstandig ontdekken. Dat maakt hun leer-ervaring nog intenser.\
 Veel succes!",
-    step2Title: "Overal microcontrollers",
-    step2Content: "De voorbije decennia nam het aantal digitale apparaten in huis, tuin en werkomgeving exponentieel toe. Het begon met de introductie van eenvoudige zaken zoals wekkerradio's en elektrische tandenborstels maar ondertussen is zo goed als elk apparaat intelligent. Misschien heb je thuis wel een grasmaai- of stofzuigrobot, of zelfs een zelfrijdende auto, deze zijn de dag van vandaag zeker geen science fiction meer!\
+  step2Title: "Overal microcontrollers",
+  step2Content: "De voorbije decennia nam het aantal digitale apparaten in huis, tuin en werkomgeving exponentieel toe. Het begon met de introductie van eenvoudige zaken zoals wekkerradio's en elektrische tandenborstels maar ondertussen is zo goed als elk apparaat intelligent. Misschien heb je thuis wel een grasmaai- of stofzuigrobot, of zelfs een zelfrijdende auto, deze zijn de dag van vandaag zeker geen science fiction meer!\
 Sterker nog, al deze apparaten worden steeds meer verbonden met het internet en vormen zo samen het Internet of Things (IoT). Studies schatten dat tegen 2020 meer dan 50 miljard apparaten verbonden zullen zijn met het internet. We spreken dan niet alleen over smartphones en tablets maar ook over bijvoorbeeld slimme rookmelders, intelligente koelkasten en robots.\
 De basis van al deze apparaten zijn digitale rekensystemen die instaan voor de nodige intelligentie. Een voorbeeld hiervan is de microcontroller, deze omvat al het nodige om sensorgegevens te verwerken, berekeningen uit te voeren en acties te ondernemen.",
-    step3Title: "Het bord",
+  step3Title: "Het bord",
 };
 
 
@@ -220,6 +222,7 @@ MSG.tutorials.hello_dwenguino = {
   step6Content: "Probeer het nu zelf! Verander de tekst die op het scherm komt eens in je eigen naam. </br> Probeer ook eens om de tekst op de tweede lijn van het scherm te laten verschijnen.",
 };
 
+
 MSG.tutorials.blink = {
   step1Title: "Knipperlicht",
   step1Content: "In deze tutorial schrijven we een programma dat LD13 afwisselend aan- en uitzet. We zorgen ervoor dat de led twee keer per seconde aan- en uitgaat.",
@@ -234,6 +237,7 @@ MSG.tutorials.blink = {
   step6Title: "Nu zelf!",
   step6Content: "Probeer het nu zelf!</br><ul><li>Verander de knippersnelheid zodat de led 1 keer per seconde aan- en uitgaat.</li><li>Kies eens een andere led om aan en uit te zetten.</li><li>Probeer eens meerdere leds aan en uit te zetten.</li></ul>",
 };
+
 
 MSG.tutorials.hello_robot = {
   step1Title: "Rijdende robot",
@@ -250,6 +254,7 @@ MSG.tutorials.hello_robot = {
   step6Content: "Nu je erin geslaagd bent om de robot een bocht van 90° te laten nemen, kan je eens proberen om hem in een vierkant te laten rijden.",
 };
 
+
 //TODO: translate
 MSG.tutorials.nameOnLcd = {
   step1Title: "Name on lcd-screen",
@@ -257,6 +262,7 @@ MSG.tutorials.nameOnLcd = {
   step2Title: "Name on lcd-screen",
   step2Content: "Change the program so your name appears on the first line of the lcd-screen.",
 };
+
 
 //TODO: translate
 MSG.tutorials.blinkLED = {
@@ -279,6 +285,7 @@ MSG.tutorials.ledOnButtonPress = {
   step3Content: "Make sure the LED turns off when you release the north button.",
 };
 
+
 //TODO: translate
 MSG.tutorials.bitPatternOnLeds = {
   step1Title: "Pattern on LEDs",
@@ -289,6 +296,7 @@ MSG.tutorials.bitPatternOnLeds = {
   step3Content: "When you succeeded in reducing the number of blocks, call one of the tutors to get feedback on your solution.",
 };
 
+
 //TODO: translate
 MSG.tutorials.allButtons = {
   step1Title: "All buttons",
@@ -298,6 +306,7 @@ MSG.tutorials.allButtons = {
   step3Title: "Extra",
   step3Content: "Change the code so the LED turns off when the button is released.",
 };
+
 
 //TODO: trnalsate
 MSG.tutorials.driveForward = {
@@ -313,6 +322,7 @@ MSG.tutorials.driveForward = {
     "Gaat de auto vooruit?",
   ],
 };
+
 
 //TODO: translate
 MSG.tutorials.rideInSquare = {
@@ -330,6 +340,7 @@ MSG.tutorials.rideInSquare = {
   ],
 };
 
+
 //TODO: translate
 MSG.tutorials.rideToWall = {
   stepTitles: [
@@ -346,6 +357,7 @@ MSG.tutorials.rideToWall = {
   ],
 };
 
+
 //TODO: translate
 MSG.tutorials.avoidWall = {
   stepTitles: [
@@ -361,6 +373,7 @@ MSG.tutorials.avoidWall = {
     "Ontwijkt de robot tot aan de muur? Probeer de fout te vinden en deze te verbeteren. Gebruik hiervoor de debugger.",
   ],
 };
+
 
 MSG.tutorials.nameOnLcdBasic = {
   step1Title: "Naam op LCD-scherm",
@@ -400,6 +413,7 @@ MSG.tutorials.nameOnLcdWeGoSTEM = {
     "Goed zo! Je weet nu hoe je tekst op het LCD-scherm kan plaatsen.",
   ],
 };
+
 
 MSG.tutorials.introduceYourself = {
   stepTitles: [
@@ -459,6 +473,7 @@ MSG.tutorials.poem1 = {
     "Is het gelukt om de code te verbeteren?",
   ],
 };
+
 
 MSG.tutorials.poem2 = {
   stepTitles: [
