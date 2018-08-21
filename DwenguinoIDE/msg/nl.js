@@ -32,7 +32,7 @@ var MSG = {
   loop: "herhaal",
   dwenguino_main_program_structure: "Het eerste stukje code wordt maar een keer uitgevoerd bij het starten van het programma. De code in de 'herhaal' wordt steeds opnieuw herhaalt tot het programma stopt (bv. wanneer je de stekker uit het bordje trekt).",
   catDwenguino: "Dwenguino",
-  delay_help: "Wacht een opgegeven aantal miliseconden. (1 miliseconde = 1000 seconden)",
+  delay_help: "Wacht een opgegeven aantal miliseconden. (1 seconde = 1000 miliseconden)",
   delay: "wacht",
   clearLCD: "maak lcd-scherm leeg",
   dwenguinoLCD: "lcd-scherm %1 %2 %3 schrijf tekst: %4 op rij %5 vanaf kolom %6",
@@ -117,62 +117,60 @@ MSG.simulator = {
 };
 
 MSG.tutorials = {
-    introduction: {},
-    theremin: {},
-    robot: {},
-    basic_test: {},
-    hello_dwenguino: {},
-    blink: {},
-    hello_robot: {},
+  introduction: {},
+  theremin: {},
+  robot: {},
+  basic_test: {},
+  hello_dwenguino: {},
+  blink: {},
+  hello_robot: {},
 };
 
 MSG.tutorials.introduction = {
-        step1Title: "Welkom bij DwenguinoBlockly",
-        step1Content: "Hoi, ik ben Dwenguino! Ik zal je helpen om de interface te leren kennen!",
-        step2aTitle: "Het Blockly codegebied",
-        step2aContent: "Dit is het Blockly codegebied",
-        step2bTitle: "De Blockly toolbox",
-        step2bContent: "Dit is de toolbox. Deze bevat alle blokken die je kan gebruiken om jouw programma te schrijven. Afhankelijk van het niveau dat je gekozen hebt zie je meer of minder blokken. Ga eens op verkenning en bekijk welke blokken er allemaal zijn.",
-        step3Title: "Taal instellen",
-        step3Content: "Hier kan je een andere taal selecteren.",
-        step4Title: "De moeilijkheidsgraad",
-        step4Content: "Deze schuifbalk kan je gebruiken om de moeilijkheidsgraad in te stellen. Op hogere niveaus heb je meer geavanceerde blokken. Om deze te gebruiken beheers je best eerst de blokken op lagere niveaus. Voorlopig zijn er maar twee niveaus die blokjes bevatten, in de toekomst komen er meer.",
-        step5Title: "Dwengobooks",
-        step5Content: "Dwengobooks zijn interactieve tutorials die je stap voor stap uitleggen hoe je een programma moet schrijven. Je leerkracht kan hier zelf ook lessen aan toevoegen zodat je makkelijk de lessen kan volgen.",
-        step6Title: "Je code uploaden naar het Dwenguino-bord",
-        step6Content: "Als je denkt dat je programma af is kan je het uploaden naar het Dwenguino-bord door op deze knop te drukken. (Vergeet niet om eerst het bord aan te sluiten op de computer met de usb-kabel.)",
-        step7Title: "Openen",
-        step7Content: "Deze knop geeft je de mogelijkheid om een bestand dat je eerder hebt opgeslagen te openen in de editor.",
-        step8Title: "Opslaan",
-        step8Content: "Met deze knop kan je de blokken opslaan naar een lokaal bestand.",
-        step9Title: "De simulator",
-        step9Content: "Met deze knop kan je de simulator openen. Deze kan je gebruiken om je code eerst te testen voor je hem naar het bord uploadt."
-
+  step1Title: "Welkom bij DwenguinoBlockly",
+  step1Content: "Hoi, ik ben Dwenguino! Ik zal je helpen om de interface te leren kennen!",
+  step2aTitle: "Het Blockly codegebied",
+  step2aContent: "Dit is het Blockly codegebied",
+  step2bTitle: "De Blockly toolbox",
+  step2bContent: "Dit is de toolbox. Deze bevat alle blokken die je kan gebruiken om jouw programma te schrijven. Afhankelijk van het niveau dat je gekozen hebt zie je meer of minder blokken. Ga eens op verkenning en bekijk welke blokken er allemaal zijn.",
+  step3Title: "Taal instellen",
+  step3Content: "Hier kan je een andere taal selecteren.",
+  step4Title: "De moeilijkheidsgraad",
+  step4Content: "Deze schuifbalk kan je gebruiken om de moeilijkheidsgraad in te stellen. Op hogere niveaus heb je meer geavanceerde blokken. Om deze te gebruiken beheers je best eerst de blokken op lagere niveaus. Voorlopig zijn er maar twee niveaus die blokjes bevatten, in de toekomst komen er meer.",
+  step5Title: "Dwengobooks",
+  step5Content: "Dwengobooks zijn interactieve tutorials die je stap voor stap uitleggen hoe je een programma moet schrijven. Je leerkracht kan hier zelf ook lessen aan toevoegen zodat je makkelijk de lessen kan volgen.",
+  step6Title: "Je code uploaden naar het Dwenguino-bord",
+  step6Content: "Als je denkt dat je programma af is kan je het uploaden naar het Dwenguino-bord door op deze knop te drukken. (Vergeet niet om eerst het bord aan te sluiten op de computer met de usb-kabel.)",
+  step7Title: "Openen",
+  step7Content: "Deze knop geeft je de mogelijkheid om een bestand dat je eerder hebt opgeslagen te openen in de editor.",
+  step8Title: "Opslaan",
+  step8Content: "Met deze knop kan je de blokken opslaan naar een lokaal bestand.",
+  step9Title: "De simulator",
+  step9Content: "Met deze knop kan je de simulator openen. Deze kan je gebruiken om je code eerst te testen voor je hem naar het bord uploadt."
 };
 
 MSG.tutorials.basic_test = {
-    step1Title: "Test je basiskennis van Dwenguino",
-    step1Content: "Wanneer je nog nooit een programma hebt geschreven voor de Dwenguino kan je deze test gebruiken om te kijken hoe ver je al staat",
-    step2Title: "Sequentie",
-    step2ContentA: "Bekijk de code die je ziet de blockly workspace. Wat is na het uitvoeren van de code de waarde die in a zit?",
-    step2ContentB: "Wat is de waarde die in b zit?",
-    stepEndTitle: "Goed zo!",
-    stepEndContent: "Je hebt de quiz successvol afgelegd, op naar de volgende!"
+  step1Title: "Test je basiskennis van Dwenguino",
+  step1Content: "Wanneer je nog nooit een programma hebt geschreven voor de Dwenguino kan je deze test gebruiken om te kijken hoe ver je al staat",
+  step2Title: "Sequentie",
+  step2ContentA: "Bekijk de code die je ziet de blockly workspace. Wat is na het uitvoeren van de code de waarde die in a zit?",
+  step2ContentB: "Wat is de waarde die in b zit?",
+  stepEndTitle: "Goed zo!",
+  stepEndContent: "Je hebt de quiz successvol afgelegd, op naar de volgende!"
 };
 
 MSG.tutorials.theremin = {
-    step1Title: "Voorwoord",
-    step1Content: "Vandaag de dag zijn elektronische apparaten niet meer weg te denken. Veel van deze apparaten worden aangestuurd door microcontrollers. In dit boekje verkennen we stap voor stap de prachtige wereld van de microcontrollers. Op het einde van dit boekje kan je zelf jouw eigen digitale piano programmeren. Hiermee heb je jouw eerste ingebed systeem ontwikkeld: een digitaal systeem dat in staat is te interageren met zijn omgeving.\
+  step1Title: "Voorwoord",
+  step1Content: "Vandaag de dag zijn elektronische apparaten niet meer weg te denken. Veel van deze apparaten worden aangestuurd door microcontrollers. In dit boekje verkennen we stap voor stap de prachtige wereld van de microcontrollers. Op het einde van dit boekje kan je zelf jouw eigen digitale piano programmeren. Hiermee heb je jouw eerste ingebed systeem ontwikkeld: een digitaal systeem dat in staat is te interageren met zijn omgeving.\
 We doen dit met behulp van de Dwenguino, een eenvoudig, multi-functioneel microcontrollerplatform. De Dwenguino is voorzien van tal van handigheidjes zodat jouw eerste stappen vlot verlopen. Dankzij de compatibiliteit met Arduino IDE gebeurt dit met behulp van goed doordachte tools die zowel grafisch als tekstueel programmeren mogelijk maken.\
 Experimenteren met microcontrollers kan zowel thuis als in de klas. Dit boekje is in de eerste plaats bedoeld voor leerkrachten die in het kader van hun lessen omgaan met informatica, elektronica of techniek. Maar jongeren kunnen dit boekje ook zelfstandig ontdekken. Dat maakt hun leer-ervaring nog intenser.\
 Veel succes!",
-    step2Title: "Overal microcontrollers",
-    step2Content: "De voorbije decennia nam het aantal digitale apparaten in huis, tuin en werkomgeving exponentieel toe. Het begon met de introductie van eenvoudige zaken zoals wekkerradio's en elektrische tandenborstels maar ondertussen is zo goed als elk apparaat intelligent. Misschien heb je thuis wel een grasmaai- of stofzuigrobot, of zelfs een zelfrijdende auto, deze zijn de dag van vandaag zeker geen science fiction meer!\
+  step2Title: "Overal microcontrollers",
+  step2Content: "De voorbije decennia nam het aantal digitale apparaten in huis, tuin en werkomgeving exponentieel toe. Het begon met de introductie van eenvoudige zaken zoals wekkerradio's en elektrische tandenborstels maar ondertussen is zo goed als elk apparaat intelligent. Misschien heb je thuis wel een grasmaai- of stofzuigrobot, of zelfs een zelfrijdende auto, deze zijn de dag van vandaag zeker geen science fiction meer!\
 Sterker nog, al deze apparaten worden steeds meer verbonden met het internet en vormen zo samen het Internet of Things (IoT). Studies schatten dat tegen 2020 meer dan 50 miljard apparaten verbonden zullen zijn met het internet. We spreken dan niet alleen over smartphones en tablets maar ook over bijvoorbeeld slimme rookmelders, intelligente koelkasten en robots.\
 De basis van al deze apparaten zijn digitale rekensystemen die instaan voor de nodige intelligentie. Een voorbeeld hiervan is de microcontroller, deze omvat al het nodige om sensorgegevens te verwerken, berekeningen uit te voeren en acties te ondernemen.",
-    step3Title: "Het bord",
+  step3Title: "Het bord",
 };
-
 
 MSG.tutorials.hello_dwenguino = {
   step1Title: "Hallo Dwenguino!",
