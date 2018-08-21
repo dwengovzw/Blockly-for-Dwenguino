@@ -83,6 +83,7 @@ dwenguinoAnalogWriteTooltip: "Tulis nilai analog antara 0 dan 255 ke pin yang di
 dwenguinoAnalogRead: "Baca nilai analog dari %1",
 dwenguinoAnalogWriteTooltip: "Baca nilai beteween 0 dan 255 dari pin yang ditentukan",
 digitalReadSwitch: "Baca suis %1",
+waitForSwitch: "wait until button %1 is pressed",
 digitalReadSwitchTooltip: "Baca nilai dari salah satu suis dwenguino",
 north: "Utara",
 east: "Timur",

@@ -147,15 +147,49 @@ var DwenguinoBlockly = {
             }
             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("downloadClicked", ""));
         });
+
+        $("#db_menu_item_clear").click(function(){
+          $("#db_menu_item_run").off("click");
+          $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/gear_animation.gif");
+          $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px 25px", maxHeight: "100%", float: "right"});
+          $("#db_menu_item_run").css({color: "gray"});
+          setTimeout(function(){
+            console.log("timeout")
+            $("#db_menu_item_run").click(DwenguinoBlockly.runEventHandler);
+            $("#db_menu_item_run").css({color: "black"});
+            $("#db_menu_item_run").hover(function() {
+              $(this).css({color: "#8bab42"});
+            });
+            $("#db_menu_item_run").mouseleave(function() {
+              $(this).css({color: "black"});
+            });
+            $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px", maxHeight: "100%", float: "right"});
+            $("#db_menu_item_dwengo_robot_teacher_image").attr("src", "img/dwengo_robot_plain.svg");
+          }, 5000);
+          var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
+          if ((typeof dwenguinoBlocklyServer) != 'undefined' && dwenguinoBlocklyServer){
+              dwenguinoBlocklyServer.uploadCode(code);
+          }
+          console.log(code.replace(/\r?\n|\r/g, "\n"));
+          //DwenguinoBlockly.build(code.replace(/\r?\n|\r/g, "\\n"));
+          DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("runClicked", ""));
+        });
+
+
         //dropdown menu code
          $(".dropdown-toggle").dropdown();
          console.log(tutorials);
 
+
+
+        // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
+        //tutorials = {};
          $.each(tutorials, function(index, arrayElement){
            var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
            newLi.click(function(){
              DwenguinoBlockly.tutorialId = arrayElement.id;
              DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
+             arrayElement.initSteps();
              hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
              hopscotch.startTour(arrayElement);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
@@ -284,6 +318,7 @@ var DwenguinoBlockly = {
         "timestamp": $.now(),
         "event": eventToRecord
       };
+      console.log(eventToRecord);
       if (DwenguinoBlockly.sessionId !== undefined){
         $.ajax({
             type: "POST",
@@ -550,15 +585,15 @@ var DwenguinoBlockly = {
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
         //document.getElementById('t
 
-        var tutorials = ['tutsIntroduction', 'tutsHelloDwenguino', 'tutsBlink', 'tutsHelloRobot',
+        var tutorials = []; /*['tutsIntroduction', 'tutsHelloDwenguino', 'tutsBlink', 'tutsHelloRobot',
         'tutsNameOnLcd', 'tutsBlinkLED', 'tutsLedOnButtonPress', 'tutsBitPatternOnLeds',
-      'tutsAllButtons', 'tutsDriveForward', 'tutsRideInSquare', 'tutsRideToWall', 'tutsAvoidWall'];
-        for (var i = 0; i < tutorials.length ; i++){
+      'tutsAllButtons', 'tutsDriveForward', 'tutsRideInSquare', 'tutsRideToWall', 'tutsAvoidWall'];*/
+      /*  for (var i = 0; i < tutorials.length ; i++){
             var element = document.getElementById(tutorials[i]);
             if (element){
                 element.innerHTML = MSG[tutorials[i]];
             }
-        }
+        }*/
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
             'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catArduino'];

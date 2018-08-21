@@ -5,12 +5,11 @@
     <block type="logic_negate"></block>
     <block type="logic_boolean"></block>
 </category>
-<category id="catFunctions" colour="270" custom="PROCEDURE">
-    <block type="procedures_defnoreturn"></block>
-    <block type="procedures_defreturn"></block>
+<category id="catFunctions" colour="270">
+    <block type="procedures_defnoreturn_typed_params"></block>
+    <block type="procedures_defreturn_typed_params"></block>
     <block type="procedures_callreturn"></block>
-    <block type="procedures_defnoreturn_typed"></block>
-    
+
 </category>
 <category id="catLoops" colour="180" name="Loops">
   <block type="controls_for">

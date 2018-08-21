@@ -69,6 +69,12 @@ var MSG = {
   tutsRideToWall: "Naar muur rijden",
   tutsAvoidWall: "Muur ontwijken",
   tutsNameOnLcdBasic: "Je naam op het LCD-scherm",
+  tutsNameOnLcdWeGoSTEM: "Naam op LCD-scherm",
+  tutsIntroduceYourselfWeGoSTEM: "Jezelf voorstellen",
+  tutsShowNameAndDisappearWeGoSTEM: "Naam doen verdwijnen",
+  tutsLampOnOffWeGoSTEM: "Knipperlicht",
+  tutsPoem1: "Gedicht 1",
+  tutsPoem2: "Gedicht 2",
   simulator: "Simulator",
   setLedState: "zet %1 %2",
   setLedStateTooltip: "Zet een LEdwenguinoDCMotorBlock op het arduino bord aan of uit",
@@ -85,6 +91,7 @@ var MSG = {
   dwenguinoAnalogRead: "lees analoge waarde van %1",
   dwenguinoAnalogWriteTooltip: "Lees een analoge waarde tussen 0 en 255 van de opgegeven pin",
   digitalReadSwitch: "lees waarde knop %1",
+  waitForSwitch: "wacht tot knop %1 wordt ingedrukt",
   digitalReadSwitchTooltip: "lees de waarde van een van de dwenguino knoppen",
   north: "NOORD",
   east:"OOST",
@@ -136,6 +143,7 @@ MSG.tutorials = {
     hello_dwenguino: {},
     blink: {},
     hello_robot: {},
+
 };
 
 MSG.tutorials.general = {
@@ -143,28 +151,34 @@ MSG.tutorials.general = {
   sureText: "Wanneer je op 'Volgende' klikt dan worden de blokken op het werkblad vervangen.",
 };
 
-MSG.tutorials.introduction = {
-        step1Title: "Welkom bij DwenguinoBlockly",
-        step1Content: "Hoi, ik ben Dwenguino! Ik zal je helpen om de interface te leren kennen!",
-        step2aTitle: "Het Blockly codegebied",
-        step2aContent: "Dit is het Blockly codegebied",
-        step2bTitle: "De Blockly toolbox",
-        step2bContent: "Dit is de toolbox. Deze bevat alle blokken die je kan gebruiken om jouw programma te schrijven. Afhankelijk van het niveau dat je gekozen hebt zie je meer of minder blokken. Ga eens op verkenning en bekijk welke blokken er allemaal zijn.",
-        step3Title: "Taal instellen",
-        step3Content: "Hier kan je een andere taal selecteren.",
-        step4Title: "De moeilijkheidsgraad",
-        step4Content: "Deze schuifbalk kan je gebruiken om de moeilijkheidsgraad in te stellen. Op hogere niveaus heb je meer geavanceerde blokken. Om deze te gebruiken beheers je best eerst de blokken op lagere niveaus. Voorlopig zijn er maar twee niveaus die blokjes bevatten, in de toekomst komen er meer.",
-        step5Title: "Dwengobooks",
-        step5Content: "Dwengobooks zijn interactieve tutorials die je stap voor stap uitleggen hoe je een programma moet schrijven. Je leerkracht kan hier zelf ook lessen aan toevoegen zodat je makkelijk de lessen kan volgen.",
-        step6Title: "Je code uploaden naar het Dwenguino-bord",
-        step6Content: "Als je denkt dat je programma af is kan je het uploaden naar het Dwenguino-bord door op deze knop te drukken. (Vergeet niet om eerst het bord aan te sluiten op de computer met de usb-kabel.)",
-        step7Title: "Openen",
-        step7Content: "Deze knop geeft je de mogelijkheid om een bestand dat je eerder hebt opgeslagen te openen in de editor.",
-        step8Title: "Opslaan",
-        step8Content: "Met deze knop kan je de blokken opslaan naar een lokaal bestand.",
-        step9Title: "De simulator",
-        step9Content: "Met deze knop kan je de simulator openen. Deze kan je gebruiken om je code eerst te testen voor je hem naar het bord uploadt."
+MSG.tutorials.introduction =
 
+{
+
+  stepTitles: [
+    "Welkom bij DwenguinoBlockly",
+    "Het Blockly codegebied",
+    "De Blockly toolbox",
+    "Taal instellen",
+    "De moeilijkheidsgraad",
+    "Dwengobooks",
+    "Je code uploaden naar het Dwenguino-bord",
+    "Openen",
+    "Opslaan",
+    "De simulator"
+  ],
+  stepContents: [
+    "Hoi, ik ben Dwenguino! Ik zal je helpen om de interface te leren kennen!",
+    "Dit is het Blockly codegebied. Hier komt het programma dat je gaat schrijven.",
+    "Dit is de toolbox. Deze bevat alle blokken die je kan gebruiken om jouw programma te schrijven. Afhankelijk van het niveau dat je gekozen hebt zie je meer of minder blokken. Ga eens op verkenning en bekijk welke blokken er allemaal zijn.",
+    "Hier kan je een andere taal selecteren.",
+    "Deze schuifbalk kan je gebruiken om de moeilijkheidsgraad in te stellen. Op hogere niveaus heb je meer geavanceerde blokken. Om deze te gebruiken beheers je best eerst de blokken op lagere niveaus. Voorlopig zijn er maar twee niveaus die blokjes bevatten, in de toekomst komen er meer.",
+    "Dwengobooks zijn interactieve tutorials die je stap voor stap uitleggen hoe je een programma moet schrijven.",
+    "Als je denkt dat je programma af is kan je het uploaden naar het Dwenguino-bord door op deze knop te drukken. (Vergeet niet om eerst het bord aan te sluiten op de computer met de usb-kabel.) <br/><em>Opgelet! Dit werkt enkel in als je dit programma in de Arduino IDE uitvoert en dus niet online in de browser.</em>",
+    "Deze knop geeft je de mogelijkheid om een bestand dat je eerder hebt opgeslagen te openen in de editor.",
+    "Met deze knop kan je de blokken opslaan naar een lokaal bestand.",
+    "Met deze knop kan je de simulator openen. Deze kan je gebruiken om je code eerst te testen voor je hem naar het bord uploadt."
+  ],
 };
 
 MSG.tutorials.basic_test = {
@@ -287,48 +301,65 @@ MSG.tutorials.allButtons = {
 
 //TODO: trnalsate
 MSG.tutorials.driveForward = {
-  step1Title: "Drive forward",
-  step1Content: "Open the simulator view.",
-  step2Title: "Drive forward",
-  step2Content: "Select the scenario view and test the code. What do you see?",
-  step3Title: "Drive forward",
-  step3Content: "Does the car drive forward? Correct the code so the car drives forward.",
+
+  stepTitles: [
+    "Vooruit rijden",
+    "Vooruit rijden",
+    "Vooruit rijden",
+  ],
+  stepContents: [
+    "Open de simulator",
+    "Selecteer het scenario 'rijdende robot' en test de code in de simulator. Wat zie je?",
+    "Gaat de auto vooruit?",
+  ],
 };
 
 //TODO: translate
 MSG.tutorials.rideInSquare = {
-  step1Title: "Ride into square",
-  step1Content: "Open the simulator view.",
-  step2Title: "Ride into square",
-  step2Content: "Select the scenario view and test the code. What do you see?",
-  step3Title: "Ride into square",
-  step3Content: "Does the car ride in a square? Correct the code so the car ride in a square.",
-  step4Title: "Extra",
-  step4Content: "The code is long, can you make it shorter while maintaining the same behaviour?",
+  stepTitles: [
+    "In vierkant rijden",
+    "In vierkant rijden",
+    "In vierkant rijden",
+    "Extra",
+  ],
+  stepContents: [
+    "Open de simulator",
+    "Selecteer het scenario 'rijdende robot' en test de code in de simulator. Wat zie je?",
+    "Rijdt de auto in een vierkant? Probeer de fout te vinden en deze te verbeteren. Gebruik hiervoor de debugger.",
+    "De code is heel lang. Kan je de code korter maken?",
+  ],
 };
 
 //TODO: translate
 MSG.tutorials.rideToWall = {
-  step1Title: "Ride to wall",
-  step1Content: "Open the simulator view.",
-  step2Title: "Ride to wall",
-  step2Content: "Select the scenario view.",
-  step3Title: "Ride to wall",
-  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
-  step4Title: "Ride to wall",
-  step4Content: "Does the car ride to the wall? Does it stop at the wall? Change the code so the car stop near the wall.",
+  stepTitles: [
+    "Naar de muur rijden",
+    "Naar de muur rijden",
+    "Naar de muur rijden",
+    "Naar de muur rijden",
+  ],
+  stepContents: [
+    "Open de simulator",
+    "Selecteer het scenario 'rijdende robot' en test de code in de simulator. Wat zie je?",
+    "Verander het scenario type naar 'rijdende robt met muur'?",
+    "Rijdt de robot tot aan de muur? Probeer de fout te vinden en deze te verbeteren. Gebruik hiervoor de debugger.",
+  ],
 };
 
 //TODO: translate
 MSG.tutorials.avoidWall = {
-  step1Title: "Avoid wall",
-  step1Content: "Open the simulator view.",
-  step2Title: "Avoid wall",
-  step2Content: "Select the scenario view.",
-  step3Title: "Avoid wall",
-  step3Content: "Change the scenario to moving robot with wall and test the code. What do you see?",
-  step4Title: "Avoid wall",
-  step4Content: "Does the car avoid the wall by turning before it reaches it? Change the code so the car keeps driving but never hits a wall.",
+  stepTitles: [
+    "Muur ontwijken",
+    "Muur ontwijken",
+    "Muur ontwijken",
+    "Muur ontwijken",
+  ],
+  stepContents: [
+    "Open de simulator.",
+    "Selecteer de scenario tab.",
+    "Verander het scenario type naar 'rijdende robt met muur'?",
+    "Ontwijkt de robot tot aan de muur? Probeer de fout te vinden en deze te verbeteren. Gebruik hiervoor de debugger.",
+  ],
 };
 
 MSG.tutorials.nameOnLcdBasic = {
@@ -344,4 +375,126 @@ MSG.tutorials.nameOnLcdBasic = {
   step5Content: "Test je code.",
   step6Title: "Proficiat",
   step6Content: "Goed zo! Je weet nu hoe je tekst op het LCD-scherm kan plaatsen.",
+};
+
+
+MSG.tutorials.nameOnLcdWeGoSTEM = {
+  stepTitles: [
+    "Open Simulatorvenster",
+    "Naam op LCD-scherm",
+    "Testen in de simulator",
+    "Stop simulatie",
+    "Je eigen naam",
+    "Twee rijen",
+    "Test",
+    "Proficiat",
+  ],
+  stepContents: [
+    "Open het simulatorvenster door op de simulator knop te drukken.",
+    "In deze oefening plaats je je naam op het LCD-scherm. Je ziet een voorbeeld van hoe dat moet.</br> Bekijk de codeblokken en probeer te begrijpen wat het doet.",
+    "Test je code door in de simulator op <e>Start</e> te drukken.</br>Wat zie je?",
+    "Stop je test door op <e>Stop</e> te drukken",
+    "Momenteel zie je de naam 'Tom' op het scherm verschijnen. Pas de code aan zodat je jouw naam ziet.",
+    "Het LCD-scherm heeft twee rijen. Verander de rij waarop je naam staat van 0 naar 1.",
+    "Test je code.",
+    "Goed zo! Je weet nu hoe je tekst op het LCD-scherm kan plaatsen.",
+  ],
+};
+
+MSG.tutorials.introduceYourself = {
+  stepTitles: [
+    "Open Simulatorvenster",
+    "Jezelf voorstellen",
+    "Testen in de simulator",
+    "Stop simulatie",
+    "Pas de code aan",
+    "Gelukt?",
+  ],
+  stepContents: [
+    "Open het simulatorvenster door op de simulator knop te drukken.",
+    "In deze oefening stel je jezelf voor via het lcd-scherm. </br> Bekijk de code en probeer te achterhalen wat die doet.",
+    "Test de code door in de simulator op <e>Start</e> te drukken.</br>Wat zie je?",
+    "Stop je test door op <i>Stop</i> te drukken. </br>Wat doet het programma? Noteer dit!",
+    "Er zijn een aantal verschillen tussen de tekst die dit programma toont en wat je wil dat het programma toont.</br>Pas het programma aan zodat de juiste tekst getoond wordt.",
+    "Is het gelukt om de code te verbeteren?",
+  ],
+};
+
+
+MSG.tutorials.showNameAndDisappear = {
+  stepTitles: [
+    "Open Simulatorvenster",
+    "Naam tonen",
+    "Testen in de simulator",
+    "Stop simulatie",
+    "Pas de code aan",
+    "Gelukt?",
+  ],
+  stepContents: [
+    "Open het simulatorvenster door op de simulator knop te drukken.",
+    "In deze oefening toon je je naam voor 2 seconden op het lcd-scherm en laat je hem dan opnieuw verdwijnen.",
+    "Test de code door in de simulator op <e>Start</e> te drukken.</br>Wat zie je?",
+    "Stop je test door op <i>Stop</i> te drukken. </br>Wat doet het programma? Noteer dit!",
+    "Wat zijn de verschillen tussen dit programma en het programma dat je wil? </br> Verbeter je code!",
+    "Is het gelukt om de code te verbeteren?",
+  ],
+};
+
+
+MSG.tutorials.poem1 = {
+  stepTitles: [
+    "Open Simulatorvenster",
+    "Gedicht",
+    "Testen in de simulator",
+    "Stop simulatie",
+    "Pas de code aan",
+    "Gelukt?",
+  ],
+  stepContents: [
+    "Open het simulatorvenster door op de simulator knop te drukken.",
+    "Dit programma zou het gedicht dat je op het bord ziet moeten tonen op het lcd-scherm.",
+    "Test de code door in de simulator op <e>Start</e> te drukken.</br>Wat zie je?",
+    "Stop je test door op <i>Stop</i> te drukken. </br>Wat doet het programma? Noteer dit!",
+    "Wat zijn de verschillen tussen dit programma en het programma dat je wil?</br>Dit programma bevat twee fouten.</br>Je kan de code zoveel als je wil uitproberen om de fouten te vinden.</br><b>Probeer de fouten in het programma te verbeteren.</b>",
+    "Is het gelukt om de code te verbeteren?",
+  ],
+};
+
+MSG.tutorials.poem2 = {
+  stepTitles: [
+    "Open Simulatorvenster",
+    "Gedicht",
+    "Testen in de simulator",
+    "Stop simulatie",
+    "Pas de code aan",
+    "Gelukt?",
+  ],
+  stepContents: [
+    "Open het simulatorvenster door op de simulator knop te drukken.",
+    "Dit programma toont het gedicht dat je op het bord kan zien op het lcd-scherm.",
+    "Test de code door in de simulator op <e>Start</e> te drukken.",
+    "Stop je test door op <i>Stop</i> te drukken. </br>Wat doet het programma? Noteer dit!",
+    "Het programma werkt correct maar is heel groot. Probeer de code korter te krijgen door gebruik te maken van een <b>rekenen met</b>-blok.",
+    "Is het gelukt om de code te verbeteren?",
+  ],
+};
+
+
+MSG.tutorials.lampOnOffWeGoSTEM = {
+  stepTitles: [
+    "Open Simulatorvenster",
+    "Gedicht",
+    "Testen in de simulator",
+    "Stop simulatie",
+    "Pas de code aan",
+    "Gelukt?",
+  ],
+  stepContents: [
+    "Open het simulatorvenster door op de simulator knop te drukken.",
+    "Dit programma zou lampje nummer 3 elke seconde 1 keer moeten laten knipperen.",
+    "Test de code door in de simulator op <e>Start</e> te drukken.",
+    "Stop je test door op <i>Stop</i> te drukken. </br>Wat doet het programma? Noteer dit!",
+    "Werkt het programma zoals het zou moeten?.</br>Pas het programma aan zodat het wel correct werkt.",
+    "Is het gelukt om de code te verbeteren?",
+  ],
 };

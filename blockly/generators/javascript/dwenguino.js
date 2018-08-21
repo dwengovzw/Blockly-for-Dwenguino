@@ -23,7 +23,7 @@ Blockly.JavaScript['setup_loop_structure'] = function (block) {
     // Assemble JavaScript into code variable.
     //Blockly.JavaScript.setups_['userSetupCode'] = 'DwenguinoSimulation.initDwenguino();\n' + statements_setup + "\nloop0();\n";
     Blockly.JavaScript.setups_['userSetupCode'] = statements_setup.trim() + "\n";
-    
+
     return statements_loop;
 };
 
@@ -68,7 +68,7 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
     var value_trig = Blockly.JavaScript.valueToCode(block, 'trig', Blockly.JavaScript.ORDER_NONE);
     var value_echo = Blockly.JavaScript.valueToCode(block, 'echo', Blockly.JavaScript.ORDER_NONE);
     //define sonar settings
-   
+
     //  Assemble JavaScript into code variable.
     var code = machine + "sonar(" + value_trig +', ' + value_echo + ')';
 
@@ -191,6 +191,14 @@ Blockly.JavaScript.dwenguino_digital_read_switch = function(){
     var code = machine + 'digitalRead("' + switch_number + '")';
 
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+
+Blockly.JavaScript.dwenguino_wait_for_switch = function(){
+    var switch_number = this.getFieldValue('SWITCH');
+    var code = 'while(digitalRead(' + switch_number + ')){}';
+
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 

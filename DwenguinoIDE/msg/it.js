@@ -74,6 +74,7 @@ var MSG = {
   dwenguinoAnalogRead: "Leggi un valore analogico dal pin %1",
   dwenguinoAnalogWriteTooltip: "Leggi un valore compreso fra 0 e 255 dal pin specificato.",
   digitalReadSwitch: "Leggi dal pulsante %1",
+  waitForSwitch: "attendere fino a quando si preme %1 il pulsante",
   digitalReadSwitchTooltip: "Leggi un valore da uno dei pulsanti di Dwenguino",
   north: "Nord",
   east:"Est",

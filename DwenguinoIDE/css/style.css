@@ -16,10 +16,16 @@ body{
 
 .db_logo{
     box-sizing: border-box;
-    width: 15%;
+    width: 220px;
     display: inline-block;
     position: absolute;
     height: 100%;
+}
+
+#db_wegostem_logo_top_left{
+  padding: 5px;
+  padding-left: 40px;
+  padding-right: 30px;
 }
 
 .db_menu{

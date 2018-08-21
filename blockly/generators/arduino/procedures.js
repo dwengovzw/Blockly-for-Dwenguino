@@ -69,6 +69,49 @@ Blockly.Arduino.procedures_defreturn = function() {
   return null;
 };
 
+Blockly.Arduino.procedures_defreturn_typed_params = function() {
+  // Define a procedure with a return value.
+  var funcName = Blockly.Arduino.variableDB_.getName(this.getFieldValue('NAME'),
+      Blockly.Procedures.NAME_TYPE);
+  console.log("function def");
+  console.log(this);
+  for (var i = 0 ; i < this.inputList.length ; i++){
+    console.log('Input list');
+    console.log(this.inputList[i].name);
+      if (this.inputList[i].name == "RETURN"){
+          console.log("yay");
+      }
+  }
+  var branch = Blockly.Arduino.statementToCode(this, 'STACK');
+  if (Blockly.Arduino.INFINITE_LOOP_TRAP) {
+    branch = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g,
+        '\'' + this.id + '\'') + branch;
+  }
+  var returnValue = Blockly.Arduino.valueToCode(this, 'RETURN',
+      Blockly.Arduino.ORDER_NONE) || '';
+  if (returnValue) {
+    returnValue = '  return ' + returnValue + ';\n';
+  }
+  // HACK: also match string return type based on the premise that all strings have the "String" prefix
+  var returnType
+  var res = returnValue.match(/String*/);
+  if (res){
+    	returnType = "String";
+    }else{
+    	returnType = returnValue ? 'int' : 'void';
+    }
+  var args = [];
+  for (var x = 0; x < this.arguments_.length; x++) {
+    args[x] = 'int ' + Blockly.Arduino.variableDB_.getName(this.arguments_[x],
+        Blockly.Variables.NAME_TYPE);
+  }
+  var code = returnType + ' ' + funcName + '(' + args.join(', ') + ') {\n' +
+      branch + returnValue + '}\n';
+  code = Blockly.Arduino.scrub_(this, code);
+  Blockly.Arduino.definitions_[funcName] = code;
+  return null;
+};
+
 // Defining a procedure without a return value uses the same generator as
 // a procedure with a return value.
 Blockly.Arduino.procedures_defnoreturn = Blockly.Arduino.procedures_defreturn;

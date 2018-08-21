@@ -78,6 +78,30 @@ Blockly.Blocks['dwenguino_delay'] = {
   }
 };
 
+var dwenguino_wait_for_switch = {
+    "id": "dwenguino_wait_for_switch",
+    "message0": MSG.waitForSwitch,
+    "args0": [
+        {
+            "type": "field_dropdown",
+            "name": "SWITCH",
+            "check": "Number",
+            "options": [[MSG.north, "SW_N"], [MSG.east, "SW_E"], [MSG.south, "SW_S"], [MSG.west, "SW_W"], [MSG.center, "SW_C"]]
+
+        }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Blocks.dwenguino.HUE,
+    "tooltip": MSG.digitalReadSwitchTooltip,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_wait_for_switch'] = {
+    init: function(){
+        this.jsonInit(dwenguino_wait_for_switch);
+    }
+};
 
 var clear_lcd_json = {
   "id": "clear_lcd",

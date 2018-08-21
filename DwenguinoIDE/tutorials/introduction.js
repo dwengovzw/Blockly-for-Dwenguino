@@ -1,75 +1,43 @@
 
-tutorials.introduction = {
+tutorials.introduction =
+{
+      targets: [tutorialTargets.dwenguino,
+                tutorialTargets.workspaceArea,
+                "db_blocklyToolboxDiv",
+                "db_menu_item_language",
+                "db_menu_item_difficulty",
+                "books_dropdown",
+                "db_menu_item_run",
+                "db_menu_item_upload",
+                "db_menu_item_download",
+                "db_menu_item_simulator"
+              ],
+      placements: ["left", "right", "right", "left", "left", "left", "left", "left", "left", "left"],
+      nrOfSteps: 10,
+      xOffsets: [0, "center", 0, 0, 0, 0, 0, 0, 0, 0],
+      yOffsets: [0, "center", 0, 0, 0, 0, 0, 0, 0, 0],
+      steps: [],
       id: "tutsIntroduction",
       label: MSG.tutsIntroduction,
-      steps: [
-        {
-          title: MSG.tutorials.introduction.step1Title,
-          content: MSG.tutorials.introduction.step1Content,
-          target: tutorialTargets.dwenguino,
-          placement: "left",
-          showCloseButton:"true",
-          width: 400,
+      initSteps: function(){
+        var i;
+        for (i = 0 ; i < this.nrOfSteps ; i++){
+          this.steps.push({
+            title: MSG.tutorials.introduction.stepTitles[i],
+            content: MSG.tutorials.introduction.stepContents[i],
+            target: this.targets[i],
+            placement: this.placements[i],
+            showCloseButton:"true",
+            width: 400,
+            xOffset: this.xOffsets[i],
+            yOffset: this.yOffsets[i],
+          });
+        }
       },
-      {
-        title: MSG.tutorials.introduction.step2aTitle,
-        content: MSG.tutorials.introduction.step2aContent,
-        target: tutorialTargets.workspaceArea,
-        placement: "top",
-        xOffset: "center",
-        yOffset: "center"
-    },
-    {
-      title: MSG.tutorials.introduction.step2bTitle,
-      content: MSG.tutorials.introduction.step2bContent,
-      target: "db_blocklyToolboxDiv",
-      placement: "right"
-  },
-    {
-      title: MSG.tutorials.introduction.step3Title,
-      content: MSG.tutorials.introduction.step3Content,
-      target: "db_menu_item_language",
-      placement: "left"
-  },
-  {
-    title: MSG.tutorials.introduction.step4Title,
-    content: MSG.tutorials.introduction.step4Content,
-    target: "db_menu_item_difficulty",
-    placement: "left"
-  },
-  {
-    title: MSG.tutorials.introduction.step5Title,
-    content: MSG.tutorials.introduction.step5Content,
-    target: "books_dropdown",
-    placement: "left"
-  },
-  {
-    title: MSG.tutorials.introduction.step6Title,
-    content: MSG.tutorials.introduction.step6Content,
-    target: "db_menu_item_run",
-    placement: "left"
-  },
-  {
-    title: MSG.tutorials.introduction.step7Title,
-    content: MSG.tutorials.introduction.step7Content,
-    target: "db_menu_item_upload",
-    placement: "left"
-  },
-  {
-    title: MSG.tutorials.introduction.step8Title,
-    content: MSG.tutorials.introduction.step8Content,
-    target: "db_menu_item_download",
-    placement: "left"
-  },
-  {
-    title: MSG.tutorials.introduction.step9Title,
-    content: MSG.tutorials.introduction.step9Content,
-    target: "db_menu_item_simulator",
-    placement: "left"
-  }
-    ],
-    onEnd: function(){
-        console.log("introduction tutorial ended");
-        DwenguinoBlockly.endTutorial();
-    }
+      onStart: function(){
+        DwenguinoBlockly.loadFileXmlIntoWorkspace('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="setup_loop_structure" id="yMwUfZQ@p0kW8udJ1vEa" x="-88" y="-382"></block></xml>');
+      },
+      onEnd: function(){
+          DwenguinoBlockly.endTutorial();
+      }
     };

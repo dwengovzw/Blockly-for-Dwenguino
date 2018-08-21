@@ -49,6 +49,7 @@
             </block>
         </value>
     </block>
+    <block type="dwenguino_wait_for_switch"></block>
     <block type="clear_lcd"></block>
     <block type="dwenguino_lcd">
         <value name="text">
