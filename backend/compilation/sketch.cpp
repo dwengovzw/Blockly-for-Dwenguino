@@ -14,7 +14,5 @@ void setup()
 
 void loop()
 {
-    dwenguinoLCD.setCursor(0,0);
-    dwenguinoLCD.print(String("Hallo Dwenguino"));
 
 }

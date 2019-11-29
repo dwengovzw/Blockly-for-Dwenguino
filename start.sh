@@ -1,2 +1,2 @@
-cd /home/tneutens/Documents/UGent/Onderzoek/dwenguinoblockly-logging/backend
+cd /home/tneutens/Documents/UGent/Onderzoek/DwenguinoBlockly/backend
 node index

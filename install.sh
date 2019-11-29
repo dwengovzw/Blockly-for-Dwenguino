@@ -53,7 +53,8 @@ echo 'Name=dwenguinoblockly' >> ~/.local/share/applications/dwenguinoblockly.des
 echo "Icon=$(pwd)/dwengo_robot_plain.svg" >> ~/.local/share/applications/dwenguinoblockly.desktop
 echo "Exec=$(pwd)/start.sh" >> ~/.local/share/applications/dwenguinoblockly.desktop
 
-chmod +x ~/.local/share/applications/dwenguinoblockly.desktop
+chmod u+x ~/.local/share/applications/dwenguinoblockly.desktop
+gio set ~/Desktop/dwenguinoblockly.desktop "metadata::trusted" yes
 
 cp ~/.local/share/applications/dwenguinoblockly.desktop ~/Desktop/dwenguinoblockly.desktop
 
