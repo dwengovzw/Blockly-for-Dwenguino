@@ -14,5 +14,6 @@ void setup()
 
 void loop()
 {
+    LEDS = 0b01010101;
 
 }
