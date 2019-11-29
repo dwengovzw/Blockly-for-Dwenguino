@@ -1,0 +1,32 @@
+{
+  "name": "dwenguinoblockly-package",
+  "version": "1.0.0",
+  "description": "Logging server which provides unique session ids and receives logging data for all sessions running in the online version of google blockly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "logging",
+    "json",
+    "dwengo"
+  ],
+  "author": "Tom Neutens",
+  "license": "ISC",
+  "bin": {
+    "db-start": "./cli.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "browser-sync-close-hook": "^1.0.5",
+    "chrome-launcher": "^0.12.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.12",
+    "open": "^7.0.0",
+    "opener": "^1.5.1"
+  },
+  "devDependencies": {
+    "open-cli": "^5.0.0"
+  }
+}

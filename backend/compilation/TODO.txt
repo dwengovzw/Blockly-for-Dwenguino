@@ -1,0 +1,3 @@
+- Check python version
+- Check pyserial module
+- Desktop icon permissions
