@@ -130,6 +130,20 @@ var MSG = {
   
 };
 
+MSG.dropzone = {
+  dictSelectFile: "Selecteer een bestand.",
+  dictChooseFile: "Kies bestand",
+  dictDefaultMessage: "Of zet ze hier neer",
+  dictFallbackMessage: "Je browser ondersteunt geen drop down uploads",
+  dictFileTooBig: "Je bestand is te groot ({{filesize}}MiB). Maximum bestandsgrootte: {{maxFilesize}}MiB.",
+  dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+  dictInvalidFileType: "Je kan geen bestanden van dit type uploaden.",
+  dictResponseError: "De server reageerde met code {{statusCode}}.",
+  dictCancelUpload: "Annuleer upload",
+  dictCancelUploadConfirmation: "Ben je zeker dat je deze upload wil annuleren?",
+  dictRemoveFile: "Verwijder bestand",
+  dictMaxFilesExceeded: "Je kan niet meer bestanden uploaden.",
+}
 
 MSG.simulator = {
   start: "Start",

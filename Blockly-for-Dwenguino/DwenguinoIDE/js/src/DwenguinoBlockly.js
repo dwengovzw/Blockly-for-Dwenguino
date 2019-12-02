@@ -140,7 +140,7 @@ var DwenguinoBlockly = {
               $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
               $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
               $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
-              $('#modalDialog').append('<div class="modal-body">Selecteer een bestand.<input type="file" id="fileInput"><div id="filedrag">of zet ze hier neer</div><pre id="fileDisplayArea"><pre></div>');
+              $('#modalDialog').append('<div class="modal-body">'+ MSG.dropzone['dictSelectFile']+'<input type="file" id="fileInput"><div id="filedrag">'+ MSG.dropzone['dictDefaultMessage'] +'</div><pre id="fileDisplayArea"><pre></div>');
               $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
 
               $("#dropzoneModal").modal('show');
