@@ -20,5 +20,7 @@ The frontend runs on all plaforms and is available on dwengo.org/dwenguinoblockl
 
 * nodejs
 * python3
+    * pyserial module
+* google chrome
 
 
