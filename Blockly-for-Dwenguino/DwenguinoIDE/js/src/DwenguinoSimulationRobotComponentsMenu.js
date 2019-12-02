@@ -195,25 +195,26 @@ var DwenguinoSimulationRobotComponentsMenu = {
   addRobotComponent: function(id, socialRobotScenario) {
     switch (id) {
       case "rc_servo_plus_button":
-        socialRobotScenario.addServo();
+        socialRobotScenario.addRobotComponent(TypesEnum.SERVO);
         break;
       case "rc_led_plus_button":
-        socialRobotScenario.addLed();
+        socialRobotScenario.addRobotComponent(TypesEnum.LED);
         break;
       case "rc_pir_plus_button":
-        socialRobotScenario.addPir();
+        socialRobotScenario.addRobotComponent(TypesEnum.PIR);
         break;
       case "rc_sonar_plus_button":
-        socialRobotScenario.addSonar();
+        socialRobotScenario.addRobotComponent(TypesEnum.SONAR);
         break;
       case "rc_decoration_plus_button":
-        socialRobotScenario.addDecoration();
+        socialRobotScenario.addRobotComponent(TypesEnum.DECORATION);
         break;
       case "rc_lcd_plus_button":
-        socialRobotScenario.addLcd();
+        socialRobotScenario.addRobotComponent(TypesEnum.LCD);
         break;
       case "rc_button_plus_button":
-        socialRobotScenario.addButton();
+        // TODO
+        break;
       case "default":
         break;
     }
@@ -226,25 +227,25 @@ var DwenguinoSimulationRobotComponentsMenu = {
   removeRobotComponent: function(id, socialRobotScenario) {
     switch (id) {
       case "rc_servo_minus_button":
-        socialRobotScenario.removeServo();
+        socialRobotScenario.removeRobotComponent(TypesEnum.SERVO);
         break;
       case "rc_led_minus_button":
-        socialRobotScenario.removeLed();
+        socialRobotScenario.removeRobotComponent(TypesEnum.LED);
         break;
       case "rc_pir_minus_button":
-        socialRobotScenario.removePir();
+        socialRobotScenario.removeRobotComponent(TypesEnum.PIR);
         break;
       case "rc_sonar_minus_button":
-        socialRobotScenario.removeSonar();
+        socialRobotScenario.removeRobotComponent(TypesEnum.SONAR);
         break;
       case "rc_decoration_minus_button":
-        socialRobotScenario.removeDecoration();
+        socialRobotScenario.removeRobotComponent(TypesEnum.DECORATION);
         break;
       case "rc_lcd_minus_button":
-        socialRobotScenario.removeLcd();
+        socialRobotScenario.removeRobotComponent(TypesEnum.LCD);
         break;
       case "rc_button_minus_button":
-        socialRobotScenario.removeButton();
+        // TODO
         break;
       case "default":
         break;

@@ -236,6 +236,9 @@ var DwenguinoBlockly = {
         // tutorials = {};
          $.each(tutorials, function(index, arrayElement){
            var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
+           if(arrayElement.id == 'introductionSocialRobot'){
+            $("#dropdownMenuTuts").append("<div class='dropdown-divider'>" + MSG.catSocialRobot + "</div>");
+           }
            $("#dropdownMenuTuts").append(newLi);
            newLi.click(function(){
              DwenguinoBlockly.tutorialId = arrayElement.id;

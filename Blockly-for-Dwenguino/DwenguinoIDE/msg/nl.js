@@ -113,8 +113,11 @@ var MSG = {
   create_global: "Maak globaal",
   next: "Volgende",
   previous: "Vorige",
-  socialrobotWaveArmesBlock: "Zwaai armen %1 %2 Servo rechterhand %3 %4 Servo linkerhand %5 %6",
-  socialRobotArmsDownBlock: "Doe armen naar beneden %1 %2 Servo rechterhand %3 %4 Servo linkerhand %5 %6",
+  socialrobotWaveArmesBlock: "Zwaai armen %1 %2 Servo rechterarm %3 %4 Servo linkerarm %5 %6",
+  socialRobotArmsUpBlock: "Doe armen naar boven %1 %2 %3 Servo rechterarm %4 %5 Servo linkerarm %6 %7",
+  socialRobotArmsDownBlock: "Doe armen naar beneden %1 %2 %3 Servo rechterarm %4 %5 Servo linkerarm %6 %7",
+  socialRobotEyesLeftBlock: "Draai ogen naar links %1 %2 %3 Servo linkeroog %4 %5 Servo rechteroog %6 %7",
+  socialRobotEyesRightBlock: "Draai ogen naar rechts %1 %2 %3 Servo linkeroog %4 %5 Servo rechteroog %6 %7",
   socialrobotReadPinBlock: "Lees de waarde pin %1 %2",
   socialRobotServoRightHand: "Servo rechterhand",
   socialRobotServoLeftHand: "Servo linkerhand",
@@ -548,11 +551,11 @@ MSG.tutorials.lampOnOffWeGoSTEM = {
 };
 
 MSG.tutorials.socialrobot['introduction'] = {};
-MSG.tutorials.socialrobot['introduction'].label = 'Ontwerp een robot';
+MSG.tutorials.socialrobot['introduction'].label = '1. Werken met de simulator';
 MSG.tutorials.socialrobot['introduction'].stepTitles = [
   "Ontwerp een robot",
   "Naar de simulator",
-  "Robot bouwblokken",
+  "Kies je scenario",
   "Bouwblokken toevoegen",
   "Jouw robot samenstellen",
   "Bouwblokken verwijderen",
@@ -561,13 +564,13 @@ MSG.tutorials.socialrobot['introduction'].stepTitles = [
   "Einde"
 ];
 MSG.tutorials.socialrobot['introduction'].stepContents = [
-  "Tijdens deze tutorial ga je aan de slag om zelf een robot te ontwerpen. Je ontdekt wat er allemaal mogelijk is in DwenguinoBlockly. Daarna kan je de volgende tutorials bekijken om stap voor stap jouw persoonlijke robot te leren bouwen.",
-  "Vooraleer je begint met het ineen knutselen van je robot, is het zinvol om eens te fantaseren hoe die robot er moet uitzien. Daarvoor is er de simulator. Je opent en verbergt hem door op deze knop te klikken.",
-  "Je kan in de simulator niet alleen robots bouwen, daarom moet je hier nog klikken op de robot. Je krijgt dan andere bouwblokken te zien.",
-  "Hier zie je alle bouwblokken uit de simulator die je kan gebruiken om je robot te ontwerpen. Op dit moment kan je servomotoren, LEDs en een PIR sensor toevoegen aan jouw robot.<br><br> Klik eens op een + knop om een element aan je robot toevoegen. Zie je het onderaan verschijnen?",
-  "Nadat je robotblokken toegevoegd hebt, kan je ze hier verslepen naar een andere plaats. Zo kan je zelf bepalen hoe jouw robot eruitziet.",
-  "Als je een blok te veel toegevoegd hebt, kan je het laatst aangemaakte blok weer verwijderen met de - knop. <br><br>Haal alle blokken van je robot weer weg. Is het gelukt?",
-  "Je weet nu hoe je een robot kan bouwen, maar je robot kan nog niet bewegen. Daarom moeten we de robot nog aansturen met een zelfgeschreven programma. Dit kan met de blokken uit de toolbox. ",
-  "Wanneer je blokken uit de toolbox sleept, komen ze in het Blockly codegebied. Hier komt het programma dat je gaat schrijven.",
-  "Je bent nu klaar om met de volgende tutorials te beginnen, waarin je de verschillende robotelementen leert gebruiken."
+  "Tijdens deze tutorial ga je aan de slag om zelf een sociale robot te ontwerpen. Je ontdekt wat je met de <b>simulator</b> kan doen. <br><img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!--Daarna kan je de volgende tutorials doorlopen om stap voor stap jouw persoonlijke robot te leren bouwen.-->",
+  "Het bouwen van de robot gebeurt in de simulator. Je opent en verbergt hem door op deze knop te klikken.",
+  "Je kan in de simulator niet alleen sociale robots bouwen, maar ook rijdende robots simuleren. Er zijn dus verschillende scenario's. <b>Klik nu het scenario van de sociale robot aan.</b> Je krijgt dan andere bouwblokken te zien.",
+  "Hier zie je alle bouwblokken uit de simulator die je kan gebruiken om je robot te ontwerpen. <br><br> Klik eens op een <b>+ knop</b> om een bouwblok aan je robot <b>toe te voegen</b>. Zie je het onderaan in de simulatie verschijnen?",
+  "Nadat je een bouwblok hebt toegevoegd, kan je ze hier verslepen naar een andere plaats. Zo kan je zelf bepalen hoe jouw robot eruitziet. <br><br>Beweeg met de muis over het nieuwe bouwblok en versleep op de robot met het <img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.",
+  "Als je een blok te veel toegevoegd hebt, kan je het laatst aangemaakte blok weer <b>verwijderen</b> met de <b>- knop</b>. <br><br>Haal alle blokken van je robot weer weg. Is het gelukt?",
+  "Je weet nu hoe je een robot kan bouwen, maar je robot kan nog niet bewegen. Daarom moeten we de robot nog aansturen met een zelfgeschreven programma. Dit kan met de <b>programmeerblokken</b> uit de <b>toolbox</b>. ",
+  "Wanneer je blokken uit de toolbox sleept, komen ze in het <b>codegebied</b> terecht. Hier komt het programma dat je gaat schrijven.",
+  "Je bent nu klaar om met de volgende tutorials te beginnen, waarin je de robotblokken leert gebruiken."
 ];

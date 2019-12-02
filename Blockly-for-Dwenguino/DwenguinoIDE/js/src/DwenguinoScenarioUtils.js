@@ -1,4 +1,7 @@
-//const StatesEnum = {"plain":0, "eye":1, "mouth":2, "righthand":3, "lefthand":4};
+/**
+ * The different states robot components can be in. 
+ * Not all states are supported for each robot component.
+ */
 const StatesEnum = {
     PLAIN: 'plain', 
     EYE: 'eye', 
@@ -220,15 +223,14 @@ DwenguinoScenarioUtils.prototype.contextMenuServo = function(){
                         self.scenario.setServoState(i, StatesEnum.PLAIN);
                     }
                 },
-                // "eye": {
-                //     name: MSG.socialrobot['eye'], 
-                //     // superseeds "global" callback
-                //     callback: function(itemKey, opt, e) {
-                //         var simServoId = this.attr('id');
-                //         var i = simServoId.replace(/\D/g,'');
-                //         self.scenario.setServoState(i, StatesEnum.EYE);
-                //     }
-                // },
+                "eye": {
+                    name: MSG.socialrobot['eye'], 
+                    callback: function(itemKey, opt, e) {
+                        var simServoId = this.attr('id');
+                        var i = simServoId.replace(/\D/g,'');
+                        self.scenario.setServoState(i, StatesEnum.EYE);
+                    }
+                },
                 // "mouth": {name: MSG.socialrobot['mouth'],},
                 "righthand": {
                     name: MSG.socialrobot['righthand'],
@@ -262,21 +264,18 @@ DwenguinoScenarioUtils.prototype.contextMenuLed = function(){
                 + '<li class="label1" title="yellow">yellow'
                 + '<li class="label2" title="red">red'
                 + '<li class="label3" title="blue">blue'
-                + '<li class="label4" title="green">green')
+                + '<li class="label4" title="green">#72f542' +'</ul></span>')
                 .appendTo(this)
                 .on('click', 'li', function() {
-                    // do some funky stuff
-                    //console.log('Clicked on ' + $(this).text());
-                    // hide the menu
                     root.$menu.trigger('contextmenu:hide');
                 });
     
             this.addClass('labels').on('contextmenu:focus', function(e) {
-                // setup some awesome stuff
+
             }).on('contextmenu:blur', function(e) {
-                // tear down whatever you did
+  
             }).on('keydown', function(e) {
-                // some funky key handling, maybe?
+
             });
         };
     

@@ -6,6 +6,7 @@ var tutorialTargets = {
   dwenguino: "db_menu_item_dwengo_robot_teacher_image",
   workspaceArea: "blocklyDiv",
   toolboxArea: "db_blocklyToolboxDiv",
+  toolbox: "blocklyToolboxDiv",
   languageMenu: "db_menu_item_language",
   difficultyMenu: "db_menu_item_difficulty",
   dwengoBooksMenu: "books_dropdown",

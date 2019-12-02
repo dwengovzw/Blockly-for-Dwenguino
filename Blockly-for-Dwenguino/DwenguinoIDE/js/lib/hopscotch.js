@@ -1115,7 +1115,7 @@
       this.opt = opt;
 
       //Apply classes to bubble. Add "animated" for fade css animation
-      el.className = 'hopscotch-bubble animated';
+      el.className = 'hopscotch-bubble animated draggable';
       if (!opt.isTourBubble) {
         utils.addClass(el, 'hopscotch-callout no-number');
       } else {
