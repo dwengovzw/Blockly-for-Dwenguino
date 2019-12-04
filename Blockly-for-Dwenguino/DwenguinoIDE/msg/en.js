@@ -20,6 +20,7 @@ var MSG = {
   catFunctions: "Functions",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Social robot",
+  catComments: "Comments",
   catBoardIO: "IO",
   createVar: "Create variable",
   listVariable: "list",

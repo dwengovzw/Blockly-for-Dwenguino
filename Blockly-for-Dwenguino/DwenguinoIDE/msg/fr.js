@@ -15,6 +15,7 @@ var MSG = {
   catVariables: "Variables",
   catFunctions: "Fonctions",
   catDwenguino: "Dwenguino",
+  catComments: "Commentaire",
   catBoardIO: "IO",
   listVariable: "liste",
   textVariable: "texte",

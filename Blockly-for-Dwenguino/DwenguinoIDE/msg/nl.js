@@ -22,6 +22,7 @@ var MSG = {
   catArduino: "Arduino",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Sociale robot",
+  catComments: "Commentaar",
   catBoardIO: "IO",
   createVar: "Maak nieuwe variabele",
   listVariable: "lijst",
