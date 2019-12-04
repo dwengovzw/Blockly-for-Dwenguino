@@ -10,27 +10,27 @@ var TutorialMenu = {
     loadTutorialDialog: function(){
         $("#tutorialModal .modal-header").text("Tutorials");
         $("#tutorialModal .modal-body .message").empty();
-        $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">Kies een categorie</div>');
+        $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_categories_menu" class="tutorial_categories_wrapper"></div>');
         
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_wegostem" class="tutorial_categories_item card"></div>');
-        $("#tutorial_category_wegostem").append('<div class="category_tag">WeGoSTEM</div>');
+        $("#tutorial_category_wegostem").append('<div class="category_tag">'+ MSG.tutorialMenu.catWeGoStem +'</div>');
         $("#tutorial_category_wegostem").append('<div id="tutorial_categories_wegostem_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_dwenguino" class="tutorial_categories_item card"></div>');
-        $("#tutorial_category_dwenguino").append('<div class="category_tag">Leren programmeren<br>met Dwenguino</div>');
+        $("#tutorial_category_dwenguino").append('<div class="category_tag">'+ MSG.tutorialMenu.catDwenguino +'</div>');
         $("#tutorial_category_dwenguino").append('<div id="tutorial_categories_dwenguino_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_riding_robot" class="tutorial_categories_item card"></div>');
-        $("#tutorial_category_riding_robot").append('<div class="category_tag">Rijdende robot</div>');
+        $("#tutorial_category_riding_robot").append('<div class="category_tag">'+ MSG.tutorialMenu.catRidingRobot +'</div>');
         $("#tutorial_category_riding_robot").append('<div id="tutorial_categories_riding_robot_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_social_robot" class="tutorial_categories_item card"></div>');
-        $("#tutorial_category_social_robot").append('<div class="category_tag">Sociale robot (nieuw)</div>');
+        $("#tutorial_category_social_robot").append('<div class="category_tag">'+ MSG.tutorialMenu.catSocialRobot +'</div>');
         $("#tutorial_category_social_robot").append('<div id="tutorial_categories_social_robot_img"></div>');      
         
         $("#tutorialModal .modal-footer").empty();
-        $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">Close</button>');
+        $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
     },
 
     addTutorialDialogEventHandlers: function(){
@@ -69,8 +69,8 @@ var TutorialMenu = {
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_tutorials_menu"></div>');
 
         $("#tutorialModal .modal-footer").empty();
-        $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">Previous</button>');
-        $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">Close</button>');
+        $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'</button>');
+        $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
         
         $("#previous_tutorial_dialog").click(function() {
             TutorialMenu.loadTutorialDialog();

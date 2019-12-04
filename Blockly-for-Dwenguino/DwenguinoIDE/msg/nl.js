@@ -185,6 +185,16 @@ MSG.socialrobot = {
   lefthand: "Linkerhand",
 };
 
+MSG.tutorialMenu = {
+  catDwenguino: "Leren programmeren<br>met DwenguinoBlockly",
+  catRidingRobot: "Rijdende robot",
+  catSocialRobot: "Sociale robot",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Kies een categorie",
+  chooseTutorial: "Kies een tutorial",
+  previous: "Vorige",
+  close: "Sluiten",
+}
 
 MSG.tutorials = {
     introduction: {},
