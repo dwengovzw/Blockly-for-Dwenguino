@@ -28,11 +28,12 @@
             <span id="db_menu_item_download" class="db_menu_item glyphicon glyphicon-download" alt="Download blocks to file" /></span>
             <span id="db_menu_item_upload" class="db_menu_item glyphicon glyphicon-upload" alt="Upload blocks to file" /></span>
             <span id="db_menu_item_run" class="db_menu_item glyphicon glyphicon-play" alt="Upload code to Dwenguino board" /></span>
-            <div id="books_dropdown" class="dropdown db_menu_item">
-              <span class="dropdown-toggle glyphicon glyphicon-book" id="dropdownMenu" data-toggle="dropdown"><span class="caret"></span></span>
+            <span id="books_dropdown" class="db_menu_item glyphicon glyphicon-book" alt="Tutorials"/></span>
+            <!-- <div id="books_dropdown" class="dropdown db_menu_item"> -->
+              <!-- <span class="dropdown-toggle glyphicon glyphicon-book" id="dropdownMenu" data-toggle="dropdown"><span class="caret"></span></span>
                 <ul id="dropdownMenuTuts" class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu">
-                </ul>
-            </div>
+                </ul> -->
+            <!-- </div> -->
             <span id="db_menu_item_clear" class="db_menu_item glyphicon glyphicon glyphicon-remove-sign" alt="Upload empty sketch" /></span>
             <span id="db_menu_item_easy" class="db_diff_icon db_menu_item glyphicon glyphicon-king" alt="beginner level icon"></span>
             <span id="db_menu_item_difficulty" class="db_menu_item" alt="Slider to set difficulty level">
@@ -398,6 +399,22 @@
             </div>
     </div>
 
+
+    <div id="tutorialModal" class="modal fade" role="dialog">
+        <div class="modal-dialog"><!-- Modal content-->
+            <div class="modal-content">
+                <span class="close">x</span>
+                <div class="modal-header h1">
+                </div>
+                <div class="modal-body">
+                    <div class="message"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+</div>
+
     <!-- import jquery -->
 
     
@@ -417,22 +434,22 @@
     <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem1.js"></script>
     <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem2.js"></script>
     <script src="./DwenguinoIDE/tutorials/wegostem_debugging/lampje_aan_uit.js"></script>
-    <script src="./DwenguinoIDE/tutorials/drive_forward.js"></script>
-    <script src="./DwenguinoIDE/tutorials/ride_in_square.js"></script>
-    <script src="./DwenguinoIDE/tutorials/ride_to_wall.js"></script>
-    <script src="./DwenguinoIDE/tutorials/avoid_wall.js"></script>
-    <script src="./DwenguinoIDE/tutorials/introduction.js"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/drive_forward.js"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_in_square.js"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_to_wall.js"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/avoid_wall.js"></script>
+    <script src="./DwenguinoIDE/tutorials/dwenguino/introduction.js"></script>
     <script src="./DwenguinoIDE/tutorials/socialrobot/introduction.js"></script>
 
 
-    <!--<script src="tutorials/blink_led.js"></script>
-    <script src="tutorials/led_on_button_press.js"></script>
-    <script src="tutorials/bit_pattern_on_leds.js"></script>
-    <script src="tutorials/all_buttons.js"></script>-->
-    <!--<script src="tutorials/name_lcd_basic.js"></script>
-    <script src="tutorials/hello_dwenguino.js"></script>
-    <script src="tutorials/blink.js"></script>
-    <script src="tutorials/hello_robot.js"></script>-->
+    <!--<script src="tutorials/dwenguino/blink_led.js"></script>
+    <script src="tutorials/dwenguino/led_on_button_press.js"></script>
+    <script src="tutorials/dwenguino/bit_pattern_on_leds.js"></script>
+    <script src="tutorials/dwenguino/all_buttons.js"></script>-->
+    <!--<script src="tutorials/dwenguino/name_lcd_basic.js"></script>
+    <script src="tutorials/dwenguino/hello_dwenguino.js"></script>
+    <script src="tutorials/dwenguino/blink.js"></script>
+    <script src="tutorials/dwenguino/hello_robot.js"></script>-->
 
 
     <script src="./blockly/generators/arduino.js"></script>
@@ -503,6 +520,7 @@
     <script src="./DwenguinoIDE/js/src/DwenguinoScenarioUtils.js"></script>
     <script src="./DwenguinoIDE/js/src/RobotComponentsFactory.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoBlockly.js"></script>
+    <script src="./DwenguinoIDE/js/src/tutorials/TutorialMenu.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoSimulationScenario.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoSimulationScenarioRidingRobot.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoSimulationScenarioRidingRobotWithWall.js"></script>
@@ -511,10 +529,6 @@
     <script src="./DwenguinoIDE/js/src/DwenguinoSimulationRobotComponentsMenu.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoSimulationRobotComponents.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoSimulation.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebug-lite/1.4.0/firebug-lite.js"></script>
-
-
 
     </body>
     </html>

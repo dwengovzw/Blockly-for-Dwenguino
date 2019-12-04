@@ -1,5 +1,6 @@
 
 tutorials.allButtons = {
+      category: "dwenguino",
       id: "tutsAllButtons",
       label: MSG.tutsAllButtons,
       onStart: function(){
@@ -33,6 +34,6 @@ tutorials.allButtons = {
     }
     ],
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+        TutorialMenu.endTutorial();
     }
     };

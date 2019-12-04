@@ -225,30 +225,29 @@ var DwenguinoBlockly = {
           DwenguinoBlockly.runEventHandler(code);
         });
 
-
-        //dropdown menu code
-         $(".dropdown-toggle").dropdown();
-         console.log(tutorials);
-
+        // //dropdown menu code
+        //  $(".dropdown-toggle").dropdown();
+        //  console.log(tutorials);
 
 
-        // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
-        // tutorials = {};
-         $.each(tutorials, function(index, arrayElement){
-           var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
-           if(arrayElement.id == 'introductionSocialRobot'){
-            $("#dropdownMenuTuts").append("<div class='dropdown-divider'>" + MSG.catSocialRobot + "</div>");
-           }
-           $("#dropdownMenuTuts").append(newLi);
-           newLi.click(function(){
-             DwenguinoBlockly.tutorialId = arrayElement.id;
-             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
-             arrayElement.initSteps();
-             hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
-             hopscotch.startTour(arrayElement);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
-           });
-         });
+
+        // // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
+        // // tutorials = {};
+        //  $.each(tutorials, function(index, arrayElement){
+        //    var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
+        //    if(arrayElement.id == 'introductionSocialRobot'){
+        //     $("#dropdownMenuTuts").append("<div class='dropdown-divider'>" + MSG.catSocialRobot + "</div>");
+        //    }
+        //    $("#dropdownMenuTuts").append(newLi);
+        //    newLi.click(function(){
+        //      DwenguinoBlockly.tutorialId = arrayElement.id;
+        //      DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
+        //      arrayElement.initSteps();
+        //      hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
+        //      hopscotch.startTour(arrayElement);
+        //      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
+        //    });
+        //  });
 
          $("#language1").click(function(){
             DwenguinoBlockly.language = "cpp";
@@ -383,11 +382,6 @@ var DwenguinoBlockly = {
       return event;
     },
 
-    endTutorial: function(){
-        DwenguinoBlockly.tutorialId = "";
-        DwenguinoBlockly.tutorialIdSetting = "";
-        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("endTutorial", ""));
-    },
     /*
     * This function submits an event to the python logging server.
     */

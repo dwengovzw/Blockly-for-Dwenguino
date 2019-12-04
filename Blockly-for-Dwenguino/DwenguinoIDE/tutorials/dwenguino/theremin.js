@@ -1,5 +1,6 @@
 var DwengoBotId = "db_menu_item_dwengo_robot_teacher_image";
 tutorials.theremin =    {
+    category: "dwenguino",
     id: "theremin",
     label: MSG.tutsTheremin,
     steps: [
@@ -24,7 +25,7 @@ tutorials.theremin =    {
     ],
     onEnd: function(){
         console.log("Basic test ended");
-        DwenguinoBlockly.endTutorial();
+        TutorialMenu.endTutorial();
         DwenguinoBlockly.workspace.clear();
     }
 };

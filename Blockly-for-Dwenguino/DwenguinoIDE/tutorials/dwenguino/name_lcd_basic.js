@@ -1,5 +1,6 @@
 
 tutorials.nameOnLcdBasic = {
+      category: "dwenguino",
       id: "tutsNameOnLcdBasic",
       label: MSG.tutsNameOnLcdBasic,
       onStart: function(){
@@ -82,6 +83,6 @@ tutorials.nameOnLcdBasic = {
       }
     ],
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+      TutorialMenu.endTutorial();
     }
   };

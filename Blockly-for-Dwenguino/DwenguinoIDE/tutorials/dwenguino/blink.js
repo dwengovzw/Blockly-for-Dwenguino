@@ -1,5 +1,5 @@
 tutorials.blink = {
-
+  category: "dwenguino",
   id: "tutsBlink",
   label: MSG.tutsBlink,
   steps: [
@@ -60,6 +60,6 @@ tutorials.blink = {
   ],
   onEnd: function(){
     console.log("introduction tutorial ended");
-    DwenguinoBlockly.endTutorial();
+    TutorialMenu.endTutorial();
   }
 };

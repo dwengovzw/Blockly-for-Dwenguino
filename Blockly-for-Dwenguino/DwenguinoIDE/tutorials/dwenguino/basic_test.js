@@ -1,5 +1,6 @@
 var DwengoBotId = "db_menu_item_dwengo_robot_teacher_image";
 tutorials.basic_test =    {
+    category: "dwenguino",
     id: "db_basic_test",
     label: MSG.tutsBasicTest,
     steps: [
@@ -32,7 +33,7 @@ tutorials.basic_test =    {
     ],
     onEnd: function(){
         console.log("Basic test ended");
-        DwenguinoBlockly.endTutorial();
+        TutorialMenu.endTutorial();
         DwenguinoBlockly.workspace.clear();
     }
 };

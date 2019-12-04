@@ -1,5 +1,6 @@
 
 tutorials.bitPatternOnLeds = {
+      category: "dwenguino",
       id: "tutsBitPatternOnLeds",
       label: MSG.tutsBitPatternOnLeds,
       onStart: function(){
@@ -32,6 +33,6 @@ tutorials.bitPatternOnLeds = {
     }
     ],
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+      TutorialMenu.endTutorial();
     }
     };

@@ -3,6 +3,7 @@
  */
 
 tutorials.introductionSocialRobot = {
+    category: "socialrobot",
     targets: [
       document.body,
       tutorialTargets.simulatorButton,
@@ -74,7 +75,7 @@ tutorials.introductionSocialRobot = {
 
     },
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+      TutorialMenu.endTutorial();
     },
     onNext: function(){
       DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));

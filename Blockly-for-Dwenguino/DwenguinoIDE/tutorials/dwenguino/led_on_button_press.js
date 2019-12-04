@@ -1,5 +1,6 @@
 
 tutorials.ledOnButtonPress = {
+      category: "dwenguino",
       id: "tutsLedOnButtonPress",
       label: MSG.tutsLedOnButtonPress,
       onStart: function(){
@@ -32,6 +33,6 @@ tutorials.ledOnButtonPress = {
     }
     ],
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+      TutorialMenu.endTutorial();
     }
     };

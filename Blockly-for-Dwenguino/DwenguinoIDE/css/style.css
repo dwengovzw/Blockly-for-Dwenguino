@@ -979,3 +979,103 @@ span.grippy::after {
 #errorModal .modal-footer {
     clear: both;
 }
+
+#tutorialModal .modal-dialog {
+    min-width: 80%;
+}
+
+.tutorial_label {
+    margin-bottom: 10px;
+}
+
+#tutorialModal .modal-footer {
+    clear: both;
+}
+
+#tutorialModal .close {
+    color: #000;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+
+#tutorialModal_categories_menu {
+    min-height: 200px;
+}
+
+.tutorial_categories_item { 
+    padding: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
+    background-color: #dddddd;
+    /* border-style: solid;
+    border-color: gray; */
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
+
+.tutorial_categories_item:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.tutorial_categories_wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.tutorial_categories_wrapper > .card {
+    flex: 0 0 auto;
+    padding: 15px;
+}
+
+
+.tutorial_categories_item > .category_tag {
+    min-height: 40px;
+}
+
+#tutorial_categories_wegostem_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/wegostem.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial_categories_dwenguino_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/dwenguino.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial_categories_riding_robot_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/scenario_moving.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial_categories_social_robot_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/scenario_socialrobot.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.tutorial_item{
+    padding: 4px 7px;
+    color: #333;
+    background-color: #DDDDDD;
+    margin-bottom: 7px;
+}
+
+.tutorial_item:hover{
+    background-color: #FFFFFF;
+    cursor: pointer;
+}

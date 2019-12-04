@@ -1,5 +1,6 @@
 
 tutorials.rideToWall = {
+      category: "ridingrobot",
       id: "tutsRideToWall",
       label: MSG.tutsRideToWall,
       targets: [tutorialTargets.simulatorButton,
@@ -31,6 +32,6 @@ tutorials.rideToWall = {
       },
 
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+      TutorialMenu.endTutorial();
     }
     };

@@ -1,5 +1,6 @@
 
 tutorials.blinkLED = {
+      category: "dwenguino",
       id: "tutsBlinkLED",
       label: MSG.tutsBlinkLED,
       onStart: function(){
@@ -32,6 +33,6 @@ tutorials.blinkLED = {
     }
     ],
     onEnd: function(){
-        DwenguinoBlockly.endTutorial();
+      TutorialMenu.endTutorial();
     }
     };

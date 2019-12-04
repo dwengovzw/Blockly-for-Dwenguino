@@ -1,5 +1,5 @@
 tutorials.helloRobot = {
-
+  category: "dwenguino",
   id: "tutsHelloRobot",
   label: MSG.tutsHelloRobot,
   steps: [
@@ -61,6 +61,6 @@ tutorials.helloRobot = {
   ],
   onEnd: function(){
     console.log("introduction tutorial ended");
-    DwenguinoBlockly.endTutorial();
+    TutorialMenu.endTutorial();
   }
 };
