@@ -187,6 +187,7 @@ MSG.socialrobot = {
 };
 
 MSG.tutorialMenu = {
+  header: "Tutorials",
   catDwenguino: "Leren programmeren<br>met DwenguinoBlockly",
   catRidingRobot: "Rijdende robot",
   catSocialRobot: "Sociale robot",

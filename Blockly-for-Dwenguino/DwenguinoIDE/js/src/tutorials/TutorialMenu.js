@@ -8,7 +8,7 @@ var TutorialMenu = {
     },
 
     loadTutorialDialog: function(){
-        $("#tutorialModal .modal-header").text("Tutorials");
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
         $("#tutorialModal .modal-body .message").empty();
         $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_categories_menu" class="tutorial_categories_wrapper"></div>');

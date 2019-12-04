@@ -149,11 +149,12 @@ MSG.socialrobot = {
 };
 
 MSG.tutorialMenu = {
+  header: "Tutoriels",
   catDwenguino: "Programmer<br>avec DwenguinoBlockly",
   catRidingRobot: "Robot roulant",
   catSocialRobot: "Robot social",
   catWeGoStem: "WeGoSTEM",
-  chooseCategory: "Choisissez une catégorie de tutoriel",
+  chooseCategory: "Choisissez une catégorie de tutoriels",
   chooseTutorial: "Choisissez un tutoriel",
   previous: "Précedent",
   close: "Fermer",
