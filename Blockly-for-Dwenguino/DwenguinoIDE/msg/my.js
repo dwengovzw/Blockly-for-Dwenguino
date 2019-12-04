@@ -19,6 +19,7 @@ catArduino: "Arduino",
 catVariables: "Pemboleh ubah",
 catFunctions: "Functions",
 catDwenguino: "Dwenguino",
+catSocialRobot: "Social robot",
 catComments: "Comments",
 catBoardIO: "IO",
 listVariable: "list",
@@ -99,6 +100,14 @@ pressedTooltip: "Merupakan keadaan butang. Gunakan nilai ini untuk membandingkan
 create: "Create",
 with_type: "with type",
 create_global: "Create global",
+socialrobotWaveArmesBlock: "Wave arms %1 %2 Servo right arm %3 %4 Servo left arm %5 %6",
+socialRobotArmsDownBlock: "Put arms down %1 %2 %3 Servo right arm %4 %5 Servo left arm %6 %7",
+socialRobotArmsUpBlock: "Put arms up %1 %2 %3 Servo right arm %4 %5 Servo left arm %6 %7",
+socialRobotEyesLeftBlock: "Turn eyes left %1 %2 %3 Servo left eye %4 %5 Servo right eye %6 %7",
+socialRobotEyesRightBlock: "Turn eyes right %1 %2 %3 Servo left eye %4 %5 Servo right eye %6 %7",
+socialrobotReadPinBlock: "Read value of pin %1 %2",
+socialRobotServoRightHand: "Servo right hand",
+socialRobotServoLeftHand: "Servo left hand",
 runError: "Oops there was an error when trying to run your code on the board.",
 uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is connected try unplugging it and plugging it back in.",
 cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
@@ -132,6 +141,25 @@ code: "Kod",
 pir: "PIR sensor",
 led: "LED",
 };
+
+MSG.socialrobot = {
+  plain: "Default",
+  eye: "Eye",
+  mouth: "Mouth",
+  righthand: "Right hand",
+  lefthand: "Left hand",
+};
+
+MSG.tutorialMenu = {
+  catDwenguino: "Learn to program<br>with DwenguinoBlockly",
+  catRidingRobot: "Riding robot",
+  catSocialRobot: "Social robot",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Select a tutorial category",
+  chooseTutorial: "Select a tutorial",
+  previous: "Previous",
+  close: "Close",
+}
 
 MSG.tutorials = {
 introduction: {},

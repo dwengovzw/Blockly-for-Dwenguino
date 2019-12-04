@@ -15,6 +15,7 @@ var MSG = {
   catVariables: "Variables",
   catFunctions: "Fonctions",
   catDwenguino: "Dwenguino",
+  catSocialRobot: "Robot social",
   catComments: "Commentaire",
   catBoardIO: "IO",
   listVariable: "liste",
@@ -96,6 +97,14 @@ var MSG = {
   create: "Create",
   with_type: "with type",
   create_global: "Create global",
+  socialrobotWaveArmesBlock: "Saluez avec les mains %1 %2 Servo main droite %3 %4 Servo main gauche %5 %6",
+  socialRobotArmsDownBlock: "Baissez les mains  %1 %2 %3 Servo main droite %4 %5 Servo main gauche %6 %7",
+  socialRobotArmsUpBlock: "Levez les mains %1 %2 %3 Servo main droite %4 %5 Servo main gauche %6 %7",
+  socialRobotEyesLeftBlock: "Tournez les yeux à gauche %1 %2 %3 Servo oeil gauche %4 %5 Servo oeil droit %6 %7",
+  socialRobotEyesRightBlock: "Tournez les yeux à droit %1 %2 %3 Servo oeil gauche %4 %5 Servo oeil droit %6 %7",
+  socialrobotReadPinBlock: "Read value of pin %1 %2",
+  socialRobotServoRightHand: "Servo main droite",
+  socialRobotServoLeftHand: "Servo main gauche",
   runError: "Oops there was an error when trying to run your code on the board.",
   uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is connected try unplugging it and plugging it back in.",
   cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
@@ -130,6 +139,25 @@ MSG.simulator = {
   pir: "PIR sensor",
   led: "LED",
 };
+
+MSG.socialrobot = {
+  plain: "Standard",
+  eye: "Oeil",
+  mouth: "Bouche",
+  righthand: "Main droite",
+  lefthand: "Main gauche",
+};
+
+MSG.tutorialMenu = {
+  catDwenguino: "Programmer<br>avec DwenguinoBlockly",
+  catRidingRobot: "Robot roulant",
+  catSocialRobot: "Robot social",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Choisissez une catégorie de tutoriel",
+  chooseTutorial: "Choisissez un tutoriel",
+  previous: "Précedent",
+  close: "Fermer",
+}
 
 MSG.tutorials = {
     introduction: {},
