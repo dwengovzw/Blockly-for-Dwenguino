@@ -100,9 +100,12 @@ body{
 }
 
 #db_menu_item_language_selection{
-    width: 200px;
+    /* width: 200px; */
     font-size: 20px;
     margin: 15px 0;
+    background-color: #ffffff;
+    border: 1px #8bab42 solid;
+    
 }
 
 #db_menu_item_language{
