@@ -11,7 +11,7 @@ tutorials.introductionSocialRobot = {
       tutorialTargets.robotComponentsMenuLedPlusButton,
       tutorialTargets.simulatorBottomPane,
       tutorialTargets.robotComponentsMenuLedMinusButton,
-      tutorialTargets.workspaceArea,
+      tutorialTargets.toolbox,
       tutorialTargets.workspaceArea,
       document.body
     ],
@@ -34,7 +34,7 @@ tutorials.introductionSocialRobot = {
       0, 
       -600, 
       0, 
-      -800, 
+      0, 
       -500, 
       500 
     ],
