@@ -124,6 +124,15 @@ Blockly.SPRITE = {
   url: 'sprites.png'
 };
 
+/**
+ * Sprited undo icon
+ */
+Blockly.UNDO = {
+  width: 32,
+  height: 32,
+  url: 'undo-button.png'
+}
+
 // Constants below this point are not intended to be changed.
 
 /**

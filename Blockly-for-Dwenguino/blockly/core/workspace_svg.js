@@ -704,6 +704,10 @@ Blockly.WorkspaceSvg.prototype.dispose = function() {
     this.zoomControls_.dispose();
     this.zoomControls_ = null;
   }
+  if (this.undoButton_) {
+    this.undoButton_.dispose();
+    this.undoButton_ = null;
+  }
 
   if (this.marker_) {
     this.marker_.getDrawer().dispose();
@@ -787,6 +791,17 @@ Blockly.WorkspaceSvg.prototype.addZoomControls = function() {
   var svgZoomControls = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(svgZoomControls);
 };
+
+Blockly.WorkspaceSvg.prototype.addUndoButton = function() {
+  console.log('add undo button');
+  if (!Blockly.UndoButton) {
+    throw Error('Missing require for Blockly.UndoButton');
+  }
+  /** @type {Blockly.UndoButton} */
+  this.undoButton_ = new Blockly.UndoButton(this);
+  var svgUndoButton = this.undoButton_.createDom();
+  this.svgGroup_.appendChild(svgUndoButton);
+}
 
 /**
  * Add a flyout element in an element with the given tag name.
@@ -896,6 +911,9 @@ Blockly.WorkspaceSvg.prototype.resize = function() {
   }
   if (this.zoomControls_) {
     this.zoomControls_.position();
+  }
+  if (this.undoButton_) {
+    this.undoButton_.position();
   }
   if (this.scrollbar) {
     this.scrollbar.resize();

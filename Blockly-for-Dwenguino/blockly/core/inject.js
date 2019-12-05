@@ -228,6 +228,12 @@ Blockly.createMainWorkspace_ = function(svg, options, blockDragSurface,
   if (options.zoomOptions && options.zoomOptions.controls) {
     mainWorkspace.addZoomControls();
   }
+  if (options.undo) {
+    console.log('add undu button');
+    mainWorkspace.addUndoButton();
+  }
+
+
   // Register the workspace svg as a UI component.
   mainWorkspace.getThemeManager().subscribe(svg, 'workspace', 'background-color');
 
@@ -426,7 +432,10 @@ Blockly.init_ = function(mainWorkspace) {
     verticalSpacing = mainWorkspace.trashcan.init(verticalSpacing);
   }
   if (options.zoomOptions && options.zoomOptions.controls) {
-    mainWorkspace.zoomControls_.init(verticalSpacing);
+    verticalSpacing = mainWorkspace.zoomControls_.init(verticalSpacing);
+  }
+  if (options.undo) {
+    mainWorkspace.undoButton_.init(verticalSpacing);
   }
 
   if (options.moveOptions && options.moveOptions.scrollbars) {

@@ -56,6 +56,7 @@ goog.require('Blockly.VariablesDynamic');
 // If zoom controls aren't required, then Blockly.inject's
 // "zoom"/"controls" configuration must be false.
 goog.require('Blockly.ZoomControls');
+goog.require('Blockly.UndoButton');
 
 
 // Block dependencies.

@@ -1,6 +1,6 @@
 var TutorialMenu = {
     initTutorialMenu: function(){
-        $("#books_dropdown").click(function(){
+        $("#db_tutorials").click(function(){
             TutorialMenu.loadTutorialDialog();
             TutorialMenu.addTutorialDialogEventHandlers();
             TutorialMenu.showTutorialDialog();

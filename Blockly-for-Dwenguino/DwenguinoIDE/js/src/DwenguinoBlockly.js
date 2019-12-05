@@ -326,6 +326,9 @@ var DwenguinoBlockly = {
                newValue: event.newValue
              };
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyChange", data));
+           } else if (event.type == Blockly.Events.UNDO){
+             var data = {};
+              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("undo", data));
            }
          });
 
@@ -634,7 +637,8 @@ var DwenguinoBlockly = {
             {
                 toolbox: document.getElementById('toolbox'),
                 media: "DwenguinoIDE/img/",
-                zoom: {controls: true, wheel: true}
+                zoom: {controls: true, wheel: true},
+                undo : true
             });
         window.addEventListener('resize', DwenguinoBlockly.onresize, false);
         DwenguinoBlockly.onresize();

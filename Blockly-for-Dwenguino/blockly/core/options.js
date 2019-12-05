@@ -114,6 +114,11 @@ Blockly.Options = function(options) {
   } else {
     var oneBasedIndex = !!options['oneBasedIndex'];
   }
+  var undo = options['undo'];
+  if( undo === undefined ){
+    undo = false;
+  }
+
   var theme = options['theme'];
   var keyMap = options['keyMap'] || Blockly.user.keyMap.createDefaultKeyMap();
 
@@ -141,6 +146,7 @@ Blockly.Options = function(options) {
   this.gridOptions = Blockly.Options.parseGridOptions_(options);
   this.zoomOptions = Blockly.Options.parseZoomOptions_(options);
   this.toolboxPosition = toolboxPosition;
+  this.undo = undo;
   this.theme = theme;
   this.keyMap = keyMap;
   this.renderer = renderer;
