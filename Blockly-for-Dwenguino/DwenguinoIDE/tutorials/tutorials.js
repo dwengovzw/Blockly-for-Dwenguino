@@ -9,7 +9,7 @@ var tutorialTargets = {
   toolbox: "blocklyToolboxDiv",
   languageMenu: "db_menu_item_language",
   difficultyMenu: "db_menu_item_difficulty",
-  dwengoBooksMenu: "books_dropdown",
+  dwengoBooksMenu: "db_tutorials",
   playButton: "db_menu_item_run",
   uploadButton: "db_menu_item_upload",
   openButton: "db_menu_item_upload",
