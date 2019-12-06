@@ -336,15 +336,15 @@ Blockly.UndoButton.prototype.createUndoButtonSvg_ = function(rnd) {
  */
 Blockly.Css.register([
   /* eslint-disable indent */
-  '.blocklyZoom>image, .blocklyZoom>svg>image {',
+  '.undo>image, .undo>svg>image {',
     'opacity: .4;',
   '}',
 
-  '.blocklyZoom>image:hover, .blocklyZoom>svg>image:hover {',
+  '.undo>image:hover, .undo>svg>image:hover {',
     'opacity: .6;',
   '}',
 
-  '.blocklyZoom>image:active, .blocklyZoom>svg>image:active {',
+  '.undo>image:active, .undo>svg>image:active {',
     'opacity: .8;',
   '}'
   /* eslint-enable indent */
