@@ -87,7 +87,6 @@ tutorials.introductionSocialRobot = {
     },
 
     onShow: function(){
-
       // Hide arrow on the first and last step
       var curr = hopscotch.getCurrStepNum();
       if(curr == 8 | curr == 0){

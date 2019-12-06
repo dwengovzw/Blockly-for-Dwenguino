@@ -229,8 +229,6 @@ var DwenguinoBlockly = {
         //  $(".dropdown-toggle").dropdown();
         //  console.log(tutorials);
 
-
-
         // // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
         // // tutorials = {};
         //  $.each(tutorials, function(index, arrayElement){

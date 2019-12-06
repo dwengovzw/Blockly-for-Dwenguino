@@ -961,8 +961,12 @@ span.grippy::after {
     padding: 2px 7px;
 }
 .tutorial {
-    max-width: 360px; 
+    max-width: 350px; 
     max-height: 360px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #errorModal .modal-body .console {

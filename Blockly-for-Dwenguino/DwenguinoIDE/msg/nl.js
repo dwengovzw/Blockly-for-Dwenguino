@@ -576,6 +576,10 @@ MSG.tutorials.lampOnOffWeGoSTEM = {
   ],
 };
 
+/**
+ * Social robot tutorials
+ */
+
 MSG.tutorials.socialrobot['introduction'] = {};
 MSG.tutorials.socialrobot['introduction'].label = '1. Werken met de simulator';
 MSG.tutorials.socialrobot['introduction'].stepTitles = [
@@ -600,3 +604,68 @@ MSG.tutorials.socialrobot['introduction'].stepContents = [
   "Wanneer je blokken uit de toolbox sleept, komen ze in het <b>codegebied</b> terecht. Hier komt het programma dat je gaat schrijven.",
   "Je bent nu klaar om met de volgende tutorials te beginnen, waarin je de robotblokken leert gebruiken."
 ];
+
+MSG.tutorials.socialrobot['socialrobots'] = {};
+MSG.tutorials.socialrobot['socialrobots'].label = '2. Sociale robots';
+MSG.tutorials.socialrobot['socialrobots'].stepTitles = [
+  "Sociale robots",
+  "Sociale robots",
+  "Sociale robots",
+  "Sociale robots"
+];
+MSG.tutorials.socialrobot['socialrobots'].stepContents = [
+  "Sociale robots zijn robots die, net zoals mensen onder elkaar, met ons kunnen communiceren. "
+    + "Ze worden ontworpen om mensen te begrijpen en ons welzijn te vergroten. ",
+  "Wat sociale robots precies doen en in welke omgeving, varieert van robot tot robot. "
+    + "Sommige robots worden ontworpen om bij je thuis te zijn. Andere zullen enkel op het werk of "
+    + "in de publieke ruimte functioneren. <br><br>Je ben misschien al een sociale robot tegengekomen "
+    + "op de luchthaven? Die helpt je met je vliegtuigtickets of het vinden van de juiste gate. "
+    + "Ook in woonzorgcentra vind je tegenwoordig knuffelrobots die de bewoners gezelschap houden.",
+  "Om te kunnen interageren met de buitenwereld, gebruiken robots <b>sensoren</b> en <b>actuoren</b>."
+    + "<br><br><b>Sensoren</b> zijn zintuiglijke ingangen waarmee een robot zijn omgeving kan 'meten'. "
+    + "Die meetgegevens kunnen nadien verwerkt worden tot informatie. Er bestaan allerlei sensoren, "
+    + "bijvoorbeeld temperatuur-, licht-, infrarood-, druk- of bewegingssensoren."
+    + "<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/sonartje.png' width='120px'></div>"
+    + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>"
+    + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passief infrarood sensor</i></div></div><br><br>"
+    + "<b>Actuoren</b> vormen de uitgangen waarmee een robot kan 'handelen'. "
+    + "Denk bijvoorbeeld aan een servomotor die de arm van een robot aanstuurt, zodat de robot naar je zwaait wanneer hij je ziet.<br><br>"
+    + "<div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/servo.png'  width='100px'></div>"
+    + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/dc.png'  width='100px'></div></div>"
+    + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
+  "Een robot hoort zelf <b>beslissingen</b> te nemen. Dit kan hij doen op basis van de gegevens "
+    + "die de sensoren meten. Beslissingen worden doorgaans genomen in een <b>processor</b> (bij een computer)"
+    + " of een <b>microcontroller</b> (bij de simulator)."
+    + "<br><br>De microcontroller van onze simulator ziet er zo uit:"
+    + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/dwenguino.png'></div>"
+];
+
+MSG.tutorials.socialrobot['hello'] = {};
+MSG.tutorials.socialrobot['hello'].label = '3. Zeg \'ns hallo';
+MSG.tutorials.socialrobot['hello'].stepTitles = [
+  "Introductie",
+  "Naar de simulator",
+  "Sociale robot",
+  "Kies het juiste bouwblok",
+  "Voeg het LCD-scherm toe aan je robot",
+  "Voeg het LCD-scherm toe aan je code",
+  "Speel de simulatie af",
+  "Zet je simulatie stop"
+];
+MSG.tutorials.socialrobot['hello'].stepContents = [
+  "In deze tutorial leer je hoe je de robot iets kan laten zeggen. We gebruiken daarvoor het LCD-scherm.",
+  "Open de simulator.  ",
+  "Kies voor de sociale robot.  ",
+  "<b>Scroll</b> door het menu met bouwblokken tot je het <b>LCD-scherm</b> tegenkomt.   ",
+  "Klik op de <b>+ knop</b> om het LCD-scherm aan je robot toe te voegen. "
+    + "Sleep nadien het scherm naar de plek op de robot waar je het wil hebben.  ",
+  "Tijd om iets op het scherm te laten verschijnen. Klik het <b>Dwenguino</b> menu open "
+    + "en sleep het <b>LCD-scherm</b> uit de toolbox. Klik het scherm vast in het 'zet klaar' blok. "
+    + " Vul een boodschap in die op het scherm moet komen.<br>"
+    + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>"
+    + "<p class='tutorial center-block'><i>Het programma zal de tekst \'Hallo!\' tonen op het LCD-scherm.</i></p></div>",
+  "Druk nu op de <b>afspeelknop</b> om je programma uit te voeren. "
+    + "<br><br>Zie je de tekst op het LCD-scherm van je robot verschijnen?",
+  "Druk nu op de <b>stopknop</b> om je simulatie te laten stoppen."
+];
+

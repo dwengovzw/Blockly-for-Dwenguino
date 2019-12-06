@@ -25,6 +25,8 @@ var tutorialTargets = {
   robotComponentsMenuLedPlusButton: "rc_led_plus_button",
   robotComponentsMenuLedMinusButton: "rc_led_minus_button",
   robotcomponentsMenuLedOptions: "rc_led_options",
+  robotComponentsMenuLcdPlusbutton: "rc_lcd_plus_button",
+  robotComponensMenu: "robot_components_menu"
 };
 
 /*
