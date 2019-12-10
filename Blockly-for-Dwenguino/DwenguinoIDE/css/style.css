@@ -1086,3 +1086,11 @@ span.grippy::after {
     background-color: #FFFFFF;
     cursor: pointer;
 }
+
+.tutorial_wrong_answer{
+    color: #A55B5B;
+}
+
+.tutorial_correct_answer{
+    color: #8BAB42;
+}

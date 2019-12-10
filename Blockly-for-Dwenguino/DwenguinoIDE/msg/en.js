@@ -185,6 +185,9 @@ MSG.tutorialMenu = {
   chooseTutorial: "Select a tutorial",
   previous: "Previous",
   close: "Close",
+  checkAnswer: "Check answer",
+  correctAnswer: "The answer was correct!",
+  wrongAnswer: "The answer was not correct. Try again!"
 }
 
 MSG.tutorials = {

@@ -196,6 +196,9 @@ MSG.tutorialMenu = {
   chooseTutorial: "Kies een tutorial",
   previous: "Vorige",
   close: "Sluiten",
+  checkAnswer: "Kijk na",
+  correctAnswer: "Het antwoord was juist.",
+  wrongAnswer: "Het antwoord was fout. Probeer opnieuw."
 }
 
 MSG.tutorials = {
@@ -650,7 +653,8 @@ MSG.tutorials.socialrobot['hello'].stepTitles = [
   "Voeg het LCD-scherm toe aan je robot",
   "Voeg het LCD-scherm toe aan je code",
   "Speel de simulatie af",
-  "Zet je simulatie stop"
+  "Zet je simulatie stop",
+  "Vraag"
 ];
 MSG.tutorials.socialrobot['hello'].stepContents = [
   "In deze tutorial leer je hoe je de robot iets kan laten zeggen. We gebruiken daarvoor het LCD-scherm.",
@@ -666,6 +670,10 @@ MSG.tutorials.socialrobot['hello'].stepContents = [
     + "<p class='tutorial center-block'><i>Het programma zal de tekst \'Hallo!\' tonen op het LCD-scherm.</i></p></div>",
   "Druk nu op de <b>afspeelknop</b> om je programma uit te voeren. "
     + "<br><br>Zie je de tekst op het LCD-scherm van je robot verschijnen?",
-  "Druk nu op de <b>stopknop</b> om je simulatie te laten stoppen."
+  "Druk nu op de <b>stopknop</b> om je simulatie te laten stoppen.",
+  "Placeholder"
 ];
-
+MSG.tutorials.socialrobot['hello'].answers = [
+  "Antwoord A",
+  "Antwoord B"
+];
