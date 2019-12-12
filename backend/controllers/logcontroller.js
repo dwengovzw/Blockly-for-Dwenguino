@@ -1,5 +1,5 @@
 // Import contact model
-Logging = require('../models/logModel');
+Logitem = require('../models/logModel');
 const uuidv4 = require('uuid/v4');
 
 exports.newSessionId = function(req, res) {
