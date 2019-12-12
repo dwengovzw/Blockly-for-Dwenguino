@@ -1,10 +1,11 @@
 
-function TutorialMultipleChoiceQuestion(name, answers, correctAnswer){
+function TutorialMultipleChoiceQuestion(name, questionText, answers, correctAnswer){
     if (!(this instanceof TutorialMultipleChoiceQuestion)){
       return new TutorialMultipleChoiceQuestion();
     }
 
     this.name = name;
+    this.questionText = questionText;
     this.answers = answers;
     this.correctAnswer = correctAnswer;
 };
@@ -12,6 +13,11 @@ function TutorialMultipleChoiceQuestion(name, answers, correctAnswer){
 
 TutorialMultipleChoiceQuestion.prototype.getHtml = function(){
     var html = "<div class='container'><form id='myform' onsubmit='return false'>";
+
+    html = html
+        + "<div class='row'>"
+        + this.questionText
+        + "</div>";
 
     var numberOfAnswers = this.answers.length;
     for (var i = 0; i < numberOfAnswers; i++) {

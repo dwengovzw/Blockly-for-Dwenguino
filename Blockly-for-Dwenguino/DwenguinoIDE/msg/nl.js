@@ -673,6 +673,9 @@ MSG.tutorials.socialrobot['hello'].stepContents = [
   "Druk nu op de <b>stopknop</b> om je simulatie te laten stoppen.",
   "Placeholder"
 ];
+MSG.tutorials.socialrobot['hello'].questions = [
+  "Kies het juiste resultaat voor het onderstaande programma."
+];
 MSG.tutorials.socialrobot['hello'].answers = [
   "Antwoord A",
   "Antwoord B"
