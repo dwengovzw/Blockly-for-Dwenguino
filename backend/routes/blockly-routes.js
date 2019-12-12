@@ -21,6 +21,11 @@ router.get('/', function (req, res) {
 let logcontroller = require('../controllers/logcontroller');
 let utilsconvroller = require('../controllers/utilscontroller');
 
+router.route('/logging/id')
+    .get(logcontroller.newSessionId);
+
+router.route('/logging/event')
+    .post(logcontroller.event);
 
 router.route('/utilities/clean')
     .get(utilsconvroller.clean);

@@ -12,7 +12,8 @@ var DwenguinoBlockly = {
     sessionId: null,
     tutorialId: null,
 
-    serverUrl: 'http://localhost:8081',
+    //serverUrl: 'http://localhost:8081',
+    serverUrl: 'http://localhost:12032',
 
     //General settings for this session, these are used for data logging during experiments
     agegroupSetting: "",
@@ -67,9 +68,8 @@ var DwenguinoBlockly = {
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
-                url: this.serverUrl + "/sessions/newId"}
+                url: this.serverUrl + "/logging/id"}
             ).done(function(data){
-                console.debug('sessionId is set to', data);
                 DwenguinoBlockly.sessionId = data;
             }).fail(function(response, status)  {
                 console.warn('Failed to fetch sessionId:', status);
@@ -370,8 +370,8 @@ var DwenguinoBlockly = {
 
     createEvent: function(eventName, data){
       var event = {
-        "name": eventName,
         "timestamp": $.now(),
+        "name": eventName,
         "simulatorState": DwenguinoBlockly.simulatorState,
         "selectedDifficulty": DwenguinoBlockly.difficultyLevel,
         "activeTutorial": DwenguinoBlockly.tutorialIdSetting,
@@ -388,19 +388,19 @@ var DwenguinoBlockly = {
     */
     recordEvent: function(eventToRecord){
       var serverSubmission = {
+        "timestamp": $.now(),
         "sessionId": DwenguinoBlockly.sessionId,
         "agegroup": DwenguinoBlockly.agegroupSetting,
         "gender": DwenguinoBlockly.genderSetting,
         "activityId": DwenguinoBlockly.activityId,
-        "timestamp": $.now(),
         "event": eventToRecord
       };
       console.log(eventToRecord);
       if (DwenguinoBlockly.sessionId !== undefined){
         $.ajax({
             type: "POST",
-            url: this.serverUrl + "/sessions/update",
-            data: {"logEntry": JSON.stringify(serverSubmission)},
+            url: this.serverUrl + "/logging/event",
+            data: serverSubmission,
         }).done(function(data){
             console.debug('Recording submitted', data);
         }).fail(function(response, status)  {

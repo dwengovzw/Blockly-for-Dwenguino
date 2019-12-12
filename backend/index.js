@@ -4,7 +4,8 @@ let express = require('express');
 // Import body parser
 let bodyParser = require('body-parser');
 // Import mongoose
-//let mongoose = require('mongoose');
+let mongoose = require('mongoose');
+
 // Import blockly router
 let blocklyRoutes = require('./routes/blockly-routes');
 
@@ -15,11 +16,11 @@ let app = express();
 app.use(bodyParser.urlencoded({
     extended: true
 }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ type: 'application/*+json' }));
 
 // connect to Mongoose and set connection variable
 // Depricate: mongoose.connect();
-/*mongoose.connect('mongodb://localhost/resthub', {
+mongoose.connect('mongodb://localhost/dwenguinoblockly', {
     useNewUrlParser: true,
 })
 var db = mongoose.connection;
@@ -28,7 +29,7 @@ if (!db){
     console.log("Error connecting to db");
 } else {
     console.log("db connection succesfull");
-}*/
+}
 
 // Use blockly routes for the app
 app.use('/', blocklyRoutes);

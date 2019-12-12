@@ -24,7 +24,8 @@
     "express": "^4.17.1",
     "mongoose": "^5.7.12",
     "open": "^7.0.0",
-    "opener": "^1.5.1"
+    "opener": "^1.5.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "open-cli": "^5.0.0"
