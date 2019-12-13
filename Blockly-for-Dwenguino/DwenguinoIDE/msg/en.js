@@ -344,3 +344,29 @@ MSG.tutorials.nameOnLcdBasic = {
 /*MSG.tutorials.hello_dwenguino = {
   label: "Hello World!",
 };*/
+
+MSG.logging = {
+  setup: "Test setup",
+  agegroup: "Age group:",
+  primary1: "Primary grade 1",
+  primary2: "Primary grade 2",
+  primary3: "Primary grade 3",
+  primary4: "Primary grade 4",
+  primary5: "Primary grade 5",
+  primary6: "Primary grade 6",
+  secondary1: "Secondary grade 1",
+  secondary2: "Secondary grade 2",
+  secondary3: "Secondary grade 3",
+  secondary4: "Secondary grade 4",
+  secondary5: "Secondary grade 5",
+  secondary6: "Secondary grade 6",
+  gender: "Gender: ",
+  gender1: "F",
+  gender2: "M",
+  gender3: "X",
+  gender4: "I\'d rather not say",
+  activity: "Activity: ",
+  name: "Name ",
+  date: "Date ",
+  ok: "Ok"
+};

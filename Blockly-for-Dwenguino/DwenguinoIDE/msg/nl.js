@@ -680,3 +680,29 @@ MSG.tutorials.socialrobot['hello'].answers = [
   "Antwoord A",
   "Antwoord B"
 ];
+
+MSG.logging = {
+  setup: "Instellingen",
+  agegroup: "Leeftijd:",
+  primary1: "Lagere school 1",
+  primary2: "Lagere school 2",
+  primary3: "Lagere school 3",
+  primary4: "Lagere school 4",
+  primary5: "Lagere school 5",
+  primary6: "Lagere school 6",
+  secondary1: "Middelbare school 1",
+  secondary2: "Middelbare school 2",
+  secondary3: "Middelbare school 3",
+  secondary4: "Middelbare school 4",
+  secondary5: "Middelbare school 5",
+  secondary6: "Middelbare school 6",
+  gender: "Geslacht: ",
+  gender1: "V",
+  gender2: "M",
+  gender3: "X",
+  gender4: "Ik wil dit liever niet zeggen",
+  activity: "Activiteit: ",
+  name: "Naam ",
+  date: "Datum ",
+  ok: "Bevestig"
+};
