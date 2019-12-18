@@ -20,6 +20,10 @@ router.get('/', function (req, res) {
 // Import contact controller
 let logcontroller = require('../controllers/logcontroller');
 let utilsconvroller = require('../controllers/utilscontroller');
+let schoolscontroller = require('../controllers/schoolscontroller');
+
+router.route('/schools/')
+    .get(schoolscontroller.getSchools);
 
 router.route('/logging/id')
     .get(logcontroller.newSessionId);

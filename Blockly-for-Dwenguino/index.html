@@ -7,15 +7,13 @@
     <title>Blockly Demo:</title>
     <link rel="stylesheet" href="./DwenguinoIDE/css/style.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap-grid.css">
     <link rel="stylesheet" href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/prettify.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/hopscotch.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/jquery.contextMenu.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/tutorials.css">
-
-
-
-
+    <link rel="stylesheet" href="./DwenguinoIDE/css/auto-complete.css">
 </head>
 <body id="db_body">
     <div class="db_header">
@@ -335,7 +333,9 @@
     <div id="tutorialModal" class="modal fade" role="dialog">
         <div class="modal-dialog"><!-- Modal content-->
             <div class="modal-content">
-                <span class="close">x</span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <div class="modal-header h1">
                 </div>
                 <div class="modal-body">
@@ -347,10 +347,12 @@
         </div>
 </div>
 
+
     <!-- import jquery -->
 
     
     <script src="./DwenguinoIDE/js/lib/jquery/jquery-3.1.1.min.js"></script>
+    <script src="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.js"></script>
 
     <script src="./blockly/blockly_uncompressed.js"></script>
     <script src="./blockly/msg/messages.js"></script>
@@ -437,6 +439,7 @@
     <script src="./DwenguinoIDE/js/lib/diff.js"></script>
     <script src="./DwenguinoIDE/js/lib/interact-1.6.js"></script>
     <script src="./DwenguinoIDE/js/lib/jquery.contextMenu.js"></script>
+    <script src="./DwenguinoIDE/js/lib/auto-complete.js"></script>
 
     <!-- libs -->
    <script type="./DwenguinoIDE/text/javascript" src="js/lib/matterjs/decomp.js"></script>
@@ -454,6 +457,7 @@
     <script src="./DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoScenarioUtils.js"></script>
     <script src="./DwenguinoIDE/js/src/scenario/socialrobot/RobotComponentsFactory.js"></script>
     <script src="./DwenguinoIDE/js/src/DwenguinoBlockly.js"></script>
+    <script src="./DwenguinoIDE/js/src/logging/Validator.js"></script>
     <script src="./DwenguinoIDE/js/src/logging/LoggingMenu.js"></script>
     <script src="./DwenguinoIDE/js/src/logging/DwenguinoEventLogger.js"></script>
     <script src="./DwenguinoIDE/js/src/tutorials/TutorialMenu.js"></script>

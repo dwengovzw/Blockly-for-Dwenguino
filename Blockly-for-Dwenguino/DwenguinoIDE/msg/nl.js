@@ -683,6 +683,7 @@ MSG.tutorials.socialrobot['hello'].answers = [
 
 MSG.logging = {
   setup: "Instellingen",
+  login: "Aanmelden",
   agegroup: "Leeftijd:",
   primary1: "Lagere school 1",
   primary2: "Lagere school 2",
@@ -704,5 +705,30 @@ MSG.logging = {
   activity: "Activiteit: ",
   name: "Naam ",
   date: "Datum ",
-  ok: "Bevestig"
+  ok: "Bevestig",
+  reset: "Reset",
+  person: "Persoon",
+  dog: "Hond",
+  car: "Auto",
+  camera: "Camera",
+  heart: "Hart",
+  plane: "Vliegtuig",
+  house: "Huis",
+  umbrella: "Paraplu",
+  star: "Ster",
+  money: "Geld",
+  gift: "Cadeau",
+  keys: "Sleutels",
+  music: "Muziek",
+  snowflake: "Sneeuw",
+  fire: "Vuur",
+  envelope: "Envelop"
+};
+
+MSG.validator = {
+  errSchool: "Selecteer een school.",
+  errId: "Je hebt niet genoeg iconen geselcteerd.",
+  errAgeGroup: "Selecteer je leeftijdscategorie.",
+  errGender: "Selecteer je geslacht.",
+  errActivityId: "De naam van de activiteit mag niet leeg zijn."
 };

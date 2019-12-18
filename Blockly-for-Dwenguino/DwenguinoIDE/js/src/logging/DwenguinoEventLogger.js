@@ -7,6 +7,10 @@
 var DwenguinoEventLogger = {
       sessionId: null,
       tutorialId: null,
+
+      school: null,
+      userId: null,
+      activityDate: null,
   
       //General settings for this session, these are used for data logging during experiments
       agegroupSetting: "",
@@ -24,24 +28,6 @@ var DwenguinoEventLogger = {
                 keys[e.which] = true;
                 if (keys[69] && keys[83] && keys[84]){
                     DwenguinoEventLogger.loggingModal.showMenu();
-                    var db_now = new Date();
-    
-                    var db_day = ("0" + db_now.getDate()).slice(-2);
-                    var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
-    
-                    var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
-                    $('#activity_date').val(db_today);
-
-                    //code to init the bootstrap modal dialog
-                    $("#submit_modal_dialog_button").click(function(){
-                        DwenguinoEventLogger.agegroupSetting = $("input[name=agegroupRadio]:checked").val();
-                        DwenguinoEventLogger.genderSetting = $("input[name=genderRadio]:checked").val();
-                        DwenguinoEventLogger.activityIdSetting = $("#activity_identifier").val();
-                        var activity_date = $("#activity_date").val();
-                        console.log("[act;" + (DwenguinoEventLogger.agegroupSetting || "")
-                            + ";" + (DwenguinoEventLogger.activityIdSetting || "")
-                            + ";" + (activity_date || "") + "]");
-                    });
                 }
             });
     
@@ -86,6 +72,8 @@ var DwenguinoEventLogger = {
         recordEvent: function(eventToRecord){
             var serverSubmission = {
             "timestamp": $.now(),
+            "userId": DwenguinoEventLogger.userId,
+            "school": DwenguinoEventLogger.school,
             "sessionId": DwenguinoEventLogger.sessionId,
             "agegroup": DwenguinoEventLogger.agegroupSetting,
             "gender": DwenguinoEventLogger.genderSetting,
@@ -105,6 +93,30 @@ var DwenguinoEventLogger = {
             });
             }
         },
+
+        setUserId: function(userId){
+            this.userId = userId;
+        },
+
+        setSchool: function(school){
+            this.school = school;
+        },
+
+        setAgegroup: function(agegroup){
+            this.agegroupSetting = agegroup;
+        },
+
+        setGender: function(gender){
+            this.genderSetting = gender;
+        },
+
+        setActivityId: function(activityId){
+            this.activityIdSetting = activityId;
+        },
+
+        setActivityDate: function(activityDate){
+            this.activityDate = activityDate;
+        }
 }
 
 $(document).ready(function() {

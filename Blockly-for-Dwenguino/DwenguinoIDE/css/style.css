@@ -1094,3 +1094,85 @@ span.grippy::after {
 .tutorial_correct_answer{
     color: #8BAB42;
 }
+
+.authentication_item { 
+    background-color: #dddddd;
+}
+
+.authentication_item:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.authentication_item_selected {
+    border-color: #8BAB42;
+    border-style: solid;
+}
+
+#loggingModalErrors {
+    color: red;
+}
+
+.icon-user:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-4-user.png");
+}
+
+.icon-dog:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-3-dog.png");
+}
+
+.icon-car:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-6-car.png");
+}
+
+.icon-camera:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-12-camera.png");
+}
+
+.icon-heart:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-13-heart.png");
+}
+
+.icon-plane:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-39-plane.png");
+}
+
+.icon-house:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-21-home.png");
+}
+
+.icon-umbrella:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-71-umbrella.png");
+}
+
+.icon-star:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-50-star.png");
+}
+
+.icon-money:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-38-coins.png");
+}
+
+.icon-gift:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-70-gift.png");
+}
+
+.icon-keys:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-45-keys.png");
+}
+
+.icon-music:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-18-music.png");
+}
+
+.icon-snowflake:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-22-snowflake.png");
+}
+
+.icon-fire:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-23-fire.png");
+}
+
+.icon-envelope:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-11-envelope.png");
+}

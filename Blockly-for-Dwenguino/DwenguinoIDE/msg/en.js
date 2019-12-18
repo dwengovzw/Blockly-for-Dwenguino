@@ -347,6 +347,7 @@ MSG.tutorials.nameOnLcdBasic = {
 
 MSG.logging = {
   setup: "Test setup",
+  login: "Login",
   agegroup: "Age group:",
   primary1: "Primary grade 1",
   primary2: "Primary grade 2",
@@ -368,5 +369,30 @@ MSG.logging = {
   activity: "Activity: ",
   name: "Name ",
   date: "Date ",
-  ok: "Ok"
+  ok: "Ok",
+  reset: "Reset",
+  person: "Person",
+  dog: "Dog",
+  car: "Car",
+  camera: "Camera",
+  heart: "Heart",
+  plane: "Plane",
+  house: "House",
+  umbrella: "Umbrella",
+  star: "Star",
+  money: "Money",
+  gift: "Gift",
+  keys: "Keys",
+  music: "Music",
+  snowflake: "Snowflake",
+  fire: "Fire",
+  envelope: "Envelope"
+};
+
+MSG.validator = {
+  errSchool: "Select a school.",
+  errId: "You didn't select enough icons.",
+  errAgeGroup: "Select your age group.",
+  errGender: "Select your gender.",
+  errActivityId: "Your activity title cannot be empty."
 };

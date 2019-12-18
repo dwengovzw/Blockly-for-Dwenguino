@@ -10,6 +10,8 @@ exports.newSessionId = function(req, res) {
 exports.event = function(req, res) {  
     let logitem = new Logitem();
    
+    logitem.user_id = req.body.userId;
+    logitem.school = req.body.school;
     logitem.session_id = req.body.sessionId;
     logitem.agegroup = req.body.agegroup;
     logitem.gender = req.body.gender;
