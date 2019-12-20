@@ -26,20 +26,18 @@ function LoggingMenu() {
     ];
     this.schools = null;
     this.validator = new Validator();
-    this.createLoggingModalDialogWithoutFooter();
-
-    $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-    $('#loggingModalHeader').append('<h4 class="modal-title">'+MSG.logging['login']+'</h4>');
+    this.createLoggingModalDialogWithoutFooter(MSG.logging['login']);
 
     $('#loggingModalBody').append('<p id="loggingModalBody1"></p>')
     $("#loggingModalBody").append('<div id="authentication_menu" class="tutorial_categories_wrapper"></div>');
-    $("#authentication_menu").append('<div id="authentication_school_user" class="tutorial_categories_item card"></div>');
-    $("#authentication_school_user").append('<div class="category_tag">'+ 'For schools' +'</div>');
-    $("#authentication_school_user").append('<div id="school_user_img"></div>');
 
     $("#authentication_menu").append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
-    $("#authentication_new_user").append('<div class="category_tag">'+ 'Other users' +'</div>');
+    $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
     $("#authentication_new_user").append('<div id="new_user_img"></div>');
+
+    $("#authentication_menu").append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
+    $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+    $("#authentication_existing_user").append('<div id="school_user_img"></div>');
 }
 
 /**
@@ -49,23 +47,87 @@ LoggingMenu.prototype.showMenu = function(){
     $("#loggingModal").modal('show');
 
     var self = this;
-    $("#authentication_school_user").click(function(){
+    $("#authentication_new_user").click(function(){
         $('.modal-backdrop').remove();
         self.createIdMenu();
         self.showIdMenu();
     });
 
-    $("#athentication_new_user").click(function(){
+    $("#authentication_existing_user").click(function(){
         $('.modal-backdrop').remove();
-        self.createLoggingModalDialog();
-
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-        $('#loggingModalHeader').append('<h4 class="modal-title">'+MSG.logging['setup']+'</h4>');
-
-        $('#loggingModalBody').append('<p>This still needs to be implemented.</p>');
-
-        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">'+MSG.logging['ok']+'</button>');
+        self.createLoginMenu();
+        self.showLoginMenu();
     });
+}
+
+LoggingMenu.prototype.createLoginMenu = function(){
+    var self = this;
+        this.createLoggingModalDialog(MSG.logging['login']);
+        $('#loggingModalBody').append('<div id="inputUsername" class="ui-widget row mb-4">');
+        $('#inputUsername').append('<label for="myusernametag" class="col-md-2">Username </label>');
+        $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="Enter username">');
+
+        $('#loggingModalBody').append('<div class="row"><div class="col-md-12 mt-4"><b>Select your 4 personal icons</b></div></div>');
+        $('#loggingModalBody').append('<div class="row"><div class="col-md-3 mt-4 mb-4">Currently selected:</div><div class="col-md-8 mt-4 mb-4"><div id="currentlySelected" class="row"></div></div>');
+
+        $('#currentlySelected').append('<div id="currentlySelected0" class="col-2"></div>');
+        $('#currentlySelected').append('<div id="currentlySelected1" class="col-2"></div>');
+        $('#currentlySelected').append('<div id="currentlySelected2" class="col-2"></div>');
+        $('#currentlySelected').append('<div id="currentlySelected3" class="col-2"></div>');
+
+        this.createIdGrid();
+
+        $('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
+        
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+        this.showLoginMenu();
+
+        for(let i=1; i<5; i++){
+            for(let j=1; j<5; j++){
+                $("#r" + i +"c" + j).click(function(){
+                    self.addIconToId(i,j);
+                });    
+            }
+        }
+
+        $("#reset_modal_dialog_button").click(function(){
+            self.resetId();
+        });
+
+        $("#submit_modal_dialog_button").click(function(){
+            var errors = [];
+            let username = $( "input[name=myusernametag]").val();
+            console.log(username);
+            console.log(self.currentlySelectedIcons);
+            errors.push(self.validator.validateId(self.currentlySelectedIcons));
+
+            if(self.validator.hasErrors(errors)){
+                self.showErrors(errors);
+            } else {
+                var serverSubmission = {
+                    "userId": username,
+                    "password": JSON.stringify(self.currentlySelectedIcons)
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: window.serverUrl + "/authentication/authenticate",
+                    data: serverSubmission,
+                }).done(function(data){
+                    DwenguinoEventLogger.setUserId(self.currentlySelectedIcons);
+                    $('div').remove('#loggingModal');
+                    $('.modal-backdrop').remove();
+                    self.showSettingsMenu();
+                    console.debug('Registered', data);
+                }).fail(function(response, status)  {
+                    console.warn('Failed to login:', status);
+                });
+            }
+        });
+};
+
+LoggingMenu.prototype.showLoginMenu = function(){
+    $("#loggingModal").modal('show');
 }
 
 LoggingMenu.prototype.createIdMenu = function(){
@@ -75,14 +137,11 @@ LoggingMenu.prototype.createIdMenu = function(){
         url: window.serverUrl + "/schools/"}
     ).done(function(data){
         self.schools = data;
-        self.createLoggingModalDialog();
+        self.createLoggingModalDialog(MSG.logging['newuser']);
 
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-        $('#loggingModalHeader').append('<h4 class="modal-title">'+MSG.logging['login']+'</h4>');
-
-        $('#loggingModalBody').append('<div id="inputSchool" class="ui-widget row mb-4">');
-        $('#inputSchool').append('<label for="myschooltags" class="col-md-2">School </label>');
-        $('#inputSchool').append('<input id="myschooltags" name="myschooltags" class="col-md-8" placeholder="Zoek op naam van de school...">');
+        $('#loggingModalBody').append('<div id="inputUsername" class="ui-widget row mb-4">');
+        $('#inputUsername').append('<label for="myusernametag" class="col-md-2">Username </label>');
+        $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="Choose a username">');
 
         $('#loggingModalBody').append('<div class="row"><div class="col-md-12 mt-4"><b>Select your 4 personal icons</b></div></div>');
         $('#loggingModalBody').append('<div class="row"><div class="col-md-3 mt-4 mb-4">Currently selected:</div><div class="col-md-8 mt-4 mb-4"><div id="currentlySelected" class="row"></div></div>');
@@ -99,20 +158,6 @@ LoggingMenu.prototype.createIdMenu = function(){
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
         self.showIdMenu();
 
-        // Schools autocomplete
-        this.schoolsAutocomplete = new autoComplete({
-            selector: 'input[name="myschooltags"]',
-            minChars: 2,
-            source: function(term, suggest){
-                term = term.toLowerCase();
-                var choices = data;
-                var matches = [];
-                for (i=0; i<choices.length; i++)
-                    if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
-                suggest(matches);
-            }
-        });
-
         for(let i=1; i<5; i++){
             for(let j=1; j<5; j++){
                 $("#r" + i +"c" + j).click(function(){
@@ -127,18 +172,31 @@ LoggingMenu.prototype.createIdMenu = function(){
 
         $("#submit_modal_dialog_button").click(function(){
             var errors = [];
-            let school = $( "input[name=myschooltags]" ).val();
-            errors.push(self.validator.validateSchool(school));
+            let username = $( "input[name=myusernametag]").val();
+            console.log(username);
             errors.push(self.validator.validateId(self.currentlySelectedIcons));
 
             if(self.validator.hasErrors(errors)){
                 self.showErrors(errors);
             } else {
-                DwenguinoEventLogger.setSchool(school);
-                DwenguinoEventLogger.setUserId(self.currentlySelectedIcons);
-                $('div').remove('#loggingModal');
-                $('.modal-backdrop').remove();
-                self.showSettingsMenu();
+                var serverSubmission = {
+                    "userId": username,
+                    "password": JSON.stringify(self.currentlySelectedIcons)
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: window.serverUrl + "/authentication/new",
+                    data: serverSubmission,
+                }).done(function(data){
+                    DwenguinoEventLogger.setUserId(username);
+                    $('div').remove('#loggingModal');
+                    $('.modal-backdrop').remove();
+                    self.showSettingsMenu();
+                    console.debug('Registered', data);
+                }).fail(function(response, status)  {
+                    console.warn('Failed to register:', status);
+                });
             }
         });
 
@@ -193,85 +251,113 @@ LoggingMenu.prototype.showIdMenu = function(){
  * Show the menu on the screen
  */
 LoggingMenu.prototype.showSettingsMenu = function(){
-    this.createLoggingModalDialog();
-
-    $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-    $('#loggingModalHeader').append('<h4 class="modal-title">'+MSG.logging['setup']+'</h4>');
-
-    $('#loggingModalBody').append('<p id="loggingModalBody1"></p>');
-    $('#loggingModalBody1').append('<h4>'+MSG.logging['agegroup']+'</h4>');
-    $('#loggingModalBody1').append('<div id="loggingModalBodyCol1" class="col-md-6"></div>');
-    $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p1">'+MSG.logging['primary1']+'</label></div>');
-    $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p2">'+MSG.logging['primary2']+'</label></div>');
-    $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p3">'+MSG.logging['primary3']+'</label></div>');
-    $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p4">'+MSG.logging['primary4']+'</label></div>');
-    $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p5">'+MSG.logging['primary5']+'</label></div>');
-    $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p6">'+MSG.logging['primary6']+'</label></div>');
-    $('#loggingModalBody1').append('<div id="loggingModalBodyCol2" class="col-md-6"></div>');
-    $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s1">'+MSG.logging['secondary1']+'</label></div>');
-    $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s2">'+MSG.logging['secondary2']+'</label></div>');
-    $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s3">'+MSG.logging['secondary3']+'</label></div>');
-    $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s4">'+MSG.logging['secondary4']+'</label></div>');
-    $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s5">'+MSG.logging['secondary5']+'</label></div>');
-    $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s6">'+MSG.logging['secondary6']+'</label></div>');
-
-    $('#loggingModalBody').append('<p id="loggingModalBody2" class="pt-1"></p>');
-    $('#loggingModalBody2').append('<h4>'+MSG.logging['gender']+'</h4>');
-    $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="f">'+MSG.logging['gender1']+'</label>');
-    $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="m">'+MSG.logging['gender2']+'</label>');
-    $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="x">'+MSG.logging['gender3']+'</label>');
-    $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="na">'+MSG.logging['gender4']+'</label>');
-
-    $('#loggingModalBody').append('<p id="loggingModalBody3">');
-    $('#loggingModalBody3').append('<h4>'+MSG.logging['activity']+'</h4>');
-    $('#loggingModalBody3').append('<div id="loggingModalFormGroup" class="form-group"></div>');
-    $('#loggingModalFormGroup').append(' <label for="activity_identifier">'+MSG.logging['name']+'</label>');
-    $('#loggingModalFormGroup').append('<input type="text" class="form-control" id="activity_identifier">');
-    $('#loggingModalFormGroup').append('<label for="activity_date">'+MSG.logging['date']+'</label>');
-    $('#loggingModalFormGroup').append('<input type="date" class="form-control" id="activity_date">');
-
-    // Set date to today
-    var db_now = new Date();
-    var db_day = ("0" + db_now.getDate()).slice(-2);
-    var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
-    var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
-    $('#activity_date').val(db_today);
-
-    $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
-
-    $("#loggingModal").modal('show');
-
     var self = this;
-    $("#submit_modal_dialog_button").click(function(){
+    $.ajax({
+        type: "GET",
+        url: window.serverUrl + "/schools/"}
+    ).done(function(data){
+        self.schools = data;
+        self.createLoggingModalDialog(MSG.logging['setup']);
 
-        var errors = [];
-        let ageGroup = $("input[name=agegroupRadio]:checked").val();
-        let gender = $("input[name=genderRadio]:checked").val();
-        let activityId = $("#activity_identifier").val();
-        let activityDate = $("#activity_date").val();
+        $('#loggingModalBody').append('<div id="inputSchool" class="ui-widget row mb-4">');
+        $('#inputSchool').append('<label for="myschooltags" class="col-md-2">School </label>');
+        $('#inputSchool').append('<input id="myschooltags" name="myschooltags" class="col-md-8" placeholder="Zoek op naam van de school...">');
 
-        // TODO validate settings on server side
-        errors.push(self.validator.validateAgeGroup(ageGroup));
-        errors.push(self.validator.validateGender(gender));
-        errors.push(self.validator.validateActivityId(activityId));
+        $('#loggingModalBody').append('<p id="loggingModalBody1"></p>');
+        $('#loggingModalBody1').append('<h4>'+MSG.logging['agegroup']+'</h4>');
+        $('#loggingModalBody1').append('<div id="loggingModalBodyCol1" class="col-md-6"></div>');
+        $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p1">'+MSG.logging['primary1']+'</label></div>');
+        $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p2">'+MSG.logging['primary2']+'</label></div>');
+        $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p3">'+MSG.logging['primary3']+'</label></div>');
+        $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p4">'+MSG.logging['primary4']+'</label></div>');
+        $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p5">'+MSG.logging['primary5']+'</label></div>');
+        $('#loggingModalBodyCol1').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="p6">'+MSG.logging['primary6']+'</label></div>');
+        $('#loggingModalBody1').append('<div id="loggingModalBodyCol2" class="col-md-6"></div>');
+        $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s1">'+MSG.logging['secondary1']+'</label></div>');
+        $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s2">'+MSG.logging['secondary2']+'</label></div>');
+        $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s3">'+MSG.logging['secondary3']+'</label></div>');
+        $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s4">'+MSG.logging['secondary4']+'</label></div>');
+        $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s5">'+MSG.logging['secondary5']+'</label></div>');
+        $('#loggingModalBodyCol2').append('<div class="row"><label class="radio-inline"><input type="radio" name="agegroupRadio" value="s6">'+MSG.logging['secondary6']+'</label></div>');
 
-        if(self.validator.hasErrors(errors)){
-            self.showErrors(errors);
-        } else {
-            DwenguinoEventLogger.setAgegroup(ageGroup);
-            DwenguinoEventLogger.setGender(gender);
-            DwenguinoEventLogger.setActivityId(activityId);
-            DwenguinoEventLogger.setActivityDate(activityDate);
-            $('div').remove('#loggingModal');
-            $('.modal-backdrop').remove();
+        $('#loggingModalBody').append('<p id="loggingModalBody2" class="pt-1"></p>');
+        $('#loggingModalBody2').append('<h4>'+MSG.logging['gender']+'</h4>');
+        $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="f">'+MSG.logging['gender1']+'</label>');
+        $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="m">'+MSG.logging['gender2']+'</label>');
+        $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="x">'+MSG.logging['gender3']+'</label>');
+        $('#loggingModalBody2').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="na">'+MSG.logging['gender4']+'</label>');
 
-            console.log("[act;" + (DwenguinoEventLogger.agegroupSetting || "")
-                            + ";" + (DwenguinoEventLogger.activityIdSetting || "")
-                            + ";" + (DwenguinoEventLogger.activityDate || "") 
-                            + ";" + (DwenguinoEventLogger.userId || "")
-                            + ";" + (DwenguinoEventLogger.school || "")
-                            + "]");
-        }
+        $('#loggingModalBody').append('<p id="loggingModalBody3">');
+        $('#loggingModalBody3').append('<h4>'+MSG.logging['activity']+'</h4>');
+        $('#loggingModalBody3').append('<div id="loggingModalFormGroup" class="form-group"></div>');
+        $('#loggingModalFormGroup').append(' <label for="activity_identifier">'+MSG.logging['name']+'</label>');
+        $('#loggingModalFormGroup').append('<input type="text" class="form-control" id="activity_identifier">');
+        $('#loggingModalFormGroup').append('<label for="activity_date">'+MSG.logging['date']+'</label>');
+        $('#loggingModalFormGroup').append('<input type="date" class="form-control" id="activity_date">');
+
+        // Set date to today
+        var db_now = new Date();
+        var db_day = ("0" + db_now.getDate()).slice(-2);
+        var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
+        var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
+        $('#activity_date').val(db_today);
+
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+
+        $("#loggingModal").modal('show');
+
+        // Schools autocomplete
+        self.schoolsAutocomplete = new autoComplete({
+            selector: 'input[name="myschooltags"]',
+            minChars: 2,
+            source: function(term, suggest){
+                term = term.toLowerCase();
+                var choices = data;
+                var matches = [];
+                for (i=0; i<choices.length; i++)
+                    if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
+                suggest(matches);
+            }
+        });
+
+        $("#submit_modal_dialog_button").click(function(){
+
+            var errors = [];
+            let school = $( "input[name=myschooltags]" ).val();
+            let ageGroup = $("input[name=agegroupRadio]:checked").val();
+            let gender = $("input[name=genderRadio]:checked").val();
+            let activityId = $("#activity_identifier").val();
+            let activityDate = $("#activity_date").val();
+
+            // TODO validate settings on server side
+
+            errors.push(self.validator.validateSchool(school));
+            errors.push(self.validator.validateAgeGroup(ageGroup));
+            errors.push(self.validator.validateGender(gender));
+            errors.push(self.validator.validateActivityId(activityId));
+
+            if(self.validator.hasErrors(errors)){
+                self.showErrors(errors);
+            } else {
+                DwenguinoEventLogger.setSchool(school);
+                DwenguinoEventLogger.setAgegroup(ageGroup);
+                DwenguinoEventLogger.setGender(gender);
+                DwenguinoEventLogger.setActivityId(activityId);
+                DwenguinoEventLogger.setActivityDate(activityDate);
+                $('div').remove('#loggingModal');
+                $('.modal-backdrop').remove();
+
+                console.log("[act;" + (DwenguinoEventLogger.agegroupSetting || "")
+                                + ";" + (DwenguinoEventLogger.activityIdSetting || "")
+                                + ";" + (DwenguinoEventLogger.activityDate || "") 
+                                + ";" + (DwenguinoEventLogger.userId || "")
+                                + ";" + (DwenguinoEventLogger.school || "")
+                                + "]");
+            }
+        });
+
+    }).fail(function(response, status)  {
+        console.warn('Failed to fetch schools:', status);
     });
 }
 
@@ -279,7 +365,7 @@ LoggingMenu.prototype.loadInitialMenu = function(){
 
 }
 
-LoggingMenu.prototype.createLoggingModalDialog = function(){
+LoggingMenu.prototype.createLoggingModalDialog = function(headerTitle){
     // Make sure there is no duplicate logging menu
     $('div').remove('#loggingModal');
 
@@ -291,9 +377,12 @@ LoggingMenu.prototype.createLoggingModalDialog = function(){
     $('#loggingModalContent').append('<div id="loggingModalHeader" class="modal-header"></div>');
     $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
     $('#loggingModalContent').append('<div id="loggingModalFooter" class="modal-footer"></div>');
+
+    $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+    $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
 }
 
-LoggingMenu.prototype.createLoggingModalDialogWithoutFooter = function(){
+LoggingMenu.prototype.createLoggingModalDialogWithoutFooter = function(headerTitle){
     // Make sure there is no duplicate logging menu
     $('div').remove('#loggingModal');
 
@@ -304,6 +393,9 @@ LoggingMenu.prototype.createLoggingModalDialogWithoutFooter = function(){
 
     $('#loggingModalContent').append('<div id="loggingModalHeader" class="modal-header"></div>');
     $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
+
+    $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+    $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
 }
 
 LoggingMenu.prototype.showErrors = function(errors){

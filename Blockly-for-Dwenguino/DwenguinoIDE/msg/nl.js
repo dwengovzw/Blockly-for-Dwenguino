@@ -684,6 +684,8 @@ MSG.tutorials.socialrobot['hello'].answers = [
 MSG.logging = {
   setup: "Instellingen",
   login: "Aanmelden",
+  newuser: "Nieuwe gebruiker",
+  username: "Gebruikersnaam",
   agegroup: "Leeftijd:",
   primary1: "Lagere school 1",
   primary2: "Lagere school 2",

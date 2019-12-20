@@ -348,6 +348,8 @@ MSG.tutorials.nameOnLcdBasic = {
 MSG.logging = {
   setup: "Test setup",
   login: "Login",
+  newuser: "New user",
+  username: "Username",
   agegroup: "Age group:",
   primary1: "Primary grade 1",
   primary2: "Primary grade 2",

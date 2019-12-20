@@ -7,7 +7,7 @@ exports.getSchools = function(req, res) {
     })
     .fromFile(csvFilePath)
     .then((jsonObj)=>{
-        console.log(jsonObj);
+        //console.log(jsonObj);
         res.send(jsonObj);
     })
 

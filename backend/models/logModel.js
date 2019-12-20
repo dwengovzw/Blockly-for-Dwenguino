@@ -5,7 +5,7 @@ var logSchema = mongoose.Schema({
         type: Date,
         required: true
     },
-    user_id: Array,
+    user_id: String,
     school: String,
     session_id: String,
     agegroup: String,
@@ -19,7 +19,7 @@ var logSchema = mongoose.Schema({
         data: String,
     }
 });
-// Export Contact model
+
 var Logitem = module.exports = mongoose.model('logging', logSchema);
 module.exports.get = function (callback, limit) {
     Logitem.find(callback).limit(limit);
