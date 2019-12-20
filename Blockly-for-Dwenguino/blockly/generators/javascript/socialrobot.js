@@ -28,6 +28,18 @@ Blockly.JavaScript['socialrobot_arms_down'] = function(block) {
   return code;
 }
 
+
+Blockly.JavaScript['socialrobot_arms_up'] = function(block) {
+  var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand2', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand2', Blockly.JavaScript.ORDER_ATOMIC);
+  
+  var code = machine 
+  + 'servo(' + value_servo_right_hand + ', ' + '0' + ');\n' 
+  + machine + 'servo(' + value_servo_left_hand + ', ' + '180' + ');\n';
+  console.log(code);
+  return code;
+}
+
 Blockly.JavaScript['socialrobot_wave_arms'] = function(block) {
   var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand', Blockly.JavaScript.ORDER_ATOMIC);
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand', Blockly.JavaScript.ORDER_ATOMIC);
@@ -40,6 +52,26 @@ Blockly.JavaScript['socialrobot_wave_arms'] = function(block) {
   + machine + 'servo(' + value_servo_left_hand + ', ' + '0' + ');\n'
   + machine + 'sleep(' + '1000' + ');\n';
   console.log(code);
+  return code;
+}
+
+Blockly.JavaScript['socialrobot_eyes_left'] = function(block) {
+  var value_servo_right_eye = Blockly.JavaScript.valueToCode(block, 'servo_right_eye', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye', Blockly.JavaScript.ORDER_ATOMIC);
+  
+  var code = machine 
+  + 'servo(' + value_servo_right_eye + ', ' + '0' + ');\n' 
+  + machine + 'servo(' + value_servo_left_eye + ', ' + '0' + ');\n';
+  return code;
+}
+
+Blockly.JavaScript['socialrobot_eyes_right'] = function(block) {
+  var value_servo_right_eye = Blockly.JavaScript.valueToCode(block, 'servo_right_eye1', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye1', Blockly.JavaScript.ORDER_ATOMIC);
+  
+  var code = machine 
+  + 'servo(' + value_servo_right_eye + ', ' + '120' + ');\n' 
+  + machine + 'servo(' + value_servo_left_eye + ', ' + '120' + ');\n';
   return code;
 }
 

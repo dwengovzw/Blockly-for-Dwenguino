@@ -100,9 +100,12 @@ body{
 }
 
 #db_menu_item_language_selection{
-    width: 200px;
+    /* width: 200px; */
     font-size: 20px;
     margin: 15px 0;
+    background-color: #ffffff;
+    border: 1px #8bab42 solid;
+    
 }
 
 #db_menu_item_language{
@@ -448,6 +451,12 @@ body{
     background-size: contain;
     background-repeat: no-repeat;
     z-index:-1;
+}
+
+#sim_background_img {
+    content:url("../img/socialrobot/robot1.png");
+    height: inherit;
+    width: min-content;
 }
 
 .sim_servo {
@@ -940,22 +949,230 @@ span.grippy {
 
 span.grippy::after {
     content: '.. .. .. ..';
+}
+
+
+.dropdown-divider {
+    /* height: 0; */
+    margin: .5rem 0;
+    overflow: hidden;
+    border-top: 1px solid #e9ecef;
+    color: darkgrey;
+    padding: 2px 7px;
+}
+.tutorial {
+    max-width: 350px; 
+    max-height: 360px;
+    padding-left: 5px;
+    padding-right: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#errorModal .modal-body .console {
+    margin: 20px 30px 20px 10px;
+    padding: 10px;
+    color: green;
+    background-color: black;
+    border: 5px gray;
+}
+
+#errorModal .modal-body .error_details{
+    margin-top: 20px;
+    float: right;
+    margin-bottom: 20px;
+}
+
+#errorModal .modal-footer {
+    clear: both;
+}
+
+#tutorialModal .modal-dialog {
+    min-width: 80%;
+}
+
+.tutorial_label {
+    margin-bottom: 10px;
+}
+
+#tutorialModal .modal-footer {
+    clear: both;
+}
+
+#tutorialModal .close {
+    color: #000;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
   }
 
-  #errorModal .modal-body .console {
-      margin: 20px 30px 20px 10px;
-      padding: 10px;
-      color: green;
-      background-color: black;
-      border: 5px gray;
-  }
+#tutorialModal_categories_menu {
+    min-height: 200px;
+}
 
-  #errorModal .modal-body .error_details{
-      margin-top: 20px;
-      float: right;
-      margin-bottom: 20px;
-  }
+.tutorial_categories_item { 
+    padding: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
+    background-color: #dddddd;
+    /* border-style: solid;
+    border-color: gray; */
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+}
 
-  #errorModal .modal-footer {
-      clear: both;
-  }
+.tutorial_categories_item:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.tutorial_categories_wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+}
+
+.tutorial_categories_wrapper > .card {
+    flex: 0 0 auto;
+    padding: 15px;
+}
+
+
+.tutorial_categories_item > .category_tag {
+    min-height: 40px;
+}
+
+#tutorial_categories_wegostem_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/wegostem.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial_categories_dwenguino_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/dwenguino.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial_categories_riding_robot_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/scenario_moving.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#tutorial_categories_social_robot_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/scenario_socialrobot.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.tutorial_item{
+    padding: 4px 7px;
+    color: #333;
+    background-color: #DDDDDD;
+    margin-bottom: 7px;
+}
+
+.tutorial_item:hover{
+    background-color: #FFFFFF;
+    cursor: pointer;
+}
+
+.tutorial_wrong_answer{
+    color: #A55B5B;
+}
+
+.tutorial_correct_answer{
+    color: #8BAB42;
+}
+
+.authentication_item { 
+    background-color: #dddddd;
+}
+
+.authentication_item:hover {
+    background-color: white;
+    cursor: pointer;
+}
+
+.authentication_item_selected {
+    border-color: #8BAB42;
+    border-style: solid;
+}
+
+#loggingModalErrors {
+    color: red;
+}
+
+.icon-user:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-4-user.png");
+}
+
+.icon-dog:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-3-dog.png");
+}
+
+.icon-car:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-6-car.png");
+}
+
+.icon-camera:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-12-camera.png");
+}
+
+.icon-heart:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-13-heart.png");
+}
+
+.icon-plane:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-39-plane.png");
+}
+
+.icon-house:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-21-home.png");
+}
+
+.icon-umbrella:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-71-umbrella.png");
+}
+
+.icon-star:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-50-star.png");
+}
+
+.icon-money:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-38-coins.png");
+}
+
+.icon-gift:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-70-gift.png");
+}
+
+.icon-keys:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-45-keys.png");
+}
+
+.icon-music:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-18-music.png");
+}
+
+.icon-snowflake:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-22-snowflake.png");
+}
+
+.icon-fire:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-23-fire.png");
+}
+
+.icon-envelope:before {
+    content: url("../img/glyphicons_free/glyphicons/png/glyphicons-11-envelope.png");
+}

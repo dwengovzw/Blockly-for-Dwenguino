@@ -6,9 +6,10 @@ var tutorialTargets = {
   dwenguino: "db_menu_item_dwengo_robot_teacher_image",
   workspaceArea: "blocklyDiv",
   toolboxArea: "db_blocklyToolboxDiv",
+  toolbox: "blocklyToolboxDiv",
   languageMenu: "db_menu_item_language",
   difficultyMenu: "db_menu_item_difficulty",
-  dwengoBooksMenu: "books_dropdown",
+  dwengoBooksMenu: "db_tutorials",
   playButton: "db_menu_item_run",
   uploadButton: "db_menu_item_upload",
   openButton: "db_menu_item_upload",
@@ -24,6 +25,8 @@ var tutorialTargets = {
   robotComponentsMenuLedPlusButton: "rc_led_plus_button",
   robotComponentsMenuLedMinusButton: "rc_led_minus_button",
   robotcomponentsMenuLedOptions: "rc_led_options",
+  robotComponentsMenuLcdPlusbutton: "rc_lcd_plus_button",
+  robotComponensMenu: "robot_components_menu"
 };
 
 /*

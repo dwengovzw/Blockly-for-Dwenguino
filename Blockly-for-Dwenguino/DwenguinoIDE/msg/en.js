@@ -20,6 +20,7 @@ var MSG = {
   catFunctions: "Functions",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Social robot",
+  catComments: "Comments",
   catBoardIO: "IO",
   createVar: "Create variable",
   listVariable: "list",
@@ -102,8 +103,11 @@ var MSG = {
   create: "Create",
   with_type: "with type",
   create_global: "Create global",
-  socialrobotWaveArmesBlock: "Wave arms %1 %2 Servo right hand %3 %4 Servo left hand %5 %6",
-  socialRobotArmsDownBlock: "Put arms down %1 %2 Servo right hand %3 %4 Servo left hand %5 %6",
+  socialrobotWaveArmesBlock: "Wave arms %1 %2 Servo right arm %3 %4 Servo left arm %5 %6",
+  socialRobotArmsDownBlock: "Put arms down %1 %2 %3 Servo right arm %4 %5 Servo left arm %6 %7",
+  socialRobotArmsUpBlock: "Put arms up %1 %2 %3 Servo right arm %4 %5 Servo left arm %6 %7",
+  socialRobotEyesLeftBlock: "Turn eyes left %1 %2 %3 Servo left eye %4 %5 Servo right eye %6 %7",
+  socialRobotEyesRightBlock: "Turn eyes right %1 %2 %3 Servo left eye %4 %5 Servo right eye %6 %7",
   socialrobotReadPinBlock: "Read value of pin %1 %2",
   socialRobotServoRightHand: "Servo right hand",
   socialRobotServoLeftHand: "Servo left hand",
@@ -116,6 +120,20 @@ var MSG = {
 
 };
 
+MSG.dropzone = {
+  dictSelectFile: "Select a file.",
+  dictChooseFile: "Choose file",
+  dictDefaultMessage: "Drop files here to upload",
+  dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
+  dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
+  dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
+  dictInvalidFileType: "You can't upload files of this type.",
+  dictResponseError: "Server responded with {{statusCode}} code.",
+  dictCancelUpload: "Cancel upload",
+  dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
+  dictRemoveFile: "Remove file",
+  dictMaxFilesExceeded: "You can not upload any more files.",
+}
 
 MSG.simulator = {
   start: "Start",
@@ -157,6 +175,20 @@ MSG.socialrobot = {
   lefthand: "Left hand",
 };
 
+MSG.tutorialMenu = {
+  header: "Tutorials",
+  catDwenguino: "Learn to program<br>with DwenguinoBlockly",
+  catRidingRobot: "Riding robot",
+  catSocialRobot: "Social robot",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Select a tutorial category",
+  chooseTutorial: "Select a tutorial",
+  previous: "Previous",
+  close: "Close",
+  checkAnswer: "Check answer",
+  correctAnswer: "The answer was correct!",
+  wrongAnswer: "The answer was not correct. Try again!"
+}
 
 MSG.tutorials = {
   introduction: {},
@@ -312,3 +344,57 @@ MSG.tutorials.nameOnLcdBasic = {
 /*MSG.tutorials.hello_dwenguino = {
   label: "Hello World!",
 };*/
+
+MSG.logging = {
+  setup: "Test setup",
+  login: "Login",
+  newuser: "New user",
+  username: "Username",
+  agegroup: "Age group:",
+  primary1: "Primary grade 1",
+  primary2: "Primary grade 2",
+  primary3: "Primary grade 3",
+  primary4: "Primary grade 4",
+  primary5: "Primary grade 5",
+  primary6: "Primary grade 6",
+  secondary1: "Secondary grade 1",
+  secondary2: "Secondary grade 2",
+  secondary3: "Secondary grade 3",
+  secondary4: "Secondary grade 4",
+  secondary5: "Secondary grade 5",
+  secondary6: "Secondary grade 6",
+  gender: "Gender: ",
+  gender1: "F",
+  gender2: "M",
+  gender3: "X",
+  gender4: "I\'d rather not say",
+  activity: "Activity: ",
+  name: "Name ",
+  date: "Date ",
+  ok: "Ok",
+  reset: "Reset",
+  person: "Person",
+  dog: "Dog",
+  car: "Car",
+  camera: "Camera",
+  heart: "Heart",
+  plane: "Plane",
+  house: "House",
+  umbrella: "Umbrella",
+  star: "Star",
+  money: "Money",
+  gift: "Gift",
+  keys: "Keys",
+  music: "Music",
+  snowflake: "Snowflake",
+  fire: "Fire",
+  envelope: "Envelope"
+};
+
+MSG.validator = {
+  errSchool: "Select a school.",
+  errId: "You didn't select enough icons.",
+  errAgeGroup: "Select your age group.",
+  errGender: "Select your gender.",
+  errActivityId: "Your activity title cannot be empty."
+};

@@ -69,6 +69,12 @@ Blockly.Events.BLOCK_CREATE = Blockly.Events.CREATE;
 Blockly.Events.DELETE = 'delete';
 
 /**
+ * Name of event that undos the last action.
+ * @const
+ */
+Blockly.Events.UNDO = 'undo';
+
+/**
  * Name of event that deletes a block.
  * @const
  */
@@ -365,6 +371,9 @@ Blockly.Events.fromJson = function(json, workspace) {
       break;
     case Blockly.Events.MOVE:
       event = new Blockly.Events.Move(null);
+      break;
+    case Blockly.Events.UNDO:
+      event = new Blockly.Events.Undo(null);
       break;
     case Blockly.Events.VAR_CREATE:
       event = new Blockly.Events.VarCreate(null);

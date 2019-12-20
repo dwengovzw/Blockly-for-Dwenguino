@@ -2,79 +2,22 @@
 
 if (!window.dwenguinoBlocklyServer) {
   dwenguinoBlocklyServer = false;
-}
+};
+
+window.serverUrl = 'http://localhost:12032';
 
 var DwenguinoBlockly = {
     simButtonStateClicked: false,
 
     workspace: null,
     recording: "",
-    sessionId: null,
-    tutorialId: null,
 
-    serverUrl: 'http://localhost:8081',
-
-    //General settings for this session, these are used for data logging during experiments
-    agegroupSetting: "",
-    genderSetting: "",  //TODO: add this to the modal dialog
-    activityIdSetting: "",
-    tutorialIdSetting: "",
-    computerId: "-1",
-    workshopId: "-1",
     difficultyLevel: 1,
     simulatorState: "off",
     xmlLoadedFromFile: "",
     xmlFromScenario: "",
 
     initDwenguinoBlockly: function(){
-        //set keypress event listerner to show test environment window
-        var keys = {};
-        $(document).keydown(function (e) {
-            keys[e.which] = true;
-            if (keys[69] && keys[83] && keys[84]){
-                console.log("starting test environment");
-                $('#myModal').modal('show');
-                var db_now = new Date();
-
-                var db_day = ("0" + db_now.getDate()).slice(-2);
-                var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
-
-                var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
-                $('#activity_date').val(db_today);
-            }
-        });
-
-        $(document).keyup(function (e) {
-            delete keys[e.which];
-        });
-
-
-        
-
-        //code to init the bootstrap modal dialog
-        $("#submit_modal_dialog_button").click(function(){
-            DwenguinoBlockly.agegroupSetting = $("input[name=optradio]:checked").val();
-            DwenguinoBlockly.activityIdSetting = $("#activity_identifier").val();
-            var activity_date = $("#activity_date").val();
-            console.log("[act;" + (DwenguinoBlockly.agegroupSetting || "")
-                + ";" + (DwenguinoBlockly.activityIdSetting || "")
-                + ";" + (activity_date || "") + "]");
-        });
-
-        DwenguinoBlockly.sessionId = window.sessionStorage.loadOnceSessionId;
-        delete window.sessionStorage.loadOnceSessionId;
-        if (!DwenguinoBlockly.sessionId /*&& dwenguinoBlocklyServer*/){
-            // Try to get a new sessionId from the server to keep track
-            $.ajax({
-                type: "GET",
-                url: this.serverUrl + "/sessions/newId"}
-            ).done(function(data){
-                console.debug('sessionId is set to', data);
-                DwenguinoBlockly.sessionId = data;
-            }).fail(function(response, status)  {
-                console.warn('Failed to fetch sessionId:', status);
-            });
-        }
 
         //Restore recording after language change
         DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "";
@@ -140,7 +83,7 @@ var DwenguinoBlockly = {
               $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
               $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
               $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
-              $('#modalDialog').append('<div class="modal-body">Selecteer een bestand.<input type="file" id="fileInput"><div id="filedrag">of zet ze hier neer</div><pre id="fileDisplayArea"><pre></div>');
+              $('#modalDialog').append('<div class="modal-body">'+ MSG.dropzone['dictSelectFile']+'<input type="file" id="fileInput"><div id="filedrag">'+ MSG.dropzone['dictDefaultMessage'] +'</div><pre id="fileDisplayArea"><pre></div>');
               $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
 
               $("#dropzoneModal").modal('show');
@@ -225,27 +168,27 @@ var DwenguinoBlockly = {
           DwenguinoBlockly.runEventHandler(code);
         });
 
+        // //dropdown menu code
+        //  $(".dropdown-toggle").dropdown();
+        //  console.log(tutorials);
 
-        //dropdown menu code
-         $(".dropdown-toggle").dropdown();
-         console.log(tutorials);
-
-
-
-        // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
-        // tutorials = {};
-         $.each(tutorials, function(index, arrayElement){
-           var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
-           $("#dropdownMenuTuts").append(newLi);
-           newLi.click(function(){
-             DwenguinoBlockly.tutorialId = arrayElement.id;
-             DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
-             arrayElement.initSteps();
-             hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
-             hopscotch.startTour(arrayElement);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
-           });
-         });
+        // // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
+        // // tutorials = {};
+        //  $.each(tutorials, function(index, arrayElement){
+        //    var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
+        //    if(arrayElement.id == 'introductionSocialRobot'){
+        //     $("#dropdownMenuTuts").append("<div class='dropdown-divider'>" + MSG.catSocialRobot + "</div>");
+        //    }
+        //    $("#dropdownMenuTuts").append(newLi);
+        //    newLi.click(function(){
+        //      DwenguinoBlockly.tutorialId = arrayElement.id;
+        //      DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
+        //      arrayElement.initSteps();
+        //      hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
+        //      hopscotch.startTour(arrayElement);
+        //      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
+        //    });
+        //  });
 
          $("#language1").click(function(){
             DwenguinoBlockly.language = "cpp";
@@ -271,12 +214,14 @@ var DwenguinoBlockly = {
                xml: event.xml,
                ids: event.ids
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockCreate", data));
            } else if (event.type == "delete"){
              var data = {
                oldXml: event.oldXml,
                ids: event.ids
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockDelete", data));
            } else if (event.type == "move"){
              var data = {
@@ -287,6 +232,7 @@ var DwenguinoBlockly = {
                newInputName: event.newInputName,
                newCoordinate: event.newCoordinate
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockMove", data));
            } else if (event.type == "createVar"){
              var data = {
@@ -294,6 +240,7 @@ var DwenguinoBlockly = {
                varName: event.varName,
                varId: event.varId
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarCreate", data));
            } else if (event.type == "deleteVar"){
              var data = {
@@ -301,6 +248,7 @@ var DwenguinoBlockly = {
                varName: event.varName,
                varId: event.varId
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarDelete", data));
            } else if (event.type == Blockly.Events.VAR_RENAME){
              var data = {
@@ -308,6 +256,7 @@ var DwenguinoBlockly = {
                newName: event.newName,
                varId: event.varId
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarRename", data));
            } else if (event.type == Blockly.Events.UI){
              var data = {
@@ -315,6 +264,7 @@ var DwenguinoBlockly = {
                oldValue: event.oldValue,
                newValue: event.newValue
              }
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyUI", data));
            } else if (event.type == Blockly.Events.CHANGE){
              var data = {
@@ -323,7 +273,12 @@ var DwenguinoBlockly = {
                oldValue: event.oldValue,
                newValue: event.newValue
              };
+             data = JSON.stringify(data);
              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyChange", data));
+           } else if (event.type == Blockly.Events.UNDO){
+             console.log(event);
+             var data = {};
+              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("undo", data));
            }
          });
 
@@ -366,49 +321,14 @@ var DwenguinoBlockly = {
     },
 
     createEvent: function(eventName, data){
-      var event = {
-        "name": eventName,
-        "timestamp": $.now(),
-        "simulatorState": DwenguinoBlockly.simulatorState,
-        "selectedDifficulty": DwenguinoBlockly.difficultyLevel,
-        "activeTutorial": DwenguinoBlockly.tutorialIdSetting,
-        "groupId": DwenguinoBlockly.activityIdSetting,
-        "computerId": DwenguinoBlockly.computerId,
-        "workshopId": DwenguinoBlockly.workshopId,
-        "data": data
-      };
-      return event;
+      return DwenguinoEventLogger.createEvent(eventName, data);
     },
 
-    endTutorial: function(){
-        DwenguinoBlockly.tutorialId = "";
-        DwenguinoBlockly.tutorialIdSetting = "";
-        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("endTutorial", ""));
-    },
     /*
     * This function submits an event to the python logging server.
     */
     recordEvent: function(eventToRecord){
-      var serverSubmission = {
-        "sessionId": DwenguinoBlockly.sessionId,
-        "agegroup": DwenguinoBlockly.agegroupSetting,
-        "gender": DwenguinoBlockly.genderSetting,
-        "activityId": DwenguinoBlockly.activityId,
-        "timestamp": $.now(),
-        "event": eventToRecord
-      };
-      console.log(eventToRecord);
-      if (DwenguinoBlockly.sessionId !== undefined){
-        $.ajax({
-            type: "POST",
-            url: this.serverUrl + "/sessions/update",
-            data: {"logEntry": JSON.stringify(serverSubmission)},
-        }).done(function(data){
-            console.debug('Recording submitted', data);
-        }).fail(function(response, status)  {
-            console.warn('Failed to submit recording:', status);
-        });
-      }
+      DwenguinoEventLogger.recordEvent(eventToRecord);
     },
 
     runEventHandler: function(code){
@@ -420,7 +340,7 @@ var DwenguinoBlockly = {
           DwenguinoBlockly.resetRunButton();
       }else{
         $.ajax({
-            url: 'http://localhost:12032/utilities/run',
+            url: windowserverUrl + "/utilities/run",
             dataType: 'json',
             type: 'post',
             contentType: 'application/x-www-form-urlencoded',
@@ -637,7 +557,8 @@ var DwenguinoBlockly = {
             {
                 toolbox: document.getElementById('toolbox'),
                 media: "DwenguinoIDE/img/",
-                zoom: {controls: true, wheel: true}
+                zoom: {controls: true, wheel: true},
+                undo : true
             });
         window.addEventListener('resize', DwenguinoBlockly.onresize, false);
         DwenguinoBlockly.onresize();
@@ -776,28 +697,13 @@ var DwenguinoBlockly = {
     doTranslation: function() {
         // Inject language strings.
         document.title += ' ' + MSG['title'];
-        //document.getElementById('title').textContent = MSG['title'];
-        //document.getElementById('tab_blocks').textContent = MSG['blocks'];
 
-        //document.getElementById('linkButton').title = MSG['linkTooltip'];
-        //document.getElementById('db_menu_item_run').title = MSG['runTooltip'];
         document.getElementById('db_menu_item_upload').title = MSG['loadBlocksFileTooltip'];
         document.getElementById('db_menu_item_download').title = MSG['saveBlocksFileTooltip'];
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
-        //document.getElementById('t
-
-        var tutorials = []; /*['tutsIntroduction', 'tutsHelloDwenguino', 'tutsBlink', 'tutsHelloRobot',
-        'tutsNameOnLcd', 'tutsBlinkLED', 'tutsLedOnButtonPress', 'tutsBitPatternOnLeds',
-      'tutsAllButtons', 'tutsDriveForward', 'tutsRideInSquare', 'tutsRideToWall', 'tutsAvoidWall'];*/
-      /*  for (var i = 0; i < tutorials.length ; i++){
-            var element = document.getElementById(tutorials[i]);
-            if (element){
-                element.innerHTML = MSG[tutorials[i]];
-            }
-        }*/
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
-            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catArduino'];
+            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catArduino', 'catComments'];
         for (var i = 0, cat; cat = categories[i]; i++) {
             var element = document.getElementById(cat);
             if (element) {

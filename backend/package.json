@@ -17,14 +17,18 @@
     "db-start": "./cli.js"
   },
   "dependencies": {
+    "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
     "browser-sync-close-hook": "^1.0.5",
     "chrome-launcher": "^0.12.0",
     "cors": "^2.8.5",
+    "csv-parser": "^2.3.2",
+    "csvtojson": "^2.0.10",
     "express": "^4.17.1",
     "mongoose": "^5.7.12",
     "open": "^7.0.0",
-    "opener": "^1.5.1"
+    "opener": "^1.5.1",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "open-cli": "^5.0.0"

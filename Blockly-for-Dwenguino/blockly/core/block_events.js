@@ -30,6 +30,7 @@ goog.provide('Blockly.Events.Change');  // Deprecated.
 goog.provide('Blockly.Events.Create');  // Deprecated.
 goog.provide('Blockly.Events.Delete');  // Deprecated.
 goog.provide('Blockly.Events.Move');  // Deprecated.
+goog.provide('Blockly.Events.Undo');
 
 goog.require('Blockly.Events');
 goog.require('Blockly.Events.Abstract');
@@ -520,3 +521,47 @@ Blockly.Events.Move.prototype.run = function(forward) {
     }
   }
 };
+
+/**
+ * Class for an undu action event.
+ * @constructor
+ */
+Blockly.Events.Undo = function() {
+};
+
+/**
+ * Type of this event.
+ * @type {string}
+ */
+Blockly.Events.Delete.prototype.type = Blockly.Events.UNDO;
+
+/**
+ * Encode the event as JSON.
+ * @return {!Object} JSON representation.
+ */
+Blockly.Events.Undo.prototype.toJson = function() {
+  var json = "";
+  return json;
+};
+
+/**
+ * Decode the JSON event.
+ * @param {!Object} json JSON representation.
+ */
+Blockly.Events.Undo.prototype.fromJson = function(json) {
+};
+
+/**
+ * Run a deletion event.
+ */
+Blockly.Events.Undo.prototype.run = function() {
+};
+
+/**
+ * Does this event record any change of state?
+ * @return {boolean} True if null, false if something changed.
+ */
+Blockly.Events.Undo.prototype.isNull = function() {
+  return false;
+};
+

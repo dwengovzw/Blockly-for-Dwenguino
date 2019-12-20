@@ -10337,6 +10337,15 @@ declare module Blockly {
     
             /** @type {Blockly.ZoomControls} */
             zoomControls_: Blockly.ZoomControls;
+
+            /**
+             * Add undo button.
+             * @package
+             */
+            addUndoButton(): void;
+
+            /** @type {Blockly.UndoButton} */
+            zoomControls_: Blockly.UndoButton;
     
             /**
              * Getter for the flyout associated with this workspace.  This flyout may be
