@@ -1,19 +1,12 @@
 #include <Arduino.h>
 #include <Wire.h>
-
 #include <Dwenguino.h>
-
 #include <LiquidCrystal.h>
 
-void setup()
-{
-  initDwenguino();
-
+void setup(){
+initDwenguino();
+dwenguinoLCD.setCursor(2,0);
+dwenguinoLCD.print(String("WeGoSTEM ;)"));
 }
 
-
-void loop()
-{
-    LEDS = 0b01010101;
-
-}
+void loop(){}

@@ -131,7 +131,7 @@ then
     echo "Adding user to dialout group to get access to the USB ports"
     sudo usermod -a -G dialout $USER
     sudo usermod -a -G tty $USER
-    sudo chmod 666 /dev/ttyACM0
+    sudo chmod 666 /dev/ttyACM*
     
     echo "---------------------------------------------------------------------------------------"
     echo "Configured start script!"
