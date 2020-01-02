@@ -4,7 +4,8 @@
   "description": "Logging server which provides unique session ids and receives logging data for all sessions running in the online version of google blockly",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-nw": "nw --disable-raf-throttling"
   },
   "keywords": [
     "logging",
@@ -31,6 +32,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "open-cli": "^5.0.0"
+    "open-cli": "^5.0.0",
+    "nw": "0.43.2-skd"
   }
 }
