@@ -8,7 +8,7 @@ var logSchema = mongoose.Schema({
     user_id: String,
     school: String,
     session_id: String,
-    agegroup: String,
+    date_of_birth: Date,
     gender: String,
     activity_id: Number,
     event: {

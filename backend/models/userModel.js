@@ -1,8 +1,12 @@
 var mongoose = require('mongoose');
 // Setup schema
 var userSchema = mongoose.Schema({
-    user_id: String,
-    password: String
+    username: String,
+    id: String,
+    password: String,
+    date_of_birth: Date,
+    gender: String,
+    school: String
 });
 // Export Contact model
 var Useritem = module.exports = mongoose.model('authentication', userSchema);

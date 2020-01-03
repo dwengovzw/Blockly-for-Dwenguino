@@ -50,5 +50,8 @@ router.route('/authentication/new')
 router.route('/authentication/authenticate')
     .post(authenticationcontroller.authenticate);
 
+router.route('/authentication/updateUser')
+    .post(authenticationcontroller.update);
+
 // Export API routes
 module.exports = router;
