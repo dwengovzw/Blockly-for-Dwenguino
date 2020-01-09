@@ -94,8 +94,8 @@ LoggingMenu.prototype.createLoginMenu = function(){
 LoggingMenu.prototype.login = function(){
     var self = this;
     var errors = [];
-    self.username = $( "input[name=myusernametag]").val();
-    self.password = self.currentlySelectedIcons;
+    User.username = $( "input[name=myusernametag]").val();
+    User.password = JSON.stringify(self.currentlySelectedIcons);
 
     errors.push(self.validator.validateId(self.currentlySelectedIcons));
 
@@ -103,7 +103,7 @@ LoggingMenu.prototype.login = function(){
         self.showErrors(errors);
     } else {
         var serverSubmission = {
-            "userId": self.username,
+            "userId": User.username,
             "password": JSON.stringify(self.currentlySelectedIcons)
         };
 
@@ -153,8 +153,8 @@ LoggingMenu.prototype.createUserMenu = function(){
 LoggingMenu.prototype.registerUser = function(){
     var self = this;
     var errors = [];
-    self.username = $( "input[name=myusernametag]").val();
-    self.password = self.currentlySelectedIcons;
+    User.username = $( "input[name=myusernametag]").val();
+    User.password = JSON.stringify(self.currentlySelectedIcons);
 
     errors.push(self.validator.validateId(self.currentlySelectedIcons));
 
@@ -162,7 +162,7 @@ LoggingMenu.prototype.registerUser = function(){
         self.showErrors(errors);
     } else {
         var serverSubmission = {
-            "userId": self.username,
+            "userId": User.username,
             "password": JSON.stringify(self.currentlySelectedIcons)
         };
 
@@ -255,8 +255,8 @@ LoggingMenu.prototype.showSettingsMenu = function(){
                 DwenguinoEventLogger.setGender(gender);
 
                 var serverSubmission = {
-                    "userId": self.username,
-                    "password": JSON.stringify(self.currentlySelectedIcons),
+                    "userId": User.username,
+                    "password": User.password,
                     "school": school,
                     "dateOfBirth": dateOfBirth,
                     "gender": gender

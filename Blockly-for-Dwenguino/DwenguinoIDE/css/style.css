@@ -1176,3 +1176,11 @@ span.grippy::after {
 .icon-envelope:before {
     content: url("../img/glyphicons_free/glyphicons/png/glyphicons-11-envelope.png");
 }
+
+.icon-completed {
+    color: green;
+}
+
+.icon-not-completed {
+    color: red;
+}
