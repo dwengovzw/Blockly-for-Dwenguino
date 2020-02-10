@@ -57,5 +57,8 @@ router.route('/authentication/updateUser')
 router.route('/tutorials/completedTutorials')
     .post(tutorialcontroller.getCompletedTutorials);
 
+router.route('/tutorials/completeTutorial')
+    .post(tutorialcontroller.newCompletedTutorial);
+
 // Export API routes
 module.exports = router;

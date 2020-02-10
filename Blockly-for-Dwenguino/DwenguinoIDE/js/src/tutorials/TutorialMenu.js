@@ -146,6 +146,7 @@ var TutorialMenu = {
             $("#tutorialModal_tutorials_menu").append(newLi);
             newLi.click(function(){
                 DwenguinoBlockly.tutorialId = tutorial.id;
+                DwenguinoBlockly.tutorialCategory = tutorial.category;
                 DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
                 tutorial.initSteps();
                 hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
@@ -168,11 +169,35 @@ var TutorialMenu = {
      * Event handler for endig a tutorial. Triggers the 'endTutorial' event for logging.
      */
     endTutorial: function(){
+        TutorialMenu.saveCompleteTutorial(DwenguinoBlockly.tutorialId, DwenguinoBlockly.tutorialCategory);
         DwenguinoBlockly.tutorialId = "";
+        DwenguinoBlockly.tutorialCategory = "";
         DwenguinoBlockly.tutorialIdSetting = "";
         DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("endTutorial", ""));
         TutorialMenu.showTutorialDialog();
     },
+
+    saveCompleteTutorial: function(tutorialId, category){
+        console.log(tutorialId, category);
+        var serverSubmission = {
+            "username": User.username,
+            "password": User.password,
+            "tutorialId": tutorialId,
+            "category": category,
+        };
+
+        if (DwenguinoEventLogger.sessionId !== undefined){
+            $.ajax({
+                type: "POST",
+                url: window.serverUrl + "/tutorials/completeTutorial",
+                data: serverSubmission,
+            }).done(function(data){
+                console.debug('Recording submitted', data);
+            }).fail(function(response, status)  {
+                console.warn('Failed to submit recording:', status);
+            });
+        }
+    }
 }
 
 $(document).ready(function() {
