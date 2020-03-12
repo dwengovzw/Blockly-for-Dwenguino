@@ -17,6 +17,10 @@ var DwenguinoBlockly = {
     xmlLoadedFromFile: "",
     xmlFromScenario: "",
 
+    tutorialId: "",
+    tutorialCategory: "",
+    tutorialIdSetting: "",
+
     initDwenguinoBlockly: function(){
 
         //Restore recording after language change

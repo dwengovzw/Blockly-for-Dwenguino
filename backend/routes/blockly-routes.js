@@ -22,6 +22,7 @@ let logcontroller = require('../controllers/logcontroller');
 let utilsconvroller = require('../controllers/utilscontroller');
 let schoolscontroller = require('../controllers/schoolscontroller');
 let authenticationcontroller = require('../controllers/authenticationcontroller');
+let tutorialcontroller = require('../controllers/tutorialcontroller');
 
 router.route('/logging/id')
     .get(logcontroller.newSessionId);
@@ -49,6 +50,15 @@ router.route('/authentication/new')
 
 router.route('/authentication/authenticate')
     .post(authenticationcontroller.authenticate);
+
+router.route('/authentication/updateUser')
+    .post(authenticationcontroller.update);
+
+router.route('/tutorials/completedTutorials')
+    .post(tutorialcontroller.getCompletedTutorials);
+
+router.route('/tutorials/completeTutorial')
+    .post(tutorialcontroller.newCompletedTutorial);
 
 // Export API routes
 module.exports = router;

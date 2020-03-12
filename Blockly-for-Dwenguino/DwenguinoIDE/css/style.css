@@ -951,7 +951,6 @@ span.grippy::after {
     content: '.. .. .. ..';
 }
 
-
 .dropdown-divider {
     /* height: 0; */
     margin: .5rem 0;
@@ -1175,4 +1174,12 @@ span.grippy::after {
 
 .icon-envelope:before {
     content: url("../img/glyphicons_free/glyphicons/png/glyphicons-11-envelope.png");
+}
+
+.icon-completed {
+    color: green;
+}
+
+.icon-not-completed {
+    color: red;
 }

@@ -101,22 +101,52 @@ var TutorialMenu = {
             TutorialMenu.addTutorialDialogEventHandlers();
         });
 
-        $.each(tutorials, function(index, tutorial){
-            if(tutorial.category == category){
-                TutorialMenu.addTutorial(tutorial);
-            }
+        var serverSubmission = {
+            "username": User.username,
+            "password": User.password,
+            "category": category
+        };
+
+        $.ajax({
+            type: "POST",
+            url: window.serverUrl + "/tutorials/completedTutorials",
+            data: serverSubmission,
+        }).done(function(completedTutorials){
+
+            $.each(tutorials, function(index, tutorial){
+                if(tutorial.category == category){
+                    var isCompleted = false;
+                    $.each(completedTutorials, function(i, completedTutorial){
+                        if(tutorial.id == completedTutorial['tutorial_id']){
+                            isCompleted = true;
+                        }
+                    });
+                    TutorialMenu.addTutorial(tutorial, isCompleted);
+                }
+            });
+        }).fail(function(response, status)  {
+            console.warn('Failed to get completed tutorials:', status);
+            $.each(tutorials, function(index, tutorial){
+                if(tutorial.category == category){
+                    var isCompleted = false;
+                    TutorialMenu.addTutorial(tutorial, isCompleted);
+                }
+            });
         });
+
     },
 
     /**
      * Add a specific tutorial to the tutorial list interface
      * @param {Tutorial} tutorial The tutorial object to add to the list
      */
-    addTutorial: function(tutorial){
-        var newLi = $("<div>").attr("class", "tutorial_item").attr("id", tutorial.id).attr("role", "presentation").html(tutorial.label);
+    addTutorial: function(tutorial, isCompleted){
+
+        var newLi = $("<div>").attr("class", "tutorial_item row").attr("id", tutorial.id).attr("role", "presentation");
             $("#tutorialModal_tutorials_menu").append(newLi);
             newLi.click(function(){
                 DwenguinoBlockly.tutorialId = tutorial.id;
+                DwenguinoBlockly.tutorialCategory = tutorial.category;
                 DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
                 tutorial.initSteps();
                 hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
@@ -124,17 +154,50 @@ var TutorialMenu = {
                 hopscotch.startTour(tutorial);
                 DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
             });
+
+        if(isCompleted){
+            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok icon-completed col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
+        } else {
+            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-remove icon-not-completed col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
+        }
+  
     },
 
     /**
      * Event handler for endig a tutorial. Triggers the 'endTutorial' event for logging.
      */
     endTutorial: function(){
+        TutorialMenu.saveCompleteTutorial(DwenguinoBlockly.tutorialId, DwenguinoBlockly.tutorialCategory);
         DwenguinoBlockly.tutorialId = "";
+        DwenguinoBlockly.tutorialCategory = "";
         DwenguinoBlockly.tutorialIdSetting = "";
         DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("endTutorial", ""));
         TutorialMenu.showTutorialDialog();
     },
+
+    saveCompleteTutorial: function(tutorialId, category){
+        console.log(tutorialId, category);
+        var serverSubmission = {
+            "username": User.username,
+            "password": User.password,
+            "tutorialId": tutorialId,
+            "category": category,
+        };
+
+        if (DwenguinoEventLogger.sessionId !== undefined){
+            $.ajax({
+                type: "POST",
+                url: window.serverUrl + "/tutorials/completeTutorial",
+                data: serverSubmission,
+            }).done(function(data){
+                console.debug('Recording submitted', data);
+            }).fail(function(response, status)  {
+                console.warn('Failed to submit recording:', status);
+            });
+        }
+    }
 }
 
 $(document).ready(function() {

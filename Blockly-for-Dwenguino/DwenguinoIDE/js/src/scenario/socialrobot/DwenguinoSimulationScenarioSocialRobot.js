@@ -575,6 +575,9 @@ DwenguinoSimulationScenarioSocialRobot.prototype.loadFromXml = function(){
       case TypesEnum.SONAR:
         this.robotComponentsFactory.addSonar(true, offsetLeft, offsetTop);
         break;
+      case TypesEnum.LCD:
+        this.robotComponentsFactory.addLcd(true, offsetLeft, offsetTop);
+        break;
     }
     DwenguinoSimulationRobotComponentsMenu.changeValue(type,1);
   }

@@ -10,12 +10,10 @@ var DwenguinoEventLogger = {
 
       school: null,
       userId: null,
-      activityDate: null,
   
       //General settings for this session, these are used for data logging during experiments
-      agegroupSetting: "",
+      dateOfBirth: "",
       genderSetting: "",  
-      activityIdSetting: "",
       tutorialIdSetting: "",
       computerId: "-1",
       workshopId: "-1",
@@ -27,7 +25,7 @@ var DwenguinoEventLogger = {
             $(document).keydown(function (e) {
                 keys[e.which] = true;
                 if (keys[69] && keys[83] && keys[84]){
-                    DwenguinoEventLogger.loggingModal.showMenu();
+                    DwenguinoEventLogger.loggingModal.createInitialMenu();
                 }
             });
     
@@ -75,9 +73,8 @@ var DwenguinoEventLogger = {
             "userId": DwenguinoEventLogger.userId,
             "school": DwenguinoEventLogger.school,
             "sessionId": DwenguinoEventLogger.sessionId,
-            "agegroup": DwenguinoEventLogger.agegroupSetting,
+            "dateOfBirth": DwenguinoEventLogger.agegroupSetting,
             "gender": DwenguinoEventLogger.genderSetting,
-            "activityId": DwenguinoEventLogger.activityId,
             "event": eventToRecord
             };
             console.log(eventToRecord);
@@ -102,20 +99,12 @@ var DwenguinoEventLogger = {
             this.school = school;
         },
 
-        setAgegroup: function(agegroup){
-            this.agegroupSetting = agegroup;
+        setDateOfBirth: function(dateOfBirth){
+            this.dateOfBirth = dateOfBirth;
         },
 
         setGender: function(gender){
             this.genderSetting = gender;
-        },
-
-        setActivityId: function(activityId){
-            this.activityIdSetting = activityId;
-        },
-
-        setActivityDate: function(activityDate){
-            this.activityDate = activityDate;
         }
 }
 
