@@ -1,3 +1,6 @@
+import BoardState from "./simulation/BoardState.js";
+import SimulationSandbox from "./simulation/SimulationSandbox.js";
+import ButtonMap from "./simulation/ButtonMap.js"
 
 export default class DwenguinoSimulation {
     board = null;
@@ -13,28 +16,14 @@ export default class DwenguinoSimulation {
     debugger = null;
     logger = null;
     workspace = null;
+    simulationSandbox = null;
     constructor(logger, workspace){
-        this.initBoardState();
+        this.board = new BoardState();
         this.initScenarioState();
         this.initDebuggerState();
         this.logger = logger;
         this.workspace = workspace;
-    }
-
-    initBoardState(){
-        this.board = {
-            lcdContent: new Array(2),
-            buzzer: {
-              osc: null,
-              audiocontext: null,
-              tonePlaying: 0
-            },
-            servoAngles: [0, 0],
-            motorSpeeds: [0, 0],
-            leds: [0,0,0,0,0,0,0,0,0],
-            buttons: [1,1,1,1,1],
-            sonarDistance: 50
-          };
+        this.simulationSandbox = new SimulationSandbox();
     }
 
     initScenarioState(){
@@ -339,51 +328,16 @@ export default class DwenguinoSimulation {
 
     this.hideSonar();
 
+    let self = this;
     // push buttons
     $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mousedown', function() {
-      if (document.getElementById(this.id).className === "sim_button") {
-        document.getElementById(this.id).className = "sim_button sim_button_pushed";
-        // update state of buttons
-        switch(this.id) {
-          case "sim_button_N":
-            this.board.buttons[0] = 0;
-          break;
-          case "sim_button_W":
-            this.board.buttons[1] = 0;
-          break;
-          case "sim_button_C":
-            this.board.buttons[2] = 0;
-          break;
-          case "sim_button_E":
-            this.board.buttons[3] = 0;
-          break;
-          case "sim_button_S":
-            this.board.buttons[4] = 0;
-        }
-      }
+        self.board.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 0;
+        self.updateSimulatorView();
     });
 
     $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mouseup', function() {
-      if (document.getElementById(this.id).className === "sim_button sim_button_pushed") {
-        document.getElementById(this.id).className = "sim_button";
-        // update state of buttons
-        switch(this.id) {
-          case "sim_button_N":
-            this.board.buttons[0] = 1;
-          break;
-          case "sim_button_W":
-            this.board.buttons[1] = 1;
-          break;
-          case "sim_button_C":
-            this.board.buttons[2] = 1;
-          break;
-          case "sim_button_E":
-            this.board.buttons[3] = 1;
-          break;
-          case "sim_button_S":
-            this.board.buttons[4] = 1;
-        }
-      }
+        self.board.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 1;
+        self.updateSimulatorView();
     });
   }
 
@@ -413,13 +367,8 @@ export default class DwenguinoSimulation {
     $("#sim_sonar_input").hide();
   }
 
-  lcdBacklightOn(){
-    $("#sim_lcds").addClass("on");
-  }
 
-  lcdBacklightOff(){
-    $("#sim_lcds").removeClass("on");
-  }
+ 
 
 /* -------------------------------------------------------------------------
 * Functions for handling the simulator controls
@@ -479,7 +428,7 @@ export default class DwenguinoSimulation {
             iframeParentElement: document.getElementById('debug'),
             // declare context that should be available in debugger
             sandbox: {
-                DwenguinoSimulation: this
+                DwenguinoSimulation: this.simulationSandbox
             }
         });
 
@@ -515,6 +464,7 @@ export default class DwenguinoSimulation {
         var code = this.debugger.code.split("\n")[line] === undefined ? '' : this.debugger.code.split("\n")[line];
 
         // Update the scenario View
+        // TODO: Do not reassign board, make sure updateScenario just changes the state of board
         this.board = this.currentScenario.updateScenario(this.board);
 
         // check if current line is not a sleep
@@ -528,6 +478,7 @@ export default class DwenguinoSimulation {
             this.delayRemainingAfterSteps = delayTime % this.baseSpeedDelay;
             this.performDelayLoop(this.step);
         }
+        this.updateSimulatorView();
         this.checkForEnd();
     }
 
@@ -540,6 +491,7 @@ export default class DwenguinoSimulation {
         // with an interval of speedDelay.
         if (this.delayStepsTaken < this.delayStepsToTake){
             // Update the scenario View
+            // TODO: Do not reassign board, make sure updateScenario just changes the state of board
             this.board = this.currentScenario.updateScenario(this.board);
             this.delayStepsTaken++;
             setTimeout(() => {
@@ -556,6 +508,7 @@ export default class DwenguinoSimulation {
   oneStep() {
     // let driving robot update 1 frame
     // Update the scenario View
+    // TODO: Do not reassign board, make sure updateScenario just changes the state of board
     this.board = this.currentScenario.updateScenario(this.board);
 
     // Get current line
@@ -761,76 +714,69 @@ export default class DwenguinoSimulation {
   }
 
   resetBoard(){
-    // stop sound
-    if (this.board.buzzer.tonePlaying !== 0) {
-      this.noTone("BUZZER");
-    }
-    // clearn lcd
-    this.clearLcd();
-    // turn all lights out
-    this.board.leds = [0,0,0,0,0,0,0,0,0];
-    for (var i = 0; i < 8; i++) {
-      document.getElementById('sim_light_' + i).className = "sim_light sim_light_off";
-    }
-    document.getElementById('sim_light_13').className = "sim_light sim_light_off";
-
-    // reset servo
-    this.board.servoAngles = [0, 0];
-    //$("#sim_servo1_mov, #sim_servo2_mov").css("transform", "rotate(0deg)");
-
-    // reset motors
-    this.board.motorSpeeds = [0, 0];
-    //$("#sim_motor1, #sim_motor2").css("transform", "rotate(0deg)");
-
-    //reset buttons
-    this.board.buttons = [1,1,1,1,1];
-    $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").removeClass().addClass('sim_button');
-
-    // clear scope
-    //document.getElementById('sim_scope').innerHTML = "";
+    this.board.reset();
+    this.updateSimulatorView();
   }
 
-  /*
-    * function called by the delay block to delay the simulation
-    *  @param {int} delay: time in ms the simaultion should be paused
-    */
-    sleep(delay) {
-        // sleep is regulated inside step funtion
+  updateSimulatorView(){
+
+    // Change the visuals of the pir sensor
+    // TODO: Figure out how to update the pir sensor visuals
+
+    // Show the sonar value
+    var distance = Math.round(this.board.sonarDistance);
+    if (distance <= -1){
+        this.hideSonar();
+    } else {
+        this.showSonar();
+        var sim_sonar  = document.getElementById('sonar_input');
+        
+        if(typeof(sim_sonar) != 'undefined' && sim_sonar != null){
+            sim_sonar.value = distance;
+        } else {
+            console.log('Sonar input element is undefined');
+        }
+    }
+    
+
+    // Play audio on the buzzer
+    if (this.board.buttons.audiocontext){
+        if (this.board.buzzer.tonePlaying === 0) {
+            this.board.buzzer.osc.stop();
+        } else {
+            // start tone
+            this.board.buzzer.osc.frequency.value = this.board.buzzer.tonePlaying; // Hz
+            this.board.buzzer.osc.connect(this.board.buzzer.audiocontext.destination); // connect it to the destination
+            this.board.buzzer.osc.start(); // start the oscillator
+        }
     }
 
-  /*
-  * Makes the lcd display empty
-  *
-  */
-  clearLcd() {
-    // clear lcd by writing spaces to it
-    for (var i = 0; i < 2; i++) {
-        this.board.lcdContent[i] = " ".repeat(16);
-        this.writeLcd(" ".repeat(16), i, 1);
+    // Update the button view
+    for (let i = 0 ; i < this.board.buttons.length ; ++i){
+        if (this.board.buttons[i] === 0){
+            document.getElementById("#" + ButtonMap.mapIndexToButtonId(i)).className = "sim_button sim_button_pushed";
+        }else{
+            document.getElementById("#" + ButtonMap.mapIndexToButtonId(i)).className = "sim_button";    
+        }
     }
-  }
+    
 
-  /*
-  * Writes text to the lcd on the given row starting fro position column
-  * @param {string} text: text to write
-  * @param {int} row: 0 or 1 addresses the row
-  * @param {int} column: 0-15: the start position on the given row
-  */
-  writeLcd(text, row, column) {
-    this.lcdBacklightOn();
-    // replace text in current content (if text is hello and then a is written this gives aello)
-    text = this.board.lcdContent[row].substr(0, column) +
-    text.substring(0, 16 - column) +
-    this.board.lcdContent[row].substr(text.length + column, 16);
-    this.board.lcdContent[row] = text;
-
-    // write new text to lcd screen and replace spaces with &nbsp;
-    $("#sim_lcd_row" + row).text(text);
-    if(document.getElementById('sim_lcd_row' + row) !== null){
-      document.getElementById('sim_lcd_row' + row).innerHTML =
-      document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+    // Turn lcd backlight on or off.
+    if (this.board.backlight){
+        $("#sim_lcds").addClass("on");
+    }else{
+        $("#sim_lcds").removeClass("on");
     }
-
+    
+    // Set the board text on the screen
+    for (var i = 0 ; i < 2 ; ++i){
+        // write new text to lcd screen and replace spaces with &nbsp;
+        $("#sim_lcd_row" + i).text(this.board.lcdContent[i]);
+        if(document.getElementById('sim_lcd_row' + row) !== null){
+            document.getElementById('sim_lcd_row' + row).innerHTML =
+            document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+        }
+    }
     // repaint
     var element = document.getElementById("sim_lcds");
     if(element !== null){
@@ -838,272 +784,29 @@ export default class DwenguinoSimulation {
       element.offsetHeight;
       element.style.display = 'block';
     }
-  }
+     
 
-  /*
-  * Write value 'HIGH' or 'LOW' to a pin, used to turn light on and off
-  * @param {int} pinNumber: 13 or 32-39 adresses a light
-  * @param {string} state: 'HIGH' to trun light on or 'LOW' to turn light off
-  */
-  digitalWrite(pinNumber, state) {
-    // turns light on or off
-    var pin = Number(pinNumber);
-    if ((pin >= 32 && pin <= 39) || pin === 13) {
-      if (pin >= 32 && pin <= 39) {
-        pin -= 32;
-      }
-      if (state === 'HIGH' || state == 1) {
-        pin=== 13? this.board.leds[8] = 1 : this.board.leds[pin] = 1;
-        var sim_light =  document.getElementById('sim_light_' + pin);
-        if (typeof(sim_light) != 'undefined' && sim_light != null) {
-          sim_light.className = "sim_light sim_light_on";
+    // Set leds to right value
+    for (var i = 0; i < 8; i++) {
+        let classValue = "";
+        if (this.board.leds[i] === 0){
+            classValue = "sim_light sim_light_off";
+        }else{
+            classValue = "sim_light sim_light_on";
         }
-      } else {
-        pin === 13? this.board.leds[8] = 0 : this.board.leds[pin] = 0;
-        var sim_light =  document.getElementById('sim_light_' + pin);
-        if (typeof(sim_light) != 'undefined' && sim_light != null) {
-          sim_light.className = "sim_light sim_light_off";
-        }
+        document.getElementById('sim_light_' + i).className = classValue;
       }
+      // Set led 13 to right value
+    if (this.board.leds[8] === 0){
+        document.getElementById('sim_light_13').className = "sim_light sim_light_off";
+    }else{
+        document.getElementById('sim_light_13').className = "sim_light sim_light_on";
     }
-  }
-
-  analogWrite(pinNumber, state) {
-
-  }
-
-  /*
-  * Reads the value of the given pin, used to know the value of a button
-  * @param {string} id of the button "SW_N","SW_W,SW_C","SW_E" or "SW_S"
-  * @returns {int} 1 if not pressed, 0 if pressed
-  */
-  digitalRead(pin) {
-    // read value from buttons
-    if (pin.startsWith("SW_")) {
-      return document.getElementById("sim_button_" + pin[3]).className === "sim_button" ? 1 : 0;
-    }
-
-    pin = Number(pin);
-    if ((pin >= 32 && pin <= 39) || pin === 13) {
-      if (pin >= 32 && pin <= 39) {
-        pin -= 32;
-      }
-      return document.getElementById('sim_light_' + pin).className.includes("sim_light_on")? 1 : 0;
-    }
-
-    return 1;
-  }
-
-  analogRead(pin) {
-    return 0;
-  }
-
-  /*
-  * Changes the state of all eight lights
-  * @param {String} bin "0b00000000" to turn all lights off, "0b11111111" to turn all lights on
-  */
-  setLeds(bin) {
-    //Convert number to binary string
-    bin = bin.toString(2);
-
-    // Turn all leds off
-    for (var i = 0 ; i < 8 ; i++){
-        this.digitalWrite(32+i, 0);
-    }
-    // Turn on the respective leds
-    var diff = 8 - bin.length;
-    if (diff < 0){
-      diff = 0
-    }
-    for (var i = 0 ; i < Math.min(bin.length, 8) ; i++){
-        this.digitalWrite(39 - (diff + i), bin[i]);
-    }
-    
-
-    
-  }
-
-  /*
-  * Turns the buzzer to a given frequancy
-  * @param {string} id of the pin "BUZZER"
-  * @param {int} frequency of the wanted sound
-  */
-  tone(pin, frequency) {
-    if (pin !== "BUZZER") {
-      return;
-    }
-    if (this.board.buzzer.osc === null) {
-      // initiate sound object
-      try {
-        this.board.buzzer.audiocontext = new(window.AudioContext || window.webkitAudioContext)();
-      } catch (e) {
-        alert('Web Audio API is not supported in this browser');
-      }
-      //DwenguinoSimulation.board.sound.audiocontextBuzzer = new AudioContext();
-    }
-    if (this.board.buzzer.tonePlaying !== 0 && this.board.buzzer.tonePlaying !== frequency) {
-        this.board.buzzer.osc.stop();
-    }
-    if (this.board.buzzer.tonePlaying !== frequency) {
-      // a new oscilliator for each round
-      this.board.buzzer.osc = this.board.buzzer.audiocontext.createOscillator(); // instantiate an oscillator
-      this.board.buzzer.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
-
-      // start tone
-      this.board.buzzer.osc.frequency.value = frequency; // Hz
-      this.board.buzzer.osc.connect(this.board.buzzer.audiocontext.destination); // connect it to the destination
-      this.board.buzzer.osc.start(); // start the oscillator
-
-      this.board.buzzer.tonePlaying = frequency;
-    }
-  }
-
-  /*
-  * Stops the buzzer
-  * @param {string} id of the pin "BUZZER"
-  */
-  noTone(pin) {
-    if (pin === "BUZZER") {
-      // stop tone
-      this.board.buzzer.tonePlaying = 0;
-      this.board.buzzer.osc.stop();
-    }
-  }
-
-  /*
-  * Sets the servo to a given angle
-  * @param {int} channel id of servo 1 or 2
-  * @param {int} angle between 0 and 180
-  */
-  servo(channel, angle) {
-    //$("#sim_servo"+channel).show();
-    //document.getElementById("servo"+channel).checked = true;
-
-    //set angle
-    if (angle > 180) {
-      angle = 180;
-    }
-    if (angle < 0) {
-      angle = 0;
-    }
-
-    if (angle !== this.board.servoAngles[channel - 1]) {
-        this.board.servoAngles[channel - 1] = angle;
-        this.servoRotate(channel, angle);
-    }
-  }
-
-  /*
-  * Renders the movement of the servo
-  * @param {int} channel id of servo 1 or 2
-  * @param {int} angle between 0 and 180
-  */
-  servoRotate(channel, angle) {
-    var maxMovement = 10;
-    if (angle !== this.board.servoAngles[channel - 1]) {
-      return;
-    }
-    //var prevAngle = DwenguinoSimulation.getAngle($("#sim_servo" + channel + "_mov"));
-    // set 10 degrees closer at a time to create rotate effect
-    /*if (Math.abs(angle - prevAngle) > maxMovement) {
-      var direction = ((angle - prevAngle) > 0) ? 1 : -1;
-      $("#sim_servo" + channel + "_mov").css("transform", "rotate(" + (prevAngle + direction * maxMovement) + "deg)");
-      setTimeout(function() {
-        DwenguinoSimulation.servoRotate(channel, angle);
-      }, 20);
-    } else {
-      $("#sim_servo" + channel + "_mov").css("transform", "rotate(" + angle + "deg)");
-    }*/
-  }
-
-  /*
-  * Help function to get the angle in degrees of a rotated html object
-  * @param {obj} obj html object
-  * @returns {int} degrees of rotation
-  */
-  getAngle(obj) {
-    var matrix = obj.css("-webkit-transform") ||
-    obj.css("-moz-transform") ||
-    obj.css("-ms-transform") ||
-    obj.css("-o-transform") ||
-    obj.css("transform");
-    if (matrix !== "none") {
-      var values = matrix.split('(')[1];
-      values = values.split(')')[0];
-      values = values.split(',');
-      var a = values[0];
-      var b = values[1];
-      return Math.round(Math.atan2(b, a) * (180 / Math.PI));
-    }
-    return 0;
-  }
-
-  /*
-  * Turn a motor on at given speed
-  * @param {int} channel id of motor 1 or 2
-  * @param {int} speed between 0 and 255
-  */
-  startDcMotor(channel, speed) {
-    //$("#sim_motor"+channel).show();
-    //document.getElementById("motor"+channel).checked = true;
-
-    //set angle
-    if (speed > 255) {
-      speed = 255;
-    }
-    if (speed < -255) {
-      speed = -255;
-    }
-
-    // change view of motor
-    if (speed === this.board.motorSpeeds[channel - 1]) {
-      return;
-    }
-    this.board.motorSpeeds[channel - 1] = speed;
-    this.dcMotorRotate(channel, speed);
-
-    // change view of driving robot
-    var e = document.getElementById("sim_scenario");
-    //var option = e.options[e.selectedIndex].value;
 
   }
 
-  /*
-  * Renders the rotation of the motor
-  * @param {int} channel id of motor 1 or 2
-  * @param {int} speed between 0 and 255
-  */
-  dcMotorRotate(channel, speed) {
-    var maxMovement = speed / 20 + 5;
-    if (speed !== this.board.motorSpeeds[channel - 1] && speed !== 0) {
-      return;
-    }
-    //var prevAngle = DwenguinoSimulation.getAngle($("#sim_motor" + channel));
-    // rotate x degrees at a time based on speed
-    //$("#sim_motor" + channel).css("transform", "rotate(" + ((prevAngle + maxMovement) % 360) + "deg)");
 
-    this.timeout = setTimeout(() => {
-        this.dcMotorRotate(channel, speed);
-    }, 20);
-  }
-  /*
-  * Returns the distance between the sonar and the wall
-  * @param {int} trigPin 11
-  * @param {int} echoPin 12
-  * @returns {int} distance in cm
-  */
-  sonar(trigPin, echoPin) {
-    this.showSonar();
-    //document.getElementById("sonar").checked = true;
-    var sim_sonar  = document.getElementById('sonar_input');
-    var distance = Math.round(this.board.sonarDistance);
-    if(typeof(sim_sonar) != 'undefined' && sim_sonar != null){
-      sim_sonar.value = distance;
-    } else {
-      console.log('Sonar input element is undefined');
-    }
-    return distance
-  }
+  //TODO: Remove this function!!!!
 
   /**
    * Returns the state of PIR sensor if it was added to the scenario. Otherwise it returns a low signal by default.
