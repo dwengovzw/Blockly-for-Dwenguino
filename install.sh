@@ -23,9 +23,9 @@ check_for_root () {
 check_python_install () {
     if command -v python3 &>/dev/null
     then
-        echo Python 3 already installed.
+        echo "Python 3 already installed."
     else
-        echo Python 3 is not installed, trying to install.
+        echo "Python 3 is not installed, trying to install."
         sudo apt-get update
         sudo apt-get install python3.6
     fi
