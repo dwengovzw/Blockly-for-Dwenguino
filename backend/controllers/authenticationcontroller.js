@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 exports.new = function(req, res) {
   let mongoose = require('mongoose');
-  mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
+  mongoose.connect('mongodb://localhost/dwenguinoblocklyexit', { useNewUrlParser: true });
   let db = mongoose.connection;
   const rounds = 10;
 

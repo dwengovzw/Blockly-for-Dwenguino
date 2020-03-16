@@ -1,8 +1,9 @@
+import DwenguinoEventLogger from './logging/DwenguinoEventLogger.js'
+import DwenguinoSimulation from './DwenguinoSimulation.js'
+
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
-if (!window.dwenguinoBlocklyServer) {
-  dwenguinoBlocklyServer = false;
-};
+export { DwenguinoBlockly as default }
 
 window.serverUrl = 'http://localhost:12032';
 
@@ -21,7 +22,17 @@ var DwenguinoBlockly = {
     tutorialCategory: "",
     tutorialIdSetting: "",
 
+    logger: null,
+
+    simulationEnvironment: null,
+
     initDwenguinoBlockly: function(){
+        // Create DwenguinoEventLogger instance
+        this.logger = new DwenguinoEventLogger();
+        this.logger.init();
+
+        // Create new simulationenvironment
+        this.simulationEnvironment = new DwenguinoSimulation(this.logger, this.workspace);  // This is weird, workspace should be created in a different place..
 
         //Restore recording after language change
         DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "";
@@ -36,7 +47,7 @@ var DwenguinoBlockly = {
             slide: function( event, ui ) {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
                 console.log(ui.value);
-                DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("setDifficultyLevel", ui.value));
+                this.logger.createEvent(this.logger.createEvent("setDifficultyLevel", ui.value));
             }
         });
         $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
@@ -67,107 +78,101 @@ var DwenguinoBlockly = {
 
 
         //The following code handles the upload of a saved file.
-        //If it is run as an arduino ide plugin its shows a filechooser and returns the xml string
+        //If it is run as an arduino ide plugin its shows a filechooser and returns the xml string (depricated and removed)
         //If it is run in the browser it shows a modal dialog with two upload options:
         //1) Using the upload button.
         //2) Using the drag and drop system.
         $("#db_menu_item_upload").click(function(){
           var xml = "";
-          if (dwenguinoBlocklyServer){
-            xml = Blockly.Xml.textToDom(dwenguinoBlocklyServer.loadBlocks());
-            DwenguinoBlockly.restoreFromXml(xml);
-          }else{
-            if (window.File && window.FileReader && window.FileList && window.Blob) {
-              // Great success! All the File APIs are supported.
-              console.log("yay, files supported");
+          if (window.File && window.FileReader && window.FileList && window.Blob) {
+            // Great success! All the File APIs are supported.
+            console.log("yay, files supported");
 
-              // reset form
-              $('div').remove('#dropzoneModal');
+            // reset form
+            $('div').remove('#dropzoneModal');
 
-              $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
-              $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
-              $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
-              $('#modalDialog').append('<div class="modal-body">'+ MSG.dropzone['dictSelectFile']+'<input type="file" id="fileInput"><div id="filedrag">'+ MSG.dropzone['dictDefaultMessage'] +'</div><pre id="fileDisplayArea"><pre></div>');
-              $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
+            $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
+            $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
+            $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
+            $('#modalDialog').append('<div class="modal-body">'+ MSG.dropzone['dictSelectFile']+'<input type="file" id="fileInput"><div id="filedrag">'+ MSG.dropzone['dictDefaultMessage'] +'</div><pre id="fileDisplayArea"><pre></div>');
+            $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
 
-              $("#dropzoneModal").modal('show');
+            $("#dropzoneModal").modal('show');
 
-              var processFile = function(file){
-                var textType = /text.*/;
-      
-                if (file.type.match(textType)) {
-                  var reader = new FileReader();
-      
-                  reader.onload = function(e) {
-                    fileDisplayArea.innerText = file.name;
-                    DwenguinoBlockly.xmlLoadedFromFile = reader.result;
-                  }
-      
-                  reader.readAsText(file);
-                } else {
-                  fileDisplayArea.innerText = "File not supported!"
+            var processFile = function(file){
+              var textType = /text.*/;
+    
+              if (file.type.match(textType)) {
+                var reader = new FileReader();
+    
+                reader.onload = function(e) {
+                  fileDisplayArea.innerText = file.name;
+                  DwenguinoBlockly.xmlLoadedFromFile = reader.result;
                 }
+    
+                reader.readAsText(file);
+              } else {
+                fileDisplayArea.innerText = "File not supported!"
               }
-      
-              var fileInput = document.getElementById('fileInput');
-              var fileDisplayArea = document.getElementById('fileDisplayArea');
-      
-              fileInput.addEventListener('change', function(e) {
-                var file = fileInput.files[0];
-                processFile(file);
-              });
-      
-              // file drag hover
-              var FileDragHover = function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                e.target.className = (e.type == "dragover" ? "hover" : "");
-              };
-      
-              // file selection
-              var FileSelectHandler = function(e) {
-                // cancel event and hover styling
-                FileDragHover(e);
-                // fetch FileList object
-                var files = e.target.files || e.dataTransfer.files;
-                var file = files[0];
-                processFile(file);
-              };
-      
-              var filedrag = document.getElementById("filedrag");
-              filedrag.addEventListener("dragover", FileDragHover, false);
-              filedrag.addEventListener("dragleave", FileDragHover, false);
-              filedrag.addEventListener("drop", FileSelectHandler, false);
-              filedrag.style.display = "block";
-      
-              $("#submit_upload_modal_dialog_button").click(function(){
-                DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(DwenguinoBlockly.xmlLoadedFromFile));
-              });
-
-            } else {
-              alert('The File APIs are not fully supported in this browser.');
             }
+    
+            var fileInput = document.getElementById('fileInput');
+            var fileDisplayArea = document.getElementById('fileDisplayArea');
+    
+            fileInput.addEventListener('change', function(e) {
+              var file = fileInput.files[0];
+              processFile(file);
+            });
+    
+            // file drag hover
+            var FileDragHover = function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+              e.target.className = (e.type == "dragover" ? "hover" : "");
+            };
+    
+            // file selection
+            var FileSelectHandler = function(e) {
+              // cancel event and hover styling
+              FileDragHover(e);
+              // fetch FileList object
+              var files = e.target.files || e.dataTransfer.files;
+              var file = files[0];
+              processFile(file);
+            };
+    
+            var filedrag = document.getElementById("filedrag");
+            filedrag.addEventListener("dragover", FileDragHover, false);
+            filedrag.addEventListener("dragleave", FileDragHover, false);
+            filedrag.addEventListener("drop", FileSelectHandler, false);
+            filedrag.style.display = "block";
+    
+            $("#submit_upload_modal_dialog_button").click(function(){
+              DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(DwenguinoBlockly.xmlLoadedFromFile));
+            });
+
+          } else {
+            alert('The File APIs are not fully supported in this browser.');
           }
+          
         });
 
         // This code handles the download of the workspace to a local file.
-        // If this is run in the arduino ide, a filechooser is shown.
+        // If this is run in the arduino ide, a filechooser is shown. (depricated and removed)
         // If it is run in the browser, the document is downloaded using the name blocks.xml.
         $("#db_menu_item_download").click(function(){
             var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
             var data = Blockly.Xml.domToText(xml);
-            if (dwenguinoBlocklyServer){
-                dwenguinoBlocklyServer.saveBlocks(data);
-            } else {
-                console.log(data);
-                localStorage.workspaceXml = data;
-                DwenguinoBlockly.download("blocks.xml", data);
-            }
-            DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("downloadClicked", ""));
+            
+            console.log(data);
+            localStorage.workspaceXml = data;
+            DwenguinoBlockly.download("blocks.xml", data);
+            
+            DwenguinoBlockly.logger.recordEvent(this.logger.createEvent("downloadClicked", ""));
         });
 
         $("#db_menu_item_clear").click(function(){
-          DwenguinoSimulation.handleSimulationStop();
+          DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
           var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
           DwenguinoBlockly.runEventHandler(code);
         });
@@ -205,13 +210,13 @@ var DwenguinoBlockly = {
          });
 
          $("#blocklyDiv").click(function(){
-           DwenguinoSimulation.handleSimulationStop();
+           DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
          });
 
          // Process blockly events and log them
          DwenguinoBlockly.workspace.addChangeListener(function(event){
            // Stop de simulator
-           DwenguinoSimulation.handleSimulationStop();
+           DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
            console.log("blockly event");
            if (event.type == "create"){
              var data = {
@@ -219,14 +224,14 @@ var DwenguinoBlockly = {
                ids: event.ids
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockCreate", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyBlockCreate", data));
            } else if (event.type == "delete"){
              var data = {
                oldXml: event.oldXml,
                ids: event.ids
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockDelete", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyBlockDelete", data));
            } else if (event.type == "move"){
              var data = {
                oldParentId: event.oldParentId,
@@ -237,7 +242,7 @@ var DwenguinoBlockly = {
                newCoordinate: event.newCoordinate
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyBlockMove", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyBlockMove", data));
            } else if (event.type == "createVar"){
              var data = {
                varType: event.varType,
@@ -245,7 +250,7 @@ var DwenguinoBlockly = {
                varId: event.varId
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarCreate", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyVarCreate", data));
            } else if (event.type == "deleteVar"){
              var data = {
                varType: event.varType,
@@ -253,7 +258,7 @@ var DwenguinoBlockly = {
                varId: event.varId
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarDelete", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyVarDelete", data));
            } else if (event.type == Blockly.Events.VAR_RENAME){
              var data = {
                oldName: event.oldName,
@@ -261,7 +266,7 @@ var DwenguinoBlockly = {
                varId: event.varId
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyVarRename", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyVarRename", data));
            } else if (event.type == Blockly.Events.UI){
              var data = {
                element: event.element,
@@ -269,7 +274,7 @@ var DwenguinoBlockly = {
                newValue: event.newValue
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyUI", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyUI", data));
            } else if (event.type == Blockly.Events.CHANGE){
              var data = {
                element: event.element,
@@ -278,11 +283,11 @@ var DwenguinoBlockly = {
                newValue: event.newValue
              };
              data = JSON.stringify(data);
-             DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("blocklyChange", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyChange", data));
            } else if (event.type == Blockly.Events.UNDO){
              console.log(event);
              var data = {};
-              DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("undo", data));
+              DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("undo", data));
            }
          });
 
@@ -291,7 +296,7 @@ var DwenguinoBlockly = {
       DwenguinoBlockly.workspace.clear();
       Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
       var count = DwenguinoBlockly.workspace.getAllBlocks().length;
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("uploadClicked", xml));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("uploadClicked", xml));
     },
 
     download: function(filename, text) {
@@ -311,61 +316,46 @@ var DwenguinoBlockly = {
       var newStateArray = [];
       if (this.simButtonStateClicked){
         newStateArray = ['100%', 'off', false];
-        DwenguinoSimulation.handleSimulationStop();
+        DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
       } else {
         newStateArray = ['50%', 'on', true];
-        DwenguinoSimulation.setupEnvironment();
+        DwenguinoBlockly.simulationEnvironment.setupEnvironment();
       }
       $("#db_blockly").width(newStateArray[0]);
       this.simButtonStateClicked = newStateArray[2];
       DwenguinoBlockly.simulatorState = newStateArray[1];
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("simButtonStateClicked", DwenguinoBlockly.simulatorState));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("simButtonStateClicked", DwenguinoBlockly.simulatorState));
       DwenguinoBlockly.onresize();
       Blockly.svgResize(DwenguinoBlockly.workspace);
-    },
-
-    createEvent: function(eventName, data){
-      return DwenguinoEventLogger.createEvent(eventName, data);
-    },
-
-    /*
-    * This function submits an event to the python logging server.
-    */
-    recordEvent: function(eventToRecord){
-      DwenguinoEventLogger.recordEvent(eventToRecord);
     },
 
     runEventHandler: function(code){
       
       DwenguinoBlockly.disableRunButton();
       
-      if ((typeof dwenguinoBlocklyServer) != 'undefined' && dwenguinoBlocklyServer){
-          dwenguinoBlocklyServer.uploadCode(code);
-          DwenguinoBlockly.resetRunButton();
-      }else{
-        $.ajax({
-            url: windowserverUrl + "/utilities/run",
-            dataType: 'json',
-            type: 'post',
-            contentType: 'application/x-www-form-urlencoded',
-            data: {"code": code},
-            success: function( data, textStatus, jQxhr ){
-                console.log('succes');
-                console.log(data);
+      $.ajax({
+          url: windowserverUrl + "/utilities/run",
+          dataType: 'json',
+          type: 'post',
+          contentType: 'application/x-www-form-urlencoded',
+          data: {"code": code},
+          success: function( data, textStatus, jQxhr ){
+              console.log('succes');
+              console.log(data);
 
-                if (data.status === "error"){
-                  DwenguinoBlockly.showModalErrorDialog(data);
-                }
-                DwenguinoBlockly.resetRunButton();
-            },
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log( errorThrown );
-                DwenguinoBlockly.resetRunButton();
-            }
-        });
-      }
+              if (data.status === "error"){
+                DwenguinoBlockly.showModalErrorDialog(data);
+              }
+              DwenguinoBlockly.resetRunButton();
+          },
+          error: function( jqXhr, textStatus, errorThrown ){
+              console.log( errorThrown );
+              DwenguinoBlockly.resetRunButton();
+          }
+      });
+      
       console.log(code.replace(/\r?\n|\r/g, "\n"));
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("runClicked", ""));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("runClicked", ""));
     },
     showModalErrorDialog: function(error){
       $('#errorModal .modal-header').text(MSG.runError);
@@ -442,7 +432,7 @@ var DwenguinoBlockly = {
         var text = Blockly.Xml.domToText(xml);
         if (text != DwenguinoBlockly.prevWorkspaceXml){
             DwenguinoBlockly.prevWorkspaceXml = text;
-            DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("changedWorkspace", text));
+            DwenguinoBlockly.logger.recordEvent(this.logger.createEvent("changedWorkspace", text));
         }
     },
 
