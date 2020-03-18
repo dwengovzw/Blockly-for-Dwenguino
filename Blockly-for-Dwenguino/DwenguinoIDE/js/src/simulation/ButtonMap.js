@@ -23,7 +23,7 @@ export default class ButtonMap{
 
     static mapIndexToButtonId(index){
         for (let key in ButtonMap.map){
-            if (map[key] === index){
+            if (ButtonMap.map[key] === index){
                 return key;
             }
         }
@@ -36,7 +36,7 @@ export default class ButtonMap{
 
     static mapIndexToButtonPinName(index){
         for (let key in ButtonMap.pinMap){
-            if (this.pinMap[key] === index){
+            if (ButtonMap.pinMap[key] === index){
                 return key;
             }
         }

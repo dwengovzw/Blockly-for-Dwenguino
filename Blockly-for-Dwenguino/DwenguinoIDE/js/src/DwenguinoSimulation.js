@@ -23,7 +23,7 @@ export default class DwenguinoSimulation {
         this.initDebuggerState();
         this.logger = logger;
         this.workspace = workspace;
-        this.simulationSandbox = new SimulationSandbox();
+        this.simulationSandbox = new SimulationSandbox(this.board);
     }
 
     initScenarioState(){
@@ -351,8 +351,8 @@ export default class DwenguinoSimulation {
         this.isSimulationPaused = false;
         this.setButtonsStop();
         this.stopSimulation();
-        this.hideSonar();
-        this.lcdBacklightOff();
+        this.board.reset();         // Reset the board state to defaults for the next run
+        this.updateSimulatorView(); // Update the simulator view so the default values are shown
   }
 
   showSonar(){
@@ -458,7 +458,7 @@ export default class DwenguinoSimulation {
 
         // highlight the current block
         this.updateBlocklyColour();
-        this.handleScope();
+        //his.handleScope();
 
         // Get current line
         var code = this.debugger.code.split("\n")[line] === undefined ? '' : this.debugger.code.split("\n")[line];
@@ -476,7 +476,7 @@ export default class DwenguinoSimulation {
             this.delayStepsTaken = 0;
             this.delayStepsToTake = Math.floor(delayTime/this.baseSpeedDelay);
             this.delayRemainingAfterSteps = delayTime % this.baseSpeedDelay;
-            this.performDelayLoop(this.step);
+            this.performDelayLoop();
         }
         this.updateSimulatorView();
         this.checkForEnd();
@@ -485,7 +485,7 @@ export default class DwenguinoSimulation {
     /*
     *  This function iterates until the delay has passed
     */
-    performDelayLoop(returnCallback){
+    performDelayLoop(){
         // Here we want the simulation to keep running but not let the board state update.
         // To do so we execute the updateScenario() function of the current scenario delay/speedDelay times
         // with an interval of speedDelay.
@@ -493,12 +493,13 @@ export default class DwenguinoSimulation {
             // Update the scenario View
             // TODO: Do not reassign board, make sure updateScenario just changes the state of board
             this.board = this.currentScenario.updateScenario(this.board);
+            this.updateSimulatorView();     // Update the simulator view
             this.delayStepsTaken++;
             setTimeout(() => {
-                this.performDelayLoop(returnCallback);
+                this.performDelayLoop();
             }, this.speedDelay);
         } else {
-            setTimeout(returnCallback, this.delayRemainingAfterSteps);
+            setTimeout(() => { this.step() }, this.delayRemainingAfterSteps);
         }
     }
 
@@ -517,7 +518,7 @@ export default class DwenguinoSimulation {
 
     this.debugger.debuggerjs.machine.step();
     this.updateBlocklyColour();
-    this.handleScope();
+    //this.handleScope();
     this.checkForEnd();
 
     // check if current line is not a sleep
@@ -752,11 +753,11 @@ export default class DwenguinoSimulation {
     }
 
     // Update the button view
-    for (let i = 0 ; i < this.board.buttons.length ; ++i){
+    for (let i = 0 ; i < this.board.buttons.length ; i++){
         if (this.board.buttons[i] === 0){
-            document.getElementById("#" + ButtonMap.mapIndexToButtonId(i)).className = "sim_button sim_button_pushed";
+            document.getElementById(ButtonMap.mapIndexToButtonId(i)).className = "sim_button sim_button_pushed";
         }else{
-            document.getElementById("#" + ButtonMap.mapIndexToButtonId(i)).className = "sim_button";    
+            document.getElementById(ButtonMap.mapIndexToButtonId(i)).className = "sim_button";    
         }
     }
     
@@ -769,9 +770,9 @@ export default class DwenguinoSimulation {
     }
     
     // Set the board text on the screen
-    for (var i = 0 ; i < 2 ; ++i){
+    for (var row = 0 ; row < 2 ; ++row){
         // write new text to lcd screen and replace spaces with &nbsp;
-        $("#sim_lcd_row" + i).text(this.board.lcdContent[i]);
+        $("#sim_lcd_row" + row).text(this.board.lcdContent[row]);
         if(document.getElementById('sim_lcd_row' + row) !== null){
             document.getElementById('sim_lcd_row' + row).innerHTML =
             document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');

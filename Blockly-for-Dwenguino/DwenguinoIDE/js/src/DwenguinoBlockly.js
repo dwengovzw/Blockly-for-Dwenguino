@@ -1,5 +1,6 @@
 import DwenguinoEventLogger from './logging/DwenguinoEventLogger.js'
 import DwenguinoSimulation from './DwenguinoSimulation.js'
+import TutorialMenu from './tutorials/TutorialMenu.js'
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
@@ -18,18 +19,23 @@ var DwenguinoBlockly = {
     xmlLoadedFromFile: "",
     xmlFromScenario: "",
 
-    tutorialId: "",
-    tutorialCategory: "",
-    tutorialIdSetting: "",
-
     logger: null,
 
     simulationEnvironment: null,
 
+    tutorialMenu: null,
+
     initDwenguinoBlockly: function(){
+        
+
         // Create DwenguinoEventLogger instance
+        // This instance should be passed to all classes which want to log events.
         this.logger = new DwenguinoEventLogger();
         this.logger.init();
+
+        // Create an instance of the tutorial menu (persists until the application stops).
+        // Uses the event logger to capture tutorial actions.
+        this.tutorialMenu = new TutorialMenu(this.logger);
 
         // Create new simulationenvironment
         this.simulationEnvironment = new DwenguinoSimulation(this.logger, this.workspace);  // This is weird, workspace should be created in a different place..
@@ -176,28 +182,6 @@ var DwenguinoBlockly = {
           var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
           DwenguinoBlockly.runEventHandler(code);
         });
-
-        // //dropdown menu code
-        //  $(".dropdown-toggle").dropdown();
-        //  console.log(tutorials);
-
-        // // ONLY PUT THIS BACK WHEN ENABLING TUTORIALS
-        // // tutorials = {};
-        //  $.each(tutorials, function(index, arrayElement){
-        //    var newLi = $("<li>").attr("class", "dropdownmenuitem").attr("id", arrayElement.id).attr("role", "presentation").html(arrayElement.label);
-        //    if(arrayElement.id == 'introductionSocialRobot'){
-        //     $("#dropdownMenuTuts").append("<div class='dropdown-divider'>" + MSG.catSocialRobot + "</div>");
-        //    }
-        //    $("#dropdownMenuTuts").append(newLi);
-        //    newLi.click(function(){
-        //      DwenguinoBlockly.tutorialId = arrayElement.id;
-        //      DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
-        //      arrayElement.initSteps();
-        //      hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
-        //      hopscotch.startTour(arrayElement);
-        //      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
-        //    });
-        //  });
 
          $("#language1").click(function(){
             DwenguinoBlockly.language = "cpp";

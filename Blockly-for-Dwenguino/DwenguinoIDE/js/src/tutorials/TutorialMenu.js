@@ -2,23 +2,31 @@
  * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
  * the menu.
  */
-var TutorialMenu = {
+export default class TutorialMenu {
+
+    tutorialCategory = "";
+    eventLogger = null;
+
+    constructor(eventLogger){
+        this.eventLogger = eventLogger;
+        this.initTutorialMenu();
+    }
 
     /**
      * Initialize the tutorial menu.
      */
-    initTutorialMenu: function(){
-        $("#db_tutorials").click(function(){
-            TutorialMenu.loadTutorialDialog();
-            TutorialMenu.addTutorialDialogEventHandlers();
-            TutorialMenu.showTutorialDialog();
+    initTutorialMenu(){
+        $("#db_tutorials").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
+            this.showTutorialDialog();
         });
-    },
+    }
 
     /**
      * Loads the general tutorial menu user interface displaying all tutorial categories.
      */
-    loadTutorialDialog: function(){
+    loadTutorialDialog(){
         $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
         $("#tutorialModal .modal-body .message").empty();
         $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'</div>');
@@ -42,52 +50,52 @@ var TutorialMenu = {
         
         $("#tutorialModal .modal-footer").empty();
         $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
-    },
+    }
 
     /**
      * Adds event handlers for the general tutorial menu user interface.
      */
-    addTutorialDialogEventHandlers: function(){
-        $("#tutorial_category_wegostem").click(function() {
-            TutorialMenu.loadTutorialsMenu("wegostem");
+    addTutorialDialogEventHandlers(){
+        $("#tutorial_category_wegostem").click(() => {
+            this.loadTutorialsMenu("wegostem");
         });
 
-        $("#tutorial_category_dwenguino").click(function() {
-            TutorialMenu.loadTutorialsMenu("dwenguino");
+        $("#tutorial_category_dwenguino").click(() => {
+            this.loadTutorialsMenu("dwenguino");
         });
     
-        $("#tutorial_category_riding_robot").click(function() {
-            TutorialMenu.loadTutorialsMenu("ridingrobot");
+        $("#tutorial_category_riding_robot").click(() => {
+            this.loadTutorialsMenu("ridingrobot");
         });
     
-        $("#tutorial_category_social_robot").click(function() {
-            TutorialMenu.loadTutorialsMenu("socialrobot");
+        $("#tutorial_category_social_robot").click(() => {
+            this.loadTutorialsMenu("socialrobot");
         });
 
-        $('.close').click(function() {
-            TutorialMenu.hideTutorialDialog();
+        $('.close').click(() => {
+            this.hideTutorialDialog();
         });
-    },
+    }
 
     /**
      * Makes the tutorial menu visible
      */
-    showTutorialDialog: function(){
+    showTutorialDialog(){
         $("#tutorialModal").modal('show');
-    },
+    }
 
     /**
      * Makes the tutorial menu hidden
      */
-    hideTutorialDialog: function(){
+    hideTutorialDialog(){
         $('#tutorialModal').modal("hide");
-    },
+    }
 
     /**
      * Loads a list of tutorials from a specific category.
      * @param {String} category The tutorial category to load tutorials from 
      */
-    loadTutorialsMenu: function(category){
+    loadTutorialsMenu(category){
         $("#tutorialModal .modal-body .message").empty();
         $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">Kies een tutorial</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_tutorials_menu"></div>');
@@ -96,9 +104,9 @@ var TutorialMenu = {
         $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'</button>');
         $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
         
-        $("#previous_tutorial_dialog").click(function() {
-            TutorialMenu.loadTutorialDialog();
-            TutorialMenu.addTutorialDialogEventHandlers();
+        $("#previous_tutorial_dialog").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
         });
 
         var serverSubmission = {
@@ -107,6 +115,7 @@ var TutorialMenu = {
             "category": category
         };
 
+        let self = this;
         $.ajax({
             type: "POST",
             url: window.serverUrl + "/tutorials/completedTutorials",
@@ -121,7 +130,7 @@ var TutorialMenu = {
                             isCompleted = true;
                         }
                     });
-                    TutorialMenu.addTutorial(tutorial, isCompleted);
+                    self.addTutorial(tutorial, isCompleted);
                 }
             });
         }).fail(function(response, status)  {
@@ -129,31 +138,31 @@ var TutorialMenu = {
             $.each(tutorials, function(index, tutorial){
                 if(tutorial.category == category){
                     var isCompleted = false;
-                    TutorialMenu.addTutorial(tutorial, isCompleted);
+                    self.addTutorial(tutorial, isCompleted);
                 }
             });
         });
 
-    },
+    }
 
     /**
      * Add a specific tutorial to the tutorial list interface
      * @param {Tutorial} tutorial The tutorial object to add to the list
      */
-    addTutorial: function(tutorial, isCompleted){
+    addTutorial(tutorial, isCompleted){
 
         var newLi = $("<div>").attr("class", "tutorial_item row").attr("id", tutorial.id).attr("role", "presentation");
-            $("#tutorialModal_tutorials_menu").append(newLi);
-            newLi.click(function(){
-                DwenguinoBlockly.tutorialId = tutorial.id;
-                DwenguinoBlockly.tutorialCategory = tutorial.category;
-                DwenguinoBlockly.tutorialIdSetting = DwenguinoBlockly.tutorialId;
-                tutorial.initSteps();
-                hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
-                TutorialMenu.hideTutorialDialog(); // hide the tutorial dialog before starting the tutorial
-                hopscotch.startTour(tutorial);
-                DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("startTutorial", DwenguinoBlockly.tutorialIdSetting));
-            });
+        $("#tutorialModal_tutorials_menu").append(newLi);
+        newLi.click(() => {
+            this.eventLogger.tutorialId = tutorial.id;
+            this.tutorialCategory = tutorial.category;
+            this.eventLogger.tutorialIdSetting = tutorial.id;
+            tutorial.initSteps();
+            hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
+            this.hideTutorialDialog(); // hide the tutorial dialog before starting the tutorial
+            hopscotch.startTour(tutorial);
+            eventLogger.recordEvent(eventLogger.createEvent("startTutorial", tutorial.id));
+        });
 
         if(isCompleted){
             $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok icon-completed col-auto"></div>'); 
@@ -163,21 +172,21 @@ var TutorialMenu = {
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         }
   
-    },
+    }
 
     /**
      * Event handler for endig a tutorial. Triggers the 'endTutorial' event for logging.
      */
-    endTutorial: function(){
-        TutorialMenu.saveCompleteTutorial(DwenguinoBlockly.tutorialId, DwenguinoBlockly.tutorialCategory);
-        DwenguinoBlockly.tutorialId = "";
-        DwenguinoBlockly.tutorialCategory = "";
-        DwenguinoBlockly.tutorialIdSetting = "";
-        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("endTutorial", ""));
+    endTutorial(){
+        this.saveCompleteTutorial(this.tutorialId, this.tutorialCategory);
+        this.eventLogger.tutorialId = "";
+        this.eventLogger.tutorialIdSetting = "";
+        this.tutorialCategory = "";
+        this.recordEvent(eventLogger.createEvent("endTutorial", ""));
         TutorialMenu.showTutorialDialog();
-    },
+    }
 
-    saveCompleteTutorial: function(tutorialId, category){
+    saveCompleteTutorial(tutorialId, category){
         console.log(tutorialId, category);
         var serverSubmission = {
             "username": User.username,
@@ -199,8 +208,4 @@ var TutorialMenu = {
         }
     }
 }
-
-$(document).ready(function() {
-    TutorialMenu.initTutorialMenu();
-});
 

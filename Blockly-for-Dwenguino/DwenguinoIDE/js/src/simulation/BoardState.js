@@ -21,7 +21,7 @@ export default class BoardState {
             this.boardState.buzzer.osc = this.boardState.buzzer.audiocontext.createOscillator(); // instantiate an oscillator
             this.boardState.buzzer.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
         } catch (e) {
-            alert('Web Audio API is not supported in this browser');
+            console.log('Web Audio API is not supported in this browser');
         }
     }
 

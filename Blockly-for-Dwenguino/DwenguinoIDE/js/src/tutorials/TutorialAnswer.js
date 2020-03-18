@@ -1,9 +1,8 @@
-function TutorialAnswer(id, text){
-    if (!(this instanceof TutorialAnswer)){
-      return new TutorialAnswer();
-    }
-
+export default class TutorialAnswer{
+  constructor(id, text){
     this.id = id;
     this.text = text;
+  }
 }
+
   

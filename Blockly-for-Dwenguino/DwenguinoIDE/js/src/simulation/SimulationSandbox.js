@@ -203,4 +203,13 @@ export default class SimulationSandbox{
       // TODO: figure out hou to access the pir data
     return 0;
   }
+
+  /**
+   * This function is just a stub for the debugging environment 
+   * The acutal waiting is done in the step function in DwenguinoSimulation
+   * @param {int} time The time that should be waited in miliseconds
+   */
+  sleep(time){
+    return;
+  }
 }
