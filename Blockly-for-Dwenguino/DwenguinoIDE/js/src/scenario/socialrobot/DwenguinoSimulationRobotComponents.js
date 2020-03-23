@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../DwenguinoBlockly.js"
+
 /**
  * Functions for interact.js to make the robot components
  * in the scenario draggable within the simulation container.

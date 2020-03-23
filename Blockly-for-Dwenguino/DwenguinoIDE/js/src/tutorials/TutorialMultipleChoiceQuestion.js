@@ -2,6 +2,7 @@ import TutorialQuestion from "./TutorialQuestion.js"
 
 export default class TutorialMultipleChoiceQuestion extends TutorialQuestion{
     constructor(name, questionText, answers, correctAnswer){
+        super();
         this.name = name;
         this.questionText = questionText;
         this.answers = answers;

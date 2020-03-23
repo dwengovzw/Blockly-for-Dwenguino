@@ -1,3 +1,6 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
+
 var DwengoBotId = "db_menu_item_dwengo_robot_teacher_image";
 tutorials.theremin =    {
     category: "dwenguino",
@@ -25,7 +28,7 @@ tutorials.theremin =    {
     ],
     onEnd: function(){
         console.log("Basic test ended");
-        TutorialMenu.endTutorial();
+        DwenguinoBlockly.tutorialMenu.endTutorial();
         DwenguinoBlockly.workspace.clear();
     }
 };

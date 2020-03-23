@@ -1,3 +1,7 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+import TutorialAnswer from "../../js/src/tutorials/TutorialAnswer.js"
+import TutorialMultipleChoiceQuestion from "../../js/src/tutorials/TutorialMultipleChoiceQuestion.js"
+
 /**
  * Implementation of this tour with Hopscotch
  */
@@ -50,16 +54,16 @@ tutorials.hello = {
       500
     ],
     steps: [],
-    question: [],
+    question: null,
     // Create the steps array dynamically by using the different arrays
     initSteps: function(){
       var questionText = MSG.tutorials.socialrobot['hello'].questions[0];
       var answer0 = new TutorialAnswer(0,MSG.tutorials.socialrobot['hello'].answers[0]);
       var answer1 = new TutorialAnswer(1,MSG.tutorials.socialrobot['hello'].answers[1]);
       var answers = [answer0, answer1];
-      question = new TutorialMultipleChoiceQuestion("test", questionText, answers, answer0)
-      MSG.tutorials.socialrobot['hello'].stepContents[8] = question.getHtml();;
-      question.addEventHandler();
+      this.question = new TutorialMultipleChoiceQuestion("test", questionText, answers, answer0)
+      MSG.tutorials.socialrobot['hello'].stepContents[8] = this.question.getHtml();;
+      this.question.addEventHandler();
 
       var i;
       for (i = 0 ; i < this.nrOfSteps ; i++){
@@ -83,15 +87,15 @@ tutorials.hello = {
 
     },
     onEnd: function(){
-      TutorialMenu.endTutorial();
+      DwenguinoBlockly.tutorialMenu.endTutorial();
     },
     onNext: function(){
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));
-      console.log(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
+      console.log(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
     },
     onPrev: function(){
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialPrevStep", DwenguinoBlockly.tutorialIdSetting));
-      console.log(DwenguinoBlockly.createEvent("tutorialPrevStep", DwenguinoBlockly.tutorialIdSetting));
+      DwenguinoBlockly.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
+      console.log(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
     },
 
     onShow: function(){
@@ -99,7 +103,7 @@ tutorials.hello = {
         if(curr == 0){
           $('.hopscotch-bubble-arrow-container').css('visibility', 'hidden');
         } else if (curr == 8) {
-          question.addEventHandler();
+          tutorials.hello.question.addEventHandler();
         }
     },
 };

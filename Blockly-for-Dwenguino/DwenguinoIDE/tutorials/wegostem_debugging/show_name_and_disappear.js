@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 
 tutorials.showNameAndDisappear = {
       category: "wegostem",
@@ -36,14 +38,14 @@ tutorials.showNameAndDisappear = {
         DwenguinoBlockly.loadFileXmlIntoWorkspace('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="setup_loop_structure" id="ndSZof?3RjcH}j2Lp/XZ" x="-20" y="56"><statement name="SETUP"><block type="dwenguino_lcd" id="P~z0QTD+UA%Wvi-1|pJi"><value name="text"><block type="text" id="48"><field name="TEXT">Tom</field></block></value><value name="line_number"><block type="char_type" id="53"><field name="BITMASK">0</field></block></value><value name="character_number"><block type="char_type" id="58"><field name="BITMASK">0</field></block></value><next><block type="dwenguino_delay" id="8^{{=Y9|}Yjf}J~*A}Ug"><value name="DELAY_TIME"><block type="char_type" id="TO?6iQPh}HsK1u6/()KQ"><field name="BITMASK">7000</field></block></value><next><block type="clear_lcd" id="mZ@64g4j].F$R?6I2;|e"></block></next></block></next></block></statement></block></xml>');
       },
       onEnd: function(){
-        TutorialMenu.endTutorial();
+        DwenguinoBlockly.tutorialMenu.endTutorial();
       },
       onNext: function(){
-        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));
-        console.log(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));
+        DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
+        console.log(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
       },
       onPrev: function(){
-        DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialPrevStep", DwenguinoBlockly.tutorialIdSetting));
-        console.log(DwenguinoBlockly.createEvent("tutorialPrevStep", DwenguinoBlockly.tutorialIdSetting));
+        DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
+        console.log(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
       },
   };

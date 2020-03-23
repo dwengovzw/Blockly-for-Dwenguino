@@ -1,3 +1,5 @@
+import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulationRobotComponentsMenu.js"
+
 
 /*
  * This Object is the abstraction of the social robot simulator scenario.
@@ -5,7 +7,7 @@
  * It provides a step function which uses and updates the state of the dwenguino board.
  *
  */
-function DwenguinoSimulationScenarioSocialRobot(){
+export default function DwenguinoSimulationScenarioSocialRobot(){
     if (!(this instanceof DwenguinoSimulationScenarioSocialRobot)){
       return new DwenguinoSimulationScenarioSocialRobot();
     }

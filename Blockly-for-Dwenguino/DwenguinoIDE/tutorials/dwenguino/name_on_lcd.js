@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 
 tutorials.nameOnLcd = {
       category: "dwenguino",
@@ -25,6 +27,6 @@ tutorials.nameOnLcd = {
       }
     ],
     onEnd: function(){
-      TutorialMenu.endTutorial();
+      DwenguinoBlockly.tutorialMenu.endTutorial();
     }
     };

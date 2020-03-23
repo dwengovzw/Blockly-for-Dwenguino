@@ -161,7 +161,7 @@ export default class TutorialMenu {
             hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
             this.hideTutorialDialog(); // hide the tutorial dialog before starting the tutorial
             hopscotch.startTour(tutorial);
-            eventLogger.recordEvent(eventLogger.createEvent("startTutorial", tutorial.id));
+            this.eventLogger.recordEvent(this.eventLogger.createEvent("startTutorial", tutorial.id));
         });
 
         if(isCompleted){
@@ -182,8 +182,8 @@ export default class TutorialMenu {
         this.eventLogger.tutorialId = "";
         this.eventLogger.tutorialIdSetting = "";
         this.tutorialCategory = "";
-        this.recordEvent(eventLogger.createEvent("endTutorial", ""));
-        TutorialMenu.showTutorialDialog();
+        this.eventLogger.recordEvent(this.eventLogger.createEvent("endTutorial", ""));
+        this.showTutorialDialog();
     }
 
     saveCompleteTutorial(tutorialId, category){
@@ -195,7 +195,7 @@ export default class TutorialMenu {
             "category": category,
         };
 
-        if (DwenguinoEventLogger.sessionId !== undefined){
+        if (this.eventLogger.sessionId !== undefined){
             $.ajax({
                 type: "POST",
                 url: window.serverUrl + "/tutorials/completeTutorial",

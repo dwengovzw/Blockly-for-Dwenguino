@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 
 tutorials.introduction =
 {
@@ -39,6 +41,6 @@ tutorials.introduction =
         DwenguinoBlockly.loadFileXmlIntoWorkspace('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="setup_loop_structure" id="yMwUfZQ@p0kW8udJ1vEa" x="-88" y="-382"></block></xml>');
       },
       onEnd: function(){
-        TutorialMenu.endTutorial();
+        DwenguinoBlockly.tutorialMenu.endTutorial();
       }
     };

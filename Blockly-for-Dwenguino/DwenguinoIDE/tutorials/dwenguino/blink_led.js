@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 
 tutorials.blinkLED = {
       category: "dwenguino",
@@ -33,6 +35,6 @@ tutorials.blinkLED = {
     }
     ],
     onEnd: function(){
-      TutorialMenu.endTutorial();
+      DwenguinoBlockly.tutorialMenu.endTutorial();
     }
     };

@@ -1,3 +1,4 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 
 tutorials.allButtons = {
       category: "dwenguino",
@@ -34,6 +35,6 @@ tutorials.allButtons = {
     }
     ],
     onEnd: function(){
-        TutorialMenu.endTutorial();
+        DwenguinoBlockly.tutorialMenu.endTutorial();
     }
     };

@@ -136,6 +136,8 @@ body{
     height:100%;
     width:auto;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 
@@ -146,15 +148,16 @@ body{
 
 #db_simulator_top_pane{
     height: 50%;
-    min-height: 280px;
+    min-height: 270px;
     width: 100%;
     position: relative;
-    display: flex;
-    flex-direction: row;
+    flex: 1;
 }
 
 #db_simulator_menu{
-    flex: 0 0 100px;
+    position: relative;
+    flex: 0 0 70px;
+    border-bottom: black solid 1px;
 }
 
 /*#db_simulator_pane{
@@ -171,9 +174,12 @@ body{
 }
 
 #db_robot_pane{
+    position: absolute;
     height: 100%;
+    width: 100%;
     box-sizing: border-box;
     display: none;
+    flex: 1 1 auto;
 }
 #db_matterjs_pane{
   height: 100%;
@@ -182,13 +188,14 @@ body{
 }
 
 #db_simulator_bottom_pane{
-  height: 50%;
+  flex: 1;
   position: relative;
   width: 100%;
 }
 
 #db_simulator_tab_selection{
-  border-bottom: solid black 2px;
+    flex: 0 1 auto;
+    border-bottom: solid black 2px;
 }
 
 #sim_point {
@@ -244,18 +251,23 @@ body{
     line-height: 600px;
 }
 
+#db_simulator_panes{
+    flex-direction: column;
+    flex: 1;
+    overflow: auto;
+    display: flex;
+}
+
 #sim_menu {
-    width: 25%;
-    height: 60px;
-    float: left;
+    width: 100%;
+    height: 70px;
     display: flex;
     flex-direction: row;
 }
 
 #sim_menu * {
     float: left;
-    margin-top: 5px;
-    padding: 5px;
+    padding: 0 5px;
 }
 
 .sim_item:hover {
@@ -274,12 +286,31 @@ body{
     cursor: default;
 }
 
-#sim_start,
+/*#sim_start,
 #sim_pause,
 #sim_stop,
-#sim_step {
+#sim_step,
+#sim_scenario,
+#sim_scenarioTag {
     font-size: 20px;
     flex: 0 0 auto;
+}*/
+
+#sim_menu > * {
+    font-size: 25px;
+    flex: 0 0 auto;
+    margin: auto 1px;
+    text-align: center;
+}
+
+#scenario_radio_container{
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+#sim_scenarioTag{
+    margin: auto 10px;
+    text-align: center;
 }
 
 #sim_board {
@@ -359,27 +390,37 @@ body{
 
 #sim_buttons {
     position: absolute;
-    width: 30%;
+    width: 20%;
     height: 25%;
     top: 75%;
     left: 70%;
+    display: flex;
+    flex-direction: column;
 }
 
-#sim_buttons * {
-    height: 26px;
-    margin-bottom: 2px;
+#sim_buttons_top{
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
 }
 
-#sim_buttons_top * {
-    margin-left: 27px;
+#sim_buttons_middle{
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
 }
 
-#sim_buttons_middle * {
-    margin-right: 2px;
+#sim_buttons_bottom{
+    flex: 1;
+    display: flex;
+    justify-content: space-evenly;
 }
 
-#sim_buttons_bottom * {
-    margin-left: 27px;
+
+
+#sim_button_N{
+    flex: 1;
+    justify-content: space-around;
 }
 
 
@@ -392,9 +433,13 @@ body{
 .sim_button {
     background-image: url("../img/board/button.png");
     background-size: 100% 100%;
-    width: 26px;
-    height: 26px;
-    float:left;
+    max-width: 26px;
+    max-height: 26px;
+    min-width: 10px;
+    min-height: 10px;
+    width: 30%;
+    height: 100%;
+    flex: 1;
 }
 
 .sim_button_pushed {
@@ -441,6 +486,8 @@ body{
 
 .scenario_image {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
   width: 50;
   height: 50px;
 }
@@ -511,8 +558,8 @@ body{
 }
 
 .sim_scenarioTag {
-  float: left;
-  clear: left;
+  /*float: left;
+  clear: left;*/
 }
 
 /* .scenario_radio_container > img {
@@ -525,11 +572,6 @@ body{
   height: 100%;
   float: left;
   clear: left;
-}
-
-.scenario_radio_container {
-  clear: left;
-  float:left;
 }
 
 #sim_start {
@@ -805,8 +847,9 @@ body{
 
 #sim_container{
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 80%;
+    display: flex;
     box-sizing: border-box;
 }
 

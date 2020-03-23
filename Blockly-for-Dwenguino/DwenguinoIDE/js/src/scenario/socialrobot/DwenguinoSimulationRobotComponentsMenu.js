@@ -1,3 +1,5 @@
+export { DwenguinoSimulationRobotComponentsMenu as default }
+
 var DwenguinoSimulationRobotComponentsMenu = {
   maxNumberOfServos: 5,
   maxNumberOfLeds: 3,

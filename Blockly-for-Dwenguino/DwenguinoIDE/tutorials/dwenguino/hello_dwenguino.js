@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 tutorials.helloDwenguino = {
   category: "dwenguino",
   id: "tutsHelloDwenguino",
@@ -61,6 +63,6 @@ tutorials.helloDwenguino = {
   ],
   onEnd: function(){
     console.log("introduction tutorial ended");
-    TutorialMenu.endTutorial();
+    DwenguinoBlockly.tutorialMenu.endTutorial();
   }
 };

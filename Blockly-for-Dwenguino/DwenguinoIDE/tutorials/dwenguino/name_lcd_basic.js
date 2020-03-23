@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 
 tutorials.nameOnLcdBasic = {
       category: "dwenguino",
@@ -83,6 +85,6 @@ tutorials.nameOnLcdBasic = {
       }
     ],
     onEnd: function(){
-      TutorialMenu.endTutorial();
+      DwenguinoBlockly.tutorialMenu.endTutorial();
     }
   };

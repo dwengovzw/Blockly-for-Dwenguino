@@ -46,33 +46,37 @@
         <div id="db_blockly" class="resize-drag">
         </div>
         <div id="db_infopane">
-            <div id="db_simulator_top_pane">
-            </div>
-            <div id="db_simulator_bottom_pane" class="resize-sensor">
-              <div id="db_simulator_tab_selection">
-                <ul class='tabs'>
-                  <li id="robot_pane_tab"><a href="#db_robot_pane" class='active'>Robot</a></li>
-                  <li><a href="#db_code_pane">Code</a></li>
-                </ul>
-              </div>
-              <div id="db_robot_pane" class="resize-sensor">
-                    <div id="sim_container">
-                        <div id="sim_animation">
-                            <canvas id="sim_canvas"></canvas>
+            <div id="db_simulator_panes">
+                
+                <div id="db_simulator_top_pane">
+                </div>
+                <div id="db_simulator_bottom_pane" class="resize-sensor">
+                    <div id="db_simulator_tab_selection">
+                        <ul class='tabs'>
+                        <li id="robot_pane_tab"><a href="#db_robot_pane" class='active'>Robot</a></li>
+                        <li><a href="#db_code_pane">Code</a></li>
+                        </ul>
+                    </div>
+                    <div id="db_robot_pane" class="resize-sensor">
+                        <div id="sim_container">
+                            <div id="sim_animation">
+                                <canvas id="sim_canvas"></canvas>
+                            </div>
+                            <div id="sim_debug"></div>
                         </div>
-                        <div id="sim_debug"></div>
-                  </div>
-              </div>
-              <div id="db_code_pane">
-                  <!--<div id="language1" class="language">C++</div>-->
-                  <!-- No need to see javascript code, irrelevant for the children -->
-                  <!--<div id="language2" class="language">JavaScript</div>-->
-                  <pre id="content_arduino" class="content"></pre>
-              </div>
-              </div>
+                    </div>
+                    <div id="db_code_pane">
+                        <!--<div id="language1" class="language">C++</div>-->
+                        <!-- No need to see javascript code, irrelevant for the children -->
+                        <!--<div id="language2" class="language">JavaScript</div>-->
+                        <pre id="content_arduino" class="content"></pre>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
+
     <!--Blockly is injected into the following div, therafter it is positioned over the db_blockly div -->
     <div id="blocklyDiv" style="position: absolute"></div>
 
@@ -362,20 +366,20 @@
     <!--Scripts for step by step tutorials -->
     <script src="./DwenguinoIDE/js/lib/hopscotch.js"></script>
     <script src="./DwenguinoIDE/tutorials/tutorials.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/name_on_lcd.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/show_name_and_disappear.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/introduce_yourself.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem1.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem2.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/lampje_aan_uit.js"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/drive_forward.js"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_in_square.js"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_to_wall.js"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/avoid_wall.js"></script>
-    <script src="./DwenguinoIDE/tutorials/dwenguino/introduction.js"></script>
-    <script src="./DwenguinoIDE/tutorials/socialrobot/introduction.js"></script>
-    <script src="./DwenguinoIDE/tutorials/socialrobot/socialrobots.js"></script>
-    <script src="./DwenguinoIDE/tutorials/socialrobot/hello.js"></script>
+    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/name_on_lcd.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/show_name_and_disappear.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/introduce_yourself.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem1.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem2.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/lampje_aan_uit.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/drive_forward.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_in_square.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_to_wall.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/ridingrobot/avoid_wall.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/dwenguino/introduction.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/socialrobot/introduction.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/socialrobot/socialrobots.js" type="module"></script>
+    <script src="./DwenguinoIDE/tutorials/socialrobot/hello.js" type="module"></script>
 
 
     <!--<script src="./DwenguinoIDE/tutorials/dwenguino/blink_led.js"></script>
@@ -461,17 +465,17 @@
     <script src="./DwenguinoIDE/js/src/logging/User.js"></script>
     <!--<script src="./DwenguinoIDE/js/src/logging/LoggingMenu.js"></script>-->
     <!--<script src="./DwenguinoIDE/js/src/logging/DwenguinoEventLogger.js"></script>-->
-    <script src="./DwenguinoIDE/js/src/tutorials/TutorialMenu.js"></script>
-    <script src="./DwenguinoIDE/js/src/tutorials/TutorialAnswer.js"></script>
-    <script src="./DwenguinoIDE/js/src/tutorials/TutorialMultipleChoiceQuestion.js"></script>
+    <!-- <script src="./DwenguinoIDE/js/src/tutorials/TutorialMenu.js"></script>-->
+    <!-- <script src="./DwenguinoIDE/js/src/tutorials/TutorialAnswer.js"></script> -->
+    <!-- <script src="./DwenguinoIDE/js/src/tutorials/TutorialMultipleChoiceQuestion.js"></script>-->
     <script src="./DwenguinoIDE/js/src/scenario/DwenguinoSimulationScenario.js"></script>
     <script src="./DwenguinoIDE/js/src/scenario/ridingrobot/DwenguinoSimulationScenarioRidingRobot.js"></script>
     <script src="./DwenguinoIDE/js/src/scenario/ridingrobot/DwenguinoSimulationScenarioRidingRobotWithWall.js"></script>
     <script src="./DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationScenarioSocialRobot.js"></script>
     <script src="./DwenguinoIDE/js/src/scenario/DwenguinoSimulationScenarioSpyrograph.js"></script>
-    <script src="./DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationRobotComponentsMenu.js"></script>
-    <script src="./DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationRobotComponents.js"></script>
-    <script src="./DwenguinoIDE/js/src/DwenguinoSimulation.js"></script>
+    <script src="./DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationRobotComponentsMenu.js" type="module"></script>
+    <script src="./DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationRobotComponents.js" type="module"></script>
+   <!-- <script src="./DwenguinoIDE/js/src/DwenguinoSimulation.js"></script>-->
 
     </body>
     </html>

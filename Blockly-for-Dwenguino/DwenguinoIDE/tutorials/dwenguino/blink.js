@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 tutorials.blink = {
   category: "dwenguino",
   id: "tutsBlink",
@@ -60,6 +62,6 @@ tutorials.blink = {
   ],
   onEnd: function(){
     console.log("introduction tutorial ended");
-    TutorialMenu.endTutorial();
+    DwenguinoBlockly.tutorialMenu.endTutorial();
   }
 };

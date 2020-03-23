@@ -1,3 +1,5 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+
 
 tutorials.rideToWall = {
       category: "ridingrobot",
@@ -32,6 +34,6 @@ tutorials.rideToWall = {
       },
 
     onEnd: function(){
-      TutorialMenu.endTutorial();
+      DwenguinoBlockly.tutorialMenu.endTutorial();
     }
     };

@@ -1,3 +1,9 @@
+import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+import TutorialAnswer from "../../js/src/tutorials/TutorialAnswer.js"
+import TutorialMultipleChoiceQuestion from "../../js/src/tutorials/TutorialMultipleChoiceQuestion.js"
+
+
+
 /**
  * Implementation of this tour with Hopscotch
  */
@@ -55,15 +61,15 @@ tutorials.socialRobots = {
 
     },
     onEnd: function(){
-      TutorialMenu.endTutorial();
+      DwenguinoBlockly.tutorialMenu.endTutorial();
     },
     onNext: function(){
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));
-      console.log(DwenguinoBlockly.createEvent("tutorialNextStep", DwenguinoBlockly.tutorialIdSetting));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
+      console.log(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
     },
     onPrev: function(){
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("tutorialPrevStep", DwenguinoBlockly.tutorialIdSetting));
-      console.log(DwenguinoBlockly.createEvent("tutorialPrevStep", DwenguinoBlockly.tutorialIdSetting));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
+      console.log(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
     },
 
     onShow: function(){

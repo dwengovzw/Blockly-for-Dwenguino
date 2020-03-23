@@ -178,7 +178,7 @@ var DwenguinoBlockly = {
         });
 
         $("#db_menu_item_clear").click(function(){
-          DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
+          DwenguinoBlockly.simulationEnvironment.stop();
           var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
           DwenguinoBlockly.runEventHandler(code);
         });
@@ -194,13 +194,13 @@ var DwenguinoBlockly = {
          });
 
          $("#blocklyDiv").click(function(){
-           DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
+           DwenguinoBlockly.simulationEnvironment.stop();
          });
 
          // Process blockly events and log them
          DwenguinoBlockly.workspace.addChangeListener(function(event){
            // Stop de simulator
-           DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
+           DwenguinoBlockly.simulationEnvironment.stop();
            console.log("blockly event");
            if (event.type == "create"){
              var data = {
@@ -300,10 +300,10 @@ var DwenguinoBlockly = {
       var newStateArray = [];
       if (this.simButtonStateClicked){
         newStateArray = ['100%', 'off', false];
-        DwenguinoBlockly.simulationEnvironment.handleSimulationStop();
+        DwenguinoBlockly.simulationEnvironment.stop();
       } else {
         newStateArray = ['50%', 'on', true];
-        DwenguinoBlockly.simulationEnvironment.setupEnvironment();
+        DwenguinoBlockly.simulationEnvironment.open();
       }
       $("#db_blockly").width(newStateArray[0]);
       this.simButtonStateClicked = newStateArray[2];
