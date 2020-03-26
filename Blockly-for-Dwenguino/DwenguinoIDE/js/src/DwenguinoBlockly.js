@@ -1,5 +1,5 @@
 import DwenguinoEventLogger from './logging/DwenguinoEventLogger.js'
-import DwenguinoSimulation from './DwenguinoSimulation.js'
+import DwenguinoSimulation from './simulation/DwenguinoSimulation.js'
 import TutorialMenu from './tutorials/TutorialMenu.js'
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
@@ -200,7 +200,7 @@ var DwenguinoBlockly = {
          // Process blockly events and log them
          DwenguinoBlockly.workspace.addChangeListener(function(event){
            // Stop de simulator
-           DwenguinoBlockly.simulationEnvironment.stop();
+           //DwenguinoBlockly.simulationEnvironment.stop();
            console.log("blockly event");
            if (event.type == "create"){
              var data = {
@@ -447,9 +447,9 @@ var DwenguinoBlockly = {
 
         // display code
         if (DwenguinoBlockly.previouslyRenderedCode === null){
-            document.getElementById('content_arduino').innerHTML =
+            /*document.getElementById('content_arduino').innerHTML =
                 prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
-                DwenguinoBlockly.previouslyRenderedCode = code;
+                DwenguinoBlockly.previouslyRenderedCode = code;*/
         }
         else if (code !== DwenguinoBlockly.previouslyRenderedCode) {
             //When the redered code changed log the block structures

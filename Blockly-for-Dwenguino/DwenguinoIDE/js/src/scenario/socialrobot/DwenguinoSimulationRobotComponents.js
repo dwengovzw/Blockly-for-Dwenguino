@@ -1,4 +1,3 @@
-import DwenguinoBlockly from "../../DwenguinoBlockly.js"
 
 /**
  * Functions for interact.js to make the robot components
@@ -33,7 +32,7 @@ interact('.draggable')
                    Math.pow(event.pageY - event.y0, 2) | 0))
           .toFixed(2) + 'px')
 
-      DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("moveRobotComponent", event.target.id));
+      //DwenguinoBlockly.recordEvent(DwenguinoBlockly.createEvent("moveRobotComponent", event.target.id));
     }
   })
 

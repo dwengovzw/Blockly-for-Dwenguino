@@ -1,21 +1,24 @@
-export { DwenguinoSimulationRobotComponentsMenu as default }
 
-var DwenguinoSimulationRobotComponentsMenu = {
-  maxNumberOfServos: 5,
-  maxNumberOfLeds: 3,
-  maxNumberOfPirs: 1,
-  maxNumberOfSonars: 1,
-  maxNumberOfLcds: 1,
-  maxNumberOfButtons: 3,
-  maxNumberOfDecorations: 10,
-  socialRobotScenario: {},
-  numberOfButtons: 3,
+import { TypesEnum } from "./RobotComponentsFactory.js"
+
+export default class DwenguinoSimulationRobotComponentsMenu {
+  maxNumberOfServos = 5;
+  maxNumberOfLeds = 3;
+  maxNumberOfPirs = 1;
+  maxNumberOfSonars = 1;
+  maxNumberOfLcds =  1;
+  maxNumberOfButtons = 3;
+  maxNumberOfDecorations = 10;
+  socialRobotScenario = {};
+  numberOfButtons = 3;
+  constructor(){
+  }
 
   /** 
   * Initializes the robot components menu environment when loading 
   * the social robot scenario.
   */
-  setupEnvironment: function(socialRobotScenario, containerIdSelector) {
+  setupEnvironment(socialRobotScenario) {
     this.socialRobotScenario = socialRobotScenario;
     console.log('setupEnvironment');
     /**
@@ -23,17 +26,18 @@ var DwenguinoSimulationRobotComponentsMenu = {
      * display the current number of robot components of each type. 
      * // should actually already be handled by the socialrobotscenario which is used here.
      */
-    DwenguinoSimulationRobotComponentsMenu.initMenu(socialRobotScenario);
-    DwenguinoSimulationRobotComponentsMenu.translateRobotComponents();
-    socialRobotScenario.initSimulation(containerIdSelector);
-    this.socialRobotScenario.loadRobotComponents();
-  },
+    this.initMenu(socialRobotScenario);
+    this.translateRobotComponents();
+
+  }
 
   /**
    * Initialize the robot components menu 
    * when the scenario is loaded. 
    */
-  initMenu: function(socialRobotScenario) {
+  initMenu(socialRobotScenario) {
+    $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
+
     $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item card"></div>');
     $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag"></div>');
     $('#rc_servo').append('<div id="rc_servo_img"></div>');
@@ -71,42 +75,43 @@ var DwenguinoSimulationRobotComponentsMenu = {
     $('#rc_decoration').append('<div id="rc_decoration_img"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_options"></div>');
 
-    DwenguinoSimulationRobotComponentsMenu.initButtons(socialRobotScenario);
-  },
+    this.initButtons(socialRobotScenario);
+  }
 
   /** 
    * Add buttons to the robot components menu to add or remove robot components 
    * in the scenario.
    */
-  initButtons: function(socialRobotScenario) {
+  initButtons(socialRobotScenario) {
   
   // TODO: rewrite this in a more readable way
-  $('#rc_servo_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_servo_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="servo"><span class="glyphicon glyphicon-minus" id="rc_servo_minus_button"></span></button></span><input type="text" name="servo" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfServos + '"><span class="input-group-btn"><button type="button" id="rc_servo_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="servo"><span class="glyphicon glyphicon-plus" id="rc_servo_plus_button"></span></button></span></div>');
+  $('#rc_servo_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_servo_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="servo"><span class="glyphicon glyphicon-minus" id="rc_servo_minus_button"></span></button></span><input type="text" name="servo" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfServos + '"><span class="input-group-btn"><button type="button" id="rc_servo_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="servo"><span class="glyphicon glyphicon-plus" id="rc_servo_plus_button"></span></button></span></div>');
 
-  $('#rc_led_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_led_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="led"><span class="glyphicon glyphicon-minus" id="rc_led_minus_button"></span></button></span><input type="text" name="led" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfLeds + '"><span class="input-group-btn"><button type="button" id="rc_led_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="led"><span class="glyphicon glyphicon-plus" id="rc_led_plus_button"></span></button></span></div>');
+  $('#rc_led_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_led_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="led"><span class="glyphicon glyphicon-minus" id="rc_led_minus_button"></span></button></span><input type="text" name="led" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLeds + '"><span class="input-group-btn"><button type="button" id="rc_led_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="led"><span class="glyphicon glyphicon-plus" id="rc_led_plus_button"></span></button></span></div>');
 
-  $('#rc_pir_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_pir_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="pir"><span class="glyphicon glyphicon-minus" id="rc_pir_minus_button"></span></button></span><input type="text" name="pir" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfPirs + '"><span class="input-group-btn"><button type="button" id="rc_pir_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="pir"><span class="glyphicon glyphicon-plus" id="rc_pir_plus_button"></span></button></span></div>'); 
+  $('#rc_pir_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_pir_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="pir"><span class="glyphicon glyphicon-minus" id="rc_pir_minus_button"></span></button></span><input type="text" name="pir" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfPirs + '"><span class="input-group-btn"><button type="button" id="rc_pir_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="pir"><span class="glyphicon glyphicon-plus" id="rc_pir_plus_button"></span></button></span></div>'); 
 
-  $('#rc_sonar_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_sonar_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="sonar"><span class="glyphicon glyphicon-minus" id="rc_sonar_minus_button"></span></button></span><input type="text" name="sonar" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfSonars + '"><span class="input-group-btn"><button type="button" id="rc_sonar_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="sonar"><span class="glyphicon glyphicon-plus" id="rc_sonar_plus_button"></span></button></span></div>'); 
+  $('#rc_sonar_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_sonar_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="sonar"><span class="glyphicon glyphicon-minus" id="rc_sonar_minus_button"></span></button></span><input type="text" name="sonar" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfSonars + '"><span class="input-group-btn"><button type="button" id="rc_sonar_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="sonar"><span class="glyphicon glyphicon-plus" id="rc_sonar_plus_button"></span></button></span></div>'); 
 
-  $('#rc_lcd_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_lcd_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="lcd"><span class="glyphicon glyphicon-minus" id="rc_lcd_minus_button"></span></button></span><input type="text" name="lcd" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfLcds + '"><span class="input-group-btn"><button type="button" id="rc_lcd_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="lcd"><span class="glyphicon glyphicon-plus" id="rc_lcd_plus_button"></span></button></span></div>'); 
+  $('#rc_lcd_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_lcd_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="lcd"><span class="glyphicon glyphicon-minus" id="rc_lcd_minus_button"></span></button></span><input type="text" name="lcd" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLcds + '"><span class="input-group-btn"><button type="button" id="rc_lcd_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="lcd"><span class="glyphicon glyphicon-plus" id="rc_lcd_plus_button"></span></button></span></div>'); 
 
-  // $('#rc_button_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_button_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="button"><span class="glyphicon glyphicon-minus" id="rc_button_minus_button"></span></button></span><input type="text" name="button" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfButtons + '"><span class="input-group-btn"><button type="button" id="rc_button_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="button"><span class="glyphicon glyphicon-plus" id="rc_button_plus_button"></span></button></span></div>');
+  // $('#rc_button_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_button_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="button"><span class="glyphicon glyphicon-minus" id="rc_button_minus_button"></span></button></span><input type="text" name="button" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfButtons + '"><span class="input-group-btn"><button type="button" id="rc_button_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="button"><span class="glyphicon glyphicon-plus" id="rc_button_plus_button"></span></button></span></div>');
 
-  $('#rc_decoration_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_decoration_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="decoration"><span class="glyphicon glyphicon-minus" id="rc_decoration_minus_button"></span></button></span><input type="text" name="decoration" class="form-control input-number" value="0" min="0" max="' + DwenguinoSimulationRobotComponentsMenu.maxNumberOfDecorations + '"><span class="input-group-btn"><button type="button" id="rc_decoration_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="decoration"><span class="glyphicon glyphicon-plus" id="rc_decoration_plus_button"></span></button></span></div>'); 
+  $('#rc_decoration_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_decoration_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="decoration"><span class="glyphicon glyphicon-minus" id="rc_decoration_minus_button"></span></button></span><input type="text" name="decoration" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfDecorations + '"><span class="input-group-btn"><button type="button" id="rc_decoration_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="decoration"><span class="glyphicon glyphicon-plus" id="rc_decoration_plus_button"></span></button></span></div>'); 
 
+  let self = this;
     // Event handlers
     $('.btn-number').click(function(e){
       e.preventDefault();
-      fieldName = $(this).attr('data-field');
-      type      = $(this).attr('data-type');
+      let fieldName = $(this).attr('data-field');
+      let type = $(this).attr('data-type');
       var input = $("input[name='"+fieldName+"']");
       var currentVal = parseInt(input.val());
       if (!isNaN(currentVal)) {
           if(type == 'minus') {
               if(currentVal > input.attr('min')) {
                   input.val(currentVal - 1).change();
-                  DwenguinoSimulationRobotComponentsMenu.removeRobotComponent(e.target.id, socialRobotScenario);
+                  self.removeRobotComponent(e.target.id, socialRobotScenario);
               } 
               if(parseInt(input.val()) == input.attr('min')) {
                   $(this).attr('disabled', true);
@@ -115,7 +120,7 @@ var DwenguinoSimulationRobotComponentsMenu = {
           } else if(type == 'plus') {
               if(currentVal < input.attr('max')) {
                   input.val(currentVal + 1).change();
-                  DwenguinoSimulationRobotComponentsMenu.addRobotComponent(e.target.id, socialRobotScenario);
+                  self.addRobotComponent(e.target.id, socialRobotScenario);
               }
               if(parseInt(input.val()) == input.attr('max')) {
                   $(this).attr('disabled', true);
@@ -132,11 +137,11 @@ var DwenguinoSimulationRobotComponentsMenu = {
 
     $('.input-number').change(function() {
         
-        minValue =  parseInt($(this).attr('min'));
-        maxValue =  parseInt($(this).attr('max'));
-        valueCurrent = parseInt($(this).val());
+        let minValue =  parseInt($(this).attr('min'));
+        let maxValue =  parseInt($(this).attr('max'));
+        let valueCurrent = parseInt($(this).val());
         
-        name = $(this).attr('name');
+        let name = $(this).attr('name');
         if(valueCurrent >= minValue) {
             $(".btn-number[data-type='minus'][data-field='"+name+"']").removeAttr('disabled')
         } else {
@@ -166,53 +171,53 @@ var DwenguinoSimulationRobotComponentsMenu = {
             e.preventDefault();
         }
     });
-  },
+  }
 
-  resetButtons: function() {
+  resetButtons() {
     for (const [type, t] of Object.entries(TypesEnum)) {
       var input = $("input[name='"+ t +"']");
       input.val(0).change();
     }
-  },
+  }
 
-  changeValue: function(type, number) {
+  changeValue(type, number) {
     var input = $("input[name='"+ type +"']");
     var currentVal = parseInt(input.val())
     input.val(currentVal+number).change();
-  },
+  }
 
   /**
    * This function translates the text of the robot components menu.
    */
-  translateRobotComponents: function() {
+  translateRobotComponents() {
     for (const [type, t] of Object.entries(TypesEnum)) {
       document.getElementById('rc_' + t + '_tag').textContent = MSG.simulator[t];
     }
-  },
+  }
 
   /*
    * This function adds the specified robot component to the 
    * social robot scenario.
    */
-  addRobotComponent: function(id, socialRobotScenario) {
+  addRobotComponent(id, socialRobotScenario) {
     switch (id) {
       case "rc_servo_plus_button":
-        socialRobotScenario.addRobotComponent(TypesEnum.SERVO);
+        this.socialRobotScenario.addRobotComponent(TypesEnum.SERVO);
         break;
       case "rc_led_plus_button":
-        socialRobotScenario.addRobotComponent(TypesEnum.LED);
+        this.socialRobotScenario.addRobotComponent(TypesEnum.LED);
         break;
       case "rc_pir_plus_button":
-        socialRobotScenario.addRobotComponent(TypesEnum.PIR);
+        this.socialRobotScenario.addRobotComponent(TypesEnum.PIR);
         break;
       case "rc_sonar_plus_button":
-        socialRobotScenario.addRobotComponent(TypesEnum.SONAR);
+        this.socialRobotScenario.addRobotComponent(TypesEnum.SONAR);
         break;
       case "rc_decoration_plus_button":
-        socialRobotScenario.addRobotComponent(TypesEnum.DECORATION);
+        this.socialRobotScenario.addRobotComponent(TypesEnum.DECORATION);
         break;
       case "rc_lcd_plus_button":
-        socialRobotScenario.addRobotComponent(TypesEnum.LCD);
+        this.socialRobotScenario.addRobotComponent(TypesEnum.LCD);
         break;
       case "rc_button_plus_button":
         // TODO
@@ -220,31 +225,31 @@ var DwenguinoSimulationRobotComponentsMenu = {
       case "default":
         break;
     }
-  },
+  }
 
   /*
    * This functions removes the last created specified robot component
    * from the social robot scenario.
    */
-  removeRobotComponent: function(id, socialRobotScenario) {
+  removeRobotComponent(id, socialRobotScenario) {
     switch (id) {
       case "rc_servo_minus_button":
-        socialRobotScenario.removeRobotComponent(TypesEnum.SERVO);
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.SERVO);
         break;
       case "rc_led_minus_button":
-        socialRobotScenario.removeRobotComponent(TypesEnum.LED);
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.LED);
         break;
       case "rc_pir_minus_button":
-        socialRobotScenario.removeRobotComponent(TypesEnum.PIR);
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.PIR);
         break;
       case "rc_sonar_minus_button":
-        socialRobotScenario.removeRobotComponent(TypesEnum.SONAR);
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.SONAR);
         break;
       case "rc_decoration_minus_button":
-        socialRobotScenario.removeRobotComponent(TypesEnum.DECORATION);
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.DECORATION);
         break;
       case "rc_lcd_minus_button":
-        socialRobotScenario.removeRobotComponent(TypesEnum.LCD);
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.LCD);
         break;
       case "rc_button_minus_button":
         // TODO
@@ -252,7 +257,7 @@ var DwenguinoSimulationRobotComponentsMenu = {
       case "default":
         break;
     }
-  },
+  }
 
 };
 

@@ -1,36 +1,48 @@
-import ButtonMap from "./ButtonMap.js"
+import ButtonMap from "../simulation/ButtonMap.js"
+import DwenguinoSimulationScenario from "./DwenguinoSimulationScenario.js"
 
-export default class SimulationController{
+export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     inputsState = null;
     audiocontext = null;
     osc = null;
     audioStarted = false;
-    constructor(){
+    muted = true;
+    prevFreq = 0;
+
+    constructor(logger){
+        super(logger);
         this.inputsState = {
             buttons: [1, 1, 1, 1, 1],
             reset: 1,
         }
     }
 
-    initSimulationState(){
+
+    initAudioContext(){
         try {
-            this.audiocontext = new(window.AudioContext || window.webkitAudioContext)();
-            // Create a new oscillator to play a specific tone and set the type to sin
-            this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
-            this.osc.type = 'sine'; // this is the default - also square, sawtooth, triangle
+            this.audiocontext = new AudioContext();
         } catch (e) {
             console.log('Web Audio API is not supported in this browser');
         }
     }
 
-    initSimulationDisplay(){
+    initSimulationState(){
 
 
-        $('#db_simulator_top_pane').append('<div id="db_simulator_pane"></div>');
+    }
+
+    initSimulationDisplay(containerId){
+        // init simulation state (does nothing, just for reference)
+        this.initSimulationState();
+
+        //db_simulator_top_pane
+        $(`#${containerId}`).append('<div id="db_simulator_pane"></div>');
 
         $('#db_simulator_pane').append('<div id="debug"></div>');
         $('#db_simulator_pane').append('<div id="sim_components"></div>');
         $('#db_simulator_pane').append('<div id="sim_board"></div>');  
+        $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
+        $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
 
         let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
@@ -83,6 +95,22 @@ export default class SimulationController{
         $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mouseup', function() {
             self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 1;
         });
+
+        $('#db_simulator_mute').on("click", () => {
+            if (this.audiocontext == null){
+                this.initAudioContext();
+            }
+            if (this.muted){
+                this.muted = false;
+                $('#db_simulator_mute').removeClass();
+                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-up")
+            }else{
+                this.muted = true;
+                $('#db_simulator_mute').removeClass();
+                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-off")
+            }
+
+        });
     
     }
 
@@ -99,13 +127,17 @@ export default class SimulationController{
     }
 
 
-    updateSimulationState(board){
+    updateScenarioState(board){
         board.reset = this.inputsState.reset;
         board.buttons = this.inputsState.buttons;
-        return board;
     }
 
-    updateSimulationDisplay(board){
+    updateScenario(dwenguinoState){
+        this.updateScenarioState();
+        this.updateScenarioDisplay(dwenguinoState);
+    }
+
+    updateScenarioDisplay(board){
 
         // Change the visuals of the pir sensor
         // TODO: Figure out how to update the pir sensor visuals
@@ -125,20 +157,39 @@ export default class SimulationController{
             }
         }
         
+
+
     
         // Play audio on the buzzer
+        
         if (this.audiocontext){
-            if (board.buzzer.tonePlaying === 0 && this.audioStarted) {
-                //this.osc.stop();
-                console.log("stop");
+            // Check if freq has changed
+            if (this.prevFreq != board.buzzer.tonePlaying && this.prevFreq != 0 && board.buzzer.tonePlaying != 0){
+                this.prevFreq = board.buzzer.tonePlaying;
+                // stop the current tone
+                this.osc.stop(this.audiocontext.currentTime);
+                this.osc.disconnect(this.audiocontext.destination);
+                this.osc = null;
                 this.audioStarted = false;
-            } else if ( !this.audioStarted ) {
-                // start tone
-                this.osc.frequency.value = board.buzzer.tonePlaying; // Hz
-                this.osc.connect(this.audiocontext.destination); // connect it to the destination
-                //this.osc.start(); // start the oscillator
-                console.log("start");
-                this.audioStarted = true;
+            }
+            if (board.buzzer.tonePlaying === 0 || this.muted) {
+                if (this.audioStarted){
+                    console.log("stop");
+                    this.audioStarted = false;
+                    this.osc.stop(this.audiocontext.currentTime);
+                    this.osc.disconnect(this.audiocontext.destination);
+                    this.osc = null;
+                }
+            } else if (board.buzzer.tonePlaying !== 0 && !this.muted) {
+                if ( !this.audioStarted ){
+                    // Create a new oscillator to play a specific tone and set the type to sin
+                    this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
+                    this.osc.frequency.value = board.buzzer.tonePlaying; // Hz
+                    this.osc.start(this.audiocontext.currentTime);
+                    this.osc.connect(this.audiocontext.destination); // connect it to the destination
+                    console.log("start");
+                    this.audioStarted = true;
+                }
             }
         }
     

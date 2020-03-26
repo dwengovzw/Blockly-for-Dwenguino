@@ -1,8 +1,6 @@
-import BoardSimulation from "./BoardSimulation.js";
-import BoardSimulationModel from "./BoardSimulationModel.js";
 import BoardState from "./BoardState.js";
 import SimulationSandbox from "./SimulationSandbox.js";
-import SimulationController from "./SimulationController.js";
+import SimulationController from "../scenario/DwenguinoBoardSimulation.js";
 
 export default class SimulationRunner {
     board = null;
@@ -12,21 +10,18 @@ export default class SimulationRunner {
     workspace = null;
     scenarios = null;
     currentScenario = null;
-    simulationController = null;
+    //simulationController = null;
 
     speedDelay = 16;
     baseSpeedDelay = 16;
     isSimulationRunning = false;
     isSimulationPaused = false;
 
-    simulationViewContainerId = "#db_robot_pane";
+    simulationViewContainerId = "db_simulator_panes";
 
     constructor(logger, workspace) {
         this.board = new BoardState();
         this.simulationSandbox = new SimulationSandbox(this.board);
-        this.simulationController = new SimulationController();
-        this.simulationController.initSimulationState();
-        this.simulationController.initSimulationDisplay();
         this.logger = logger;
         this.workspace = workspace;
         this.initDebuggerState();
@@ -34,7 +29,7 @@ export default class SimulationRunner {
 
     setCurrentScenario(scenario){
         this.currentScenario = scenario;
-        this.currentScenario.initSimulationDisplay(this.simulationViewContainerId);
+        this.resetDwenguino();
     }
 
     /**
@@ -50,15 +45,6 @@ export default class SimulationRunner {
                 blockMapping: {}
             }
         };
-    }
-
-    /*
-    * Makes the simulation ready (draw the board)
-    */
-    initDwenguino() {
-        //Reset the Dwenguino board display
-        this.resetDwenguino();
-        this.currentScenario.initSimulationDisplay(this.simulationViewContainerId);
     }
 
 
@@ -80,18 +66,9 @@ export default class SimulationRunner {
 
         // Reset the board state
         this.board.resetBoard();
-        this.simulationController.updateSimulationDisplay(this.board);
+        this.currentScenario.initSimulationDisplay(this.simulationViewContainerId);
+        this.currentScenario.updateScenario(this.board);
 
-        //QUESTION: Why should the board not be reset for the social robot?
-        var option = this.scenarioView;
-
-        switch (option) {
-            case "socialrobot":
-                break;
-            case "default":
-                
-                break;
-        }
     }
 
 
@@ -100,7 +77,7 @@ export default class SimulationRunner {
     */
     initDebugger() {
         // initialize simulation
-        this.initDwenguino();
+        this.resetDwenguino();
 
         // get code
         this.debugger.code = Blockly.JavaScript.workspaceToCode(this.workspace);
@@ -138,7 +115,7 @@ export default class SimulationRunner {
         }
 
         // make sure the SimulationController updates the state of the buttons on the board
-        this.simulationController.updateSimulationState(this.board);
+        //this.simulationController.updateSimulationState(this.board);
 
         // Read the next line and execute it. The sandbox environment will update the board state
         var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
@@ -170,7 +147,7 @@ export default class SimulationRunner {
             this.delayRemainingAfterSteps = delayTime % this.baseSpeedDelay;
             this.performDelayLoop(once);
         }
-        this.simulationController.updateSimulationDisplay(this.board);
+        //this.simulationController.updateSimulationDisplay(this.board);
         this.checkForEnd();
     }
 
@@ -186,7 +163,7 @@ export default class SimulationRunner {
             // Update the scenario View
             // TODO: Do not reassign board, make sure updateScenario just changes the state of board
             this.currentScenario.updateScenario(this.board);
-            this.simulationController.updateSimulationDisplay(this.board);     // Update the simulator view
+            //this.simulationController.updateSimulationDisplay(this.board);     // Update the simulator view
             this.delayStepsTaken++;
             setTimeout(() => {
                 this.performDelayLoop(once);

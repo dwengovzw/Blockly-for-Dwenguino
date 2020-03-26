@@ -1,5 +1,5 @@
 import SimulationRunner from "./SimulationRunner.js"
-import DwenguinoSimulationRobotComponentsMenu from "../scenario/socialrobot/DwenguinoSimulationRobotComponentsMenu.js"
+import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulation.js"
 
 export default class SimulationControlsController {
     simulationRunner = null;
@@ -52,7 +52,6 @@ export default class SimulationControlsController {
             $("#sim_menu").append(image);
         });
 
-        this.initSimulationPane();
         this.translateSimulatorInterface();
 
         // change speed of simulation
@@ -67,8 +66,9 @@ export default class SimulationControlsController {
         $("input[name=scenario_type]:radio").change(function () {
             console.log($(this).val());
             self.scenarioView = $(this).val();
-            self.initSimulationPane();
             self.translateSimulatorInterface();
+
+            self.handleSimulationStop();
             self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
             self.logger.recordEvent(self.logger.createEvent("changedScenario", this.scenarioView));
 
@@ -140,7 +140,7 @@ export default class SimulationControlsController {
             toggleSimulatorPaneView(this, [$("a[href$='#db_code_pane']")], e);
         });
 
-        $("ul.tabs").each(function () {
+        /*$("ul.tabs").each(function () {
             // For each set of tabs, we want to keep track of
             // which tab is active and its associated content
             var $active, $content, $links = $(this).find('a');
@@ -156,7 +156,7 @@ export default class SimulationControlsController {
             $links.not($active).each(function () {
                 $(this.hash).hide();
             });
-        });
+        });*/
 
         //Select the scenario view by default.
         $("a[href$='#db_robot_pane']").trigger("click");
@@ -175,51 +175,6 @@ export default class SimulationControlsController {
         document.getElementById('sim_scenarioTag').textContent = MSG.simulator['scenario'] + ":";
 
     }
-
-    /**
-     * This function initializes the simulation pane according to the selected scenario.
-     * Each time a different scenario is selected, this function will update the simulation pane.
-     */
-    initSimulationPane() {
-        // Reset custom changes from the social robot scenario
-        $('#db_simulator_top_pane').css('height', '45%');
-        $('#db_simulator_bottom_pane').css('height', '55%');
-
-        //$('#db_simulator_pane').children().remove();
-
-        // Code to load riding robot simulation pane is now in the initSimulationDisplay function
-        // of the SimulationController class
-        switch (this.scenarioView) {
-            case "moving":
-                //this.simulationRunner.initDwenguino();
-                //this.loadRidingRobotSimulationPane();
-                break;
-            case "wall":
-                //this.simulationRunner.initDwenguino();
-                //this.loadRidingRobotSimulationPane();
-                break;
-            case "socialrobot":
-                this.loadSocialRobotSimulationPane();
-                break;
-            case "default":
-                //this.simulationRunner.initDwenguino();
-                //this.loadRidingRobotSimulationPane();
-                break;
-        }
-    }
-
-    /**
-     * This function only loads the elements in the simulation pane that 
-     * are used by the Social Robot scenario.
-     */
-    loadSocialRobotSimulationPane() {
-        console.log("load social robot simulation pane");
-        // Load the robot components menu
-        $('#db_simulator_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
-        DwenguinoSimulationRobotComponentsMenu.setupEnvironment(this.scenarios['socialrobot'], this.simulationViewContainerId);
-    }
-
-
 
     /*
     * Starts the simulation for the current code
