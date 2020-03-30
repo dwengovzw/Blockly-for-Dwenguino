@@ -92,8 +92,6 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
     initSimulationDisplay(containerId) {
         // init superclass
         super.initSimulationDisplay(containerId);
-        // Reset the simulation state
-        this.initSimulationState();
 
 
         // Create the bottom and top pane and init the Board simulation into the top pane
@@ -125,6 +123,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         db_simulator_panes.append(top_pane).append(bottom_pane);
 
         // init board simulation
+        this.dwenguinoBoardSimulation.initSimulationState();
         this.dwenguinoBoardSimulation.initSimulationDisplay("db_simulator_top_pane");
 
 

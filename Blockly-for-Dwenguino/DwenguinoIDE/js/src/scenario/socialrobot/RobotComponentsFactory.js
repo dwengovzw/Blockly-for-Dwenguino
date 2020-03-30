@@ -1,6 +1,8 @@
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
+import { StatesEnum } from "./DwenguinoScenarioUtils.js"
 
 export { TypesEnum, RobotComponentsFactory }
+
 
 /**
  * The supported robot component types

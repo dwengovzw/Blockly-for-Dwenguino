@@ -2,7 +2,8 @@ import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulationRobotCo
 import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { TypesEnum, RobotComponentsFactory } from "./RobotComponentsFactory.js"
-
+import DwenguinoSimulationRobotComponents from "./DwenguinoSimulationRobotComponents.js"
+import {DwenguinoScenarioUtils, StatesEnum} from "./DwenguinoScenarioUtils.js"
 
 /*
  * This Object is the abstraction of the social robot simulator scenario.
@@ -12,10 +13,13 @@ import { TypesEnum, RobotComponentsFactory } from "./RobotComponentsFactory.js"
  */
 export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
   simulationComponentsMenu = null;
+  simulationRobotComponents = null;
   constructor(logger) {
     super(logger);
+    this.simulationRobotComponents = new DwenguinoSimulationRobotComponents(this);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu();
-    this.initSimulationState();
+    this.clearRobot();
+    //this.initSimulationState();
   }
 
 
@@ -37,13 +41,11 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     this.initSocialRobot();
     this.robotComponentsFactory = new RobotComponentsFactory(this.robot, this.scenarioUtils, this.logger);
 
-    this.setSensorOptions();
-    this.setBackground();
+    
 
     this.scenarioUtils.contextMenuBackground();
 
-    // Load robot components from local storage if they are present
-    this.checkLocalStorage();
+    
 
   }
 
@@ -63,13 +65,17 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     let bottom_pane = $("<div>").attr("id", "db_simulator_bottom_pane");
     container.append(top_pane).append(bottom_pane);
 
+    // Load robot components from local storage if they are present
+    //this.checkLocalStorage();
+
     // Setup the components menu
     this.simulationComponentsMenu.setupEnvironment(this);
 
     this.initSimulation(containerIdSelector);
-    this.loadRobotComponents();
+    
 
     this.renderer.render(this.robot);
+    
 
     var self = this;
     $("#sim_stop").click(function () {
@@ -79,7 +85,15 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
       }, 500);
     });
 
+
+    this.setBackground();
+
     this.initScenarioOptions();
+
+    this.setSensorOptions();
+
+    this.loadRobot();
+
   }
 
   initScenarioOptions() {
@@ -112,7 +126,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     $('#db_simulator_bottom_pane').css('height', '65%');
 
     // Load the simulation container
-    var simulationContainer = $("<div>").attr("id", "sim_container");
+    var simulationContainer = $("<div>").attr("id", "sim_container").attr("style", "margin: auto");
 
     // Add resize listerner to the conainer and update width and height accordingly
     var self = this;
@@ -131,7 +145,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     // this.robot[backgroundCanvasId].image.src = this.robot.imgRobot;
 
     // Reset the simulation state
-    this.initSimulationState();
+   // this.initSimulationState();
 
   }
 
@@ -381,127 +395,16 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    **********************/
 
   /**
-   * Checks if the scenario was saved in the local storage. If this is the 
-   * case, the saved components are loaded into the simulation container.
-   * This function will be called when the social robot scenario is added to the list of scenarios.
-   */
-  checkLocalStorage() {
-    this.setSensorOptions();
-
-    console.log('sim container', $('#sim_container'));
-
-    if (window.localStorage) {
-      var localStorage = window.localStorage;
-
-      if (localStorage.getItem('socialRobotScenario')) {
-
-        for (const [type, t] of Object.entries(TypesEnum)) {
-          var elements = localStorage.getItem(t);
-          if (elements != null) {
-            elements = elements.split('+').map(e => e.split(','));
-            for (var i = 0; i < elements.length - 1; i++) {
-              switch (t) {
-                case TypesEnum.SERVO:
-                  this.robotComponentsFactory.addServo(false, elements[i][2], elements[i][3], elements[i][4], parseFloat(elements[i][5]), parseFloat(elements[i][6]), elements[i][7], elements[i][8]);
-                  break;
-                case TypesEnum.LED:
-                  this.robotComponentsFactory.addLed(false, elements[i][2], elements[i][3], elements[i][4]);
-                  break;
-                case TypesEnum.PIR:
-                  this.robotComponentsFactory.addPir(false, elements[i][2], elements[i][3]);
-                  break;
-                case TypesEnum.SONAR:
-                  this.robotComponentsFactory.addSonar(false, elements[i][2], elements[i][3]);
-                  break;
-                case TypesEnum.LCD:
-                  this.robotComponentsFactory.addLcd(false, elements[i][2], elements[i][3]);
-                  break;
-              }
-              this.simulationComponentsMenu.changeValue(t, 1);
-            }
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * Displays the robot components that were instantiated from the local storage. 
-   * Additionally it triggers saveRobotComponents to periodically save the current scenario
-   * state in the local storage.
-   */
-  loadRobotComponents() {
-    if (window.localStorage) {
-      var localStorage = window.localStorage;
-      var self = this;
-
-      if (localStorage.getItem('socialRobotScenario')) {
-        for (const [type, t] of Object.entries(TypesEnum)) {
-          for (var i = 1; i <= self.robot.numberOf[t]; i++) {
-            $('#sim_' + t + i).css('visibility', 'visible');
-          }
-        }
-
-        this.saveRobotComponents();
-
-      } else {
-        // from now save current state
-        this.saveRobotComponents();
-      }
-    }
-  }
-
-  /**
    * Periodically saves the current robot components to the local storage,
    * so that when the page gets refreshed they can be reloaded.
    */
   saveRobotComponents() {
-    if (window.localStorage) {
-      var localStorage = window.localStorage;
-      var self = this;
+    
 
       try {
 
         // Set the interval and autosave every second
-        setInterval(function () {
-          localStorage.setItem('socialRobotScenario', 'saved');
-          for (const [type, t] of Object.entries(TypesEnum)) {
-            var saveState = '';
-
-            for (var i = 1; i <= self.robot.numberOf[t]; i++) {
-              var simId = '#sim_' + t + i;
-              var canvasId = 'sim_' + t + '_canvas' + i;
-              var leftOffset = 0;
-              if ($(simId).attr('data-x')) {
-                leftOffset = parseFloat(self.robot[canvasId].offset['left']) + parseFloat($(simId).attr('data-x'));
-              } else {
-                leftOffset = parseFloat(self.robot[canvasId].offset['left']);
-              }
-
-              var topOffset = 0;
-              if ($(simId).attr('data-y')) {
-                topOffset = parseFloat(self.robot[canvasId].offset['top']) + parseFloat($(simId).attr('data-y'));
-              } else {
-                topOffset = parseFloat(self.robot[canvasId].offset['top']);
-              }
-
-              if (t === TypesEnum.LED) {
-                var onColor = self.robot[canvasId].onColor;
-                saveState = saveState.concat("sim_" + t, i, ",", "sim_" + t + "_canvas", i, ",", leftOffset, ",", topOffset, ",", onColor, "+");
-              } else if (t === TypesEnum.SERVO) {
-                var width = parseFloat(self.robot[canvasId].width);
-                var height = parseFloat(self.robot[canvasId].height);
-                var image = self.robot[canvasId].image.src;
-                var state = self.robot[canvasId].state;
-                var classes = document.getElementById(canvasId).className;
-                saveState = saveState.concat("sim_" + t, i, ",", "sim_" + t + "_canvas", i, ",", leftOffset, ",", topOffset, ",", state, ",", width, ",", height, ",", image, ",", classes, "+");
-              } else {
-                saveState = saveState.concat("sim_" + t, i, ",", "sim_" + t + "_canvas", i, ",", leftOffset, ",", topOffset, "+");
-              }
-            }
-            localStorage.setItem(t, saveState);
-          }
-        }, 1000);
+        //setInterval(() => this.saveRobotComponents(), 1000);
 
       } catch (e) {
 
@@ -510,9 +413,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
         }
       }
 
-    } else {
-      console.log("No local storage");
-    }
+    
   }
 
   /*********************
@@ -523,36 +424,57 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    * Writes the current scenario state to an Xml document and return it.
    */
   loadToXml() {
-    var data = '<xml xmlns="http://www.w3.org/1999/xhtml">';
+    
     if (window.localStorage) {
       var localStorage = window.localStorage;
       var canvasId = '';
       if (localStorage.getItem('socialRobotScenario')) {
+        return this.robotToXml();
+      }
+    }
+    
+  }
 
-        for (const [type, t] of Object.entries(TypesEnum)) {
-          var elements = localStorage.getItem(t);
-          elements = elements.split('+').map(e => e.split(','));
-          for (var i = 0; i < elements.length - 1; i++) {
-            canvasId = elements[i][1];
-            data = data.concat("<Item ");
-            data = data.concat(" Type='", t, "'");
-            data = data.concat(" Id='", elements[i][0], "'");
-            data = data.concat(" CanvasId='", elements[i][1], "'");
-            data = data.concat(" OffsetLeft='", elements[i][2], "'");
-            data = data.concat(" OffsetTop='", elements[i][3], "'");
-            if (t === TypesEnum.SERVO) {
-              data = data.concat(" State='", elements[i][4], "'");
-              data = data.concat(" Width='", elements[i][5], "'");
-              data = data.concat(" Height='", elements[i][6], "'");
-              data = data.concat(" Image='", elements[i][7], "'");
-              data = data.concat(" Classes='", elements[i][8], "'");
-            }
-            if (t === TypesEnum.LED) {
-              data = data.concat(" OnColor='", elements[i][4], "'");
-            }
-            data = data.concat('></Item>');
-          }
+  /**
+   * Convert the current robot config to xml format
+   */
+  robotToXml(){
+    let data = '<xml xmlns="http://www.w3.org/1999/xhtml">';
+    for (const [type, t] of Object.entries(TypesEnum)) {
+      for (var i = 1; i <= this.robot.numberOf[t]; i++) {
+        data = data.concat("<Item ");
+        data = data.concat(" Type='", t, "'");
+        let simId = '#sim_' + t + i;
+        data = data.concat(" Id='", simId, "'");
+        let canvasId = 'sim_' + t + '_canvas' + i;
+        data = data.concat(" CanvasId='", canvasId, "'");
+        let leftOffset = 0;
+        if ($(simId).attr('data-x')) {
+          leftOffset = parseFloat(this.robot[canvasId].offset['left']) + parseFloat($(simId).attr('data-x'));
+        } else {
+          leftOffset = parseFloat(this.robot[canvasId].offset['left']);
         }
+
+        let topOffset = 0;
+        if ($(simId).attr('data-y')) {
+          topOffset = parseFloat(this.robot[canvasId].offset['top']) + parseFloat($(simId).attr('data-y'));
+        } else {
+          topOffset = parseFloat(this.robot[canvasId].offset['top']);
+        }
+
+        data = data.concat(" OffsetLeft='", leftOffset, "'");
+        data = data.concat(" OffsetTop='", topOffset, "'");
+
+        if (t === TypesEnum.LED) {
+          data = data.concat(" OnColor='", this.robot[canvasId].onColor, "'");
+        } else if (t === TypesEnum.SERVO) {
+          data = data.concat(" State='", this.robot[canvasId].state, "'");
+          data = data.concat(" Width='", this.robot[canvasId].width, "'");
+          data = data.concat(" Height='", this.robot[canvasId].height, "'");
+          data = data.concat(" Image='", this.robot[canvasId].image.src, "'");
+          data = data.concat(" Classes='", document.getElementById(canvasId).className, "'");
+        } 
+        data = data.concat('></Item>');
       }
     }
     data = data.concat('</xml>');
@@ -560,23 +482,11 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
   }
 
   /**
-   * Loads the current xml document and adds the specified robot components
-   * to the simulation container. It immediately displays the components on the screen.
+   * Converts an robot xml string into a robot on the screen
+   * @param {the xml string to be converted} xml 
    */
-  loadFromXml() {
-    this.initSocialRobot();
-    var container = document.getElementById("sim_container");
-    var elements = container.getElementsByClassName("sim_element");
-    DwenguinoSimulationRobotComponentsMenu.resetButtons();
-
-    while (elements[0]) {
-      elements[0].parentNode.removeChild(elements[0]);
-    }
-
-    this.setSensorOptions();
-    this.setBackground();
-
-    var data = this.scenarioUtils.textToDom(this.xml);
+  xmlToRobot(xml){
+    var data = this.scenarioUtils.textToDom(xml);
 
     var childCount = data.childNodes.length;
     for (var i = 0; i < childCount; i++) {
@@ -609,6 +519,46 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
           break;
       }
       this.simulationComponentsMenu.changeValue(type, 1);
+    }
+  }
+
+  /**
+   * Converts the robot to xml and saves it into the local storage of the browser
+   */
+  saveRobot(permanent = false, uniqeIdentifier = ""){
+    let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c saving robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      let robotXml = this.robotToXml();
+      localStorage.setItem(storageKey, robotXml)
+    }
+  }
+
+  /**
+   * Check the local storage if an item exists and load the xml
+   */
+  loadRobot(permanent = false, uniqeIdentifier = ""){
+    let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c loading robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      let robotXml = localStorage.getItem(storageKey);
+      if (robotXml){
+        this.xmlToRobot(robotXml);
+      }
+    }
+  }
+
+  /**
+   * Removes the localstorage entry for the robot
+   */
+  clearRobot(uniqeIdentifier = ""){
+    let storageKey = "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c clearing robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      localStorage.removeItem(storageKey);
     }
   }
 }

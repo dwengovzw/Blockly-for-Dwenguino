@@ -1,10 +1,13 @@
 import DwenguinoEventLogger from './logging/DwenguinoEventLogger.js'
 import DwenguinoSimulation from './simulation/DwenguinoSimulation.js'
 import TutorialMenu from './tutorials/TutorialMenu.js'
+import FileIOController from './FileIoController.js';
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
-export { DwenguinoBlockly as default }
+//export { DwenguinoBlockly as default }
+
+export default DwenguinoBlockly
 
 window.serverUrl = 'http://localhost:12032';
 
@@ -25,9 +28,12 @@ var DwenguinoBlockly = {
 
     tutorialMenu: null,
 
+    fileIOController: null,
+
     initDwenguinoBlockly: function(){
         
-
+        // Create file io controller responisble for saving and uploading files
+        this.fileIOController = new FileIOController();
         // Create DwenguinoEventLogger instance
         // This instance should be passed to all classes which want to log events.
         this.logger = new DwenguinoEventLogger();
@@ -104,6 +110,8 @@ var DwenguinoBlockly = {
             $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
 
             $("#dropzoneModal").modal('show');
+
+            
 
             var processFile = function(file){
               var textType = /text.*/;

@@ -32,8 +32,6 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     }
 
     initSimulationDisplay(containerId){
-        // init simulation state (does nothing, just for reference)
-        this.initSimulationState();
 
         //db_simulator_top_pane
         $(`#${containerId}`).append('<div id="db_simulator_pane"></div>');

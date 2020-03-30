@@ -13,6 +13,7 @@ export default class DwenguinoSimulationScenario {
     logger = null;
     constructor(logger){
         this.logger = logger;
+        console.log("Constructor");
     }
 
     /* @brief Initializes the simulator robot.
@@ -22,7 +23,7 @@ export default class DwenguinoSimulationScenario {
     *
     */
     initSimulationState(){
-
+        console.log("initSimulationState");
 
     }
 
@@ -55,7 +56,6 @@ export default class DwenguinoSimulationScenario {
     *
     */
     updateScenarioState(dwenguinoState){
-
     }
 
     /* @brief updates the simulation display
@@ -65,6 +65,5 @@ export default class DwenguinoSimulationScenario {
     *
     */
     updateScenarioDisplay(dwenguinoState){
-
     }
 }

@@ -66,8 +66,13 @@ export default class SimulationRunner {
 
         // Reset the board state
         this.board.resetBoard();
+        // reset scenario state
+        this.currentScenario.initSimulationState();
         this.currentScenario.initSimulationDisplay(this.simulationViewContainerId);
         this.currentScenario.updateScenario(this.board);
+
+
+        
 
     }
 
@@ -78,6 +83,7 @@ export default class SimulationRunner {
     initDebugger() {
         // initialize simulation
         this.resetDwenguino();
+
 
         // get code
         this.debugger.code = Blockly.JavaScript.workspaceToCode(this.workspace);

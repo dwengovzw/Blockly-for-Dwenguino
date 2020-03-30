@@ -225,6 +225,9 @@ export default class DwenguinoSimulationRobotComponentsMenu {
       case "default":
         break;
     }
+
+    // Save robot components when a component is added
+    this.socialRobotScenario.saveRobot();
   }
 
   /*
@@ -257,6 +260,9 @@ export default class DwenguinoSimulationRobotComponentsMenu {
       case "default":
         break;
     }
+
+    // Save robot components when a component is deleted
+    this.socialRobotScenario.saveRobot();
   }
 
 };
