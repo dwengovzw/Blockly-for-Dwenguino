@@ -226,7 +226,7 @@
                 <field name="NUM">1</field>
             </block>
         </value>
-        <value name="servo_left_eye2">
+        <value name="servo_left_eye1">
             <block type="math_number" id="209">
                 <field name="NUM">2</field>
             </block>
