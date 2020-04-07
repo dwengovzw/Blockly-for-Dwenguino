@@ -1,3 +1,5 @@
+import { EVENT_NAMES } from "../../logging/DwenguinoEventLogger.js"
+
 export default class DwenguinoSimulationRobotComponents {
   socialRobotScenario = null;
   constructor(socialRobotScenario){
@@ -37,7 +39,7 @@ export default class DwenguinoSimulationRobotComponents {
                     Math.pow(event.pageY - event.y0, 2) | 0))
             .toFixed(2) + 'px')
         self.socialRobotScenario.saveRobot();
-        self.socialRobotScenario.logger.recordEvent(self.socialRobotScenario.logger.createEvent("moveRobotComponent", event.target.id));
+        self.socialRobotScenario.logger.recordEvent(self.socialRobotScenario.logger.createEvent(EVENT_NAMES.moveRobotComponent, event.target.id));
       }
     })
   }

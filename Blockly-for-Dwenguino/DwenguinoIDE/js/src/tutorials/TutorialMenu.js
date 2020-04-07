@@ -1,3 +1,5 @@
+import { EVENT_NAMES } from "../logging/DwenguinoEventLogger.js"
+
 /**
  * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
  * the menu.
@@ -161,7 +163,7 @@ export default class TutorialMenu {
             hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
             this.hideTutorialDialog(); // hide the tutorial dialog before starting the tutorial
             hopscotch.startTour(tutorial);
-            this.eventLogger.recordEvent(this.eventLogger.createEvent("startTutorial", tutorial.id));
+            this.eventLogger.recordEvent(this.eventLogger.createEvent(EVENT_NAMES.startTutorial, tutorial.id));
         });
 
         if(isCompleted){
@@ -182,7 +184,7 @@ export default class TutorialMenu {
         this.eventLogger.tutorialId = "";
         this.eventLogger.tutorialIdSetting = "";
         this.tutorialCategory = "";
-        this.eventLogger.recordEvent(this.eventLogger.createEvent("endTutorial", ""));
+        this.eventLogger.recordEvent(this.eventLogger.createEvent(EVENT_NAMES.endTutorial, ""));
         this.showTutorialDialog();
     }
 
