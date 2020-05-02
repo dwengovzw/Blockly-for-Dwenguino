@@ -1,5 +1,6 @@
 import SimulationRunner from "./SimulationRunner.js"
 import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulation.js"
+import { EVENT_NAMES } from "../logging/DwenguinoEventLogger.js"
 
 export default class SimulationControlsController {
     simulationRunner = null;
@@ -70,7 +71,7 @@ export default class SimulationControlsController {
 
             self.handleSimulationStop();
             self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
-            self.logger.recordEvent(self.logger.createEvent("changedScenario", this.scenarioView));
+            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, this.scenarioView));
 
         });
 
@@ -81,10 +82,10 @@ export default class SimulationControlsController {
             if (!this.simulationRunner.isSimulationRunning && !this.simulationRunner.isSimulationPaused) {
                 this.simulationRunner.isSimulationRunning = true;
                 this.startSimulation();
-                this.logger.recordEvent(this.logger.createEvent("simStart", ""));
+                this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStart, ""));
                 // resume
             } else if (!this.simulationRunner.isSimulationRunning) {
-                this.logger.recordEvent(this.logger.createEvent("simResume", ""));
+                this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simResume, ""));
                 this.simulationRunner.isSimulationPaused = false;
                 this.simulationRunner.isSimulationRunning = true;
                 this.resumeSimulation();
@@ -92,20 +93,20 @@ export default class SimulationControlsController {
         });
 
         $("#sim_pause").click(() => {
-            this.logger.recordEvent(this.logger.createEvent("simPause", ""));
+            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simPause, ""));
             this.simulationRunner.isSimulationRunning = false;
             this.simulationRunner.isSimulationPaused = true;
             this.setButtonsPause();
         });
 
         $("#sim_stop").click(() => {
-            this.logger.recordEvent(this.logger.createEvent("simStopButtonClicked", ""));
+            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStopButtonClicked, ""));
             this.handleSimulationStop();
         });
 
         $("#sim_step").click(() => {
             this.setButtonsStep();
-            this.logger.recordEvent(this.logger.createEvent("simStep", ""));
+            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStep, ""));
             // step 1
             if (!this.simulationRunner.isSimulationPaused && !this.simulationRunner.isSimulationRunning) {
                 this.startStepSimulation();
@@ -215,7 +216,7 @@ export default class SimulationControlsController {
     }
 
     handleSimulationStop() {
-        this.logger.recordEvent(this.logger.createEvent("simStop", ""));
+        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStop, ""));
         this.simulationRunner.isSimulationRunning = false;
         this.simulationRunner.isSimulationPaused = false;
         this.setButtonsStop();
@@ -304,7 +305,7 @@ export default class SimulationControlsController {
         var e = document.getElementById("sim_speed");
         var option = e.options[e.selectedIndex].value;
 
-        this.logger.recordEvent(this.logger.createEvent("setSpeed", option));
+        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.setSpeed, option));
 
         switch (option) {
             case "veryslow":

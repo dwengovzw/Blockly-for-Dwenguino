@@ -1,5 +1,6 @@
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { StatesEnum } from "./DwenguinoScenarioUtils.js"
+import { EVENT_NAMES } from "../../logging/DwenguinoEventLogger.js"
 
 export { TypesEnum, RobotComponentsFactory }
 
@@ -85,7 +86,7 @@ class RobotComponentsFactory {
     * Add a new servo to the simulation container.
     */
   addServo(draw = true, offsetLeft = 5, offsetTop = 5, state = StatesEnum.PLAIN, width = 100, height = 50, image = this.robot.imgServo, classes = 'sim_canvas servo_canvas') {
-    this.logger.recordEvent(this.logger.createEvent("addRobotComponent", TypesEnum.SERVO));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
 
     this.incrementNumberOf(TypesEnum.SERVO);
     var id = this.robot.numberOf[TypesEnum.SERVO];
@@ -120,7 +121,7 @@ class RobotComponentsFactory {
    * Remove the most recent created servo from the simulation container.
    */
   removeServo() {
-    this.logger.recordEvent(this.logger.createEvent("removeRobotComponent", TypesEnum.SERVO));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
 
     var id = this.robot.numberOf[TypesEnum.SERVO];
     $("#sim_servo" + id + "").remove();
@@ -133,7 +134,7 @@ class RobotComponentsFactory {
    * Add a new LED to the simulation container.
    */
   addLed(draw = true, offsetLeft = 5, offsetTop = 5, onColor = 'yellow') {
-    this.logger.recordEvent(this.logger.createEvent("addRobotComponent", TypesEnum.LED));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
 
     this.incrementNumberOf(TypesEnum.LED);
     var i = this.robot.numberOf[TypesEnum.LED];
@@ -167,7 +168,7 @@ class RobotComponentsFactory {
    * Remove the most recent created LED from the simulation container.
    */
   removeLed() {
-    this.logger.recordEvent(this.logger.createEvent("removeRobotComponent", TypesEnum.LED));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LED));
     var id = this.robot.numberOf[TypesEnum.LED];
     $("#sim_led" + id + "").remove();
 
@@ -179,7 +180,7 @@ class RobotComponentsFactory {
    * Add a new PIR sensor to the simulation container.
    */
   addPir(draw = true, offsetLeft = 5, offsetTop = 5) {
-    this.logger.recordEvent(this.logger.createEvent("addRobotComponent", TypesEnum.PIR));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
 
     this.incrementNumberOf(TypesEnum.PIR);
     var id = this.robot.numberOf[TypesEnum.PIR];
@@ -217,7 +218,7 @@ class RobotComponentsFactory {
    * Remove the most recent created PIR sensor from the simulation container.
    */
   removePir() {
-    this.logger.recordEvent(this.logger.createEvent("removeRobotComponent", TypesEnum.PIR));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.PIR));
     var id = this.robot.numberOf[TypesEnum.PIR];
     $('#sim_pir' + id).remove();
 
@@ -234,7 +235,7 @@ class RobotComponentsFactory {
    * Add a new SONAR sensor to the simulation container.
    */
   addSonar(draw = true, offsetLeft = 5, offsetTop = 5) {
-    this.logger.recordEvent(this.logger.createEvent("addRobotComponent", TypesEnum.SONAR));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
 
     this.incrementNumberOf(TypesEnum.SONAR);
     var id = this.robot.numberOf[TypesEnum.SONAR];
@@ -291,7 +292,7 @@ class RobotComponentsFactory {
    * Remove the most recent created SONAR sensor from the simulation container.
    */
   removeSonar() {
-    this.logger.recordEvent(this.logger.createEvent("removeRobotComponent", TypesEnum.SONAR));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SONAR));
     var id = this.robot.numberOf[TypesEnum.SONAR];
     $('#sim_sonar' + id).remove();
 
@@ -386,7 +387,7 @@ class RobotComponentsFactory {
    * Add a new PIR sensor to the simulation container.
    */
   addButton(draw = true, offsetLeft = 5, offsetTop = 5) {
-    this.logger.recordEvent(this.logger.createEvent("addRobotComponent", TypesEnum.BUTTON));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTON));
     this.incrementNumberOf(TypesEnum.BUTTON);
     var id = this.robot.numberOf[TypesEnum.BUTTON];
     var buttonId = 'sim_button_canvas' + id;
@@ -423,7 +424,7 @@ class RobotComponentsFactory {
    * Remove the most recent created PIR sensor from the simulation container.
    */
   removeButton() {
-    this.logger.recordEvent(this.logger.createEvent("removeRobotComponent", TypesEnum.BUTTON));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.BUTTON));
     var id = this.robot.numberOf[TypesEnum.PIR];
     $('#sim_button' + id).remove();
 

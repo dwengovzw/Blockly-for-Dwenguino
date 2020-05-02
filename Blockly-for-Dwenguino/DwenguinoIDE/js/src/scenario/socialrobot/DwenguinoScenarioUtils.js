@@ -1,6 +1,7 @@
 //import { DwenguinoBlockly } from "../../DwenguinoBlockly.js"
 
 import FileIOController from "../../FileIoController.js";
+import { EVENT_NAMES } from "../../logging/DwenguinoEventLogger.js"
 
 export { StatesEnum, DwenguinoScenarioUtils }
 
@@ -32,7 +33,7 @@ class DwenguinoScenarioUtils{
         console.log('save scenario');
         this.ioController.download("scenario.xml", data);
         //DwenguinoBlockly.download("scenario.xml", data);
-        this.scenario.logger.recordEvent(this.scenario.logger.createEvent("downloadScenarioClicked", ""));
+        this.scenario.logger.recordEvent(this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, ""));
     }
 
     async loadScenario(scenario){

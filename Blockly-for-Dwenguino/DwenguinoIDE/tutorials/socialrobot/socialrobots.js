@@ -1,7 +1,7 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 import TutorialAnswer from "../../js/src/tutorials/TutorialAnswer.js"
 import TutorialMultipleChoiceQuestion from "../../js/src/tutorials/TutorialMultipleChoiceQuestion.js"
-
+import { EVENT_NAMES } from "../../js/src/logging/DwenguinoEventLogger.js"
 
 
 /**
@@ -64,12 +64,12 @@ tutorials.socialRobots = {
       DwenguinoBlockly.tutorialMenu.endTutorial();
     },
     onNext: function(){
-      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
-      console.log(DwenguinoBlockly.logger.createEvent("tutorialNextStep", DwenguinoBlockly.logger.tutorialIdSetting));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.tutorialNextStep, DwenguinoBlockly.logger.tutorialIdSetting));
+      console.log(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.tutorialNextStep, DwenguinoBlockly.logger.tutorialIdSetting));
     },
     onPrev: function(){
-      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
-      console.log(DwenguinoBlockly.logger.createEvent("tutorialPrevStep", DwenguinoBlockly.logger.tutorialIdSetting));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.tutorialPrevStep, DwenguinoBlockly.logger.tutorialIdSetting));
+      console.log(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.tutorialPrevStep, DwenguinoBlockly.logger.tutorialIdSetting));
     },
 
     onShow: function(){

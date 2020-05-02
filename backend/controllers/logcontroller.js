@@ -2,6 +2,7 @@
 Logitem = require('../models/logModel');
 const uuidv4 = require('uuid/v4');
 
+
 exports.newSessionId = function(req, res) {
     let id = uuidv4();
     res.send(id);

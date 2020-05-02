@@ -2,6 +2,7 @@ import DwenguinoEventLogger from './logging/DwenguinoEventLogger.js'
 import DwenguinoSimulation from './simulation/DwenguinoSimulation.js'
 import TutorialMenu from './tutorials/TutorialMenu.js'
 import FileIOController from './FileIoController.js';
+import { EVENT_NAMES } from './logging/DwenguinoEventLogger.js'
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
@@ -182,7 +183,7 @@ var DwenguinoBlockly = {
             localStorage.workspaceXml = data;
             DwenguinoBlockly.download("blocks.xml", data);
             
-            DwenguinoBlockly.logger.recordEvent(this.logger.createEvent("downloadClicked", ""));
+          DwenguinoBlockly.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.downloadClicked, ""));
         });
 
         $("#db_menu_item_clear").click(function(){
@@ -216,14 +217,14 @@ var DwenguinoBlockly = {
                ids: event.ids
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyBlockCreate", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyBlockCreate, data));
            } else if (event.type == "delete"){
              var data = {
                oldXml: event.oldXml,
                ids: event.ids
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyBlockDelete", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyBlockDelete, data));
            } else if (event.type == "move"){
              var data = {
                oldParentId: event.oldParentId,
@@ -234,7 +235,7 @@ var DwenguinoBlockly = {
                newCoordinate: event.newCoordinate
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyBlockMove", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyBlockMove, data));
            } else if (event.type == "createVar"){
              var data = {
                varType: event.varType,
@@ -242,7 +243,7 @@ var DwenguinoBlockly = {
                varId: event.varId
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyVarCreate", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyVarCreate, data));
            } else if (event.type == "deleteVar"){
              var data = {
                varType: event.varType,
@@ -250,7 +251,7 @@ var DwenguinoBlockly = {
                varId: event.varId
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyVarDelete", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyVarDelete, data));
            } else if (event.type == Blockly.Events.VAR_RENAME){
              var data = {
                oldName: event.oldName,
@@ -258,7 +259,7 @@ var DwenguinoBlockly = {
                varId: event.varId
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyVarRename", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyVarRename, data));
            } else if (event.type == Blockly.Events.UI){
              var data = {
                element: event.element,
@@ -266,7 +267,7 @@ var DwenguinoBlockly = {
                newValue: event.newValue
              }
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyUI", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyUI, data));
            } else if (event.type == Blockly.Events.CHANGE){
              var data = {
                element: event.element,
@@ -275,11 +276,11 @@ var DwenguinoBlockly = {
                newValue: event.newValue
              };
              data = JSON.stringify(data);
-             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("blocklyChange", data));
+             DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.blocklyChange, data));
            } else if (event.type == Blockly.Events.UNDO){
              console.log(event);
              var data = {};
-              DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("undo", data));
+              DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.undo, data));
            }
          });
 
@@ -288,7 +289,7 @@ var DwenguinoBlockly = {
       DwenguinoBlockly.workspace.clear();
       Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
       var count = DwenguinoBlockly.workspace.getAllBlocks().length;
-      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("uploadClicked", xml));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.uploadClicked, xml));
     },
 
     download: function(filename, text) {
@@ -316,7 +317,7 @@ var DwenguinoBlockly = {
       $("#db_blockly").width(newStateArray[0]);
       this.simButtonStateClicked = newStateArray[2];
       DwenguinoBlockly.simulatorState = newStateArray[1];
-      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("simButtonStateClicked", DwenguinoBlockly.simulatorState));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.simButtonStateClicked, DwenguinoBlockly.simulatorState));
       DwenguinoBlockly.onresize();
       Blockly.svgResize(DwenguinoBlockly.workspace);
     },
@@ -347,7 +348,7 @@ var DwenguinoBlockly = {
       });
       
       console.log(code.replace(/\r?\n|\r/g, "\n"));
-      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent("runClicked", ""));
+      DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.runClicked, ""));
     },
     showModalErrorDialog: function(error){
       $('#errorModal .modal-header').text(MSG.runError);
@@ -420,11 +421,19 @@ var DwenguinoBlockly = {
     */
     takeSnapshotOfWorkspace: function(){
         console.log("taking snapshot");
-        var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-        var text = Blockly.Xml.domToText(xml);
+        // Get xml for current code
+        let xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+        let xmlText = Blockly.Xml.domToText(xml);
+        // Get javascript for current code
+        let js = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+        let workspaceState = {
+          blocksXml: xmlText,
+          blocksJsCode: js,
+        }
+        let workspaceStateText = JSON.stringify(workspaceState);
         if (text != DwenguinoBlockly.prevWorkspaceXml){
             DwenguinoBlockly.prevWorkspaceXml = text;
-            DwenguinoBlockly.logger.recordEvent(this.logger.createEvent("changedWorkspace", text));
+            DwenguinoBlockly.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedWorkspace, workspaceStateText));
         }
     },
 
