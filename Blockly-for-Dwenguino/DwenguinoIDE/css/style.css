@@ -609,7 +609,7 @@ body{
     height: 50%; */
     /*float: right;*/
     height: 90%;
-    width: 90%;
+    width: 100%;
     margin-right: 10px;
     padding-left: 10px;
     padding-right: 10px;
@@ -859,7 +859,7 @@ body{
 
 #sim_container{
     position: relative;
-    width: 80%;
+    width: 100%;
     height: 80%;
     display: flex;
     flex-direction: column;
