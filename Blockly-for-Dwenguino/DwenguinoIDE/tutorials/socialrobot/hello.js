@@ -1,7 +1,7 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 import TutorialAnswer from "../../js/src/tutorials/TutorialAnswer.js"
 import TutorialMultipleChoiceQuestion from "../../js/src/tutorials/TutorialMultipleChoiceQuestion.js"
-import { EVENT_NAMES } from "../../js/src/logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../../js/src/logging/EventNames.js"
 
 /**
  * Implementation of this tour with Hopscotch

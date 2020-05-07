@@ -1,6 +1,7 @@
 {
   "name": "DwenguinoIDE",
   "version": "1.0.0",
+  "type": "module",
   "dependencies": {
     "interactjs": "1.4.0-rc.13"
   }

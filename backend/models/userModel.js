@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 // Setup schema
 var userSchema = mongoose.Schema({
     username: String,
@@ -9,7 +9,9 @@ var userSchema = mongoose.Schema({
     school: String
 });
 // Export Contact model
-var Useritem = module.exports = mongoose.model('authentication', userSchema);
-module.exports.get = function (callback, limit) {
+var Useritem = mongoose.model('authentication', userSchema);
+/*module.exports.get = function (callback, limit) {
     Useritem.find(callback).limit(limit);
-}
+}*/
+
+export default Useritem;

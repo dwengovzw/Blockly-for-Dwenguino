@@ -1,7 +1,7 @@
 //import { DwenguinoBlockly } from "../../DwenguinoBlockly.js"
 
 import FileIOController from "../../FileIoController.js";
-import { EVENT_NAMES } from "../../logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../../logging/EventNames.js"
 
 export { StatesEnum, DwenguinoScenarioUtils }
 

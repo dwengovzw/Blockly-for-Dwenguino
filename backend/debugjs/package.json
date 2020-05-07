@@ -1,0 +1,55 @@
+{
+  "_from": "github:amasad/debugjs",
+  "_id": "debugjs@0.0.1",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/debugjs",
+  "_phantomChildren": {
+    "amdefine": "1.0.1",
+    "cls": "0.1.5",
+    "defs": "0.6.2",
+    "private": "0.1.8"
+  },
+  "_requested": {
+    "type": "git",
+    "raw": "amasad/debugjs",
+    "rawSpec": "amasad/debugjs",
+    "saveSpec": "github:amasad/debugjs",
+    "fetchSpec": null,
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:amasad/debugjs#270ec52184149bf138d6490243306936205e4669",
+  "_spec": "amasad/debugjs",
+  "_where": "/home/tneutens/Documents/UGent/Onderzoek/DwenguinoBlockly",
+  "author": "",
+  "bundleDependencies": false,
+  "dependencies": {
+    "brfs": "0.0.8",
+    "commander": "~2.1.0",
+    "context-eval": "0.0.2",
+    "generator-supported": "0.0.1",
+    "jsonpretty": "0.0.1",
+    "recast": "~0.5.8",
+    "regenerator": "~0.3.4"
+  },
+  "deprecated": false,
+  "description": "Lightweight JavaScript VM and stepping debugger in JavaScript.     [Demo app](http://debugjs.com/#example)     [Blog post](http://amasad.me/2014/01/06/building-an-in-browser-javascript-vm-and-debugger-using-generators/)",
+  "devDependencies": {
+    "cross-env": "^3.0.0",
+    "esprima": "git://github.com/ariya/esprima.git#harmony",
+    "mocha": "^7.1.1",
+    "raw-loader": "^0.5.1",
+    "rimraf": "^2.5.4"
+  },
+  "license": "AAL",
+  "main": "lib/index.js",
+  "name": "debugjs",
+  "scripts": {
+    "build": "npm run build:umd && npm run build:es"
+  },
+  "version": "0.0.1"
+}

@@ -1,7 +1,13 @@
 // Import contact model
-Logitem = require('../models/logModel');
-const uuidv4 = require('uuid/v4');
+import FunctionalVectorGenerator from '../functionalGenerator/functionalVectorGenerator.js'
+import Logitem from '../models/logModel.js';
+import uuidv4 from 'uuid/v4.js';
+import { EVENT_NAMES } from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/logging/EventNames.js';
+import path from 'path'
 
+import { Worker, isMainThread, parentPort } from 'worker_threads';
+
+let exports = {};
 
 exports.newSessionId = function(req, res) {
     let id = uuidv4();
@@ -21,16 +27,68 @@ exports.event = function(req, res) {
     logitem.event.name = req.body.event.name;
     logitem.event.data = req.body.event.data;
 
-    // save the contact and check for errors
-    logitem.save()
+
+    if (!req.body.event.name){
+      res.send("incorrect logging format");
+      return
+    }
+
+    // Save the logitem to the database
+    // If the event was a workspace change: 
+    // Spawn a thread after saving the item to generate the functional vector
+    // Disabled saving for testing purposes
+    /*logitem.save()
       .then(item => {
-        res.send("Logitem saved to database");
+        // If the event is a changedworkspace event, generate functional vector otherwise just save the event
+        if (req.body.event.name == EVENT_NAMES.changedWorkspace){
+          let id = item.id;
+          let promise = processEvent({data: req.body.event.data});
+          promise.then((resp) => {
+            console.log("promise fulfilled");
+            console.log(resp);
+            Logitem.findOneAndUpdate({"_id": id }, 
+              {$set: { "event.functional_vector": resp.value }}, 
+              { useFindAndModify: false, runValidators: false }, 
+              (err, numAffected) => {
+                  console.log("updated entry");
+              }
+            );
+          }).catch((err) => {
+            console.error(err);
+          }); 
+        }
       })
       .catch(err => {
         console.debug(err);
-        res.status(400).send("Unable to save to database");
-      });
+      });*/
+
+    // This does not let the client know if the server was able to save the item or not.
+    // Tis is not required i think since it doesn't realy matter if logging events get lost
+    res.send("Logitem received by server");
+    
 };
+
+function processEvent(data){
+  return new Promise((resolve, reject) => {
+    let workerResult = null;
+    // When running from debugger
+    const worker = new Worker('./backend/functionalGenerator/workerStartup.js', { workerData: data });
+    // When running from start script
+    //const worker = new Worker('../functionalGenerator/workerStartup.js', { workerData: data });
+    // Get result value from worker
+    worker.once("message", (value) => {
+      workerResult = value.result;
+    });
+    // Resolve once thread has finished.
+    worker.once( "exit", (exitCode) => {
+      resolve({message: `Thread exited with code: ${exitCode}`, value: workerResult });
+    });
+    // Reject on error.
+    worker.once("error", (err) => {
+      reject(err);
+    });
+  })
+}
 
 // Handle index actions
 // exports.index = function (req, res) {
@@ -110,3 +168,5 @@ exports.event = function(req, res) {
 //         });
 //     });
 // };
+
+export default exports;

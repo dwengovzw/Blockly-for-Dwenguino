@@ -126,12 +126,14 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
 
 
     updateScenarioState(board){
-        board.reset = this.inputsState.reset;
-        board.buttons = this.inputsState.buttons;
+       // board.reset = this.inputsState.reset;
+       for (let i = 0 ; i < this.inputsState.buttons.length ; ++i){
+           board.setButtonState(i, this.inputsState.buttons[i])
+       }
     }
 
     updateScenario(dwenguinoState){
-        this.updateScenarioState();
+        this.updateScenarioState(dwenguinoState);
         this.updateScenarioDisplay(dwenguinoState);
     }
 
@@ -162,15 +164,15 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         
         if (this.audiocontext){
             // Check if freq has changed
-            if (this.prevFreq != board.buzzer.tonePlaying && this.prevFreq != 0 && board.buzzer.tonePlaying != 0){
-                this.prevFreq = board.buzzer.tonePlaying;
+            if (this.prevFreq != board.getTonePlaying() && this.prevFreq != 0 && board.getTonePlaying != 0){
+                this.prevFreq = board.getTonePlaying();
                 // stop the current tone
                 this.osc.stop(this.audiocontext.currentTime);
                 this.osc.disconnect(this.audiocontext.destination);
                 this.osc = null;
                 this.audioStarted = false;
             }
-            if (board.buzzer.tonePlaying === 0 || this.muted) {
+            if (board.getTonePlaying() === 0 || this.muted) {
                 if (this.audioStarted){
                     console.log("stop");
                     this.audioStarted = false;
@@ -178,11 +180,11 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
                     this.osc.disconnect(this.audiocontext.destination);
                     this.osc = null;
                 }
-            } else if (board.buzzer.tonePlaying !== 0 && !this.muted) {
+            } else if (board.getTonePlaying() !== 0 && !this.muted) {
                 if ( !this.audioStarted ){
                     // Create a new oscillator to play a specific tone and set the type to sin
                     this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
-                    this.osc.frequency.value = board.buzzer.tonePlaying; // Hz
+                    this.osc.frequency.value = board.getTonePlaying(); // Hz
                     this.osc.start(this.audiocontext.currentTime);
                     this.osc.connect(this.audiocontext.destination); // connect it to the destination
                     console.log("start");
@@ -192,8 +194,8 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         }
     
         // Update the button view
-        for (let i = 0 ; i < board.buttons.length ; i++){
-            if (board.buttons[i] === 0){
+        for (let i = 0 ; i < 5 ; i++){
+            if (board.getButtonState(i) === 0){
                 document.getElementById(ButtonMap.mapIndexToButtonId(i)).className = "sim_button sim_button_pushed";
             }else{
                 document.getElementById(ButtonMap.mapIndexToButtonId(i)).className = "sim_button";    
@@ -202,7 +204,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         
     
         // Turn lcd backlight on or off.
-        if (board.backlight){
+        if (board.getBackLightStatus() == 1){
             $("#sim_lcds").addClass("on");
         }else{
             $("#sim_lcds").removeClass("on");
@@ -211,7 +213,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         // Set the board text on the screen
         for (var row = 0 ; row < 2 ; ++row){
             // write new text to lcd screen and replace spaces with &nbsp;
-            $("#sim_lcd_row" + row).text(board.lcdContent[row]);
+            $("#sim_lcd_row" + row).text(board.getLcdContent(row));
             if(document.getElementById('sim_lcd_row' + row) !== null){
                 document.getElementById('sim_lcd_row' + row).innerHTML =
                 document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
@@ -229,7 +231,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         // Set leds to right value
         for (var i = 0; i < 8; i++) {
             let classValue = "";
-            if (board.leds[i] === 0){
+            if (board.getLedState(i) === 0){
                 classValue = "sim_light sim_light_off";
             }else{
                 classValue = "sim_light sim_light_on";
@@ -237,7 +239,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
             document.getElementById('sim_light_' + i).className = classValue;
           }
           // Set led 13 to right value
-        if (board.leds[8] === 0){
+        if (board.getLedState(8) === 0){
             document.getElementById('sim_light_13').className = "sim_light sim_light_off";
         }else{
             document.getElementById('sim_light_13').className = "sim_light sim_light_on";

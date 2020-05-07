@@ -1,6 +1,6 @@
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { StatesEnum } from "./DwenguinoScenarioUtils.js"
-import { EVENT_NAMES } from "../../logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../../logging/EventNames.js"
 
 export { TypesEnum, RobotComponentsFactory }
 

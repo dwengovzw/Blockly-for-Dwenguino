@@ -1,40 +1,5 @@
 import LoggingMenu from './LoggingMenu.js'
-
-
-export const EVENT_NAMES = Object.freeze({
-    downloadClicked: "downloadClicked",
-    blockyBlockCreate: "blocklyBlockCreate",
-    blocklyBlockDelete: "blocklyBlockDelete",
-    blocklyBlockMove: "blocklyBlockMove",
-    blocklyVarCreate: "blocklyVarCreate",
-    blocklyVarDelete: "blocklyVarDelete",
-    blocklyVarRename: "blocklyVarRename",
-    blocklyUI: "blocklyUI",
-    blocklyChange: "blocklyChange",
-    undo: "undo",
-    uploadClicked: "uploadClicked",
-    simButtonStateClicked: "simButtonStateClicked",
-    runClicked: "runClicked",
-    changedWorkspace: "changedWorkspace",
-    downloadScenarioClicked: "downloadScenarioClicked",
-    moveRobotComponent: "moveRobotComponent",
-    addRobotComponent: "addRobotComponent",
-    removeRobotComponent: "removeRobotComponent",
-    addRobotComponent: "addRobotComponent",
-    changedScenario: "changedScenario",
-    simStart: "simStart",
-    simResume: "simResume",
-    simPause: "simPause",
-    simStopButtonClicked: "simStopButtonClicked",
-    simStep: "simStep",
-    simStop: "simStop",
-    setSpeed: "setSpeed",
-    startTutorial: "startTutorial",
-    endTutorial: "endTutorial",
-    tutorialNextStep: "tutorialNextStep", 
-    tutorialPrevStep: "tutorialPrevStep",
-    
-})
+import ServerConfig from '../ServerConfig.js'
 
 export default class DwenguinoEventLogger {
     sessionId = null;
@@ -77,7 +42,7 @@ export default class DwenguinoEventLogger {
             // Try to get a new sessionId from the server to keep track
             $.ajax({
                 type: "GET",
-                url: window.serverUrl + "/logging/id"}
+                url: ServerConfig.getServerUrl() + "/logging/id"}
             ).done((data) => {
                 this.sessionId = data;
             }).fail(function(response, status)  {
@@ -112,10 +77,10 @@ export default class DwenguinoEventLogger {
         "event": eventToRecord
         };
         console.log(eventToRecord);
-        if (DwenguinoEventLogger.sessionId !== undefined){
+        if (this.sessionId !== undefined){
         $.ajax({
             type: "POST",
-            url: window.serverUrl + "/logging/event",
+            url: ServerConfig.getServerUrl() + "/logging/event",
             data: serverSubmission,
         }).done(function(data){
             console.debug('Recording submitted', data);

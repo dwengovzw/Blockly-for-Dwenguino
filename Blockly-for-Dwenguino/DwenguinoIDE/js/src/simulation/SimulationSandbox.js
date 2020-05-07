@@ -31,12 +31,12 @@ export default class SimulationSandbox{
   */
   writeLcd(text, row, column) {
     // Turn on lcd backlight
-    this.boardState.backlight = true;
+    this.boardState.setBacklight(1);
     // replace text in current content (if text is hello and then a is written this gives aello)
-    text = this.boardState.lcdContent[row].substr(0, column) +
+    text = this.boardState.getLcdContent(row).substr(0, column) +
     text.substring(0, 16 - column) +
-    this.boardState.lcdContent[row].substr(text.length + column, 16);
-    this.boardState.lcdContent[row] = text;
+    this.boardState.getLcdContent(row).substr(text.length + column, 16);
+    this.boardState.setLcdContent(row, text);
  
   }
 
@@ -53,16 +53,17 @@ export default class SimulationSandbox{
         pin -= 32;
       }
       if (state === 'HIGH' || state == 1) {
-        pin=== 13 ? this.boardState.leds[8] = 1 : this.boardState.leds[pin] = 1;
+        pin=== 13 ? this.boardState.setLedState(8, 1) : this.boardState.setLedState(pin, 1);
       } else {
-        pin === 13 ? this.boardState.leds[8] = 0 : this.boardState.leds[pin] = 0;
+        pin === 13 ? this.boardState.setLedState(8, 0) : this.boardState.setLedState(pin, 0);
       }
     }
   }
 
-  analogWrite(pinNumber, state) {
-
+  analogWrite(pinName, state) {
+    this.boardState.setAnalogIoPinState(pinName, state);
   }
+
 
   /*
   * Reads the value of the given pin, used to know the value of a button
@@ -73,7 +74,7 @@ export default class SimulationSandbox{
     // read value from buttons
     if (pin.startsWith("SW_")) {
         let pinIndex = ButtonMap.mapButtonPinNameToIndex(pin);
-        return this.boardState.buttons[pinIndex];
+        return this.boardState.getButtonState(pinIndex);
     }
 
     // Return the value that is set to the leds
@@ -82,7 +83,7 @@ export default class SimulationSandbox{
       if (pin >= 32 && pin <= 39) {
         pin -= 32;
       }
-      return this.boardState.leds[pin];
+      return this.boardState.getButtonState(pin);
     }
 
     // Otherwise, assume the value of the pin is high can possibly be extended.
@@ -90,8 +91,8 @@ export default class SimulationSandbox{
   }
 
   // TODO: implement this when the time is right :p
-  analogRead(pin) {
-    return 0;
+  analogRead(pinName) {
+    return this.boardState.getAnalogIoPinState(pinName);
   }
 
   /*
@@ -125,7 +126,7 @@ export default class SimulationSandbox{
     if (pin !== "BUZZER") {
       return;
     }
-    this.boardState.buzzer.tonePlaying = frequency;
+    this.boardState.setTonePlaying(frequency);
   }
 
   /*
@@ -135,7 +136,7 @@ export default class SimulationSandbox{
   noTone(pin) {
     if (pin === "BUZZER") {
       // stop tone
-      this.boardState.buzzer.tonePlaying = 0;
+      this.boardState.setTonePlaying(0);
     }
   }
 
@@ -153,8 +154,8 @@ export default class SimulationSandbox{
       angle = 0;
     }
 
-    if (angle !== this.boardState.servoAngles[channel - 1]) {
-        this.boardState.servoAngles[channel - 1] = angle;
+    if (angle !== this.boardState.getServoAngle(channel - 1)) {
+        this.boardState.setServoAngle(channel - 1, angle);
     }
   }
 
@@ -176,10 +177,10 @@ export default class SimulationSandbox{
     }
 
     // change view of motor
-    if (speed === this.boardState.motorSpeeds[channel - 1]) {
+    if (speed === this.boardState.getMotorSpeedchannel) {
       return;
     }
-    this.boardState.motorSpeeds[channel - 1] = speed;
+    this.boardState.setMotorSpeed(channel, speed);
 
   }
 
@@ -191,7 +192,7 @@ export default class SimulationSandbox{
   * @returns {int} distance in cm
   */
   sonar(trigPin, echoPin) {
-    return Math.round(this.boardState.sonarDistance);
+    return Math.round(this.boardState.getSonarDistance());
   }
 
   /**
@@ -206,7 +207,7 @@ export default class SimulationSandbox{
       // TODO: figure out hou to access the pir data
 
     //invert state (low = pressed)
-      return (this.boardState.ioPins[0] == 0 ? 1 : 0);
+      return (this.boardState.getIoPinState(0) == 0 ? 1 : 0);
   }
 
   /**

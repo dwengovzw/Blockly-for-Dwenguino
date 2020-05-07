@@ -88,8 +88,9 @@ updateScenario(dwenguinoState) {
  */
 updateScenarioState(dwenguinoState) {
     super.updateScenarioState(dwenguinoState);
-    var speed1 = dwenguinoState.motorSpeeds[0];
-    var speed2 = dwenguinoState.motorSpeeds[1];
+    
+    var speed1 = dwenguinoState.getMotorSpeed(1);
+    var speed2 = dwenguinoState.getMotorSpeed(2);
 
     // Save the current state of the robot into local variables.
     var x = this.robot.position.x;
@@ -157,9 +158,9 @@ updateScenarioState(dwenguinoState) {
     var D = Math.min(this.calcDistanceBetweenPoints(intersectionPointX, [xFront, yFront]),
         this.calcDistanceBetweenPoints(intersectionPointY, [xFront, yFront]));
 
-    dwenguinoState.sonarDistance = Math.abs(D - 25); // Compensate for borders
+    dwenguinoState.setSonarDistance(Math.abs(D - 25)); // Compensate for borders
 
-    console.log(dwenguinoState.sonarDistance);
+    console.log(dwenguinoState.getSonarDistance());
 
 
     this.robot.position = {

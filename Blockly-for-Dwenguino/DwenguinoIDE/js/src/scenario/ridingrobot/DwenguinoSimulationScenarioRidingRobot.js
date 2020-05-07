@@ -187,6 +187,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         super.updateScenario(dwenguinoState);
         this.updateScenarioState(dwenguinoState);
         this.updateScenarioDisplay(dwenguinoState);
+        this.dwenguinoBoardSimulation.updateScenario(dwenguinoState);
     }
 
     /* @brief updates the simulation state
@@ -221,8 +222,8 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
 
         // update the state of this simulation
 
-        var speed1 = dwenguinoState.motorSpeeds[0];
-        var speed2 = dwenguinoState.motorSpeeds[1];
+        var speed1 = dwenguinoState.getMotorSpeed(1);
+        var speed2 = dwenguinoState.getMotorSpeed(2);
 
 
         // Save the current state of the robot into local variables.

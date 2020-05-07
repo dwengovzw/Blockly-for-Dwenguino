@@ -1,4 +1,5 @@
-import { EVENT_NAMES } from "../logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../logging/EventNames.js"
+import ServerConfig from "../ServerConfig.js"
 
 /**
  * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
@@ -120,7 +121,7 @@ export default class TutorialMenu {
         let self = this;
         $.ajax({
             type: "POST",
-            url: window.serverUrl + "/tutorials/completedTutorials",
+            url: ServerConfig.getServerUrl() + "/tutorials/completedTutorials",
             data: serverSubmission,
         }).done(function(completedTutorials){
 
@@ -200,7 +201,7 @@ export default class TutorialMenu {
         if (this.eventLogger.sessionId !== undefined){
             $.ajax({
                 type: "POST",
-                url: window.serverUrl + "/tutorials/completeTutorial",
+                url: ServerConfig.getServerUrl() + "/tutorials/completeTutorial",
                 data: serverSubmission,
             }).done(function(data){
                 console.debug('Recording submitted', data);
