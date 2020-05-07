@@ -2,8 +2,11 @@
 // compiling, uploading and error handling
 
 // Module for handling external execution
-const exec = require('child_process').exec
-const fs = require('fs');
+import childProcess from 'child_process';
+const exec = childProcess.exec;
+import fs from 'fs';
+
+let exports = {};
 
 let handleExternalCommand = function(command, res, err_msg, succes_msg){
     let cmd = exec(command, {timeout: 10000}, 
@@ -130,4 +133,6 @@ exports.run = function (req, res) {
     })
     
 };
+
+export default exports;
 

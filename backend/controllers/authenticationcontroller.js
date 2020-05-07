@@ -1,5 +1,7 @@
-Useritem = require('../models/userModel');
-const bcrypt = require('bcrypt');
+import Useritem from '../models/userModel.js';
+import bcrypt from 'bcrypt';
+
+let exports = {};
 
 exports.new = function(req, res) {
   let mongoose = require('mongoose');
@@ -123,3 +125,5 @@ exports.authenticate = function(req, res) {
         } 
   });
 };
+
+export default exports;

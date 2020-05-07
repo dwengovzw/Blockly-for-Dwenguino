@@ -1,4 +1,4 @@
-import { EVENT_NAMES } from "../../logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../../logging/EventNames.js"
 
 export default class DwenguinoSimulationRobotComponents {
   socialRobotScenario = null;

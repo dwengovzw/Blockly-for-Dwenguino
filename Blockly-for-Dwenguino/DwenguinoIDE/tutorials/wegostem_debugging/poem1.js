@@ -1,5 +1,5 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
-import { EVENT_NAMES } from "../../js/src/logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../../js/src/logging/EventNames.js"
 
 tutorials.poem1 = {
       category: "wegostem",

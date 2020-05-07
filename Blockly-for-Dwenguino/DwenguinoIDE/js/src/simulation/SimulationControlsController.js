@@ -1,6 +1,6 @@
 import SimulationRunner from "./SimulationRunner.js"
 import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulation.js"
-import { EVENT_NAMES } from "../logging/DwenguinoEventLogger.js"
+import { EVENT_NAMES } from "../logging/EventNames.js"
 
 export default class SimulationControlsController {
     simulationRunner = null;
@@ -15,6 +15,7 @@ export default class SimulationControlsController {
 
 
         // Create a new runner for the environment
+        
         this.simulationRunner = new SimulationRunner(this.logger, workspace);
         this.simulationRunner.setCurrentScenario(this.scenarios[this.scenarioView]);
         

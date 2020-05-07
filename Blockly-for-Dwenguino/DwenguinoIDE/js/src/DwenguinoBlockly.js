@@ -2,15 +2,15 @@ import DwenguinoEventLogger from './logging/DwenguinoEventLogger.js'
 import DwenguinoSimulation from './simulation/DwenguinoSimulation.js'
 import TutorialMenu from './tutorials/TutorialMenu.js'
 import FileIOController from './FileIoController.js';
-import { EVENT_NAMES } from './logging/DwenguinoEventLogger.js'
+import { EVENT_NAMES } from './logging/EventNames.js'
+import SeverConfig from "./ServerConfig.js"
+import ServerConfig from './ServerConfig.js';
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
 //export { DwenguinoBlockly as default }
 
 export default DwenguinoBlockly
-
-window.serverUrl = 'http://localhost:12032';
 
 var DwenguinoBlockly = {
     simButtonStateClicked: false,
@@ -327,7 +327,7 @@ var DwenguinoBlockly = {
       DwenguinoBlockly.disableRunButton();
       
       $.ajax({
-          url: windowserverUrl + "/utilities/run",
+          url: ServerConfig.getServerUrl() + "/utilities/run",
           dataType: 'json',
           type: 'post',
           contentType: 'application/x-www-form-urlencoded',
@@ -424,16 +424,16 @@ var DwenguinoBlockly = {
         // Get xml for current code
         let xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         let xmlText = Blockly.Xml.domToText(xml);
-        // Get javascript for current code
-        let js = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
-        let workspaceState = {
-          blocksXml: xmlText,
-          blocksJsCode: js,
-        }
-        let workspaceStateText = JSON.stringify(workspaceState);
-        if (text != DwenguinoBlockly.prevWorkspaceXml){
-            DwenguinoBlockly.prevWorkspaceXml = text;
-            DwenguinoBlockly.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedWorkspace, workspaceStateText));
+        if (xmlText != DwenguinoBlockly.prevWorkspaceXml){
+          // Get javascript for current code
+          let js = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+          let workspaceState = {
+            blocksXml: xmlText,
+            blocksJsCode: js,
+          }
+          let workspaceStateText = JSON.stringify(workspaceState);
+          DwenguinoBlockly.prevWorkspaceXml = xmlText;
+          DwenguinoBlockly.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedWorkspace, workspaceStateText));
         }
     },
 
@@ -454,6 +454,9 @@ var DwenguinoBlockly = {
         var arduino_content = document.getElementById("content_arduino");
         //var xml_content = document.getElementById("content_xml");
 
+        // Log code change if code has changed
+        DwenguinoBlockly.logCodeChange();
+
         // transform code
         if (DwenguinoBlockly.language === "cpp") {
             var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
@@ -472,7 +475,7 @@ var DwenguinoBlockly = {
             //When the redered code changed log the block structures
             //Do this because when the user moves blocks we do not want to log anything
             //We want to log code progression not code movement
-            DwenguinoBlockly.logCodeChange();
+            
 
             var diff = JsDiff.diffWords(DwenguinoBlockly.previouslyRenderedCode, code);
             var resultStringArray = [];

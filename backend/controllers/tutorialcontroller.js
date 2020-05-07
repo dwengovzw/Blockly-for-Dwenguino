@@ -1,6 +1,8 @@
-Useritem = require('../models/userModel');
-Tutorialitem = require('../models/tutorialModel');
-const bcrypt = require('bcrypt');
+import Useritem from '../models/userModel.js';
+import Tutorialitem from '../models/tutorialModel.js';
+import bcrypt from 'bcrypt';
+
+let exports  = {};
 
 exports.getCompletedTutorials = function(req, res) {
   let mongoose = require('mongoose');
@@ -80,3 +82,4 @@ exports.newCompletedTutorial = function(req, res) {
     });
 };
 
+export default exports

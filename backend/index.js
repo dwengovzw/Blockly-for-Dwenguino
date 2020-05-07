@@ -1,19 +1,28 @@
 // FileName: index.js
 // Import express
-let express = require('express');
+import express from 'express';
+//let express = require('express');
 // Import body parser
-let bodyParser = require('body-parser');
+import bodyParser from 'body-parser';
 // Import mongoose
-let mongoose = require('mongoose');
+import mongoose from 'mongoose';
+//mongoose.set('debug', true);
 // Import path
-let path = require("path");
+import path from 'path';
+
+// Import chrome launcher
+import ChromeLauncher from 'chrome-launcher';
 
 // Import blockly router
-let blocklyRoutes = require('./routes/blockly-routes');
+import blocklyRoutes from './routes/blockly-routes.js';
+//let blocklyRoutes = require('./routes/blockly-routes');
 
 // For deploying to production
-let compression = require('compression');
-let helmet = require('helmet');
+import compression from 'compression';
+import helmet from 'helmet';
+
+let __dirname = path.resolve();
+console.log(`dirname: ${__dirname}`);
 
 // Initialize the app
 let app = express();
@@ -31,10 +40,12 @@ app.use(bodyParser.json({ type: 'application/*+json' }));
 
 // connect to Mongoose and set connection variable
 // Depricate: mongoose.connect();
-let dev_db_url = 'mongodb://localhost/dwenguinoblockly';
+//let dev_db_url = 'mongodb://localhost/dwenguinoblockly';
+let dev_db_url = 'mongodb://localhost/testingFuncSave';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, {
     useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
 var db = mongoose.connection;
 
@@ -48,6 +59,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 } else {
     // Setup static file serving
+    // Changed for debugging, use first line when debugging
+    //app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 }
 
@@ -63,11 +76,15 @@ let server = app.listen(port, function () {
     console.log("Running RestHub on port " + port);
 });
 
+
+//commented out for debugging
+
+
 if (process.env.NODE_ENV === 'production') {
     module.export = app;
 } else {
     // Launch a browser window
-    const ChromeLauncher = require('chrome-launcher');
+    
     ChromeLauncher.launch({
         startingUrl: 'http://localhost:12032/dwenguinoblockly',
         chromeFlags: ['--star-fullscreen', '--start-maximized'],

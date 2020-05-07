@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 // Setup schema
 var logSchema = mongoose.Schema({
     timestamp: {
@@ -17,10 +17,14 @@ var logSchema = mongoose.Schema({
             required: true
         }, 
         data: String,
+        functional_vector: Array,
     }
 });
 
-var Logitem = module.exports = mongoose.model('logging', logSchema);
-module.exports.get = function (callback, limit) {
+var Logitem = mongoose.model('logging', logSchema);
+let get = function (callback, limit) {
     Logitem.find(callback).limit(limit);
 }
+
+
+export default Logitem;

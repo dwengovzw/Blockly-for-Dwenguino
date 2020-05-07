@@ -1,4 +1,5 @@
 import Validator from './Validator.js'
+import ServerConfig from '../ServerConfig.js'
 /**
  * This class builds and displays the logging menu on the screen.
  * It is used by the DwenguinoEventLogger to gather data about the user.
@@ -114,7 +115,7 @@ export default class LoggingMenu{
     
             $.ajax({
                 type: "POST",
-                url: window.serverUrl + "/authentication/authenticate",
+                url: ServerConfig.getServerUrl() + "/authentication/authenticate",
                 data: serverSubmission,
             }).done(function(data){
                 self.eventLogger.setUserId(data['id']);
@@ -173,7 +174,7 @@ export default class LoggingMenu{
     
             $.ajax({
                 type: "POST",
-                url: window.serverUrl + "/authentication/new",
+                url: ServerConfig.getServerUrl() + "/authentication/new",
                 data: serverSubmission,
             }).done(function(data){
                 self.eventLogger.setUserId(self.username);
@@ -193,7 +194,7 @@ export default class LoggingMenu{
         var self = this;
         $.ajax({
             type: "GET",
-            url: window.serverUrl + "/schools/"}
+            url: ServerConfig.getServerUrl() + "/schools/"}
         ).done(function(data){
             self.schools = data;
             self.createLoggingModalDialog(MSG.logging['setup']);
@@ -269,7 +270,7 @@ export default class LoggingMenu{
 
                     $.ajax({
                         type: "POST",
-                        url: window.serverUrl + "/authentication/updateUser",
+                        url: ServerConfig.getServerUrl() + "/authentication/updateUser",
                         data: serverSubmission,
                     }).done(function(data){
                         self.removeDialog();

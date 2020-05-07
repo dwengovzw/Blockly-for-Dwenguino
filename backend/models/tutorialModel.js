@@ -1,4 +1,4 @@
-var mongoose = require('mongoose');
+import mongoose from 'mongoose';
 // Setup schema
 var tutorialSchema = mongoose.Schema({
     user_id: String,
@@ -6,7 +6,9 @@ var tutorialSchema = mongoose.Schema({
     category: String
 });
 
-var tutorials = module.exports = mongoose.model('tutorials', tutorialSchema);
-module.exports.get = function (callback, limit) {
+var tutorials = mongoose.model('tutorials', tutorialSchema);
+/*module.exports.get = function (callback, limit) {
     tutorials.find(callback).limit(limit);
-}
+}*/
+
+export default tutorials;

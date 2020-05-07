@@ -2,45 +2,94 @@
  * This class is used as a datastructure to save the state of the simulated Dwenguino board.
 */
 
+import ButtonMap from "./ButtonMap.js";
+
 export default class BoardState {
+    pins = new Array(33);
+    pinMapping = {};
     lcdContent = null;
-    backlight = null;
-    buzzer = null;
-    servoAngles = null;
-    motorSpeeds =  null;
-    leds = null;
-    buttons = null;
     sonarDistance = -1;
-    ioPins = null;          // Value 0 or 1
-    analogIoPins = null;    // Value from 0 to 1023
+    
 
     constructor(){
         this.resetBoard();
+        // Map pin numbers to simulated pin indexes
+        for (let i = 0 ; i < 24 ; ++i){
+            this.pinMapping[i + ""] = i;
+        }
+        // Map analog pin names to simulated pin indexes
+        for (let i = 0 ; i < 8 ; ++i){
+            this.pinMapping["A" + i] = 24 + i;
+        }
+        // Map switch names to corresponding switch numbers
+        this.pinMapping["SW_N"] = 16;
+        this.pinMapping["SW_E"] = 17;
+        this.pinMapping["SW_S"] = 18;
+        this.pinMapping["SW_W"] = 19;
+        this.pinMapping["SW_C"] = 32;
+        // Map BUZZER pin name to number
+        this.pinMapping["BUZZER"] = 33;
+        // Map backlight pin
+        this.pinMapping["LCD_BACKLIGHT"] = 20;
+        // Motor pin mappings: normally uses 2 pins but simulated by one 
+        // since it cannot interfere with other connections since not exposed on external connector
+        this.pinMapping["DC_MOTOR_1"] = 34;
+        this.pinMapping["DC_MOTOR_2"] = 35;
+        // Same for servo motors
+        this.pinMapping["SERVO_MOTOR_1"] = 36;
+        this.pinMapping["SERVO_MOTOR_2"] = 37;
+        // Same for leds, only save the index of the first LED, rest is after
+        for (let i = 0 ; i < 8 ; ++i){
+            this.pinMapping["LED" + i] = 38 + i;
+        }
         
+        this.pinMapping["LED13"] = 13;
     }
 
     resetBoard(){
         this.lcdContent = new Array(2);
-        this.backlight = false;
         this.lcdContent[0] = "";
         this.lcdContent[1] = "";
-        this.buzzer = {
-            tonePlaying: 0
-        };
-        this.servoAngles = [0, 0];
-        this.motorSpeeds = [0, 0];
-        this.leds = [0,0,0,0,0,0,0,0,0];
-        this.buttons = [1,1,1,1,1];
+        this.pins[this.pinMapping["LCD_BACKLIGHT"]] = 0;
+        // Set no frequency playing on BUZZER
+        this.pins[this.pinMapping["BUZZER"]] = 0;
+        
+        //Set servo angles to 0 and DC speeds to 0
+        this.pins[this.pinMapping["DC_MOTOR_1"]] = 0;
+        this.pins[this.pinMapping["DC_MOTOR_2"]] = 0;
+        this.pins[this.pinMapping["SERVO_MOTOR_1"]] = 0;
+        this.pins[this.pinMapping["SERVO_MOTOR_2"]] = 0;
+        // Turn leds off
+        for (let i = 0 ; i < 8 ; ++i){
+            this.pins[this.pinMapping["LED0"] + i] = 0;
+        }
+        // Turn led 13 off
+        this.pins[this.pinMapping["LED13"]] = 0;
+        // Set buttons to default on state
+        this.pins[this.pinMapping["SW_N"]] = 1;
+        this.pins[this.pinMapping["SW_E"]] = 1;
+        this.pins[this.pinMapping["SW_S"]] = 1;
+        this.pins[this.pinMapping["SW_W"]] = 1;
+        this.pins[this.pinMapping["SW_C"]] = 1;
         this.sonarDistance = -1;
-        this.ioPins = new Array(30);
-        for (let i = 0 ; i < 30 ; ++i){
-            this.ioPins[i] = 0;
-        }
-        this.analogIoPins = new Array(10);
-        for (let i = 0 ; i < 10 ; ++i){
-            this.analogIoPins[i] = 0;
-        }
     }
+
+    setTonePlaying(tone){
+        this.setTonePlayingOnPin(tone, "BUZZER");
+    }
+
+    getTonePlaying(){
+        return this.getTonePlayingOnPin("BUZZER");
+    }
+
+    setTonePlayingOnPin(tone, pinName){
+        this.pins[this.pinMapping[pinName]] = tone;
+    }
+
+    getTonePlayingOnPin(pinName){
+        return this.pins[this.pinMapping[pinName]];
+    }
+
 
     setLcdContent(line, text){
         let textForLine = text;
@@ -62,22 +111,23 @@ export default class BoardState {
     }
 
     setBacklight(status){
-        if (typeof status != 'boolean'){
-            throw Error("status parameter can only be of type boolean");
+        if (status == 1 || status == 0){
+            this.pins[this.pinMapping["LCD_BACKLIGHT"]] = status;
+        } else {
+            throw new Error("Invalid status");
         }
-        this.backlight = status;
     }
 
     getBackLightStatus(){
-        return this.backlight;
+        return this.pins[this.pinMapping["LCD_BACKLIGHT"]];
     }
 
     setServoAngle(servoNr, angle){
-        this.servoAngles[servoNr] = angle;
+        this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]] = angle;
     }
 
     getServoAngle(servoNr){
-        return this.servoAngles[servoNr];
+        return this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]];
     }
 
     setMotorSpeed(motorNr, speed){
@@ -91,30 +141,40 @@ export default class BoardState {
         if (speed > 255){
             motorspeed = 255;
         }
-        this.motorSpeeds[motorNr] = speed;
+        this.pins[this.pinMapping["SERVO_MOTOR_" + motorNr]] = speed;
     }
 
     getMotorSpeed(motorNr){
         if (motorNr >2 || motorNr < 1){
             throw Error("No motor with this number")
         }
-        return this.motorSpeeds[motorNr];
+        return this.pins[this.pinMapping["SERVO_MOTOR_" + motorNr]];
     }
 
     setLedState(index, state){
-        this.leds[index] = state;
+        if (index == 8){
+            this.pins[this.pinMapping["LED13"]] = state; 
+        } else {
+            this.pins[this.pinMapping["LED" + index]] = state;
+        }
     }
 
     getLedState(index){
-        return this.leds[index];
+        if (index == 8){
+            return this.pins[this.pinMapping["LED13"]]; 
+        } else {
+            return this.pins[this.pinMapping["LED" + index]];
+        }
     }
 
     setButtonState(index, state){
-        this.buttons[index] = state;
+        let switchName = ButtonMap.mapIndexToButtonPinName(index);
+        this.pins[this.pinMapping[switchName]] = state
     }
 
     getButtonState(index){
-        return this.buttons[index];
+        let switchName = ButtonMap.mapIndexToButtonPinName(index);
+        return this.pins[this.pinMapping[switchName]];
     }
 
     setSonarDistance(dist){
@@ -125,20 +185,30 @@ export default class BoardState {
         return this.sonarDistance;
     }
 
-    setIoPinState(index, state){
-        this.ioPins[index] = state;
+    setIoPinState(pinName, state){
+        // Convert pin name to string
+        let index = pinName + "";
+        this.pins[this.pinMapping[index]] = state;
     }
 
-    getIoPinState(index){
-        return this.ioPins[index];
+    getIoPinState(pinName){
+        // Convert pin name to string
+        let index = pinName + "";
+        return this.pins[this.pinMapping[index]];
     }
 
-    setAnalogIoPinState(index, value){
-        this.analogIoPins[index] = value;
+    setAnalogIoPinState(pinName, value){
+        if (!pinName.startsWith("A")){
+            throw new Error("Not a valid analog pin name!")
+        }
+        this.setIoPinState(pinName, value);
     }
 
-    getAnalogIoPinState(index){
-        return this.analogIoPins[index];
+    getAnalogIoPinState(pinName){
+        if (!pinName.startsWith("A")){
+            throw new Error("Not a valid analog pin name!")
+        }
+        return this.getIoPinState(pinName);
     }
 
 }
