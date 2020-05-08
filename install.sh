@@ -120,7 +120,7 @@ then
     # Configure start file
     echo "#!/bin/bash" > start.sh
     echo "cd $(pwd)/backend" >> start.sh 
-    echo "node index" >> start.sh
+    echo "node --experimental-modules index.js" >> start.sh
     chmod +x start.sh
     
     # Configure make binaries
@@ -165,7 +165,7 @@ then
     # Configure start file
     echo "#!/bin/bash" > dwenguinoblockly.command
     echo "cd $(pwd)/backend" >> dwenguinoblockly.command
-    echo "node index" >> dwenguinoblockly.command
+    echo "node --experimental-modules index.js" >> dwenguinoblockly.command
     chmod +x dwenguinoblockly.command
     cp dwenguinoblockly.command ~/Desktop
     
