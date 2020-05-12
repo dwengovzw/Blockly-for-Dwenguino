@@ -39,13 +39,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
     //Init robot state
     this.initSocialRobot();
-    this.robotComponentsFactory = new RobotComponentsFactory(this.robot, this.scenarioUtils, this.logger);
-
-    
+    this.robotComponentsFactory = new RobotComponentsFactory(this._robot, this.scenarioUtils, this.logger);
 
     this.scenarioUtils.contextMenuBackground();
-
-    
 
   }
 
@@ -74,14 +70,14 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     this.initSimulation(containerIdSelector);
     
 
-    this.renderer.render(this.robot);
+    this.renderer.render(this._robot);
     
 
     var self = this;
     $("#sim_stop").click(function () {
       let timer = setTimeout(() => {
         self.resetSocialRobot();
-        self.renderer.render(self.robot);
+        self.renderer.render(self._robot);
       }, 500);
     });
 
@@ -166,52 +162,50 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
   /* @brief updates the simulation state
    * This function updates the simulation state using the supplied board state.
    *
-   * @param boardState The state of the Dwenguino board. It has the following structure:
-   * {
-     lcdContent: new Array(2),
-     buzzer: {
-       osc: null,
-       audiocontext: null,
-       tonePlaying: 0
-     },
-     servoAngles: [0, 0],
-     motorSpeeds: [0, 0],
-     leds: [0,0,0,0,0,0,0,0,0],
-     buttons: [1,1,1,1,1],
-     sonarDistance: 50
-   }
+   * @param boardState The state of the Dwenguino board. 
    * @return The updated Dwenguino board state.
    *
    */
   updateScenarioState(dwenguinoState) {
     super.updateScenarioState(dwenguinoState);
 
-    for (var i = 0; i < dwenguinoState.leds.length; i++) {
-      var ledCanvasId = 'sim_led_canvas' + (i + 1);
-      if (this.robot[ledCanvasId] !== undefined) {
-        this.robot[ledCanvasId].state = dwenguinoState.leds[i];
+    for(var i = 0; i < this._robot; i++){
+      type = this._robot[i].getType();
+
+      let pin = 0;
+      switch (type) {
+        case TypesEnum.SERVO:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
+            this._robot[i].setPrevAngle(this._robot[i].getAngle());
+            this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
+          }
+          break;
+        case TypesEnum.LED:
+          pin = this._robot[i].getPin();
+          this._robot[i].setState(dwenguinoState.getIoPinState(pin));  
+          break;
+        case TypesEnum.PIR:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.SONAR:
+          let echoPin = this._robot[i].getEchoPin();
+          let triggerPin = this._robot[i].getTriggerPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(echoPin, this._robot[i].getState());
+            dwenguinoState.setIoPinState(triggerPin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.LCD:
+          this._robot[i].setState(dwenguinoState.getLcdContent(0), dwenguinoState.getLcdContent(1));
+          break;
       }
     }
-
-    for (var i = 0; i < dwenguinoState.servoAngles.length; i++) {
-      var servoCanvasId = 'sim_servo_canvas' + (i + 1);
-      if (this.robot[servoCanvasId] !== undefined) {
-        if (this.robot[servoCanvasId].angle != dwenguinoState.servoAngles[i]) {
-          this.robot[servoCanvasId].prevAngle = this.robot[servoCanvasId].angle;
-          this.robot[servoCanvasId].angle = dwenguinoState.servoAngles[i];
-        }
-      }
-    }
-
-    
-    this.robot.lcdstate[0] = dwenguinoState.getLcdContent(0);
-    this.robot.lcdstate[1] = dwenguinoState.getLcdContent(1);
-
-    // Also update the input state based on the current events
-    dwenguinoState.buttons = this.robotComponentsFactory.getInputState().buttons;
-    dwenguinoState.sonarDistance = this.robotComponentsFactory.getInputState().sonarDistance;
-    //!!! for now we assume the pir sensor is connected to io pin 
-    dwenguinoState.ioPins[0] = this.robotComponentsFactory.getInputState().pir;
 
   };
 
@@ -223,31 +217,14 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   updateScenarioDisplay(dwenguinoState) {
     super.updateScenarioDisplay(dwenguinoState);
-    this.renderer.render(this.robot);
+    this.renderer.render(this._robot);
   };
 
   /* @brief Initializes the social robot state.
    * 
    */
-  initSocialRobot(containerIdSelector) {
-    this.robot = {
-      numberOf: {},
-      imgServo: './DwenguinoIDE/img/socialrobot/servo_movement.png',
-      imgPir: './DwenguinoIDE/img/socialrobot/pir.png',
-      imgPirOn: './DwenguinoIDE/img/socialrobot/pir_on.png',
-      imgSonar: './DwenguinoIDE/img/board/sonar.png',
-      imgRobot: 'url("./DwenguinoIDE/img/socialrobot/robot1.png")',
-      imgR: './DwenguinoIDE/img/socialrobot/robot1.png',
-      imgEye: './img/socialrobot/eye.svg',
-      imgRightHand: './DwenguinoIDE/img/socialrobot/righthand.png',
-      imgLeftHand: './DwenguinoIDE/img/socialrobot/lefthand.png'
-    };
-
-    this.robot.lcdstate = new Array(2);
-
-    for (const [type, t] of Object.entries(TypesEnum)) {
-      this.robot.numberOf[t] = 0;
-    }
+  initSocialRobot(containerIdSelector) { 
+    this._robot = [];
   };
 
   setSensorOptions() {
@@ -274,30 +251,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    * remove the components from the container or move them around, but merely puts them in their initial off state.
    */
   resetSocialRobot(containerIdSelector) {
-    for (var i = 1; i <= this.robot.numberOf[TypesEnum.SERVO]; i++) {
-      var servoCanvasId = 'sim_servo_canvas' + i;
-      this.robot[servoCanvasId].x = 0;
-      this.robot[servoCanvasId].y = 30;
-      this.robot[servoCanvasId].angle = 0;
-      this.robot[servoCanvasId].prevAngle = 0;
+    for(var i = 0; i < this._robot.length; i++){
+      this._robot[i].reset();
     }
-
-    for (var i = 1; i <= this.robot.numberOf[TypesEnum.LED]; i++) {
-      var ledCanvasId = 'sim_led_canvas' + i;
-      this.robot[ledCanvasId].x = 0;
-      this.robot[ledCanvasId].y = 0;
-      this.robot[ledCanvasId].state = 0;
-    }
-
-    for (var i = 1; i <= this.robot.numberOf[TypesEnum.PIR]; i++) {
-      var pirCanvasId = 'sim_pir_canvas' + i;
-      this.robot[pirCanvasId].state = 0;
-    }
-
-    // Reset of the board is handled by the simulation runner.
-    /*if (this.robot.numberOf[TypesEnum.LCD] != 0) {
-      DwenguinoSimulation.clearLcd();
-    }*/
   };
 
   /**
@@ -312,81 +268,58 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   removeRobotComponent(type) {
     this.robotComponentsFactory.removeRobotComponent(type);
-    this.renderer.render(this.robot);
+    this.renderer.render(this._robot);
   };
-
-  /**
-   * Change the object distance of the sonar sensor in the simulation container
-   */
-  changeSonarDistance(value, id) {
-    var sliderValue = 'slider' + id + '_value';
-    document.getElementById(sliderValue).innerHTML = value + ' cm';
-    DwenguinoSimulation.board.sonarDistance = value;
-  };
-
-  /**
-   * Returns the led id of the Dwenguino board based on the id of the canvas.
-   */
-  getLedId(i) {
-    var id = 0;
-    if (i < 9) {
-      id = i - 1;
-    } else {
-      id = 13;
-    }
-    return id;
-  }
 
   /**
    * Changes the color of led canvas i to the given color.
    */
   setLedColor(i, color) {
-    var ledCanvasId = 'sim_led_canvas' + i;
-    this.robot[ledCanvasId].onColor = color;
+    let led = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.LED, i);
+    if(led !== undefined){
+      led.setOnColor(color);
+    }
   }
 
   /**
    * Change the state of ith servo canvas to the specified state.
    */
-  setServoState(i, state) {
-    var servoCanvasId = 'sim_servo_canvas' + i;
-    this.robot[servoCanvasId].state = state;
+  setServoState(i, costume) {
+    let servo = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.SERVO, i);
+    if(servo !== undefined){
+      this.renderer.clearCanvas(servo.getCanvasId());
 
-    switch (state) {
-      case StatesEnum.PLAIN:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = this.robot.imgServo;
-        this.robot[servoCanvasId].width = 100;
-        this.robot[servoCanvasId].height = 50;
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
-      case StatesEnum.EYE:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = '';
-        this.robot[servoCanvasId].width = 35;
-        this.robot[servoCanvasId].height = 35;
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
-      case StatesEnum.RIGHTHAND:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = this.robot.imgRightHand;
-        this.robot[servoCanvasId].width = 64;
-        this.robot[servoCanvasId].height = 149;
-        document.getElementById(servoCanvasId).classList.add('hand_canvas');
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
-      case StatesEnum.LEFTHAND:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = this.robot.imgLeftHand;
-        this.robot[servoCanvasId].width = 64;
-        this.robot[servoCanvasId].height = 149;
-        document.getElementById(servoCanvasId).classList.add('hand_canvas');
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
+      switch (costume) {
+        case StatesEnum.PLAIN:
+          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setCostume(costume);
+          servo.setWidth(100);
+          servo.setHeight(50);
+          break;
+        case StatesEnum.EYE:
+          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setCostume(costume);
+          servo.setWidth(35);
+          servo.setHeight(35);
+          break;
+        case StatesEnum.RIGHTHAND:
+          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setCostume(costume);
+          servo.setWidth(64);
+          servo.setHeight(149);
+          document.getElementById(servo.getCanvasId()).classList.add('hand_canvas');
+          break;
+        case StatesEnum.LEFTHAND:
+          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setCostume(costume);
+          servo.setWidth(64);
+          servo.setHeight(149);
+          document.getElementById(servo.getCanvasId()).classList.add('hand_canvas');
+          break;
+      }
+
+      this.renderer.initializeCanvas(this._robot, servo);
+      this.saveRobot()
     }
   }
 
@@ -440,42 +373,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   robotToXml(){
     let data = '<xml xmlns="http://www.w3.org/1999/xhtml">';
-    for (const [type, t] of Object.entries(TypesEnum)) {
-      for (var i = 1; i <= this.robot.numberOf[t]; i++) {
-        data = data.concat("<Item ");
-        data = data.concat(" Type='", t, "'");
-        let simId = '#sim_' + t + i;
-        data = data.concat(" Id='", simId, "'");
-        let canvasId = 'sim_' + t + '_canvas' + i;
-        data = data.concat(" CanvasId='", canvasId, "'");
-        let leftOffset = 0;
-        if ($(simId).attr('data-x')) {
-          leftOffset = parseFloat(this.robot[canvasId].offset['left']) + parseFloat($(simId).attr('data-x'));
-        } else {
-          leftOffset = parseFloat(this.robot[canvasId].offset['left']);
-        }
-
-        let topOffset = 0;
-        if ($(simId).attr('data-y')) {
-          topOffset = parseFloat(this.robot[canvasId].offset['top']) + parseFloat($(simId).attr('data-y'));
-        } else {
-          topOffset = parseFloat(this.robot[canvasId].offset['top']);
-        }
-
-        data = data.concat(" OffsetLeft='", leftOffset, "'");
-        data = data.concat(" OffsetTop='", topOffset, "'");
-
-        if (t === TypesEnum.LED) {
-          data = data.concat(" OnColor='", this.robot[canvasId].onColor, "'");
-        } else if (t === TypesEnum.SERVO) {
-          data = data.concat(" State='", this.robot[canvasId].state, "'");
-          data = data.concat(" Width='", this.robot[canvasId].width, "'");
-          data = data.concat(" Height='", this.robot[canvasId].height, "'");
-          data = data.concat(" Image='", this.robot[canvasId].image.src, "'");
-          data = data.concat(" Classes='", document.getElementById(canvasId).className, "'");
-        } 
-        data = data.concat('></Item>');
-      }
+    for(var i = 0; i < this._robot.length; i++){
+      data = data.concat(this._robot[i].toXml());
     }
     data = data.concat('</xml>');
     return data;
@@ -491,33 +390,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     var childCount = data.childNodes.length;
     for (var i = 0; i < childCount; i++) {
       var xmlChild = data.childNodes[i];
-      var type = xmlChild.getAttribute('Type');
-      var offsetLeft = parseFloat(xmlChild.getAttribute('OffsetLeft'));
-      var offsetTop = parseFloat(xmlChild.getAttribute('OffsetTop'));
-
-      switch (type) {
-        case TypesEnum.SERVO:
-          var width = parseFloat(xmlChild.getAttribute('Width'));
-          var height = parseFloat(xmlChild.getAttribute('Height'));
-          var image = xmlChild.getAttribute('Image');
-          var state = xmlChild.getAttribute('State');
-          var classes = xmlChild.getAttribute('Classes');
-          this.robotComponentsFactory.addServo(true, offsetLeft, offsetTop, state, width, height, image, classes);
-          break;
-        case TypesEnum.LED:
-          var onColor = xmlChild.getAttribute('OnColor');
-          this.robotComponentsFactory.addLed(true, offsetLeft, offsetTop, onColor);
-          break;
-        case TypesEnum.PIR:
-          this.robotComponentsFactory.addPir(true, offsetLeft, offsetTop);
-          break;
-        case TypesEnum.SONAR:
-          this.robotComponentsFactory.addSonar(true, offsetLeft, offsetTop);
-          break;
-        case TypesEnum.LCD:
-          this.robotComponentsFactory.addLcd(true, offsetLeft, offsetTop);
-          break;
-      }
+      let type = xmlChild.getAttribute('Type');
+      this.robotComponentsFactory.addRobotComponentFromXml(xmlChild);
       this.simulationComponentsMenu.changeValue(type, 1);
     }
   }

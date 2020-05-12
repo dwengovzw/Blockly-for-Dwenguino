@@ -2,6 +2,13 @@ import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { StatesEnum } from "./DwenguinoScenarioUtils.js"
 import { EVENT_NAMES } from "../../logging/EventNames.js"
 
+import { RobotComponent } from "./components/RobotComponent.js"
+import { Servo } from "./components/Servo.js"
+import { Led } from "./components/Led.js"
+import { Lcd } from "./components/Lcd.js"
+import { Sonar } from "./components/Sonar.js"
+import { Pir } from "./components/Pir.js"
+
 export { TypesEnum, RobotComponentsFactory }
 
 
@@ -13,9 +20,7 @@ const TypesEnum = {
   LED: 'led',
   PIR: 'pir',
   SONAR: 'sonar',
-  LCD: 'lcd',
-  //BUTTON: 'button',
-  DECORATION: 'decoration'
+  LCD: 'lcd'
 };
 Object.freeze(TypesEnum);
 
@@ -31,17 +36,44 @@ class RobotComponentsFactory {
     buttons: [1, 1, 1, 1, 1],
     sonarDistance: -1
   }
-  constructor(robot, scenarioUtils, logger) {
+  constructor(_robot, scenarioUtils, logger) {
     this.logger = logger;
-    this.robot = robot;
-    this.scenarioUtils = scenarioUtils
+    this._robot = _robot;
+    this._numberOfComponentsOfType = {};
+    //this.robot = robot;
+    this.scenarioUtils = scenarioUtils;
     this.renderer = new SimulationCanvasRenderer();
+
+    for (const [type, t] of Object.entries(TypesEnum)) {
+      this._numberOfComponentsOfType[t] = 0;
+    }
   }
 
   getInputState(){
     return this.inputState;
   }
 
+  getRobotComponentWithTypeAndId(type, id){
+    for(let i = 0; i < this._robot.length; i++){
+      if(this._robot[i].getType() == type && this._robot[i].getId() == id){
+        return this._robot[i];
+      }
+    }
+  }
+
+  removeRobotComponentWithTypeAndId(type, id){
+    let component = this.getRobotComponentWithTypeAndId(type, id);
+
+    component.removeHtml();
+    for(let i = 0; i < this._robot.length; i++){
+      if(this._robot[i].getType() == type && this._robot[i].getId() == id){
+        this._robot.splice(i, 1);
+        this.decrementNumberOf(type);
+      }
+    }
+
+  }
+  
   addRobotComponent(type) {
     switch (type) {
       case TypesEnum.SERVO:
@@ -82,435 +114,343 @@ class RobotComponentsFactory {
     }
   }
 
+  addRobotComponentFromXml(data){
+    let type = data.getAttribute('Type');
+
+    switch (type) {
+      case TypesEnum.SERVO:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var angle = parseInt(data.getAttribute('Angle'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var costume = data.getAttribute('Costume');
+        var htmlClasses = data.getAttribute('Classes');
+        this.addServo(pin, costume, angle, true, 0, 0, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LED:
+        var radius = parseFloat(data.getAttribute('Radius'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var onColor = data.getAttribute('OnColor');
+        var offColor = data.getAttribute('OffColor');
+        var borderColor = data.getAttribute('BorderColor');
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLed(pin, state, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+        break;
+      case TypesEnum.PIR:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addPir(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.SONAR:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var echoPin = parseInt(data.getAttribute('EchoPin'));
+        var triggerPin = parseInt(data.getAttribute('TriggerPin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addSonar(echoPin, triggerPin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LCD:
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLcd(true, offsetLeft, offsetTop, htmlClasses);
+        break;
+    }
+  }
+
   /**
     * Add a new servo to the simulation container.
     */
-  addServo(draw = true, offsetLeft = 5, offsetTop = 5, state = StatesEnum.PLAIN, width = 100, height = 50, image = this.robot.imgServo, classes = 'sim_canvas servo_canvas') {
+  addServo(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
-
     this.incrementNumberOf(TypesEnum.SERVO);
-    var id = this.robot.numberOf[TypesEnum.SERVO];
-    var servoCanvasId = 'sim_servo_canvas' + id;
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
-    this.robot[servoCanvasId] = {};
-    this.robot[servoCanvasId].width = width;
-    this.robot[servoCanvasId].height = height;
-    this.robot[servoCanvasId].x = 0;
-    this.robot[servoCanvasId].y = 30;
-    this.robot[servoCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-    this.robot[servoCanvasId].angle = 0;
-    this.robot[servoCanvasId].prevAngle = 0;
-    this.robot[servoCanvasId].image = new Image();
-    this.robot[servoCanvasId].image.src = image;
-    this.robot[servoCanvasId].state = state;
-    this.robot[servoCanvasId].backgroundColor = '#206499';
-
-    this.addHtml(TypesEnum.SERVO, id, offsetTop, offsetLeft, classes);
-
-    this.renderer.initializeCanvas(servoCanvasId, this.robot);
-    if (draw) {
-      $('#sim_servo' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_servo' + id).css('visibility', 'hidden');
+    let pin = 0;
+    if(id === 1){
+      pin = 36;
+    } else if (id === 2){
+      pin = 37;
     }
 
+    let servo = new Servo(id, pin);
+    this._robot.push(servo);
+
+    this.renderer.initializeCanvas(this._robot, servo); 
+    this.scenarioUtils.contextMenuServo();
+  }
+
+  addServo(pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
+    this.incrementNumberOf(TypesEnum.SERVO);
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+
+    let servo = new Servo(id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(servo);
+
+    this.renderer.initializeCanvas(this._robot, servo); 
     this.scenarioUtils.contextMenuServo();
   }
 
   /**
    * Remove the most recent created servo from the simulation container.
    */
-  removeServo() {
+  removeServo(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
 
-    var id = this.robot.numberOf[TypesEnum.SERVO];
-    $("#sim_servo" + id + "").remove();
-
-    delete this.robot['sim_servo_canvas' + id];
-    this.decrementNumberOf(TypesEnum.SERVO);
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SERVO, id);
   }
 
   /**
    * Add a new LED to the simulation container.
    */
-  addLed(draw = true, offsetLeft = 5, offsetTop = 5, onColor = 'yellow') {
+  addLed(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
-
     this.incrementNumberOf(TypesEnum.LED);
-    var i = this.robot.numberOf[TypesEnum.LED];
-    var id = this.getLedId(i);
-    var ledCanvasId = 'sim_led_canvas' + i;
+    let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
-    this.robot[ledCanvasId] = {};
-    this.robot[ledCanvasId].radius = 10;
-    this.robot[ledCanvasId].x = 0;
-    this.robot[ledCanvasId].y = 0;
-    this.robot[ledCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-    this.robot[ledCanvasId].onColor = onColor;
-    this.robot[ledCanvasId].offColor = 'gray';
-    this.robot[ledCanvasId].borderColor = 'black';
-    this.robot[ledCanvasId].state = 0;
+    let led = new Led(id);
+    this._robot.push(led);
 
-    var classes = 'sim_canvas led_canvas';
-    this.addHtml(TypesEnum.LED, i, offsetTop, offsetLeft, classes);
+    this.renderer.initializeCanvas(this._robot, led); 
+    this.scenarioUtils.contextMenuLed();
+  }
+  
+  addLed(pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses) {
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
+    this.incrementNumberOf(TypesEnum.LED);
+    let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
-    this.renderer.initializeCanvas(ledCanvasId, this.robot);
-    if (draw) {
-      $('#sim_led' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_led' + id).css('visibility', 'hidden');
-    }
+    let led = new Led(id, pin, state, true, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+    this._robot.push(led);
 
+    this.renderer.initializeCanvas(this._robot, led); 
     this.scenarioUtils.contextMenuLed();
   }
 
   /**
    * Remove the most recent created LED from the simulation container.
    */
-  removeLed() {
+  removeLed(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LED));
-    var id = this.robot.numberOf[TypesEnum.LED];
-    $("#sim_led" + id + "").remove();
 
-    delete this.robot['sim_led_canvas' + id];
-    this.decrementNumberOf(TypesEnum.LED);
+    let id = this._numberOfComponentsOfType[TypesEnum.LED];
+    this.removeRobotComponentWithTypeAndId(TypsEnum.LED, id);
   }
 
   /**
    * Add a new PIR sensor to the simulation container.
    */
-  addPir(draw = true, offsetLeft = 5, offsetTop = 5) {
+  addPir(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
-
     this.incrementNumberOf(TypesEnum.PIR);
-    var id = this.robot.numberOf[TypesEnum.PIR];
-    var pirCanvasId = 'sim_pir_canvas' + id;
+    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
 
-    this.robot[pirCanvasId] = {};
-    this.robot[pirCanvasId].width = 50;
-    this.robot[pirCanvasId].height = 50;
-    this.robot[pirCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-    this.robot[pirCanvasId].image = new Image();
-    this.robot[pirCanvasId].image.src = this.robot.imgPir;
-    this.robot[pirCanvasId].state = 0;
+    let pir = new Pir(id);
+    this._robot.push(pir);
 
-    var classes = 'sim_canvas pir_canvas';
-    this.addHtml(TypesEnum.PIR, id, offsetTop, offsetLeft, classes);
+    this.renderer.initializeCanvas(this._robot, pir);
+  }
 
-    var buttonLabel = 'button' + id + '_label';
-    var pirButtonId = 'pir_button' + id;
-    if (!document.getElementById(pirButtonId)) {
-      $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.pirButtonLabel + ' ' + id + "</div>");
-      $('#sensor_options').append("<div id='" + pirButtonId + "' class='pir_button' alt='Load'></div>");
+  addPir(pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
+    this.incrementNumberOf(TypesEnum.PIR);
+    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
 
-      this.addPirEventHandler(pirButtonId, pirCanvasId);
-    }
+    let pir = new Pir(id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(pir);
 
-    this.renderer.initializeCanvas(pirCanvasId, this.robot);
-    if (draw) {
-      $('#sim_pir' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_pir' + id).css('visibility', 'hidden');
-    }
+    this.renderer.initializeCanvas(this._robot, pir); 
   }
 
   /**
    * Remove the most recent created PIR sensor from the simulation container.
    */
-  removePir() {
+  removePir(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.PIR));
-    var id = this.robot.numberOf[TypesEnum.PIR];
-    $('#sim_pir' + id).remove();
 
-    var buttonLabel = '#button' + id + '_label';
-    var pirButtonId = '#pir_button' + id;
-    $(buttonLabel).remove();
-    $(pirButtonId).remove();
-
-    delete this.robot['sim_pir_canvas' + id];
-    this.decrementNumberOf(TypesEnum.PIR);
+    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.PIR, id);
   }
 
   /**
    * Add a new SONAR sensor to the simulation container.
    */
-  addSonar(draw = true, offsetLeft = 5, offsetTop = 5) {
+  addSonar(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
-
     this.incrementNumberOf(TypesEnum.SONAR);
-    var id = this.robot.numberOf[TypesEnum.SONAR];
-    var sonarCanvasId = 'sim_sonar_canvas' + id;
+    let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
 
-    this.robot[sonarCanvasId] = {};
-    this.robot[sonarCanvasId].width = 100;
-    this.robot[sonarCanvasId].height = 58;
-    this.robot[sonarCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-    this.robot[sonarCanvasId].image = new Image();
-    this.robot[sonarCanvasId].image.src = this.robot.imgSonar;
+    let sonar = new Sonar(id);
+    this._robot.push(sonar);
 
-    var classes = 'sim_canvas sonar_canvas';
-    this.addHtml(TypesEnum.SONAR, id, offsetTop, offsetLeft, classes);
-
-    this.renderer.initializeCanvas(sonarCanvasId, this.robot);
-    if (draw) {
-      $('#sim_sonar' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_sonar' + id).css('visibility', 'hidden');
-    }
-
-    var sliderId = 'slider' + id;
-    var sliderLabel = 'slider' + id + '_label';
-    var sliderValue = 'slider' + id + '_value';
-    var sonarSliderId = 'sonar_slider' + id;
-    if (!document.getElementById(sonarSliderId)) {
-      console.log('make slider');
-      $('#sensor_options').append("<div id='" + sliderLabel + "' class='sensor_options_label' alt='Slider label'>" + MSG.sonarSliderLabel + " " + id + "</div>");
-      $('#sensor_options').append("<div id='" + sliderValue + "' class='' alt='Slider value'>100 cm</div>");
-      $('#sensor_options').append("<div id='" + sliderId + "' class='sonar_slider slidecontainer' alt='Load'></div>");
-      $('#' + sliderId).append("<input type='range' min='0' max='200' value='100' class='slider' id='" + sonarSliderId + "'></input>");
-
-      var self = this;
-      var slider = document.getElementById(sonarSliderId);
-      slider.oninput = function () {
-        var id = this.id.replace(/^\D+/g, '');
-        self.changeSonarDistance(this.value, id);
-      };
-    }
+    this.renderer.initializeCanvas(this._robot, sonar); // TODO
   }
+
+  addSonar(echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
+    this.incrementNumberOf(TypesEnum.SONAR);
+    let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
+
+    let sonar = new Sonar(id, echoPin, triggerPin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(sonar);
+
+    this.renderer.initializeCanvas(this._robot, sonar); // TODO
+  }
+  // addSonar(draw = true, offsetLeft = 5, offsetTop = 5) {
+  //   this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
+
+  //   this.incrementNumberOf(TypesEnum.SONAR);
+  //   var id = this.robot.numberOf[TypesEnum.SONAR];
+  //   var sonarCanvasId = 'sim_sonar_canvas' + id;
+
+  //   this.robot[sonarCanvasId] = {};
+  //   this.robot[sonarCanvasId].width = 100;
+  //   this.robot[sonarCanvasId].height = 58;
+  //   this.robot[sonarCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
+  //   this.robot[sonarCanvasId].image = new Image();
+  //   this.robot[sonarCanvasId].image.src = this.robot.imgSonar;
+
+  //   var classes = 'sim_canvas sonar_canvas';
+  //   this.addHtml(TypesEnum.SONAR, id, offsetTop, offsetLeft, classes);
+
+  //   this.renderer.initializeCanvas(sonarCanvasId, this.robot);
+  //   if (draw) {
+  //     $('#sim_sonar' + id).css('visibility', 'visible');
+  //   } else {
+  //     $('#sim_sonar' + id).css('visibility', 'hidden');
+  //   }
+
+  //   var sliderId = 'slider' + id;
+  //   var sliderLabel = 'slider' + id + '_label';
+  //   var sliderValue = 'slider' + id + '_value';
+  //   var sonarSliderId = 'sonar_slider' + id;
+  //   if (!document.getElementById(sonarSliderId)) {
+  //     console.log('make slider');
+  //     $('#sensor_options').append("<div id='" + sliderLabel + "' class='sensor_options_label' alt='Slider label'>" + MSG.sonarSliderLabel + " " + id + "</div>");
+  //     $('#sensor_options').append("<div id='" + sliderValue + "' class='' alt='Slider value'>100 cm</div>");
+  //     $('#sensor_options').append("<div id='" + sliderId + "' class='sonar_slider slidecontainer' alt='Load'></div>");
+  //     $('#' + sliderId).append("<input type='range' min='0' max='200' value='100' class='slider' id='" + sonarSliderId + "'></input>");
+
+  //     var self = this;
+  //     var slider = document.getElementById(sonarSliderId);
+  //     slider.oninput = function () {
+  //       var id = this.id.replace(/^\D+/g, '');
+  //       self.changeSonarDistance(this.value, id);
+  //     };
+  //   }
+  // }
+
+  // /**
+  //  * Remove the most recent created SONAR sensor from the simulation container.
+  //  */
+  // changeSonarDistance(value, id) {
+  //   var sliderValue = 'slider' + id + '_value';
+  //   document.getElementById(sliderValue).innerHTML = value + ' cm';
+  //   // TODO: Remove this. the board state should be updated in the updateScenarioState function when it is called!
+  //   this.inputState.sonarDistance = value;
+  // }
 
   /**
    * Remove the most recent created SONAR sensor from the simulation container.
    */
-  changeSonarDistance(value, id) {
-    var sliderValue = 'slider' + id + '_value';
-    document.getElementById(sliderValue).innerHTML = value + ' cm';
-    // TODO: Remove this. the board state should be updated in the updateScenarioState function when it is called!
-    this.inputState.sonarDistance = value;
-  }
-
-  /**
-   * Remove the most recent created SONAR sensor from the simulation container.
-   */
-  removeSonar() {
+  removeSonar(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SONAR));
-    var id = this.robot.numberOf[TypesEnum.SONAR];
-    $('#sim_sonar' + id).remove();
 
-    delete this.robot['sim_sonar_canvas' + id];
-    this.decrementNumberOf(TypesEnum.SONAR);
-
-    if (this.robot.numberOf[TypesEnum.SONAR] === 0) {
-      $('#slider1_label').remove();
-      $('#slider1_value').remove();
-      $('#slider1').remove();
-    }
-  }
-
-
-  /**
-   * Add a new decoration component to the simulation container.
-   */
-  addDecoration(draw = true, offsetLeft = 5, offsetTop = 5, state = 'hair') {
-    this.incrementNumberOf(TypesEnum.DECORATION);
-    var id = this.robot.numberOf[TypesEnum.DECORATION];
-    var decorationCanvasId = 'sim_decoration_canvas' + id;
-
-    this.robot[decorationCanvasId] = {};
-    this.robot[decorationCanvasId].width = 100;
-    this.robot[decorationCanvasId].height = 50;
-    this.robot[decorationCanvasId].x = 0;
-    this.robot[decorationCanvasId].y = 0;
-    this.robot[decorationCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-    this.robot[decorationCanvasId].state = state;
-
-    var classes = 'sim_canvas decoration_canvas';
-    this.addHtml(TypesEnum.DECORATION, id, offsetTop, offsetLeft, classes);
-
-    this.renderer.initializeCanvas(decorationCanvasId, this.robot);
-    if (draw) {
-      $('#sim_decoration' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_decoration' + id).css('visibility', 'hidden');
-    }
-  }
-
-  /**
-  * Remove the most recent created decoration element from the simulation container.
-  */
-  removeDecoration() {
-    var id = this.robot.numberOf[TypesEnum.DECORATION];
-    $("#sim_decoration" + id + "").remove();
-
-    delete this.robot['sim_decoration_canvas' + id];
-    this.decrementNumberOf(TypesEnum.DECORATION);
+    let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SONAR, id);
   }
 
   /**
    * Add a new decoration component to the simulation container.
    */
-  addLcd(draw = true, offsetLeft = 5, offsetTop = 5) {
+  addLcd(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LCD));
     this.incrementNumberOf(TypesEnum.LCD);
-    var id = this.robot.numberOf[TypesEnum.LCD];
+    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
 
-    var decorationCanvasId = 'sim_lcd_canvas' + id;
-
-    this.robot[decorationCanvasId] = {};
-    this.robot[decorationCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-
-    $('#sim_container').append("<div id='sim_lcd" + id + "' class='sim_element sim_element_lcd draggable'><div><span class='grippy'></span>Lcd</div></div>");
-    $('#sim_lcd' + id).css('top', offsetTop + 'px');
-    $('#sim_lcd' + id).css('left', offsetLeft + 'px');
-    $('#sim_lcd' + id).append("<div id='sim_element_lcd_img'></div>");
-    $('#sim_element_lcd_img').append('<div class="lcd" id="sim_lcd_row0"></div>');
-    $('#sim_element_lcd_img').append('<div class="lcd" id="sim_lcd_row1"></div>');
-
-    this.renderer.initializeCanvas(decorationCanvasId, this.robot);
-    if (draw) {
-      $('#sim_lcd' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_lcd' + id).css('visibility', 'hidden');
-    }
+    let lcd = new Lcd(id);
+    this._robot.push(lcd);
   }
+
+  addLcd(visible, offsetLeft, offsetTop, htmlClasses){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LCD));
+    this.incrementNumberOf(TypesEnum.LCD);
+    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
+
+    let lcd = new Lcd(id, visible, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(lcd);
+  }
+  
 
   /**
   * Remove the most recent created decoration element from the simulation container.
   */
-  removeLcd() {
-    var id = this.robot.numberOf[TypesEnum.LCD];
-    $("#sim_lcd" + id + "").remove();
-
-    delete this.robot['sim_lcd_canvas' + id];
-    this.decrementNumberOf(TypesEnum.LCD);
-  }
-
-  /**
-   * Add a new PIR sensor to the simulation container.
-   */
-  addButton(draw = true, offsetLeft = 5, offsetTop = 5) {
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTON));
-    this.incrementNumberOf(TypesEnum.BUTTON);
-    var id = this.robot.numberOf[TypesEnum.BUTTON];
-    var buttonId = 'sim_button_canvas' + id;
-
-    this.robot[buttonId] = {};
-    this.robot[buttonId].pin = id;
-    this.robot[buttonId].width = 50;
-    this.robot[buttonId].height = 50;
-    this.robot[buttonId].offset = { 'left': offsetLeft, 'top': offsetTop };
-    this.robot[buttonId].image = new Image();
-    this.robot[buttonId].state = 0;
-
-    $('#sim_container').append("<div id='sim_button" + id + "' class='sim_element sim_element_button draggable'><div><span class='grippy'></span>" + MSG.simulator['button'] + " pin " + id + "</div></div>");
-    $('#sim_button' + id).css('top', offsetTop + 'px');
-    $('#sim_button' + id).css('left', offsetLeft + 'px');
-    $('#sim_button' + id).append("<div id='sim_button_canvas" + id + "' class='sim_canvas button_canvas sim_button'></canvas>");
-
-    // if(!document.getElementById(buttonId)){
-    //   $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.pirButtonLabel + ' ' + id + "</div>");
-    //   $('#sensor_options').append("<div id='" + pirButtonId + "' class='pir_button' alt='Load'></div>");
-
-    this.addButtonEventHandler(buttonId);
-    // }
-
-    this.renderer.initializeCanvas(buttonId, this.robot);
-    if (draw) {
-      $('#sim_button' + id).css('visibility', 'visible');
-    } else {
-      $('#sim_button' + id).css('visibility', 'hidden');
-    }
-  }
-
-  /**
-   * Remove the most recent created PIR sensor from the simulation container.
-   */
-  removeButton() {
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.BUTTON));
-    var id = this.robot.numberOf[TypesEnum.PIR];
-    $('#sim_button' + id).remove();
-
-    delete this.robot['sim_button_canvas' + id];
-    this.decrementNumberOf(TypesEnum.BUTTON);
+  removeLcd(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypsEnum.Lcd));
+    
+    let id = this._numberOfComponentsOfType[TypsEnum.LCD];
+    this.removeRobotComponentWithTypeAndId(TypsEnum.LCD, id);
   }
 
   /**
    * Returns the led id of the Dwenguino board based on the id of the canvas.
    */
-  getLedId(i) {
-    var id = 0;
-    if (i < 9) {
-      id = i - 1;
-    } else {
-      id = 13;
-    }
-    return id;
-  }
+  // getLedId(i) {
+  //   var id = 0;
+  //   if (i < 9) {
+  //     id = i - 1;
+  //   } else {
+  //     id = 13;
+  //   }
+  //   return id;
+  // }
 
-  addPirEventHandler(pirButtonId, pirCanvasId) {
-    var self = this;
-    console.log(pirButtonId);
-    $("#" + pirButtonId).on('mousedown', function () {
-      if (document.getElementById(pirButtonId).className === "pir_button") {
-        document.getElementById(pirButtonId).className = "pir_button pir_button_pushed";
-        self.robot[pirCanvasId].image.src = self.robot.imgPirOn;
-        self.robot[pirCanvasId].state = 1;
-        self.inputState.pir = 1;
-      }
-    });
+  // addPirEventHandler(pirButtonId, pirCanvasId) {
+  //   var self = this;
+  //   console.log(pirButtonId);
+  //   $("#" + pirButtonId).on('mousedown', function () {
+  //     if (document.getElementById(pirButtonId).className === "pir_button") {
+  //       document.getElementById(pirButtonId).className = "pir_button pir_button_pushed";
+  //       self.robot[pirCanvasId].image.src = self.robot.imgPirOn;
+  //       self.robot[pirCanvasId].state = 1;
+  //       self.inputState.pir = 1;
+  //     }
+  //   });
 
-    $("#" + pirButtonId).on('mouseup', function () {
-      if (document.getElementById(pirButtonId).className === "pir_button pir_button_pushed") {
-        document.getElementById(pirButtonId).className = "pir_button";
-        self.robot[pirCanvasId].image.src = self.robot.imgPir;
-        self.robot[pirCanvasId].state = 0;
-        self.inputState.pir = 0;
-      }
-    });
-  }
+  //   $("#" + pirButtonId).on('mouseup', function () {
+  //     if (document.getElementById(pirButtonId).className === "pir_button pir_button_pushed") {
+  //       document.getElementById(pirButtonId).className = "pir_button";
+  //       self.robot[pirCanvasId].image.src = self.robot.imgPir;
+  //       self.robot[pirCanvasId].state = 0;
+  //       self.inputState.pir = 0;
+  //     }
+  //   });
+  // }
 
-  addButtonEventHandler(buttonId) {
-    var self = this;
-    console.log(buttonId);
-    $("#" + buttonId).on('mousedown', function () {
-      console.log('button clicked');
-      console.log(buttonId);
-      if (document.getElementById(buttonId).classList.contains('sim_button')) {
-        console.log(document.getElementById(buttonId));
-        document.getElementById(buttonId).className = "sim_button sim_button_pushed";
-        //TODO: remove this call. the digitalwrite function is part of the sandbox and should not be called by
-        // a simulation scenario. This should change the board state in the updateSimulationState method
-        this.inputState.buttons[buttonId] = 0;
-        //DwenguinoSimulation.digitalWrite(self.robot[buttonId].pin, 'LOW');
-        // self.robot[pirCanvasId].image.src = self.robot.imgPirOn;
-        // self.robot[pirCanvasId].state = 1;
-      }
-    });
-
-    $("#" + buttonId).on('mouseup', function () {
-      if (document.getElementById(buttonId).classList.contains('sim_button_pushed')) {
-        document.getElementById(buttonId).className = "sim_button";
-        //TODO: remove this call. the digitalwrite function is part of the sandbox and should not be called by
-        // a simulation scenario. This should change the board state in the updateSimulationState method
-        //DwenguinoSimulation.digitalWrite(self.robot[buttonId].pin, 'HIGH');
-        this.inputState.buttons[buttonId] = 0;
-        // self.robot[pirCanvasId].image.src = self.robot.imgPir;
-        // self.robot[pirCanvasId].state = 0;
-      }
-    });
-  }
 
   incrementNumberOf(type) {
-    this.robot.numberOf[type] += 1;
+    //this.robot.numberOf[type] += 1;
+    this._numberOfComponentsOfType[type] += 1;
   }
 
   decrementNumberOf(type) {
-    this.robot.numberOf[type] -= 1;
+    //this.robot.numberOf[type] -= 1;
+    this._numberOfComponentsOfType[type] -= 1;
   }
 
-  addHtml(type, id, offsetTop, offsetLeft, classes = '') {
-    var canvasId = 'sim_' + type + "_canvas" + id;
-    $('#sim_container').append("<div id='sim_" + type + id + "' class='sim_element sim_element_" + type + " draggable'><div><span class='grippy'></span>" + MSG.simulator[type] + " " + id + "</div></div>");
-    $('#sim_' + type + id).css('top', offsetTop + 'px');
-    $('#sim_' + type + id).css('left', offsetLeft + 'px');
-    $('#sim_' + type + id).append("<canvas id='" + canvasId + "' class='" + classes + "'></canvas>");
-  }
 }
