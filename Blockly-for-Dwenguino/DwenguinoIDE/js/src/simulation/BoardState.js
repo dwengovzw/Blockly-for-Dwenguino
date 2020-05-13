@@ -12,7 +12,6 @@ export default class BoardState {
     
 
     constructor(){
-        this.resetBoard();
         // Map pin numbers to simulated pin indexes
         for (let i = 0 ; i < 24 ; ++i){
             this.pinMapping[i + ""] = i;
@@ -44,12 +43,22 @@ export default class BoardState {
         }
         
         this.pinMapping["LED13"] = 13;
+        this.resetBoard();
     }
 
     resetBoard(){
         this.lcdContent = new Array(2);
         this.lcdContent[0] = "";
         this.lcdContent[1] = "";
+
+        for (let i = 0 ; i < 24 ; ++i){
+            this.pins[this.pinMapping[i + ""]] = 0;
+        }
+
+        for (let i = 0 ; i < 8 ; ++i){
+            this.pins[this.pinMapping["A" + i]] = 0;
+        }
+
         this.pins[this.pinMapping["LCD_BACKLIGHT"]] = 0;
         // Set no frequency playing on BUZZER
         this.pins[this.pinMapping["BUZZER"]] = 0;
