@@ -40,28 +40,27 @@ class Pir extends RobotComponent{
             $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.pirButtonLabel + ' ' + this.getId() + "</div>");
             $('#sensor_options').append("<div id='" + pirButtonId + "' class='pir_button' alt='Load'></div>");
 
-            this.addPirEventHandler(pirButtonId, this.getCanvasId());
+            this.addPirEventHandler(pirButtonId);
         }
     }
 
-    addPirEventHandler(pirButtonId, pirCanvasId) {
+    addPirEventHandler(pirButtonId) {
         var self = this;
-        // console.log(pirButtonId);
         $("#" + pirButtonId).on('mousedown', function () {
           if (document.getElementById(pirButtonId).className === "pir_button") {
             document.getElementById(pirButtonId).className = "pir_button pir_button_pushed";
             self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
             self.setState(1);
-            self._stateUpdated = true; // TODO
+            self._stateUpdated = true;
           }
         });
     
         $("#" + pirButtonId).on('mouseup', function () {
           if (document.getElementById(pirButtonId).className === "pir_button pir_button_pushed") {
             document.getElementById(pirButtonId).className = "pir_button";
-            self.robot[pirCanvasId].image.src = self.robot.imgPir;
-            self.robot[pirCanvasId].state = 0;
-            self._stateUpdated = true; // TODO
+            self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
+            self.setState(0);
+            self._stateUpdated = true; 
           }
         });
     }

@@ -18,8 +18,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     super(logger);
     this.simulationRobotComponents = new DwenguinoSimulationRobotComponents(this);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu();
-    this.clearRobot();
-    //this.initSimulationState();
+    //this.clearRobot();
+
   }
 
 
@@ -61,9 +61,6 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     let bottom_pane = $("<div>").attr("id", "db_simulator_bottom_pane");
     container.append(top_pane).append(bottom_pane);
 
-    // Load robot components from local storage if they are present
-    //this.checkLocalStorage();
-
     // Setup the components menu
     this.simulationComponentsMenu.setupEnvironment(this);
 
@@ -72,7 +69,6 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
     this.renderer.render(this._robot);
     
-
     var self = this;
     $("#sim_stop").click(function () {
       let timer = setTimeout(() => {
@@ -88,6 +84,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
     this.setSensorOptions();
 
+    // Load robot components from local storage if they are present
     this.loadRobot();
 
   }
@@ -168,17 +165,27 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   updateScenarioState(dwenguinoState) {
     super.updateScenarioState(dwenguinoState);
-
-    for(var i = 0; i < this._robot; i++){
-      type = this._robot[i].getType();
-
+    for(var i = 0; i < this._robot.length; i++){
+      let type = this._robot[i].getType();
       let pin = 0;
       switch (type) {
-        case TypesEnum.SERVO:
+        case TypesEnum.SERVO:;
           pin = this._robot[i].getPin();
-          if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
-            this._robot[i].setPrevAngle(this._robot[i].getAngle());
-            this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
+          if(pin === 36){
+            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(1)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getServoAngle(1));
+            }
+          } else if(pin === 37){
+            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(2)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getServoAngle(2));
+            }
+          } else {
+            if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
+            }
           }
           break;
         case TypesEnum.LED:

@@ -180,10 +180,12 @@ class RobotComponentsFactory {
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
     let pin = 0;
-    if(id === 1){
+    if(id == 1){
       pin = 36;
-    } else if (id === 2){
+    } else if (id == 2){
       pin = 37;
+    } else {
+      pin = 0;
     }
 
     let servo = new Servo(id, pin);
@@ -197,6 +199,14 @@ class RobotComponentsFactory {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+
+    if(id == 1){
+      pin = 36;
+    } else if (id == 2){
+      pin = 37;
+    } else {
+      pin = 0;
+    }
 
     let servo = new Servo(id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);

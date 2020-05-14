@@ -41,10 +41,18 @@ class Servo extends RobotComponent{
         
         this.insertHtml();
         this.toggleVisibility(visible);
+        console.log(this.toString());
     }
 
     toString(){
-        return 'servo';
+        let str = '';
+        str = str.concat(this.getType(), ' ');
+        str = str.concat(this.getId(), ' ');
+        str = str.concat('Angle ', this.getAngle(), ' ');
+        str = str.concat('Costume ', this.getCostume(), ' ');
+        str = str.concat('Pin ', this.getPin(), ' ');
+        str = str.concat('CanvasId ', this.getCanvasId(), ' ');
+        return str;
     }
 
     insertHtml(){
@@ -90,7 +98,7 @@ class Servo extends RobotComponent{
         data = data.concat(" Angle='", this.getAngle(), "'");
         data = data.concat(" PrevAngle='", this.getPrevAngle(), "'");
 
-        data = data.concat(" Pin='", this.getPin(), "'");
+        data = data.concat(" Pin='", parseInt(this.getPin()), "'");
         data = data.concat(" Costume='", this.getCostume(), "'");
         data = data.concat(" Classes='", this.getHtmlClasses(), "'");
 

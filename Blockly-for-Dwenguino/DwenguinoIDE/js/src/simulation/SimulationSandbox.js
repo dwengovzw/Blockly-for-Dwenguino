@@ -154,8 +154,8 @@ export default class SimulationSandbox{
       angle = 0;
     }
 
-    if (angle !== this.boardState.getServoAngle(channel - 1)) {
-        this.boardState.setServoAngle(channel - 1, angle);
+    if (angle !== this.boardState.getServoAngle(channel)) {
+        this.boardState.setServoAngle(channel, angle);
     }
   }
 

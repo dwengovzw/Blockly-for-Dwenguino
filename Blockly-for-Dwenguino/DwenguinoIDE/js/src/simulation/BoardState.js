@@ -133,6 +133,7 @@ export default class BoardState {
 
     setServoAngle(servoNr, angle){
         this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]] = angle;
+        console.log('setServoAngle', this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]]);
     }
 
     getServoAngle(servoNr){
