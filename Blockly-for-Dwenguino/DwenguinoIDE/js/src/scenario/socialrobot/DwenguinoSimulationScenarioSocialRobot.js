@@ -298,33 +298,33 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
       switch (costume) {
         case StatesEnum.PLAIN:
-          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setHtmlClasses('sim_servo servo_canvas');
           servo.setCostume(costume);
           servo.setWidth(100);
           servo.setHeight(50);
           break;
         case StatesEnum.EYE:
-          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setHtmlClasses('servo_canvas');
           servo.setCostume(costume);
           servo.setWidth(35);
           servo.setHeight(35);
           break;
         case StatesEnum.RIGHTHAND:
-          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setHtmlClasses('servo_canvas hand_canvas');
           servo.setCostume(costume);
           servo.setWidth(64);
           servo.setHeight(149);
-          document.getElementById(servo.getCanvasId()).classList.add('hand_canvas');
           break;
         case StatesEnum.LEFTHAND:
-          document.getElementById(servo.getCanvasId()).classList.remove('hand_canvas');
+          servo.setHtmlClasses('servo_canvas hand_canvas');
           servo.setCostume(costume);
           servo.setWidth(64);
           servo.setHeight(149);
-          document.getElementById(servo.getCanvasId()).classList.add('hand_canvas');
           break;
       }
 
+      document.getElementById(servo.getCanvasId()).className = "";
+      document.getElementById(servo.getCanvasId()).className = servo.getHtmlClasses();
       this.renderer.initializeCanvas(this._robot, servo);
       this.saveRobot()
     }

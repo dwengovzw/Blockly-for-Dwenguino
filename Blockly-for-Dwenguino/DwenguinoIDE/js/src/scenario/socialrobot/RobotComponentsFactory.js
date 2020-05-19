@@ -259,7 +259,7 @@ class RobotComponentsFactory {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LED));
 
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
-    this.removeRobotComponentWithTypeAndId(TypsEnum.LED, id);
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LED, id);
   }
 
   /**

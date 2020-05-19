@@ -60,10 +60,18 @@ class Servo extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+    
+        var self = this;
+        $('#sim_' + this.getType() + this.getId()).dblclick(function(){
+            console.log('dobule click');
+            self.createComponentOptionsModalDialog('Servo options');
+            self.showDialog();
+          });
+    
     }
 
     removeHtml(){
-        $('#sim_' + this.toString() + this.getId()).remove();
+        $('#sim_' + this.getType() + this.getId()).remove();
     }
 
     toggleVisibility(visible){
@@ -112,6 +120,31 @@ class Servo extends RobotComponent{
         this.setY(30);
         this.setAngle(0);
         this.setPrevAngle(0);
+    }
+
+    showDialog(){
+        $("#componentOptionsModal").modal('show');
+    }
+    
+    removeDialog(){
+        $('div').remove('#componentOptionsModal');
+        $('.modal-backdrop').remove();
+    }
+
+    createComponentOptionsModalDialog(headerTitle){
+        this.removeDialog();
+    
+        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
+        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
+    
+        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
+    
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
+    
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
     }
 
     getId(){
@@ -216,7 +249,7 @@ class Servo extends RobotComponent{
                 this._image.src = './DwenguinoIDE/img/socialrobot/righthand.png';
                 break;
             case StatesEnum.LEFTHAND:
-                this._image.src = './DwenguinoIDE/img/socialrobot/lefthand.png';              
+                this._image.src = './DwenguinoIDE/img/socialrobot/lefthand.png';           
                 break;
         }
     }
