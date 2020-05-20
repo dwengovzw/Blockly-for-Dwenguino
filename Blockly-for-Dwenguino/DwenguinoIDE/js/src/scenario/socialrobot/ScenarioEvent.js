@@ -1,7 +1,9 @@
 export { EventsEnum, ScenarioEvent }
 
 const EventsEnum = {
-    SAVE: 'save'
+    SAVE: 'save',
+    INITIALIZECANVAS: 'initializecanvas',
+    CLEARCANVAS: 'clearcanvas'
   };
   Object.freeze(EventsEnum);
 

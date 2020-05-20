@@ -3,9 +3,10 @@ import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { TypesEnum, RobotComponentsFactory } from "./RobotComponentsFactory.js"
 import DwenguinoSimulationRobotComponents from "./DwenguinoSimulationRobotComponents.js"
-import {DwenguinoScenarioUtils, StatesEnum} from "./DwenguinoScenarioUtils.js"
+import {DwenguinoScenarioUtils} from "./DwenguinoScenarioUtils.js"
 import { EventsEnum } from "./ScenarioEvent.js"
 import {EventBus} from "./EventBus.js"
+import { CostumesEnum } from "./components/Servo.js"
 
 /*
  * This Object is the abstraction of the social robot simulator scenario.
@@ -44,6 +45,13 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     this.scenarioUtils = new DwenguinoScenarioUtils(this, this._eventBus);
 
     this.robotComponentsFactory = new RobotComponentsFactory(this.scenarioUtils, this.logger, this._eventBus);
+
+    this._eventBus.registerEvent(EventsEnum.CLEARCANVAS);
+    this._eventBus.addEventListener(EventsEnum.CLEARCANVAS, (canvasId)=>{ this.renderer.clearCanvas(canvasId)});
+
+    this._eventBus.registerEvent(EventsEnum.INITIALIZECANVAS);
+    this._eventBus.addEventListener(EventsEnum.INITIALIZECANVAS, (component)=>{ this.renderer.initializeCanvas(this.robotComponentsFactory.getRobot(), component)});
+
 
   }
 
@@ -227,49 +235,6 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     let led = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.LED, i);
     if(led !== undefined){
       led.setOnColor(color);
-    }
-  }
-
-  /**
-   * Change the state of ith servo canvas to the specified state.
-   */
-  setServoState(i, costume) {
-    let servo = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.SERVO, i);
-    if(servo !== undefined){
-      this.renderer.clearCanvas(servo.getCanvasId());
-
-      switch (costume) {
-        case StatesEnum.PLAIN:
-          servo.setHtmlClasses('sim_servo servo_canvas');
-          servo.setCostume(costume);
-          servo.setWidth(100);
-          servo.setHeight(50);
-          break;
-        case StatesEnum.EYE:
-          servo.setHtmlClasses('servo_canvas');
-          servo.setCostume(costume);
-          servo.setWidth(35);
-          servo.setHeight(35);
-          break;
-        case StatesEnum.RIGHTHAND:
-          servo.setHtmlClasses('servo_canvas hand_canvas');
-          servo.setCostume(costume);
-          servo.setWidth(64);
-          servo.setHeight(149);
-          break;
-        case StatesEnum.LEFTHAND:
-          servo.setHtmlClasses('servo_canvas hand_canvas');
-          servo.setCostume(costume);
-          servo.setWidth(64);
-          servo.setHeight(149);
-          break;
-      }
-
-      document.getElementById(servo.getCanvasId()).className = "";
-      document.getElementById(servo.getCanvasId()).className = servo.getHtmlClasses();
-      this.renderer.initializeCanvas(this.robotComponentsFactory.getRobot(), servo);
-      
-      this._eventBus.dispatchEvent(EventsEnum.SAVE);
     }
   }
 

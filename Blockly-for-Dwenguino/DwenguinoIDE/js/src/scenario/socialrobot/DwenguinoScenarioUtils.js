@@ -3,21 +3,13 @@
 import FileIOController from "../../FileIoController.js";
 import { EVENT_NAMES } from "../../logging/EventNames.js"
 import { EventsEnum } from "./ScenarioEvent.js";
-
-export { StatesEnum, DwenguinoScenarioUtils }
+import { CostumesEnum } from "./components/Servo.js"
+export { DwenguinoScenarioUtils }
 
 /**
  * The different states robot components can be in. 
  * Not all states are supported for each robot component.
  */
-const StatesEnum = {
-    PLAIN: 'plain', 
-    EYE: 'eye', 
-    MOUTH: 'mouth',
-    RIGHTHAND: 'righthand',
-    LEFTHAND: 'lefthand'
-  };
-Object.freeze(StatesEnum);
 
 class DwenguinoScenarioUtils{
     ioController = null;
@@ -60,57 +52,6 @@ class DwenguinoScenarioUtils{
         goog.asserts.fail('Blockly.Xml.textToDom did not obtain a valid XML tree.');
         }
         return dom.firstChild;
-    }
-
-    contextMenuServo(){
-        var self = this;
-        $(function(){
-            $.contextMenu({
-                selector: '.sim_element_servo',
-                trigger: 'right', 
-                callback: function(itemKey, opt, e) {
-                    var m = "global: " + itemKey;
-                    window.console && console.log(m) || alert(m); 
-                },
-                items: {
-                    "plain": {
-                        name: MSG.socialrobot['plain'],
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.PLAIN);
-                        }
-                    },
-                    "eye": {
-                        name: MSG.socialrobot['eye'], 
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.EYE);
-                        }
-                    },
-                    // "mouth": {name: MSG.socialrobot['mouth'],},
-                    "righthand": {
-                        name: MSG.socialrobot['righthand'],
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.RIGHTHAND);
-                        }
-                    },
-                    "lefthand": {
-                        name: MSG.socialrobot['lefthand'],
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.LEFTHAND);
-                        }
-                    }//,
-                    //"sep1": "---------",
-                    //"quit": {name: "Quit"}
-                }
-            });
-        });  
     }
 
     contextMenuLed(){

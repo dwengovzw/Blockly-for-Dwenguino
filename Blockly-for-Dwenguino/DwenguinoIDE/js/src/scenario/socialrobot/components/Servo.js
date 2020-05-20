@@ -1,9 +1,17 @@
 import { RobotComponent } from './RobotComponent.js'
-import { StatesEnum, DwenguinoScenarioUtils } from './../DwenguinoScenarioUtils.js'
 import { TypesEnum } from './../RobotComponentsFactory.js'
 import { EventsEnum } from './../ScenarioEvent.js'
 
-export { Servo }
+export { Servo, CostumesEnum}
+
+const CostumesEnum = {
+    PLAIN: 'plain', 
+    EYE: 'eye', 
+    MOUTH: 'mouth',
+    RIGHTHAND: 'righthand',
+    LEFTHAND: 'lefthand'
+  };
+Object.freeze(CostumesEnum);
 
 class Servo extends RobotComponent{
     constructor(eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses){
@@ -21,16 +29,16 @@ class Servo extends RobotComponent{
         this._image = new Image();
 
         switch (costume) {
-            case StatesEnum.PLAIN:
+            case CostumesEnum.PLAIN:
                 this._image.src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
                 break;
-            case StatesEnum.EYE:
+            case CostumesEnum.EYE:
                 this._image.src = '';
                 break;
-            case StatesEnum.RIGHTHAND:
+            case CostumesEnum.RIGHTHAND:
                 this._image.src = './DwenguinoIDE/img/socialrobot/righthand.png';
                 break;
-            case StatesEnum.LEFTHAND:
+            case CostumesEnum.LEFTHAND:
                 this._image.src = './DwenguinoIDE/img/socialrobot/lefthand.png';              
                 break;
           }
@@ -42,7 +50,6 @@ class Servo extends RobotComponent{
         
         this.insertHtml();
         this.toggleVisibility(visible);
-        console.log(this.toString());
     }
 
     toString(){
@@ -148,6 +155,7 @@ class Servo extends RobotComponent{
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
 
         this.createPinOptionsInModalDialog();
+        this.createCostumeOptionsDialog();
 
     }
 
@@ -168,11 +176,9 @@ class Servo extends RobotComponent{
             pinButton.addEventListener('click', () => { 
                 let newPin = pinButton.name;
                 this.setPin(newPin);
-                console.log(this.toString());
-                console.log(this.toXml());
                 $('.pinButton').removeClass('option_button_selected');
                 pinButton.classList.add('option_button_selected');
-                this._eventBus.dispatchEvent(EventsEnum.SAVE,{permanent: false, uniqueIdentifier: ""});
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
             });
         }
 
@@ -199,6 +205,56 @@ class Servo extends RobotComponent{
 
     getAllPossibleServoPins(){
         return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 36, 37];
+    }
+
+    createCostumeOptionsDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsCostume" class="ui-widget row mb-4">');
+        $('#componentOptionsCostume').append('<div class="col-md-2">'+'Costume'+'</div>');
+        $('#componentOptionsCostume').append('<div id="costume" class="col-md-10"></div>');
+
+        for (const [type, t] of Object.entries(CostumesEnum)) {
+            console.log(t);
+            $('#costume').append('<div id=costume'+t+' name='+t+' class="col-md-2 ml-2 mb-2 costumeButton">'+t+'</div>');
+
+            let costumeButton = document.getElementById('costume'+t);
+            costumeButton.addEventListener('click', () => {
+
+                this._eventBus.dispatchEvent(EventsEnum.CLEARCANVAS, this.getCanvasId());
+                let newCostume = costumeButton.getAttribute("name");
+                switch (newCostume) {
+                    case CostumesEnum.PLAIN:
+                        this.setHtmlClasses('sim_canvas servo_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(100);
+                        this.setHeight(50);
+                        break;
+                    case CostumesEnum.EYE:
+                        this.setHtmlClasses('servo_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(35);
+                        this.setHeight(35);
+                        break;
+                    case CostumesEnum.RIGHTHAND:
+                        this.setHtmlClasses('servo_canvas hand_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(64);
+                        this.setHeight(149);
+                        break;
+                    case CostumesEnum.LEFTHAND:
+                        this.setHtmlClasses('servo_canvas hand_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(64);
+                        this.setHeight(149);
+                        break;
+                    }
+
+                document.getElementById(this.getCanvasId()).className = "";
+                document.getElementById(this.getCanvasId()).className = this.getHtmlClasses();
+
+                this._eventBus.dispatchEvent(EventsEnum.INITIALIZECANVAS, this);
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+            });
+        }
     }
 
     getId(){
@@ -293,16 +349,16 @@ class Servo extends RobotComponent{
         this._costume = costume;
 
         switch (costume) {
-            case StatesEnum.PLAIN:
+            case CostumesEnum.PLAIN:
                 this._image.src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
                 break;
-            case StatesEnum.EYE:
+            case CostumesEnum.EYE:
                 this._image.src = '';
                 break;
-            case StatesEnum.RIGHTHAND:
+            case CostumesEnum.RIGHTHAND:
                 this._image.src = './DwenguinoIDE/img/socialrobot/righthand.png';
                 break;
-            case StatesEnum.LEFTHAND:
+            case CostumesEnum.LEFTHAND:
                 this._image.src = './DwenguinoIDE/img/socialrobot/lefthand.png';           
                 break;
         }

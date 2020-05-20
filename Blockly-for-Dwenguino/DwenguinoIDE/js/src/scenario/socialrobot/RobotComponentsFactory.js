@@ -1,9 +1,8 @@
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
-import { StatesEnum } from "./DwenguinoScenarioUtils.js"
 import { EVENT_NAMES } from "../../logging/EventNames.js"
 
 import { RobotComponent } from "./components/RobotComponent.js"
-import { Servo } from "./components/Servo.js"
+import { Servo, CostumesEnum } from "./components/Servo.js"
 import { Led } from "./components/Led.js"
 import { Lcd } from "./components/Lcd.js"
 import { Sonar } from "./components/Sonar.js"
@@ -40,7 +39,6 @@ class RobotComponentsFactory {
     this._eventBus = eventBus;
     this._robot = [];
     this._numberOfComponentsOfType = {};
-    //this.robot = robot;
     this.scenarioUtils = scenarioUtils;
     this.renderer = new SimulationCanvasRenderer();
 
@@ -235,7 +233,7 @@ class RobotComponentsFactory {
   /**
     * Add a new servo to the simulation container.
     */
-  addServo(pin=0, costume=StatesEnum.PLAIN, angle=0, visible=true, x=0, y=0, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
+  addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, x=0, y=0, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
@@ -251,7 +249,6 @@ class RobotComponentsFactory {
     this._robot.push(servo);
 
     this.renderer.initializeCanvas(this._robot, servo); 
-    this.scenarioUtils.contextMenuServo();
   }
 
   /**
