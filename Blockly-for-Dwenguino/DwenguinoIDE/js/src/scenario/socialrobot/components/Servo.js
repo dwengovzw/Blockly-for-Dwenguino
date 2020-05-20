@@ -1,12 +1,13 @@
 import { RobotComponent } from './RobotComponent.js'
 import { StatesEnum, DwenguinoScenarioUtils } from './../DwenguinoScenarioUtils.js'
 import { TypesEnum } from './../RobotComponentsFactory.js'
+import { EventsEnum } from './../ScenarioEvent.js'
 
 export { Servo }
 
 class Servo extends RobotComponent{
-    constructor(id, pin, costume = StatesEnum.PLAIN, angle = 0, visible = true, x = 0, y = 0, width = 100, height = 50, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas servo_canvas'){
-        super(htmlClasses);
+    constructor(eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses){
+        super(eventBus, htmlClasses);
 
         this._id = id;
         this._type = TypesEnum.SERVO;
@@ -61,12 +62,12 @@ class Servo extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        var self = this;
-        $('#sim_' + this.getType() + this.getId()).dblclick(function(){
-            console.log('dobule click');
-            self.createComponentOptionsModalDialog('Servo options');
-            self.showDialog();
-          });
+        let simServo = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simServo.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog('Servo options');
+            this.showDialog();
+        });
     
     }
 
@@ -140,11 +141,64 @@ class Servo extends RobotComponent{
         $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
     
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
     
         $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+
+        this.createPinOptionsInModalDialog();
+
+    }
+
+    createPinOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
+        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
+        $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
+
+        let pins = this.getAllPossibleServoPins();
+        for(let pin = 0; pin < pins.length; pin++){
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            if(this.getPin() == pins[pin]){
+                $('#pin' + pins[pin]).addClass('option_button_selected');
+            }
+
+            let pinButton = document.getElementById('pin'+pins[pin]);
+
+            pinButton.addEventListener('click', () => { 
+                let newPin = pinButton.name;
+                this.setPin(newPin);
+                console.log(this.toString());
+                console.log(this.toXml());
+                $('.pinButton').removeClass('option_button_selected');
+                pinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE,{permanent: false, uniqueIdentifier: ""});
+            });
+        }
+
+        if(this.getId() == 1){
+            $('.pinButton').prop('disabled', true);
+            $('.pinButton').addClass('option_button_disabled');
+            $('#pin36.pinButton').prop('disabled', false);
+            $('#pin36.pinButton').removeClass('option_button_disabled');
+            $('#pin36.pinButton').addClass('option_button_selected');
+        } else if(this.getId() == 2){
+            $('.pinButton').prop('disabled', true);
+            $('.pinButton').addClass('option_button_disabled');
+            $('#pin37.pinButton').prop('disabled', false);
+            $('#pin37.pinButton').removeClass('option_button_disabled');
+            $('#pin37.pinButton').addClass('option_button_selected');
+        } else {
+            $('.pinButton').removeClass('option_button_disabled');
+            $('#pin36.pinButton').prop('disabled', true);
+            $('#pin37.pinButton').prop('disabled', true);
+            $('#pin36.pinButton').addClass('option_button_disabled');
+            $('#pin37.pinButton').addClass('option_button_disabled');
+        }
+    }
+
+    getAllPossibleServoPins(){
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 36, 37];
     }
 
     getId(){

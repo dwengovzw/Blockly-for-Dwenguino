@@ -449,6 +449,7 @@ body{
 
 .disabled {
     color: darkgrey;
+    
 }
 
 .disabled:hover {
@@ -1005,6 +1006,22 @@ span.grippy {
 
 span.grippy::after {
     content: '.. .. .. ..';
+}
+
+.option_button_disabled {
+    background-color: darkgrey;
+}
+
+.option_button {
+    background-color: #d5e1df;
+}
+
+.option_button_selected {
+    background-color: #B5C986;
+}
+
+.modal-content {
+    border-radius: 0px!important;
 }
 
 .dropdown-divider {

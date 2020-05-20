@@ -17,6 +17,14 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
     return "";
 };
 
+Blockly.JavaScript['socialrobot_servo'] = function (block) {
+  var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
+  // Assemble JavaScript into code variable.
+  var code = machine + 'servoWithPin(' + value_pin + ', ' + value_angle + ');\n';
+  return code;
+};
+
 Blockly.JavaScript['socialrobot_arms_down'] = function(block) {
   var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand1', Blockly.JavaScript.ORDER_ATOMIC);
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand1', Blockly.JavaScript.ORDER_ATOMIC);

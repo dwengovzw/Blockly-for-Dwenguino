@@ -21,6 +21,22 @@ Blockly.Arduino['initdwenguino'] = function (block) {
     return code;
 };
 
+Blockly.Arduino['socialrobot_servo'] = function (block) {
+  let value_channel = Blockly.Arduino.valueToCode(block, 'channel', Blockly.Arduino.ORDER_ATOMIC);
+  let value_pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_ATOMIC);
+  let value_angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_ATOMIC);
+
+  //define sonar settings
+  Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n" + "int servoPin" + value_channel + " = " + value_pin +"\n";
+  Blockly.Arduino.definitions_['define_servo_' + value_channel] = "Servo servo" + value_channel + ";\n";
+
+  Blockly.Arduino.setups_['define_dwenguino_servo' + value_channel] = 'servo' + value_channel + '.attach(servoPin' + value_channel + ');\n';
+
+  // Assemble JavaScript into code variable.
+  var code = 'servo' + value_channel + '.write(' + value_angle + ');\n';
+  return code;
+};
+
 Blockly.Arduino['socialrobot_arms_down'] = function(block) {
   var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand1', Blockly.JavaScript.ORDER_ATOMIC);
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand1', Blockly.JavaScript.ORDER_ATOMIC);

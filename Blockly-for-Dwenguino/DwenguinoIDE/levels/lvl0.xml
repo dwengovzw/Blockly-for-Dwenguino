@@ -144,7 +144,7 @@
      <block type="pir_sensor">
             <value name="trig">
                 <block type="char_type" id="pir_sensor_pin"> 
-                  <field name="BITMASK">11</field>
+                  <field name="BITMASK">13</field>
                 </block>
             </value>
         </block>
@@ -172,6 +172,23 @@
 </category>
 
 <category id="catSocialRobot" colour="25" name='SocialRobot'>
+    <block type="socialrobot_servo">
+        <value name="channel">
+            <block type="math_number" id="211">
+                <field name="NUM">3</field>
+            </block>
+        </value>
+        <value name="pin">
+            <block type="math_number" id="212">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+        <value name="angle">
+            <block type="math_number" id="213">
+                <field name="NUM">45</field>
+            </block>
+        </value>
+    </block>
     <block type="socialrobot_arms_down">
             <value name="servo_right_hand1">
                 <block type="math_number" id="202">

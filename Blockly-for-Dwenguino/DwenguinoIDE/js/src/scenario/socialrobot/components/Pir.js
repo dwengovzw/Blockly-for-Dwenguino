@@ -1,11 +1,12 @@
 import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
+import { EventsEnum } from '../ScenarioEvent.js';
 
 export { Pir }
 
 class Pir extends RobotComponent{
-    constructor(id, pin = 0, state = 0, visible = true, width = 50, height = 50, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas pir_canvas'){
-        super(htmlClasses);
+    constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+        super(eventBus, htmlClasses);
 
         this._id = id;
         this._type = TypesEnum.PIR;
@@ -52,6 +53,7 @@ class Pir extends RobotComponent{
             self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
             self.setState(1);
             self._stateUpdated = true;
+            self._eventBus.dispatchEvent(EventsEnum.SAVE);
           }
         });
     
@@ -61,6 +63,7 @@ class Pir extends RobotComponent{
             self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
             self.setState(0);
             self._stateUpdated = true; 
+            self._eventBus.dispatchEvent(EventsEnum.SAVE);
           }
         });
     }

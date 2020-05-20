@@ -24,7 +24,6 @@ const TypesEnum = {
 };
 Object.freeze(TypesEnum);
 
-
 /**
  * This factory produces robot components for the given robot
  * @param {SocialRobot} robot 
@@ -36,9 +35,10 @@ class RobotComponentsFactory {
     buttons: [1, 1, 1, 1, 1],
     sonarDistance: -1
   }
-  constructor(_robot, scenarioUtils, logger) {
+  constructor(scenarioUtils, logger, eventBus) {
     this.logger = logger;
-    this._robot = _robot;
+    this._eventBus = eventBus;
+    this._robot = [];
     this._numberOfComponentsOfType = {};
     //this.robot = robot;
     this.scenarioUtils = scenarioUtils;
@@ -46,6 +46,67 @@ class RobotComponentsFactory {
 
     for (const [type, t] of Object.entries(TypesEnum)) {
       this._numberOfComponentsOfType[t] = 0;
+    }
+  }
+
+  getRobot(){
+    return this._robot;
+  }
+
+  resetSocialRobot(){
+    for(var i = 0; i < this._robot.length; i++){
+      this._robot[i].reset();
+    }
+  }
+
+  updateScenarioState(dwenguinoState){
+    for(var i = 0; i < this._robot.length; i++){
+      let type = this._robot[i].getType();
+      let pin = 0;
+      switch (type) {
+        case TypesEnum.SERVO:;
+          pin = this._robot[i].getPin();
+          if(pin === 36){
+            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(1)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getServoAngle(1));
+            }
+          } else if(pin === 37){
+            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(2)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getServoAngle(2));
+            }
+          } else {
+            if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
+            }
+          }
+          break;
+        case TypesEnum.LED:
+          pin = this._robot[i].getPin();
+          this._robot[i].setState(dwenguinoState.getIoPinState(pin));  
+          break;
+        case TypesEnum.PIR:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.SONAR:
+          let echoPin = this._robot[i].getEchoPin();
+          let triggerPin = this._robot[i].getTriggerPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(echoPin, this._robot[i].getState());
+            dwenguinoState.setIoPinState(triggerPin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.LCD:
+          this._robot[i].setState(dwenguinoState.getLcdContent(0), dwenguinoState.getLcdContent(1));
+          break;
+      }
     }
   }
 
@@ -174,28 +235,8 @@ class RobotComponentsFactory {
   /**
     * Add a new servo to the simulation container.
     */
-  addServo(){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
-    this.incrementNumberOf(TypesEnum.SERVO);
-    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+  addServo(pin=0, costume=StatesEnum.PLAIN, angle=0, visible=true, x=0, y=0, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
 
-    let pin = 0;
-    if(id == 1){
-      pin = 36;
-    } else if (id == 2){
-      pin = 37;
-    } else {
-      pin = 0;
-    }
-
-    let servo = new Servo(id, pin);
-    this._robot.push(servo);
-
-    this.renderer.initializeCanvas(this._robot, servo); 
-    this.scenarioUtils.contextMenuServo();
-  }
-
-  addServo(pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
@@ -204,11 +245,9 @@ class RobotComponentsFactory {
       pin = 36;
     } else if (id == 2){
       pin = 37;
-    } else {
-      pin = 0;
-    }
+    } 
 
-    let servo = new Servo(id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
+    let servo = new Servo(this._eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);
 
     this.renderer.initializeCanvas(this._robot, servo); 
@@ -225,27 +264,13 @@ class RobotComponentsFactory {
     this.removeRobotComponentWithTypeAndId(TypesEnum.SERVO, id);
   }
 
-  /**
-   * Add a new LED to the simulation container.
-   */
-  addLed(){
+
+  addLed(pin=0, state=0, visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, onColor='yellow', offColor='gray', borderColor='black', htmlClasses='sim_canvas led_canvas') {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
     this.incrementNumberOf(TypesEnum.LED);
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
-    let led = new Led(id);
-    this._robot.push(led);
-
-    this.renderer.initializeCanvas(this._robot, led); 
-    this.scenarioUtils.contextMenuLed();
-  }
-  
-  addLed(pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses) {
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
-    this.incrementNumberOf(TypesEnum.LED);
-    let id = this._numberOfComponentsOfType[TypesEnum.LED];
-
-    let led = new Led(id, pin, state, true, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+    let led = new Led(this._eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
     this._robot.push(led);
 
     this.renderer.initializeCanvas(this._robot, led); 
@@ -265,23 +290,12 @@ class RobotComponentsFactory {
   /**
    * Add a new PIR sensor to the simulation container.
    */
-  addPir(){
+  addPir(pin=0, state=0, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
 
-    let pir = new Pir(id);
-    this._robot.push(pir);
-
-    this.renderer.initializeCanvas(this._robot, pir);
-  }
-
-  addPir(pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
-    this.incrementNumberOf(TypesEnum.PIR);
-    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
-
-    let pir = new Pir(id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let pir = new Pir(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(pir);
 
     this.renderer.initializeCanvas(this._robot, pir); 
@@ -300,81 +314,18 @@ class RobotComponentsFactory {
   /**
    * Add a new SONAR sensor to the simulation container.
    */
-  addSonar(){
+  addSonar(echoPin=0, triggerPin=0, state=100, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
+
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
     this.incrementNumberOf(TypesEnum.SONAR);
     let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
 
-    let sonar = new Sonar(id);
+    let sonar = new Sonar(this._eventBus, id, echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(sonar);
 
     this.renderer.initializeCanvas(this._robot, sonar); // TODO
   }
-
-  addSonar(echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
-    this.incrementNumberOf(TypesEnum.SONAR);
-    let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
-
-    let sonar = new Sonar(id, echoPin, triggerPin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
-    this._robot.push(sonar);
-
-    this.renderer.initializeCanvas(this._robot, sonar); // TODO
-  }
-  // addSonar(draw = true, offsetLeft = 5, offsetTop = 5) {
-  //   this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
-
-  //   this.incrementNumberOf(TypesEnum.SONAR);
-  //   var id = this.robot.numberOf[TypesEnum.SONAR];
-  //   var sonarCanvasId = 'sim_sonar_canvas' + id;
-
-  //   this.robot[sonarCanvasId] = {};
-  //   this.robot[sonarCanvasId].width = 100;
-  //   this.robot[sonarCanvasId].height = 58;
-  //   this.robot[sonarCanvasId].offset = { 'left': offsetLeft, 'top': offsetTop };
-  //   this.robot[sonarCanvasId].image = new Image();
-  //   this.robot[sonarCanvasId].image.src = this.robot.imgSonar;
-
-  //   var classes = 'sim_canvas sonar_canvas';
-  //   this.addHtml(TypesEnum.SONAR, id, offsetTop, offsetLeft, classes);
-
-  //   this.renderer.initializeCanvas(sonarCanvasId, this.robot);
-  //   if (draw) {
-  //     $('#sim_sonar' + id).css('visibility', 'visible');
-  //   } else {
-  //     $('#sim_sonar' + id).css('visibility', 'hidden');
-  //   }
-
-  //   var sliderId = 'slider' + id;
-  //   var sliderLabel = 'slider' + id + '_label';
-  //   var sliderValue = 'slider' + id + '_value';
-  //   var sonarSliderId = 'sonar_slider' + id;
-  //   if (!document.getElementById(sonarSliderId)) {
-  //     console.log('make slider');
-  //     $('#sensor_options').append("<div id='" + sliderLabel + "' class='sensor_options_label' alt='Slider label'>" + MSG.sonarSliderLabel + " " + id + "</div>");
-  //     $('#sensor_options').append("<div id='" + sliderValue + "' class='' alt='Slider value'>100 cm</div>");
-  //     $('#sensor_options').append("<div id='" + sliderId + "' class='sonar_slider slidecontainer' alt='Load'></div>");
-  //     $('#' + sliderId).append("<input type='range' min='0' max='200' value='100' class='slider' id='" + sonarSliderId + "'></input>");
-
-  //     var self = this;
-  //     var slider = document.getElementById(sonarSliderId);
-  //     slider.oninput = function () {
-  //       var id = this.id.replace(/^\D+/g, '');
-  //       self.changeSonarDistance(this.value, id);
-  //     };
-  //   }
-  // }
-
-  // /**
-  //  * Remove the most recent created SONAR sensor from the simulation container.
-  //  */
-  // changeSonarDistance(value, id) {
-  //   var sliderValue = 'slider' + id + '_value';
-  //   document.getElementById(sliderValue).innerHTML = value + ' cm';
-  //   // TODO: Remove this. the board state should be updated in the updateScenarioState function when it is called!
-  //   this.inputState.sonarDistance = value;
-  // }
-
+  
   /**
    * Remove the most recent created SONAR sensor from the simulation container.
    */
@@ -388,21 +339,12 @@ class RobotComponentsFactory {
   /**
    * Add a new decoration component to the simulation container.
    */
-  addLcd(){
+  addLcd(visible=true, offsetLeft=5, offsetTop=5, htmlClasses=''){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LCD));
     this.incrementNumberOf(TypesEnum.LCD);
     let id = this._numberOfComponentsOfType[TypesEnum.LCD];
 
-    let lcd = new Lcd(id);
-    this._robot.push(lcd);
-  }
-
-  addLcd(visible, offsetLeft, offsetTop, htmlClasses){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LCD));
-    this.incrementNumberOf(TypesEnum.LCD);
-    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
-
-    let lcd = new Lcd(id, visible, offsetLeft, offsetTop, htmlClasses);
+    let lcd = new Lcd(this._eventBus, id, visible, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(lcd);
   }
   
@@ -416,42 +358,6 @@ class RobotComponentsFactory {
     let id = this._numberOfComponentsOfType[TypsEnum.LCD];
     this.removeRobotComponentWithTypeAndId(TypsEnum.LCD, id);
   }
-
-  /**
-   * Returns the led id of the Dwenguino board based on the id of the canvas.
-   */
-  // getLedId(i) {
-  //   var id = 0;
-  //   if (i < 9) {
-  //     id = i - 1;
-  //   } else {
-  //     id = 13;
-  //   }
-  //   return id;
-  // }
-
-  // addPirEventHandler(pirButtonId, pirCanvasId) {
-  //   var self = this;
-  //   console.log(pirButtonId);
-  //   $("#" + pirButtonId).on('mousedown', function () {
-  //     if (document.getElementById(pirButtonId).className === "pir_button") {
-  //       document.getElementById(pirButtonId).className = "pir_button pir_button_pushed";
-  //       self.robot[pirCanvasId].image.src = self.robot.imgPirOn;
-  //       self.robot[pirCanvasId].state = 1;
-  //       self.inputState.pir = 1;
-  //     }
-  //   });
-
-  //   $("#" + pirButtonId).on('mouseup', function () {
-  //     if (document.getElementById(pirButtonId).className === "pir_button pir_button_pushed") {
-  //       document.getElementById(pirButtonId).className = "pir_button";
-  //       self.robot[pirCanvasId].image.src = self.robot.imgPir;
-  //       self.robot[pirCanvasId].state = 0;
-  //       self.inputState.pir = 0;
-  //     }
-  //   });
-  // }
-
 
   incrementNumberOf(type) {
     //this.robot.numberOf[type] += 1;

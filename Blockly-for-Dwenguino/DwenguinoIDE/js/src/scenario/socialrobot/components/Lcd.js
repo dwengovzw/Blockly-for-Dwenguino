@@ -4,8 +4,8 @@ import { TypesEnum } from '../RobotComponentsFactory.js';
 export { Lcd }
 
 class Lcd extends RobotComponent{
-    constructor(id, visible = true, offsetLeft = 5, offsetTop = 5, htmlClasses = ''){
-        super(htmlClasses);
+    constructor(eventBus, id, visible = true, offsetLeft = 5, offsetTop = 5, htmlClasses = ''){
+        super(eventBus, htmlClasses);
 
         this._id = id;
         this._type = TypesEnum.LCD;

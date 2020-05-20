@@ -1,7 +1,8 @@
 export { RobotComponent }
 
 class RobotComponent{
-    constructor(htmlClasses){
+    constructor(eventBus, htmlClasses){
+      this._eventBus = eventBus;
       this._htmlClasses = htmlClasses;
       
         if (this.toString === undefined) {

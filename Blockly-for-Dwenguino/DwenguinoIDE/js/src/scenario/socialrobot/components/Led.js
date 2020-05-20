@@ -4,8 +4,8 @@ import { TypesEnum } from '../RobotComponentsFactory.js';
 export { Led }
 
 class Led extends RobotComponent{
-    constructor(id, pin = 0, state = 0, visible = true, radius = 10, x = 0, y = 0, offsetLeft = 5, offsetTop = 5, onColor = 'yellow', offColor = 'gray', borderColor = 'black', htmlClasses = 'sim_canvas led_canvas'){
-        super(htmlClasses);
+    constructor(eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses){
+        super(eventBus, htmlClasses);
 
         this._id = id;
         this._type = TypesEnum.LED;

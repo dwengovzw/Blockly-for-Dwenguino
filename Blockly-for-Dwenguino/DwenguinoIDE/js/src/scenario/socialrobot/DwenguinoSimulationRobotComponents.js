@@ -1,9 +1,11 @@
 import { EVENT_NAMES } from "../../logging/EventNames.js"
+import { EventsEnum } from "./ScenarioEvent.js";
 
 export default class DwenguinoSimulationRobotComponents {
   socialRobotScenario = null;
-  constructor(socialRobotScenario){
+  constructor(socialRobotScenario, eventBus){
     this.socialRobotScenario = socialRobotScenario;
+    this._eventBus = eventBus;
     this.setupInteract();
     // this is used later in the resizing and gesture demos
     window.dragMoveListener = this.dragMoveListener;
@@ -38,7 +40,7 @@ export default class DwenguinoSimulationRobotComponents {
           (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
                     Math.pow(event.pageY - event.y0, 2) | 0))
             .toFixed(2) + 'px')
-        self.socialRobotScenario.saveRobot();
+        self._eventBus.dispatchEvent(EventsEnum.SAVE);
         self.socialRobotScenario.logger.recordEvent(self.socialRobotScenario.logger.createEvent(EVENT_NAMES.moveRobotComponent, event.target.id));
       }
     })

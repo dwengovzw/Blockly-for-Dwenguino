@@ -1,11 +1,12 @@
 import { RobotComponent } from './RobotComponent.js'
-import { TypesEnum } from '../RobotComponentsFactory.js';
+import { TypesEnum } from '../RobotComponentsFactory.js'
+import { EventsEnum } from '../ScenarioEvent.js'
 
 export { Sonar }
 
 class Sonar extends RobotComponent{
-    constructor(id, echoPin = 0, triggerPin = 0, state = 100, visible = true, width = 100, height = 58, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas sonar_canvas'){
-        super(htmlClasses);
+    constructor(eventBus, id, echoPin = 0, triggerPin = 0, state = 100, visible = true, width = 100, height = 58, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas sonar_canvas'){
+        super(eventBus, htmlClasses);
 
         this._id = id;
         this._type = TypesEnum.SONAR;
@@ -63,6 +64,7 @@ class Sonar extends RobotComponent{
         // this.inputState.sonarDistance = value;
         this.setState(value);
         this._stateUpdated = true;
+        this._eventBus.dispatchEvent(EventsEnum.SAVE);
     }
 
     removeHtml(){
