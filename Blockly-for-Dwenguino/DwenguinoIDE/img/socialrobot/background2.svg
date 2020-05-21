@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 214.47 300.32"
+   version="1.1"
+   id="svg54"
+   sodipodi:docname="background2.svg"
+   width="214.47"
+   height="300.32001"
+   inkscape:version="0.92.4 (unknown)">
+  <metadata
+     id="metadata58">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>M005_Robots</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="756"
+     inkscape:window-height="480"
+     id="namedview56"
+     showgrid="false"
+     inkscape:zoom="0.72100695"
+     inkscape:cx="107.235"
+     inkscape:cy="163.66"
+     inkscape:window-x="566"
+     inkscape:window-y="290"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg54" />
+  <defs
+     id="defs7">
+    <style
+       id="style2">.cls-1{fill:none;}.cls-2{fill:#ededed;}.cls-3,.cls-5{fill:#0b75bb;}.cls-3{opacity:0.3;}.cls-4{fill:#096f80;}.cls-6{fill:#88bd28;}.cls-7{clip-path:url(#clip-path);}.cls-8{fill:#f6f6f6;}.cls-9{fill:#0e6942;}.cls-10{fill:#c6c6c6;}.cls-11{fill:#f28e78;}</style>
+    <clipPath
+       id="clip-path">
+      <path
+         class="cls-1"
+         d="m 110.58,201.84 c -35.41,0 -64.11,-9.21 -64.11,-20.57 V 243 c 0,11.36 28.7,20.57 64.11,20.57 35.41,0 64.12,-9.21 64.12,-20.57 v -61.73 c 0,11.36 -28.7,20.57 -64.12,20.57 z"
+         id="path4"
+         inkscape:connector-curvature="0"
+         style="fill:none" />
+    </clipPath>
+  </defs>
+  <title
+     id="title9">M005_Robots</title>
+  <g
+     id="fles"
+     transform="translate(0,-14.99992)">
+    <path
+       class="cls-2"
+       d="M 144.88,72 A 22.27,22.27 0 0 1 134.34,53.25 v -9.1 H 86.82 v 9.1 A 22.26,22.26 0 0 1 76.29,72 64,64 0 0 0 46.47,126.16 V 292.6 c 0,3.35 2.51,6.51 6.93,9.3 v -0.13 a 2.72,2.72 0 0 1 2.72,-2.72 v 0 a 2.72,2.72 0 0 1 2.73,2.72 v 1.16 a 2.68,2.68 0 0 0 1.67,2.51 c 11.74,4.71 29.8,7.73 50.06,7.73 35.41,0 64.12,-9.21 64.12,-20.57 V 126.15 A 64,64 0 0 0 144.88,72 Z"
+       id="path11"
+       inkscape:connector-curvature="0"
+       style="fill:#ededed" />
+    <path
+       class="cls-3"
+       d="M 144.88,72 A 22.27,22.27 0 0 1 134.34,53.25 v -9.1 H 86.82 v 9.1 A 22.26,22.26 0 0 1 76.29,72 64,64 0 0 0 46.47,126.16 V 292.6 c 0,3.35 2.51,6.51 6.93,9.3 v -0.13 a 2.72,2.72 0 0 1 2.72,-2.72 v 0 a 2.72,2.72 0 0 1 2.73,2.72 v 1.16 a 2.68,2.68 0 0 0 1.67,2.51 c 11.74,4.71 29.8,7.73 50.06,7.73 35.41,0 64.12,-9.21 64.12,-20.57 V 126.15 A 64,64 0 0 0 144.88,72 Z"
+       id="path13"
+       inkscape:connector-curvature="0"
+       style="opacity:0.3;fill:#0b75bb" />
+    <path
+       class="cls-4"
+       d="m 76.23,28.13 v 23.56 c 0,6.08 15.38,11 34.35,11 18.97,0 34.36,-4.94 34.36,-11 V 28.13 Z"
+       id="path15"
+       inkscape:connector-curvature="0"
+       style="fill:#096f80" />
+    <ellipse
+       class="cls-5"
+       cx="110.58"
+       cy="28.129999"
+       rx="34.349998"
+       ry="11.02"
+       id="ellipse17"
+       style="fill:#0b75bb" />
+    <path
+       class="cls-6"
+       d="m 110.58,201.84 c -35.41,0 -64.11,-9.21 -64.11,-20.57 V 243 c 0,11.36 28.7,20.57 64.11,20.57 35.41,0 64.12,-9.21 64.12,-20.57 v -61.73 c 0,11.36 -28.7,20.57 -64.12,20.57 z"
+       id="path19"
+       inkscape:connector-curvature="0"
+       style="fill:#88bd28" />
+    <g
+       class="cls-7"
+       clip-path="url(#clip-path)"
+       id="g45">
+      <rect
+         class="cls-8"
+         x="142.13"
+         y="226.21001"
+         width="36.259998"
+         height="41.189999"
+         id="rect21"
+         style="fill:#f6f6f6" />
+      <path
+         class="cls-9"
+         d="m 157.19,234.68 a 11,11 0 1 0 18.07,-8.47 h -14.1 a 11,11 0 0 0 -3.97,8.47 z"
+         id="path23"
+         inkscape:connector-curvature="0"
+         style="fill:#0e6942" />
+      <ellipse
+         class="cls-10"
+         cx="131.11"
+         cy="218.59"
+         rx="2.8299999"
+         ry="4.3000002"
+         transform="rotate(-45,131.10485,218.59459)"
+         id="ellipse25"
+         style="fill:#c6c6c6" />
+      <circle
+         class="cls-8"
+         cx="145.39999"
+         cy="231.53"
+         r="17.74"
+         id="circle27"
+         style="fill:#f6f6f6" />
+      <circle
+         class="cls-11"
+         cx="134.94"
+         cy="242.50999"
+         r="8.04"
+         id="circle29"
+         style="fill:#f28e78" />
+      <circle
+         class="cls-9"
+         cx="130.67999"
+         cy="240.81"
+         r="1.28"
+         id="circle31"
+         style="fill:#0e6942" />
+      <circle
+         class="cls-9"
+         cx="134.47"
+         cy="240.81"
+         r="1.28"
+         id="circle33"
+         style="fill:#0e6942" />
+      <circle
+         class="cls-9"
+         cx="147.02"
+         cy="230.42999"
+         r="6.6799998"
+         id="circle35"
+         style="fill:#0e6942" />
+      <ellipse
+         class="cls-9"
+         cx="157.34"
+         cy="218.17"
+         rx="4.3000002"
+         ry="2.8299999"
+         transform="rotate(-45,157.34682,218.16481)"
+         id="ellipse37"
+         style="fill:#0e6942" />
+      <circle
+         class="cls-5"
+         cx="144.67999"
+         cy="230.98"
+         r="1.28"
+         id="circle39"
+         style="fill:#0b75bb" />
+      <circle
+         class="cls-5"
+         cx="133.19"
+         cy="230.98"
+         r="1.28"
+         id="circle41"
+         style="fill:#0b75bb" />
+      <path
+         class="cls-8"
+         d="m 43.66,184.09 c 10.47,15.06 21.7,21.7 26.3,40.85 4.6,19.15 3.83,29.87 -1,26.55 -4.83,-3.32 -2.56,-7.4 -3.32,-9.45 -0.76,-2.05 -5.62,-1.53 -4.34,1.79 1.28,3.32 4.59,5.54 6.12,8.26 1.53,2.72 -5.32,4.59 -8,0.42 -2.68,-4.17 -3.66,-6 -5.53,-4.6 -1.72,1.34 -3.06,5.11 2.3,8.18 5.36,3.07 30.32,10.31 35.74,8.68 5.42,-1.63 10.81,-4.15 6.9,-5.88 -3.32,-1.46 -7.86,5.6 -7.34,1.47 0.13,-1 2.42,-1.36 3.83,-3.06 2.12,-2.56 -1.6,-9.39 -3.39,-5.81 -1.79,3.58 -2.93,7.28 -4.48,6.51 -1.55,-0.77 0.12,-14.43 -4,-30 C 79.33,212.43 67.4,197.36 56.94,187.4 46.48,177.44 43.66,184.09 43.66,184.09 Z"
+         id="path43"
+         inkscape:connector-curvature="0"
+         style="fill:#f6f6f6" />
+    </g>
+    <path
+       class="cls-8"
+       d="m 113.47,248.91 c 4.61,5.29 -14.45,5.05 -13.12,2.77 1.33,-2.28 9.87,-6.5 13.12,-2.77 z"
+       id="path47"
+       inkscape:connector-curvature="0"
+       style="fill:#f6f6f6" />
+    <path
+       class="cls-8"
+       d="m 106,239.16 c 4.24,0.08 -3.58,8.51 -4.07,7 -0.49,-1.51 1.07,-7.06 4.07,-7 z"
+       id="path49"
+       inkscape:connector-curvature="0"
+       style="fill:#f6f6f6" />
+    <path
+       class="cls-8"
+       d="m 63.86,231.09 c 2.55,-3.38 4.78,7.9 3.26,7.4 -1.52,-0.5 -5.06,-5.02 -3.26,-7.4 z"
+       id="path51"
+       inkscape:connector-curvature="0"
+       style="fill:#f6f6f6" />
+  </g>
+</svg>

@@ -106,6 +106,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     $('#sim_container').append(scenarioOptions);
     scenarioOptions.append("<div id='load_scenario' class='glyphicon glyphicon-cloud-upload' alt='Load'></div>");
     scenarioOptions.append("<div id='save_scenario' class='glyphicon glyphicon-cloud-download' alt='Save'></div>");
+    scenarioOptions.append("<div id='switch_background' class='glyphicon glyphicon-refresh'></div>")
 
     $("#load_scenario").click(function () {
       self.scenarioUtils.loadScenario();
@@ -116,6 +117,10 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
       self.scenarioUtils.saveScenario(data);
     });
 
+    let switchBackground = document.getElementById('switch_background');
+    switchBackground.addEventListener('click', () => {
+      this.switchBackground();
+    });
   }
 
   initSimulation(containerIdSelector) {
@@ -125,8 +130,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     let container = $(`#${containerIdSelector}`);
 
     // Make the bottom pane larger
-    $('#db_simulator_top_pane').css('height', '35%');
-    $('#db_simulator_bottom_pane').css('height', '65%');
+    $('#db_simulator_top_pane').css('height', '25%');
+    $('#db_simulator_bottom_pane').css('height', '75%');
 
     // Load the simulation container
     var simulationContainer = $("<div>").attr("id", "sim_container").attr("style", "margin: auto");
@@ -139,14 +144,6 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     });
 
     container.append(simulationContainer);
-
-    // TODO implemnt change of background image
-    // var backgroundCanvasId = 'sim_background';
-    // this.robot[backgroundCanvasId] = {};
-    // this.robot[backgroundCanvasId].offset = {'left': 0, 'top': 0};
-    // this.robot[backgroundCanvasId].image = new Image();
-    // this.robot[backgroundCanvasId].image.src = this.robot.imgRobot;
-
   }
 
 
@@ -195,15 +192,40 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   setBackground() {
     console.log('set background');
-    $('#sim_container').append("<div id='sim_background' class='sim_element'></div>");
-    $('#sim_background').append("<div id='sim_background_img'></div>");
+    $('#sim_container').append("<div id='sim_background' class='sim_element row'></div>");
+    $('#sim_background').append("<div id='sim_background_img' class='background1'></div>");
+    this._background = 1;
     var sensorOptionswidth = $('#sensor_options').width();
     var parentWidth = $('#sim_background').width() - sensorOptionswidth;
     var width = $('#sim_background_img').width();
     var offSet = (parentWidth - width) / 2;
     $('#sim_background_img').css('top', 0 + 'px');
     $('#sim_background_img').css('margin-left', offSet + 'px');
+
   };
+
+  switchBackground() {
+    if (this._background < 3){
+      this._background += 1;
+    } else {
+      this._background = 1;
+    }
+
+    document.getElementById('sim_background_img').className = "";
+    document.getElementById('sim_background_img').className = 'background' + this._background;
+    this._eventBus.dispatchEvent(EventsEnum.SAVE);
+  }
+
+  backgroundToXml() {
+    let data = '';
+        
+    data = data.concat("<Item ");
+    data = data.concat(" Type='", "background", "'");
+    data = data.concat(" Class='", document.getElementById('sim_background_img').className, "'");
+    data = data.concat(" Id='", this._background, "'");
+    data = data.concat("></Item>");
+    return data;
+  }
 
   /**
    * Resets the robot components of the simulation container to their initial state. This function doesn't
@@ -262,6 +284,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   robotToXml(){
     let data = '<xml xmlns="http://www.w3.org/1999/xhtml">';
+    data = data.concat(this.backgroundToXml());
+
     let robot = this.robotComponentsFactory.getRobot();
 
     for(var i = 0; i < robot.length; i++){
@@ -282,8 +306,13 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     for (var i = 0; i < childCount; i++) {
       var xmlChild = data.childNodes[i];
       let type = xmlChild.getAttribute('Type');
-      this.robotComponentsFactory.addRobotComponentFromXml(xmlChild);
-      this.simulationComponentsMenu.changeValue(type, 1);
+      if(type !== 'background'){
+        this.robotComponentsFactory.addRobotComponentFromXml(xmlChild);
+        this.simulationComponentsMenu.changeValue(type, 1);
+      } else {
+        this._background = parseInt(xmlChild.getAttribute('Id'));
+        document.getElementById('sim_background_img').className = xmlChild.getAttribute('Class');
+      }
     }
   }
 
