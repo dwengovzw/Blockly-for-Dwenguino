@@ -55,6 +55,13 @@ class Sonar extends RobotComponent{
               self.changeSonarDistance(this.value, id); // TODO
             };
         }
+
+        let simSonar = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simSonar.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog('Sonar options');
+            this.showDialog();
+        });
     }
 
     changeSonarDistance(value, id) {
@@ -116,6 +123,97 @@ class Sonar extends RobotComponent{
         } else {
             $('#sim_sonar' + this.getId()).css('visibility', 'hidden');
         }
+    }
+
+    showDialog(){
+        $("#componentOptionsModal").modal('show');
+    }
+    
+    removeDialog(){
+        $('div').remove('#componentOptionsModal');
+        $('.modal-backdrop').remove();
+    }
+
+    createComponentOptionsModalDialog(headerTitle){
+        this.removeDialog();
+    
+        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
+        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
+    
+        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
+    
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
+    
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+
+        this.createPinOptionsInModalDialog();
+    }
+
+    createPinOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsTriggerPin" class="ui-widget row mb-4"></div>');
+        $('#componentOptionsTriggerPin').append('<div class="col-md-2">'+'Trigger pin'+'</div>');
+        $('#componentOptionsTriggerPin').append('<div id="triggerPin" class="col-md-10"></div>');
+        $('#componentOptionsModalBody').append('<div id="componentOptionsEchoPin" class="ui-widget row mb-4"></div>');
+        $('#componentOptionsEchoPin').append('<div class="col-md-2">'+'Echo pin'+'</div>');
+        $('#componentOptionsEchoPin').append('<div id="echoPin" class="col-md-10"></div>');
+    
+        let pins = this.getAllPossiblePins();
+        for(let pin = 0; pin < pins.length; pin++){
+            $('#triggerPin').append('<button type="button" id=triggerPin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 triggerPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#echoPin').append('<button type="button" id=echoPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 echoPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+        }
+
+        for(let p = 0; p < pins.length; p++){
+            if(this.getTriggerPin() == pins[p]){
+                $('#triggerPin' + pins[p]).addClass('option_button_selected');
+                $('#echoPin' + pins[p]).addClass('option_button_disabled');
+                $('#echoPin' + pins[p]).prop('disabled', true);
+            }
+
+            if(this.getEchoPin() == pins[p]){
+                $('#echoPin' + pins[p]).addClass('option_button_selected');
+                $('#triggerPin' + pins[p]).addClass('option_button_disabled');
+                $('#triggerPin' + pins[p]).prop('disabled', true);
+            }
+
+            let triggerPinButton = document.getElementById('triggerPin'+pins[p]);
+            let echoPinButton = document.getElementById('echoPin' + pins[p]);
+
+            triggerPinButton.addEventListener('click', () => { 
+                let newPin = triggerPinButton.name;
+                this.setTriggerPin(newPin);
+                $('.triggerPinButton').removeClass('option_button_selected');
+                triggerPinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+
+                $('.echoPinButton').removeClass('option_button_disabled');
+                $('.echoPinButton').prop('disabled', false);
+                $('#echoPin' + newPin).addClass('option_button_disabled');
+                $('#echoPin' + newPin).prop('disabled', true);
+            });
+
+            echoPinButton.addEventListener('click', () => { 
+                let newPin = echoPinButton.name;
+                this.setEchoPin(newPin);
+                $('.echoPinButton').removeClass('option_button_selected');
+                echoPinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+
+                $('.triggerPinButton').removeClass('option_button_disabled');
+                $('.triggerPinButton').prop('disabled', false);
+                $('#triggerPin' + newPin).addClass('option_button_disabled');
+                $('#triggerPin' + newPin).prop('disabled', true);
+            });
+        
+        }
+
+    }
+
+    getAllPossiblePins(){
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
     }
 
     getId(){

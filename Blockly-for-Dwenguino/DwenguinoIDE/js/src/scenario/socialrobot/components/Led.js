@@ -1,7 +1,16 @@
 import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
+import { EventsEnum } from './../ScenarioEvent.js'
 
-export { Led }
+export { Led, ColorsEnum }
+
+const ColorsEnum = {
+    red: 'red', 
+    yellow: 'yellow', 
+    blue: 'blue',
+    green: '#72f542'
+  };
+Object.freeze(ColorsEnum);
 
 class Led extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses){
@@ -33,6 +42,13 @@ class Led extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+
+        let simLed = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simLed.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog('Led options');
+            this.showDialog();
+        });
     }
 
     removeHtml(){
@@ -83,6 +99,90 @@ class Led extends RobotComponent{
             $('#sim_led' + this.getId()).css('visibility', 'visible');
         } else {
             $('#sim_led' + this.getId()).css('visibility', 'hidden');
+        }
+    }
+
+    showDialog(){
+        $("#componentOptionsModal").modal('show');
+    }
+    
+    removeDialog(){
+        $('div').remove('#componentOptionsModal');
+        $('.modal-backdrop').remove();
+    }
+
+    createComponentOptionsModalDialog(headerTitle){
+        this.removeDialog();
+    
+        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
+        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
+    
+        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
+    
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
+    
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+
+        this.createPinOptionsInModalDialog();
+        this.createColorOptionsDialog();
+
+    }
+
+    createPinOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
+        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
+        $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
+
+        let pins = this.getAllPossiblePins();
+        for(let pin = 0; pin < pins.length; pin++){
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            if(this.getPin() == pins[pin]){
+                $('#pin' + pins[pin]).addClass('option_button_selected');
+            }
+
+            let pinButton = document.getElementById('pin'+pins[pin]);
+
+            pinButton.addEventListener('click', () => { 
+                let newPin = pinButton.name;
+                this.setPin(newPin);
+                $('.pinButton').removeClass('option_button_selected');
+                pinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+            });
+        }
+
+    }
+
+    getAllPossiblePins(){
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+    }
+
+    createColorOptionsDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsColor" class="ui-widget row mb-4">');
+        $('#componentOptionsColor').append('<div class="col-md-2">'+'Color'+'</div>');
+        $('#componentOptionsColor').append('<div id="color" class="col-md-10"></div>');
+
+        for (const [type, t] of Object.entries(ColorsEnum)) {
+            console.log(t);
+            $('#color').append('<button type="button" id=color'+t+' name='+type+' class="col-md-1 ml-2 mb-2 colorButton"></buttons>');
+            let colorButton = document.getElementById('color'+t);
+            colorButton.classList.add(type);
+            if(this.getOnColor() == type){
+                colorButton.classList.add('colorButton_selected');
+            }
+
+            colorButton.addEventListener('click', () => {
+                this._eventBus.dispatchEvent(EventsEnum.CLEARCANVAS, this.getCanvasId());
+                let newColor = colorButton.getAttribute("name");
+                this.setOnColor(newColor);
+                $('.colorButton').removeClass('colorButton_selected');
+                colorButton.classList.add('colorButton_selected');
+                this._eventBus.dispatchEvent(EventsEnum.INITIALIZECANVAS, this);
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+            });
         }
     }
 

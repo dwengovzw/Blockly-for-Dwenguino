@@ -1043,6 +1043,31 @@ span.grippy::after {
     background-color: #B5C986;
 }
 
+.colorButton {
+    height: 25px;
+    border-width: 1px;
+}
+
+.colorButton_selected {
+    border-width: 2px;
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: #72f542;
+}
+
 .modal-content {
     border-radius: 0px!important;
 }
