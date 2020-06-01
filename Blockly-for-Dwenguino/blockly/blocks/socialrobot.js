@@ -30,6 +30,50 @@ var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
 
 Blockly.Blocks.socialrobot.HUE = 25;
 
+var socialrobot_servo_json = {
+  "id": "socialrobot_servo",
+  "message0": MSG.socialrobotServoBlock,
+  "args0": [
+    { "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/servo.png",
+      "width": 100,
+      "height": 100,
+      "alt": "*"
+    },
+    { "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "channel",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "angle",
+      "check": "Number"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "Put arms down",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_servo'] = {
+  init: function() {
+    this.jsonInit(socialrobot_servo_json);
+  }
+};
+
 var socialrobot_arms_down_json = {
   "id": "socialrobot_arms_down",
   "message0": MSG.socialRobotArmsDownBlock,

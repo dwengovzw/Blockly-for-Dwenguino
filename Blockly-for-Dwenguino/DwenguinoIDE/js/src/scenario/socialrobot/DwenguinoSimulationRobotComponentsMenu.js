@@ -1,5 +1,7 @@
 
-import { TypesEnum } from "./RobotComponentsFactory.js"
+import { TypesEnum} from "./RobotComponentsFactory.js"
+import { EventsEnum } from "./ScenarioEvent.js"
+import { EventBus} from "./EventBus.js"
 
 export default class DwenguinoSimulationRobotComponentsMenu {
   maxNumberOfServos = 5;
@@ -11,7 +13,8 @@ export default class DwenguinoSimulationRobotComponentsMenu {
   maxNumberOfDecorations = 10;
   socialRobotScenario = {};
   numberOfButtons = 3;
-  constructor(){
+  constructor(eventBus){
+    this._eventBus = eventBus;
   }
 
   /** 
@@ -227,7 +230,7 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     }
 
     // Save robot components when a component is added
-    this.socialRobotScenario.saveRobot();
+    this._eventBus.dispatchEvent(EventsEnum.SAVE);
   }
 
   /*
@@ -262,7 +265,7 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     }
 
     // Save robot components when a component is deleted
-    this.socialRobotScenario.saveRobot();
+    this._eventBus.dispatchEvent(EventsEnum.SAVE);
   }
 
 };

@@ -2,26 +2,20 @@
 
 import FileIOController from "../../FileIoController.js";
 import { EVENT_NAMES } from "../../logging/EventNames.js"
-
-export { StatesEnum, DwenguinoScenarioUtils }
+import { EventsEnum } from "./ScenarioEvent.js";
+import { CostumesEnum } from "./components/Servo.js"
+export { DwenguinoScenarioUtils }
 
 /**
  * The different states robot components can be in. 
  * Not all states are supported for each robot component.
  */
-const StatesEnum = {
-    PLAIN: 'plain', 
-    EYE: 'eye', 
-    MOUTH: 'mouth',
-    RIGHTHAND: 'righthand',
-    LEFTHAND: 'lefthand'
-  };
-Object.freeze(StatesEnum);
 
 class DwenguinoScenarioUtils{
     ioController = null;
-    constructor(scenario){
+    constructor(scenario, eventBus){
         this.scenario = scenario;
+        this._eventBus = eventBus;
         this.ioController = new FileIOController();
     }
 
@@ -36,76 +30,16 @@ class DwenguinoScenarioUtils{
         this.scenario.logger.recordEvent(this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, ""));
     }
 
-    async loadScenario(scenario){
+    async loadScenario(){
         try{
             let xml = await this.ioController.uploadXml();
             this.scenario.xmlToRobot(xml);
-            this.scenario.saveRobot();
+            this._eventBus.dispatchEvent(EventsEnum.SAVE);
 
         }catch(err){
             console.error(err);
         }
     }
-
-    // DwenguinoScenarioUtils.prototype.setBackgroundImage = function(){
-    //     var self = this; 
-    //     if (window.File && window.FileReader && window.FileList && window.Blob) {
-
-    //         // reset form
-    //         $('div').remove('#dropzoneModal');
-
-    //         $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
-    //         $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
-    //         $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
-    //         $('#modalDialog').append('<div class="modal-body">Selecteer een bestand.<input type="file" id="fileInput"><div id="filedrag">of zet ze hier neer</div><pre id="fileDisplayArea"><pre></div>');
-    //         $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
-
-    //         $("#dropzoneModal").modal('show');
-
-    //         var processFile = function(file){
-
-    //             // TODO implement change of background image
-    //         }
-
-    //         var fileInput = document.getElementById('fileInput');
-    //         var fileDisplayArea = document.getElementById('fileDisplayArea');
-
-    //         fileInput.addEventListener('change', function(e) {
-    //             var file = fileInput.files[0];
-    //             processFile(file);
-    //         });
-
-    //         // file drag hover
-    //         var FileDragHover = function(e) {
-    //             e.stopPropagation();
-    //             e.preventDefault();
-    //             e.target.className = (e.type == "dragover" ? "hover" : "");
-    //         };
-
-    //         // file selection
-    //         var FileSelectHandler = function(e) {
-    //             // cancel event and hover styling
-    //             FileDragHover(e);
-    //             // fetch FileList object
-    //             var files = e.target.files || e.dataTransfer.files;
-    //             var file = files[0];
-    //             processFile(file);
-    //         };
-
-    //         var filedrag = document.getElementById("filedrag");
-    //         filedrag.addEventListener("dragover", FileDragHover, false);
-    //         filedrag.addEventListener("dragleave", FileDragHover, false);
-    //         filedrag.addEventListener("drop", FileSelectHandler, false);
-    //         filedrag.style.display = "block";
-
-    //         $("#submit_upload_modal_dialog_button").click(function(){
-    //             self.scenario.loadFromXml();
-    //         });
-
-    //     } else {
-    //         alert('The File APIs are not fully supported in this browser.');
-    //     }
-    // }
 
     textToDom(text){
         var oParser = new DOMParser();
@@ -118,79 +52,6 @@ class DwenguinoScenarioUtils{
         goog.asserts.fail('Blockly.Xml.textToDom did not obtain a valid XML tree.');
         }
         return dom.firstChild;
-    }
-
-    contextMenuBackground(){
-        // var self = this;
-        // $(function(){
-        //     $.contextMenu({
-        //         selector: '#sim_background',
-        //         trigger: 'right', 
-        //         callback: function(itemKey, opt, e) {
-        //             var m = "global: " + itemKey;
-        //             window.console && console.log(m) || alert(m); 
-        //         },
-        //         items: {
-        //             "image": {
-        //                 name: "Change image", 
-        //                 callback: function(itemKey, opt, e) {
-        //                     self.setBackgroundImage();
-        //                 }
-        //             }
-        //         }
-        //     });
-        // });  
-    }
-
-    contextMenuServo(){
-        var self = this;
-        $(function(){
-            $.contextMenu({
-                selector: '.sim_element_servo',
-                trigger: 'right', 
-                callback: function(itemKey, opt, e) {
-                    var m = "global: " + itemKey;
-                    window.console && console.log(m) || alert(m); 
-                },
-                items: {
-                    "plain": {
-                        name: MSG.socialrobot['plain'],
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.PLAIN);
-                        }
-                    },
-                    "eye": {
-                        name: MSG.socialrobot['eye'], 
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.EYE);
-                        }
-                    },
-                    // "mouth": {name: MSG.socialrobot['mouth'],},
-                    "righthand": {
-                        name: MSG.socialrobot['righthand'],
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.RIGHTHAND);
-                        }
-                    },
-                    "lefthand": {
-                        name: MSG.socialrobot['lefthand'],
-                        callback: function(itemKey, opt, e) {
-                            var simServoId = this.attr('id');
-                            var i = simServoId.replace(/\D/g,'');
-                            self.scenario.setServoState(i, StatesEnum.LEFTHAND);
-                        }
-                    }//,
-                    //"sep1": "---------",
-                    //"quit": {name: "Quit"}
-                }
-            });
-        });  
     }
 
     contextMenuLed(){

@@ -154,11 +154,24 @@ export default class SimulationSandbox{
       angle = 0;
     }
 
-    if (angle !== this.boardState.getServoAngle(channel - 1)) {
-        this.boardState.setServoAngle(channel - 1, angle);
+    let pin = channel + 35;
+
+    if (angle !== this.boardState.getServoAngle(channel)) {
+        this.boardState.setServoAngle(channel, angle);
+        this.boardState.setIoPinState(pin, angle); // for completion also save the angle on the corresponding pin
     }
   }
 
+  /**
+   * Sets the (extra) servo on the given pin to a given angle
+   * @param {int} pin 
+   * @param {int} angle 
+   */
+  servoWithPin(pin, angle) {
+    if (angle !== this.boardState.getIoPinState(pin)){
+      this.boardState.setIoPinState(pin, angle);
+    }
+  }
 
 
   /*

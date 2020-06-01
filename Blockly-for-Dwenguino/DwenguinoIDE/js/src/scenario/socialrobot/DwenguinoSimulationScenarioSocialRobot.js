@@ -3,7 +3,10 @@ import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { TypesEnum, RobotComponentsFactory } from "./RobotComponentsFactory.js"
 import DwenguinoSimulationRobotComponents from "./DwenguinoSimulationRobotComponents.js"
-import {DwenguinoScenarioUtils, StatesEnum} from "./DwenguinoScenarioUtils.js"
+import {DwenguinoScenarioUtils} from "./DwenguinoScenarioUtils.js"
+import { EventsEnum } from "./ScenarioEvent.js"
+import {EventBus} from "./EventBus.js"
+import { CostumesEnum } from "./components/Servo.js"
 
 /*
  * This Object is the abstraction of the social robot simulator scenario.
@@ -16,10 +19,14 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
   simulationRobotComponents = null;
   constructor(logger) {
     super(logger);
-    this.simulationRobotComponents = new DwenguinoSimulationRobotComponents(this);
-    this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu();
-    this.clearRobot();
-    //this.initSimulationState();
+
+    // Event listener for saving the robot scenario to local storage
+    this._eventBus = new EventBus();
+    this._eventBus.registerEvent(EventsEnum.SAVE);
+    this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.saveRobot()});
+
+    this.simulationRobotComponents = new DwenguinoSimulationRobotComponents(this, this._eventBus);
+    this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
   }
 
 
@@ -35,17 +42,16 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
     this.renderer = new SimulationCanvasRenderer();
 
-    this.scenarioUtils = new DwenguinoScenarioUtils(this);
+    this.scenarioUtils = new DwenguinoScenarioUtils(this, this._eventBus);
 
-    //Init robot state
-    this.initSocialRobot();
-    this.robotComponentsFactory = new RobotComponentsFactory(this.robot, this.scenarioUtils, this.logger);
+    this.robotComponentsFactory = new RobotComponentsFactory(this.scenarioUtils, this.logger, this._eventBus);
 
-    
+    this._eventBus.registerEvent(EventsEnum.CLEARCANVAS);
+    this._eventBus.addEventListener(EventsEnum.CLEARCANVAS, (canvasId)=>{ this.renderer.clearCanvas(canvasId)});
 
-    this.scenarioUtils.contextMenuBackground();
+    this._eventBus.registerEvent(EventsEnum.INITIALIZECANVAS);
+    this._eventBus.addEventListener(EventsEnum.INITIALIZECANVAS, (component)=>{ this.renderer.initializeCanvas(this.robotComponentsFactory.getRobot(), component)});
 
-    
 
   }
 
@@ -65,23 +71,19 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     let bottom_pane = $("<div>").attr("id", "db_simulator_bottom_pane");
     container.append(top_pane).append(bottom_pane);
 
-    // Load robot components from local storage if they are present
-    //this.checkLocalStorage();
-
     // Setup the components menu
     this.simulationComponentsMenu.setupEnvironment(this);
 
     this.initSimulation(containerIdSelector);
     
 
-    this.renderer.render(this.robot);
+    //this.renderer.render(this.robotComponentFactory.getRobot());
     
-
     var self = this;
     $("#sim_stop").click(function () {
       let timer = setTimeout(() => {
         self.resetSocialRobot();
-        self.renderer.render(self.robot);
+        self.renderer.render(self.robotComponentsFactory.getRobot());
       }, 500);
     });
 
@@ -92,6 +94,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
     this.setSensorOptions();
 
+    // Load robot components from local storage if they are present
     this.loadRobot();
 
   }
@@ -103,6 +106,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     $('#sim_container').append(scenarioOptions);
     scenarioOptions.append("<div id='load_scenario' class='glyphicon glyphicon-cloud-upload' alt='Load'></div>");
     scenarioOptions.append("<div id='save_scenario' class='glyphicon glyphicon-cloud-download' alt='Save'></div>");
+    scenarioOptions.append("<div id='switch_background' class='glyphicon glyphicon-refresh'></div>")
 
     $("#load_scenario").click(function () {
       self.scenarioUtils.loadScenario();
@@ -113,6 +117,10 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
       self.scenarioUtils.saveScenario(data);
     });
 
+    let switchBackground = document.getElementById('switch_background');
+    switchBackground.addEventListener('click', () => {
+      this.switchBackground();
+    });
   }
 
   initSimulation(containerIdSelector) {
@@ -122,8 +130,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     let container = $(`#${containerIdSelector}`);
 
     // Make the bottom pane larger
-    $('#db_simulator_top_pane').css('height', '35%');
-    $('#db_simulator_bottom_pane').css('height', '65%');
+    $('#db_simulator_top_pane').css('height', '25%');
+    $('#db_simulator_bottom_pane').css('height', '75%');
 
     // Load the simulation container
     var simulationContainer = $("<div>").attr("id", "sim_container").attr("style", "margin: auto");
@@ -136,17 +144,6 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     });
 
     container.append(simulationContainer);
-
-    // TODO implemnt change of background image
-    // var backgroundCanvasId = 'sim_background';
-    // this.robot[backgroundCanvasId] = {};
-    // this.robot[backgroundCanvasId].offset = {'left': 0, 'top': 0};
-    // this.robot[backgroundCanvasId].image = new Image();
-    // this.robot[backgroundCanvasId].image.src = this.robot.imgRobot;
-
-    // Reset the simulation state
-   // this.initSimulationState();
-
   }
 
 
@@ -166,53 +163,13 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
   /* @brief updates the simulation state
    * This function updates the simulation state using the supplied board state.
    *
-   * @param boardState The state of the Dwenguino board. It has the following structure:
-   * {
-     lcdContent: new Array(2),
-     buzzer: {
-       osc: null,
-       audiocontext: null,
-       tonePlaying: 0
-     },
-     servoAngles: [0, 0],
-     motorSpeeds: [0, 0],
-     leds: [0,0,0,0,0,0,0,0,0],
-     buttons: [1,1,1,1,1],
-     sonarDistance: 50
-   }
+   * @param boardState The state of the Dwenguino board. 
    * @return The updated Dwenguino board state.
    *
    */
   updateScenarioState(dwenguinoState) {
     super.updateScenarioState(dwenguinoState);
-
-    for (var i = 0; i < dwenguinoState.leds.length; i++) {
-      var ledCanvasId = 'sim_led_canvas' + (i + 1);
-      if (this.robot[ledCanvasId] !== undefined) {
-        this.robot[ledCanvasId].state = dwenguinoState.leds[i];
-      }
-    }
-
-    for (var i = 0; i < dwenguinoState.servoAngles.length; i++) {
-      var servoCanvasId = 'sim_servo_canvas' + (i + 1);
-      if (this.robot[servoCanvasId] !== undefined) {
-        if (this.robot[servoCanvasId].angle != dwenguinoState.servoAngles[i]) {
-          this.robot[servoCanvasId].prevAngle = this.robot[servoCanvasId].angle;
-          this.robot[servoCanvasId].angle = dwenguinoState.servoAngles[i];
-        }
-      }
-    }
-
-    
-    this.robot.lcdstate[0] = dwenguinoState.getLcdContent(0);
-    this.robot.lcdstate[1] = dwenguinoState.getLcdContent(1);
-
-    // Also update the input state based on the current events
-    dwenguinoState.buttons = this.robotComponentsFactory.getInputState().buttons;
-    dwenguinoState.sonarDistance = this.robotComponentsFactory.getInputState().sonarDistance;
-    //!!! for now we assume the pir sensor is connected to io pin 
-    dwenguinoState.ioPins[0] = this.robotComponentsFactory.getInputState().pir;
-
+    this.robotComponentsFactory.updateScenarioState(dwenguinoState);
   };
 
   /* @brief updates the simulation display
@@ -223,31 +180,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   updateScenarioDisplay(dwenguinoState) {
     super.updateScenarioDisplay(dwenguinoState);
-    this.renderer.render(this.robot);
-  };
-
-  /* @brief Initializes the social robot state.
-   * 
-   */
-  initSocialRobot(containerIdSelector) {
-    this.robot = {
-      numberOf: {},
-      imgServo: './DwenguinoIDE/img/socialrobot/servo_movement.png',
-      imgPir: './DwenguinoIDE/img/socialrobot/pir.png',
-      imgPirOn: './DwenguinoIDE/img/socialrobot/pir_on.png',
-      imgSonar: './DwenguinoIDE/img/board/sonar.png',
-      imgRobot: 'url("./DwenguinoIDE/img/socialrobot/robot1.png")',
-      imgR: './DwenguinoIDE/img/socialrobot/robot1.png',
-      imgEye: './img/socialrobot/eye.svg',
-      imgRightHand: './DwenguinoIDE/img/socialrobot/righthand.png',
-      imgLeftHand: './DwenguinoIDE/img/socialrobot/lefthand.png'
-    };
-
-    this.robot.lcdstate = new Array(2);
-
-    for (const [type, t] of Object.entries(TypesEnum)) {
-      this.robot.numberOf[t] = 0;
-    }
+    this.renderer.render(this.robotComponentsFactory.getRobot());
   };
 
   setSensorOptions() {
@@ -259,45 +192,47 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   setBackground() {
     console.log('set background');
-    $('#sim_container').append("<div id='sim_background' class='sim_element'></div>");
-    $('#sim_background').append("<div id='sim_background_img'></div>");
+    $('#sim_container').append("<div id='sim_background' class='sim_element row'></div>");
+    $('#sim_background').append("<div id='sim_background_img' class='background1'></div>");
+    this._background = 1;
     var sensorOptionswidth = $('#sensor_options').width();
     var parentWidth = $('#sim_background').width() - sensorOptionswidth;
     var width = $('#sim_background_img').width();
     var offSet = (parentWidth - width) / 2;
     $('#sim_background_img').css('top', 0 + 'px');
     $('#sim_background_img').css('margin-left', offSet + 'px');
+
   };
+
+  switchBackground() {
+    if (this._background < 3){
+      this._background += 1;
+    } else {
+      this._background = 1;
+    }
+
+    document.getElementById('sim_background_img').className = "";
+    document.getElementById('sim_background_img').className = 'background' + this._background;
+    this._eventBus.dispatchEvent(EventsEnum.SAVE);
+  }
+
+  backgroundToXml() {
+    let data = '';
+        
+    data = data.concat("<Item ");
+    data = data.concat(" Type='", "background", "'");
+    data = data.concat(" Class='", document.getElementById('sim_background_img').className, "'");
+    data = data.concat(" Id='", this._background, "'");
+    data = data.concat("></Item>");
+    return data;
+  }
 
   /**
    * Resets the robot components of the simulation container to their initial state. This function doesn't
    * remove the components from the container or move them around, but merely puts them in their initial off state.
    */
   resetSocialRobot(containerIdSelector) {
-    for (var i = 1; i <= this.robot.numberOf[TypesEnum.SERVO]; i++) {
-      var servoCanvasId = 'sim_servo_canvas' + i;
-      this.robot[servoCanvasId].x = 0;
-      this.robot[servoCanvasId].y = 30;
-      this.robot[servoCanvasId].angle = 0;
-      this.robot[servoCanvasId].prevAngle = 0;
-    }
-
-    for (var i = 1; i <= this.robot.numberOf[TypesEnum.LED]; i++) {
-      var ledCanvasId = 'sim_led_canvas' + i;
-      this.robot[ledCanvasId].x = 0;
-      this.robot[ledCanvasId].y = 0;
-      this.robot[ledCanvasId].state = 0;
-    }
-
-    for (var i = 1; i <= this.robot.numberOf[TypesEnum.PIR]; i++) {
-      var pirCanvasId = 'sim_pir_canvas' + i;
-      this.robot[pirCanvasId].state = 0;
-    }
-
-    // Reset of the board is handled by the simulation runner.
-    /*if (this.robot.numberOf[TypesEnum.LCD] != 0) {
-      DwenguinoSimulation.clearLcd();
-    }*/
+    this.robotComponentsFactory.resetSocialRobot();
   };
 
   /**
@@ -312,108 +247,17 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   removeRobotComponent(type) {
     this.robotComponentsFactory.removeRobotComponent(type);
-    this.renderer.render(this.robot);
+    this.renderer.render(this.robotComponentsFactory.getRobot());
   };
-
-  /**
-   * Change the object distance of the sonar sensor in the simulation container
-   */
-  changeSonarDistance(value, id) {
-    var sliderValue = 'slider' + id + '_value';
-    document.getElementById(sliderValue).innerHTML = value + ' cm';
-    DwenguinoSimulation.board.sonarDistance = value;
-  };
-
-  /**
-   * Returns the led id of the Dwenguino board based on the id of the canvas.
-   */
-  getLedId(i) {
-    var id = 0;
-    if (i < 9) {
-      id = i - 1;
-    } else {
-      id = 13;
-    }
-    return id;
-  }
 
   /**
    * Changes the color of led canvas i to the given color.
    */
   setLedColor(i, color) {
-    var ledCanvasId = 'sim_led_canvas' + i;
-    this.robot[ledCanvasId].onColor = color;
-  }
-
-  /**
-   * Change the state of ith servo canvas to the specified state.
-   */
-  setServoState(i, state) {
-    var servoCanvasId = 'sim_servo_canvas' + i;
-    this.robot[servoCanvasId].state = state;
-
-    switch (state) {
-      case StatesEnum.PLAIN:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = this.robot.imgServo;
-        this.robot[servoCanvasId].width = 100;
-        this.robot[servoCanvasId].height = 50;
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
-      case StatesEnum.EYE:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = '';
-        this.robot[servoCanvasId].width = 35;
-        this.robot[servoCanvasId].height = 35;
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
-      case StatesEnum.RIGHTHAND:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = this.robot.imgRightHand;
-        this.robot[servoCanvasId].width = 64;
-        this.robot[servoCanvasId].height = 149;
-        document.getElementById(servoCanvasId).classList.add('hand_canvas');
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
-      case StatesEnum.LEFTHAND:
-        this.renderer.clearCanvas(servoCanvasId);
-        document.getElementById(servoCanvasId).classList.remove('hand_canvas');
-        this.robot[servoCanvasId].image.src = this.robot.imgLeftHand;
-        this.robot[servoCanvasId].width = 64;
-        this.robot[servoCanvasId].height = 149;
-        document.getElementById(servoCanvasId).classList.add('hand_canvas');
-        this.renderer.initializeCanvas(servoCanvasId, this.robot);
-        break;
+    let led = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.LED, i);
+    if(led !== undefined){
+      led.setOnColor(color);
     }
-  }
-
-  /**********************
-   *  LOCAL STORAGE     *
-   **********************/
-
-  /**
-   * Periodically saves the current robot components to the local storage,
-   * so that when the page gets refreshed they can be reloaded.
-   */
-  saveRobotComponents() {
-    
-
-      try {
-
-        // Set the interval and autosave every second
-        //setInterval(() => this.saveRobotComponents(), 1000);
-
-      } catch (e) {
-
-        if (e == QUOTA_EXCEEDED_ERR) {
-          alert('Quota exceeded!');
-        }
-      }
-
-    
   }
 
   /*********************
@@ -440,42 +284,12 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    */
   robotToXml(){
     let data = '<xml xmlns="http://www.w3.org/1999/xhtml">';
-    for (const [type, t] of Object.entries(TypesEnum)) {
-      for (var i = 1; i <= this.robot.numberOf[t]; i++) {
-        data = data.concat("<Item ");
-        data = data.concat(" Type='", t, "'");
-        let simId = '#sim_' + t + i;
-        data = data.concat(" Id='", simId, "'");
-        let canvasId = 'sim_' + t + '_canvas' + i;
-        data = data.concat(" CanvasId='", canvasId, "'");
-        let leftOffset = 0;
-        if ($(simId).attr('data-x')) {
-          leftOffset = parseFloat(this.robot[canvasId].offset['left']) + parseFloat($(simId).attr('data-x'));
-        } else {
-          leftOffset = parseFloat(this.robot[canvasId].offset['left']);
-        }
+    data = data.concat(this.backgroundToXml());
 
-        let topOffset = 0;
-        if ($(simId).attr('data-y')) {
-          topOffset = parseFloat(this.robot[canvasId].offset['top']) + parseFloat($(simId).attr('data-y'));
-        } else {
-          topOffset = parseFloat(this.robot[canvasId].offset['top']);
-        }
+    let robot = this.robotComponentsFactory.getRobot();
 
-        data = data.concat(" OffsetLeft='", leftOffset, "'");
-        data = data.concat(" OffsetTop='", topOffset, "'");
-
-        if (t === TypesEnum.LED) {
-          data = data.concat(" OnColor='", this.robot[canvasId].onColor, "'");
-        } else if (t === TypesEnum.SERVO) {
-          data = data.concat(" State='", this.robot[canvasId].state, "'");
-          data = data.concat(" Width='", this.robot[canvasId].width, "'");
-          data = data.concat(" Height='", this.robot[canvasId].height, "'");
-          data = data.concat(" Image='", this.robot[canvasId].image.src, "'");
-          data = data.concat(" Classes='", document.getElementById(canvasId).className, "'");
-        } 
-        data = data.concat('></Item>');
-      }
+    for(var i = 0; i < robot.length; i++){
+      data = data.concat(robot[i].toXml());
     }
     data = data.concat('</xml>');
     return data;
@@ -491,36 +305,20 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     var childCount = data.childNodes.length;
     for (var i = 0; i < childCount; i++) {
       var xmlChild = data.childNodes[i];
-      var type = xmlChild.getAttribute('Type');
-      var offsetLeft = parseFloat(xmlChild.getAttribute('OffsetLeft'));
-      var offsetTop = parseFloat(xmlChild.getAttribute('OffsetTop'));
-
-      switch (type) {
-        case TypesEnum.SERVO:
-          var width = parseFloat(xmlChild.getAttribute('Width'));
-          var height = parseFloat(xmlChild.getAttribute('Height'));
-          var image = xmlChild.getAttribute('Image');
-          var state = xmlChild.getAttribute('State');
-          var classes = xmlChild.getAttribute('Classes');
-          this.robotComponentsFactory.addServo(true, offsetLeft, offsetTop, state, width, height, image, classes);
-          break;
-        case TypesEnum.LED:
-          var onColor = xmlChild.getAttribute('OnColor');
-          this.robotComponentsFactory.addLed(true, offsetLeft, offsetTop, onColor);
-          break;
-        case TypesEnum.PIR:
-          this.robotComponentsFactory.addPir(true, offsetLeft, offsetTop);
-          break;
-        case TypesEnum.SONAR:
-          this.robotComponentsFactory.addSonar(true, offsetLeft, offsetTop);
-          break;
-        case TypesEnum.LCD:
-          this.robotComponentsFactory.addLcd(true, offsetLeft, offsetTop);
-          break;
+      let type = xmlChild.getAttribute('Type');
+      if(type !== 'background'){
+        this.robotComponentsFactory.addRobotComponentFromXml(xmlChild);
+        this.simulationComponentsMenu.changeValue(type, 1);
+      } else {
+        this._background = parseInt(xmlChild.getAttribute('Id'));
+        document.getElementById('sim_background_img').className = xmlChild.getAttribute('Class');
       }
-      this.simulationComponentsMenu.changeValue(type, 1);
     }
   }
+
+    /**********************
+   *  LOCAL STORAGE     *
+   **********************/
 
   /**
    * Converts the robot to xml and saves it into the local storage of the browser

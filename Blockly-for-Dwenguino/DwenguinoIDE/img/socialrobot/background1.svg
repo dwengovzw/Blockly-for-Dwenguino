@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="Doos"
+   viewBox="0 0 302.29002 279.02999"
+   version="1.1"
+   sodipodi:docname="background1.svg"
+   width="302.29001"
+   height="279.03"
+   inkscape:version="0.92.4 (unknown)">
+  <metadata
+     id="metadata31">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>M005_Robots</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1853"
+     inkscape:window-height="1025"
+     id="namedview29"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="0.65462815"
+     inkscape:cx="151.145"
+     inkscape:cy="139.515"
+     inkscape:window-x="67"
+     inkscape:window-y="27"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="Doos" />
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#fab63c;}.cls-2,.cls-3,.cls-6{fill:#d02625;}.cls-2{opacity:0.5;}.cls-3{opacity:0.1;}.cls-4{fill:#0b75bb;}.cls-5{opacity:0.8;}.cls-7{fill:#f6f6f6;}</style>
+  </defs>
+  <title
+     id="title6">M005_Robots</title>
+  <polygon
+     class="cls-1"
+     points="45.96,301.56 120.08,301.56 120.08,282.6 76.66,282.6 "
+     id="polygon8"
+     style="fill:#fab63c"
+     transform="translate(-45.96,-40.740002)" />
+  <polygon
+     class="cls-1"
+     points="348.25,301.56 274.13,301.56 274.13,282.6 317.55,282.6 "
+     id="polygon10"
+     style="fill:#fab63c"
+     transform="translate(-45.96,-40.740002)" />
+  <polygon
+     class="cls-2"
+     points="45.96,301.56 120.08,301.56 120.08,282.6 76.66,282.6 "
+     id="polygon12"
+     style="opacity:0.5;fill:#d02625"
+     transform="translate(-45.96,-40.740002)" />
+  <rect
+     class="cls-1"
+     x="50.230003"
+     y="0"
+     width="201.82001"
+     height="260.07001"
+     id="rect14"
+     style="fill:#fab63c" />
+  <rect
+     class="cls-3"
+     x="50.230003"
+     y="0"
+     width="201.82001"
+     height="260.07001"
+     id="rect16"
+     style="opacity:0.1;fill:#d02625" />
+  <path
+     class="cls-4"
+     d="m 252.04,30.389998 a 29.2,29.2 0 1 0 0,57 z"
+     id="path18"
+     inkscape:connector-curvature="0"
+     style="fill:#0b75bb" />
+  <g
+     class="cls-5"
+     id="g22"
+     style="opacity:0.8"
+     transform="translate(-45.96,-40.740002)">
+    <path
+       class="cls-6"
+       d="m 286.7,263.54 -13.62,-18.37 a 3.45,3.45 0 0 0 -5.54,0.24 l -13.62,18.86 a 3.25,3.25 0 0 0 2.77,5.15 h 3 a 3.32,3.32 0 0 1 3.4,3.27 v 10.58 a 3.38,3.38 0 0 0 3.4,3.33 h 7.7 a 3.38,3.38 0 0 0 3.4,-3.36 v -10.73 a 3.47,3.47 0 0 1 3.4,-3.44 l 3,-0.08 a 3.48,3.48 0 0 0 2.71,-5.45 z"
+       id="path20"
+       inkscape:connector-curvature="0"
+       style="fill:#d02625" />
+  </g>
+  <path
+     class="cls-7"
+     d="m 62.04,157.12 h 8.09 a 7.56,7.56 0 0 1 7.56,7.56 v 69.58 a 7.56,7.56 0 0 1 -7.56,7.56 h -8.09 a 7.42,7.42 0 0 1 -7.42,-7.42 v -69.85 a 7.42,7.42 0 0 1 7.42,-7.43 z"
+     id="path24"
+     inkscape:connector-curvature="0"
+     style="fill:#f6f6f6" />
+  <polygon
+     class="cls-1"
+     points="96.19,300.81 65.49,319.77 197.11,319.77 328.72,319.77 298.02,300.81 197.11,300.81 "
+     id="polygon26"
+     style="fill:#fab63c"
+     transform="translate(-45.96,-40.740002)" />
+</svg>

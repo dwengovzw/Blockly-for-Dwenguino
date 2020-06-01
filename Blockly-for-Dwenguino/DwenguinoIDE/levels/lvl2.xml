@@ -152,7 +152,7 @@
      <block type="pir_sensor">
             <value name="trig">
                 <block type="char_type" id="pir_sensor_pin"> 
-                  <field name="BITMASK">11</field>
+                  <field name="BITMASK">13</field>
                 </block>
             </value>
         </block>

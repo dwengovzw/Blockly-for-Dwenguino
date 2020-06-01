@@ -1,5 +1,5 @@
 // Import contact model
-import FunctionalVectorGenerator from '../functionalGenerator/functionalVectorGenerator.js'
+//import FunctionalVectorGenerator from '../functionalGenerator/functionalVectorGenerator.js'
 import Logitem from '../models/logModel.js';
 import uuidv4 from 'uuid/v4.js';
 import { EVENT_NAMES } from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/logging/EventNames.js';

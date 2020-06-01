@@ -1,3 +1,5 @@
+import { TypesEnum } from "./RobotComponentsFactory.js"
+
 /**
  * This renderer renders the robot component canvases in the simulation
  * container. 
@@ -23,25 +25,28 @@ export default class SimulationCanvasRenderer {
      * Draw the lines of text on the lcd screen
      */
     drawLcd(robot){
-        // Set the board text on the screen
-        for (var row = 0 ; row < 2 ; ++row){
-            // write new text to lcd screen and replace spaces with &nbsp;
-            $("#sim_lcd_row" + row).text(robot.lcdstate[row]);
-            if(document.getElementById('sim_lcd_row' + row) !== null){
-                document.getElementById('sim_lcd_row' + row).innerHTML =
-                document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.LCD){
+                for(var row = 0; row < 2; ++row){
+                    $("#sim_lcd_row" + row).text(robot[i].getState()[row]);
+                }
+                if(document.getElementById('sim_lcd_row' + row) !== null){
+                    document.getElementById('sim_lcd_row' + row).innerHTML =
+                    document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+                }
             }
-        }
+        }   
     }
 
     /**
      * Initialized the canvas with the given id (string) to the right dimensions and subsequently updates the simulation
      */
-    initializeCanvas(canvasId, robot){
-        var canvas = document.getElementById(canvasId);
+    initializeCanvas(robot, component){
+        let canvasId = component.getCanvasId();
+        let canvas = document.getElementById(canvasId);
         if(canvas !== null){
-        this.configureCanvasDimensions(canvas);
-        this.render(robot);
+            this.configureCanvasDimensions(canvas);
+            this.render(robot);
         }
     }
 
@@ -73,95 +78,93 @@ export default class SimulationCanvasRenderer {
      * Draw all leds on led canvases with the states specified in robot.
      */
     drawLeds(robot){
-        var canvases = document.getElementsByClassName('sim_canvas led_canvas');
-        for(var i = 0; i < canvases.length; i++)
-        {
-            this.drawLed(robot,canvases.item(i));
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.LED){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawLed(robot[i], canvas);
+            }
         }
     }
 
     /**
      * Draw an led on the given canvas with the state specified in robot.
      */
-    drawLed(robot, canvas){
-        if (canvas.getContext) {
-            var id = canvas.id;
+    drawLed(led, canvas){
+        if(canvas.getContext){
             var ctx = canvas.getContext('2d');
             ctx.beginPath();
-            ctx.arc(canvas.width/2, canvas.height/2, robot[id].radius, 0, 2 * Math.PI);
-            if (robot[id].state === 1) {
-                ctx.fillStyle = robot[id].onColor;
+            ctx.arc(canvas.width/2, canvas.height/2, led.getRadius(), 0, 2 * Math.PI);
+            if (led.getState() === 1) {
+                ctx.fillStyle = led.getOnColor();
             } else {
-                ctx.fillStyle = robot[id].offColor;
+                ctx.fillStyle = led.getOffColor();
             }
             ctx.fill();
-            ctx.fillStyle = robot[id].borderColor;
+            ctx.fillStyle = led.getBorderColor();
             ctx.stroke();
         } else {
-            console.log(canvas, "This canvas has no context");
-        }    
+            console.log(canvas, "This canvas has no context");   
+        }
     }
 
     /**
      * Draw all servos on servo canvases with the states and images specified in robot.
      */
     drawServos(robot){
-        var canvases = document.getElementsByClassName('sim_canvas servo_canvas');
-        for(var i = 0; i < canvases.length; i++)
-        {
-            this.drawServo(robot,canvases.item(i));   
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.SERVO){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawServo(robot[i], canvas);
+            }
         }
     }
 
     /**
      * Draw a servo  on the given canvas with the state and image specified in robot.
      */
-    drawServo(robot, canvas){
+    drawServo(servo, canvas){
         if (canvas.getContext) {
-            var id = canvas.id;
             // in case the image isn't loaded yet.
             var self = this;
-            robot[id].image.onload = function() {
+            servo.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.fillStyle = robot[id].backgroundColor;
-                switch(robot[id].state){
+                ctx.fillStyle = servo.getBackgroundColor();
+                switch(servo.getCostume()){
                     case 'plain':
-                        ctx.fillRect(robot[id].x, robot[id].y, robot[id].width, robot[id].height);
-                        self.drawRotatedServohead(ctx, robot[id]);
+                        ctx.fillRect(servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight());
+                        self.drawRotatedServohead(ctx, servo);
                         break;
                     case 'eye':
-                    // ctx.fillRect(robot[id].x+2, robot[id].y-15, robot[id].width, robot[id].height-20);
-                        self.drawEye(ctx,robot[id], canvas);
+                        self.drawEye(ctx,servo, canvas);
                         break;
                     case 'righthand':
-                        ctx.fillRect(robot[id].x+100, robot[id].y+30, robot[id].width-100, robot[id].height-60);
-                        self.drawRightHand(ctx,robot[id]);
+                        ctx.fillRect(servo.getX()+100, servo.getY()+30, servo.getWidth()-100, servo.getHeight()-60);
+                        self.drawRightHand(ctx,servo);
                         break;
                     case 'lefthand':
-                        ctx.fillRect(robot[id].x+10, robot[id].y+30, robot[id].width-28, robot[id].height-60);
-                        self.drawLeftHand(ctx,robot[id]);
+                        ctx.fillRect(servo.getX()+10, servo.getY()+30, servo.getWidth()-28, servo.getHeight()-60);
+                        self.drawLeftHand(ctx,servo);
                         break;
                 }
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.fillStyle = robot[id].backgroundColor;
-            switch(robot[id].state){
+            ctx.fillStyle = servo.getBackgroundColor();
+            switch(servo.getCostume()){
                 case 'plain':
-                    ctx.fillRect(robot[id].x, robot[id].y, robot[id].width, robot[id].height);
-                    self.drawRotatedServohead(ctx, robot[id]);
+                    ctx.fillRect(servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight());
+                    self.drawRotatedServohead(ctx, servo);
                     break;
                 case 'eye':
-                    //ctx.fillRect(robot[id].x+2, robot[id].y-15, robot[id].width, robot[id].height-20);
-                    self.drawEye(ctx,robot[id], canvas);
+                    self.drawEye(ctx,servo, canvas);
                     break;
                 case 'righthand':
-                    ctx.fillRect(robot[id].x+100, robot[id].y+30, robot[id].width-100, robot[id].height-60);
-                    self.drawRightHand(ctx,robot[id]);
+                    ctx.fillRect(servo.getX()+100, servo.getY()+30, servo.getWidth()-100, servo.getHeight()-60);
+                    self.drawRightHand(ctx,servo);
                     break;
                 case 'lefthand':
-                    ctx.fillRect(robot[id].x+10, robot[id].y+30, robot[id].width-28, robot[id].height-60);
-                    self.drawLeftHand(ctx,robot[id]);
+                    ctx.fillRect(servo.getX()+10, servo.getY()+30, servo.getWidth()-28, servo.getHeight()-60);
+                    self.drawLeftHand(ctx,servo);
                     break;
             }
         } else {
@@ -173,95 +176,98 @@ export default class SimulationCanvasRenderer {
      * Draw all pir sensors on pir canvases with the image specified in robot.
      */
     drawPirs(robot){
-        var canvases = document.getElementsByClassName('sim_canvas pir_canvas');
-        for(var i = 0; i < canvases.length; i++)
-        {
-            this.drawPir(robot,canvases.item(i));
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.PIR){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawPir(robot[i], canvas);
+            }
         }
     }
 
     /**
      * Draw a pir sensor on the given canvas with the image specified in robot.
      */
-    drawPir(robot, canvas){
+    drawPir(pir, canvas){
         if (canvas.getContext) {
-            var id = canvas.id;
 
             // in case the image isn't loaded yet.
             var self = this;
-            robot[id].image.onload = function() {
+            pir.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(robot[id].image,0,0,robot[id].width,robot[id].height); 
+                ctx.drawImage(pir.getImage(),0,0,pir.getWidth(),pir.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(robot[id].image,0,0,robot[id].width,robot[id].height);
+            ctx.drawImage(pir.getImage(),0,0,pir.getWidth(),pir.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
-        }       
+        } 
     }
 
     /**
      * Draw all sonar sensors on sonar canvases with the image specified in robot.
      */
     drawSonars(robot){
-        var canvases = document.getElementsByClassName('sim_canvas sonar_canvas');
-        for(var i = 0; i < canvases.length; i++)
-        {
-            this.drawSonar(robot,canvases.item(i));
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.SONAR){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawSonar(robot[i], canvas);
+            }
         }
     }
 
     /**
      * Draw a sonar sensor on the given canvas with the image specified in robot.
      */
-    drawSonar(robot, canvas){
+    drawSonar(sonar, canvas){
         if (canvas.getContext) {
-            var id = canvas.id;
 
             // in case the image isn't loaded yet.
             var self = this;
-            robot[id].image.onload = function() {
+            sonar.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(robot[id].image,0,0,robot[id].width,robot[id].height); 
+                ctx.drawImage(sonar.getImage(),0,0,sonar.getWidth(), sonar.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(robot[id].image,0,0,robot[id].width,robot[id].height);
+            ctx.drawImage(sonar.getImage(),0,0,sonar.getWidth(),sonar.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
-        }       
-    }
+        }
+    }   
 
     /**
      * Draws a plain servohead of the given servo at the correct angle on the given context
      */
     drawRotatedServohead(ctx, servo){
         // make the servo rotate stepwise
-        var direction = this.getDirection(servo.prevAngle, servo.angle);
+        var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
 
-        if((servo.angle-servo.prevAngle) != 0){
-            if (((servo.angle-servo.prevAngle) > 5) || ((servo.angle-servo.prevAngle) < -5)) {
-                servo.prevAngle = servo.prevAngle + (5 * direction);
-                ctx.translate(servo.x+servo.width/2,servo.y+servo.height/2);
-                ctx.rotate(servo.prevAngle * Math.PI / 180);
-                ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-                ctx.rotate(-servo.prevAngle * Math.PI / 180);
-                ctx.translate(-servo.x-servo.width/2, -servo.y-servo.height/2); 
+        let difference = servo.getAngle()-servo.getPrevAngle();
+        if(difference != 0){
+            if ((difference > 5) || (difference < -5)) {
+                let prevAngle = servo.getPrevAngle() + (5 * direction);
+                servo.setPrevAngle(prevAngle);
+                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
+                ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+                ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             } else {
-                servo.prevAngle = servo.prevAngle + (servo.angle-servo.prevAngle);
-                ctx.translate(servo.x+servo.width/2,servo.y+servo.height/2);
-                ctx.rotate(servo.angle * Math.PI / 180);
-                ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-                ctx.rotate(-servo.angle * Math.PI / 180);
-                ctx.translate(-servo.x-servo.width/2, -servo.y-servo.height/2); 
+                let prevAngle = servo.getPrevAngle() + (difference);
+                servo.setPrevAngle(prevAngle);
+                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(servo.getAngle() * Math.PI / 180);
+                ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+                ctx.rotate(-servo.getAngle() * Math.PI / 180);
+                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             }
         } else {
-            ctx.translate(servo.x+servo.width/2,servo.y+servo.height/2);
-            ctx.rotate(servo.angle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(-servo.angle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2, -servo.y-servo.height/2); 
+            ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
         }
     }
 
@@ -272,7 +278,7 @@ export default class SimulationCanvasRenderer {
 
     renderEyeBall(ctx, servo,canvas){
         ctx.beginPath();
-        ctx.arc(canvas.width/2, canvas.height/2, servo.width, 0, 2 * Math.PI);
+        ctx.arc(canvas.width/2, canvas.height/2, servo.getWidth(), 0, 2 * Math.PI);
         ctx.fillStyle = 'white';
         ctx.fill();
         ctx.fillStyle = 'black';
@@ -280,20 +286,22 @@ export default class SimulationCanvasRenderer {
     }
 
     renderIris(ctx, servo, canvas){
-        var direction = this.getDirection(servo.prevAngle, servo.angle);
+        var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
 
-        if((servo.angle-servo.prevAngle) != 0){
-            var factorBegin = Math.max((servo.prevAngle - 120)/10, 0.2);
-            var factorEnd = Math.min(2- ((servo.prevAngle-120)/10), 1.8);
-            var horTranslation = (servo.prevAngle / 120 * (canvas.width-60)) + 30;
-            if (((servo.angle-servo.prevAngle) > 5) || ((servo.angle-servo.prevAngle) < -5)) {
-                servo.prevAngle = servo.prevAngle + (5 * direction);
-                if((servo.prevAngle >= 0) & (servo.prevAngle <= 120)){
+        let difference = servo.getAngle()-servo.getPrevAngle();
+        if(difference != 0){
+            var factorBegin = Math.max((servo.getPrevAngle() - 120)/10, 0.2);
+            var factorEnd = Math.min(2- ((servo.getPrevAngle()-120)/10), 1.8);
+            var horTranslation = (servo.getPrevAngle() / 120 * (canvas.width-60)) + 30;
+            if ((difference > 5) || (difference < -5)) {
+                let prevAngle = servo.getPrevAngle() + (5 * direction);
+                servo.setPrevAngle(prevAngle);
+                if((servo.getPrevAngle() >= 0) & (servo.getPrevAngle() <= 120)){
                     ctx.beginPath();
                     ctx.arc(horTranslation, canvas.height/2, 10, 0, 2 * Math.PI);
                     ctx.fillStyle = 'black';
                     ctx.fill();
-                } else if (servo.prevAngle <= 130){
+                } else if (servo.getPrevAngle() <= 130){
                     ctx.beginPath();
                     horTranslation = (canvas.width-60) + 30;
                     ctx.arc(horTranslation, canvas.height/2, 10, factorBegin * Math.PI, factorEnd * Math.PI);
@@ -301,13 +309,14 @@ export default class SimulationCanvasRenderer {
                     ctx.fill(); 
                 }
             } else {
-                servo.prevAngle = servo.prevAngle + (servo.angle-servo.prevAngle);
-                if((servo.prevAngle >= 0) & (servo.prevAngle <= 120)){
+                let prevAngle = servo.getPrevAngle() + difference;
+                servo.setPrevAngle(prevAngle);
+                if((servo.getPrevAngle() >= 0) & (servo.getPrevAngle() <= 120)){
                     ctx.beginPath();
                     ctx.arc(horTranslation, canvas.height/2, 10, 0, 2 * Math.PI);
                     ctx.fillStyle = 'black';
                     ctx.fill();
-                } else if (servo.prevAngle <= 130){
+                } else if (servo.getPrevAngle() <= 130){
                     ctx.beginPath();
                     horTranslation = (canvas.width-60) + 30;
                     ctx.arc(horTranslation, canvas.height/2, 10, factorBegin * Math.PI, factorEnd * Math.PI);
@@ -316,15 +325,15 @@ export default class SimulationCanvasRenderer {
                 }
             }
         } else {
-            var factorBegin = Math.max((servo.angle - 120)/10,0.2);
-            var factorEnd = Math.min(2- ((servo.angle-120)/10), 1.8);
-            var horTranslation = (servo.angle / 120 * (canvas.width-60)) + 30;
-            if((servo.angle >= 0) & (servo.angle <= 120)){
+            var factorBegin = Math.max((servo.getAngle() - 120)/10,0.2);
+            var factorEnd = Math.min(2- ((servo.getAngle()-120)/10), 1.8);
+            var horTranslation = (servo.getAngle() / 120 * (canvas.width-60)) + 30;
+            if((servo.getAngle() >= 0) & (servo.getAngle() <= 120)){
                 ctx.beginPath();
                 ctx.arc(horTranslation, canvas.height/2, 10, 0, 2 * Math.PI);
                 ctx.fillStyle = 'black';
                 ctx.fill();
-            } else if (servo.angle <= 130){
+            } else if (servo.getAngle() <= 130){
                 ctx.beginPath();
                 horTranslation = (canvas.width-60) + 30;
                 ctx.arc(horTranslation, canvas.height/2, 10, factorBegin * Math.PI, factorEnd * Math.PI);
@@ -339,17 +348,17 @@ export default class SimulationCanvasRenderer {
      * The selected servo skin is a right hand.
      */
     drawRightHand(ctx, servo){
-        var diff = servo.angle-servo.prevAngle;
+        var diff = servo.getAngle()-servo.getPrevAngle();
         if(diff > 0) {
             this.drawDown(ctx, servo);
         } else if(diff < 0) {
             this.drawUp(ctx, servo);
         } else {
-            ctx.translate(servo.x+servo.width/2+50,servo.y+servo.height/2);
-            ctx.rotate(-servo.angle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(servo.angle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2-50, -servo.y-servo.height/2); 
+            ctx.translate(servo.getX()+servo.getWidth()/2+50,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2-50, -servo.getY()-servo.getHeight()/2); 
         }
     }
 
@@ -357,21 +366,23 @@ export default class SimulationCanvasRenderer {
      * Draw a counterclockwise downward movement of the given servo to the specified angle.
      */
     drawDown(ctx, servo){
-        var diff2 = (servo.angle-servo.prevAngle);
+        var diff2 = (servo.getAngle()-servo.getPrevAngle());
         if ( diff2 >= 5 ) {
-            servo.prevAngle = servo.prevAngle + 5;
-            ctx.translate(servo.x+servo.width/2+50,servo.y+servo.height/2);
-            ctx.rotate(-servo.prevAngle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(servo.prevAngle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2-50, -servo.y-servo.height/2);
+            let prevAngle = servo.getPrevAngle() + 5;
+            servo.setPrevAngle(prevAngle);
+            ctx.translate(servo.getX()+servo.getWidth()/2+50,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2-50, -servo.getY()-servo.getHeight()/2);
         } else {
-            servo.prevAngle = servo.prevAngle + diff2;
-            ctx.translate(servo.x+servo.width/2+50,servo.y+servo.height/2);
-            ctx.rotate(-servo.angle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(servo.angle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2-50, -servo.y-servo.height/2);       
+            let prevAngle = servo.getPrevAngle() + diff2;
+            servo.setPrevAngle(prevAngle);
+            ctx.translate(servo.getX()+servo.getWidth()/2+50,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2-50, -servo.getY()-servo.getHeight()/2);       
         }
     }
 
@@ -379,21 +390,23 @@ export default class SimulationCanvasRenderer {
      * Draw a clockwase upward movement of the given servo to the specified angle.
      */
     drawUp(ctx, servo){
-        var diff3 = servo.prevAngle - servo.angle;
+        var diff3 = servo.getPrevAngle() - servo.getAngle();
         if ( diff3 >= 5)  {
-            servo.prevAngle = servo.prevAngle - 5;
-            ctx.translate(servo.x+servo.width/2+50,servo.y+servo.height/2);
-            ctx.rotate(-servo.prevAngle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(servo.prevAngle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2-50, -servo.y-servo.height/2); 
+            let prevAngle = servo.getPrevAngle() - 5;
+            servo.setPrevAngle(prevAngle);
+            ctx.translate(servo.getX()+servo.getWidth()/2+50,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2-50, -servo.getY()-servo.getHeight()/2); 
         } else {
-            servo.prevAngle = servo.prevAngle - diff3;
-            ctx.translate(servo.x+servo.width/2+50,servo.y+servo.height/2);
-            ctx.rotate(-servo.angle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(servo.angle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2-50, -servo.y-servo.height/2); 
+            let prevAngle = servo.getPrevAngle() - diff3;
+            servo.setPrevAngle(prevAngle);
+            ctx.translate(servo.getX()+servo.getWidth()/2+50,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2-50, -servo.getY()-servo.getHeight()/2); 
         }
     }
 
@@ -403,30 +416,33 @@ export default class SimulationCanvasRenderer {
      */
     drawLeftHand(ctx, servo){
         // make the servo rotate stepwise
-        var direction = this.getDirection(servo.prevAngle, servo.angle);
+        var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
 
-        if((servo.angle-servo.prevAngle) != 0){
-            if (((servo.angle-servo.prevAngle) > 5) || ((servo.angle-servo.prevAngle) < -5)) {
-                servo.prevAngle = servo.prevAngle + (5 * direction);
-                ctx.translate(servo.x+servo.width/2,servo.y+servo.height/2);
-                ctx.rotate(-servo.prevAngle * Math.PI / 180);
-                ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-                ctx.rotate(servo.prevAngle * Math.PI / 180);
-                ctx.translate(-servo.x-servo.width/2, -servo.y-servo.height/2); 
+        let difference = servo.getAngle() - servo.getPrevAngle();
+        if(difference != 0){
+            if ((difference > 5) || (difference < -5)) {
+                let prevAngle = servo.getPrevAngle() + (5 * direction);
+                servo.setPrevAngle(prevAngle);
+                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+                ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+                ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
+                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             } else {
-                servo.prevAngle = servo.prevAngle + (servo.angle-servo.prevAngle);
-                ctx.translate(servo.x+servo.width/2,servo.y+servo.height/2);
-                ctx.rotate(-servo.angle * Math.PI / 180);
-                ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-                ctx.rotate(servo.angle * Math.PI / 180);
-                ctx.translate(-servo.x-servo.width/2, -servo.y-servo.height/2); 
+                let prevAngle = servo.getPrevAngle() + difference;
+                servo.setPrevAngle(prevAngle);
+                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(-servo.getAngle() * Math.PI / 180);
+                ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+                ctx.rotate(servo.getAngle() * Math.PI / 180);
+                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             }
         } else {
-            ctx.translate(servo.x+servo.width/2,servo.y+servo.height/2);
-            ctx.rotate(-servo.angle * Math.PI / 180);
-            ctx.drawImage(servo.image,-servo.width/2,-servo.height/2,servo.width,servo.height);
-            ctx.rotate(servo.angle * Math.PI / 180);
-            ctx.translate(-servo.x-servo.width/2, -servo.y-servo.height/2); 
+            ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
         }
     }
 
