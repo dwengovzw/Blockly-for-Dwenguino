@@ -55,13 +55,17 @@ check_python_install () {
 check_nodejs_install () {
     if which node > /dev/null
     then
-        echo "nodejs is installed, skipping..."
-    else
-        # add deb.nodesource repo commands 
-        # install node
-        echo "Installing nodejs using root permissions.."
-        sudo curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-        sudo apt install nodejs
+        if [[ $(node -v) = v12* ]]; then
+            echo "nodejs v12 (lts) is installed, skipping..."
+        else
+            # add deb.nodesource repo commands 
+            # install node
+            echo "Installing latest lts version of nodejs using root permissions.."
+            sudo apt update
+            sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+            sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+            sudo apt -y install nodejs
+        fi
     fi
 }
 
