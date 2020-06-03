@@ -1,7 +1,9 @@
 #!/bin/bash
-cd /home/tneutens/Documents/UGent/Onderzoek/DwenguinoBlockly/backend
-# the -r esm flag uses the esm package to fix issues with em6 module support in nodejs
-# this can be removed in future versions of nodejs if support is complete
-#node -r esm index.js
-node --experimental-modules index.js
-#node index.js
+/home/tneutens/Documents/UGent/Onderzoek/DwenguinoBlockly/node_modules/electron/dist/electron /home/tneutens/Documents/UGent/Onderzoek/DwenguinoBlockly/Blockly-for-Dwenguino/index.html --no-sandbox &
+electronPid=$!
+node --experimental-modules /home/tneutens/Documents/UGent/Onderzoek/DwenguinoBlockly/backend/index.js &
+nodePid=$!
+echo "DwenguinoBlockly is running"
+wait $electronPid
+kill $nodePid
+echo "Quitting DwenguinoBlockly"

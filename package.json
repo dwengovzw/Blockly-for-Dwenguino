@@ -44,5 +44,9 @@
   "devDependencies": {
     "electron": "^7.1.7",
     "open-cli": "^5.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dwengovzw/Blockly-for-Dwenguino.git"
   }
 }
