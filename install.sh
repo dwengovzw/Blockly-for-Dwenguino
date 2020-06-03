@@ -71,22 +71,6 @@ check_nodejs_install () {
     fi
 }
 
-# Check if chrome is installed
-check_chrome_install () {
-    echo "Checking if Google chrome is installed."
-    if hash google-chrome 2>/dev/null
-    then
-        echo "Google chrome is installed, skipping..."
-    else
-        echo "Installing google chrome."
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-        sudo dpkg -i google-chrome-stable_current_amd64.deb
-        rm google-chrome-stable_current_amd64.deb
-        echo "Finished installing google chrome."
-    fi
-
-}
-
 
 #check os type
 if [ $OSTYPE == "linux-gnu" ]
@@ -101,9 +85,6 @@ then
 
     # Check nodejs install
     check_nodejs_install
-
-    # Check if Google chrome is installed
-    check_chrome_install
 
     # Create desktop file if not existant
     touch ./dwenguinoblockly.desktop
