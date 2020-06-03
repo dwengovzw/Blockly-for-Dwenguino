@@ -121,11 +121,15 @@ then
     rm ./dwenguinoblockly.desktop
     echo "Created desktop icon!"
 
+    # Install node modules
+    npm install
+
     # Configure start file
     echo "#!/bin/bash" > start.sh
     echo "cd $(pwd)/backend" >> start.sh 
     echo "node --experimental-modules index.js" >> start.sh
     chmod +x start.sh
+    
     
     # Configure make binaries
     rm ./backend/compilation/bin/make
