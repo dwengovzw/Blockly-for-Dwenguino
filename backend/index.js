@@ -80,7 +80,7 @@ let server = app.listen(port, function () {
 //commented out for debugging
 
 
-if (process.env.NODE_ENV === 'production') {
+/*if (process.env.NODE_ENV === 'production') {
     module.export = app;
 } else {
     // Launch a browser window
@@ -95,7 +95,7 @@ if (process.env.NODE_ENV === 'production') {
             process.exit();
         });
     });
-}
+}*/
 
 
 
