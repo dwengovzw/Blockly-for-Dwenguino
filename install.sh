@@ -53,19 +53,17 @@ check_python_install () {
 
 # Check if nodejs is installed
 check_nodejs_install () {
-    if which node > /dev/null
+    if [ -x "$(command -v node)" ] && [[ $(node -v) == v12* ]]
     then
-        if [[ $(node -v) = v12* ]]; then
-            echo "nodejs v12 (lts) is installed, skipping..."
-        else
-            # add deb.nodesource repo commands 
-            # install node
-            echo "Installing latest lts version of nodejs using root permissions.."
-            sudo apt update
-            sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
-            sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-            sudo apt -y install nodejs
-        fi
+        echo "nodejs v12 (lts) is installed, skipping..."
+    else
+        echo "Installing latest lts version of nodejs using root permissions.."
+        # add deb.nodesource repo commands
+        sudo apt update
+        sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+        sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
+        # install node
+        sudo apt -y install nodejs
     fi
 }
 
@@ -90,16 +88,16 @@ check_chrome_install () {
 if [ $OSTYPE == "linux-gnu" ]
 then
     echo "Installing for gnu-linux system."
-    
+
     # Check if script is run as root
     check_for_root
-    
+
     # Check if python3 is installed
     check_python_install
 
     # Check nodejs install
     check_nodejs_install
-    
+
     # Check if Google chrome is installed
     check_chrome_install
 
@@ -114,7 +112,7 @@ then
     echo 'Name=dwenguinoblockly' >> ./dwenguinoblockly.desktop
     echo "Icon=$(pwd)/dwengo_robot_plain.svg" >> ./dwenguinoblockly.desktop
     echo "Exec=$(pwd)/start.sh" >> ./dwenguinoblockly.desktop
-    
+
     chmod u+x ./dwenguinoblockly.desktop
     cp ./dwenguinoblockly.desktop ~/Desktop/dwenguinoblockly.desktop
     gio set ~/Desktop/dwenguinoblockly.desktop "metadata::trusted" yes
@@ -123,10 +121,10 @@ then
 
     # Configure start file
     echo "#!/bin/bash" > start.sh
-    echo "cd $(pwd)/backend" >> start.sh 
+    echo "cd $(pwd)/backend" >> start.sh
     echo "node --experimental-modules index.js" >> start.sh
     chmod +x start.sh
-    
+
     # Configure make binaries
     rm ./backend/compilation/bin/make
     cp ./backend/compilation/bin/linux/make ./backend/compilation/bin/make
@@ -136,50 +134,50 @@ then
     sudo usermod -a -G dialout $USER
     sudo usermod -a -G tty $USER
     sudo chmod 666 /dev/ttyACM*
-    
+
     echo "---------------------------------------------------------------------------------------"
     echo "Configured start script!"
     echo "Installation completed, you can launch DwenguinoBlockly using the desktop icon!"
     echo "IMPORTANT! If you can not upload your program to the board because of a permission denied error\
- you should REBOOT your computer and try again.\ 
+ you should REBOOT your computer and try again.\
 Some of the changes made by the script require a reboot before they take effect"
     echo "---------------------------------------------------------------------------------------"
-    
+
 elif [ $OSTYPE ==  "darwin" ]
 then
     # MACOS config
     echo "MACOS install is not supported right now"
-    
+
     # Check if script is run as root
     check_for_root
-    
+
     # Check if python3 is installed
     check_python_install
 
     # Check nodejs install
     check_nodejs_install
-    
+
     # Configure make binaries
     brew install --with-default-names make
     cp /usr/local/bin/gmake ./backend/compilation/bin/make
     #rm ./backend/compilation/bin/make
     #cp ./backend/compilation/bin/macos/make ./backend/compilation/bin/make
     echo "Configured make binaries for macos"
-    
+
     # Configure start file
     echo "#!/bin/bash" > dwenguinoblockly.command
     echo "cd $(pwd)/backend" >> dwenguinoblockly.command
     echo "node --experimental-modules index.js" >> dwenguinoblockly.command
     chmod +x dwenguinoblockly.command
     cp dwenguinoblockly.command ~/Desktop
-    
-    
-        
+
+
+
 elif [ $OSTYPE == "win32" ]
 then
     # Windows config
     echo "Windows install is not supported right now"
-    
+
     # Configure make binaries
     rm ./backend/compilation/bin/make
     cp ./backend/compilation/bin/windows/make.exe ./backend/compilation/bin/make
