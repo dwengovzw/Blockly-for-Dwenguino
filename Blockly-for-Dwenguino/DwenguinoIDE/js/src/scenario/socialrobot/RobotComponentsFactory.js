@@ -196,9 +196,8 @@ class RobotComponentsFactory {
         var offColor = data.getAttribute('OffColor');
         var borderColor = data.getAttribute('BorderColor');
         var pin = parseInt(data.getAttribute('Pin'));
-        var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
-        this.addLed(pin, state, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+        this.addLed(pin, 0, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
         break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
@@ -271,7 +270,6 @@ class RobotComponentsFactory {
     this._robot.push(led);
 
     this.renderer.initializeCanvas(this._robot, led); 
-    this.scenarioUtils.contextMenuLed();
   }
 
   /**

@@ -83,6 +83,15 @@ Blockly.JavaScript['socialrobot_eyes_right'] = function(block) {
   return code;
 }
 
+Blockly.JavaScript['socialrobot_set_pin'] = function(block){
+  var pin_number = Blockly.JavaScript.valueToCode(block, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
+  var pin_state = Blockly.JavaScript.valueToCode(block, "PIN_STATE", Blockly.JavaScript.ORDER_ATOMIC);
+
+  var code = machine + 'digitalWrite(' + pin_number + ', ' + pin_state + ');\n';
+  console.log(code);
+  return code;
+};
+
 Blockly.JavaScript['socialrobot_read_pin'] = function(block){
   // var pin_number = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
   var pin_number = this.getFieldValue('PIN');

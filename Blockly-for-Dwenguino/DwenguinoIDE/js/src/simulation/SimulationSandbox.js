@@ -57,6 +57,8 @@ export default class SimulationSandbox{
       } else {
         pin === 13 ? this.boardState.setLedState(8, 0) : this.boardState.setLedState(pin, 0);
       }
+    } else {
+      this.boardState.setIoPinState(pin, state);
     }
   }
 

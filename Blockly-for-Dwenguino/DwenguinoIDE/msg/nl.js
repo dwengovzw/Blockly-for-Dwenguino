@@ -114,6 +114,7 @@ var MSG = {
   create_global: "Maak globaal",
   next: "Volgende",
   previous: "Vorige",
+  socialrobotSetPinState: "Zet %1 %2",
   socialrobotServoBlock: "Servo motor %1 %2 %3  nummer %4 pin %5 hoek %6",
   socialrobotWaveArmesBlock: "Zwaai armen %1 %2 Servo rechterarm %3 %4 Servo linkerarm %5 %6",
   socialRobotArmsUpBlock: "Doe armen naar boven %1 %2 %3 Servo rechterarm %4 %5 Servo linkerarm %6 %7",

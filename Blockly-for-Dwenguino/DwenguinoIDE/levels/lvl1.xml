@@ -277,6 +277,16 @@
             </block>
         </value>
     </block>
+        <block type="socialrobot_set_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+        <value name="PIN_STATE">
+            <block type="dwenguino_highlow"></block>
+        </value>
+    </block>
 </category>
 
 <sep></sep>

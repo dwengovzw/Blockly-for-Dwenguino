@@ -103,6 +103,7 @@ var MSG = {
   create: "Create",
   with_type: "with type",
   create_global: "Create global",
+  socialrobotSetPinState: "Set %1 %2",
   socialrobotServoBlock: "Servo motor %1 %2 %3  channel %4 pin %5 angle %6",
   socialrobotWaveArmesBlock: "Wave arms %1 %2 Servo right arm %3 %4 Servo left arm %5 %6",
   socialRobotArmsDownBlock: "Put arms down %1 %2 %3 Servo right arm %4 %5 Servo left arm %6 %7",
