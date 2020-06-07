@@ -11,24 +11,24 @@
     <block type="procedures_callreturn"></block>
 </category>
 <category id="catLoops" colour="120" name="Loops">
-  <block type="controls_for">
-    <value name="FROM">
-      <shadow type="char_type">
-        <field name="BITMASK">0</field>
-      </shadow>
-    </value>
-      <value name="TO">
-      <shadow type="char_type">
-        <field name="BITMASK">10</field>
-      </shadow>
-    </value>
-    <value name="BY">
-      <shadow type="char_type">
-        <field name="BITMASK">1</field>
-      </shadow>
-    </value>
-  </block>
-  <block type="controls_whileUntil"></block>
+    <block type="controls_for">
+        <value name="FROM">
+            <shadow type="char_type">
+                <field name="BITMASK">0</field>
+            </shadow>
+        </value>
+        <value name="TO">
+            <shadow type="char_type">
+                <field name="BITMASK">10</field>
+            </shadow>
+        </value>
+        <value name="BY">
+            <shadow type="char_type">
+                <field name="BITMASK">1</field>
+            </shadow>
+        </value>
+    </block>
+    <block type="controls_whileUntil"></block>
 </category>
 <category id="catMath" colour="45" name='Math'>
     <block type="char_type">
@@ -150,13 +150,13 @@
             </block>
         </value>
     </block>
-     <block type="pir_sensor">
-            <value name="trig">
-                <block type="char_type" id="pir_sensor_pin"> 
-                  <field name="BITMASK">13</field>
-                </block>
-            </value>
-        </block>
+    <block type="pir_sensor">
+        <value name="trig">
+            <block type="char_type" id="pir_sensor_pin">
+                <field name="BITMASK">13</field>
+            </block>
+        </value>
+    </block>
     <block type="dwenguino_set_led">
         <value name="LED">
             <block type="dwenguino_led_pins">
@@ -253,7 +253,7 @@
             </block>
         </value>
     </block>
-            <block type="socialrobot_eyes_left">
+    <block type="socialrobot_eyes_left">
         <value name="servo_right_eye">
             <block type="math_number" id="206">
                 <field name="NUM">1</field>
@@ -277,7 +277,7 @@
             </block>
         </value>
     </block>
-        <block type="socialrobot_set_pin">
+    <block type="socialrobot_set_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">0</field>
@@ -285,6 +285,13 @@
         </value>
         <value name="PIN_STATE">
             <block type="dwenguino_highlow"></block>
+        </value>
+    </block>
+    <block type="socialrobot_read_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">0</field>
+            </block>
         </value>
     </block>
 </category>

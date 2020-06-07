@@ -140,8 +140,8 @@ Blockly.Arduino['socialrobot_set_pin'] = function(block){
 
 Blockly.Arduino['socialrobot_read_pin'] = function(block){
     var pin_number = Blockly.Arduino.valueToCode(block, "PIN", Blockly.Arduino.ORDER_ATOMIC);
-    //Blockly.Arduino.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);';
+    Blockly.Arduino.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);\n';
 
-    var code = 'DigitalRead(' + pin_number + ')';
+    var code = 'digitalRead(' + pin_number + ')';
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };

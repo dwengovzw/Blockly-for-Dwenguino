@@ -7,6 +7,7 @@ import { Led } from "./components/Led.js"
 import { Lcd } from "./components/Lcd.js"
 import { Sonar } from "./components/Sonar.js"
 import { Pir } from "./components/Pir.js"
+import { SoundSensor } from "./components/SoundSensor.js"
 
 export { TypesEnum, RobotComponentsFactory }
 
@@ -19,7 +20,8 @@ const TypesEnum = {
   LED: 'led',
   PIR: 'pir',
   SONAR: 'sonar',
-  LCD: 'lcd'
+  LCD: 'lcd',
+  SOUND: 'sound',
 };
 Object.freeze(TypesEnum);
 
@@ -150,6 +152,9 @@ class RobotComponentsFactory {
       case TypesEnum.LCD:
         this.addLcd();
         break;
+      case TypesEnum.SOUND:
+        this.addSoundSensor();
+        break;
     }
   }
 
@@ -169,6 +174,9 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.LCD:
         this.removeLcd();
+        break;
+      case TypesEnum.SOUND:
+        this.removeSoundSensor();
         break;
     }
   }
@@ -225,6 +233,16 @@ class RobotComponentsFactory {
         var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
         var htmlClasses = data.getAttribute('Classes');
         this.addLcd(true, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.SOUND:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addSoundSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
     }
   }
@@ -352,6 +370,31 @@ class RobotComponentsFactory {
     
     let id = this._numberOfComponentsOfType[TypsEnum.LCD];
     this.removeRobotComponentWithTypeAndId(TypsEnum.LCD, id);
+  }
+
+
+  /**
+   * Add a new Sound sensor to the simulation container.
+   */
+  addSoundSensor(pin=0, state=0, visible=true, width=100, height=54, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
+    this.incrementNumberOf(TypesEnum.SOUND);
+    let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
+
+    let soundSensor = new SoundSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(soundSensor);
+
+    this.renderer.initializeCanvas(this._robot, soundSensor); 
+  }
+
+  /**
+   * Remove the most recent created Sound sensor from the simulation container.
+   */
+  removeSoundSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SOUND));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SOUND, id);
   }
 
   incrementNumberOf(type) {

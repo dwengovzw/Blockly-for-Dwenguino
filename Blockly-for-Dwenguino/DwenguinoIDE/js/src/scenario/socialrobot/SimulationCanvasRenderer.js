@@ -19,6 +19,7 @@ export default class SimulationCanvasRenderer {
     this.drawServos(robot);
     this.drawPirs(robot);
     this.drawSonars(robot);
+    this.drawSoundSensors(robot);
   }
 
     /**
@@ -444,6 +445,38 @@ export default class SimulationCanvasRenderer {
             ctx.rotate(servo.getAngle() * Math.PI / 180);
             ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
         }
+    }
+
+    /**
+     * Draw all sound sensors on sound canvases with the image specified in robot.
+     */
+    drawSoundSensors(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.SOUND){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawSoundSensor(robot[i], canvas);
+            }
+        }
+    }
+
+    /**
+     * Draw a pir sensor on the given canvas with the image specified in robot.
+     */
+    drawSoundSensor(soundSensor, canvas){
+        if (canvas.getContext) {
+
+            // in case the image isn't loaded yet.
+            var self = this;
+            soundSensor.getImage().onload = function() {
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight()); 
+            }
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight());
+        } else {
+            console.log(canvas, "This canvas has no context");
+        } 
     }
 
     /**

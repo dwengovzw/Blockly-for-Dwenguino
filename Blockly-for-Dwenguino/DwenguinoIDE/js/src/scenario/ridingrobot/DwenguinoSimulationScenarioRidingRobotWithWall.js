@@ -158,9 +158,11 @@ updateScenarioState(dwenguinoState) {
     var D = Math.min(this.calcDistanceBetweenPoints(intersectionPointX, [xFront, yFront]),
         this.calcDistanceBetweenPoints(intersectionPointY, [xFront, yFront]));
 
-    dwenguinoState.setSonarDistance(Math.abs(D - 25)); // Compensate for borders
+    var trigPin = 11;
+    var echoPin = 12;
+    dwenguinoState.setSonarDistance(trigPin, echoPin, Math.abs(D - 25)); // Compensate for borders
 
-    console.log(dwenguinoState.getSonarDistance());
+    console.log(dwenguinoState.getSonarDistance(trigPin, echoPin));
 
 
     this.robot.position = {

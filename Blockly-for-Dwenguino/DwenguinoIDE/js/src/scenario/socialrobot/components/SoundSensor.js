@@ -1,40 +1,31 @@
 import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
-import { EventsEnum } from './../ScenarioEvent.js'
+import { EventsEnum } from '../ScenarioEvent.js';
 
-export { Led, ColorsEnum }
+export { SoundSensor }
 
-const ColorsEnum = {
-    red: 'red', 
-    yellow: 'yellow', 
-    blue: 'blue',
-    green: '#72f542'
-  };
-Object.freeze(ColorsEnum);
-
-class Led extends RobotComponent{
-    constructor(eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses){
+class SoundSensor extends RobotComponent{
+    constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.LED;
-        this._radius = radius;
-        this._x = x;
-        this._y = y;
+        this._type = TypesEnum.SOUND;
+        this._width = width;
+        this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
-        this._onColor = onColor;
-        this._offColor = offColor;
-        this._borderColor = borderColor;
+        this._image = new Image();
+        this._image.src = './DwenguinoIDE/img/socialrobot/sound_sensor.png';
         this._pin = pin;
         this._state = state;
-        this._canvasId = 'sim_led_canvas' + this._id; 
+        this._stateUpdated = false;
+        this._canvasId = 'sim_sound_canvas' + this._id;
 
         this.insertHtml();
         this.toggleVisibility(visible);
     }
 
     toString(){
-        return 'led';
+        return 'sound sensor';
     }
 
     insertHtml(){
@@ -42,17 +33,63 @@ class Led extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+    
+        let buttonLabel = this.getType() + '_button' + this.getId() + '_label';
+        let soundButtonId = this.getType() + '_button' + this.getId();
+        
+        if (!document.getElementById(soundButtonId)) {
+            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.soundButtonLabel + ' ' + this.getId() + "</div>");
+            $('#sensor_options').append("<div id='" + soundButtonId + "' class='sound_button' alt='Load'></div>");
 
-        let simLed = document.getElementById('sim_'+this.getType() + this.getId());
+            this.addSoundSensorEventHandler(soundButtonId);
+        }
 
-        simLed.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog('Led options');
+        let simSoundSensor = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simSoundSensor.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog('PIR sensor options');
             this.showDialog();
         });
     }
 
+    addSoundSensorEventHandler(soundButtonId) {
+        var self = this;
+        $("#" + soundButtonId).on('mousedown', function () {
+          if (document.getElementById(soundButtonId).className === "sound_button") {
+            document.getElementById(soundButtonId).className = "sound_button sound_button_pushed";
+            self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+            self.setState(1);
+            self._stateUpdated = true;
+            self._eventBus.dispatchEvent(EventsEnum.SAVE);
+          }
+        });
+    
+        $("#" + soundButtonId).on('mouseup', function () {
+          if (document.getElementById(soundButtonId).className === "sound_button sound_button_pushed") {
+            document.getElementById(soundButtonId).className = "sound_button";
+            self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+            self.setState(0);
+            self._stateUpdated = true; 
+            self._eventBus.dispatchEvent(EventsEnum.SAVE);
+          }
+        });
+    }
+
     removeHtml(){
-        $('#sim_' + this.toString() + this.getId()).remove();
+        $('#sim_sound' + this.getId()).remove();
+
+        let buttonLabel = '#' + this.getType() + '_button' + this.getId() + '_label';
+        let soundButtonId = '#' + this.getType() + '_button' + this.getId();
+        $(buttonLabel).remove();
+        $(soundButtonId).remove();
+    }
+
+    toggleVisibility(visible){
+        if (visible) {
+            $('#sim_sound' + this.getId()).css('visibility', 'visible');
+        } else {
+            $('#sim_sound' + this.getId()).css('visibility', 'hidden');
+        }
     }
 
     toXml(){
@@ -61,7 +98,8 @@ class Led extends RobotComponent{
         data = data.concat("<Item ");
         data = data.concat(" Type='", this.getType(), "'");
         data = data.concat(" Id='", this.getId(), "'");
-        data = data.concat(" Radius='", this.getRadius(), "'");
+        data = data.concat(" Width='", this.getWidth(), "'");
+        data = data.concat(" Height='", this.getHeight(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
@@ -75,10 +113,8 @@ class Led extends RobotComponent{
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }
 
-        data = data.concat(" OnColor='", this.getOnColor(), "'");
-        data = data.concat(" OffColor='", this.getOffColor(), "'");
-        data = data.concat(" BorderColor='", this.getBorderColor(), "'");
         data = data.concat(" Pin='", this.getPin(), "'");
+        data = data.concat(" State='", this.getState(), "'");
         data = data.concat(" Classes='", this.getHtmlClasses(), "'");
 
         data = data.concat('></Item>');
@@ -87,17 +123,8 @@ class Led extends RobotComponent{
     }
 
     reset(){
-        this.setX(0);
-        this.setY(0);
         this.setState(0);
-    }
-
-    toggleVisibility(visible){
-        if (visible) {
-            $('#sim_led' + this.getId()).css('visibility', 'visible');
-        } else {
-            $('#sim_led' + this.getId()).css('visibility', 'hidden');
-        }
+        this._stateUpdated = false;
     }
 
     showDialog(){
@@ -125,7 +152,6 @@ class Led extends RobotComponent{
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
 
         this.createPinOptionsInModalDialog();
-        this.createColorOptionsDialog();
 
     }
 
@@ -151,37 +177,10 @@ class Led extends RobotComponent{
                 this._eventBus.dispatchEvent(EventsEnum.SAVE);
             });
         }
-
     }
 
     getAllPossiblePins(){
         return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
-    }
-
-    createColorOptionsDialog(){
-        $('#componentOptionsModalBody').append('<div id="componentOptionsColor" class="ui-widget row mb-4">');
-        $('#componentOptionsColor').append('<div class="col-md-2">'+'Color'+'</div>');
-        $('#componentOptionsColor').append('<div id="color" class="col-md-10"></div>');
-
-        for (const [type, t] of Object.entries(ColorsEnum)) {
-            console.log(t);
-            $('#color').append('<button type="button" id=color'+t+' name='+type+' class="col-md-1 ml-2 mb-2 colorButton"></buttons>');
-            let colorButton = document.getElementById('color'+t);
-            colorButton.classList.add(type);
-            if(this.getOnColor() == type){
-                colorButton.classList.add('colorButton_selected');
-            }
-
-            colorButton.addEventListener('click', () => {
-                this._eventBus.dispatchEvent(EventsEnum.CLEARCANVAS, this.getCanvasId());
-                let newColor = colorButton.getAttribute("name");
-                this.setOnColor(newColor);
-                $('.colorButton').removeClass('colorButton_selected');
-                colorButton.classList.add('colorButton_selected');
-                this._eventBus.dispatchEvent(EventsEnum.INITIALIZECANVAS, this);
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
-            });
-        }
     }
 
     getId(){
@@ -192,28 +191,20 @@ class Led extends RobotComponent{
         return this._type;
     }
 
-    setRadius(radius){
-        this._radius = radius;
+    setWidth(width){
+        this._width = width;
     }
 
-    getRadius(){
-        return this._radius;
+    getWidth(){
+        return this._width;
     }
 
-    setX(x){
-        this._x = x;
+    setHeight(height){
+        this._height = height;
     }
 
-    getX(){
-        return this._x;
-    }
-
-    setY(y){
-        this._y = y;
-    }
-
-    getY(){
-        return this._y;
+    getHeight(){
+        return this._height;
     }
 
     setOffset(offset){
@@ -223,30 +214,15 @@ class Led extends RobotComponent{
     getOffset(){
         return this._offset;
     }
-    setOnColor(onColor){
-        this._onColor = onColor;
+
+    setImage(image){
+        this._image.src = image;
     }
 
-    getOnColor(){
-        return this._onColor;
+    getImage(){
+        return this._image;
     }
-
-    setOffColor(offColor){
-        this._offColor = offColor;
-    }
-
-    getOffColor(){
-        return this._offColor;
-    }
-
-    setBorderColor(borderColor){
-        this._borderColor = borderColor;
-    }
-
-    getBorderColor(){
-        return this._borderColor;
-    }
-
+    
     setPin(pin){
         this._pin = pin;
     }
@@ -261,6 +237,10 @@ class Led extends RobotComponent{
 
     getState(){
         return this._state;
+    }
+
+    isStateUpdated(){
+        return this._stateUpdated;
     }
 
     getCanvasId(){

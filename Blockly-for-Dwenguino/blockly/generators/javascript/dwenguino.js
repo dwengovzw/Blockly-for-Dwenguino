@@ -71,7 +71,7 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
 
     //  Assemble JavaScript into code variable.
     var code = machine + "sonar(" + value_trig +', ' + value_echo + ')';
-
+  
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -81,7 +81,7 @@ Blockly.JavaScript['pir_sensor'] = function (block) {
 
   //  Assemble JavaScript into code variable.
   var code = machine + "pir(" + value_trig + ')';
-
+   console.log(code);
   return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
