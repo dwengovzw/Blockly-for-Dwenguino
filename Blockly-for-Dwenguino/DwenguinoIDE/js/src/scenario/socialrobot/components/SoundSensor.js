@@ -47,7 +47,7 @@ class SoundSensor extends RobotComponent{
         let simSoundSensor = document.getElementById('sim_'+this.getType() + this.getId());
 
         simSoundSensor.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog('PIR sensor options');
+            this.createComponentOptionsModalDialog(MSG.soundOptions);
             this.showDialog();
         });
     }
