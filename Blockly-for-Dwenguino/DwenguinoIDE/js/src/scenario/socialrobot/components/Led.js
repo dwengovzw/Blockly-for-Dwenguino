@@ -46,7 +46,7 @@ class Led extends RobotComponent{
         let simLed = document.getElementById('sim_'+this.getType() + this.getId());
 
         simLed.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog('Led options');
+            this.createComponentOptionsModalDialog(MSG.ledOptions);
             this.showDialog();
         });
     }

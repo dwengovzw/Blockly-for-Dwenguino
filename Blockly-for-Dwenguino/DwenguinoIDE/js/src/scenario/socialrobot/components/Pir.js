@@ -47,7 +47,7 @@ class Pir extends RobotComponent{
         let simPir = document.getElementById('sim_'+this.getType() + this.getId());
 
         simPir.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog('PIR sensor options');
+            this.createComponentOptionsModalDialog(MSG.pirOptions);
             this.showDialog();
         });
     }
