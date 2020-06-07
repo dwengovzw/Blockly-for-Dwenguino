@@ -174,6 +174,7 @@ MSG.simulator = {
   code: "Code",
   pir: "PIR sensor",
   sonar: "Sonar",
+  sound: "Geluidssensor",
   led: "LED",
   lcd: "LCD-scherm",
   decoration: "Decoratie",

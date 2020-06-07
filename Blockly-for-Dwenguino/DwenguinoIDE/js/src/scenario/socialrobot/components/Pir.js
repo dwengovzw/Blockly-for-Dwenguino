@@ -43,6 +43,13 @@ class Pir extends RobotComponent{
 
             this.addPirEventHandler(pirButtonId);
         }
+
+        let simPir = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simPir.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog('PIR sensor options');
+            this.showDialog();
+        });
     }
 
     addPirEventHandler(pirButtonId) {
@@ -117,6 +124,62 @@ class Pir extends RobotComponent{
     reset(){
         this.setState(0);
         this._stateUpdated = false;
+    }
+
+    showDialog(){
+        $("#componentOptionsModal").modal('show');
+    }
+    
+    removeDialog(){
+        $('div').remove('#componentOptionsModal');
+        $('.modal-backdrop').remove();
+    }
+
+    createComponentOptionsModalDialog(headerTitle){
+        this.removeDialog();
+    
+        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
+        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
+    
+        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
+    
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
+        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
+    
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+
+        this.createPinOptionsInModalDialog();
+
+    }
+
+    createPinOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
+        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
+        $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
+
+        let pins = this.getAllPossiblePins();
+        for(let pin = 0; pin < pins.length; pin++){
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            if(this.getPin() == pins[pin]){
+                $('#pin' + pins[pin]).addClass('option_button_selected');
+            }
+
+            let pinButton = document.getElementById('pin'+pins[pin]);
+
+            pinButton.addEventListener('click', () => { 
+                let newPin = pinButton.name;
+                this.setPin(newPin);
+                $('.pinButton').removeClass('option_button_selected');
+                pinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+            });
+        }
+    }
+
+    getAllPossiblePins(){
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
     }
 
     getId(){

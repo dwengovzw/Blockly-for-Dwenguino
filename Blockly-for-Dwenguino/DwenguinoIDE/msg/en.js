@@ -115,6 +115,7 @@ var MSG = {
   socialRobotServoLeftHand: "Servo left hand",
   sonarSliderLabel: "Sonar distance",
   pirButtonLabel: "PIR button",
+  soundButtonLabel: "Sound button",
   runError: "Oops there was an error when trying to run your code on the board.",
   uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is connected try unplugging it and plugging it back in.",
   cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
@@ -166,6 +167,7 @@ MSG.simulator = {
   led: "LED",
   lcd: "LCD screen",
   button: "Button",
+  sound: "Sound sensor",
   decoration: "Decoration",
 };
 

@@ -8,7 +8,7 @@ export default class BoardState {
     pins = new Array(33);
     pinMapping = {};
     lcdContent = null;
-    sonarDistance = -1;
+    // sonarDistance = -1; // now has to be fetched as values with getIOPinState(echoPin)
     
 
     constructor(){
@@ -80,7 +80,7 @@ export default class BoardState {
         this.pins[this.pinMapping["SW_S"]] = 1;
         this.pins[this.pinMapping["SW_W"]] = 1;
         this.pins[this.pinMapping["SW_C"]] = 1;
-        this.sonarDistance = -1;
+        //this.sonarDistance = -1;
     }
 
     setTonePlaying(tone){
@@ -187,12 +187,14 @@ export default class BoardState {
         return this.pins[this.pinMapping[switchName]];
     }
 
-    setSonarDistance(dist){
-        this.sonarDistance = dist;
+    setSonarDistance(trigPin, echoPin, dist){
+        this.setIoPinState(trigPin, dist);
+        this.setIoPinState(echoPin, dist);
+        //this.sonarDistance = dist;
     }
 
-    getSonarDistance(){
-        return this.sonarDistance;
+    getSonarDistance(trigPin, echoPin){
+        return this.getIoPinState(echoPin);
     }
 
     setIoPinState(pinName, state){
