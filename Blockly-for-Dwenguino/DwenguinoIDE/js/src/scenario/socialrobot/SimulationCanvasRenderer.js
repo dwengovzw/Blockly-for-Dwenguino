@@ -115,6 +115,7 @@ export default class SimulationCanvasRenderer {
         for(var i = 0; i < robot.length; i++){
             if(robot[i].getType() == TypesEnum.SERVO){
                 let canvas = document.getElementById(robot[i].getCanvasId());
+                this.clearCanvas(robot[i].getCanvasId());
                 this.drawServo(robot[i], canvas);
             }
         }
