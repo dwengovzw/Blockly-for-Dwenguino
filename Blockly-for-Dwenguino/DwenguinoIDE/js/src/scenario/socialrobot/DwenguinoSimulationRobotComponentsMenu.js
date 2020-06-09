@@ -10,6 +10,7 @@ export default class DwenguinoSimulationRobotComponentsMenu {
   maxNumberOfSonars = 1;
   maxNumberOfLcds =  1;
   maxNumberOfSoundSensors = 2;
+  maxNumberOfLightSensors = 2;
   maxNumberOfDecorations = 10;
   socialRobotScenario = {};
   numberOfButtons = 3;
@@ -73,6 +74,11 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     $('#rc_sound').append('<div id="rc_sound_img"></div>');
     $('#rc_sound').append('<div id="rc_sound_options"></div>');
 
+    $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item card"></div>');
+    $('#rc_light').append('<div id="rc_light_tag" class="rc_tag"></div>');
+    $('#rc_light').append('<div id="rc_light_img"></div>');
+    $('#rc_light').append('<div id="rc_light_options"></div>');
+
     $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item card"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_img"></div>');
@@ -99,6 +105,8 @@ export default class DwenguinoSimulationRobotComponentsMenu {
   $('#rc_lcd_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_lcd_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="lcd"><span class="glyphicon glyphicon-minus" id="rc_lcd_minus_button"></span></button></span><input type="text" name="lcd" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLcds + '"><span class="input-group-btn"><button type="button" id="rc_lcd_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="lcd"><span class="glyphicon glyphicon-plus" id="rc_lcd_plus_button"></span></button></span></div>'); 
 
   $('#rc_sound_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_sound_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="sound"><span class="glyphicon glyphicon-minus" id="rc_sound_minus_button"></span></button></span><input type="text" name="sound" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfSoundSensors + '"><span class="input-group-btn"><button type="button" id="rc_sound_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="sound"><span class="glyphicon glyphicon-plus" id="rc_sound_plus_button"></span></button></span></div>');
+
+  $('#rc_light_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_light_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="light"><span class="glyphicon glyphicon-minus" id="rc_light_minus_button"></span></button></span><input type="text" name="light" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLightSensors + '"><span class="input-group-btn"><button type="button" id="rc_light_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="light"><span class="glyphicon glyphicon-plus" id="rc_light_plus_button"></span></button></span></div>');
 
   $('#rc_decoration_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_decoration_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="decoration"><span class="glyphicon glyphicon-minus" id="rc_decoration_minus_button"></span></button></span><input type="text" name="decoration" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfDecorations + '"><span class="input-group-btn"><button type="button" id="rc_decoration_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="decoration"><span class="glyphicon glyphicon-plus" id="rc_decoration_plus_button"></span></button></span></div>'); 
 
@@ -225,6 +233,9 @@ export default class DwenguinoSimulationRobotComponentsMenu {
       case "rc_sound_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.SOUND);
         break;
+      case "rc_light_plus_button":
+        this.socialRobotScenario.addRobotComponent(TypesEnum.LIGHT);
+        break;
       case "default":
         break;
     }
@@ -259,6 +270,9 @@ export default class DwenguinoSimulationRobotComponentsMenu {
         break;
       case "rc_sound_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.SOUND);
+        break;
+      case "rc_light_minus_button":
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.LIGHT);
         break;
       case "default":
         break;

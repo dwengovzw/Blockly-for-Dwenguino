@@ -20,6 +20,7 @@ export default class SimulationCanvasRenderer {
     this.drawPirs(robot);
     this.drawSonars(robot);
     this.drawSoundSensors(robot);
+    this.drawLightSensors(robot);
   }
 
     /**
@@ -475,6 +476,38 @@ export default class SimulationCanvasRenderer {
 
             var ctx = canvas.getContext('2d');
             ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight());
+        } else {
+            console.log(canvas, "This canvas has no context");
+        } 
+    }
+
+        /**
+     * Draw all light sensors on light canvases with the image specified in robot.
+     */
+    drawLightSensors(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.LIGHT){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawLightSensor(robot[i], canvas);
+            }
+        }
+    }
+
+    /**
+     * Draw a pir sensor on the given canvas with the image specified in robot.
+     */
+    drawLightSensor(lightSensor, canvas){
+        if (canvas.getContext) {
+
+            // in case the image isn't loaded yet.
+            var self = this;
+            lightSensor.getImage().onload = function() {
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(lightSensor.getImage(),0,0,lightSensor.getWidth(),lightSensor.getHeight()); 
+            }
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(lightSensor.getImage(),0,0,lightSensor.getWidth(),lightSensor.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         } 
