@@ -334,6 +334,35 @@ var socialrobot_wave_arms_json = {
     }
   };
 
+  var socialrobot_set_pin = {
+    "id": "socialrobot_set_pin",
+    "message0": MSG.socialrobotSetPinState,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "PIN",
+        "check": "Number"
+      },
+      {
+        "type": "input_value",
+        "name": "PIN_STATE",
+        "check": "Number"
+      }
+    ],
+    "inputsInline": true,
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Blocks.socialrobot.HUE,
+    "tooltip": "Set pin",
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_set_pin'] = {
+    init: function(){
+        this.jsonInit(socialrobot_set_pin);
+    }
+};
+
   var socialrobot_read_pin_json = {
     "id": "socialrobot_read_pin",
     "message0": MSG.socialrobotReadPinBlock,

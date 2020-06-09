@@ -297,6 +297,23 @@
                 </block>
             </value>
         </block>
+        <block type="socialrobot_set_pin">
+            <value name="PIN">
+                <block type="dwenguino_pins" id="214">
+                    <field name="PIN">0</field>
+                </block>
+            </value>
+            <value name="PIN_STATE" id="215">
+                <block type="dwenguino_highlow"></block>
+            </value>
+        </block>
+        <block type="socialrobot_read_pin">
+            <value name="PIN">
+                <block type="dwenguino_pins" id="215">
+                    <field name="PIN">0</field>
+                </block>
+            </value>
+        </block>
     </category>
     <sep></sep>
     <category id="catComments" colour="200" name='Comments'>
@@ -437,7 +454,7 @@
 
     <script src="./DwenguinoIDE/js/lib/ResizeSensor.js"></script>
     <script src="./DwenguinoIDE/js/lib/ElementQueries.js"></script>
-    <script src="./DwenguinoIDE/js/lib/debugjs.js"></script>
+    <script src="./DwenguinoIDE/js/lib/debugjs.js" type="text/javascript"></script>
     <script src="./DwenguinoIDE/js/lib/socket.io.js"></script>
     <script src="./DwenguinoIDE/js/lib/dropzone.js"></script>
 

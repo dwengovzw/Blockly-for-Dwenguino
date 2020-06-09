@@ -72,7 +72,7 @@ class Servo extends RobotComponent{
         let simServo = document.getElementById('sim_'+this.getType() + this.getId());
 
         simServo.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog('Servo options');
+            this.createComponentOptionsModalDialog(MSG.servoOptions);
             this.showDialog();
         });
     
@@ -209,12 +209,21 @@ class Servo extends RobotComponent{
 
     createCostumeOptionsDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsCostume" class="ui-widget row mb-4">');
-        $('#componentOptionsCostume').append('<div class="col-md-2">'+'Costume'+'</div>');
+        $('#componentOptionsCostume').append('<div class="col-md-2">'+ MSG.servoCostume +'</div>');
         $('#componentOptionsCostume').append('<div id="costume" class="col-md-10"></div>');
 
+        let costumeIcons = { 
+            'plain' : './DwenguinoIDE/img/socialrobot/servo.png',
+            'eye' : './DwenguinoIDE/img/socialrobot/eye.png',
+            'mouth' : './DwenguinoIDE/img/socialrobot/mouth.png',
+            'righthand' : './DwenguinoIDE/img/socialrobot/righthand_icon.png',
+            'lefthand' : './DwenguinoIDE/img/socialrobot/lefthand_icon.png'
+    }
         for (const [type, t] of Object.entries(CostumesEnum)) {
             console.log(t);
-            $('#costume').append('<div id=costume'+t+' name='+t+' class="col-md-2 ml-2 mb-2 costumeButton">'+t+'</div>');
+            $('#costume').append('<div id="costume_inner" class="row"></div>');
+            $('#costume_inner').append('<div id=costume'+t+' name='+t+' class="col-lg-3 col-md-2 col-sm-3 col-xs-4 ml-2 mb-2 costumeButton"></div>');
+            $('#costume'+t).append('<img src="' + costumeIcons[t] +'" class="img-responsive">');
 
             let costumeButton = document.getElementById('costume'+t);
             costumeButton.addEventListener('click', () => {

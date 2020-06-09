@@ -143,7 +143,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         // TODO: Figure out how to update the pir sensor visuals
     
         // Show the sonar value
-        var distance = Math.round(board.sonarDistance);
+        var distance = board.getSonarDistance(11, 12);
         if (distance <= -1){
             this.hideSonar();
         } else {

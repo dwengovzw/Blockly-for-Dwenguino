@@ -2,30 +2,30 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
 
-export { Pir }
+export { LightSensor }
 
-class Pir extends RobotComponent{
+class LightSensor extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.PIR;
+        this._type = TypesEnum.LIGHT;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/socialrobot/pir.png';
+        this._image.src = './DwenguinoIDE/img/socialrobot/light_sensor.png';
         this._pin = pin;
         this._state = state;
         this._stateUpdated = false;
-        this._canvasId = 'sim_pir_canvas' + this._id;
+        this._canvasId = 'sim_light_canvas' + this._id;
 
         this.insertHtml();
         this.toggleVisibility(visible);
     }
 
     toString(){
-        return 'pir';
+        return 'light sensor';
     }
 
     insertHtml(){
@@ -34,60 +34,60 @@ class Pir extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let buttonLabel = 'button' + this.getId() + '_label';
-        let pirButtonId = 'pir_button' + this.getId();
+        let buttonLabel = this.getType() + '_button' + this.getId() + '_label';
+        let lightButtonId = this.getType() + '_button' + this.getId();
         
-        if (!document.getElementById(pirButtonId)) {
-            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.pirButtonLabel + ' ' + this.getId() + "</div>");
-            $('#sensor_options').append("<div id='" + pirButtonId + "' class='pir_button' alt='Load'></div>");
+        if (!document.getElementById(lightButtonId)) {
+            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.lightButtonLabel + ' ' + this.getId() + "</div>");
+            $('#sensor_options').append("<div id='" + lightButtonId + "' class='light_button' alt='Load'></div>");
 
-            this.addPirEventHandler(pirButtonId);
+            this.addLightSensorEventHandler(lightButtonId);
         }
 
-        let simPir = document.getElementById('sim_'+this.getType() + this.getId());
+        let simLightSensor = document.getElementById('sim_'+this.getType() + this.getId());
 
-        simPir.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.pirOptions);
+        simLightSensor.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog(MSG.lightOptions);
             this.showDialog();
         });
     }
 
-    addPirEventHandler(pirButtonId) {
+    addLightSensorEventHandler(lightButtonId) {
         var self = this;
-        $("#" + pirButtonId).on('click', function () {
-            let classesActive = "pir_button pir_button_pushed";
-            let classesInactive = "pir_button";
+        $("#" + lightButtonId).on('click', function () {
+            let classesActive = "light_button light_button_pushed";
+            let classesInactive = "light_button";
 
-            if (document.getElementById(pirButtonId).className === classesInactive) {
-                document.getElementById(pirButtonId).className = classesActive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
+            if (document.getElementById(lightButtonId).className === classesInactive) {
+                document.getElementById(lightButtonId).className = classesActive;
+                self.setImage('./DwenguinoIDE/img/socialrobot/light_sensor.png');
                 self.setState(1);
                 self._stateUpdated = true;
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);
             } else {
-                document.getElementById(pirButtonId).className = classesInactive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
+                document.getElementById(lightButtonId).className = classesInactive;
+                self.setImage('./DwenguinoIDE/img/socialrobot/light_sensor.png');
                 self.setState(0);
                 self._stateUpdated = true; 
-                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+                self._eventBus.dispatchEvent(EventsEnum.SAVE); 
             }
-          });
+        });
     }
 
     removeHtml(){
-        $('#sim_pir' + this.getId()).remove();
+        $('#sim_light' + this.getId()).remove();
 
-        let buttonLabel = '#button' + this.getId() + '_label';
-        let pirButtonId = '#pir_button' + this.getId();
+        let buttonLabel = '#' + this.getType() + '_button' + this.getId() + '_label';
+        let lightButtonId = '#' + this.getType() + '_button' + this.getId();
         $(buttonLabel).remove();
-        $(pirButtonId).remove();
+        $(lightButtonId).remove();
     }
 
     toggleVisibility(visible){
         if (visible) {
-            $('#sim_pir' + this.getId()).css('visibility', 'visible');
+            $('#sim_light' + this.getId()).css('visibility', 'visible');
         } else {
-            $('#sim_pir' + this.getId()).css('visibility', 'hidden');
+            $('#sim_light' + this.getId()).css('visibility', 'hidden');
         }
     }
 
@@ -120,6 +120,7 @@ class Pir extends RobotComponent{
 
         return data;
     }
+
     reset(){
         this.setState(0);
         this._stateUpdated = false;

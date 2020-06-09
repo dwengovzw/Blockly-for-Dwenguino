@@ -7,6 +7,8 @@ import { Led } from "./components/Led.js"
 import { Lcd } from "./components/Lcd.js"
 import { Sonar } from "./components/Sonar.js"
 import { Pir } from "./components/Pir.js"
+import { SoundSensor } from "./components/SoundSensor.js"
+import { LightSensor } from "./components/LightSensor.js"
 
 export { TypesEnum, RobotComponentsFactory }
 
@@ -19,7 +21,9 @@ const TypesEnum = {
   LED: 'led',
   PIR: 'pir',
   SONAR: 'sonar',
-  LCD: 'lcd'
+  LCD: 'lcd',
+  SOUND: 'sound',
+  LIGHT: 'light',
 };
 Object.freeze(TypesEnum);
 
@@ -104,6 +108,20 @@ class RobotComponentsFactory {
         case TypesEnum.LCD:
           this._robot[i].setState(dwenguinoState.getLcdContent(0), dwenguinoState.getLcdContent(1));
           break;
+        case TypesEnum.SOUND:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.LIGHT:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
       }
     }
   }
@@ -150,6 +168,12 @@ class RobotComponentsFactory {
       case TypesEnum.LCD:
         this.addLcd();
         break;
+      case TypesEnum.SOUND:
+        this.addSoundSensor();
+        break;
+      case TypesEnum.LIGHT:
+        this.addLightSensor();
+        break;
     }
   }
 
@@ -169,6 +193,12 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.LCD:
         this.removeLcd();
+        break;
+      case TypesEnum.SOUND:
+        this.removeSoundSensor();
+        break;
+      case TypesEnum.LIGHT:
+        this.removeLightSensor();
         break;
     }
   }
@@ -196,9 +226,8 @@ class RobotComponentsFactory {
         var offColor = data.getAttribute('OffColor');
         var borderColor = data.getAttribute('BorderColor');
         var pin = parseInt(data.getAttribute('Pin'));
-        var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
-        this.addLed(pin, state, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+        this.addLed(pin, 0, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
         break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
@@ -226,6 +255,26 @@ class RobotComponentsFactory {
         var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
         var htmlClasses = data.getAttribute('Classes');
         this.addLcd(true, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.SOUND:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addSoundSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LIGHT:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLightSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
     }
   }
@@ -271,7 +320,6 @@ class RobotComponentsFactory {
     this._robot.push(led);
 
     this.renderer.initializeCanvas(this._robot, led); 
-    this.scenarioUtils.contextMenuLed();
   }
 
   /**
@@ -354,6 +402,55 @@ class RobotComponentsFactory {
     
     let id = this._numberOfComponentsOfType[TypsEnum.LCD];
     this.removeRobotComponentWithTypeAndId(TypsEnum.LCD, id);
+  }
+
+
+  /**
+   * Add a new Sound sensor to the simulation container.
+   */
+  addSoundSensor(pin=0, state=0, visible=true, width=100, height=54, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
+    this.incrementNumberOf(TypesEnum.SOUND);
+    let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
+
+    let soundSensor = new SoundSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(soundSensor);
+
+    this.renderer.initializeCanvas(this._robot, soundSensor); 
+  }
+
+  /**
+   * Remove the most recent created Sound sensor from the simulation container.
+   */
+  removeSoundSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SOUND));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SOUND, id);
+  }
+
+    /**
+   * Add a new Light sensor to the simulation container.
+   */
+  addLightSensor(pin=0, state=0, visible=true, width=30, height=30, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LIGHT));
+    this.incrementNumberOf(TypesEnum.LIGHT);
+    let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
+
+    let lightSensor = new LightSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(lightSensor);
+
+    this.renderer.initializeCanvas(this._robot, lightSensor); 
+  }
+
+  /**
+   * Remove the most recent created Light sensor from the simulation container.
+   */
+  removeLightSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LIGHT));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LIGHT, id);
   }
 
   incrementNumberOf(type) {

@@ -716,6 +716,22 @@ body{
     background-repeat: no-repeat;
 }
 
+#rc_sound_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/socialrobot/sound_sensor.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#rc_light_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/socialrobot/light_sensor.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 #rc_button_img {
     width: 50%;
     height: 50%;
@@ -779,6 +795,16 @@ body{
     height: 58px;
 }
 
+.sim_element_sound{
+    width:130px;
+    height: 60px;
+}
+
+.sim_element_light{
+    width:120px;
+    height: 60px;
+}
+
 .pir_button {
     background-image: url("../img/board/button.png");
     background-size: 100% 100%;
@@ -788,6 +814,30 @@ body{
 }
 
 .pir_button_pushed {
+    background-image: url("../img/board/button_pushed.png");
+}
+
+.sound_button {
+    background-image: url("../img/board/button.png");
+    background-size: 100% 100%;
+    height: 26px;
+    width: 26px;
+    display: inline-block;
+}
+
+.sound_button_pushed {
+    background-image: url("../img/board/button_pushed.png");
+}
+
+.light_button {
+    background-image: url("../img/board/button.png");
+    background-size: 100% 100%;
+    height: 26px;
+    width: 26px;
+    display: inline-block;
+}
+
+.light_button_pushed {
     background-image: url("../img/board/button_pushed.png");
 }
 
@@ -853,6 +903,20 @@ body{
     margin-left: 25px;
     width: 100px;
     height: 58px;
+    margin-top: 10px;
+}
+
+.sound_canvas{
+    margin-left: 25px;
+    width: 100px;
+    height: 60px;
+    margin-top: 10px;
+}
+
+.light_canvas{
+    margin-left: 25px;
+    width: 30px;
+    height: 30px;
     margin-top: 10px;
 }
 

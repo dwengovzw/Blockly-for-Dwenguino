@@ -2,30 +2,30 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
 
-export { Pir }
+export { SoundSensor }
 
-class Pir extends RobotComponent{
+class SoundSensor extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.PIR;
+        this._type = TypesEnum.SOUND;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/socialrobot/pir.png';
+        this._image.src = './DwenguinoIDE/img/socialrobot/sound_sensor.png';
         this._pin = pin;
         this._state = state;
         this._stateUpdated = false;
-        this._canvasId = 'sim_pir_canvas' + this._id;
+        this._canvasId = 'sim_sound_canvas' + this._id;
 
         this.insertHtml();
         this.toggleVisibility(visible);
     }
 
     toString(){
-        return 'pir';
+        return 'sound sensor';
     }
 
     insertHtml(){
@@ -34,60 +34,60 @@ class Pir extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let buttonLabel = 'button' + this.getId() + '_label';
-        let pirButtonId = 'pir_button' + this.getId();
+        let buttonLabel = this.getType() + '_button' + this.getId() + '_label';
+        let soundButtonId = this.getType() + '_button' + this.getId();
         
-        if (!document.getElementById(pirButtonId)) {
-            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.pirButtonLabel + ' ' + this.getId() + "</div>");
-            $('#sensor_options').append("<div id='" + pirButtonId + "' class='pir_button' alt='Load'></div>");
+        if (!document.getElementById(soundButtonId)) {
+            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.soundButtonLabel + ' ' + this.getId() + "</div>");
+            $('#sensor_options').append("<div id='" + soundButtonId + "' class='sound_button' alt='Load'></div>");
 
-            this.addPirEventHandler(pirButtonId);
+            this.addSoundSensorEventHandler(soundButtonId);
         }
 
-        let simPir = document.getElementById('sim_'+this.getType() + this.getId());
+        let simSoundSensor = document.getElementById('sim_'+this.getType() + this.getId());
 
-        simPir.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.pirOptions);
+        simSoundSensor.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog(MSG.soundOptions);
             this.showDialog();
         });
     }
 
-    addPirEventHandler(pirButtonId) {
+    addSoundSensorEventHandler(soundButtonId) {
         var self = this;
-        $("#" + pirButtonId).on('click', function () {
-            let classesActive = "pir_button pir_button_pushed";
-            let classesInactive = "pir_button";
+        $("#" + soundButtonId).on('click', function () {
+            let classesActive = "sound_button sound_button_pushed";
+            let classesInactive = "sound_button";
 
-            if (document.getElementById(pirButtonId).className === classesInactive) {
-                document.getElementById(pirButtonId).className = classesActive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
+            if (document.getElementById(soundButtonId).className === classesInactive) {
+                document.getElementById(soundButtonId).className = classesActive;
+                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
                 self.setState(1);
                 self._stateUpdated = true;
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);
             } else {
-                document.getElementById(pirButtonId).className = classesInactive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
+                document.getElementById(soundButtonId).className = classesInactive;
+                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
                 self.setState(0);
                 self._stateUpdated = true; 
-                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+                self._eventBus.dispatchEvent(EventsEnum.SAVE); 
             }
-          });
+        });
     }
 
     removeHtml(){
-        $('#sim_pir' + this.getId()).remove();
+        $('#sim_sound' + this.getId()).remove();
 
-        let buttonLabel = '#button' + this.getId() + '_label';
-        let pirButtonId = '#pir_button' + this.getId();
+        let buttonLabel = '#' + this.getType() + '_button' + this.getId() + '_label';
+        let soundButtonId = '#' + this.getType() + '_button' + this.getId();
         $(buttonLabel).remove();
-        $(pirButtonId).remove();
+        $(soundButtonId).remove();
     }
 
     toggleVisibility(visible){
         if (visible) {
-            $('#sim_pir' + this.getId()).css('visibility', 'visible');
+            $('#sim_sound' + this.getId()).css('visibility', 'visible');
         } else {
-            $('#sim_pir' + this.getId()).css('visibility', 'hidden');
+            $('#sim_sound' + this.getId()).css('visibility', 'hidden');
         }
     }
 
@@ -120,6 +120,7 @@ class Pir extends RobotComponent{
 
         return data;
     }
+
     reset(){
         this.setState(0);
         this._stateUpdated = false;
