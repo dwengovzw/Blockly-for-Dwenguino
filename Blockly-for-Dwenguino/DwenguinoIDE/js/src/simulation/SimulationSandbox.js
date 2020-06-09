@@ -57,6 +57,8 @@ export default class SimulationSandbox{
       } else {
         pin === 13 ? this.boardState.setLedState(8, 0) : this.boardState.setLedState(pin, 0);
       }
+    } else {
+      this.boardState.setIoPinState(pin, state);
     }
   }
 
@@ -205,7 +207,8 @@ export default class SimulationSandbox{
   * @returns {int} distance in cm
   */
   sonar(trigPin, echoPin) {
-    return Math.round(this.boardState.getSonarDistance());
+    //return Math.round(this.boardState.getSonarDistance());
+    return Math.round(this.boardState.getSonarDistance(trigPin, echoPin));
   }
 
   /**
@@ -220,7 +223,7 @@ export default class SimulationSandbox{
       // TODO: figure out hou to access the pir data
 
     //invert state (low = pressed)
-      return (this.boardState.getIoPinState(0) == 0 ? 1 : 0);
+      return this.boardState.getIoPinState(trigPin);
   }
 
   /**

@@ -6,10 +6,11 @@ import { EventBus} from "./EventBus.js"
 export default class DwenguinoSimulationRobotComponentsMenu {
   maxNumberOfServos = 5;
   maxNumberOfLeds = 3;
-  maxNumberOfPirs = 1;
+  maxNumberOfPirs = 2;
   maxNumberOfSonars = 1;
   maxNumberOfLcds =  1;
-  maxNumberOfButtons = 3;
+  maxNumberOfSoundSensors = 2;
+  maxNumberOfLightSensors = 2;
   maxNumberOfDecorations = 10;
   socialRobotScenario = {};
   numberOfButtons = 3;
@@ -68,10 +69,15 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     $('#rc_lcd').append('<div id="rc_lcd_img"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_options"></div>');
 
-    // $('#robot_components_menu').append('<div id="rc_button" class="robot_components_item card"></div>');
-    // $('#rc_button').append('<div id="rc_button_tag" class="rc_tag"></div>');
-    // $('#rc_button').append('<div id="rc_button_img"></div>');
-    // $('#rc_button').append('<div id="rc_button_options"></div>');
+    $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item card"></div>');
+    $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag"></div>');
+    $('#rc_sound').append('<div id="rc_sound_img"></div>');
+    $('#rc_sound').append('<div id="rc_sound_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item card"></div>');
+    $('#rc_light').append('<div id="rc_light_tag" class="rc_tag"></div>');
+    $('#rc_light').append('<div id="rc_light_img"></div>');
+    $('#rc_light').append('<div id="rc_light_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item card"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag"></div>');
@@ -92,15 +98,17 @@ export default class DwenguinoSimulationRobotComponentsMenu {
 
   $('#rc_led_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_led_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="led"><span class="glyphicon glyphicon-minus" id="rc_led_minus_button"></span></button></span><input type="text" name="led" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLeds + '"><span class="input-group-btn"><button type="button" id="rc_led_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="led"><span class="glyphicon glyphicon-plus" id="rc_led_plus_button"></span></button></span></div>');
 
-  $('#rc_pir_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_pir_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="pir"><span class="glyphicon glyphicon-minus" id="rc_pir_minus_button"></span></button></span><input type="text" name="pir" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfPirs + '"><span class="input-group-btn"><button type="button" id="rc_pir_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="pir"><span class="glyphicon glyphicon-plus" id="rc_pir_plus_button"></span></button></span></div>'); 
+  $('#rc_pir_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_pir_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="pir"><span class="glyphicon glyphicon-minus" id="rc_pir_minus_button"></span></button></span><input type="text" name="pir" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfPirs + '"><span class="input-group-btn"><button type="button" id="rc_pir_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="pir"><span class="glyphicon glyphicon-plus" id="rc_pir_plus_button"></span></button></span></div>'); 
 
-  $('#rc_sonar_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_sonar_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="sonar"><span class="glyphicon glyphicon-minus" id="rc_sonar_minus_button"></span></button></span><input type="text" name="sonar" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfSonars + '"><span class="input-group-btn"><button type="button" id="rc_sonar_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="sonar"><span class="glyphicon glyphicon-plus" id="rc_sonar_plus_button"></span></button></span></div>'); 
+  $('#rc_sonar_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_sonar_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="sonar"><span class="glyphicon glyphicon-minus" id="rc_sonar_minus_button"></span></button></span><input type="text" name="sonar" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfSonars + '"><span class="input-group-btn"><button type="button" id="rc_sonar_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="sonar"><span class="glyphicon glyphicon-plus" id="rc_sonar_plus_button"></span></button></span></div>'); 
 
-  $('#rc_lcd_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_lcd_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="lcd"><span class="glyphicon glyphicon-minus" id="rc_lcd_minus_button"></span></button></span><input type="text" name="lcd" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLcds + '"><span class="input-group-btn"><button type="button" id="rc_lcd_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="lcd"><span class="glyphicon glyphicon-plus" id="rc_lcd_plus_button"></span></button></span></div>'); 
+  $('#rc_lcd_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_lcd_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="lcd"><span class="glyphicon glyphicon-minus" id="rc_lcd_minus_button"></span></button></span><input type="text" name="lcd" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLcds + '"><span class="input-group-btn"><button type="button" id="rc_lcd_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="lcd"><span class="glyphicon glyphicon-plus" id="rc_lcd_plus_button"></span></button></span></div>'); 
 
-  // $('#rc_button_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_button_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="button"><span class="glyphicon glyphicon-minus" id="rc_button_minus_button"></span></button></span><input type="text" name="button" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfButtons + '"><span class="input-group-btn"><button type="button" id="rc_button_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="button"><span class="glyphicon glyphicon-plus" id="rc_button_plus_button"></span></button></span></div>');
+  $('#rc_sound_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_sound_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="sound"><span class="glyphicon glyphicon-minus" id="rc_sound_minus_button"></span></button></span><input type="text" name="sound" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfSoundSensors + '"><span class="input-group-btn"><button type="button" id="rc_sound_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="sound"><span class="glyphicon glyphicon-plus" id="rc_sound_plus_button"></span></button></span></div>');
 
-  $('#rc_decoration_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_decoration_minus_button" class="btn btn-default btn-number" disable="disabled" data-type="minus" data-field="decoration"><span class="glyphicon glyphicon-minus" id="rc_decoration_minus_button"></span></button></span><input type="text" name="decoration" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfDecorations + '"><span class="input-group-btn"><button type="button" id="rc_decoration_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="decoration"><span class="glyphicon glyphicon-plus" id="rc_decoration_plus_button"></span></button></span></div>'); 
+  $('#rc_light_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_light_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="light"><span class="glyphicon glyphicon-minus" id="rc_light_minus_button"></span></button></span><input type="text" name="light" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfLightSensors + '"><span class="input-group-btn"><button type="button" id="rc_light_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="light"><span class="glyphicon glyphicon-plus" id="rc_light_plus_button"></span></button></span></div>');
+
+  $('#rc_decoration_options').append('<div class="center"><p></p><div class="input-group"><span class="input-group-btn"><button type="button" id="rc_decoration_minus_button" class="btn btn-default btn-number" disabled="disabled" data-type="minus" data-field="decoration"><span class="glyphicon glyphicon-minus" id="rc_decoration_minus_button"></span></button></span><input type="text" name="decoration" class="form-control input-number" value="0" min="0" max="' + this.maxNumberOfDecorations + '"><span class="input-group-btn"><button type="button" id="rc_decoration_plus_button" class="btn btn-default btn-number" data-type="plus" data-field="decoration"><span class="glyphicon glyphicon-plus" id="rc_decoration_plus_button"></span></button></span></div>'); 
 
   let self = this;
     // Event handlers
@@ -222,8 +230,11 @@ export default class DwenguinoSimulationRobotComponentsMenu {
       case "rc_lcd_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.LCD);
         break;
-      case "rc_button_plus_button":
-        // TODO
+      case "rc_sound_plus_button":
+        this.socialRobotScenario.addRobotComponent(TypesEnum.SOUND);
+        break;
+      case "rc_light_plus_button":
+        this.socialRobotScenario.addRobotComponent(TypesEnum.LIGHT);
         break;
       case "default":
         break;
@@ -257,8 +268,11 @@ export default class DwenguinoSimulationRobotComponentsMenu {
       case "rc_lcd_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.LCD);
         break;
-      case "rc_button_minus_button":
-        // TODO
+      case "rc_sound_minus_button":
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.SOUND);
+        break;
+      case "rc_light_minus_button":
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.LIGHT);
         break;
       case "default":
         break;

@@ -57,9 +57,11 @@ export default class RandomSimulationEnvironment extends DwenguinoSimulationScen
         var D = Math.sin(this.tick/(Math.PI*100)*50) * 250;
             
         if (isNaN(D)){
-            dwenguinoState.sonarDistance = -1;
+            dwenguinoState.setSonarDistance(11, 12, -1);
+            //dwenguinoState.sonarDistance = -1;
         }else{
-            dwenguinoState.sonarDistance = D;
+            dwenguinoState.setSonarDistance(11, 12, D);
+            //dwenguinoState.sonarDistance = D;
         }
       
       

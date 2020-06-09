@@ -59,7 +59,7 @@ class Sonar extends RobotComponent{
         let simSonar = document.getElementById('sim_'+this.getType() + this.getId());
 
         simSonar.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog('Sonar options');
+            this.createComponentOptionsModalDialog(MSG.sonarOptions);
             this.showDialog();
         });
     }

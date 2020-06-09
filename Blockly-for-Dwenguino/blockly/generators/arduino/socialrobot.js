@@ -130,10 +130,18 @@ Blockly.Arduino['socialrobot_eyes_right'] = function(block) {
     return code;
 }
 
-Blockly.Arduino['socialrobot_read_pin'] = function(block){
-    var pin_number = Blockly.Arduino.valueToCode(this, "PIN", Blockly.Arduino.ORDER_ATOMIC);
-    //Blockly.Arduino.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);';
+Blockly.Arduino['socialrobot_set_pin'] = function(block){
+  var pin_number = Blockly.Arduino.valueToCode(block, "PIN", Blockly.Arduino.ORDER_ATOMIC);
+  var led_state = Blockly.Arduino.valueToCode(block, "PIN_STATE", Blockly.Arduino.ORDER_ATOMIC);
 
-    var code = 'DigitalRead(' + pin_number + ')';
+  var code = 'digitalWrite(' + pin_number + ', ' + led_state + ');\n'
+  return code;
+};
+
+Blockly.Arduino['socialrobot_read_pin'] = function(block){
+    var pin_number = Blockly.Arduino.valueToCode(block, "PIN", Blockly.Arduino.ORDER_ATOMIC);
+    Blockly.Arduino.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);\n';
+
+    var code = 'digitalRead(' + pin_number + ')';
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
