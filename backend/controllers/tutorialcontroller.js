@@ -1,11 +1,11 @@
 import Useritem from '../models/userModel.js';
 import Tutorialitem from '../models/tutorialModel.js';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 
 let exports  = {};
 
 exports.getCompletedTutorials = function(req, res) {
-  let mongoose = require('mongoose');
   mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
   let db = mongoose.connection;
 
@@ -41,7 +41,6 @@ exports.getCompletedTutorials = function(req, res) {
 };
 
 exports.newCompletedTutorial = function(req, res) {  
-  let mongoose = require('mongoose');
   mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
   let db = mongoose.connection;
 

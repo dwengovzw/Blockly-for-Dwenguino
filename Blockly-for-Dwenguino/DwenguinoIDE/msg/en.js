@@ -116,12 +116,14 @@ var MSG = {
   sonarSliderLabel: "Sonar distance",
   pirButtonLabel: "PIR button",
   soundButtonLabel: "Sound button",
+  lightButtonLabel: "Light sensor button",
   servoCostume: "Costume",
   servoOptions: "Servo motor options",
   sonarOptions: "Sonar sensor options",
   lcdOptions: "LCD screen options",
   pirOptions: "PIR sensor options",
   soundOptions: "Sound sensor options",
+  lightOptions: "Light sensor options",
   ledOptions: "LED options",
   runError: "Oops there was an error when trying to run your code on the board.",
   uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is connected try unplugging it and plugging it back in.",
@@ -175,6 +177,7 @@ MSG.simulator = {
   lcd: "LCD screen",
   button: "Button",
   sound: "Sound sensor",
+  light: "Light sensor",
   decoration: "Decoration",
 };
 

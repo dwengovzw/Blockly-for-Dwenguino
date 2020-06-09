@@ -54,24 +54,23 @@ class SoundSensor extends RobotComponent{
 
     addSoundSensorEventHandler(soundButtonId) {
         var self = this;
-        $("#" + soundButtonId).on('mousedown', function () {
-          if (document.getElementById(soundButtonId).className === "sound_button") {
-            document.getElementById(soundButtonId).className = "sound_button sound_button_pushed";
-            self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
-            self.setState(1);
-            self._stateUpdated = true;
-            self._eventBus.dispatchEvent(EventsEnum.SAVE);
-          }
-        });
-    
-        $("#" + soundButtonId).on('mouseup', function () {
-          if (document.getElementById(soundButtonId).className === "sound_button sound_button_pushed") {
-            document.getElementById(soundButtonId).className = "sound_button";
-            self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
-            self.setState(0);
-            self._stateUpdated = true; 
-            self._eventBus.dispatchEvent(EventsEnum.SAVE);
-          }
+        $("#" + soundButtonId).on('click', function () {
+            let classesActive = "sound_button sound_button_pushed";
+            let classesInactive = "sound_button";
+
+            if (document.getElementById(soundButtonId).className === classesInactive) {
+                document.getElementById(soundButtonId).className = classesActive;
+                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+                self.setState(1);
+                self._stateUpdated = true;
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            } else {
+                document.getElementById(soundButtonId).className = classesInactive;
+                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+                self.setState(0);
+                self._stateUpdated = true; 
+                self._eventBus.dispatchEvent(EventsEnum.SAVE); 
+            }
         });
     }
 
