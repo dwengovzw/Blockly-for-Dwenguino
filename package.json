@@ -42,7 +42,7 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "electron": "^7.1.7",
+    "electron": "7.3.1",
     "open-cli": "^5.0.0"
   },
   "repository": {

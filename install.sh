@@ -151,19 +151,36 @@ then
     # Check nodejs install
     check_nodejs_install
 
-    # Configure make binaries
-    brew install --with-default-names make
-    cp /usr/local/bin/gmake ./backend/compilation/bin/make
-    #rm ./backend/compilation/bin/make
-    #cp ./backend/compilation/bin/macos/make ./backend/compilation/bin/make
+    # Configure make binaries and some basic linux utils for mac
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:$PATH"
+    brew install coreutils
+    brew install make
+    brew install nano
+    # Get make location
+    makeLocation=`which make`
+    # Create symbolic link in backend to the make location
+    ln -s $makeLocation $work_dir/backend/compilation/macos/make
     echo "Configured make binaries for macos"
 
     # Configure start file
     echo "#!/bin/bash" > dwenguinoblockly.command
-    echo "cd $(pwd)/backend" >> dwenguinoblockly.command
-    echo "node --experimental-modules index.js" >> dwenguinoblockly.command
+    echo "$work_dir/node_modules/electron/dist/electron $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> dwenguinoblockly.command # Start electron
+    echo 'electronPid=$!' >> dwenguinoblockly.command # get process id for the latest command
+    echo "node --experimental-modules $work_dir/backend/index.js &" >> dwenguinoblockly.command # start backend
+    echo 'nodePid=$!' >> dwenguinoblockly.command # get the process id for the latest command
+    echo 'echo "DwenguinoBlockly is running"' >> dwenguinoblockly.command
+    echo 'wait $electronPid' >> dwenguinoblockly.command # Wait until electron environment is closed
+    echo 'kill $nodePid' >> dwenguinoblockly.command # Kill the backend application
+    echo 'echo "Quitting DwenguinoBlockly"' >> dwenguinoblockly.command
     chmod +x dwenguinoblockly.command
+    
+    # Copy start file to desktop
     cp dwenguinoblockly.command ~/Desktop
+    
+    # Install node modules
+    npm install --save electron-prebuilt
+    npm install
 
 
 
