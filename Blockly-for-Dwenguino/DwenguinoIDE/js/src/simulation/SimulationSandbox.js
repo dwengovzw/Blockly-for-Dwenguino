@@ -192,7 +192,7 @@ export default class SimulationSandbox{
     }
 
     // change view of motor
-    if (speed === this.boardState.getMotorSpeedchannel) {
+    if (speed === this.boardState.getMotorSpeed(channel)) {
       return;
     }
     this.boardState.setMotorSpeed(channel, speed);
