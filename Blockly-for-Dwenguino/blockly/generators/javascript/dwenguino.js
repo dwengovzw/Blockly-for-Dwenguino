@@ -75,16 +75,6 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
-Blockly.JavaScript['pir_sensor'] = function (block) {
-  var value_trig = Blockly.JavaScript.valueToCode(block, 'trig', Blockly.JavaScript.ORDER_NONE);
-  //define pir settings
-
-  //  Assemble JavaScript into code variable.
-  var code = machine + "pir(" + value_trig + ')';
-   console.log(code);
-  return [code, Blockly.JavaScript.ORDER_NONE];
-};
-
 Blockly.JavaScript['dwenguino_servo'] = function (block) {
     var value_channel = Blockly.JavaScript.valueToCode(block, 'channel', Blockly.JavaScript.ORDER_ATOMIC);
     var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);

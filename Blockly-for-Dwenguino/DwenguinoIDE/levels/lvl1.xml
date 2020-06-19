@@ -150,13 +150,6 @@
             </block>
         </value>
     </block>
-    <block type="pir_sensor">
-        <value name="trig">
-            <block type="char_type" id="pir_sensor_pin">
-                <field name="BITMASK">13</field>
-            </block>
-        </value>
-    </block>
     <block type="dwenguino_set_led">
         <value name="LED">
             <block type="dwenguino_led_pins">
@@ -200,15 +193,17 @@
 
 </category>
 <category id="catSocialRobot" colour="25" name='SocialRobot'>
-    <block type="socialrobot_servo">
-        <value name="channel">
-            <block type="math_number" id="211">
-                <field name="NUM">3</field>
+    <block type="pir_sensor">
+        <value name="trig">
+            <block type="char_type" id="pir_sensor_pin">
+                <field name="BITMASK">13</field>
             </block>
         </value>
+    </block>
+    <block type="socialrobot_servo">
         <value name="pin">
             <block type="math_number" id="212">
-                <field name="NUM">0</field>
+                <field name="NUM">36</field>
             </block>
         </value>
         <value name="angle">
@@ -220,60 +215,60 @@
     <block type="socialrobot_arms_down">
         <value name="servo_right_hand1">
             <block type="math_number" id="202">
-                <field name="NUM">1</field>
+                <field name="NUM">36</field>
             </block>
         </value>
         <value name="servo_left_hand1">
             <block type="math_number" id="203">
-                <field name="NUM">2</field>
+                <field name="NUM">37</field>
             </block>
         </value>
     </block>
     <block type="socialrobot_arms_up">
         <value name="servo_right_hand2">
             <block type="math_number" id="204">
-                <field name="NUM">1</field>
+                <field name="NUM">36</field>
             </block>
         </value>
         <value name="servo_left_hand2">
             <block type="math_number" id="205">
-                <field name="NUM">2</field>
+                <field name="NUM">37</field>
             </block>
         </value>
     </block>
     <block type="socialrobot_wave_arms">
         <value name="servo_right_hand">
             <block type="math_number" id="200">
-                <field name="NUM">1</field>
+                <field name="NUM">36</field>
             </block>
         </value>
         <value name="servo_left_hand">
             <block type="math_number" id="201">
-                <field name="NUM">2</field>
+                <field name="NUM">37</field>
             </block>
         </value>
     </block>
     <block type="socialrobot_eyes_left">
         <value name="servo_right_eye">
             <block type="math_number" id="206">
-                <field name="NUM">1</field>
+                <field name="NUM">36</field>
             </block>
         </value>
         <value name="servo_left_eye">
             <block type="math_number" id="207">
-                <field name="NUM">2</field>
+                <field name="NUM">37</field>
             </block>
         </value>
     </block>
     <block type="socialrobot_eyes_right">
         <value name="servo_right_eye1">
             <block type="math_number" id="208">
-                <field name="NUM">1</field>
+                <field name="NUM">36</field>
             </block>
         </value>
         <value name="servo_left_eye1">
             <block type="math_number" id="209">
-                <field name="NUM">2</field>
+                <field name="NUM">37</field>
             </block>
         </value>
     </block>

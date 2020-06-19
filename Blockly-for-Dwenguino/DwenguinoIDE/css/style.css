@@ -653,51 +653,27 @@ body{
 }
 
 #rc_servo_img {
-    /* width: 75px;
-    height: 102px;
-    margin-right: 10px;
-    float: left; */
     width: 100%;
     height: 100%;
     background-image: url("../img/socialrobot/servo.png");
     background-size: contain;
     background-repeat: no-repeat;
-    /* background-size: 100% 100%;
-    margin-bottom: 15px;
-    margin-top: 5px;
-    margin-left: 5px; */
 }
 
 #rc_led_img {
-    /* width: 52px;
-    height: 102px;
-    margin-right: 10px;
-    float: left; */
     width: 100%;
     height: 100%;
     background-image: url("../img/socialrobot/led.png");
     background-size: contain;
     background-repeat: no-repeat;
-    /* background-size: 100% 100%;
-    margin-bottom: 15px;
-    margin-top: 5px;
-    margin-left: 5px; */
 }
 
 #rc_pir_img {
-    /* width: 100px;
-    height: 97px;
-    margin-right: 10px;
-    float: left; */
     width: 100%;
     height: 100%;
     background-image: url("../img/socialrobot/pir.png");
     background-size: contain;
     background-repeat: no-repeat;
-    /* background-size: 100% 100%;
-    margin-bottom: 15px;
-    margin-top: 5px;
-    margin-left: 5px; */
 }
 
 #rc_sonar_img {
@@ -754,11 +730,6 @@ body{
 
 .rc_tag {
     margin-bottom: 5px;
-}
-
-.sim_canvas{
-    /* width: 100%;
-    height: 100%; */
 }
 
 .sim_element{

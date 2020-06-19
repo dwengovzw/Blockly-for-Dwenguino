@@ -98,19 +98,6 @@ Blockly.Arduino['sonar_sensor'] = function (block) {
     return [code, Blockly.Arduino.ORDER_NONE];
 };
 
-// TODO
-Blockly.Arduino['pir_sensor'] = function (block) {
-  var value_trig = Blockly.Arduino.valueToCode(block, 'trig', Blockly.Arduino.ORDER_NONE);
-  //define pir settings
-  Blockly.Arduino.definitions_['define_pir_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
-
-  //define pir sensor
-  Blockly.Arduino.setups_['define_dwenguino_pir' + value_trig] = "pinMode(TRIGGER_PIN_" + value_trig + ", INPUT)\n";
-  var code = "digitalRead(TRIGGER_PIN_" + value_trig + ")";
-
-  return [code, Blockly.Arduino.ORDER_NONE];
-};
-
 Blockly.Arduino['dwenguino_servo'] = function (block) {
     var value_channel = Blockly.Arduino.valueToCode(block, 'channel', Blockly.Arduino.ORDER_ATOMIC);
     var value_angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_ATOMIC);

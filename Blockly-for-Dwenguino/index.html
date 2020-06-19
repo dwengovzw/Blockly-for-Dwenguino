@@ -190,13 +190,6 @@
                   </block>
               </value>
           </block>
-          <block type="pir_sensor">
-            <value name="trig">
-                <block type="char_type" id="pir_sensor_pin"> 
-                  <field name="BITMASK">13</field>
-                </block>
-            </value>
-        </block>
           <block type="dwenguino_set_led">
               <value name="LED">
                   <block type="dwenguino_led_pins">
@@ -220,12 +213,14 @@
           <block type="dwenguino_on_off"></block>
       </category>
       <category id="catSocialRobot" colour="25" name='SocialRobot'>
-        <block type="socialrobot_servo">
-            <value name="channel">
-                <block type="math_number" id="211">
-                    <field name="NUM">3</field>
+        <block type="pir_sensor">
+            <value name="trig">
+                <block type="char_type" id="pir_sensor_pin"> 
+                  <field name="BITMASK">13</field>
                 </block>
             </value>
+        </block>
+        <block type="socialrobot_servo">
             <value name="pin">
                 <block type="math_number" id="212">
                     <field name="NUM">0</field>
