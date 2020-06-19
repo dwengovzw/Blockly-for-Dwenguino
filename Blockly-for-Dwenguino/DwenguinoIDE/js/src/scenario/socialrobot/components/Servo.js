@@ -26,20 +26,21 @@ class Servo extends RobotComponent{
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._angle = angle;
         this._prevAngle = 0;
-        this._image = new Image();
+        this._image = [new Image(), new Image()];
 
         switch (costume) {
             case CostumesEnum.PLAIN:
-                this._image.src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
                 break;
             case CostumesEnum.EYE:
-                this._image.src = '';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/eye1_background.svg';
+                this._image[1].src = './DwenguinoIDE/img/socialrobot/eye1_forground.svg';
                 break;
             case CostumesEnum.RIGHTHAND:
-                this._image.src = './DwenguinoIDE/img/socialrobot/righthand.png';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/righthand.png';
                 break;
             case CostumesEnum.LEFTHAND:
-                this._image.src = './DwenguinoIDE/img/socialrobot/lefthand.png';              
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/lefthand.png';              
                 break;
           }
         
@@ -330,12 +331,12 @@ class Servo extends RobotComponent{
         return this._prevAngle;
     }
 
-    setImage(image){
-        this._image.src = image;
+    setImage(index, image){
+        this._image[index].src = image;
     }
 
-    getImage(){
-        return this._image;
+    getImage(index){
+        return this._image[index];
     }
 
     setBackgroundColor(backgroundColor){
@@ -359,16 +360,17 @@ class Servo extends RobotComponent{
 
         switch (costume) {
             case CostumesEnum.PLAIN:
-                this._image.src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
                 break;
             case CostumesEnum.EYE:
-                this._image.src = '';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/eye1_background.svg';
+                this._image[1].src = './DwenguinoIDE/img/socialrobot/eye1_forground.svg';
                 break;
             case CostumesEnum.RIGHTHAND:
-                this._image.src = './DwenguinoIDE/img/socialrobot/righthand.png';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/righthand.png';
                 break;
             case CostumesEnum.LEFTHAND:
-                this._image.src = './DwenguinoIDE/img/socialrobot/lefthand.png';           
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/lefthand.png';           
                 break;
         }
     }

@@ -12,28 +12,44 @@ goog.require('Blockly.Arduino');
 // This is now integrated in the setup loop structure so children don't have to know about the initialisation step and can just start coding
 Blockly.Arduino['initdwenguino'] = function (block) {
 
-//    Blockly.Arduino.definitions_['define_wire_h'] = '#include <Wire.h>\n';
-//    Blockly.Arduino.definitions_['define_dwenguino_h'] = '#include <Dwenguino.h>\n';
-//    Blockly.Arduino.definitions_['define_lcd_h'] = '#include <LiquidCrystal.h>\n';
-
-    //Blockly.Arduino.setups_['initDwenguino'] = 'initDwenguino();';
-    //var code = 'initDwenguino();';
     return code;
 };
 
+Blockly.Arduino['pir_sensor'] = function (block) {
+  var value_trig = Blockly.Arduino.valueToCode(block, 'trig', Blockly.Arduino.ORDER_NONE);
+  //define pir settings
+  Blockly.Arduino.definitions_['define_pir_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
+
+  //define pir sensor
+  Blockly.Arduino.setups_['define_dwenguino_pir' + value_trig] = "pinMode(TRIGGER_PIN_" + value_trig + ", INPUT)\n";
+  var code = "digitalRead(TRIGGER_PIN_" + value_trig + ")";
+
+  return [code, Blockly.Arduino.ORDER_NONE];
+};
+
 Blockly.Arduino['socialrobot_servo'] = function (block) {
-  let value_channel = Blockly.Arduino.valueToCode(block, 'channel', Blockly.Arduino.ORDER_ATOMIC);
   let value_pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_ATOMIC);
   let value_angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_ATOMIC);
 
-  //define sonar settings
-  Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n" + "int servoPin" + value_channel + " = " + value_pin +"\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_channel] = "Servo servo" + value_channel + ";\n";
+  Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_channel] = 'servo' + value_channel + '.attach(servoPin' + value_channel + ');\n';
+  var code = '';
 
-  // Assemble JavaScript into code variable.
-  var code = 'servo' + value_channel + '.write(' + value_angle + ');\n';
+  if(value_pin === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code = 'servo1.write(' + value_angle + ');\n';
+  } else if(value_pin === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code = 'servo2.write(' + value_angle + ');\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +"\n" 
+                                                                        + "Servo servoOnPin" + value_pin + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');\n';
+    code = 'servoOnPin' + value_pin + '.write(' + value_angle + ');\n';
+  }
+  
   return code;
 };
 
@@ -42,58 +58,142 @@ Blockly.Arduino['socialrobot_arms_down'] = function(block) {
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand1', Blockly.JavaScript.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_right_hand] = "Servo servo" + value_servo_right_hand + ";\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_left_hand] = "Servo servo" + value_servo_left_hand + ";\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_right_hand] = 'servo' + value_servo_right_hand + '.attach(SERVO_' + value_servo_right_hand + ');\n';
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_left_hand] = 'servo' + value_servo_left_hand + '.attach(SERVO_' + value_servo_left_hand + ');\n';
+  var code = '';
 
-    // Assemble JavaScript into code variable.
-    var code = 'servo' + value_servo_right_hand + '.write(' + '180' + ');\n'
-    + 'servo' + value_servo_left_hand + '.write(' + '0' + ');\n';
-    return code;
+  if(value_servo_right_hand === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(180);\n';
+  } else if(value_servo_right_hand === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(180);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_hand] = "int servoPin" + value_servo_right_hand + " = " + value_servo_right_hand +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_right_hand + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_hand] = 'servoOnPin' + value_servo_right_hand + '.attach(servoPin' + value_servo_right_hand + ');\n';
+    code += 'servoOnPin' + value_servo_right_hand + '.write(180);\n';
+  }
 
-}
+  if(value_servo_left_hand === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(0);\n';
+  } else if(value_left_right_hand === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(0);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_hand] = "int servoPin" + value_servo_left_hand + " = " + value_servo_left_hand +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_left_hand + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_hand] = 'servoOnPin' + value_servo_left_hand + '.attach(servoPin' + value_servo_left_hand + ');\n';
+    code += 'servoOnPin' + value_servo_left_hand + '.write(0);\n';
+  }
+
+  return code;
+};
 
 Blockly.Arduino['socialrobot_arms_up'] = function(block) {
   var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand2', Blockly.JavaScript.ORDER_ATOMIC);
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand2', Blockly.JavaScript.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_right_hand] = "Servo servo" + value_servo_right_hand + ";\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_left_hand] = "Servo servo" + value_servo_left_hand + ";\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_right_hand] = 'servo' + value_servo_right_hand + '.attach(SERVO_' + value_servo_right_hand + ');\n';
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_left_hand] = 'servo' + value_servo_left_hand + '.attach(SERVO_' + value_servo_left_hand + ');\n';
+  var code = '';
 
-    // Assemble JavaScript into code variable.
-    var code = 'servo' + value_servo_right_hand + '.write(' + '0' + ');\n'
-    + 'servo' + value_servo_left_hand + '.write(' + '180' + ');\n';
-    return code;
+  if(value_servo_right_hand === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(0);\n';
+  } else if(value_servo_right_hand === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(0);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_hand] = "int servoPin" + value_servo_right_hand + " = " + value_servo_right_hand +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_right_hand + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_hand] = 'servoOnPin' + value_servo_right_hand + '.attach(servoPin' + value_servo_right_hand + ');\n';
+    code += 'servoOnPin' + value_servo_right_hand + '.write(0);\n';
+  }
 
-}
+  if(value_servo_left_hand === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(180);\n';
+  } else if(value_left_right_hand === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(180);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_hand] = "int servoPin" + value_servo_left_hand + " = " + value_servo_left_hand +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_left_hand + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_hand] = 'servoOnPin' + value_servo_left_hand + '.attach(servoPin' + value_servo_left_hand + ');\n';
+    code += 'servoOnPin' + value_servo_left_hand + '.write(180);\n';
+  }
+
+  return code;
+};
 
 Blockly.Arduino['socialrobot_wave_arms'] = function(block) {
   var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand', Blockly.JavaScript.ORDER_ATOMIC);
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand', Blockly.JavaScript.ORDER_ATOMIC);
-  
+
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_right_hand] = "Servo servo" + value_servo_right_hand + ";\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_left_hand] = "Servo servo" + value_servo_left_hand + ";\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_right_hand] = 'servo' + value_servo_right_hand + '.attach(SERVO_' + value_servo_right_hand + ');\n';
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_left_hand] = 'servo' + value_servo_left_hand + '.attach(SERVO_' + value_servo_left_hand + ');\n';
+  var code = '';
 
-  // Assemble JavaScript into code variable.
-  var code = 'servo' + value_servo_right_hand + '.write(' + '0' + ');\n'
-  + 'servo' + value_servo_left_hand + '.write(' + '180' + ');\n'
-  + 'delay(' + '1000' + ');\n'
-  + 'servo' + value_servo_right_hand + '.write(' + '180' + ');\n'
-  + 'servo' + value_servo_left_hand + '.write(' + '0' + ');\n'
-  + 'delay(' + '1000' + ');\n';
-  console.log(code);
+  if(value_servo_right_hand === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(0);\n';
+  } else if(value_servo_right_hand === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(0);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_hand] = "int servoPin" + value_servo_right_hand + " = " + value_servo_right_hand +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_right_hand + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_hand] = 'servoOnPin' + value_servo_right_hand + '.attach(servoPin' + value_servo_right_hand + ');\n';
+    code += 'servoOnPin' + value_servo_right_hand + '.write(0);\n';
+  }
+
+  if(value_servo_left_hand === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(180);\n';
+  } else if(value_left_right_hand === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(180);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_hand] = "int servoPin" + value_servo_left_hand + " = " + value_servo_left_hand +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_left_hand + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_hand] = 'servoOnPin' + value_servo_left_hand + '.attach(servoPin' + value_servo_left_hand + ');\n';
+    code += 'servoOnPin' + value_servo_left_hand + '.write(180);\n';
+  }
+
+  code += 'delay(' + '1000' + ');\n';
+
+  if(value_servo_right_hand === 36){
+    code += 'servo1.write(180);\n';
+  } else if(value_servo_right_hand === 37){
+    code += 'servo2.write(180);\n';
+  } else {
+    code += 'servoOnPin' + value_servo_right_hand + '.write(180);\n';
+  }
+
+  if(value_servo_left_hand === 36){
+    code += 'servo1.write(0);\n';
+  } else if(value_left_right_hand === 37){
+    code += 'servo2.write(0);\n';
+  } else {
+    code += 'servoOnPin' + value_servo_left_hand + '.write(0);\n';
+  }
+
+  code += 'delay(' + '1000' + ');\n';
+
   return code;
-
 }
 
 Blockly.Arduino['socialrobot_eyes_left'] = function(block) {
@@ -101,16 +201,40 @@ Blockly.Arduino['socialrobot_eyes_left'] = function(block) {
   var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye', Blockly.JavaScript.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_right_eye] = "Servo servo" + value_servo_right_eye + ";\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_left_eye] = "Servo servo" + value_servo_left_eye + ";\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_right_eye] = 'servo' + value_servo_right_eye + '.attach(SERVO_' + value_servo_right_eye + ');\n';
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_left_eye] = 'servo' + value_servo_left_eye + '.attach(SERVO_' + value_servo_left_eye + ');\n';
+  var code = '';
 
-    // Assemble JavaScript into code variable.
-    var code = 'servo' + value_servo_right_eye + '.write(' + '0' + ');\n'
-    + 'servo' + value_servo_left_eye + '.write(' + '0' + ');\n';
-    return code;
+  if(value_servo_right_eye === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(0);\n';
+  } else if(value_servo_right_eye === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(0);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_eye] = "int servoPin" + value_servo_right_eye + " = " + value_servo_right_eye +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_right_eye + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_eye] = 'servoOnPin' + value_servo_right_eye + '.attach(servoPin' + value_servo_right_eye + ');\n';
+    code += 'servoOnPin' + value_servo_right_eye + '.write(0);\n';
+  }
+
+  if(value_servo_left_eye === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(0);\n';
+  } else if(value_servo_left_eye === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(0);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_eye] = "int servoPin" + value_servo_left_eye + " = " + value_servo_left_eye +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_left_eye + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_eye] = 'servoOnPin' + value_servo_left_eye + '.attach(servoPin' + value_servo_left_eye + ');\n';
+    code += 'servoOnPin' + value_servo_left_eye + '.write(0);\n';
+  }
+
+  return code;
 }
 
 Blockly.Arduino['socialrobot_eyes_right'] = function(block) {
@@ -118,16 +242,40 @@ Blockly.Arduino['socialrobot_eyes_right'] = function(block) {
   var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye1', Blockly.JavaScript.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_right_eye] = "Servo servo" + value_servo_right_eye + ";\n";
-  Blockly.Arduino.definitions_['define_servo_' + value_servo_left_eye] = "Servo servo" + value_servo_left_eye + ";\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_right_eye] = 'servo' + value_servo_right_eye + '.attach(SERVO_' + value_servo_right_eye + ');\n';
-  Blockly.Arduino.setups_['define_dwenguino_servo' + value_servo_left_eye] = 'servo' + value_servo_left_eye + '.attach(SERVO_' + value_servo_left_eye + ');\n';
+  var code = '';
 
-    // Assemble JavaScript into code variable.
-    var code = 'servo' + value_servo_right_eye + '.write(' + '120' + ');\n'
-    + 'servo' + value_servo_left_eye + '.write(' + '120' + ');\n';
-    return code;
+  if(value_servo_right_eye === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(120);\n';
+  } else if(value_servo_right_eye === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(120);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_eye] = "int servoPin" + value_servo_right_eye + " = " + value_servo_right_eye +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_right_eye + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_eye] = 'servoOnPin' + value_servo_right_eye + '.attach(servoPin' + value_servo_right_eye + ');\n';
+    code += 'servoOnPin' + value_servo_right_eye + '.write(120);\n';
+  }
+
+  if(value_servo_left_eye === 36){
+    Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
+    code += 'servo1.write(120);\n';
+  } else if(value_servo_left_eye === 37){
+    Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
+    code += 'servo2.write(120);\n';
+  } else {
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_eye] = "int servoPin" + value_servo_left_eye + " = " + value_servo_left_eye +"\n" 
+                                                                        + "Servo servoOnPin" + value_servo_left_eye + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_eye] = 'servoOnPin' + value_servo_left_eye + '.attach(servoPin' + value_servo_left_eye + ');\n';
+    code += 'servoOnPin' + value_servo_left_eye + '.write(120);\n';
+  }
+
+  return code;
 }
 
 Blockly.Arduino['socialrobot_set_pin'] = function(block){

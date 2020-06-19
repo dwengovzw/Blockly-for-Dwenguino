@@ -578,37 +578,4 @@ Blockly.Blocks['dwenguino_leds_reg'] = {
     }
 };
 
-var pir_sensor_json = {
-  "id": "pir_sensor",
-  "message0": "pir %1 %2 %3" + MSG.trig + "%4",
-  "args0": [
-    {
-      "type": "input_dummy"
-    },
-    {
-      "type": "field_image",
-      "src": "DwenguinoIDE/img/pir.png",
-      "width": 150,
-      "height": 87,
-      "alt": "*"
-    },
-    {
-      "type": "input_dummy"
-    },
-    {
-      "type": "input_value",
-      "name": "trig",
-      "check": "Number"
-    }
-  ],
-  "output": "Number",
-  "colour": Blockly.Blocks.dwenguino.HUE,
-  "tooltip": MSG.sonarTooltip,
-  "helpUrl": DwenguinoHelpUrl
-};
 
-Blockly.Blocks['pir_sensor'] = {
-  init: function() {
-    this.jsonInit(pir_sensor_json);
-  }
-};

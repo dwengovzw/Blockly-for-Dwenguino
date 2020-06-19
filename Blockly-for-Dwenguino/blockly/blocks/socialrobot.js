@@ -30,6 +30,42 @@ var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
 
 Blockly.Blocks.socialrobot.HUE = 25;
 
+var pir_sensor_json = {
+  "id": "pir_sensor",
+  "message0": "pir %1 %2 %3" + MSG.trig + "%4",
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/pir.png",
+      "width": 150,
+      "height": 87,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "trig",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": MSG.sonarTooltip,
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['pir_sensor'] = {
+  init: function() {
+    this.jsonInit(pir_sensor_json);
+  }
+};
+
+
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",
   "message0": MSG.socialrobotServoBlock,
@@ -44,11 +80,6 @@ var socialrobot_servo_json = {
       "alt": "*"
     },
     { "type": "input_dummy"
-    },
-    {
-      "type": "input_value",
-      "name": "channel",
-      "check": "Number"
     },
     {
       "type": "input_value",

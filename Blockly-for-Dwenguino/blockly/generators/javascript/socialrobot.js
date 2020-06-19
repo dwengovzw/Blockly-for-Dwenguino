@@ -17,6 +17,16 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
     return "";
 };
 
+Blockly.JavaScript['pir_sensor'] = function (block) {
+  var value_trig = Blockly.JavaScript.valueToCode(block, 'trig', Blockly.JavaScript.ORDER_NONE);
+  //define pir settings
+
+  //  Assemble JavaScript into code variable.
+  var code = machine + "pir(" + value_trig + ')';
+   console.log(code);
+  return [code, Blockly.JavaScript.ORDER_NONE];
+};
+
 Blockly.JavaScript['socialrobot_servo'] = function (block) {
   var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
   var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
@@ -30,8 +40,8 @@ Blockly.JavaScript['socialrobot_arms_down'] = function(block) {
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand1', Blockly.JavaScript.ORDER_ATOMIC);
   
   var code = machine 
-  + 'servo(' + value_servo_right_hand + ', ' + '180' + ');\n' 
-  + machine + 'servo(' + value_servo_left_hand + ', ' + '0' + ');\n';
+  + 'servoWithPin(' + value_servo_right_hand + ', ' + '180' + ');\n' 
+  + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '0' + ');\n';
   return code;
 }
 
@@ -41,8 +51,8 @@ Blockly.JavaScript['socialrobot_arms_up'] = function(block) {
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand2', Blockly.JavaScript.ORDER_ATOMIC);
   
   var code = machine 
-  + 'servo(' + value_servo_right_hand + ', ' + '0' + ');\n' 
-  + machine + 'servo(' + value_servo_left_hand + ', ' + '180' + ');\n';
+  + 'servoWithPin(' + value_servo_right_hand + ', ' + '0' + ');\n' 
+  + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '180' + ');\n';
   return code;
 }
 
@@ -51,11 +61,11 @@ Blockly.JavaScript['socialrobot_wave_arms'] = function(block) {
   var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand', Blockly.JavaScript.ORDER_ATOMIC);
   
   var code = machine 
-  + 'servo(' + value_servo_right_hand + ', ' + '0' + ');\n' 
-  + machine + 'servo(' + value_servo_left_hand + ', ' + '180' + ');\n'
+  + 'servoWithPin(' + value_servo_right_hand + ', ' + '0' + ');\n' 
+  + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '180' + ');\n'
   + machine + 'sleep(' + '1000' + ');\n'
-  + machine + 'servo(' + value_servo_right_hand + ', ' + '180' + ');\n'
-  + machine + 'servo(' + value_servo_left_hand + ', ' + '0' + ');\n'
+  + machine + 'servoWithPin(' + value_servo_right_hand + ', ' + '180' + ');\n'
+  + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '0' + ');\n'
   + machine + 'sleep(' + '1000' + ');\n';
   return code;
 }
@@ -65,8 +75,9 @@ Blockly.JavaScript['socialrobot_eyes_left'] = function(block) {
   var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye', Blockly.JavaScript.ORDER_ATOMIC);
   
   var code = machine 
-  + 'servo(' + value_servo_right_eye + ', ' + '0' + ');\n' 
-  + machine + 'servo(' + value_servo_left_eye + ', ' + '0' + ');\n';
+  + 'servoWithPin(' + value_servo_right_eye + ', ' + '0' + ');\n' 
+  + machine + 'servoWithPin(' + value_servo_left_eye + ', ' + '0' + ');\n';
+  console.log(code);
   return code;
 }
 
@@ -75,8 +86,9 @@ Blockly.JavaScript['socialrobot_eyes_right'] = function(block) {
   var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye1', Blockly.JavaScript.ORDER_ATOMIC);
   
   var code = machine 
-  + 'servo(' + value_servo_right_eye + ', ' + '120' + ');\n' 
-  + machine + 'servo(' + value_servo_left_eye + ', ' + '120' + ');\n';
+  + 'servoWithPin(' + value_servo_right_eye + ', ' + '120' + ');\n' 
+  + machine + 'servoWithPin(' + value_servo_left_eye + ', ' + '120' + ');\n';
+  console.log(code);
   return code;
 }
 
