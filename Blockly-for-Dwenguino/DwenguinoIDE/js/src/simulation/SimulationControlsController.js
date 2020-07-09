@@ -39,19 +39,24 @@ export default class SimulationControlsController {
         $('#sim_menu').append('<div id="sim_step" class="sim_item"></div>');
 
         $('#sim_menu').append('<div id="sim_scenarioTag" ></div>');
-
+        $('#sim_menu').append('<div id="sim_scenarios" class="btn-group btn-group-toggle" data-toggle="buttons"></div>');
         
         $.each(Object.keys(this.scenarios), (index, value) => {
-            var newOpt = $("<input></input>").attr("type", "radio").attr("class", "sim_scenario_radio").attr("name", "scenario_type").attr("id", "sim_scenario_" + value).attr("value", value);
-            console.log(value);
-            console.log(this.scenarioView);
-            if (value == this.scenarioView) {
-                newOpt.attr("checked", "checked");
+            let label = '<label id="scenario_label_' + value + '" class="btn sim_scenario_btn"></label>';
+            let radioButton = '<input id="sim_scenario_' + value + '"' + 
+                'type="radio" ' +
+                'name="scenario_type" ' +
+                'class="sim_scenario_radio" '+
+                'value="'+ value +'" ' +
+                'autocomplete="off">' +
+                '<img src="DwenguinoIDE/img/scenarios/scenario_' + value + '.png" class="scenario_image">';
+            
+            $('#sim_scenarios').append(label);
+            $('#scenario_label_' + value).append(radioButton);
+            if (value == this.scenarioView){
+                $('#sim_scenario_' + value).attr("checked", "checked");
+                $('#scenario_label_' + value).attr("class", "btn sim_scenario_btn active");
             }
-            var image = $("<img></img>").attr("class", "scenario_image").attr("src", "DwenguinoIDE/img/scenarios/scenario_" + value + ".png");
-
-            $("#sim_menu").append(newOpt);
-            $("#sim_menu").append(image);
         });
 
         this.translateSimulatorInterface();
