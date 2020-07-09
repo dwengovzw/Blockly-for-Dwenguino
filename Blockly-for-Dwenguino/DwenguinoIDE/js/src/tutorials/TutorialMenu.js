@@ -168,10 +168,10 @@ export default class TutorialMenu {
         });
 
         if(isCompleted){
-            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok icon-completed col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok c-6 col-auto"></div>'); 
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         } else {
-            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-remove icon-not-completed col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-remove c-1 col-auto"></div>'); 
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         }
   
