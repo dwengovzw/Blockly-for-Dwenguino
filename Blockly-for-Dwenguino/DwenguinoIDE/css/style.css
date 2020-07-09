@@ -471,8 +471,15 @@ body{
     width: 120px;
 }
 
-.input-group {
-    max-width: 150px;
+
+.component_item_input{
+    display: inline-block;
+    padding: 5px 5px;
+    font-size: 14px;
+    border-radius: 0;
+    -webkit-appearance: none;
+    border: 1px solid transparent;
+    background-color: #FFFFFF;
 }
 
 #sim_scope_name {
@@ -647,7 +654,7 @@ body{
     margin: 5px;
     border-style: solid;
     border-color: #B5C986;
-    background:#B5C986;
+    background: #B5C986;
     display: flex;
     flex-direction: column;
 }
