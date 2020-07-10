@@ -32,7 +32,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         this.robot = {
             image: {
                 width: 50,
-                height: 40
+                height: 68
             },
             start: {
                 x: 100,

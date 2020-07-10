@@ -2,14 +2,13 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
 
-export { SoundSensor }
+export { SocialRobotSoundSensor as SocialRobotSoundSensor }
 
-class SoundSensor extends RobotComponent{
+class SocialRobotSoundSensor extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.SOUND;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -186,8 +185,8 @@ class SoundSensor extends RobotComponent{
         return this._id;
     }
 
-    getType(){
-        return this._type;
+    static getType(){
+        return TypesEnum.SOUND;
     }
 
     setWidth(width){

@@ -133,7 +133,7 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     let lightOptions = this.generateButtonTemplate(TypesEnum.LIGHT);
     $('#rc_light_options').append(lightOptions);
 
-    // let decorationOptions = this.generateButtonTemplate(TypesEnum.DECORATION);
+    // let decorationOptions = this.generateButtonTemplate(RobotComponentTypesEnum.DECORATION);
     // $('$rc_decoration_options').append(decorationOptions);
   
     let self = this;

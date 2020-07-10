@@ -1,14 +1,12 @@
-import { RobotComponent } from './RobotComponent.js'
-import { TypesEnum } from '../RobotComponentsFactory.js';
+import {RobotComponent } from './RobotComponent.js ';
 
-export { Lcd }
+export { SocialRobotLcd as SocialRobotLcd }
 
-class Lcd extends RobotComponent{
+class SocialRobotLcd extends RobotComponent{
     constructor(eventBus, id, visible = true, offsetLeft = 5, offsetTop = 5, htmlClasses = ''){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.LCD;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._state = new Array(2);
 
@@ -75,8 +73,8 @@ class Lcd extends RobotComponent{
         return this._id;
     }
 
-    getType(){
-        return this._type
+    static getType(){
+        return RobotComponentTypesEnum.LCD;
     }
 
     setOffset(offset){

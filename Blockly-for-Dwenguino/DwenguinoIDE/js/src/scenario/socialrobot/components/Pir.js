@@ -2,14 +2,13 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
 
-export { Pir }
+export { SocialRobotPir as SocialRobotPir }
 
-class Pir extends RobotComponent{
+class SocialRobotPir extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.PIR;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -185,8 +184,8 @@ class Pir extends RobotComponent{
         return this._id;
     }
 
-    getType(){
-        return this._type;
+    static getType(){
+        return TypesEnum.PIR;
     }
 
     setWidth(width){

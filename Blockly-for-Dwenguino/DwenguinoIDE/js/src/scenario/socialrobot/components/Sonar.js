@@ -2,14 +2,13 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js'
 import { EventsEnum } from '../ScenarioEvent.js'
 
-export { Sonar }
+export { SocialRobotSonar as SocialRobotSonar }
 
-class Sonar extends RobotComponent{
+class SocialRobotSonar extends RobotComponent{
     constructor(eventBus, id, echoPin = 0, triggerPin = 0, state = 100, visible = true, width = 100, height = 58, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas sonar_canvas'){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.SONAR;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -220,8 +219,8 @@ class Sonar extends RobotComponent{
         return this._id;
     }
 
-    getType(){
-        return this._type;
+    static getType(){
+        return TypesEnum.SONAR;
     }
 
     setWidth(width){
