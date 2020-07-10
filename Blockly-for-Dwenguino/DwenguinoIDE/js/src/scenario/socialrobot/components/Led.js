@@ -17,6 +17,7 @@ class SocialRobotLed extends RobotComponent{
         super(eventBus, htmlClasses);
 
         this._id = id;
+        this._type = TypesEnum.LED;
         this._radius = radius;
         this._x = x;
         this._y = y;
@@ -187,8 +188,8 @@ class SocialRobotLed extends RobotComponent{
         return this._id;
     }
 
-    static getType(){
-        return TypesEnum.LED;
+    getType(){
+        return this._type;
     }
 
     setRadius(radius){

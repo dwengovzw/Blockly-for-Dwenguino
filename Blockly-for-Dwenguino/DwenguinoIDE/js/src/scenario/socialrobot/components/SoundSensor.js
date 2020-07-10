@@ -9,6 +9,7 @@ class SocialRobotSoundSensor extends RobotComponent{
         super(eventBus, htmlClasses);
 
         this._id = id;
+        this._type = TypesEnum.SOUND;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -185,8 +186,8 @@ class SocialRobotSoundSensor extends RobotComponent{
         return this._id;
     }
 
-    static getType(){
-        return TypesEnum.SOUND;
+    getType(){
+        return this._type;
     }
 
     setWidth(width){
