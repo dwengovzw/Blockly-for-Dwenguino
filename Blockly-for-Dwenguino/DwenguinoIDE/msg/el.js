@@ -141,8 +141,41 @@ MSG.simulator = {
   scenario_moving: "Κινούμενο ρομπότ",
   scenario_wall: "Κινούμενο ρομπότ και τοίχος",
   code: "Κώδικας",
+  pir: "PIR sensor",
+  sonar: "Sonar",
+  led: "LED",
+  lcd: "LCD screen",
+  button: "Button",
+  sound: "Sound sensor",
+  light: "Light sensor",
+  buzzer: "Buzzer",
+  decoration: "Decoration",
 };
 
+MSG.socialrobot = {
+  plain: "Default",
+  eye: "Eye",
+  mouth: "Mouth",
+  righthand: "Right hand",
+  lefthand: "Left hand",
+};
+
+MSG.tutorialMenu = {
+  header: "Tutorials",
+  catDwenguino: "Learn to program<br>with DwenguinoBlockly",
+  catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
+  catRidingRobot: "Riding robot",
+  catSocialRobot: "Social robot",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Select a tutorial category",
+  chooseTutorial: "Select a tutorial",
+  previous: "Previous",
+  close: "Close",
+  checkAnswer: "Check answer",
+  correctAnswer: "The answer was correct!",
+  wrongAnswer: "The answer was not correct. Try again!",
+  dwenguinoComponents: "Dwenguino components"
+};
 
 MSG.tutorials = {
   introduction: {},

@@ -1037,14 +1037,14 @@ opacity: 1;
 appearance: none;
 width: 10px;
 height: 25px;
-background: #8bab42;
+background: #096f80;
 cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
 width: 25px;
 height: 25px;
-background: #8bab42;
+background: #096f80;
 cursor: pointer;
 }
 
@@ -1190,6 +1190,12 @@ span.grippy::after {
 .tutorial_categories_item:hover {
     background-color: white;
     cursor: pointer;
+}
+
+.components_overview > .card { 
+    padding: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
 }
 
 .tutorial_categories_wrapper {
