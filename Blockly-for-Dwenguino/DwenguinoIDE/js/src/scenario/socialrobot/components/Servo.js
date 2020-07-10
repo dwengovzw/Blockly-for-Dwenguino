@@ -18,6 +18,7 @@ class SocialRobotServo extends RobotComponent{
         super(eventBus, htmlClasses);
 
         this._id = id;
+        this._type = TypesEnum.SERVO;
         this._width = width;
         this._height = height;
         this._x = x;
@@ -270,8 +271,8 @@ class SocialRobotServo extends RobotComponent{
         return this._id;
     }
 
-    static getType(){
-        return TypesEnum.SERVO;
+    getType(){
+        return this._type;
     }
 
     setWidth(width){

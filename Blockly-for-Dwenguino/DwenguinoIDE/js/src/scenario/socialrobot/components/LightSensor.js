@@ -9,6 +9,7 @@ class SocialRobotLightSensor extends RobotComponent{
         super(eventBus, htmlClasses);
 
         this._id = id;
+        this._type = TypesEnum.LIGHT;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -185,8 +186,8 @@ class SocialRobotLightSensor extends RobotComponent{
         return this._id;
     }
 
-    static getType(){
-        return TypesEnum.LIGHT;
+    getType(){
+        return this._type;
     }
 
     setWidth(width){

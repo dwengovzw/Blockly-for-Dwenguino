@@ -1,6 +1,7 @@
 import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js'
 import { EventsEnum } from '../ScenarioEvent.js'
+import { Slider } from '../../utilities/Slider.js'
 
 export { SocialRobotSonar as SocialRobotSonar }
 
@@ -9,6 +10,7 @@ class SocialRobotSonar extends RobotComponent{
         super(eventBus, htmlClasses);
 
         this._id = id;
+        this._type = TypesEnum.SONAR;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -20,10 +22,6 @@ class SocialRobotSonar extends RobotComponent{
         this._stateUpdated = false;
 
         this._canvasId = 'sim_sonar_canvas' + this._id;
-        this._sliderId = 'slider' + this._id;
-        this._sliderLabelId = 'slider' + this._id + '_label';
-        this._sliderValueId = 'slider' + this._id + '_value';
-        this._sliderRangeId = 'slider' + this._id + '_range';
 
         this.insertHtml();
         this.toggleVisibility(visible);
@@ -39,20 +37,15 @@ class SocialRobotSonar extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
 
-        if (!document.getElementById(this.getSliderRangeId())) {
-            //console.log('make slider');
-            $('#sensor_options').append("<div id='" + this.getSliderLabelId() + "' class='sensor_options_label' alt='Slider label'>" + MSG.sonarSliderLabel + " " + this.getId() + "</div>");
-            $('#sensor_options').append("<div id='" + this.getSliderValueId() + "' class='' alt='Slider value'>100 cm</div>");
-            $('#sensor_options').append("<div id='" + this.getSliderId() + "' class='sonar_slider slidecontainer' alt='Load'></div>");
-            $('#' + this.getSliderId()).append("<input type='range' min='0' max='200' value='100' class='slider' id='" + this.getSliderRangeId() + "'></input>");
-      
-            var self = this;
-            var slider = document.getElementById(this.getSliderRangeId());
-            slider.oninput = function () {
-              // let id = this.id.replace(/^\D+/g, '');
-              let id = self.getId();
-              self.changeSonarDistance(this.value, id); // TODO
-            };
+        let label = MSG.sonarSliderLabel + " " + this.getId();
+        this._slider = new Slider(this.getId(), 'sensor_options', 0, 200, 100, label, '' , ' cm', 'sonar_slider');
+
+        var self = this;
+        let sliderElement = this._slider.getSliderElement();
+        sliderElement.oninput = function() {
+            let id = self.getId();
+            self.changeSonarDistance(this.value, id);
+            self._slider.updateValueLabel(this.value);
         }
 
         let simSonar = document.getElementById('sim_'+this.getType() + this.getId());
@@ -63,11 +56,7 @@ class SocialRobotSonar extends RobotComponent{
         });
     }
 
-    changeSonarDistance(value, id) {
-        var sliderValue = 'slider' + id + '_value';
-        document.getElementById(sliderValue).innerHTML = value + ' cm';
-        // TODO: Remove this. the board state should be updated in the updateScenarioState function when it is called!
-        // this.inputState.sonarDistance = value;
+    changeSonarDistance(value) {
         this.setState(value);
         this._stateUpdated = true;
         this._eventBus.dispatchEvent(EventsEnum.SAVE);
@@ -219,8 +208,8 @@ class SocialRobotSonar extends RobotComponent{
         return this._id;
     }
 
-    static getType(){
-        return TypesEnum.SONAR;
+    getType(){
+        return this._type;
     }
 
     setWidth(width){

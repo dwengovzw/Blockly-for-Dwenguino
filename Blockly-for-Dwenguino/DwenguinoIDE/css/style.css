@@ -1004,18 +1004,21 @@ body{
     margin-right: 10px;
 }
 
-.sensor_options_label{
-    margin-top: 5px;
-}
-
 #sonar_slider{
     width: 80%;
     height: 50%;
 }
 
+/* Scenario slider */
+
+
+.slider_label{
+    margin-top: 5px;
+}
+
 .slidecontainer {
     width: 100%;
-  }
+}
   
 .slider {
 -webkit-appearance: none;

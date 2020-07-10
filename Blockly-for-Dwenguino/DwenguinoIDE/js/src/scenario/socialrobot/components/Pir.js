@@ -1,6 +1,7 @@
 import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
+import { SoundSensor } from '../../../tutorials/components/SoundSensor.js';
 
 export { SocialRobotPir as SocialRobotPir }
 
@@ -9,6 +10,7 @@ class SocialRobotPir extends RobotComponent{
         super(eventBus, htmlClasses);
 
         this._id = id;
+        this._type = TypesEnum.PIR;
         this._width = width;
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -184,8 +186,8 @@ class SocialRobotPir extends RobotComponent{
         return this._id;
     }
 
-    static getType(){
-        return TypesEnum.PIR;
+    getType(){
+        return this._type;
     }
 
     setWidth(width){

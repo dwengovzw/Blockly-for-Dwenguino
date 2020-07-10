@@ -397,10 +397,10 @@ class RobotComponentsFactory {
   * Remove the most recent created decoration element from the simulation container.
   */
   removeLcd(){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypsEnum.Lcd));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.Lcd));
     
-    let id = this._numberOfComponentsOfType[TypsEnum.LCD];
-    this.removeRobotComponentWithTypeAndId(TypsEnum.LCD, id);
+    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LCD, id);
   }
 
 
