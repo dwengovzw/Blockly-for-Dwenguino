@@ -1009,7 +1009,7 @@ body{
     height: 50%;
 }
 
-/* Scenario slider */
+/* Dwenguino slider */
 
 
 .slider_label{
@@ -1050,6 +1050,21 @@ height: 25px;
 background: #096f80;
 cursor: pointer;
 }
+
+/* Dwenguino button */
+
+.dwenguino_button {
+    background-image: url("../img/board/button.png");
+    background-size: 100% 100%;
+    height: 26px;
+    width: 26px;
+    display: inline-block;
+}
+
+.dwenguino_button_pushed {
+    background-image: url("../img/board/button_pushed.png");
+}
+
 
 .draggable:hover {
     font-weight: bold;
