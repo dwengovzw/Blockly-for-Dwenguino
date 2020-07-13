@@ -3,10 +3,11 @@ export { Slider as Slider }
 /**
  * Example usage:
  * 
- * let slider = new Slider('unique_id', 'parent_id', 0, 200, 100, 'My label', '', ' cm', 'extra_css_class');
+ * this._slider = new Slider('unique_id', 'parent_id', 0, 200, 100, 'My label', '', ' cm', 'extra_css_class');
  *  
  * var self = this;
  * let sliderElement = slider.getSliderElement();
+ * 
  * // When the slider is changed
  * sliderElement.oninput = function() {
  *    let id = self.getId();
