@@ -579,14 +579,20 @@ body{
     padding-left: 5px;
 }
 
-.sim_scenarioTag {
-  /*float: left;
-  clear: left;*/
+.sim_scenario_btn:active,
+.sim_scenario_btn.active {
+  -webkit-box-shadow: none!important;
+  box-shadow: none!important;
+  outline: 5px auto #88bd28!important;
 }
 
-/* .scenario_radio_container > img {
-  margin-top: -15px !important;
-} */
+.sim_scenario_btn:focus,
+.sim_scenario_btn.focus {
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+    outline: 5px auto #88bd28!important;
+    outline-offset: -2px!important;
+}
 
 .sim_scenario {
   box-sizing: border-box;
@@ -652,9 +658,6 @@ body{
 
 .robot_components_item { 
     margin: 5px;
-    border-style: solid;
-    border-color: #B5C986;
-    background: #B5C986;
     display: flex;
     flex-direction: column;
 }
@@ -1001,18 +1004,21 @@ body{
     margin-right: 10px;
 }
 
-.sensor_options_label{
-    margin-top: 5px;
-}
-
 #sonar_slider{
     width: 80%;
     height: 50%;
 }
 
+/* Dwenguino slider */
+
+
+.slider_label{
+    margin-top: 5px;
+}
+
 .slidecontainer {
     width: 100%;
-  }
+}
   
 .slider {
 -webkit-appearance: none;
@@ -1034,16 +1040,31 @@ opacity: 1;
 appearance: none;
 width: 10px;
 height: 25px;
-background: #8bab42;
+background: #096f80;
 cursor: pointer;
 }
 
 .slider::-moz-range-thumb {
 width: 25px;
 height: 25px;
-background: #8bab42;
+background: #096f80;
 cursor: pointer;
 }
+
+/* Dwenguino button */
+
+.dwenguino_button {
+    background-image: url("../img/board/button.png");
+    background-size: 100% 100%;
+    height: 26px;
+    width: 26px;
+    display: inline-block;
+}
+
+.dwenguino_button_pushed {
+    background-image: url("../img/board/button_pushed.png");
+}
+
 
 .draggable:hover {
     font-weight: bold;
@@ -1187,6 +1208,12 @@ span.grippy::after {
 .tutorial_categories_item:hover {
     background-color: white;
     cursor: pointer;
+}
+
+.components_overview > .card { 
+    padding: 10px;
+    margin-top: 5px;
+    margin-right: 10px;
 }
 
 .tutorial_categories_wrapper {
@@ -1337,13 +1364,5 @@ span.grippy::after {
 
 .icon-envelope:before {
     content: url("../img/glyphicons_free/glyphicons/png/glyphicons-11-envelope.png");
-}
-
-.icon-completed {
-    color: green;
-}
-
-.icon-not-completed {
-    color: red;
 }
 

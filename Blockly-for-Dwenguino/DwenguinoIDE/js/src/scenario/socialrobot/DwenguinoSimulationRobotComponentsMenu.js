@@ -61,44 +61,44 @@ export default class DwenguinoSimulationRobotComponentsMenu {
   initMenu() {
     $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag"></div>');
     $('#rc_servo').append('<div id="rc_servo_img"></div>');
     $('#rc_servo').append('<div id="rc_servo_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_led').append('<div id="rc_led_tag" class="rc_tag"></div>');
     $('#rc_led').append('<div id="rc_led_img"></div>');
     $('#rc_led').append('<div id="rc_led_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag"></div>');
     $('#rc_pir').append('<div id="rc_pir_img"></div>');
     $('#rc_pir').append('<div id="rc_pir_value"></div>');
     $('#rc_pir').append('<div id="rc_pir_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_sonar" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_sonar" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_tag" class="rc_tag"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_img"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_value"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_img"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag"></div>');
     $('#rc_sound').append('<div id="rc_sound_img"></div>');
     $('#rc_sound').append('<div id="rc_sound_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_light').append('<div id="rc_light_tag" class="rc_tag"></div>');
     $('#rc_light').append('<div id="rc_light_img"></div>');
     $('#rc_light').append('<div id="rc_light_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item card"></div>');
+    $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_img"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_options"></div>');
@@ -133,7 +133,7 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     let lightOptions = this.generateButtonTemplate(TypesEnum.LIGHT);
     $('#rc_light_options').append(lightOptions);
 
-    // let decorationOptions = this.generateButtonTemplate(TypesEnum.DECORATION);
+    // let decorationOptions = this.generateButtonTemplate(RobotComponentTypesEnum.DECORATION);
     // $('$rc_decoration_options').append(decorationOptions);
   
     let self = this;

@@ -1,5 +1,13 @@
 import { EVENT_NAMES } from "../logging/EventNames.js"
 import ServerConfig from "../ServerConfig.js"
+import { Buzzer } from "./components/Buzzer.js";
+import { Lcd } from "./components/Lcd.js";
+import { Led } from "./components/Led.js";
+import { LightSensor } from "./components/LightSensor.js";
+import { Pir } from "./components/Pir.js";
+import { Servo } from "./components/Servo.js";
+import { Sonar } from "./components/Sonar.js";
+import { SoundSensor } from "./components/SoundSensor.js";
 
 /**
  * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
@@ -35,6 +43,10 @@ export default class TutorialMenu {
         $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_categories_menu" class="tutorial_categories_wrapper"></div>');
         
+        $('#tutorialModal_categories_menu').append('<div id="tutorial_category_dwenguino_components" class="tutorial_categories_item card"></div>');
+        $("#tutorial_category_dwenguino_components").append('<div class="category_tag">' + MSG.tutorialMenu.catDwenguinoComponents + '</div>');
+        $("#tutorial_category_dwenguino_compoentns").append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_wegostem" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_wegostem").append('<div class="category_tag">'+ MSG.tutorialMenu.catWeGoStem +'</div>');
         $("#tutorial_category_wegostem").append('<div id="tutorial_categories_wegostem_img"></div>');
@@ -59,6 +71,10 @@ export default class TutorialMenu {
      * Adds event handlers for the general tutorial menu user interface.
      */
     addTutorialDialogEventHandlers(){
+        $('#tutorial_category_dwenguino_components').click(() => {
+            this.loadComponentsOverview();
+        });
+
         $("#tutorial_category_wegostem").click(() => {
             this.loadTutorialsMenu("wegostem");
         });
@@ -99,8 +115,9 @@ export default class TutorialMenu {
      * @param {String} category The tutorial category to load tutorials from 
      */
     loadTutorialsMenu(category){
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
         $("#tutorialModal .modal-body .message").empty();
-        $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">Kies een tutorial</div>');
+        $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseTutoral +'</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_tutorials_menu"></div>');
 
         $("#tutorialModal .modal-footer").empty();
@@ -148,6 +165,75 @@ export default class TutorialMenu {
 
     }
 
+    loadComponentsOverview(){
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.dwenguinoComponents);
+        $("#tutorialModal .modal-body .message").empty();
+
+        $("#tutorialModal .modal-body .message").append('<div class="container"></div>');
+
+        $("#tutorialModal .modal-body .message .container").append('<div id="row1" class="row"></div>');
+        $("#row1").append('<h2>Sensors</h2>');
+        
+        $("#tutorialModal .modal-body .message .container").append('<div id="tutorialModal_sensors_menu" class="components_overview row"></div>');
+
+        let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir];
+
+        for (let i = 0; i < sensorsArray.length; i++) {
+            $('#tutorialModal_sensors_menu').append('<div id="tutorial_sensors_'+ sensorsArray[i].getType() +'" class="col-3 bg-c-4 card"></div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[sensorsArray[i].getType()] + '</div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        }
+
+        $("#tutorialModal .modal-body .message .container").append('<div id="row2" class="row"></div>');
+        $("#row2").append('<h2>Actuators</h2>');
+
+        $("#tutorialModal .modal-body .message .container").append('<div id="row3" class="row"></div>');
+        $("#row3").append('<h3>Movement</h3>');
+        $("#tutorialModal .modal-body .message .container").append('<div id="tutorialModal_movement_menu" class="components_overview row"></div>');
+
+        let movementArray = [Servo];
+
+        for (let i = 0; i < movementArray.length; i++) {
+            $('#tutorialModal_movement_menu').append('<div id="tutorial_movement_'+ movementArray[i].getType() +'" class="col-3 bg-c-11 card"></div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[movementArray[i].getType()] + '</div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        }
+
+        $("#tutorialModal .modal-body .message .container").append('<div id="row4" class="row"></div>');
+        $("#row4").append('<h3>Display</h3>');
+        $("#tutorialModal .modal-body .message .container").append('<div id="tutorialModal_display_menu" class="components_overview row"></div>');
+        
+        let displayArray = [Lcd, Led];
+
+        for (let i = 0; i < displayArray.length; i++) {
+            $('#tutorialModal_display_menu').append('<div id="tutorial_display_'+ displayArray[i].getType() +'" class="col-3 bg-c-6 card"></div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[displayArray[i].getType()] + '</div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        }
+
+        $("#tutorialModal .modal-body .message .container").append('<div id="row5" class="row"></div>');
+        $("#row5").append('<h3>Audio</h3>');
+        $("#tutorialModal .modal-body .message .container").append('<div id="tutorialModal_audio_menu" class="components_overview row"></div>');
+    
+        let audioArray = [Buzzer];
+
+        for (let i = 0; i < audioArray.length; i++) {
+            $('#tutorialModal_audio_menu').append('<div id="tutorial_audio_'+ audioArray[i].getType() +'" class="col-3 bg-c-3 card"></div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[audioArray[i].getType()] + '</div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        }
+
+
+        $("#tutorialModal .modal-footer").empty();
+        $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'</button>');
+        $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
+
+        $("#previous_tutorial_dialog").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
+        });
+    }
+
     /**
      * Add a specific tutorial to the tutorial list interface
      * @param {Tutorial} tutorial The tutorial object to add to the list
@@ -168,10 +254,10 @@ export default class TutorialMenu {
         });
 
         if(isCompleted){
-            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok icon-completed col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok c-6 col-auto"></div>'); 
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         } else {
-            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-remove icon-not-completed col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-remove c-1 col-auto"></div>'); 
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         }
   

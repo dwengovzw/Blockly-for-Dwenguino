@@ -2,9 +2,9 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
 
-export { SoundSensor }
+export { SocialRobotSoundSensor as SocialRobotSoundSensor }
 
-class SoundSensor extends RobotComponent{
+class SocialRobotSoundSensor extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
