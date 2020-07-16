@@ -53,6 +53,18 @@
     
 </category>
 <category id="catDwenguino" colour="315" name='Dwenguino'>
+    <block type="drawingrobot_stepper_motor">
+        <value name="channel">
+            <block type="math_number" id="300">
+                <field name="NUM">1</field>
+            </block>
+        </value>
+        <value name="step">
+            <block type="math_number" id="301">
+                <field name="NUM">50</field>
+            </block>
+        </value>
+    </block>
     <block type="setup_loop_structure"></block>
     <block type="dwenguino_delay">
         <value name="DELAY_TIME">
@@ -260,6 +272,79 @@
             <field name="PIN">0</field>
         </block>
     </value>
+    </block>
+</category>
+<category id="catDrawingRobot" colour="230" name='DrawingRobot'>
+    <block type="drawingrobot_stepper_motor">
+        <value name="channel">
+            <block type="drawingrobot_motor_number" id="300">
+            </block>
+        </value>
+        <value name="step">
+            <block type="math_number" id="301">
+                <field name="NUM">50</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="drawingrobot_motor_number"></block>
+
+    drawingrobot_move_direction
+    <block type="drawingrobot_move_direction">
+        <value name="angle">
+            <block type="math_number" id="303">
+                <field name="NUM">190</field>
+            </block>
+        </value>
+        <value name="amount">
+            <block type="math_number" id="304">
+                <field name="NUM">40</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="drawingrobot_move">
+        <value name="amount">
+            <block type="math_number" id="302">
+                <field name="NUM">10</field>
+            </block>
+        </value>
+    </block>
+    <block type="drawingrobot_line">
+        <value name="x">
+            <block type="math_number" id="303">
+                <field name="NUM">190</field>
+            </block>
+        </value>
+        <value name="y">
+            <block type="math_number" id="304">
+                <field name="NUM">40</field>
+            </block>
+        </value>
+    </block>
+    <block type="drawingrobot_circle">
+        <value name="radius">
+            <block type="math_number" id="305">
+                <field name="NUM">10</field>
+            </block>
+        </value>
+    </block>
+    <block type="drawingrobot_rectangle">
+        <value name="width">
+            <block type="math_number" id="306">
+                <field name="NUM">10</field>
+            </block>
+        </value>
+        <value name="height">
+            <block type="math_number" id="307">
+                <field name="NUM">10</field>
+            </block>
+        </value>
+    </block>
+    <block type="drawingrobot_lift_stylus"></block>
+    <block type="drawingrobot_lower_stylus"></block>
+    <block type="drawingrobot_color">
+        <field name="color">#ff0000</field>
     </block>
 </category>
 

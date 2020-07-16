@@ -36,9 +36,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
    * @param containerIdSelector The jquery selector of the conainer to put the robot display.
    *
    */
-  initSimulationState() {
+  initSimulationState(boardState) {
     // init superclass
-    super.initSimulationState();
+    super.initSimulationState(boardState);
 
     this.renderer = new SimulationCanvasRenderer();
 

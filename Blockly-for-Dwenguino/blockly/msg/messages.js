@@ -75,6 +75,8 @@ Blockly.Msg.DWENGUINO_HUE = '315';
 /** @type {string} */
 /// {{Notranslate}} Hue value for all procedure blocks.
 Blockly.Msg.COMMENTS_HUE = '195';
+/// {{Notranslate}} Hue value for all procedure blocks.
+Blockly.Msg.DRAWINGROBOT_HUE = '230';
 
 /** @type {string} */
 /// default name - A simple, general default name for a variable, preferably short.

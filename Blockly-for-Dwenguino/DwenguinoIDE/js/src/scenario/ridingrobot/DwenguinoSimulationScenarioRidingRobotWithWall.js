@@ -14,7 +14,7 @@ constructor(logger){
     //call super prototype
     super(logger);
     //init robot state
-    this.initSimulationState();
+    this.initSimulationState(null);
 
 }
 
@@ -24,9 +24,9 @@ constructor(logger){
  * @param containerIdSelector The jquery selector of the conainer to put the robot display.
  *
  */
-initSimulationState(containerIdSelector){
+initSimulationState(boardState){
     // init superclass
-    super.initSimulationState(containerIdSelector);
+    super.initSimulationState(boardState);
 }
 
 /* @brief Initializes the simulator robot display.

@@ -29,7 +29,7 @@ export default class FunctionalSimulationRunner extends BaseSimulationRunner{
 
         for (let i = 0 ; i < inits ; i++){
             // Initialize new random simulation state.
-            this.currentScenario.initSimulationState();
+            this.currentScenario.initSimulationState(this.board);
             this.generatedSteps = 0;
             this.initDebugger(code);
 
