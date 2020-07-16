@@ -59,6 +59,21 @@ Blockly.JavaScript['drawingrobot_move_direction'] = function(block) {
   return generateCodeForLineInDirection(amount, xIncrement, yIncrement);
 };
 
+
+Blockly.JavaScript['drawingrobot_move_direction_x_y'] = function(block) {
+  var x = Blockly.JavaScript.valueToCode(block, 'xValue', Blockly.JavaScript.ORDER_ATOMIC);
+  var y = Blockly.JavaScript.valueToCode(block, 'yValue', Blockly.JavaScript.ORDER_ATOMIC);
+
+  angle = parseInt(angle)/180*Math.PI; // Convert from degrees to radians.
+
+  let xIncrement = Math.cos(angle);
+  let yIncrement = Math.sin(angle);
+  xIncrement = xIncrement; //convert length to number of steps
+  yIncrement = -1*yIncrement; //convert length to number of steps
+
+  return generateCodeForLineInDirection(amount, xIncrement, yIncrement);
+};
+
 function generateCodeForLineInDirection(amount, xIncrement, yIncrement){
   let code = "";
   code += "for (let i = 0 ; i < " + amount + " ; ++i){";
@@ -78,7 +93,14 @@ Blockly.JavaScript['drawingrobot_line'] = function(block) {
 
 Blockly.JavaScript['drawingrobot_circle'] = function(block) {
   var radius = Blockly.JavaScript.valueToCode(block, 'radius', Blockly.JavaScript.ORDER_ATOMIC);
-  var code = machine+"drawRobotCircle(" + radius + ");\n";
+  let code = "";
+  for (let i = 1 ; i < 360 ; ++i){
+    let prevAngle = (i-1)/180*Math.PI;
+    let angle = i/180*Math.PI;
+    let xIncrement = radius * (Math.cos(angle) - Math.cos(prevAngle));
+    let yIncrement = radius * (Math.sin(angle) - Math.sin(prevAngle));
+    code += machine + 'stepMotorsTo([' + xIncrement + ', ' + yIncrement + ']);\n';
+  }
   return code;
 }
 
