@@ -16,7 +16,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
     constructor(logger) {
         super(logger);
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
-        this.initSimulationState();
+        this.initSimulationState(null);
     }
 
     /* @brief Initializes the simulator robot.
@@ -25,14 +25,14 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
     * @param containerIdSelector The jquery selector of the conainer to put the robot display.
     *
     */
-    initSimulationState() {
+    initSimulationState(boardState) {
         // init superclass
-        super.initSimulationState();
+        super.initSimulationState(boardState);
         //init robot statecontainerIdSelector
         this.robot = {
             image: {
-                width: 50,
-                height: 40
+                width: 65,
+                height: 83
             },
             start: {
                 x: 100,
@@ -53,33 +53,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         this.containerHeight = 0;
 
     }
-/*
 
-    <div id="db_simulator_top_pane">
-    </div>
-    <div id="db_simulator_bottom_pane" class="resize-sensor">
-        <div id="db_simulator_tab_selection">
-            <ul class='tabs'>
-            <li id="robot_pane_tab"><a href="#db_robot_pane" class='active'>Robot</a></li>
-            <li><a href="#db_code_pane">Code</a></li>
-            </ul>
-        </div>
-        <div id="db_robot_pane" class="resize-sensor">
-            <div id="sim_container">
-                <div id="sim_animation">
-                    <canvas id="sim_canvas"></canvas>
-                </div>
-                <div id="sim_debug"></div>
-            </div>
-        </div>
-        <div id="db_code_pane">
-            <!--<div id="language1" class="language">C++</div>-->
-            <!-- No need to see javascript code, irrelevant for the children -->
-            <!--<div id="language2" class="language">JavaScript</div>-->
-            <pre id="content_arduino" class="content"></pre>
-        </div>
-    </div>
-*/
 
     /* @brief Initializes the simulator robot display.
      * This function puts all the nececary visuals inside the container with the id containerId.
@@ -123,7 +97,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         db_simulator_panes.append(top_pane).append(bottom_pane);
 
         // init board simulation
-        this.dwenguinoBoardSimulation.initSimulationState();
+        this.dwenguinoBoardSimulation.initSimulationState(null);
         this.dwenguinoBoardSimulation.initSimulationDisplay("db_simulator_top_pane");
 
 

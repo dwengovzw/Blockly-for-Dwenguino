@@ -41,12 +41,13 @@ export default class BaseSimulationRunner{
 
     setCurrentScenario(scenario){
         this.currentScenario = scenario;
+        this.simulationSandbox.setCurrentScenario(this.currentScenario);
         this.resetDwenguino();
     }
 
     initScenario(){
         // reset scenario state
-        this.currentScenario.initSimulationState();
+        this.currentScenario.initSimulationState(this.board);
         this.currentScenario.initSimulationDisplay("");
         this.currentScenario.updateScenario(this.board);
     }

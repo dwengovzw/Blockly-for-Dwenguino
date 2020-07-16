@@ -130,6 +130,29 @@ var MSG = {
   cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
   compileError: "The code could not be compiled.\nYou should check your code, did you forget a block someware?",
 
+
+  // TODO: Translate:
+  dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
+  dwenguinoStepperMotorBlockTooltip: "TODO",
+  drawingrobotMove:"Verplaats de stift onder een van hoek %1 graden met %2 stappen",
+  drawingrobotLine:"Teken een lijn naar x: %1 y: %2",
+  drawingrobotCircle:"Teken een cirkel met straal: %1",
+  drawingrobotRectangle:"Teken een rechthoek met breedte: %1 en hoogte: %2",
+  drawingrobotLiftStylus: "Stift opheffen",
+  drawingrobotLowerStylus: "Stift neerzetten",
+  drawingrobotChangeColor: "Kleur %1",
+  up:"omhoog",
+  down:"omlaag",
+  left:"links",
+  right:"rechts",
+  bounds:"Opgelet\nJe probeert buiten het papier te tekenen",
+  drawingrobotgrid: "raster",
+  colorpicker:"Kleur",
+  drawingrobotSaveImage:"Tekening opslaan",
+  drawingrobotDrawing:"Tekening",
+  stepperMotorOne: "STEPPER1", 
+  stepperMotorTwo: "STEPPER2",
+  stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use."
 };
 
 MSG.dropzone = {
