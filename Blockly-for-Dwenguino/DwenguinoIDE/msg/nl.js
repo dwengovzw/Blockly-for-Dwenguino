@@ -209,6 +209,7 @@ MSG.simulator = {
   led: "Led",
   lcd: "Lcd-scherm",
   decoration: "Decoratie",
+  buzzer: "Buzzer",
   button: "Knop",
 };
 
@@ -223,6 +224,7 @@ MSG.socialrobot = {
 MSG.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Leren programmeren<br>met DwenguinoBlockly",
+  catDwenguinoComponents: "Handig overzicht met<br>alle Dwenguino-componenten",
   catRidingRobot: "Rijdende robot",
   catSocialRobot: "Sociale robot",
   catWeGoStem: "WeGoSTEM",
@@ -232,8 +234,9 @@ MSG.tutorialMenu = {
   close: "Sluiten",
   checkAnswer: "Kijk na",
   correctAnswer: "Het antwoord was juist.",
-  wrongAnswer: "Het antwoord was fout. Probeer opnieuw."
-}
+  wrongAnswer: "Het antwoord was fout. Probeer opnieuw.",
+  dwenguinoComponents: "Dwenguino-componenten"
+};
 
 MSG.tutorials = {
     introduction: {},

@@ -31,8 +31,13 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         //init robot statecontainerIdSelector
         this.robot = {
             image: {
+<<<<<<< HEAD
                 width: 65,
                 height: 83
+=======
+                width: 50,
+                height: 68
+>>>>>>> 4297b0d049d26aae921149da71032fd98bb36be5
             },
             start: {
                 x: 100,

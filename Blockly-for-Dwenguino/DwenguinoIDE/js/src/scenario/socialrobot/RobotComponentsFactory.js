@@ -1,16 +1,15 @@
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { EVENT_NAMES } from "../../logging/EventNames.js"
 
-import { RobotComponent } from "./components/RobotComponent.js"
-import { Servo, CostumesEnum } from "./components/Servo.js"
-import { Led } from "./components/Led.js"
-import { Lcd } from "./components/Lcd.js"
-import { Sonar } from "./components/Sonar.js"
-import { Pir } from "./components/Pir.js"
-import { SoundSensor } from "./components/SoundSensor.js"
-import { LightSensor } from "./components/LightSensor.js"
+import { SocialRobotServo, CostumesEnum } from "./components/Servo.js"
+import { SocialRobotLed } from "./components/Led.js"
+import { SocialRobotLcd } from "./components/Lcd.js"
+import { SocialRobotSonar } from "./components/Sonar.js"
+import { SocialRobotPir } from "./components/Pir.js"
+import { SocialRobotSoundSensor } from "./components/SoundSensor.js"
+import { SocialRobotLightSensor } from "./components/LightSensor.js"
 
-export { TypesEnum, RobotComponentsFactory }
+export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
 
 /**
@@ -294,7 +293,7 @@ class RobotComponentsFactory {
       pin = 37;
     } 
 
-    let servo = new Servo(this._eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
+    let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);
 
     this.renderer.initializeCanvas(this._robot, servo); 
@@ -316,7 +315,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LED);
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
-    let led = new Led(this._eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+    let led = new SocialRobotLed(this._eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
     this._robot.push(led);
 
     this.renderer.initializeCanvas(this._robot, led); 
@@ -340,7 +339,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
 
-    let pir = new Pir(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let pir = new SocialRobotPir(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(pir);
 
     this.renderer.initializeCanvas(this._robot, pir); 
@@ -365,7 +364,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SONAR);
     let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
 
-    let sonar = new Sonar(this._eventBus, id, echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let sonar = new SocialRobotSonar(this._eventBus, id, echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(sonar);
 
     this.renderer.initializeCanvas(this._robot, sonar); // TODO
@@ -389,7 +388,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LCD);
     let id = this._numberOfComponentsOfType[TypesEnum.LCD];
 
-    let lcd = new Lcd(this._eventBus, id, visible, offsetLeft, offsetTop, htmlClasses);
+    let lcd = new SocialRobotLcd(this._eventBus, id, visible, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(lcd);
   }
   
@@ -398,10 +397,10 @@ class RobotComponentsFactory {
   * Remove the most recent created decoration element from the simulation container.
   */
   removeLcd(){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypsEnum.Lcd));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.Lcd));
     
-    let id = this._numberOfComponentsOfType[TypsEnum.LCD];
-    this.removeRobotComponentWithTypeAndId(TypsEnum.LCD, id);
+    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LCD, id);
   }
 
 
@@ -413,7 +412,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SOUND);
     let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
 
-    let soundSensor = new SoundSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let soundSensor = new SocialRobotSoundSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(soundSensor);
 
     this.renderer.initializeCanvas(this._robot, soundSensor); 
@@ -437,7 +436,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LIGHT);
     let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
 
-    let lightSensor = new LightSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let lightSensor = new SocialRobotLightSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(lightSensor);
 
     this.renderer.initializeCanvas(this._robot, lightSensor); 

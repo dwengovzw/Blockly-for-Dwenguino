@@ -2,7 +2,7 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from './../RobotComponentsFactory.js'
 import { EventsEnum } from './../ScenarioEvent.js'
 
-export { Servo, CostumesEnum}
+export { SocialRobotServo as SocialRobotServo, CostumesEnum}
 
 const CostumesEnum = {
     PLAIN: 'plain', 
@@ -13,7 +13,7 @@ const CostumesEnum = {
   };
 Object.freeze(CostumesEnum);
 
-class Servo extends RobotComponent{
+class SocialRobotServo extends RobotComponent{
     constructor(eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 

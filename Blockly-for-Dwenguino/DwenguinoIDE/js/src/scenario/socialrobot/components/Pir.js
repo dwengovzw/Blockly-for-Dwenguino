@@ -1,10 +1,12 @@
 import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
+import { SoundSensor } from '../../../tutorials/components/SoundSensor.js';
+import { Button } from '../../utilities/Button.js';
 
-export { Pir }
+export { SocialRobotPir as SocialRobotPir }
 
-class Pir extends RobotComponent{
+class SocialRobotPir extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
@@ -34,14 +36,25 @@ class Pir extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let buttonLabel = 'button' + this.getId() + '_label';
-        let pirButtonId = 'pir_button' + this.getId();
+        let label = MSG.pirButtonLabel + " " + this.getId();
+        let id = '' + this.getType() + this.getId();
+        this._button = new Button(id, 'sensor_options', label);
         
-        if (!document.getElementById(pirButtonId)) {
-            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.pirButtonLabel + ' ' + this.getId() + "</div>");
-            $('#sensor_options').append("<div id='" + pirButtonId + "' class='pir_button' alt='Load'></div>");
+        var self = this;
+        this._button.getButtonElement().onclick = function (){
+            self._button.update();
 
-            this.addPirEventHandler(pirButtonId);
+            if (self._button.isActive()) {
+                self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
+                self.setState(1);
+                self._stateUpdated = true;
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            } else {
+                self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
+                self.setState(0);
+                self._stateUpdated = true; 
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            }
         }
 
         let simPir = document.getElementById('sim_'+this.getType() + this.getId());
@@ -52,27 +65,27 @@ class Pir extends RobotComponent{
         });
     }
 
-    addPirEventHandler(pirButtonId) {
-        var self = this;
-        $("#" + pirButtonId).on('click', function () {
-            let classesActive = "pir_button pir_button_pushed";
-            let classesInactive = "pir_button";
+    // addPirEventHandler(pirButtonId) {
+    //     var self = this;
+    //     $("#" + pirButtonId).on('click', function () {
+    //         let classesActive = "pir_button pir_button_pushed";
+    //         let classesInactive = "pir_button";
 
-            if (document.getElementById(pirButtonId).className === classesInactive) {
-                document.getElementById(pirButtonId).className = classesActive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
-                self.setState(1);
-                self._stateUpdated = true;
-                self._eventBus.dispatchEvent(EventsEnum.SAVE);
-            } else {
-                document.getElementById(pirButtonId).className = classesInactive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
-                self.setState(0);
-                self._stateUpdated = true; 
-                self._eventBus.dispatchEvent(EventsEnum.SAVE);
-            }
-          });
-    }
+    //         if (document.getElementById(pirButtonId).className === classesInactive) {
+    //             document.getElementById(pirButtonId).className = classesActive;
+    //             self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
+    //             self.setState(1);
+    //             self._stateUpdated = true;
+    //             self._eventBus.dispatchEvent(EventsEnum.SAVE);
+    //         } else {
+    //             document.getElementById(pirButtonId).className = classesInactive;
+    //             self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
+    //             self.setState(0);
+    //             self._stateUpdated = true; 
+    //             self._eventBus.dispatchEvent(EventsEnum.SAVE);
+    //         }
+    //       });
+    // }
 
     removeHtml(){
         $('#sim_pir' + this.getId()).remove();
