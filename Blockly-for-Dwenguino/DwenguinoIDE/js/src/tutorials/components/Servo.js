@@ -15,4 +15,15 @@ class Servo extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.SERVO;
     }
 
+    static getDescription(){
+        return MSG.simulator['servoDescription'];
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return ['angle'];
+    }
 }

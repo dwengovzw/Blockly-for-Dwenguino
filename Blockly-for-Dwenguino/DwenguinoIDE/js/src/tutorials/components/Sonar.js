@@ -15,4 +15,15 @@ class Sonar extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.SONAR;
     }
 
+    static getDescription(){
+        return '';
+    }
+
+    static getInputPins(){
+        return ['trigger'];
+    }
+
+    static getOutputPins(){
+        return ['echo'];
+    }
 }

@@ -15,4 +15,15 @@ class Led extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.LED;
     }
 
+    static getDescription(){
+        return MSG.simulator['ledDescription'];
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return [];
+    }
 }

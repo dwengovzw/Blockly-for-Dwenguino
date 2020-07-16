@@ -15,4 +15,16 @@ class Pir extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.PIR;
     }
 
+    static getDescription(){
+        return MSG.simulator['pirDescription'];
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return [];
+    }
+
 }
