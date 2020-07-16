@@ -26,7 +26,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         }
     }
 
-    initSimulationState(){
+    initSimulationState(boardState){
 
 
     }
