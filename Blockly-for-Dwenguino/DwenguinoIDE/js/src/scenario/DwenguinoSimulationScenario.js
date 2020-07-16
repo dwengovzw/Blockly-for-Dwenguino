@@ -22,7 +22,7 @@ export default class DwenguinoSimulationScenario {
     * @param containerIdSelector The jquery selector of the conainer to put the robot display.
     *
     */
-    initSimulationState(){
+    initSimulationState(boardState){
         console.log("initSimulationState");
 
     }

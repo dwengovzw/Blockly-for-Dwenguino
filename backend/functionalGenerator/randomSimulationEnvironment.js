@@ -14,8 +14,8 @@ export default class RandomSimulationEnvironment extends DwenguinoSimulationScen
     * @param containerIdSelector The jquery selector of the conainer to put the robot display.
     *
     */
-   initSimulationState(){
-     super.initSimulationState();
+   initSimulationState(boardState){
+     super.initSimulationState(boardState);
    }
 
     /* @brief Initializes the simulator robot display.

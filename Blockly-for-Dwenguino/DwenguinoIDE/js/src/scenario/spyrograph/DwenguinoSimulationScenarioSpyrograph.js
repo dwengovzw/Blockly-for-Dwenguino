@@ -45,12 +45,12 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
     
     constructor(logger){
         super(logger);
-        this.initSimulationState();
+        this.initSimulationState(null);
         this.graphicsLib = new SpyrographGraphicsLib();
     }
 
-    initSimulationState(){
-        super.initSimulationState();
+    initSimulationState(boardState){
+        super.initSimulationState(boardState);
         this.representationScale.motorAngles = [0, 0] // Determined by the simulation       
     }
 

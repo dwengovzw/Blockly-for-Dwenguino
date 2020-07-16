@@ -1,6 +1,3 @@
-import BoardState from "./BoardState.js";
-import SimulationSandbox from "./SimulationSandbox.js";
-import SimulationController from "../scenario/DwenguinoBoardSimulation.js";
 import BaseSimulationRunner from "./BaseSimulationRunner.js"
 
 export default class SimulationRunner extends BaseSimulationRunner{
@@ -33,7 +30,7 @@ export default class SimulationRunner extends BaseSimulationRunner{
 
     initScenario(){
         // reset scenario state
-        this.currentScenario.initSimulationState();
+        this.currentScenario.initSimulationState(this.board);
         this.currentScenario.initSimulationDisplay(this.simulationViewContainerId);
         this.currentScenario.updateScenario(this.board);
     }

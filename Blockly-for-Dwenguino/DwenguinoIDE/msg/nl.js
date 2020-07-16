@@ -140,7 +140,27 @@ var MSG = {
   uploadError: "Het is niet gelukt om de code te uploaden naar het bord.\nControleer of de usb kabel goed is aangesloten.\n Als dit zo is, probeer de kabel uit te trekken en terug in te pluggen.",
   cleanError: "De code van het vorige programma kon niet worden verwijderd.\nControleer of er een ander programma een .cpp bestand gebruikt en sluit dit programma.",
   compileError: "Het is niet gelukt om de code te compileren.\nControleer of er een fout zit in je programma, is er ergens een blok tekort?",
-  
+  dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
+  dwenguinoStepperMotorBlockTooltip: "TODO",
+  drawingrobotMove:"Verplaats de stift onder een van hoek %1 graden met %2 stappen",
+  drawingrobotLine:"Teken een lijn naar x: %1 y: %2",
+  drawingrobotCircle:"Teken een cirkel met straal: %1",
+  drawingrobotRectangle:"Teken een rechthoek met breedte: %1 en hoogte: %2",
+  drawingrobotLiftStylus: "Stift opheffen",
+  drawingrobotLowerStylus: "Stift neerzetten",
+  drawingrobotChangeColor: "Kleur %1",
+  up:"omhoog",
+  down:"omlaag",
+  left:"links",
+  right:"rechts",
+  bounds:"Opgelet\nJe probeert buiten het papier te tekenen",
+  drawingrobotgrid: "raster",
+  colorpicker:"Kleur",
+  drawingrobotSaveImage:"Tekening opslaan",
+  drawingrobotDrawing:"Tekening",
+  stepperMotorOne: "STAPPENMOTOR1", 
+  stepperMotorTwo: "STAPPENMOTOR2",
+  stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen."
 };
 
 MSG.dropzone = {
