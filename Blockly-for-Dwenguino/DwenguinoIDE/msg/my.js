@@ -117,6 +117,7 @@ compileError: "The code could not be compiled.\nYou should check your code, did 
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
   dwenguinoStepperMotorBlockTooltip: "TODO",
   drawingrobotMove:"Verplaats de stift onder een van hoek %1 graden met %2 stappen",
+  drawingrobotMoveXY:"Verplaats de stift %1 naar rechts en %2 naar links",
   drawingrobotLine:"Teken een lijn naar x: %1 y: %2",
   drawingrobotCircle:"Teken een cirkel met straal: %1",
   drawingrobotRectangle:"Teken een rechthoek met breedte: %1 en hoogte: %2",

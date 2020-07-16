@@ -242,11 +242,10 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
     updateScenarioState(dwenguinoState) {
         super.updateScenarioState(dwenguinoState);
 
-        if (this.checkServoAngle(dwenguinoState.getServoAngle(0), this)) {
-            this.updateServoAngle(dwenguinoState.getServoAngle(0), this);
-        }
+        // Update if the stylus is up or down
+        this.updateServoAngle(dwenguinoState.getIoPinState(38));
 
-        this.updateColor(dwenguinoState.getIoPinState(this.colorPin), $("#colorpicker").val(), this);
+        this.updateColor(dwenguinoState.getIoPinState(this.colorPin), $("#colorpicker").val());
 
         var stepL = dwenguinoState.getIoPinState(this.stepperMotorPins[0]);
         var stepR = dwenguinoState.getIoPinState(this.stepperMotorPins[1]);
@@ -358,9 +357,9 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
         ctx.fillText("200", x + 200, y);
         ctx.fillText("300", x + 300, y);
 
-        ctx.fillText("100", x - 15, y + 100);
+        ctx.fillText("300", x - 15, y + 100);
         ctx.fillText("200", x - 15, y + 200);
-        ctx.fillText("300", x - 15, y + 300);
+        ctx.fillText("100", x - 15, y + 300);
 
 
         var data = '\
@@ -382,12 +381,12 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
     }
 
 
-    updateServoAngle(angle, state) {
+    updateServoAngle(angle) {
         if (angle === 90) {
-            state.stylus.drawing.liftStylus = true;
+            this.stylus.drawing.liftStylus = true;
         }
         if (angle === 0) {
-            state.stylus.drawing.liftStylus = false;
+            this.stylus.drawing.liftStylus = false;
         }
     }
 
@@ -401,17 +400,17 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
         }
     }
 
-    updateColor(c1, c2, state) {
+    updateColor(c1, c2) {
         // Color block used
-        if (c1 !== state.stylus.drawing.boardColor) {
-            state.stylus.drawing.drawingColor = c1;
-            state.stylus.drawing.boardColor = c1;
+        if (c1 !== this.stylus.drawing.boardColor) {
+            this.stylus.drawing.drawingColor = c1;
+            this.stylus.drawing.boardColor = c1;
         }
 
         // Colorpicker used
-        if (c2 !== state.stylus.drawing.selectedColor) {
-            state.stylus.drawing.drawingColor = c2;
-            state.stylus.drawing.selectedColor = c2;
+        if (c2 !== this.stylus.drawing.selectedColor) {
+            this.stylus.drawing.drawingColor = c2;
+            this.stylus.drawing.selectedColor = c2;
         }
     }
 
