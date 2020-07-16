@@ -15,4 +15,15 @@ class SoundSensor extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.SOUND;
     }
 
+    static getDescription(){
+        return '';
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return [];
+    }
 }

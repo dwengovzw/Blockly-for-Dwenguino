@@ -182,6 +182,10 @@ export default class TutorialMenu {
             $('#tutorialModal_sensors_menu').append('<div id="tutorial_sensors_'+ sensorsArray[i].getType() +'" class="col-3 bg-c-4 card"></div>');
             $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[sensorsArray[i].getType()] + '</div>');
             $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div>'+sensorsArray[i].getDescription()+'</div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="input_pins' + sensorsArray[i].getType() + '">IN: </div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="output_pins' + sensorsArray[i].getType() + '">OUT: </div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="circuit_pins' + sensorsArray[i].getType() + '">CIRCUIT: </div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row2" class="row"></div>');
@@ -197,6 +201,10 @@ export default class TutorialMenu {
             $('#tutorialModal_movement_menu').append('<div id="tutorial_movement_'+ movementArray[i].getType() +'" class="col-3 bg-c-11 card"></div>');
             $('#tutorial_movement_'+movementArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[movementArray[i].getType()] + '</div>');
             $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('<div>'+movementArray[i].getDescription()+'</div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="input_pins' + movementArray[i].getType() + '">IN: </div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="output_pins' + movementArray[i].getType() + '">OUT: </div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="circuit_pins' + movementArray[i].getType() + '">CIRCUIT: </div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row4" class="row"></div>');
@@ -209,6 +217,10 @@ export default class TutorialMenu {
             $('#tutorialModal_display_menu').append('<div id="tutorial_display_'+ displayArray[i].getType() +'" class="col-3 bg-c-6 card"></div>');
             $('#tutorial_display_'+displayArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[displayArray[i].getType()] + '</div>');
             $('#tutorial_display_'+displayArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('<div>'+displayArray[i].getDescription()+'</div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="input_pins' + displayArray[i].getType() + '">IN: </div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="output_pins' + displayArray[i].getType() + '">OUT: </div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="circuit_pins' + displayArray[i].getType() + '">CIRCUIT: </div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row5" class="row"></div>');
@@ -221,8 +233,28 @@ export default class TutorialMenu {
             $('#tutorialModal_audio_menu').append('<div id="tutorial_audio_'+ audioArray[i].getType() +'" class="col-3 bg-c-3 card"></div>');
             $('#tutorial_audio_'+audioArray[i].getType()).append('<div class="category_tag">' + MSG.simulator[audioArray[i].getType()] + '</div>');
             $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('<div>'+audioArray[i].getDescription()+'</div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="input_pins' + audioArray[i].getType() + '">IN: </div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="output_pins' + audioArray[i].getType() + '">OUT: </div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="circuit_pins' + audioArray[i].getType() + '">CIRCUIT: </div>');
         }
 
+        let allComponents = sensorsArray.concat(movementArray).concat(displayArray).concat(audioArray);
+
+        for(let i = 0; i < allComponents.length; i++){
+            let inputPins = allComponents[i].getInputPins();
+            for(let j = 0; j < inputPins.length; j++){
+                $('#input_pins' + allComponents[i].getType()).append('<span class="badge badge-pill">'+inputPins[j]+'</span> ');
+            }
+        
+            let outputPins = allComponents[i].getOutputPins();
+            for(let j = 0; j < outputPins.length; j++){
+                $('#output_pins' + allComponents[i].getType()).append('<span class="badge badge-pill">'+outputPins[j]+'</span> ');
+            }
+            
+            $('#circuit_pins' + allComponents[i].getType()).append('<span class="badge badge-pill">5V</span> ');
+            $('#circuit_pins' + allComponents[i].getType()).append('<span class="badge badge-pill">GND</span> ');
+        }
 
         $("#tutorialModal .modal-footer").empty();
         $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'</button>');

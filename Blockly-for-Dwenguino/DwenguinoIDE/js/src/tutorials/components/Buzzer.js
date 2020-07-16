@@ -15,4 +15,16 @@ class Buzzer extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.BUZZER;
     }
 
+    static getDescription(){
+        return MSG.simulator['buzzerDescription'];
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return ['frequency'];
+    }
+
 }

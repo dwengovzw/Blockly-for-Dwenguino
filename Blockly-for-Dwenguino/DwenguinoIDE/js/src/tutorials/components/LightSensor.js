@@ -15,4 +15,16 @@ class LightSensor extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.LIGHT;
     }
 
+    static getDescription(){
+        return '';
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return [];
+    }
+    
 }

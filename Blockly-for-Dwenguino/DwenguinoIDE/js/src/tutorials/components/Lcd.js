@@ -15,4 +15,16 @@ class Lcd extends DwenguinoComponent{
         return DwenguinoComponentTypesEnum.LCD;
     }
 
+    static getDescription(){
+        return MSG.simulator['lcdDescription'];
+    }
+
+    static getInputPins(){
+        return [];
+    }
+
+    static getOutputPins(){
+        return [];
+    }
+
 }
