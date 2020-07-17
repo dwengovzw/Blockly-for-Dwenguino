@@ -8,6 +8,69 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
     penPositionPins = [36, 37];
     colorPin = 35;
     dwenguinoBoardSimulation = null;
+    previousProgramColor = "#000";
+
+    /* Changes to settings -> change values in the following funtions
+        * DwenguinoSimulationScenarioDrawingRobot.js
+        *    getPosition, getLength, getCurrentLength
+        * DwenguinoSimulation.js
+        *    stepMotorRotate
+        */
+       motor = {
+        image: {
+            radius: PlotterConstants.motorRadius,
+        },
+        position: {
+            xL: 20,
+            xR: 20 + PlotterConstants.motorDistance,
+            y: 20
+        },
+        settings: {
+            nrOfSteps: PlotterConstants.nrOfSteps,
+            currentSteps: [0, 0],
+        }
+    };
+
+    wireLengths = [300, 200];
+    startWireLengths = this.wireLengths;
+
+    stylus = {
+        image: {
+            radius: 5,
+            // color: "#000"
+        },
+        position: {
+            x: 80,
+            y: 80
+        },
+        prevPosition: {
+            x: 0,
+            y: 0
+        },
+        drawing: {
+            radius: 2,
+            drawingColor: "#000",
+            selectedColor: "#000",
+            boardColor: "#000",
+            liftStylus: false,
+            // angles: [],
+            // colors: []
+        }
+    };
+
+
+    paper = {
+        height: (this.motor.position.xR - this.motor.position.xL) / Math.sqrt(2), // height = width * sqrt(2) -> aspect ractio of a3
+        width: this.motor.position.xR - this.motor.position.xL,
+        position: {
+            x: this.motor.position.xL,
+            y: 40
+        }
+    };
+
+    containerWidth = 0;
+    containerHeight = 0;
+
     constructor(logger) {
         super(logger);
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
@@ -23,66 +86,6 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
     initSimulationState(boardState) {
         super.initSimulationState(boardState);
 
-        /* Changes to settings -> change values in the following funtions
-        * DwenguinoSimulationScenarioDrawingRobot.js
-        *    getPosition, getLength, getCurrentLength
-        * DwenguinoSimulation.js
-        *    stepMotorRotate
-        */
-        this.motor = {
-            image: {
-                radius: PlotterConstants.motorRadius,
-            },
-            position: {
-                xL: 20,
-                xR: 20 + PlotterConstants.motorDistance,
-                y: 20
-            },
-            settings: {
-                nrOfSteps: PlotterConstants.nrOfSteps,
-                currentSteps: [0, 0],
-            }
-        };
-
-        this.wireLengths = [300, 200];
-        this.startWireLengths = this.wireLengths;
-
-        this.stylus = {
-            image: {
-                radius: 5,
-                // color: "#000"
-            },
-            position: {
-                x: (this.motor.position.xR - this.motor.position.xL) / 2 + this.motor.position.xL,
-                y: 80
-            },
-            prevPosition: {
-                x: 0,
-                y: 0
-            },
-            drawing: {
-                radius: 2,
-                drawingColor: "#000",
-                selectedColor: "#000",
-                boardColor: "#000",
-                liftStylus: false,
-                // angles: [],
-                // colors: []
-            }
-        };
-
-
-        this.paper = {
-            height: (this.motor.position.xR - this.motor.position.xL) / Math.sqrt(2), // height = width * sqrt(2) -> aspect ractio of a3
-            width: this.motor.position.xR - this.motor.position.xL,
-            position: {
-                x: this.motor.position.xL,
-                y: 40
-            }
-        };
-
-        this.containerWidth = 0;
-        this.containerHeight = 0;
 
         // Calculate the correct stylus point based on the current wire lengths 
         this.caclulateStylusPoint();
@@ -143,10 +146,13 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
         //  color picker
         var item = $('<li>').attr("class", "sim_setting");
         if ($("#colorpicker") !== undefined) {
-            this.stylus.drawing.drawingColor = $("#colorpicker").val();
+            //this.stylus.drawing.drawingColor = $("#colorpicker").val();
             // this.stylus.drawing.selectedColor = $("#colorpicker").val();
         }
-        $('<input />', { type: 'color', id: 'colorpicker', name: "colorpicker", value: this.stylus.drawing.drawingColor }).appendTo(item);
+        
+
+        let colorpicker = $('<input />', { type: 'color', id: 'colorpicker', name: "colorpicker", value: this.stylus.drawing.drawingColor });
+        colorpicker.appendTo(item);
         $('<label />', { 'for': 'colorpicker', id: 'txt_colorpicker', text: MSG.colorpicker }).appendTo(item);
         settings.append(item);
         //  save image button
@@ -156,6 +162,12 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
 
 
         bottom_pane.append(settings);
+
+        let self = this;
+        colorpicker.on("change", function(event){
+            console.log($(this).val());
+            self.updateColor($(this).val());
+        });
 
         //select canvas
         var canvas = $('#sim_canvas')[0];
@@ -245,7 +257,9 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
         // Update if the stylus is up or down
         this.updateServoAngle(dwenguinoState.getIoPinState(38));
 
-        this.updateColor(dwenguinoState.getIoPinState(this.colorPin), $("#colorpicker").val());
+        if (this.previousProgramColor != dwenguinoState.getIoPinState(this.colorPin)){
+            this.updateColor(dwenguinoState.getIoPinState(this.colorPin));
+        }
 
         var stepL = dwenguinoState.getIoPinState(this.stepperMotorPins[0]);
         var stepR = dwenguinoState.getIoPinState(this.stepperMotorPins[1]);
@@ -400,18 +414,13 @@ export default class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulat
         }
     }
 
-    updateColor(c1, c2) {
+    updateColor(color) {
         // Color block used
-        if (c1 !== this.stylus.drawing.boardColor) {
-            this.stylus.drawing.drawingColor = c1;
-            this.stylus.drawing.boardColor = c1;
+        if (color != 0){
+            this.stylus.drawing.drawingColor = color;
         }
+        
 
-        // Colorpicker used
-        if (c2 !== this.stylus.drawing.selectedColor) {
-            this.stylus.drawing.drawingColor = c2;
-            this.stylus.drawing.selectedColor = c2;
-        }
     }
 
 }
