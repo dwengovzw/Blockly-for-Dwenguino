@@ -137,7 +137,7 @@ var MSG = {
   lightOptions: "Lichtsensor opties",
   ledOptions: "led opties",
   runError: "Oops, het is niet gelukt om je code op het bord uit te voeren.",
-  uploadError: "Het is niet gelukt om de code te uploaden naar het bord.\nControleer of de usb kabel goed is aangesloten.\n Als dit zo is, probeer de kabel uit te trekken en terug in te pluggen.",
+  uploadError: "Het is niet gelukt om de code te uploaden naar het bord.\nControleer of de usb kabel goed is aangesloten.\n Als dit zo is, probeer dan de volgende stappen.\n\n1) De kabel uit te trekken en terug in te pluggen.\n2) Doe een​ harde reset​ van het Dwenguino-bord\n   (a) druk de RESET-knop én SOUTH-knop tegelijkertijd in,\n   (b) los dan de RESET-knop,\n   (c) los de SOUTH-knop\n3) Probeer het opnieuw door op de play-knop te drukken",
   cleanError: "De code van het vorige programma kon niet worden verwijderd.\nControleer of er een ander programma een .cpp bestand gebruikt en sluit dit programma.",
   compileError: "Het is niet gelukt om de code te compileren.\nControleer of er een fout zit in je programma, is er ergens een blok tekort?",
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
@@ -161,7 +161,9 @@ var MSG = {
   drawingrobotDrawing:"Tekening",
   stepperMotorOne: "STAPPENMOTOR1", 
   stepperMotorTwo: "STAPPENMOTOR2",
-  stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen."
+  stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen.",
+  clear: "Wissen",
+  save: "Opslaan",
 };
 
 MSG.dropzone = {

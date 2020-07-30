@@ -112,6 +112,8 @@ var MSG = {
   colorpicker:"Kleur",
   drawingrobotSaveImage:"Tekening opslaan",
   drawingrobotDrawing:"Tekening",
+  clear: "Clear",
+  save: "Save",
 };
 
 

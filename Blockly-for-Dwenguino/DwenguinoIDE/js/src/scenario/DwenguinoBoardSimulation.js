@@ -8,6 +8,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     audioStarted = false;
     muted = true;
     prevFreq = 0;
+    boardDisplayWidth = "80%";
 
     constructor(logger){
         super(logger);
@@ -15,6 +16,10 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
             buttons: [1, 1, 1, 1, 1],
             reset: 1,
         }
+    }
+
+    setBoardDisplayWidthWidth(width){
+        this.boardDisplayWidth = width;
     }
 
 
@@ -38,7 +43,16 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
 
         $('#db_simulator_pane').append('<div id="debug"></div>');
         $('#db_simulator_pane').append('<div id="sim_components"></div>');
-        $('#db_simulator_pane').append('<div id="sim_board"></div>');  
+
+        let containerHack = $("<div>").css(
+            {"position": "absolute", "display": "inline-block", "width": this.boardDisplayWidth, "max-width": "30vw", "right": 0}
+            );
+        let containerHackDummy = $("<div>").attr("id", "dummy").css({"margin-top": "70%"});
+        let boardContainer =$("<div>").attr("id", "sim_board").css({"position": "absolute", "right": 0, "bottom": 0, "left": 0});
+        containerHack.append(containerHackDummy);
+        containerHack.append(boardContainer);
+
+        $('#db_simulator_pane').append(containerHack);  
         $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
         $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
 

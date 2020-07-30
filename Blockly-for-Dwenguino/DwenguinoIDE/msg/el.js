@@ -138,7 +138,9 @@ var MSG = {
   drawingrobotDrawing:"Tekening",
   stepperMotorOne: "STEPPER1", 
   stepperMotorTwo: "STEPPER2",
-  stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use."
+  stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
+  clear: "Clear",
+  save: "Save",
 };
 
 
