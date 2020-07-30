@@ -4,7 +4,7 @@ import { EVENT_NAMES } from "../logging/EventNames.js"
 
 export default class SimulationControlsController {
     simulationRunner = null;
-    scenarioView = "moving";
+    scenarioView = "spyrograph";
     scenarios = null;
 
     logger = null;

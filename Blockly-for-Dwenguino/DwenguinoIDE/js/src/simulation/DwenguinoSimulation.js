@@ -12,10 +12,10 @@ export default class DwenguinoSimulation{
     
     constructor(logger, workspace){
         this.scenarios = {
+            "spyrograph": new DwenguinoSimulationScenarioSpyrograph(logger) /*, "moving", "wall", "spyrograph"*/,
             "moving": new DwenguinoSimulationScenarioRidingRobot(logger),
             "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger),
             "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger),
-            "spyrograph": new DwenguinoSimulationScenarioSpyrograph(logger) /*, "moving", "wall", "spyrograph"*/,
             "plotter": new DwenguinoSimulationScenarioPlotter(logger)
         };
         this.logger = logger;
