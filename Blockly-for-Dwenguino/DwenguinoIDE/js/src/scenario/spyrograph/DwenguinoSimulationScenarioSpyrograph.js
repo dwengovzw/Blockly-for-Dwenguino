@@ -1,6 +1,7 @@
 import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
 import SpyrographGraphicsLib from "./SpyrographGraphicsLib.js"
 import Point from "../../graphicsLib/Point.js";
+import DwenguinoBoardSimulation from "../DwenguinoBoardSimulation.js"
 
 export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
     startScale = 400;
@@ -42,11 +43,18 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
     imageData = null;
 
     graphicsLib = null;
+
+
+    dwenguinoBoardSimulation = null;
+
+    scaleFactorForDisplay = 0.8;
     
     constructor(logger){
         super(logger);
         this.initSimulationState(null);
         this.graphicsLib = new SpyrographGraphicsLib();
+        this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
+        this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
     }
 
     initSimulationState(boardState){
@@ -64,6 +72,26 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
         this.loadPreviousImageIfExists();               // Check if an image was saved before and load it
         this.createControlsMenu();                      // Create the controls for scaling segments and changing color
         this.convertToDisplayAndRender(false);                                  // Render the initial drawing
+
+        this.container = $(`#${containerId}`);
+        let boardContainerId = "boardContainer";
+        // CSS hack to make the element height scale to its width.
+        /*let containerHack = $("<div>").css(
+            {"position": "absolute", "display": "inline-block", "width": "33%", "right": 0, "top": 0}
+            );
+        let containerHackDummy = $("<div>").attr("id", "dummy").css({"margin-top": "80%"});
+        let boardContainer =$("<div>").attr("id", boardContainerId).css({"position": "absolute", "top": 0, "right": 0, "bottom": 0, "left": 0});
+        containerHack.append(containerHackDummy);
+        containerHack.append(boardContainer);  
+
+        this.container.append(containerHack);*/
+
+        let boardContainer = $("<div>").attr("id", boardContainerId).css({"position": "absolute", "width": "40%", "right": "10px", "top": "10px"});
+        this.container.append(boardContainer);
+        
+        // init board simulation
+        this.dwenguinoBoardSimulation.initSimulationState(null);
+        this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);
     }
 
     initDrawingEnvironment(containerId){
@@ -121,7 +149,7 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
         controlscontainer.append(colorpicker);
 
         //Create clear button
-        let clearbutton = $("<button>").attr("value", "Clear").html("Clear").css({"width": "90%", "margin-top": "5px"});
+        let clearbutton = $("<button>").attr("value", "Clear").html(MSG.clear).css({"width": "90%", "margin-top": "5px"});
         clearbutton.on("click", (evt) => {
             // Clear drawing canvas
             this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].clearRect(
@@ -134,7 +162,7 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
         controlscontainer.append(clearbutton);
 
         //Create save button
-        let saveButton = $("<button>").attr("value", "Save").html("Save").css({"width": "90%", "margin-top": "5px"});
+        let saveButton = $("<button>").attr("value", "Save").html(MSG.save).css({"width": "90%", "margin-top": "5px"});
         saveButton.on("click", (evt) => {
             // Clear drawing canvas
             var img = this.canvases[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].toDataURL('image/png');
@@ -179,6 +207,7 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
         super.updateScenario(boardState)
         this.updateScenarioState(boardState);
         this.updateScenarioDisplay(boardState);
+        this.dwenguinoBoardSimulation.updateScenario(boardState);
     }
 
     updateScenarioState(boardState){
@@ -310,28 +339,30 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
     }
 
     scaleHingePoints(screenwidth){
+        let scale = screenwidth * this.scaleFactorForDisplay;
         for (let i = 0 ; i < this.representationScale.motorAxes.length ; ++i){
             for (let j = 0 ; j < this.representationScale.motorAxes[i].length ; ++j){
-                this.drawingScale.motorAxes[i][j] = this.representationScale.motorAxes[i][j]/this.startScale*screenwidth;
+                this.drawingScale.motorAxes[i][j] = this.representationScale.motorAxes[i][j]/this.startScale*scale;
             }
         }
         for (let i = 0 ; i < this.representationScale.hinges.length ; ++i){
             for (let j = 0 ; j < this.representationScale.hinges[i].length ; ++j){
-                this.drawingScale.hinges[i][j] = this.representationScale.hinges[i][j]/this.startScale*screenwidth;
+                this.drawingScale.hinges[i][j] = this.representationScale.hinges[i][j]/this.startScale*scale;
             }
         }
     }
 
     scaleSegementLengths(screenwidth){
+        let scale = screenwidth * this.scaleFactorForDisplay;
         for (let i = 0 ; i < this.representationScale.motorAxes.length ; i++){
             for (let j = 0 ; j < this.representationScale.motorAxes[i].length ; j++){
-                this.drawingScale.motorAxes[i][j] = this.representationScale.motorAxes[i][j]/this.startScale*screenwidth;
+                this.drawingScale.motorAxes[i][j] = this.representationScale.motorAxes[i][j]/this.startScale*scale;
             }
         }
         for (let i = 0 ; i < this.representationScale.segmentLengths.length ; i++){
-            this.drawingScale.segmentLengths[i] = this.representationScale.segmentLengths[i]/this.startScale*screenwidth
+            this.drawingScale.segmentLengths[i] = this.representationScale.segmentLengths[i]/this.startScale*scale
         }
-        this.currentScale = screenwidth;
+        this.currentScale = scale;
     }
 
     render(paintOnDrawingCanvas = TextTrackCueList){

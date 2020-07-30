@@ -188,7 +188,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         super.updateScenarioState(dwenguinoState);
 
         // update the state of the board simulation
-        this.dwenguinoBoardSimulation.updateScenarioState(dwenguinoState);
+        //this.dwenguinoBoardSimulation.updateScenarioState(dwenguinoState);
 
         //Save the current dimensions of the container
         this.containerWidth = $("#sim_container").width();
@@ -243,7 +243,7 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         super.updateScenarioDisplay(dwenguinoState);
 
         // update the display of the dwenguino board simulation
-        this.dwenguinoBoardSimulation.updateScenarioDisplay(dwenguinoState);
+        //this.dwenguinoBoardSimulation.updateScenarioDisplay(dwenguinoState);
 
         // update the state of this scenario
 
