@@ -15,8 +15,6 @@ export default class DwenguinoSimulation{
             "spyrograph": new DwenguinoSimulationScenarioSpyrograph(logger) /*, "moving", "wall", "spyrograph"*/,
             "moving": new DwenguinoSimulationScenarioRidingRobot(logger),
             "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger),
-            "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger),
-            "plotter": new DwenguinoSimulationScenarioPlotter(logger)
         };
         this.logger = logger;
         this.workspace = workspace;

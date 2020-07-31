@@ -75,23 +75,28 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
 
         this.container = $(`#${containerId}`);
         let boardContainerId = "boardContainer";
-        // CSS hack to make the element height scale to its width.
-        /*let containerHack = $("<div>").css(
-            {"position": "absolute", "display": "inline-block", "width": "33%", "right": 0, "top": 0}
-            );
-        let containerHackDummy = $("<div>").attr("id", "dummy").css({"margin-top": "80%"});
-        let boardContainer =$("<div>").attr("id", boardContainerId).css({"position": "absolute", "top": 0, "right": 0, "bottom": 0, "left": 0});
-        containerHack.append(containerHackDummy);
-        containerHack.append(boardContainer);  
-
-        this.container.append(containerHack);*/
 
         let boardContainer = $("<div>").attr("id", boardContainerId).css({"position": "absolute", "width": "40%", "right": "10px", "top": "10px"});
         this.container.append(boardContainer);
         
         // init board simulation
+        this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
+        this.dwenguinoBoardSimulation.setComponentsTopOffset("55%");
+        this.dwenguinoBoardSimulation.setComponentsRightPosition("55px");
         this.dwenguinoBoardSimulation.initSimulationState(null);
         this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);
+
+        // Render on resize of container
+        new ResizeObserver(() => {
+            for (let i = 0 ; i < this.canvases.length ; ++i){
+                this.canvases[i].width = this.container.width();
+                this.canvases[i].height = this.container.height();
+            }
+            this.convertToDisplayAndRender(true);
+        }).observe(document.querySelector(`#${containerId}`));
+ 
+        
+        
     }
 
     initDrawingEnvironment(containerId){
@@ -116,7 +121,7 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
      * @param {String} id the dom id the canvas should have
      */
     setupCanvas(id, container){
-        let canvas = $("<canvas>").attr("id", id).css({"position": "absolute", "left": 0, "top": 0})[0];
+        let canvas = $("<canvas>").attr("id", id).css({"position": "absolute", "left": "10px", "top": 0})[0];
         let context = canvas.getContext("2d");
         canvas.width = container.width();
         canvas.height = container.height();
@@ -137,7 +142,7 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
                                             });
 
         // Create segment sliders
-        this.createSlidersForSegments(controlscontainer);
+        //this.createSlidersForSegments(controlscontainer);
 
         // Create color picker
         let colorpicker = $("<input>").attr("type", "color").attr("value", this.currentColor);

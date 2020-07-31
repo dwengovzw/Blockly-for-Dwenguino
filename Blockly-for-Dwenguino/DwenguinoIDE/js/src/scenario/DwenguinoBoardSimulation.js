@@ -9,6 +9,8 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     muted = true;
     prevFreq = 0;
     boardDisplayWidth = "80%";
+    componentsTopOffset = "0%";
+    rightSimComponentsPosition = "auto";
 
     constructor(logger){
         super(logger);
@@ -20,6 +22,14 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
 
     setBoardDisplayWidthWidth(width){
         this.boardDisplayWidth = width;
+    }
+
+    setComponentsTopOffset(offset){
+        this.componentsTopOffset = offset;
+    }
+
+    setComponentsRightPosition(position){
+        this.rightSimComponentsPosition = position;
     }
 
 
@@ -63,6 +73,8 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         $('#sim_components').append(sonar);
         $('#sim_components').append(sonarDist);
         $('#sim_components').append(sonarInput);
+        $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
+
         
         $('#sim_sonar_input').append('<input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
 

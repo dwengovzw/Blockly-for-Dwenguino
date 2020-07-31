@@ -255,7 +255,7 @@ body{
 #db_simulator_panes{
     flex-direction: column;
     flex: 1;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
 }
 
@@ -470,7 +470,7 @@ body{
 #sim_components {
     position: absolute;
     top: 20px;
-    left: 20px;
+    padding-left: 20px;
     height: 100px;
     width: 120px;
     max-width: 20%;

@@ -19,10 +19,12 @@ export default class SimulationControlsController {
         this.simulationRunner = new SimulationRunner(this.logger, workspace);
         this.simulationRunner.setCurrentScenario(this.scenarios[this.scenarioView]);
         
+        
         // Init the ui controls for the debugger and simulator
         // Has to be done before the simlationRunner is initialized
         this.initSimulationControlsUI(scenarios); 
 
+        this.stopSimulation();
         
     }
 
