@@ -6,7 +6,7 @@ import DwenguinoBoardSimulation from "../DwenguinoBoardSimulation.js"
 export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
     startScale = 400;
     currentScale = 400;
-    currentColor = "#000000";
+    currentColor = "#4a9234";
     representationScale = {
         // The coordinates of the different joints (in mm)
         motorAxes: [[30, 30], [280, 30]],
@@ -15,8 +15,8 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
         // length to central hinge motor2, central hinge to point above motor1, central hinge to point above motor 2,
         // length from point above motor one to top hinge, length from point above motor 2 to top hinge, 
         //top hinge to drawing point]
-        segmentLengths: [30, 20, 150, 150, 120, 120, 150, 150, 50],
-        segmentCount: [3, 2, 15, 15, 12, 12, 15, 15, 5], 
+        segmentLengths: [30, 20, 150, 170, 120, 150, 160, 150, 50],
+        segmentCount: [3, 2, 15, 17, 12, 15, 14, 16, 5], 
         segmentRanges: [[2, 3], [2, 3], [10, 20], [10, 20], [5, 15], [5, 15], [5, 15], [5, 15], [0, 2]],
         segmentIncrement: 10,
         armWidth: 10,
@@ -92,6 +92,7 @@ export default class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimu
                 this.canvases[i].width = this.container.width();
                 this.canvases[i].height = this.container.height();
             }
+            this.loadPreviousImageIfExists(); 
             this.convertToDisplayAndRender(true);
         }).observe(document.querySelector(`#${containerId}`));
  

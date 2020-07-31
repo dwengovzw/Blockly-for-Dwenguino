@@ -11,6 +11,9 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     boardDisplayWidth = "80%";
     componentsTopOffset = "0%";
     rightSimComponentsPosition = "auto";
+    sonarDistance = 0;
+    sonarInputChanged = false;
+    sonarFieldBeingEdited = false;
 
     constructor(logger){
         super(logger);
@@ -77,6 +80,22 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
 
         
         $('#sim_sonar_input').append('<input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
+
+        $("#sonar_input").change((e) => {
+            this.sonarInputChanged = true;
+            console.log(parseInt(e.target.value));
+            this.sonarDistance = parseInt(e.target.value);
+        });
+
+        $("#sonar_input").focus(() => {
+            console.log("focus gained");
+            this.sonarFieldBeingEdited = true;
+        });
+
+        $("#sonar_input").focusout(() => {
+            console.log("focus lost");
+            this.sonarFieldBeingEdited = false;
+        });
 
         $('#sim_board').append('<div class="sim_light sim_light_off" id ="sim_light_13"></div>');
         $('#sim_board').append('<div id="sim_lcds"></div>');
@@ -156,6 +175,12 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
        for (let i = 0 ; i < this.inputsState.buttons.length ; ++i){
            board.setButtonState(i, this.inputsState.buttons[i])
        }
+       if (this.sonarInputChanged){
+           board.setSonarDistance(11, 12, this.sonarDistance);
+           this.sonarInputChanged = false;
+       }
+       this.sonarDistance = board.getSonarDistance(11, 12);
+
     }
 
     updateScenario(dwenguinoState){
@@ -177,7 +202,10 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
             var sim_sonar  = document.getElementById('sonar_input');
             
             if(typeof(sim_sonar) != 'undefined' && sim_sonar != null){
-                sim_sonar.value = distance;
+                // Only change value when not being edited
+                if (!this.sonarFieldBeingEdited){
+                    sim_sonar.value = distance;
+                }
             } else {
                 console.log('Sonar input element is undefined');
             }
