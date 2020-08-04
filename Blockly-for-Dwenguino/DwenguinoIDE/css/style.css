@@ -973,6 +973,7 @@ body{
 
 .modal-dialog{
     background-color: white;
+    min-width: 700px;
 }
 
 .labels > span > ul {

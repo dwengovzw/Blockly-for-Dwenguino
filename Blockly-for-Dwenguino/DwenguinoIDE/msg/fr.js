@@ -105,8 +105,8 @@ var MSG = {
   socialrobotReadPinBlock: "Read value of pin %1 %2",
   socialRobotServoRightHand: "Servo main droite",
   socialRobotServoLeftHand: "Servo main gauche",
-  runError: "Oops there was an error when trying to run your code on the board.",
-  uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is connected try unplugging it and plugging it back in.",
+  runError: "<h3>Désolé, je n'ai pas pu téléverser le code sur la carte</h3>",
+  uploadError: "Suivez ces étapes pour redémarrer la carte Dwenguino: \n    1. Débranchez le câble USB \n    2. Connectez l'ordinateur et la carte Dwenguino avec le câble USB \n    3. Appuyez simultanément sur le bouton RESET et le bouton SUD de la carte Dwenguino \n    4. Ensuite, relâchez d'abord le bouton RESET \n    5. Puis relâchez le bouton SUD \n    6. Téléversez à nouveau le programme via le menu principal (<span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span>)",
   cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
   compileError: "The code could not be compiled.\nYou should check your code, did you forget a block someware?",
 

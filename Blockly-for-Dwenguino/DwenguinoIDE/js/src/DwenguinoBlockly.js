@@ -351,15 +351,15 @@ var DwenguinoBlockly = {
       DwenguinoBlockly.logger.recordEvent(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.runClicked, ""));
     },
     showModalErrorDialog: function(error){
-      $('#errorModal .modal-header').text(MSG.runError);
+      $('#errorModal .modal-header').html(MSG.runError);
       if (error.info === "Upload failed"){
-        $('#errorModal .modal-body .message').text(MSG.uploadError);
+        $('#errorModal .modal-body .message').html(MSG.uploadError);
       } else if (error.info === "Compilation failed"){
-        $('#errorModal .modal-body .message').text(MSG.compileError);
+        $('#errorModal .modal-body .message').html(MSG.compileError);
       } else if (error.info === "Clean failed"){
-        $('#errorModal .modal-body .message').text(MSG.cleanError);
+        $('#errorModal .modal-body .message').html(MSG.cleanError);
       } else {
-        $('#errorModal .modal-body .message').text(MSG.uploadError);
+        $('#errorModal .modal-body .message').html(MSG.uploadError);
       }
 
       $('#errorModal .modal-body .console').hide();

@@ -111,8 +111,8 @@ var MSG = {
   socialRobotServoLeftHand: "Servo left hand",
   sonarSliderLabel: "Sonar distance",
   pirButtonLabel: "PIR button",
-  runError: "Oops there was an error when trying to run your code on the board.",
-  uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is connected try unplugging it and plugging it back in.",
+  runError: "Συγγνώμη, δεν κατάφερα να μεταφορτώσω το πρόγραμμα στην πλακέτα",
+  uploadError: "Ακολούθησε τα παρακάτω βήματα για να επανεκκινήσεις την πλακέτα Dwenguino: \n    1. Αποσύνδεσε το καλώδιο USB \n    2. Σύνδεσε ξανά με το καλώδιο USB τον υπολογιστή και την πλακέτα Dwenguino \n    3. Πίεσε ταυτόχρονα τα κουμπιά RESET και SOUTH της πλακέτας Dwenguino \n    4. Άφησε πρώτα το κουμπί RESET \n    5. Ύστερα άφησε το κουμπί SOUTH \n    6. Μεταφόρτωσε ξανά το πρόγραμμα πατώντας το <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span>κουμπί στο κύριο μενού",
   cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
   compileError: "The code could not be compiled.\nYou should check your code, did you forget a block someware?",
 
