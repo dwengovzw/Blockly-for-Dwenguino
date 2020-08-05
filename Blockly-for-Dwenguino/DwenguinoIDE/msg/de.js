@@ -41,6 +41,8 @@ var MSG = {
   catDwenguino: "Dwenguino",
 
   catBoardIO: "IO",
+  
+  catComments: "Comments",
 
   listVariable: "Liste",
 
