@@ -79,8 +79,8 @@ let server = app.listen(port, function () {
 
 //This is depricated, now the electron browser is which is started using a bash script
 
-
-/*if (process.env.NODE_ENV === 'production') {
+/*
+if (process.env.NODE_ENV === 'production') {
     module.export = app;
 } else {
     // Launch a browser window
