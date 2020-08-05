@@ -128,7 +128,7 @@ var MSG = {
   runError: "Oops there was an error when trying to run your code on the board.",
   uploadError: "The code could not be uploaded to the board. \nPlease check if the board is connected with the usb cable.\n If it is, try the following steps:\n   a) Unplug the cable and plug it back in\n   b) Reset the board by pressing the RESET-button, then pressing the SOUTH-button (S) and finally releasing the RESET-button.\n   c) Retry the upload by pressing the play button in the top menu.",
   cleanError: "The previous code could not be removed.\nPlease check if another application is using any .cpp files.\n Close the application.",
-  compileError: "The code could not be compiled.\nYou should check your code, did you forget a block someware?",
+  compileError: "The code could not be compiled.\nYou should check your code, did you forget a block somewhere?",
   clear: "Clear",
   save: "Save",
 
