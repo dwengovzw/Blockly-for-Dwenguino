@@ -20,6 +20,7 @@ var MSG = {
   catFunctions: "Συναρτήσεις",
   catDwenguino: "Dwenguino",
   catBoardIO: "Πλακέτα εισόδων/εξόδων",
+  catComments: "Comments",
   listVariable: "λίστα",
   textVariable: "κείμενο",
   httpRequestError: "Υπήρξε πρόβλημα με το αίτημα.",

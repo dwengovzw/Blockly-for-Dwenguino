@@ -41,6 +41,8 @@ var MSG = {
   catDwenguino: "Dwenguino",
 
   catBoardIO: "IO",
+  
+  catComments: "Comments",
 
   listVariable: "Liste",
 
@@ -241,6 +243,9 @@ var MSG = {
   stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
   clear: "Clear",
   save: "Save",
+  runError: "<h3>Sorry, I was unable to upload the code to the board</h3>",
+  uploadError: "Follow these steps to restart the Dwenguino board: \n    1. Disconnect the USB cable \n    2. Connect the computer and Dwenguino board with the USB cable \n    3. Simultaneously press the RESET and the SOUTH button of the Dwenguino board \n    4. Then first release the RESET button \n    5. Then release the SOUTH button \n    6. Upload the program again via the <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span> button in the main menu",
+  
 
 };
 
@@ -381,3 +386,62 @@ MSG.tutorials.introduction = {
 
 };
 
+MSG.logging = {
+  setup: "Test setup",
+  login: "Login",
+  newuser: "New user",
+  username: "Username",
+  chooseUsername: "Choose a username",
+  choosePassword: "Select 4 personal icons as your password. You need to be able to remember these in the right order.",
+  currentlySelected: "Currently selected: ",
+  birth: "Date of birth",
+  school: "School",
+  selectSchool: "Search by name of school...",
+  agegroup: "Age group:",
+  primary1: "Primary grade 1",
+  primary2: "Primary grade 2",
+  primary3: "Primary grade 3",
+  primary4: "Primary grade 4",
+  primary5: "Primary grade 5",
+  primary6: "Primary grade 6",
+  secondary1: "Secondary grade 1",
+  secondary2: "Secondary grade 2",
+  secondary3: "Secondary grade 3",
+  secondary4: "Secondary grade 4",
+  secondary5: "Secondary grade 5",
+  secondary6: "Secondary grade 6",
+  gender: "Gender: ",
+  gender1: "F",
+  gender2: "M",
+  gender3: "X",
+  gender4: "I\'d rather not say",
+  activity: "Activity: ",
+  name: "Name ",
+  date: "Date ",
+  ok: "Ok",
+  reset: "Reset",
+  person: "Person",
+  dog: "Dog",
+  car: "Car",
+  camera: "Camera",
+  heart: "Heart",
+  plane: "Plane",
+  house: "House",
+  umbrella: "Umbrella",
+  star: "Star",
+  money: "Money",
+  gift: "Gift",
+  keys: "Keys",
+  music: "Music",
+  snowflake: "Snowflake",
+  fire: "Fire",
+  envelope: "Envelope"
+};
+
+MSG.validator = {
+  errSchool: "Select a school.",
+  errId: "You didn't select enough icons.",
+  errAgeGroup: "Select your age group.",
+  errGender: "Select your gender.",
+  errActivityId: "Your activity title cannot be empty."
+};
