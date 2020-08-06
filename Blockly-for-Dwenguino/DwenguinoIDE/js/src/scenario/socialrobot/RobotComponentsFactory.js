@@ -431,7 +431,7 @@ class RobotComponentsFactory {
     /**
    * Add a new Light sensor to the simulation container.
    */
-  addLightSensor(pin=0, state=0, visible=true, width=30, height=30, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
+  addLightSensor(pin=0, state=0, visible=true, width=100, height=45, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LIGHT));
     this.incrementNumberOf(TypesEnum.LIGHT);
     let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
