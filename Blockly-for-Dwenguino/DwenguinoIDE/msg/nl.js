@@ -136,13 +136,14 @@ var MSG = {
   soundOptions: "Geluidssensor opties",
   lightOptions: "Lichtsensor opties",
   ledOptions: "led opties",
-  runError: "Oops, het is niet gelukt om je code op het bord uit te voeren.",
-  uploadError: "Het is niet gelukt om de code te uploaden naar het bord.\nControleer of de usb kabel goed is aangesloten.\n Als dit zo is, probeer de kabel uit te trekken en terug in te pluggen.",
+  runError: "<h3>Sorry, het is niet gelukt om de code te uploaden naar het bord</h3>",
+  uploadError: "Volg deze stappen om het Dwenguino-bord te herstarten: \n    1. Maak de USB-kabel los \n    2. Verbind de computer en het Dwenguino-bord met de USB-kabel \n    3. Druk tegelijkertijd de RESET-knop en de ZUID-knop in van het Dwenguino-bord \n    4. Los dan eerst de RESET-knop \n    5. Los daarna de ZUID-knop \n    6. Upload het programma opnieuw via de <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span>-knop in het hoofdmenu ",
   cleanError: "De code van het vorige programma kon niet worden verwijderd.\nControleer of er een ander programma een .cpp bestand gebruikt en sluit dit programma.",
   compileError: "Het is niet gelukt om de code te compileren.\nControleer of er een fout zit in je programma, is er ergens een blok tekort?",
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
   dwenguinoStepperMotorBlockTooltip: "TODO",
   drawingrobotMove:"Verplaats de stift onder een van hoek %1 graden met %2 stappen",
+  drawingrobotMoveXY:"Verplaats de stift %1 naar rechts en %2 naar links",
   drawingrobotLine:"Teken een lijn naar x: %1 y: %2",
   drawingrobotCircle:"Teken een cirkel met straal: %1",
   drawingrobotRectangle:"Teken een rechthoek met breedte: %1 en hoogte: %2",
@@ -160,7 +161,9 @@ var MSG = {
   drawingrobotDrawing:"Tekening",
   stepperMotorOne: "STAPPENMOTOR1", 
   stepperMotorTwo: "STAPPENMOTOR2",
-  stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen."
+  stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen.",
+  clear: "Wissen",
+  save: "Opslaan",
 };
 
 MSG.dropzone = {
