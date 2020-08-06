@@ -248,6 +248,8 @@ export default class SimulationSandbox {
   stepperPins = [33, 34];
   penPositionPins = [36, 37];
   colorPin = 35;
+  stylusPosPin =38;
+  drawingActive = false;
 
   /**
    * 
@@ -289,57 +291,6 @@ export default class SimulationSandbox {
     return [l1, l2]
   }
 
-  stepsToCoordinates(steps){
-
-  }
-
-  drawingrobotStep() {
-    // Get the next point and calculate the line lengths for this point
-    if (this.stepmotorQueue.length !== 0) {
-      var endPoint = this.stepmotorQueue.shift();
-
-      var angle = this.servoAngleQueue.shift();
-      this.boardState.setIoPinState(this.stepperPins[0], angle);
-
-      var color = this.colorQueue.shift();
-      this.boardState.setIoPinState(this.colorPin, color);
-
-      /*var endLength = DwenguinoSimulation.currentScenario.getLength(endPoint[0],endPoint[1]);
-
-      // Calculate the step difference between the default starting position and the next position
-      var stepL = endLength[0] - DwenguinoSimulation.currentScenario.line.lengthBase;
-      var stepR = endLength[1] - DwenguinoSimulation.currentScenario.line.lengthBase;*/
-
-      this.boardState.setIoPinState(this.stepperPins[0], endPoint[0]);
-      this.boardState.setIoPinState(this.stepperPins[0], endPoint[1]);
-
-    }
-  };
-
- 
-
-  drawRobotCurrentPosition() {
-
-
-    // Get the current moterstep locations
-    var stepL = this.boardState.getIoPinState(this.stepperPins[0]);
-    var stepR = this.boardState.getIoPinState(this.stepperPins[1]);
-
-    // Calculate the position using the current steps
-    var lStartL = dw.line.lengthBase + stepL;
-    var lStartR = dw.line.lengthBase + stepR;
-
-    // If the queue isn't empty, there are still other drawings that need to be finished. So the previously calculated positions are wrong
-    if (this.stepmotorQueue.length !== 0) {
-      var lastPoint = this.stepmotorQueue[this.stepmotorQueue.length - 1];
-      var l = dw.getLength(lastPoint[0], lastPoint[1]);
-      lStartL = l[0];
-      lStartR = l[1];
-    }
-
-    return dw.getPosition(lStartL, lStartR);
-  };
-
   drawRobotCheckPosition(position) {
     var sc = DwenguinoSimulation.currentScenario;
     if (position[0] < sc.paper.position.x || position[0] > sc.paper.position.x + sc.paper.width || position[1] < sc.paper.position.y || position[1] > sc.paper.position.y + sc.paper.height) {
@@ -348,30 +299,6 @@ export default class SimulationSandbox {
         DwenguinoSimulation.handleSimulationStop();
         window.stepMotorError = true;
       }
-    }
-  };
-
-  drawRobotMove(direction, amount) {
-    var position = DwenguinoSimulation.drawRobotCurrentPosition();
-    switch (direction) {
-      case 0: //Move up
-        DwenguinoSimulation.drawRobotLine(position[0], position[1] - amount, false);
-        // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-        break;
-      case 1: //Move down
-        DwenguinoSimulation.drawRobotLine(position[0], position[1] + amount, false);
-        // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-        break;
-      case 2: //Move left
-        DwenguinoSimulation.drawRobotLine(position[0] - amount, position[1], false);
-        // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-        break;
-      case 3: //Move right
-        DwenguinoSimulation.drawRobotLine(position[0] + amount, position[1], false);
-        // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-        break;
-      default:
-        break;
     }
   };
 
@@ -395,27 +322,8 @@ export default class SimulationSandbox {
     let xIncrement = Math.cos(angle);
     let yIncrement = Math.sin(angle);
     this.update(length, xIncrement, yIncrement);
+    this.drawingActive = true;
 
-    
-    
-    /*var points = this.bresenham(pStart[0], pStart[1], x, y);
-
-
-    // Check if all the points are inside the allowed area
-    for (var i = 0; i < points.length; i++) {
-      this.drawRobotCheckPosition(points[i]);
-    }
-
-    // Add points to queue
-    this.stepmotorQueue = this.stepmotorQueue.concat(points);
-
-    // Add angles/colors to queue
-    var angle = this.servoAngleQueue[this.servoAngleQueue.length - 1];
-    var color = this.colorQueue[this.colorQueue.length - 1];
-    for (var i = 0; i < points.length; i++) {
-      this.servoAngleQueue.push(angle);
-      this.colorQueue.push(color);
-    }*/
   };
 
   update(stepsLeft, xIncrement, yIncrement){
@@ -423,196 +331,26 @@ export default class SimulationSandbox {
       this.stepMotorsTo([xIncrement, yIncrement]);
       this.currentScenario.updateScenario(this.boardState);
       setTimeout(() => {this.update(stepsLeft-1, xIncrement, yIncrement)}, 30);
+    }else{
+      this.drawingActive = false;
     }
   }
 
-  drawRobotCircle(radius) {
 
-    // Get the current position
-    var position = DwenguinoSimulation.drawRobotCurrentPosition();
-    var xCircle = position[0] - radius;
-    var yCircle = position[1];
-
-    // Get the current lengths
-    var LR = DwenguinoSimulation.currentScenario.getLength(position[0], position[1]);
-    var L = LR[0];
-    var R = LR[1];
-
-    //stack for all points in the circles
-    var stack = [];
-    // var stackL = [];
-    // var stackR = [];
-
-    for (var i = 0; i < 360; i += 5) { // Calculate X and Y points in the circle
-      var radians = i * (Math.PI / 180);
-      pointX = xCircle + radius * Math.cos(radians); // x  =  h + r cosθ
-      pointY = yCircle + radius * Math.sin(radians); // y  =  k + r sinθ
-
-      LRNew = DwenguinoSimulation.currentScenario.getLength(pointX, pointY);
-      Lnew = LRNew[0];
-      Rnew = LRNew[1];
-
-      // stepsL = Math.round(Lnew-L,0);
-      // stepsR = Math.round(Rnew-R,0);
-      stepsL = Lnew - L;
-      stepsR = Rnew - R;
-
-      L = Lnew;
-      R = Rnew;
-
-      var nextPosition = DwenguinoSimulation.currentScenario.getPosition(L, R);
-      // stackL.push(stepsL);
-      // stackR.push(stepsR);
-      DwenguinoSimulation.drawRobotCheckPosition(nextPosition);
-
-      stack.push(nextPosition);
-    }
-
-    this.stepmotorQueue = this.stepmotorQueue.concat(stack);
-
-    var angle = this.servoAngleQueue[this.servoAngleQueue.length - 1];
-    var color = this.colorQueue[this.colorQueue.length - 1];
-    for (var i = 0; i < stack.length; i++) {
-      this.servoAngleQueue.push(angle);
-      this.colorQueue.push(color);
-    }
-
-
-  };
-
-  drawRobotRectangle(width, height) {
-    DwenguinoSimulation.drawRobotMove(1, height); //move down
-    // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-    DwenguinoSimulation.drawRobotMove(2, width); //move left
-    // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-    DwenguinoSimulation.drawRobotMove(0, height); //move up
-    // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-    DwenguinoSimulation.drawRobotMove(3, width); //move right
-    // DwenguinoSimulation.board = DwenguinoSimulation.currentScenario.updateScenario(DwenguinoSimulation.board);
-  };
 
   drawRobotLowerStylus() {
-    if (this.servoAngleQueue.length === 0) {
-      this.servoAngleQueue.push(0);
-    } else {
-      this.servoAngleQueue[this.servoAngleQueue.length - 1] = 0;
-    }
+    this.boardState.setIoPinState(this.stylusPosPin, 0);
 
   };
 
   drawRobotLiftStylus() {
-    if (this.servoAngleQueue.length === 0) {
-      this.servoAngleQueue.push(90);
-    } else {
-      this.servoAngleQueue[this.servoAngleQueue.length - 1] = 90;
-    }
+    this.boardState.setIoPinState(this.stylusPosPin, 90);
 
   };
 
   changeColor(color) {
-    if (this.colorQueue.length === 0) {
-      this.colorQueue.push(color);
-    } else {
-      this.colorQueue[this.colorQueue.length - 1] = color;
-    }
+    this.boardState.setIoPinState(this.colorPin, color);
 
-  };
-
-
-  bresenham(x1, y1, x2, y2) {
-    // console.log("van (" + x1 + "," + y1 + ") tot (" + x2 + "," + y2 + ")");
-    var queue = [];
-
-    var x, y;
-    var dx = x2 - x1;
-    var dy = y2 - y1;
-    var dxAbs = Math.abs(dx);
-    var dyAbs = Math.abs(dy);
-    var err1 = 2 * dyAbs - dxAbs;
-    var err2 = 2 * dxAbs - dyAbs;
-    var reverse;
-    var end;
-
-    var nr = ((dx < 0 && dy < 0) || (dx > 0 && dy > 0)) ? 1 : -1; //count up or down
-
-    if (x1 === x2) { // vertical line
-      for (var i = 0; i <= dyAbs; i++) {
-        // console.log("add (" + x1 + "," + y1+i + ")");
-        if (dy > 0) {
-          queue.push([x1, y1 + i]);
-        } else {
-          queue.push([x1, y1 - i]);
-        }
-
-      }
-
-      return queue;
-    }
-
-    if (dyAbs <= dxAbs) { // X-axis dominant
-      if (dx >= 0) {  //left -> right
-        reverse = false;
-        x = x1;
-        y = y1;
-        end = x2;
-      } else {  //right -> left
-        reverse = true;
-        x = x2;
-        y = y2;
-        end = x1;
-      }
-
-      queue.push([x, y]);
-
-      for (var i = 0; x < end; i++) {
-        x++;
-        if (err1 < 0) {
-          err1 = err1 + 2 * dyAbs;
-        } else {
-          y += nr;
-          err1 = err1 + 2 * (dyAbs - dxAbs);
-        }
-        // console.log("add (" + x + "," + y + ")");
-        if (reverse) {
-          queue.unshift([x, y]);
-        } else {
-          queue.push([x, y]);
-        }
-      }
-
-    } else { // Y-axis dominant
-      if (dy >= 0) {  //left -> right
-        reverse = false;
-        x = x1;
-        y = y1;
-        end = y2;
-      } else {  //right -> left
-        reverse = true;
-        x = x2;
-        y = y2;
-        end = y1;
-      }
-
-      queue.push([x, y]);
-
-      for (var i = 0; y < end; i++) {
-        y++;
-
-        if (err2 <= 0) {
-          err2 = err2 + 2 * dxAbs;
-        } else {
-          x += nr;
-          err2 = err2 + 2 * (dxAbs - dyAbs);
-        }
-        // console.log("add (" + x + "," + y + ")");
-        if (reverse) {
-          queue.unshift([x, y]);
-        } else {
-          queue.push([x, y]);
-        }
-      }
-    }
-    return queue;
   };
 
 }

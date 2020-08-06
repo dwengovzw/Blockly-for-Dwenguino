@@ -53,18 +53,6 @@
     
 </category>
 <category id="catDwenguino" colour="315" name='Dwenguino'>
-    <block type="drawingrobot_stepper_motor">
-        <value name="channel">
-            <block type="math_number" id="300">
-                <field name="NUM">1</field>
-            </block>
-        </value>
-        <value name="step">
-            <block type="math_number" id="301">
-                <field name="NUM">50</field>
-            </block>
-        </value>
-    </block>
     <block type="setup_loop_structure"></block>
     <block type="dwenguino_delay">
         <value name="DELAY_TIME">
@@ -288,8 +276,6 @@
     </block>
 
     <block type="drawingrobot_motor_number"></block>
-
-    drawingrobot_move_direction
     <block type="drawingrobot_move_direction">
         <value name="angle">
             <block type="math_number" id="303">

@@ -134,6 +134,34 @@ Blockly.Blocks['drawingrobot_move_direction'] = {
   }
 };
 
+var drawingrobot_move_direction_x_y_json = {
+  "id": "drawingrobot_move_direction_x_y",
+  "message0": MSG.drawingrobotMoveXY,
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "xValue",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "yValue",
+      "check": "Number"
+    },
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Msg.DRAWINGROBOT_HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['drawingrobot_move_direction_x_y'] = {
+  init: function() {
+    this.jsonInit(drawingrobot_move_direction_x_y_json);
+  }
+};
+
 
 var drawingrobot_line_json = {
   "id": "drawingrobot_line",
