@@ -129,12 +129,26 @@ export default class SimulationCanvasRenderer {
         if (canvas.getContext) {
             // in case the image isn't loaded yet.
             var self = this;
+            servo.getServoBackground().onload = function() {
+                var ctx = canvas.getContext('2d');
+                switch(servo.getCostume()){
+                    case 'plain':
+                        self.drawServoBackground(ctx, servo);
+                        break;
+                    case 'eye':
+                        break;
+                    case 'righthand':
+                        break;
+                    case 'lefthand':
+                        break;
+                }
+            }
+
             servo.getImage(0).onload = function() {
                 var ctx = canvas.getContext('2d');
                 ctx.fillStyle = servo.getBackgroundColor();
                 switch(servo.getCostume()){
                     case 'plain':
-                        ctx.fillRect(servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight());
                         self.drawRotatedServohead(ctx, servo);
                         break;
                     case 'eye':
@@ -155,7 +169,8 @@ export default class SimulationCanvasRenderer {
             ctx.fillStyle = servo.getBackgroundColor();
             switch(servo.getCostume()){
                 case 'plain':
-                    ctx.fillRect(servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight());
+                    //ctx.fillRect(servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight());
+                    self.drawServoBackground(ctx, servo)
                     self.drawRotatedServohead(ctx, servo);
                     break;
                 case 'eye':
@@ -238,6 +253,13 @@ export default class SimulationCanvasRenderer {
             console.log(canvas, "This canvas has no context");
         }
     }   
+
+    drawServoBackground(ctx, servo){
+            servo.getServoBackground().onload = function() {
+                ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(), servo.getHeight()); 
+            }
+            ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(),servo.getHeight());
+    }
 
     /**
      * Draws a plain servohead of the given servo at the correct angle on the given context

@@ -27,10 +27,14 @@ class SocialRobotServo extends RobotComponent{
         this._angle = angle;
         this._prevAngle = 0;
         this._image = [new Image(), new Image()];
+        this._backgroundImage = new Image();
+        this._backgroundImageRotated = new Image();
+        this._backgroundImage.src = './DwenguinoIDE/img/socialrobot/servo_background.png';
+        this._backgroundImageRotated.src = './DwenguinoIDE/img/socialrobot/servo_background_rotated.png';
 
         switch (costume) {
             case CostumesEnum.PLAIN:
-                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_head.png';
                 break;
             case CostumesEnum.EYE:
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/eye1_background.svg';
@@ -360,7 +364,7 @@ class SocialRobotServo extends RobotComponent{
 
         switch (costume) {
             case CostumesEnum.PLAIN:
-                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_movement.png';
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_head.png';
                 break;
             case CostumesEnum.EYE:
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/eye1_background.svg';
@@ -373,6 +377,14 @@ class SocialRobotServo extends RobotComponent{
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/lefthand.png';           
                 break;
         }
+    }
+
+    getServoBackground(){
+        return this._backgroundImage;
+    }
+
+    getServoBackgroundRotated(){
+        return this._backgroundImageRotated;
     }
 
     getCostume(){

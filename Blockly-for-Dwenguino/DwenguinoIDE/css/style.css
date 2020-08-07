@@ -874,8 +874,8 @@ body{
 
 .pir_canvas{
     margin-left: 25px;
-    width: 50px;
-    height: 50px;
+    width: 75px;
+    height: 75px;
     margin-top: 10px;
 }
 
@@ -895,7 +895,7 @@ body{
 .sound_canvas{
     margin-left: 25px;
     width: 100px;
-    height: 60px;
+    height: 42px;
     margin-top: 10px;
 }
 
