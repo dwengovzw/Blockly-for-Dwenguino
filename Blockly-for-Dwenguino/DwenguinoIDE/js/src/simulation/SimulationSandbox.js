@@ -46,9 +46,6 @@ export default class SimulationSandbox {
       oldText.substr(0, column) +
       text.substr(0, 16 - column) +
       oldText.substr(text.length + column, 16);
-    // text = this.boardState.getLcdContent(row).substr(0, column) +
-    //   text.substring(0, 16 - column) +
-    //   this.boardState.getLcdContent(row).substr(text.length + column, 16);
     this.boardState.setLcdContent(row, newText);
 
   }
