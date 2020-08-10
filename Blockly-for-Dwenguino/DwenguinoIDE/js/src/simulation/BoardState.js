@@ -54,8 +54,8 @@ export default class BoardState {
 
     resetBoard(){
         this.lcdContent = new Array(2);
-        this.lcdContent[0] = "";
-        this.lcdContent[1] = "";
+        this.lcdContent[0] = " ".repeat(16);
+        this.lcdContent[1] = " ".repeat(16);
 
         for (let i = 0 ; i < 24 ; ++i){
             this.pins[this.pinMapping[i + ""]] = 0;
