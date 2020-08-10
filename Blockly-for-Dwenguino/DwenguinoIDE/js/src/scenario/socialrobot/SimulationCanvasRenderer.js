@@ -29,12 +29,19 @@ export default class SimulationCanvasRenderer {
     drawLcd(robot){
         for(var i = 0; i < robot.length; i++){
             if(robot[i].getType() == TypesEnum.LCD){
-                for(var row = 0; row < 2; ++row){
+                for (var row = 0 ; row < 2 ; ++row){
                     $("#sim_lcd_row" + row).text(robot[i].getState()[row]);
+                    if(document.getElementById('sim_lcd_row' + row) !== null){
+                        document.getElementById('sim_lcd_row' + row).innerHTML =
+                        document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+                    }
                 }
-                if(document.getElementById('sim_lcd_row' + row) !== null){
-                    document.getElementById('sim_lcd_row' + row).innerHTML =
-                    document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+                // repaint
+                var element = document.getElementById("sim_lcds");
+                if(element !== null){
+                    element.style.display = 'none';
+                    element.offsetHeight;
+                    element.style.display = 'block';
                 }
             }
         }   
