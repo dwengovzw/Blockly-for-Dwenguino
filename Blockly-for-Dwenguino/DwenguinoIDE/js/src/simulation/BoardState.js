@@ -7,7 +7,7 @@ import ButtonMap from "./ButtonMap.js";
 export default class BoardState {
     pins = new Array(33);
     pinMapping = {};
-    lcdContent = null;
+    lcdContent = new Array(2);
     // sonarDistance = -1; // now has to be fetched as values with getIOPinState(echoPin)
     
 
@@ -49,6 +49,10 @@ export default class BoardState {
         }
 
         this.pinMapping["LED13"] = 13;
+
+        this.lcdContent[0] = " ".repeat(16);
+        this.lcdContent[1] = " ".repeat(16);
+
         this.resetBoard();
     }
 
