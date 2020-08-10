@@ -239,7 +239,7 @@ var sonar_sensor_json = {
     },
     {
       "type": "field_image",
-      "src": "DwenguinoIDE/img/sonartje.png",
+      "src": "DwenguinoIDE/img/sonar.png",
       "width": 150,
       "height": 87,
       "alt": "*"
