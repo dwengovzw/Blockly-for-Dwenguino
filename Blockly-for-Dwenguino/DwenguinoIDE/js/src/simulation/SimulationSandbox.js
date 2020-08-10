@@ -39,10 +39,17 @@ export default class SimulationSandbox {
     // Turn on lcd backlight
     this.boardState.setBacklight(1);
     // replace text in current content (if text is hello and then a is written this gives aello)
-    text = this.boardState.getLcdContent(row).substr(0, column) +
-      text.substring(0, 16 - column) +
-      this.boardState.getLcdContent(row).substr(text.length + column, 16);
-    this.boardState.setLcdContent(row, text);
+
+    let oldText = this.boardState.getLcdContent(row);
+
+    let newText = 
+      oldText.substr(0, column) +
+      text.substr(0, 16 - column) +
+      oldText.substr(text.length + column, 16);
+    // text = this.boardState.getLcdContent(row).substr(0, column) +
+    //   text.substring(0, 16 - column) +
+    //   this.boardState.getLcdContent(row).substr(text.length + column, 16);
+    this.boardState.setLcdContent(row, newText);
 
   }
 
