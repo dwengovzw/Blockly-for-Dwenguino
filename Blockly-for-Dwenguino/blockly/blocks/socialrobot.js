@@ -32,7 +32,7 @@ Blockly.Blocks.socialrobot.HUE = 25;
 
 var pir_sensor_json = {
   "id": "pir_sensor",
-  "message0": "pir %1 %2 %3" + MSG.trig + "%4",
+  "message0": "nabijheidssensor %1 %2 %3" + MSG.trig + "%4",
   "args0": [
     {
       "type": "input_dummy"
