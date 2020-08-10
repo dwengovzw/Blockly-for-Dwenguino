@@ -262,7 +262,7 @@
     </value>
     </block>
 </category>
-<category id="catDrawingRobot" colour="230" name='DrawingRobot'>
+<category id="catDrawingRobot" colour="230" name='Plotter'>
     <block type="drawingrobot_stepper_motor">
         <value name="channel">
             <block type="drawingrobot_motor_number" id="300">
