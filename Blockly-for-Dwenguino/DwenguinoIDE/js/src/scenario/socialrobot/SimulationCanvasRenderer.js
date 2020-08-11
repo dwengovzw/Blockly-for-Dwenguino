@@ -141,6 +141,7 @@ export default class SimulationCanvasRenderer {
                 switch(servo.getCostume()){
                     case 'plain':
                         self.drawServoBackground(ctx, servo);
+                        self.drawRotatedServohead(ctx, servo);
                         break;
                     case 'eye':
                         break;
@@ -262,10 +263,9 @@ export default class SimulationCanvasRenderer {
     }   
 
     drawServoBackground(ctx, servo){
-            servo.getServoBackground().onload = function() {
-                ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(), servo.getHeight()); 
-            }
-            ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(),servo.getHeight());
+        ctx.translate(0,servo.getY());
+        ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(),servo.getHeight());
+        ctx.translate(0, -servo.getY()); 
     }
 
     /**
@@ -351,73 +351,6 @@ export default class SimulationCanvasRenderer {
             }
         }
     }
-
-    // renderEyeBall(ctx, servo,canvas){
-    //     ctx.beginPath();
-    //     ctx.arc(canvas.width/2, canvas.height/2, servo.getWidth(), 0, 2 * Math.PI);
-    //     ctx.fillStyle = 'white';
-    //     ctx.fill();
-    //     ctx.fillStyle = 'black';
-    //     ctx.stroke(); 
-    // }
-
-    // renderIris(ctx, servo, canvas){
-    //     var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
-
-    //     let difference = servo.getAngle()-servo.getPrevAngle();
-    //     if(difference != 0){
-    //         var factorBegin = Math.max((servo.getPrevAngle() - 120)/10, 0.2);
-    //         var factorEnd = Math.min(2- ((servo.getPrevAngle()-120)/10), 1.8);
-    //         var horTranslation = (servo.getPrevAngle() / 120 * (canvas.width-60)) + 30;
-    //         if ((difference > 5) || (difference < -5)) {
-    //             let prevAngle = servo.getPrevAngle() + (5 * direction);
-    //             servo.setPrevAngle(prevAngle);
-    //             if((servo.getPrevAngle() >= 0) & (servo.getPrevAngle() <= 120)){
-    //                 ctx.beginPath();
-    //                 ctx.arc(horTranslation, canvas.height/2, 10, 0, 2 * Math.PI);
-    //                 ctx.fillStyle = 'black';
-    //                 ctx.fill();
-    //             } else if (servo.getPrevAngle() <= 130){
-    //                 ctx.beginPath();
-    //                 horTranslation = (canvas.width-60) + 30;
-    //                 ctx.arc(horTranslation, canvas.height/2, 10, factorBegin * Math.PI, factorEnd * Math.PI);
-    //                 ctx.fillStyle = 'black';
-    //                 ctx.fill(); 
-    //             }
-    //         } else {
-    //             let prevAngle = servo.getPrevAngle() + difference;
-    //             servo.setPrevAngle(prevAngle);
-    //             if((servo.getPrevAngle() >= 0) & (servo.getPrevAngle() <= 120)){
-    //                 ctx.beginPath();
-    //                 ctx.arc(horTranslation, canvas.height/2, 10, 0, 2 * Math.PI);
-    //                 ctx.fillStyle = 'black';
-    //                 ctx.fill();
-    //             } else if (servo.getPrevAngle() <= 130){
-    //                 ctx.beginPath();
-    //                 horTranslation = (canvas.width-60) + 30;
-    //                 ctx.arc(horTranslation, canvas.height/2, 10, factorBegin * Math.PI, factorEnd * Math.PI);
-    //                 ctx.fillStyle = 'black';
-    //                 ctx.fill(); 
-    //             }
-    //         }
-    //     } else {
-    //         var factorBegin = Math.max((servo.getAngle() - 120)/10,0.2);
-    //         var factorEnd = Math.min(2- ((servo.getAngle()-120)/10), 1.8);
-    //         var horTranslation = (servo.getAngle() / 120 * (canvas.width-60)) + 30;
-    //         if((servo.getAngle() >= 0) & (servo.getAngle() <= 120)){
-    //             ctx.beginPath();
-    //             ctx.arc(horTranslation, canvas.height/2, 10, 0, 2 * Math.PI);
-    //             ctx.fillStyle = 'black';
-    //             ctx.fill();
-    //         } else if (servo.getAngle() <= 130){
-    //             ctx.beginPath();
-    //             horTranslation = (canvas.width-60) + 30;
-    //             ctx.arc(horTranslation, canvas.height/2, 10, factorBegin * Math.PI, factorEnd * Math.PI);
-    //             ctx.fillStyle = 'black';
-    //             ctx.fill(); 
-    //         }
-    //     }
-    // }
 
     /**
      * Draws the servohead of the given servo at the correct angle on the given context. 
