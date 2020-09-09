@@ -6,6 +6,7 @@
 # @date 02/12/2019 (2nd december 2019)
 
 work_dir=$PWD
+install_command=apt-get
 
 # utility functions for shared commands between platforms
 
@@ -28,8 +29,8 @@ check_python_install () {
         echo "Python 3 already installed."
     else
         echo "Python 3 is not installed, trying to install."
-        sudo apt-get update
-        sudo apt-get install python3.6
+        sudo $install_command update
+        sudo $install_command install python3.6
     fi
     echo "Checking if pyserial is installed."
     python3 -c "import serial"
@@ -45,7 +46,7 @@ check_python_install () {
             echo "pip3 is installed, skipping..."
         else
             echo "Trying to install pip."
-            sudo apt-get install python3-pip
+            sudo $install_command install python3-pip
         fi
         echo "Installing pyserial using pip."
         python3 -m pip install pyserial
@@ -58,14 +59,16 @@ check_nodejs_install () {
     if [ -x "$(command -v node)" ] && [[ $(node -v) == v12* ]]
     then
         echo "nodejs v12 (lts) is installed, skipping..."
+        echo "fixing potential missing packages"
+        sudo npm audit fix
     else
         echo "Installing latest lts version of nodejs using root permissions.."
         # add deb.nodesource repo commands
-        sudo apt update
-        sudo apt -y install curl dirmngr apt-transport-https lsb-release ca-certificates
+        sudo $install_command update
+        sudo $install_command -y install curl dirmngr apt-transport-https lsb-release ca-certificates
         sudo curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
         # install node
-        sudo apt -y install nodejs
+        sudo $install_command -y install nodejs
         # update npm
         sudo npm install -g npm
     fi
@@ -76,6 +79,10 @@ check_nodejs_install () {
 if [ $OSTYPE == "linux-gnu" ]
 then
     echo "Installing for gnu-linux system."
+    install_command=apt-get
+    
+    echo "Updating package manager"
+    sudo $install_command update
 
     # Check if script is run as root
     check_for_root
@@ -143,6 +150,17 @@ elif [ $OSTYPE ==  "darwin" ]
 then
     # MACOS config
     echo "MACOS install is not supported right now"
+    
+    echo "Checking xcode install"
+    if ! command -v brew config &> /dev/null
+    then
+        echo "xcode or xcode command line tools could not be found"
+        echo "You have to install them before running this script"
+        echo "https://developer.apple.com/xcode/"
+        exit 1
+    fi
+    
+    install_command=brew
 
     # Check if script is run as root
     check_for_root
