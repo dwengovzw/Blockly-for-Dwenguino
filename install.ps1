@@ -1,0 +1,1 @@
+powershell .\inst_runner.ps1 -Verb runAs
