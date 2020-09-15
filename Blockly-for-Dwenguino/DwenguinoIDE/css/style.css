@@ -346,15 +346,15 @@ body{
     height: 46%;
     width: 100%;
     padding: 1%;
-    font-size: 3vh;
+    font-size: 1.45vw;
     font-family: lcd-matrix-font;
-    letter-spacing: 2px;
-    word-spacing: 4px;
+    letter-spacing: 0px;
+    word-spacing: 0;
     position: absolute;
 }
 
 #sim_lcd_row1{
-  margin-top: 14%;
+  margin-top: 10%;
 }
 
 #sim_lights {

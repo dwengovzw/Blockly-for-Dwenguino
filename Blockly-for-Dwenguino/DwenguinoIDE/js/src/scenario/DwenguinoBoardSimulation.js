@@ -72,10 +72,12 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
         let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
+        let setButton = $('<button id="set_sonar_value"></button>').text("OK");
 
         $('#sim_components').append(sonar);
         $('#sim_components').append(sonarDist);
         $('#sim_components').append(sonarInput);
+        $('#sim_components').append(setButton);
         $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
 
         
@@ -84,6 +86,11 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         $("#sonar_input").change((e) => {
             this.sonarInputChanged = true;
             console.log(parseInt(e.target.value));
+            this.sonarDistance = parseInt(e.target.value);
+        });
+
+        $('#set_sonar_value').click((e) => {
+            let distance = $("#sonar_input").val();
             this.sonarDistance = parseInt(e.target.value);
         });
 
@@ -279,8 +286,13 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
           element.style.display = 'none';
           element.offsetHeight;
           element.style.display = 'block';
+          let lcdElement = $(".sim_lcd");
+          let boardElement = $("#sim_board")
+          let boardElementWidth = boardElement.width();
+          let fontSize = boardElementWidth/16*1.25;
+          lcdElement.css({"font-size": fontSize});
         }
-         
+        
     
         // Set leds to right value
         for (var i = 0; i < 8; i++) {
