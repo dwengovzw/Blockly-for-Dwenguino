@@ -61,12 +61,13 @@ let handleRun = function(res){
     console.log("handle run");
     let command_path = path.resolve("./compilation/bin/");
     let command_name = command_path + "/make";
+    let command_location = path.resolve("./compilation");
     
     if (process.platform ==  "win32"){
         command_name = command_path + "\make.exe"
     }
     console.log(command_name);
-    let cmd_clean = exec(command_name + ' -C ./compilation clean', {timeout: 10000}, 
+    let cmd_clean = exec(command_name + ' -C ' + command_location + ' clean', {timeout: 10000}, 
         (error, stdout, stderr) => {
             console.log(stdout);
             console.log(stderr);
@@ -79,7 +80,7 @@ let handleRun = function(res){
                     trace: stderr,
                 });
             }else{
-                let cmd_compile = exec(command_name + ' -C ./compilation', {timeout: 10000}, 
+                let cmd_compile = exec(command_name + ' -C ' + command_location, {timeout: 10000}, 
                     (error, stdout, stderr) => {
                         console.log(stdout);
                         console.log(stderr);
@@ -92,7 +93,7 @@ let handleRun = function(res){
                                 trace: stderr,
                             });
                         }else{
-                            let cmd_uplaod = exec(command_name + ' -C ./compilation upload', {timeout: 10000}, 
+                            let cmd_uplaod = exec(command_name + ' -C ' + command_location + ' upload', {timeout: 10000}, 
                                 (error, stdout, stderr) => {
                                     console.log(stdout);
                                     console.log(stderr);
