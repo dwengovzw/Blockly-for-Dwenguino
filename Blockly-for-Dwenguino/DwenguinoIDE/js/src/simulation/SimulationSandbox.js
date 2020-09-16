@@ -25,7 +25,7 @@ export default class SimulationSandbox {
   clearLcd() {
     // clear lcd by writing spaces to it
     for (var i = 0; i < 2; i++) {
-      this.writeLcd(" ".repeat(16), i, 0);
+      this.writeLcd(" ".repeat(16), i, 1);
     }
   }
 
@@ -39,14 +39,14 @@ export default class SimulationSandbox {
     // Turn on lcd backlight
     this.boardState.setBacklight(1);
     // replace text in current content (if text is hello and then a is written this gives aello)
-
-    let oldText = this.boardState.getLcdContent(row);
-
-    let newText = 
-      oldText.substr(0, column) +
-      text.substr(0, 16 - column) +
-      oldText.substr(text.length + column, 16);
-    this.boardState.setLcdContent(row, newText);
+    let existingText = this.boardState.getLcdContent(row).substr(0, column);
+    let spaces = 0;
+    if (existingText.length < column){
+      spaces = column - existingText.length;
+    }
+    text = existingText + " ".repeat(spaces) + text.substring(0, 16 - column)
+    this.boardState.getLcdContent(row).substr(text.length + column, 16);
+    this.boardState.setLcdContent(row, text);
 
   }
 
