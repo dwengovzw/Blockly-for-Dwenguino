@@ -5,6 +5,7 @@
 import childProcess from 'child_process';
 const exec = childProcess.exec;
 import fs from 'fs';
+import path from 'path'
 
 let exports = {};
 
@@ -57,11 +58,20 @@ exports.upload = function (req, res) {
 
 
 let handleRun = function(res){
-    let cmd_clean = exec('./compilation/bin/make -C ./compilation clean', {timeout: 10000}, 
+    console.log("handle run");
+    let command_path = path.resolve("./compilation/bin/");
+    let command_name = command_path + "/make";
+    
+    if (process.platform ==  "win32"){
+        command_name = command_path + "\make.exe"
+    }
+    console.log(command_name);
+    let cmd_clean = exec(command_name + ' -C ./compilation clean', {timeout: 10000}, 
         (error, stdout, stderr) => {
             console.log(stdout);
             console.log(stderr);
             if (error !== null) {
+                console.log("clean failed");
                 res.json({
                     status: "error",
                     info: "Clean failed",
@@ -69,11 +79,12 @@ let handleRun = function(res){
                     trace: stderr,
                 });
             }else{
-                let cmd_compile = exec('./compilation/bin/make -C ./compilation', {timeout: 10000}, 
+                let cmd_compile = exec(command_name + ' -C ./compilation', {timeout: 10000}, 
                     (error, stdout, stderr) => {
                         console.log(stdout);
                         console.log(stderr);
                         if (error !== null) {
+                            console.log("compile failed");
                             res.json({
                                 status: "error",
                                 info: "Compilation failed",
@@ -81,11 +92,12 @@ let handleRun = function(res){
                                 trace: stderr,
                             });
                         }else{
-                            let cmd_uplaod = exec('./compilation/bin/make -C ./compilation upload', {timeout: 10000}, 
+                            let cmd_uplaod = exec(command_name + ' -C ./compilation upload', {timeout: 10000}, 
                                 (error, stdout, stderr) => {
                                     console.log(stdout);
                                     console.log(stderr);
                                     if (error !== null) {
+                                        console.log("upload failed");
                                         res.json({
                                             status: "error",
                                             info: "Upload failed",
@@ -117,8 +129,11 @@ exports.run = function (req, res) {
     let code = req.body.code;
     code = '#include <Arduino.h>\n' + code; // Append arduino include
     console.log(code);
-    fs.writeFile('./compilation/sketch.cpp', code, (error) => {
+    let filename =  path.resolve('./compilation/sketch.cpp');
+    console.log(filename);
+    fs.writeFile(filename, code, (error) => {
         if (error){ 
+            console.log("Error writing file");
             res.json({
                 status: "error",
                 info: "unable to write file",
