@@ -255,7 +255,7 @@ body{
 #db_simulator_panes{
     flex-direction: column;
     flex: 1;
-    overflow: auto;
+    overflow: hidden;
     display: flex;
 }
 
@@ -346,15 +346,15 @@ body{
     height: 46%;
     width: 100%;
     padding: 1%;
-    font-size: 3vh;
+    font-size: 1.45vw;
     font-family: lcd-matrix-font;
-    letter-spacing: 2px;
-    word-spacing: 4px;
+    letter-spacing: 0px;
+    word-spacing: 0;
     position: absolute;
 }
 
 #sim_lcd_row1{
-  margin-top: 14%;
+  margin-top: 10%;
 }
 
 #sim_lights {
@@ -470,7 +470,7 @@ body{
 #sim_components {
     position: absolute;
     top: 20px;
-    left: 20px;
+    padding-left: 20px;
     height: 100px;
     width: 120px;
     max-width: 20%;
@@ -874,8 +874,8 @@ body{
 
 .pir_canvas{
     margin-left: 25px;
-    width: 75px;
-    height: 75px;
+    width: 50px;
+    height: 50px;
     margin-top: 10px;
 }
 
@@ -895,14 +895,14 @@ body{
 .sound_canvas{
     margin-left: 25px;
     width: 100px;
-    height: 42px;
+    height: 60px;
     margin-top: 10px;
 }
 
 .light_canvas{
     margin-left: 25px;
-    width: 100px;
-    height: 45px;
+    width: 30px;
+    height: 30px;
     margin-top: 10px;
 }
 
@@ -973,6 +973,7 @@ body{
 
 .modal-dialog{
     background-color: white;
+    min-width: 700px;
 }
 
 .labels > span > ul {

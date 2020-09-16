@@ -9,6 +9,11 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     muted = true;
     prevFreq = 0;
     boardDisplayWidth = "80%";
+    componentsTopOffset = "0%";
+    rightSimComponentsPosition = "auto";
+    sonarDistance = 0;
+    sonarInputChanged = false;
+    sonarFieldBeingEdited = false;
 
     constructor(logger){
         super(logger);
@@ -20,6 +25,14 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
 
     setBoardDisplayWidthWidth(width){
         this.boardDisplayWidth = width;
+    }
+
+    setComponentsTopOffset(offset){
+        this.componentsTopOffset = offset;
+    }
+
+    setComponentsRightPosition(position){
+        this.rightSimComponentsPosition = position;
     }
 
 
@@ -56,15 +69,40 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
         $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
 
-        let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
+        let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
         let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
+        let setButton = $('<button id="set_sonar_value"></button>').text("OK");
 
         $('#sim_components').append(sonar);
         $('#sim_components').append(sonarDist);
         $('#sim_components').append(sonarInput);
+        $('#sim_components').append(setButton);
+        $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
+
         
         $('#sim_sonar_input').append('<input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
+
+        $("#sonar_input").change((e) => {
+            this.sonarInputChanged = true;
+            console.log(parseInt(e.target.value));
+            this.sonarDistance = parseInt(e.target.value);
+        });
+
+        $('#set_sonar_value').click((e) => {
+            let distance = $("#sonar_input").val();
+            this.sonarDistance = parseInt(e.target.value);
+        });
+
+        $("#sonar_input").focus(() => {
+            console.log("focus gained");
+            this.sonarFieldBeingEdited = true;
+        });
+
+        $("#sonar_input").focusout(() => {
+            console.log("focus lost");
+            this.sonarFieldBeingEdited = false;
+        });
 
         $('#sim_board').append('<div class="sim_light sim_light_off" id ="sim_light_13"></div>');
         $('#sim_board').append('<div id="sim_lcds"></div>');
@@ -144,6 +182,12 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
        for (let i = 0 ; i < this.inputsState.buttons.length ; ++i){
            board.setButtonState(i, this.inputsState.buttons[i])
        }
+       if (this.sonarInputChanged){
+           board.setSonarDistance(11, 12, this.sonarDistance);
+           this.sonarInputChanged = false;
+       }
+       this.sonarDistance = board.getSonarDistance(11, 12);
+
     }
 
     updateScenario(dwenguinoState){
@@ -165,7 +209,10 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
             var sim_sonar  = document.getElementById('sonar_input');
             
             if(typeof(sim_sonar) != 'undefined' && sim_sonar != null){
-                sim_sonar.value = distance;
+                // Only change value when not being edited
+                if (!this.sonarFieldBeingEdited){
+                    sim_sonar.value = distance;
+                }
             } else {
                 console.log('Sonar input element is undefined');
             }
@@ -239,8 +286,13 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
           element.style.display = 'none';
           element.offsetHeight;
           element.style.display = 'block';
+          let lcdElement = $(".sim_lcd");
+          let boardElement = $("#sim_board")
+          let boardElementWidth = boardElement.width();
+          let fontSize = boardElementWidth/16*1.25;
+          lcdElement.css({"font-size": fontSize});
         }
-         
+        
     
         // Set leds to right value
         for (var i = 0; i < 8; i++) {
