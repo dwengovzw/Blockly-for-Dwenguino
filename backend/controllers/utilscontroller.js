@@ -64,7 +64,7 @@ let handleRun = function(res){
     let command_location = path.resolve("./compilation");
     
     if (process.platform ==  "win32"){
-        command_name = command_path + "\make.exe"
+        command_name = "make"
     }
     console.log(command_name);
     let cmd_clean = exec(command_name + ' -C ' + command_location + ' clean', {timeout: 10000}, 
