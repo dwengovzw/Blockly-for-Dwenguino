@@ -83,15 +83,27 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         
         $('#sim_sonar_input').append('<input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
 
+
+        $("#sonar_input").on('keyup', (e) => {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                this.sonarInputChanged = true;
+                let value = $("#sonar_input").val();
+                console.log(parseInt(value.trim()));
+                this.sonarDistance = parseInt(value.trim());
+            }
+        });
+
         $("#sonar_input").change((e) => {
             this.sonarInputChanged = true;
-            console.log(parseInt(e.target.value));
-            this.sonarDistance = parseInt(e.target.value);
+            let value = $("#sonar_input").val();
+            console.log(parseInt(value.trim()));
+            this.sonarDistance = parseInt(value.trim());
         });
 
         $('#set_sonar_value').click((e) => {
-            let distance = $("#sonar_input").val();
-            this.sonarDistance = parseInt(e.target.value);
+            let value = $("#sonar_input").val();
+            console.log(parseInt(value.trim()));
+            this.sonarDistance = parseInt(value.trim());
         });
 
         $("#sonar_input").focus(() => {
