@@ -69,7 +69,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
         $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
 
-        let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
+        let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
         let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
         let setButton = $('<button id="set_sonar_value"></button>').text("OK");
