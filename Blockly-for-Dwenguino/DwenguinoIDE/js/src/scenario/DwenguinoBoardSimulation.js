@@ -69,7 +69,7 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
         $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
 
-        let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
+        let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
         let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
         let setButton = $('<button id="set_sonar_value"></button>').text("OK");
@@ -83,15 +83,27 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
         
         $('#sim_sonar_input').append('<input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
 
+
+        $("#sonar_input").on('keyup', (e) => {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                this.sonarInputChanged = true;
+                let value = $("#sonar_input").val();
+                console.log(parseInt(value.trim()));
+                this.sonarDistance = parseInt(value.trim());
+            }
+        });
+
         $("#sonar_input").change((e) => {
             this.sonarInputChanged = true;
-            console.log(parseInt(e.target.value));
-            this.sonarDistance = parseInt(e.target.value);
+            let value = $("#sonar_input").val();
+            console.log(parseInt(value.trim()));
+            this.sonarDistance = parseInt(value.trim());
         });
 
         $('#set_sonar_value').click((e) => {
-            let distance = $("#sonar_input").val();
-            this.sonarDistance = parseInt(e.target.value);
+            let value = $("#sonar_input").val();
+            console.log(parseInt(value.trim()));
+            this.sonarDistance = parseInt(value.trim());
         });
 
         $("#sonar_input").focus(() => {
