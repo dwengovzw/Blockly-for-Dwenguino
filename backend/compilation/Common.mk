@@ -34,6 +34,7 @@ $(call arduino_output,Arduino.mk Configuration:)
 # Detect OS
 ifeq ($(OS),Windows_NT)
     CURRENT_OS = WINDOWS
+    AVR_TOOLS_DIR = $(call dir_if_exists,$(ARDUINO_DIR)\hardware\tools\avr)
 else
     UNAME_S := $(shell uname -s)
     ifeq ($(UNAME_S),Linux)
