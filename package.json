@@ -10,7 +10,8 @@
   "main": "./backend/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ."
+    "start": "node .",
+    "build": "webpack --config webpack.config.cjs"
   },
   "keywords": [
     "logging",
@@ -42,8 +43,15 @@
     "uuid": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^8.1.0",
+    "babel-preset-env": "^1.7.0",
     "electron": "^9.0.2",
-    "open-cli": "^5.0.0"
+    "open-cli": "^5.0.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "repository": {
     "type": "git",
