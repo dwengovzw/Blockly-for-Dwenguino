@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# Move to top directory
-cd ..
-
 # make sure to set production flag of NodeJS
 export NODE_ENV=production
 
