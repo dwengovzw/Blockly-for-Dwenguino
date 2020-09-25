@@ -9,7 +9,7 @@ npm install
 
 # go to backend and stop the previous app version and start the new nodeJS app in bac$
 cd backend
-forever stop index.js
-forever start index.js
+pm2 stop index.js
+pm2 start index.js
 exit
 
