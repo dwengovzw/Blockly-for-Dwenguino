@@ -2,6 +2,7 @@
 
 # make sure to set production flag of NodeJS
 export NODE_ENV=production
+export PORT=80
 
 # clean the node_modules directory and reinstall to be sure you have latest version 
 rm -Rf node_modules
