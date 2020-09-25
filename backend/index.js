@@ -71,9 +71,10 @@ app.get("/", (req, res) => res.send('Welcome to blockly'));
 
 // Setup server port
 var port = process.env.PORT || 12032;
+var ip = process.env.IP || "localhost";
 console.log("Port: " + port);
 // Launch app to listen to specified port
-let server = app.listen(port, function () {
+let server = app.listen(port, ip, function () {
     console.log("Running RestHub on port " + port);
 });
 
