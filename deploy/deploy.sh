@@ -9,7 +9,7 @@ rm -Rf node_modules
 npm install
 
 # go to backend and stop the previous app version and start the new nodeJS app in bac$
-sudo forever stop $(pwd)/backend/index.js 
-sudo forever start $(pwd)/backend/index.js -l ../forever_log.txt&
+export BUILD_ID=dontKillMePlease 
+pm2 restart $(pwd)/backend/index.js -l ../forever_log.txt&
 exit
 
