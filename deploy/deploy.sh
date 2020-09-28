@@ -12,7 +12,7 @@ rm -Rf node_modules
 npm install
 
 # Copy the new files to the deployment directory
-cp -r * /home/ubuntu/blockly-build/
+sudo cp -r * /home/ubuntu/blockly-build/
 
 # go to backend and stop the previous app version and start the new nodeJS app in bac$
 #pm2 stop backend/index.js
