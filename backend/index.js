@@ -46,8 +46,6 @@ let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    user: "dwenguinoblockly",
-    pass: "s6DBubM#JBgy2?e8",
 })
 var db = mongoose.connection;
 
