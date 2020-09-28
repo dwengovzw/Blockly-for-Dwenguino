@@ -58,11 +58,10 @@ if (!db) {
 }
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+    app.use(express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 } else {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
-    console.log(path.join(__dirname, 'Blockly-for-Dwenguino'));
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
     //sapp.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 }
