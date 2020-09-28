@@ -12,7 +12,8 @@ rm -Rf node_modules
 npm install
 
 # go to backend and stop the previous app version and start the new nodeJS app in bac$
+pm2 stop backend/index.js
 export BUILD_ID=dontKillMePlease 
-pm2 restart $(pwd)/backend/index.js
+pm2 start backend/index.js
 exit
 
