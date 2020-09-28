@@ -36,8 +36,9 @@ exports.event = function(req, res) {
     // Save the logitem to the database
     // If the event was a workspace change: 
     // Spawn a thread after saving the item to generate the functional vector
-    // Disabled saving for testing purposes
-    /*logitem.save()
+    logitem.save();
+    // Disabled functional data generation (to much resource use on server)
+    /*
       .then(item => {
         // If the event is a changedworkspace event, generate functional vector otherwise just save the event
         if (req.body.event.name == EVENT_NAMES.changedWorkspace){
