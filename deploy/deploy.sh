@@ -11,9 +11,12 @@ export PM2_HOME=/etc/pm2deamon
 rm -Rf node_modules
 npm install
 
+# Copy the new files to the deployment directory
+cp -r * /home/ubuntu/blockly-build/
+
 # go to backend and stop the previous app version and start the new nodeJS app in bac$
-pm2 stop backend/index.js
-export BUILD_ID=dontKillMePlease 
-pm2 start backend/index.js
+#pm2 stop backend/index.js
+#export BUILD_ID=dontKillMePlease 
+#pm2 start backend/index.js
 exit
 
