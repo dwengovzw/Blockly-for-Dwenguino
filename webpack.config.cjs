@@ -14,9 +14,21 @@ module.exports = {
             {
                 test: /\.js?$/,
                 exclude: /node_modules/, 
-                loader: 'babel-loader',
-                query: {
-                    plugins: ["@babel/plugin-proposal-class-properties"]
+                use:{
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            ["@babel/preset-env",
+                            {
+                                'targets': {
+                                    'browsers': ['last 2 version']
+                                }
+                            }]
+                        ],
+                        plugins: ["@babel/plugin-proposal-class-properties",
+                                  "@babel/plugin-transform-classes",
+                                  '@babel/plugin-transform-runtime']
+                    }
                 }
             }
         ]

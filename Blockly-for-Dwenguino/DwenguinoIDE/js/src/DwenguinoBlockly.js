@@ -6,13 +6,14 @@ import { EVENT_NAMES } from './logging/EventNames.js'
 import SeverConfig from "./ServerConfig.js"
 import ServerConfig from './ServerConfig.js';
 
+
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
 //export { DwenguinoBlockly as default }
 
-export default DwenguinoBlockly
 
-var DwenguinoBlockly = {
+
+let DwenguinoBlockly = {
     simButtonStateClicked: false,
 
     workspace: null,
@@ -779,3 +780,5 @@ var DwenguinoBlockly = {
 $(document).ready(function() {
   DwenguinoBlockly.setupEnvironment();
 });
+
+export default DwenguinoBlockly;
