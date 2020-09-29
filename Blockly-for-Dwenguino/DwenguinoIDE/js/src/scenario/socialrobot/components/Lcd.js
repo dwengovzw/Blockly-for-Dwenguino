@@ -1,4 +1,4 @@
-import {RobotComponent } from './RobotComponent.js ';
+import { RobotComponent } from './RobotComponent.js';
 import { TypesEnum } from '../RobotComponentsFactory.js';
 
 export { SocialRobotLcd as SocialRobotLcd }
