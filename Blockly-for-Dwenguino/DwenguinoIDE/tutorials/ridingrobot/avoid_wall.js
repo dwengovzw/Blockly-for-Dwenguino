@@ -1,7 +1,8 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+import { tutorialTargets } from "../tutorialTargets.js"
 
 
-tutorials.avoidWall = {
+let avoidWall = {
       category: "ridingrobot",
       id: "tutsAvoidWall",
       label: MSG.tutsAvoidWall,
@@ -36,3 +37,5 @@ tutorials.avoidWall = {
       DwenguinoBlockly.tutorialMenu.endTutorial();
     }
     };
+
+export {avoidWall};
