@@ -56,7 +56,7 @@ if (!db) {
 }
 
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+    app.use(express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 } else {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
@@ -71,6 +71,7 @@ app.get("/", (req, res) => res.send('Welcome to blockly'));
 
 // Setup server port
 var port = process.env.PORT || 12032;
+console.log("Port: " + port);
 // Launch app to listen to specified port
 let server = app.listen(port, function () {
     console.log("Running RestHub on port " + port);
