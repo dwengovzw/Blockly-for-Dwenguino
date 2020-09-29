@@ -1,35 +1,38 @@
+import { introduction } from "./dwenguino/introduction.js"
+import { avoidWall } from "./ridingrobot/avoid_wall.js"
+import { driveForward } from "./ridingrobot/drive_forward.js"
+import { rideInSquare } from "./ridingrobot/ride_in_square.js"
+import { rideToWall } from "./ridingrobot/ride_to_wall.js"
+/*import { hello } from "./socialrobot/hello.js"
+import { introductionSocialRobot } from "./socialrobot/introduction.js"*/
+import { introduceYourself } from "./wegostem_debugging/introduce_yourself.js"
+import { lampOnOffWeGoSTEM } from "./wegostem_debugging/lampje_aan_uit.js"
+import { nameOnLcd } from "./wegostem_debugging/name_on_lcd.js"
+import { poem1 } from "./wegostem_debugging/poem1.js"
+import { poem2 } from "./wegostem_debugging/poem2.js"
+import { showNameAndDisappear } from "./wegostem_debugging/show_name_and_disappear.js"
 /*
  * Links interface locations to interface ids.
  */
 
-var tutorialTargets = {
-  dwenguino: "db_menu_item_dwengo_robot_teacher_image",
-  workspaceArea: "blocklyDiv",
-  toolboxArea: "db_blocklyToolboxDiv",
-  toolbox: "blocklyToolboxDiv",
-  languageMenu: "db_menu_item_language",
-  difficultyMenu: "db_menu_item_difficulty",
-  dwengoBooksMenu: "db_tutorials",
-  playButton: "db_menu_item_run",
-  uploadButton: "db_menu_item_upload",
-  openButton: "db_menu_item_upload",
-  saveButton: "db_menu_item_download",
-  simulatorButton: "db_menu_item_simulator",
-  codeArea: "db_code_pane",
-  simulatorArea: "db_simulator_pane",
-  simulatorStartButton: "sim_start",
-  simulatorStopButton: "sim_stop",
-  simulatorScenarioTag: "sim_scenarioTag",
-  simulatorBottomPane: "db_simulator_bottom_pane",
-  simulatorScenarioSocialRobot: "sim_scenario",
-  robotComponentsMenuLedPlusButton: "rc_led_plus_button",
-  robotComponentsMenuLedMinusButton: "rc_led_minus_button",
-  robotcomponentsMenuLedOptions: "rc_led_options",
-  robotComponentsMenuLcdPlusbutton: "rc_lcd_plus_button",
-  robotComponensMenu: "robot_components_menu"
-};
+ export { tutorials };
+
 
 /*
  * See other tutoiral files for the implementation of the specific tutorials
  */
-var tutorials = {};
+var tutorials = {
+  introduction: introduction,
+  avoidWall: avoidWall,
+  driveForward: driveForward,
+  rideInSquare: rideInSquare,
+  rideToWall: rideToWall,
+  /*hello: hello,
+  introductionSocialRobot: introductionSocialRobot,*/
+  introduceYourself: introduceYourself,
+  lampOnOffWeGoSTEM: lampOnOffWeGoSTEM,
+  nameOnLcd: nameOnLcd,
+  poem1: poem1,
+  poem2: poem2,
+  showNameAndDisappear: showNameAndDisappear,
+};

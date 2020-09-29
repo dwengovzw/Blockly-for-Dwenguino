@@ -1,7 +1,8 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+import { tutorialTargets } from "../tutorialTargets.js"
 
 
-tutorials.driveForward = {
+let driveForward = {
       category: "ridingrobot",
       targets: [tutorialTargets.simulatorButton,
                 tutorialTargets.simulatorScenarioTab,
@@ -36,3 +37,5 @@ tutorials.driveForward = {
         DwenguinoBlockly.tutorialMenu.endTutorial();
       }
     };
+
+export { driveForward }
