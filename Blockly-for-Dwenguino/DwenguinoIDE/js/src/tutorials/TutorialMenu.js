@@ -8,6 +8,7 @@ import { Pir } from "./components/Pir.js";
 import { Servo } from "./components/Servo.js";
 import { Sonar } from "./components/Sonar.js";
 import { SoundSensor } from "./components/SoundSensor.js";
+import { tutorials } from "../../../tutorials/tutorials.js";
 
 /**
  * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
@@ -117,7 +118,7 @@ export default class TutorialMenu {
     loadTutorialsMenu(category){
         $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
         $("#tutorialModal .modal-body .message").empty();
-        $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseTutoral +'</div>');
+        $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseTutorial +'</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_tutorials_menu"></div>');
 
         $("#tutorialModal .modal-footer").empty();

@@ -1,7 +1,8 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+import { tutorialTargets } from "../tutorialTargets.js"
 
 
-tutorials.introduction =
+let introduction =
 {
       category: "dwenguino",
       targets: [tutorialTargets.dwenguino,
@@ -44,3 +45,5 @@ tutorials.introduction =
         DwenguinoBlockly.tutorialMenu.endTutorial();
       }
     };
+
+export { introduction };
