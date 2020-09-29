@@ -2,12 +2,13 @@ import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 import TutorialAnswer from "../../js/src/tutorials/TutorialAnswer.js"
 import TutorialMultipleChoiceQuestion from "../../js/src/tutorials/TutorialMultipleChoiceQuestion.js"
 import { EVENT_NAMES } from "../../js/src/logging/EventNames.js"
+import { tutorialTargets } from "../tutorialTargets.js"
 
 /**
  * Implementation of this tour with Hopscotch
  */
 
-tutorials.hello = {
+let hello = {
     category: "socialrobot",
     targets: [
       document.body,
@@ -108,3 +109,5 @@ tutorials.hello = {
         }
     },
 };
+
+export { hello }

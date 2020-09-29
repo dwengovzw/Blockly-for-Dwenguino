@@ -6,13 +6,14 @@ import { EVENT_NAMES } from './logging/EventNames.js'
 import SeverConfig from "./ServerConfig.js"
 import ServerConfig from './ServerConfig.js';
 
+
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
 //export { DwenguinoBlockly as default }
 
-export default DwenguinoBlockly
 
-var DwenguinoBlockly = {
+
+let DwenguinoBlockly = {
     simButtonStateClicked: false,
 
     workspace: null,
@@ -31,8 +32,10 @@ var DwenguinoBlockly = {
 
     fileIOController: null,
 
-    initDwenguinoBlockly: function(){
-        
+    initDwenguinoBlockly: function(workspace){
+        this.workspace = workspace;
+        this.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
+
         // Create file io controller responisble for saving and uploading files
         this.fileIOController = new FileIOController();
         // Create DwenguinoEventLogger instance
@@ -509,24 +512,13 @@ var DwenguinoBlockly = {
     /*
       The following functions load the contents of a block xml file into the workspace.
     */
-    loadBlocksFile: function(filename){
-      DwenguinoBlockly.loadBlocksFileContent(filename);
-    },
+
 
     loadFileXmlIntoWorkspace: function(xml_content){
       console.log("loading into workspace");
       DwenguinoBlockly.setWorkspaceBlockFromXml(xml_content);
     },
 
-    loadBlocksFileContent: function(filename){
-      $.ajax({
-        url: filename,
-        success: function (data){
-          var serializedToString = (new XMLSerializer()).serializeToString(data);
-          DwenguinoBlockly.loadFileXmlIntoWorkspace(serializedToString);
-        }
-      });
-    },
 
 
     onresize: function(){
@@ -551,7 +543,7 @@ var DwenguinoBlockly = {
     injectBlockly: function(){
         var blocklyArea = document.getElementById('db_blockly');
         var blocklyDiv = document.getElementById('blocklyDiv');
-        DwenguinoBlockly.workspace = Blockly.inject(blocklyDiv,
+        let workspace = Blockly.inject(blocklyDiv,
             {
                 toolbox: document.getElementById('toolbox'),
                 media: "DwenguinoIDE/img/",
@@ -560,8 +552,8 @@ var DwenguinoBlockly = {
             });
         window.addEventListener('resize', DwenguinoBlockly.onresize, false);
         DwenguinoBlockly.onresize();
-        Blockly.svgResize(DwenguinoBlockly.workspace);
-        DwenguinoBlockly.workspace.addChangeListener(DwenguinoBlockly.renderCode);
+        Blockly.svgResize(workspace);
+        workspace.addChangeListener(DwenguinoBlockly.renderCode);
 
         // Init the callback for the dynamic creation of the toolbox
         /**
@@ -569,8 +561,8 @@ var DwenguinoBlockly = {
          * @param {!Blockly.Workspace} workspace The workspace this flyout is for.
          * @return {!Array.<!Element>} Array of XML block elements.
          */
-        var variablesFlyoutCallback = function(workspace) {
-          var variables = DwenguinoBlockly.workspace.getAllVariables();
+        var variablesFlyoutCallback = function() {
+          var variables = workspace.getAllVariables();
           var block_texts = []
           //block_texts.push('<button text="' + MSG['createVar'] + '" callbackKey="createVariableCallback"></button>')
           block_texts.push('<block type="variables_declare_set_int"></block>');
@@ -607,13 +599,14 @@ var DwenguinoBlockly = {
             console.log("Creating new variable");
         };
 
-        DwenguinoBlockly.workspace.registerButtonCallback(
+        workspace.registerButtonCallback(
           "createVariableCallback", createVariableCallback
         );
 
-        DwenguinoBlockly.workspace.registerToolboxCategoryCallback(
+        workspace.registerToolboxCategoryCallback(
           "DWB_VARIABLES", variablesFlyoutCallback
         );
+        return workspace;
     },
 
     changeLanguage: function() {
@@ -766,9 +759,10 @@ var DwenguinoBlockly = {
 
     setupEnvironment: function(){
         DwenguinoBlockly.initLanguage();
-        DwenguinoBlockly.injectBlockly();
-        DwenguinoBlockly.loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
-        DwenguinoBlockly.initDwenguinoBlockly();
+        let workspace = DwenguinoBlockly.injectBlockly();
+
+        //DwenguinoBlockly.loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
+        DwenguinoBlockly.initDwenguinoBlockly(workspace);
         DwenguinoBlockly.doTranslation();
         DwenguinoBlockly.setDifficultyLevel(0);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
@@ -786,3 +780,5 @@ var DwenguinoBlockly = {
 $(document).ready(function() {
   DwenguinoBlockly.setupEnvironment();
 });
+
+export default DwenguinoBlockly;

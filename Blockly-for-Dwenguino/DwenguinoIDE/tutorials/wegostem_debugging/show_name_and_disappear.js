@@ -1,8 +1,9 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 import { EVENT_NAMES } from "../../js/src/logging/EventNames.js"
+import { tutorialTargets } from "../tutorialTargets.js"
 
 
-tutorials.showNameAndDisappear = {
+let showNameAndDisappear = {
       category: "wegostem",
       targets: [tutorialTargets.simulatorButton,
                 tutorialTargets.workspaceArea,
@@ -50,3 +51,5 @@ tutorials.showNameAndDisappear = {
         console.log(DwenguinoBlockly.logger.createEvent(EVENT_NAMES.tutorialPrevStep, DwenguinoBlockly.logger.tutorialIdSetting));
       },
   };
+
+  export { showNameAndDisappear }
