@@ -68,6 +68,8 @@ var MSG = {
 
   catDwenguino: "Dwenguino",
 
+  catSocialRobot: "sozialer Roboter",
+
   delay_help: "Warte einige Millisekunden (1 Sekunde = 1000 Millisekunden)",
 
   delay: "Warte",

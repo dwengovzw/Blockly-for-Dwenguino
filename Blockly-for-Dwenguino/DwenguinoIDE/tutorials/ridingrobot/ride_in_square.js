@@ -1,7 +1,9 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 
+import { tutorialTargets } from "../tutorialTargets.js"
 
-tutorials.rideInSquare = {
+
+let rideInSquare = {
       category: "ridingrobot",
       id: "tutsRideInSquare",
       label: MSG.tutsRideInSquare,
@@ -36,3 +38,4 @@ tutorials.rideInSquare = {
       DwenguinoBlockly.tutorialMenu.endTutorial();
     }
     };
+export { rideInSquare }
