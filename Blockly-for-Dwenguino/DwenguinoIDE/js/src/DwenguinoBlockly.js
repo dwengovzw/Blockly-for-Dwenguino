@@ -42,6 +42,7 @@ let DwenguinoBlockly = {
         // This instance should be passed to all classes which want to log events.
         this.logger = new DwenguinoEventLogger();
         this.logger.init();
+        var self = this;
 
         // Create an instance of the tutorial menu (persists until the application stops).
         // Uses the event logger to capture tutorial actions.
@@ -63,7 +64,7 @@ let DwenguinoBlockly = {
             slide: function( event, ui ) {
                 DwenguinoBlockly.setDifficultyLevel(ui.value);
                 console.log(ui.value);
-                this.logger.createEvent(this.logger.createEvent("setDifficultyLevel", ui.value));
+                self.logger.recordEvent(self.logger.createEvent("setDifficultyLevel", ui.value));
             }
         });
         $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
@@ -186,7 +187,7 @@ let DwenguinoBlockly = {
             localStorage.workspaceXml = data;
             DwenguinoBlockly.download("blocks.xml", data);
             
-          DwenguinoBlockly.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.downloadClicked, ""));
+          DwenguinoBlockly.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.downloadClicked, ""));
         });
 
         $("#db_menu_item_clear").click(function(){

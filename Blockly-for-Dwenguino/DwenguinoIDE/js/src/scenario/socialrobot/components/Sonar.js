@@ -6,7 +6,7 @@ import { Slider } from '../../utilities/Slider.js'
 export { SocialRobotSonar as SocialRobotSonar }
 
 class SocialRobotSonar extends RobotComponent{
-    constructor(eventBus, id, echoPin = 0, triggerPin = 0, state = 100, visible = true, width = 100, height = 58, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas sonar_canvas'){
+    constructor(eventBus, id, echoPin = 0, triggerPin = 0, state = 0, visible = true, width = 100, height = 58, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas sonar_canvas'){
         super(eventBus, htmlClasses);
 
         this._id = id;
@@ -38,7 +38,7 @@ class SocialRobotSonar extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
 
         let label = MSG.sonarSliderLabel + " " + this.getId();
-        this._slider = new Slider(this.getId(), 'sensor_options', 0, 200, 100, label, '' , ' cm', 'sonar_slider');
+        this._slider = new Slider(this.getId(), 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider');
 
         var self = this;
         let sliderElement = this._slider.getSliderElement();
