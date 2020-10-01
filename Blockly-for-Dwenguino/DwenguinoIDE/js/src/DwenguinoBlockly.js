@@ -196,16 +196,6 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.runEventHandler(code);
         });
 
-         $("#language1").click(function(){
-            DwenguinoBlockly.language = "cpp";
-            DwenguinoBlockly.renderCode();
-         });
-
-         $("#language2").click(function(){
-            DwenguinoBlockly.language = "js";
-            DwenguinoBlockly.renderCode();
-         });
-
          $("#blocklyDiv").click(function(){
            DwenguinoBlockly.simulationEnvironment.stop();
          });
@@ -450,30 +440,22 @@ let DwenguinoBlockly = {
     },
 
     previouslyRenderedCode: null,
-    language: "cpp",
+
     /**
-     * Populate the currently selected pane with content generated from the blocks.
+     * Populate the db_blockly div with content generated from the blocks.
      */
     renderCode: function() {
-        var arduino_content = document.getElementById("content_arduino");
-        //var xml_content = document.getElementById("content_xml");
 
         // Log code change if code has changed
         DwenguinoBlockly.logCodeChange();
 
-        // transform code
-        if (DwenguinoBlockly.language === "cpp") {
-            var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-        }
-        else if (DwenguinoBlockly.language === "js") {
-            var code = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
-        }
+        var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
 
         // display code
         if (DwenguinoBlockly.previouslyRenderedCode === null){
-            /*document.getElementById('content_arduino').innerHTML =
+            document.getElementById('db_arduino_code').innerHTML =
                 prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
-                DwenguinoBlockly.previouslyRenderedCode = code;*/
+                DwenguinoBlockly.previouslyRenderedCode = code;
         }
         else if (code !== DwenguinoBlockly.previouslyRenderedCode) {
             //When the redered code changed log the block structures
@@ -495,11 +477,10 @@ let DwenguinoBlockly = {
                 }
               }
             }
-            document.getElementById('content_arduino').innerHTML =
+            document.getElementById('db_arduino_code').innerHTML =
                 prettyPrintOne(resultStringArray.join(''), 'cpp', false);
-                DwenguinoBlockly.previouslyRenderedCode = code;
+            DwenguinoBlockly.previouslyRenderedCode = code;  
          }
-
     },
 
     setDifficultyLevel: function(level){
@@ -555,7 +536,7 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.onresize();
         Blockly.svgResize(workspace);
         workspace.addChangeListener(DwenguinoBlockly.renderCode);
-
+        
         // Init the callback for the dynamic creation of the toolbox
         /**
          * Construct the blocks required by the flyout for the colours category.
@@ -770,6 +751,17 @@ let DwenguinoBlockly = {
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
             Blockly.svgResize(DwenguinoBlockly.workspace);
+        });
+
+        let codeViewCheckbox = document.querySelector('input[id="code_checkbox"]');
+
+        codeViewCheckbox.addEventListener('change', function () {
+          if (codeViewCheckbox.checked) {
+            document.getElementById("blocklyDiv").style.visibility = 'hidden';
+            DwenguinoBlockly.renderCode();
+          } else {
+            document.getElementById("blocklyDiv").style.visibility = 'visible';
+          }
         });
     },
     tearDownEnvironment: function(){
