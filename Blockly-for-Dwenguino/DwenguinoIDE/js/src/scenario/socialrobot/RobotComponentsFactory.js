@@ -360,7 +360,7 @@ class RobotComponentsFactory {
   /**
    * Add a new SONAR sensor to the simulation container.
    */
-  addSonar(echoPin=0, triggerPin=0, state=100, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
+  addSonar(echoPin=0, triggerPin=0, state=0, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
     this.incrementNumberOf(TypesEnum.SONAR);
