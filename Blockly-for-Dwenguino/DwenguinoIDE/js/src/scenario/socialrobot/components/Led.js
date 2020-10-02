@@ -164,7 +164,6 @@ class SocialRobotLed extends RobotComponent{
         $('#componentOptionsColor').append('<div id="color" class="col-md-10"></div>');
 
         for (const [type, t] of Object.entries(ColorsEnum)) {
-            console.log(t);
             $('#color').append('<button type="button" id=color'+t+' name='+type+' class="col-md-1 ml-2 mb-2 colorButton"></buttons>');
             let colorButton = document.getElementById('color'+t);
             colorButton.classList.add(type);
