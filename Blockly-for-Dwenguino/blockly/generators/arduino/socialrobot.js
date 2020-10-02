@@ -80,7 +80,7 @@ Blockly.Arduino['socialrobot_arms_down'] = function(block) {
     Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
     code += 'servo1.write(0);\n';
-  } else if(value_left_right_hand === 37){
+  } else if(value_servo_right_hand === 37){
     Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
     code += 'servo2.write(0);\n';
@@ -121,7 +121,7 @@ Blockly.Arduino['socialrobot_arms_up'] = function(block) {
     Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
     code += 'servo1.write(180);\n';
-  } else if(value_left_right_hand === 37){
+  } else if(value_servo_right_hand === 37){
     Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
     code += 'servo2.write(180);\n';
@@ -162,7 +162,7 @@ Blockly.Arduino['socialrobot_wave_arms'] = function(block) {
     Blockly.Arduino.definitions_['define_servo_1'] = "Servo servo1" + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo1'] = 'servo1' + '.attach(SERVO_1);\n';
     code += 'servo1.write(180);\n';
-  } else if(value_left_right_hand === 37){
+  } else if(value_servo_right_hand === 37){
     Blockly.Arduino.definitions_['define_servo_2'] = "Servo servo2" + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo2'] = 'servo1' + '.attach(SERVO_2);\n';
     code += 'servo2.write(180);\n';
@@ -185,7 +185,7 @@ Blockly.Arduino['socialrobot_wave_arms'] = function(block) {
 
   if(value_servo_left_hand === 36){
     code += 'servo1.write(0);\n';
-  } else if(value_left_right_hand === 37){
+  } else if(value_servo_right_hand === 37){
     code += 'servo2.write(0);\n';
   } else {
     code += 'servoOnPin' + value_servo_left_hand + '.write(0);\n';
