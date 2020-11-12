@@ -111,7 +111,7 @@ export default class BaseSimulationRunner{
         }
 
         // Read the next line and execute it. The sandbox environment will update the board state
-        var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
+        var line = this.debugger.getCurrentLoc().start.line - 1;
         this.debugger.debuggerjs.machine.step();
 
 

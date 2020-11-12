@@ -758,9 +758,11 @@ let DwenguinoBlockly = {
         codeViewCheckbox.addEventListener('change', function () {
           if (codeViewCheckbox.checked) {
             document.getElementById("blocklyDiv").style.visibility = 'hidden';
+            document.getElementById('db_code_pane').style.visibility = 'visible';
             DwenguinoBlockly.renderCode();
           } else {
             document.getElementById("blocklyDiv").style.visibility = 'visible';
+            document.getElementById('db_code_pane').style.visibility = 'hidden';
           }
         });
     },

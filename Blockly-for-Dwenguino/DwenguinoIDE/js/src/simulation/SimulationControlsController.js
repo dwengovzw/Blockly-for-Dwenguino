@@ -290,6 +290,17 @@ export default class SimulationControlsController {
         var alertMessage = '<div class ="alertDebug">' + MSG.simulator['alertDebug'] + '</div>';
         $('#db_body').append(alertMessage);
         document.getElementsByClassName('alertDebug')[0].style.width = document.getElementById("blocklyDiv").style.width;
+
+        let codeViewCheckbox = document.querySelector('input[id="code_checkbox"]');
+        if (codeViewCheckbox.checked) {
+            document.getElementById("blocklyDiv").style.visibility = 'hidden';
+            document.getElementById('db_code_pane').style.visibility = 'visible';
+        } else {
+            document.getElementById("blocklyDiv").style.visibility = 'visible';
+            document.getElementById('blocklyDiv').style.opacity = "0.5";
+            document.getElementById('db_code_pane').style.visibility = 'hidden';
+        }
+        document.getElementById('db_code_pane').style.opacity = "0.5";
         document.getElementById('blocklyDiv').style.opacity = "0.5";
         //document.getElementById('blocklyDiv').style.pointerEvents = "none";
     }
@@ -297,7 +308,18 @@ export default class SimulationControlsController {
     * Returns to normal view when debugging is finished
     */
     stopDebuggingView() {
+        let codeViewCheckbox = document.querySelector('input[id="code_checkbox"]');
+        if (codeViewCheckbox.checked) {
+            document.getElementById("blocklyDiv").style.visibility = 'hidden';
+            document.getElementById('db_code_pane').style.visibility = 'visible';
+
+        } else {
+            document.getElementById("blocklyDiv").style.visibility = 'visible';
+            document.getElementById('db_code_pane').style.visibility = 'hidden';
+        }
+        document.getElementById('db_code_pane').style.opacity = "1";
         document.getElementById('blocklyDiv').style.opacity = "1";
+
         document.getElementById('blocklyDiv').style.pointerEvents = "auto";
         if (document.getElementsByClassName("alertDebug").length !== 0) {
             document.getElementsByClassName("alertDebug")[0].remove();

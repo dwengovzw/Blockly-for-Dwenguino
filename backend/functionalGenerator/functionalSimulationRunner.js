@@ -54,7 +54,7 @@ export default class FunctionalSimulationRunner extends BaseSimulationRunner{
 
     generateStep(steps, totalStateVector){
 
-        let line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
+        let line = this.debugger.getCurrentLoc().start.line - 1;
         this.debugger.debuggerjs.machine.step();
     
     
