@@ -25,7 +25,7 @@ export default class SimulationSandbox {
   clearLcd() {
     // clear lcd by writing spaces to it
     for (var i = 0; i < 2; i++) {
-      this.writeLcd(" ".repeat(16), i, 1);
+      this.writeLcd(" ".repeat(16), i, 0);
     }
   }
 
