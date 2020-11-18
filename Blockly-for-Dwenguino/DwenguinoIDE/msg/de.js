@@ -212,13 +212,10 @@ var MSG = {
 
   pressedTooltip: "Stellt den Wert einer Taste dar. Vergleiche diesen Wert mit dem Wert, den du von einer bestimmten Taste gelesen hast.",
 
-  sureYouWantToChangeTutorial: "Möchtest du dieses Buch wirklich starten?\n Die Blöcke im aktuellen Arbeitsbereich werden ersetzt!",
-
+  sureYouWantToChangeTutorial: "Bist du sicher, dass du das Tutorial starten möchtest?\n Alle Blöcke im momentanen Arbeitsbereich werden entfernt.",
   create: "Erstellen",
-
   with_type: "mit Typ",
-
-  create_global: "Global erstellen",
+  create_global: "Erstellen (Global)",
 
   //TODO: translate:
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
@@ -245,78 +242,153 @@ var MSG = {
   stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
   clear: "Clear",
   save: "Save",
-  runError: "<h3>Sorry, I was unable to upload the code to the board</h3>",
-  uploadError: "Follow these steps to restart the Dwenguino board: \n    1. Disconnect the USB cable \n    2. Connect the computer and Dwenguino board with the USB cable \n    3. Simultaneously press the RESET and the SOUTH button of the Dwenguino board \n    4. Then first release the RESET button \n    5. Then release the SOUTH button \n    6. Upload the program again via the <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span> button in the main menu",
-  
+  runError: "Ups, beim Ausführen deines Codes am Board ist ein Fehler aufgetreten.",
+  uploadError: "Code konnte nicht aufs Board geladen werden. \nBitte überprüfe ob das Board mit dem USB-Kabel verbunden ist.\n Sollte das Kabel mit dem Board verbunden sein, versuch es abzustecken, und gleich darauf wieder einzustecken.",
+  cleanError: "Entfernen von vorherigem Code fehlgeschlagen.\nBitte überprüfe, ob .cpp files eventuell von einer anderen Applikation verwendet werden.\n Schließe diese Applikation.",
+  compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
 
+  socialrobotServoBlock: "Servo %1 %2 %3 Pin %4 Winkel %5",
+  socialrobotWaveArmesBlock: "Winke mit beiden Armen %1 %2 Servo rechter Arm %3 %4 Servo linker Arm %5 %6",
+  socialRobotArmsDownBlock: "Arme nach unten %1 %2 %3 Servo rechter Arm %4 %5 Servo linker Arm %6 %7",
+  socialRobotArmsUpBlock: "Arme nach oben %1 %2 %3 Servo rechter Arm %4 %5 Servo linker Arm %6 %7",
+  socialRobotEyesLeftBlock: "Augen nach links %1 %2 %3 Servo linkes Auge %4 %5 Servo rechtes Auge %6 %7",
+  socialRobotEyesRightBlock: "Augen nach rechts %1 %2 %3 Servo linkes Auge %4 %5 Servo rechtes Auge %6 %7",
+  socialrobotReadPinBlock: "Lies Wert von Pin aus %1 %2",
+  socialRobotServoRightHand: "Servo rechtes Auge",
+  socialRobotServoLeftHand: "Servo linkes Auge",
+  sonarSliderLabel: "Sonarabstand",
+  pirButtonLabel: "PIR Button",
+  };
+
+MSG.logging = {
+  setup: "Testkonfiguration",
+  login: "Login",
+  newuser: "Neuer Benutzer",
+  username: "Benutzername",
+  chooseUsername: "Wähle einen Benutzernamen",
+  choosePassword: "Wähle 4 persönliche Symbole (Zeichen) als Passwort. Merke sie dir in der richtigen Reihenfolge.",
+  currentlySelected: "Ausgewählt: ",
+  birth: "Geburtsdatum",
+  school: "Schule",
+  selectSchool: "Suche nach Schulnamen...",
+  agegroup: "Altersgruppe:",
+  primary1: "Primärstufe 1",
+  primary2: "Primärstufe 2",
+  primary3: "Primärstufe 3",
+  primary4: "Primärstufe 4",
+  primary5: "Sekundärstufe 1",
+  primary6: "Sekundärstufe 2",
+  secondary1: "Sekundärstufe 3",
+  secondary2: "Sekundärstufe 4",
+  secondary3: "Sekundärstufe 5",
+  secondary4: "Sekundärstufe 6",
+  secondary5: "Sekundärstufe 7",
+  secondary6: "Sekundärstufe 8",
+  gender: "Geschlecht: ",
+  gender1: "F",
+  gender2: "M",
+  gender3: "X",
+  gender4: "Das möchte ich nicht sagen",
+  activity: "Aktivität: ",
+  name: "Name ",
+  date: "Datum ",
+  ok: "Ok",
+  reset: "Reset (Zurücksetzen)",
+  person: "Person",
+  dog: "Hund",
+  car: "Katze",
+  camera: "Kamera",
+  heart: "Herz",
+  plane: "Flugzeug",
+  house: "Haus",
+  umbrella: "Regenschirm",
+  star: "Stern",
+  money: "Geld",
+  gift: "Geschenk",
+  keys: "Schlüssel",
+  music: "Musik",
+  snowflake: "Schneeflocke",
+  fire: "Feuer",
+  envelope: "Umschlag"
 };
 
+MSG.validator = {
+  errSchool: "Wähle eine Schule.",
+  errId: "Du hast nicht genug Symbole ausgewählt.",
+  errAgeGroup: "Wähle deine Altersgruppe.",
+  errGender: "Wähle dein Geschlecht.",
+  errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein."
+};
 
+MSG.socialrobot = {
+  plain: "Standard",
+  eye: "Auge",
+  mouth: "Mund",
+  righthand: "Rechte Hand",
+  lefthand: "Linke Hand",
+};
+
+MSG.tutorialMenu = {
+  header: "Tutorials",
+  catDwenguino: "Lerne programmieren<br>mit DwenguinoBlockly",
+  catRidingRobot: "reitender Roboter",
+  catSocialRobot: "sozialer Roboter",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Wähle eine Tutorial-Kategorie aus",
+  chooseTutorial: "Wähle ein Tutorial aus",
+  previous: "Zurück",
+  close: "Schließen",
+  checkAnswer: "Antwort überprüfen",
+  correctAnswer: "Die Antwort war richtig!",
+  wrongAnswer: "Die Antwort war nicht richtig. Versuch es nochmal!"
+};
 
 MSG.simulator = {
-
   start: "Start",
-
-  stop: "Stop",
-
+  stop: "Stopp",
   pause: "Pause",
-
   step: "1 Schritt",
-
   speed: "Geschwindigkeit",
-
-  speedVerySlow: "40 mal langsamer",
-
-  speedSlow: "20 mal langsamer",
-
-  speedMedium: "10 mal langsamer",
-
-  speedFast: "5 mal langsamer",
-
-  speedVeryFast: "2 mal langsamer",
-
+  speedVerySlow: "40-mal so langsam",
+  speedSlow: "20-mal so langsam",
+  speedMedium: "10-mal so langsam",
+  speedFast: "5-mal so langsam",
+  speedVeryFast: "2-mal so langsam",
   speedRealTime: "Echtzeit",
-
-  components: "Komponenten auswählen",
-
-  servo: "Servomotor",
-
+  components: "Wähle Komponenten aus",
+  servo: "Servo",
   motor: "Motor",
-
-  scope: "Werte",
-
-  alertDebug: "Beende die Simulation, bevor du zurück programmieren kannst",
-
-  distance: "Entfernung",
-
+  scope: "Variablen",
+  alertDebug: "Die Simulation stoppt wenn du weiter programmierst.",
+  distance: "Abstand",
   scenario: "Szenario",
-
-  scenario_default: "Normal",
-
-  scenario_moving: "beweglicher Roboter",
-
-  scenario_wall: "beweglicher Roboter mit Mauer",
-
-  scenario_spyrograph: "Spirograph",
-
+  scenario_default: "Normales Board",
+  scenario_moving: "Bewegender Roboter",
+  scenario_wall: "Bewegender Roboter mit Wand",
+  scenario_socialrobot:"Sozialer Roboter",
   code: "Code",
-
+  pir: "PIR Sensor",
+  sonar: "Sonar",
+  led: "LED",
+  lcd: "LCD Schirm",
+  button: "Button",
+  decoration: "Dekoration",
 };
 
 MSG.dropzone = {
-  dictSelectFile: "Select a file.",
-  dictChooseFile: "Choose file",
-  dictDefaultMessage: "Drop files here to upload",
-  dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
-  dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
-  dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
-  dictInvalidFileType: "You can't upload files of this type.",
-  dictResponseError: "Server responded with {{statusCode}} code.",
-  dictCancelUpload: "Cancel upload",
-  dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
-  dictRemoveFile: "Remove file",
-  dictMaxFilesExceeded: "You can not upload any more files.",
-}
+  dictSelectFile: "Wähle eine Datei aus",
+  dictChooseFile: "Wähle eine Datei",
+  dictDefaultMessage: "Ziehe deine Files hier her um den Upload zu starten",
+  dictFallbackMessage: "Dateien hochladen mittels Drag'n'Drop wird von deinem Browser nicht unterstützt.",
+  dictFileTooBig: "Datei ist zu groß ({{filesize}}MiB). Maximale Dateigröße: {{maxFilesize}}MiB.",
+  dictFallbackText: "Bitte verwende das Ersatzformular um deine Dateien hochzuladen, wie in alten Zeiten.",
+  dictInvalidFileType: "Dateien dieses Typs können nicht hochgeladen werden.",
+  dictResponseError: "Server antwortet mit Code {{statusCode}}.",
+  dictCancelUpload: "Upload abbrechen",
+  dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
+  dictRemoveFile: "Datei entfernen",
+  dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
+};
 
 
 
