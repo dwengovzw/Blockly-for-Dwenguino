@@ -158,7 +158,7 @@ var MSG = {
 
   simulator: "Simulator",
 
-  setLedState: "Setz %1 %2",
+  setLedState: "Setz",
 
   setLedStateTooltip: "Schalte einen DwenguinoDCMotorBlock auf der Platine ein oder aus.",
 
@@ -167,22 +167,21 @@ var MSG = {
   dwenguinoOn: "AN",
 
   dwenguinoOff: 'AUS',
-
+  dwenguinoLedBlock: "LED",
   dwenguinoOnOffTooltip: "Wähle AN oder AUS",
-
-  dwenguinoServoBlock: "Servomotor %1 %2 %3 Nummer %4 Winkel %5",
-
+  dwenguinoSonarBlock: "Sonar",
+  channel: "Nummer",
+  angle: "Winkel",
+  speed: "Geschwindigheit", 
+  dwenguinoServoBlock: "Servomotor",
   dwenguinoServoBlockTooltip: "Servomotor 1 oder 2 auf einen Winkel zwischen 0 und 180 Grad einstellen",
-
-  dwenguinoDCMotorBlock: "DC Motor %1 %2 %3 Nummer %4 Geschwindigkeit %5",
-
+  dwenguinoDCMotorBlock: "DC Motor",
   dwenguinoDCMotorBlockTooltip: "Stell die Geschwindigkeit eines an die Platine angeschlossenen Motors ein. Die Geschwindigkeit ist ein Wert zwischen -255 (volle Geschwindigkeit rückwärts) und 255 (volle Geschwindigkeit vorwärts).",
 
-  dwenguinoAnalogWrite: "Schreibe an %1 der analoge Wert %2",
-
+  dwenguinoAnalogWriteBlock: "Schreibe an",
+  dwenguinoAnalogValue: "der analoge Wert",
   dwenguinoAnalogWriteTooltip: "Schreibe einen analogen Wert zwischen 0 und 255 an einem bestimmten Stift",
-
-  dwenguinoAnalogRead: "Lese den analogen Wert %1",
+  dwenguinoAnalogReadBlock: "Lese den analogen Wert",
 
   dwenguinoAnalogWriteTooltip: "Lese einen analogen Wert zwischen 0 und 255 vom angegebenen Stift",
 
@@ -247,15 +246,19 @@ var MSG = {
   cleanError: "Entfernen von vorherigem Code fehlgeschlagen.\nBitte überprüfe, ob .cpp files eventuell von einer anderen Applikation verwendet werden.\n Schließe diese Applikation.",
   compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
 
-  socialrobotServoBlock: "Servo %1 %2 %3 Pin %4 Winkel %5",
-  socialrobotWaveArmesBlock: "Winke mit beiden Armen %1 %2 Servo rechter Arm %3 %4 Servo linker Arm %5 %6",
-  socialRobotArmsDownBlock: "Arme nach unten %1 %2 %3 Servo rechter Arm %4 %5 Servo linker Arm %6 %7",
-  socialRobotArmsUpBlock: "Arme nach oben %1 %2 %3 Servo rechter Arm %4 %5 Servo linker Arm %6 %7",
-  socialRobotEyesLeftBlock: "Augen nach links %1 %2 %3 Servo linkes Auge %4 %5 Servo rechtes Auge %6 %7",
-  socialRobotEyesRightBlock: "Augen nach rechts %1 %2 %3 Servo linkes Auge %4 %5 Servo rechtes Auge %6 %7",
-  socialrobotReadPinBlock: "Lies Wert von Pin aus %1 %2",
-  socialRobotServoRightHand: "Servo rechtes Auge",
-  socialRobotServoLeftHand: "Servo linkes Auge",
+  socialrobotSetPinBlock: "Set",
+  socialrobotReadPinBlock: "Lies Wert von Pin aus",
+  socialrobotPirBlock: "Pir",
+  socialrobotServoBlock: "Servo",
+  socialrobotWaveArmesBlock: "Winke mit beiden Armen",
+  socialRobotArmsDownBlock: "Arme nach unten",
+  socialRobotArmsUpBlock: "Arme nach oben",
+  socialRobotEyesLeftBlock: "Augen nach links",
+  socialRobotEyesRightBlock: "Augen nach rechts",
+  socialRobotServoRightHand: "Servo rechte Hand",
+  socialRobotServoLeftHand: "Servo linke Hand",
+  socialRobotServoRightEye: "Servo rechtes Auge",
+  socialRobotServoLeftEye: "Servo linkes Auge",
   sonarSliderLabel: "Sonarabstand",
   pirButtonLabel: "PIR Button",
   };
