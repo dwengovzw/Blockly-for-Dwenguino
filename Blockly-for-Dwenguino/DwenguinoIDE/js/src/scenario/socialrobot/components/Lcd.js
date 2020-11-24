@@ -21,7 +21,7 @@ class SocialRobotLcd extends RobotComponent{
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_lcd" + this.getId() + "' class='sim_element sim_element_lcd draggable'><div><span class='grippy'></span>Lcd</div></div>");
+        $('#sim_container').append("<div id='sim_lcd" + this.getId() + "' class='sim_element sim_element_lcd draggable'><div><span class='grippy'></span>"+ MSG.simulator[this.getType()] + " " + this.getId() +"</div></div>");
         $('#sim_lcd' + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_lcd' + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_lcd' + this.getId()).append("<div id='sim_element_lcd_img'></div>");
