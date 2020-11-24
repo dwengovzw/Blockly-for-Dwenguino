@@ -174,7 +174,18 @@ MSG.simulator = {
   scenario_wall: "Moving robot with wall",
   code: "Code",
   pir: "PIR sensor",
+  pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
+  sonar: "Sonar",
   led: "LED",
+  ledDescription: "A light-emitting diode (LED) is a semiconductor device that <b>emits light</b> when an electric current passes through it. Different semiconductor materials produce <b>different colors of light</b>. ",
+  lcd: "LCD screen",
+  lcdDescription: "The LCD display on the Dwengo board is a 16x2 character display with backlight.",
+  button: "Button",
+  sound: "Sound sensor",
+  light: "Light sensor",
+  buzzer: "Buzzer",
+  buzzerDescription: "The buzzer on the Dwengo board can be used to <b>play a series of tones</b> or short sound fragments. The height of each tone is controlled by defining the <b>frequency</b> of the buzzer. Use a delay block to change the length of a tone.",
+  decoration: "Decoration"
 };
 
 MSG.socialrobot = {
