@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: FileIoController.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: FileIoController.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>export default class FileIOController {
+    constructor() {
+
+    }
+    /**
+     * Downloads a file with the name "filename" and contents "text" to the user his/her computer.
+     * @param {string} filename - the name under which the file should be saved 
+     * @param {string} text - the contents of the file 
+     */
+    download(filename, text) {
+        let element = document.createElement('a');
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+        element.setAttribute('download', filename);
+
+        element.style.display = 'none';
+        document.body.appendChild(element);
+
+        element.click();
+
+        document.body.removeChild(element);
+    }
+
+    /**
+     * Displays a dialog to upload a text file
+     * @returns a promise which returns the contents of the file
+     */
+    uploadXml() {
+        return new Promise((res, rej) => {
+            let xml = "";
+            if (window.File &amp;&amp; window.FileReader &amp;&amp; window.FileList &amp;&amp; window.Blob) {
+                // Great success! All the File APIs are supported.
+                console.log("yay, files supported");
+
+                // reset form
+                $('div').remove('#dropzoneModal');
+
+                $('#blocklyDiv').append('&lt;div id="dropzoneModal" class="modal fade" role="dialog">&lt;/div>');
+                $('#dropzoneModal').append('&lt;div id="modalDialog" class="modal-dialog">&lt;/div>');
+                $('#modalDialog').append('&lt;div class="modal-header">&lt;button type="button" class="close" data-dismiss="modal">&amp;times;&lt;/button>&lt;h4 class="modal-title">Upload&lt;/h4>&lt;/div>');
+                $('#modalDialog').append('&lt;div class="modal-body">' + MSG.dropzone['dictSelectFile'] + '&lt;input type="file" id="fileInput">&lt;div id="filedrag">' + MSG.dropzone['dictDefaultMessage'] + '&lt;/div>&lt;pre id="fileDisplayArea">&lt;pre>&lt;/div>');
+                $('#modalDialog').append('&lt;div class="modal-footer">&lt;button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok&lt;/button>&lt;/div>');
+
+                $("#dropzoneModal").modal('show');
+
+                var processFile = function (file) {
+                    var textType = /text.*/;
+
+                    if (file.type.match(textType)) {
+                        var reader = new FileReader();
+
+                        reader.onload = function (e) {
+                            fileDisplayArea.innerText = file.name;
+                            xml = reader.result;
+                        }
+
+                        reader.readAsText(file);
+                    } else {
+                        fileDisplayArea.innerText = "File not supported!"
+                    }
+                }
+
+                var fileInput = document.getElementById('fileInput');
+                var fileDisplayArea = document.getElementById('fileDisplayArea');
+
+                fileInput.addEventListener('change', function (e) {
+                    var file = fileInput.files[0];
+                    processFile(file);
+                });
+
+                // file drag hover
+                var FileDragHover = function (e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    e.target.className = (e.type == "dragover" ? "hover" : "");
+                };
+
+                // file selection
+                var FileSelectHandler = function (e) {
+                    // cancel event and hover styling
+                    FileDragHover(e);
+                    // fetch FileList object
+                    var files = e.target.files || e.dataTransfer.files;
+                    var file = files[0];
+                    processFile(file);
+                };
+
+                var filedrag = document.getElementById("filedrag");
+                filedrag.addEventListener("dragover", FileDragHover, false);
+                filedrag.addEventListener("dragleave", FileDragHover, false);
+                filedrag.addEventListener("drop", FileSelectHandler, false);
+                filedrag.style.display = "block";
+
+                $("#dropzoneModal").on('click',(e) => {
+                    let target  = $(e.target);
+                    console.log(target);
+                    if (target.is("button.close") || target.is("div#dropzoneModal.modal.fade")){
+                        console.log("closed");
+                        rej("Dialog closed without result");
+                    }
+                });
+
+                $("#submit_upload_modal_dialog_button").click(function () {
+                    res(xml);
+                });
+
+            } else {
+                rej("File IO libraries not supported");
+            }
+        });
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#download">download</a></li><li><a href="global.html#uploadXml">uploadXml</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Tue Nov 24 2020 13:34:27 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/RobotComponentsFactory.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/RobotComponentsFactory.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
+import { EVENT_NAMES } from "../../logging/EventNames.js"
+
+import { SocialRobotServo, CostumesEnum } from "./components/Servo.js"
+import { SocialRobotLed } from "./components/Led.js"
+import { SocialRobotLcd } from "./components/Lcd.js"
+import { SocialRobotSonar } from "./components/Sonar.js"
+import { SocialRobotPir } from "./components/Pir.js"
+import { SocialRobotSoundSensor } from "./components/SoundSensor.js"
+import { SocialRobotLightSensor } from "./components/LightSensor.js"
+
+export { TypesEnum as TypesEnum, RobotComponentsFactory }
+
+/**
+ * The supported robot component types
+ * @readonly
+ * @enum {string}
+ */
+const TypesEnum = {
+  SERVO: 'servo',
+  LED: 'led',
+  PIR: 'pir',
+  SONAR: 'sonar',
+  LCD: 'lcd',
+  SOUND: 'sound',
+  LIGHT: 'light',
+};
+Object.freeze(TypesEnum);
+
+/**
+ * This factory produces robot components of certain types.
+ * @param {SocialRobot} robot 
+ */
+class RobotComponentsFactory {
+  logger = null;
+  inputState = {
+    pir: 0,
+    buttons: [1, 1, 1, 1, 1],
+    sonarDistance: -1
+  }
+
+  /**
+   * 
+   * @constructs
+   * @param {DwenguinoScenarioUtils} scenarioUtils 
+   * @param {DwenguinoEventLogger} logger 
+   * @param {EventBus} eventBus 
+   */
+  constructor(scenarioUtils, logger, eventBus) {
+    this.logger = logger;
+    this._eventBus = eventBus;
+    this._robot = [];
+    this._numberOfComponentsOfType = {};
+    this.scenarioUtils = scenarioUtils;
+    this.renderer = new SimulationCanvasRenderer();
+
+    for (const [type, t] of Object.entries(TypesEnum)) {
+      this._numberOfComponentsOfType[t] = 0;
+    }
+  }
+
+  /**
+   * 
+   * @returns {RobotComponent[]} The array of RobotComponent objects in social robot scenario
+   */
+  getRobot(){
+    return this._robot;
+  }
+
+  /**
+   * Resets all social robot components to their initial state.
+   */
+  resetSocialRobot(){
+    for(var i = 0; i &lt; this._robot.length; i++){
+      this._robot[i].reset();
+    }
+  }
+
+  /**
+   * Update the state and other properties of the robot components when an update of
+   * the Dwenguino Boardstate is received.
+   * @param {DwenguinoBoardSimulation} dwenguinoState 
+   */
+  updateScenarioState(dwenguinoState){
+    for(var i = 0; i &lt; this._robot.length; i++){
+      let type = this._robot[i].getType();
+      let pin = 0;
+      switch (type) {
+        case TypesEnum.SERVO:;
+          pin = this._robot[i].getPin();
+          if(pin === 36){
+            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(1)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getServoAngle(1));
+            }
+          } else if(pin === 37){
+            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(2)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getServoAngle(2));
+            }
+          } else {
+            if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
+              this._robot[i].setPrevAngle(this._robot[i].getAngle());
+              this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
+            }
+          }
+          break;
+        case TypesEnum.LED:
+          pin = this._robot[i].getPin();
+          this._robot[i].setState(dwenguinoState.getIoPinState(pin));  
+          break;
+        case TypesEnum.PIR:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.SONAR:
+          let echoPin = this._robot[i].getEchoPin();
+          let triggerPin = this._robot[i].getTriggerPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(echoPin, this._robot[i].getState());
+            dwenguinoState.setIoPinState(triggerPin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.LCD:
+          this._robot[i].setState(dwenguinoState.getLcdContent(0), dwenguinoState.getLcdContent(1));
+          break;
+        case TypesEnum.SOUND:
+          pin = this._robot[i].getPin();
+          console.log(pin);
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+            console.log(this._robot[i].getState());
+          }
+          break;
+        case TypesEnum.LIGHT:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+      }
+    }
+  }
+
+
+  /**
+   * 
+   * @param {TypesEnum} type 
+   * @param {string} id 
+   */
+  getRobotComponentWithTypeAndId(type, id){
+    for(let i = 0; i &lt; this._robot.length; i++){
+      if(this._robot[i].getType() == type &amp;&amp; this._robot[i].getId() == id){
+        return this._robot[i];
+      }
+    }
+  }
+
+  /**
+   * 
+   * @param {TypesEnum} type 
+   * @param {string} id 
+   */
+  removeRobotComponentWithTypeAndId(type, id){
+    let component = this.getRobotComponentWithTypeAndId(type, id);
+
+    component.removeHtml();
+    for(let i = 0; i &lt; this._robot.length; i++){
+      if(this._robot[i].getType() == type &amp;&amp; this._robot[i].getId() == id){
+        this._robot.splice(i, 1);
+        this.decrementNumberOf(type);
+      }
+    }
+
+  }
+  
+  /**
+   * 
+   * @param {TypesEnum} type 
+   */
+  addRobotComponent(type) {
+    switch (type) {
+      case TypesEnum.SERVO:
+        this.addServo();
+        break;
+      case TypesEnum.LED:
+        this.addLed();
+        break;
+      case TypesEnum.PIR:
+        this.addPir();
+        break;
+      case TypesEnum.SONAR:
+        this.addSonar();
+        break;
+      case TypesEnum.LCD:
+        this.addLcd();
+        break;
+      case TypesEnum.SOUND:
+        this.addSoundSensor();
+        break;
+      case TypesEnum.LIGHT:
+        this.addLightSensor();
+        break;
+    }
+  }
+
+  /**
+   * 
+   * @param {TypesEnum} type 
+   */
+  removeRobotComponent(type) {
+    switch (type) {
+      case TypesEnum.SERVO:
+        this.removeServo();
+        break;
+      case TypesEnum.LED:
+        this.removeLed();
+        break;
+      case TypesEnum.PIR:
+        this.removePir();
+        break;
+      case TypesEnum.SONAR:
+        this.removeSonar();
+        break;
+      case TypesEnum.LCD:
+        this.removeLcd();
+        break;
+      case TypesEnum.SOUND:
+        this.removeSoundSensor();
+        break;
+      case TypesEnum.LIGHT:
+        this.removeLightSensor();
+        break;
+    }
+  }
+
+  /**
+   * 
+   * @param {Object} data 
+   */
+  addRobotComponentFromXml(data){
+    let type = data.getAttribute('Type');
+
+    switch (type) {
+      case TypesEnum.SERVO:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var angle = parseInt(data.getAttribute('Angle'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var costume = data.getAttribute('Costume');
+        var htmlClasses = data.getAttribute('Classes');
+        this.addServo(pin, costume, angle, true, 0, 0, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LED:
+        var radius = parseFloat(data.getAttribute('Radius'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var onColor = data.getAttribute('OnColor');
+        var offColor = data.getAttribute('OffColor');
+        var borderColor = data.getAttribute('BorderColor');
+        var pin = parseInt(data.getAttribute('Pin'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLed(pin, 0, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+        break;
+      case TypesEnum.PIR:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addPir(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.SONAR:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var echoPin = parseInt(data.getAttribute('EchoPin'));
+        var triggerPin = parseInt(data.getAttribute('TriggerPin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addSonar(echoPin, triggerPin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LCD:
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLcd(true, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.SOUND:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addSoundSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LIGHT:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLightSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+    }
+  }
+
+  /**
+    * Add a new servo to the simulation container.
+    * @param {int} pin 
+    * @param {CostumesEnum} costume 
+    * @param {int} angle 
+    * @param {boolean} visible 
+    * @param {int} x 
+    * @param {int} y 
+    * @param {int} width 
+    * @param {int} height 
+    * @param {int} offsetLeft 
+    * @param {int} offsetTop 
+    * @param {string} htmlClasses 
+    */
+  addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, x=0, y=0, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
+
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
+    this.incrementNumberOf(TypesEnum.SERVO);
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+
+    if(id == 1){
+      pin = 36;
+    } else if (id == 2){
+      pin = 37;
+    } 
+
+    let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(servo);
+
+    this.renderer.initializeCanvas(this._robot, servo); 
+  }
+
+  /**
+   * Remove the most recent created servo from the simulation container.
+   */
+  removeServo(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SERVO, id);
+  }
+
+
+  /**
+   * 
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} radius 
+   * @param {int} x 
+   * @param {int} y 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} onColor 
+   * @param {string} offColor 
+   * @param {string} borderColor 
+   * @param {string} htmlClasses 
+   */
+  addLed(pin=0, state=0, visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, onColor='yellow', offColor='gray', borderColor='black', htmlClasses='sim_canvas led_canvas') {
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
+    this.incrementNumberOf(TypesEnum.LED);
+    let id = this._numberOfComponentsOfType[TypesEnum.LED];
+
+    let led = new SocialRobotLed(this._eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+    this._robot.push(led);
+
+    this.renderer.initializeCanvas(this._robot, led); 
+  }
+
+  /**
+   * Remove the most recent created LED from the simulation container.
+   */
+  removeLed(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LED));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.LED];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LED, id);
+  }
+
+  /**
+   * Add a new PIR sensor to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addPir(pin=0, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
+    this.incrementNumberOf(TypesEnum.PIR);
+    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
+
+    let pir = new SocialRobotPir(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(pir);
+
+    this.renderer.initializeCanvas(this._robot, pir); 
+  }
+
+  /**
+   * Remove the most recent created PIR sensor from the simulation container.
+   */
+  removePir(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.PIR));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.PIR, id);
+  }
+
+  /**
+   * Add a new SONAR sensor to the simulation container.
+   * 
+   * @param {int} echoPin 
+   * @param {int} triggerPin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addSonar(echoPin=0, triggerPin=0, state=0, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
+
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
+    this.incrementNumberOf(TypesEnum.SONAR);
+    let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
+
+    let sonar = new SocialRobotSonar(this._eventBus, id, echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(sonar);
+
+    this.renderer.initializeCanvas(this._robot, sonar); // TODO
+  }
+  
+  /**
+   * Remove the most recent created SONAR sensor from the simulation container.
+   */
+  removeSonar(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SONAR));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SONAR, id);
+  }
+
+  /**
+   * Add a new decoration component to the simulation container.
+   * @param {boolean} visible 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addLcd(visible=true, offsetLeft=5, offsetTop=5, htmlClasses=''){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LCD));
+    this.incrementNumberOf(TypesEnum.LCD);
+    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
+
+    let lcd = new SocialRobotLcd(this._eventBus, id, visible, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(lcd);
+  }
+  
+
+  /**
+  * Remove the most recent created decoration element from the simulation container.
+  */
+  removeLcd(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.Lcd));
+    
+    let id = this._numberOfComponentsOfType[TypesEnum.LCD];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LCD, id);
+  }
+
+
+  /**
+   * Add a new Sound sensor to the simulation container.
+    * @param {int} pin 
+    * @param {int} state 
+    * @param {boolean} visible 
+    * @param {int} width 
+    * @param {int} height 
+    * @param {int} offsetLeft 
+    * @param {int} offsetTop 
+    * @param {string} htmlClasses 
+    */
+  addSoundSensor(pin=0, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
+    this.incrementNumberOf(TypesEnum.SOUND);
+    let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
+
+    let soundSensor = new SocialRobotSoundSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(soundSensor);
+
+    this.renderer.initializeCanvas(this._robot, soundSensor); 
+  }
+
+  /**
+   * Remove the most recent created Sound sensor from the simulation container.
+   */
+  removeSoundSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SOUND));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.SOUND, id);
+  }
+
+    /**
+   * Add a new Light sensor to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addLightSensor(pin=0, state=0, visible=true, width=100, height=45, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LIGHT));
+    this.incrementNumberOf(TypesEnum.LIGHT);
+    let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
+
+    let lightSensor = new SocialRobotLightSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(lightSensor);
+
+    this.renderer.initializeCanvas(this._robot, lightSensor); 
+  }
+
+  /**
+   * Remove the most recent created Light sensor from the simulation container.
+   */
+  removeLightSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LIGHT));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LIGHT, id);
+  }
+
+  /**
+   * Increment the number of a certain robot component in the scenario.
+   * @param {TypesEnum} type 
+   */
+  incrementNumberOf(type) {
+    this._numberOfComponentsOfType[type] += 1;
+  }
+
+  /**
+   * Decrement the number of a certain robot component in the scenario.
+   * @param {TypesEnum} type 
+   */
+  decrementNumberOf(type) {
+    this._numberOfComponentsOfType[type] -= 1;
+  }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="module.exports.html">exports</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addTutorial">addTutorial</a></li><li><a href="global.html#addTutorialDialogEventHandlers">addTutorialDialogEventHandlers</a></li><li><a href="global.html#calculateWireLengths">calculateWireLengths</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#endTutorial">endTutorial</a></li><li><a href="global.html#generateSimulatedData">generateSimulatedData</a></li><li><a href="global.html#getPointsOnLineAtSetDistanceFromOtherPointOnLine">getPointsOnLineAtSetDistanceFromOtherPointOnLine</a></li><li><a href="global.html#getPointsPerpendicular">getPointsPerpendicular</a></li><li><a href="global.html#hideTutorialDialog">hideTutorialDialog</a></li><li><a href="global.html#initDebuggerState">initDebuggerState</a></li><li><a href="global.html#initTutorialMenu">initTutorialMenu</a></li><li><a href="global.html#loadTutorialDialog">loadTutorialDialog</a></li><li><a href="global.html#loadTutorialsMenu">loadTutorialsMenu</a></li><li><a href="global.html#pir">pir</a></li><li><a href="global.html#resetDwenguino">resetDwenguino</a></li><li><a href="global.html#servoWithPin">servoWithPin</a></li><li><a href="global.html#setupCanvas">setupCanvas</a></li><li><a href="global.html#showTutorialDialog">showTutorialDialog</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#stepperMotorStep">stepperMotorStep</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li><li><a href="global.html#uploadXml">uploadXml</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 14:23:28 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

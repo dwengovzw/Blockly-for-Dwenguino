@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationScenarioSocialRobot.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/DwenguinoSimulationScenarioSocialRobot.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulationRobotComponentsMenu.js"
+import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
+import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
+import { TypesEnum, RobotComponentsFactory } from "./RobotComponentsFactory.js"
+import DwenguinoSimulationDraggable from "./DwenguinoSimulationDraggable.js"
+import {DwenguinoScenarioUtils} from "./DwenguinoScenarioUtils.js"
+import { EventsEnum } from "./ScenarioEvent.js"
+import {EventBus} from "./EventBus.js"
+import { CostumesEnum } from "./components/Servo.js"
+
+export { DwenguinoSimulationScenarioSocialRobot as DwenguinoSimulationScenarioSocialRobot }
+
+/**
+ * This class is the abstraction of the social robot simulator scenario.
+ * It handles the layout and behaviour of a certain simulator scenario.
+ * It provides a step function which uses and updates the state of the dwenguino board.
+ * @extends DwenguinoSimulationScenario
+ */
+class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
+  simulationComponentsMenu = null;
+  simulationRobotComponents = null;
+
+  /**
+   * 
+   * @param {DwenguinoEventLogger} logger 
+   */
+  constructor(logger) {
+    super(logger);
+
+    // Event listener for saving the robot scenario to local storage
+    this._eventBus = new EventBus();
+    this._eventBus.registerEvent(EventsEnum.SAVE);
+    this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.saveRobot()});
+
+    this.simulationRobotComponents = new DwenguinoSimulationDraggable(this, this._eventBus);
+    this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
+  }
+
+
+  /**
+   * Initializes the simulator robot. This function also creates the SimulationCanvasRenderer, 
+   * DenguinoScenarioUtils and RobotComponentsFactory.
+   * This resets the simulation state.
+   * 
+   *
+   * @param {DwenguinoBoardSimulation} boardState - Object that represents the state of the Dwenguino microcontroller.
+   *
+   */
+  initSimulationState(boardState) {
+    // init superclass
+    super.initSimulationState(boardState);
+
+    this.renderer = new SimulationCanvasRenderer();
+
+    this.scenarioUtils = new DwenguinoScenarioUtils(this, this._eventBus);
+
+    this.robotComponentsFactory = new RobotComponentsFactory(this.scenarioUtils, this.logger, this._eventBus);
+
+    this._eventBus.registerEvent(EventsEnum.CLEARCANVAS);
+    this._eventBus.addEventListener(EventsEnum.CLEARCANVAS, (canvasId)=>{ this.renderer.clearCanvas(canvasId)});
+
+    this._eventBus.registerEvent(EventsEnum.INITIALIZECANVAS);
+    this._eventBus.addEventListener(EventsEnum.INITIALIZECANVAS, (component)=>{ this.renderer.initializeCanvas(this.robotComponentsFactory.getRobot(), component)});
+
+
+  }
+
+  /**
+   * Initializes the simulator social robot display.
+   * @param {string} containerIdSelector - The jquery selector of the conainer to put the robot display.
+   *
+   */
+  initSimulationDisplay(containerIdSelector) {
+    // init superclass
+    super.initSimulationDisplay();
+
+    // Clear the container and create top and bottom panes
+
+    var container = $(`#${containerIdSelector}`);
+    container.empty();
+    let top_pane = $("&lt;div>").attr("id", "db_simulator_top_pane");
+    let bottom_pane = $("&lt;div>").attr("id", "db_simulator_bottom_pane");
+    container.append(top_pane).append(bottom_pane);
+
+    // Setup the components menu
+    this.simulationComponentsMenu.setupEnvironment(this);
+
+    this.initSimulation(containerIdSelector);
+    
+
+    //this.renderer.render(this.robotComponentFactory.getRobot());
+    
+    var self = this;
+    $("#sim_stop").click(function () {
+      let timer = setTimeout(() => {
+        self.resetSocialRobot();
+        self.renderer.render(self.robotComponentsFactory.getRobot());
+      }, 500);
+    });
+
+
+    this.setBackground();
+
+    this.initScenarioOptions();
+
+    this.setSensorOptions();
+
+    // Load robot components from local storage if they are present
+    this.loadRobot();
+
+  }
+
+  /**
+   * 
+   */
+  initScenarioOptions() {
+    var self = this;
+
+    var scenarioOptions = $("&lt;div>").attr("id", "scenario_options");
+    $('#sim_container').append(scenarioOptions);
+    scenarioOptions.append("&lt;div id='load_scenario' class='glyphicon glyphicon-cloud-upload' alt='Load'>&lt;/div>");
+    scenarioOptions.append("&lt;div id='save_scenario' class='glyphicon glyphicon-cloud-download' alt='Save'>&lt;/div>");
+    scenarioOptions.append("&lt;div id='switch_background' class='glyphicon glyphicon-refresh'>&lt;/div>")
+
+    $("#load_scenario").click(function () {
+      self.scenarioUtils.loadScenario();
+    });
+
+    $("#save_scenario").click(function () {
+      var data = self.loadToXml();
+      self.scenarioUtils.saveScenario(data);
+    });
+
+    let switchBackground = document.getElementById('switch_background');
+    switchBackground.addEventListener('click', () => {
+      this.switchBackground();
+    });
+  }
+
+  /**
+   * 
+   * @param {string} containerIdSelector 
+   */
+  initSimulation(containerIdSelector) {
+
+    console.log("init simulation display");
+
+    let container = $(`#${containerIdSelector}`);
+
+    // Make the bottom pane larger
+    $('#db_simulator_top_pane').css('height', '25%');
+    $('#db_simulator_bottom_pane').css('height', '75%');
+
+    // Load the simulation container
+    var simulationContainer = $("&lt;div>").attr("id", "sim_container").attr("style", "margin: auto");
+
+    // Add resize listerner to the conainer and update width and height accordingly
+    var self = this;
+    new ResizeSensor(simulationContainer, function () {
+      self.containerWidth = simulationContainer.width();
+      self.containerHeight = simulationContainer.height();
+    });
+
+    container.append(simulationContainer);
+  }
+
+
+  /** 
+   * Updates the simulation state and display
+   * This function updates the simulation state and display using the supplied board state.
+   *
+   * @param {BoardState} boardState - The state of the Dwenguino board.
+   *
+   */
+  updateScenario(dwenguinoState) {
+    super.updateScenario(dwenguinoState);
+    this.updateScenarioState(dwenguinoState);
+    this.updateScenarioDisplay(dwenguinoState);
+  };
+
+  /** 
+   * Updates the simulation state
+   * This function updates the simulation state with the help of the robotComponentsFactory,
+   * using the supplied board state.
+   *
+   * @param {BoardState} boardState - The state of the Dwenguino board. 
+   *
+   */
+  updateScenarioState(dwenguinoState) {
+    super.updateScenarioState(dwenguinoState);
+    this.robotComponentsFactory.updateScenarioState(dwenguinoState);
+  };
+
+  /** 
+   * Updates the simulation display
+   * This function updates the simulation display using the supplied board state. It requires
+   * the SimulationCanvasRenderer to render the updated display.
+   *
+   * @param {BoardState} boardState - The state of the Dwenguino board.
+   *
+   */
+  updateScenarioDisplay(dwenguinoState) {
+    super.updateScenarioDisplay(dwenguinoState);
+    this.renderer.render(this.robotComponentsFactory.getRobot());
+  };
+
+  /**
+   * 
+   */
+  setSensorOptions() {
+    if (!document.getElementById('sensor_options')) {
+      var sensorOptions = $("&lt;div>").attr("id", "sensor_options");
+      $('#sim_container').append(sensorOptions);
+    }
+  }
+
+  /**
+   * 
+   */
+  setBackground() {
+    console.log('set background');
+    $('#sim_container').append("&lt;div id='sim_background' class='sim_element row'>&lt;/div>");
+    $('#sim_background').append("&lt;div id='sim_background_img' class='background1'>&lt;/div>");
+    this._background = 1;
+    var sensorOptionswidth = $('#sensor_options').width();
+    var parentWidth = $('#sim_background').width() - sensorOptionswidth;
+    var width = $('#sim_background_img').width();
+    var offSet = (parentWidth - width) / 2;
+    $('#sim_background_img').css('top', 0 + 'px');
+    $('#sim_background_img').css('margin-left', offSet + 'px');
+
+  };
+
+  /**
+   * 
+   */
+  switchBackground() {
+    if (this._background &lt; 3){
+      this._background += 1;
+    } else {
+      this._background = 1;
+    }
+
+    document.getElementById('sim_background_img').className = "";
+    document.getElementById('sim_background_img').className = 'background' + this._background;
+    this._eventBus.dispatchEvent(EventsEnum.SAVE);
+  }
+
+  /**
+   * 
+   */
+  backgroundToXml() {
+    let data = '';
+        
+    data = data.concat("&lt;Item ");
+    data = data.concat(" Type='", "background", "'");
+    data = data.concat(" Class='", document.getElementById('sim_background_img').className, "'");
+    data = data.concat(" Id='", this._background, "'");
+    data = data.concat(">&lt;/Item>");
+    return data;
+  }
+
+  /**
+   * Resets the robot components of the simulation container to their initial state. This function doesn't
+   * remove the components from the container or move them around, but merely puts them in their initial off state.
+   * @param {string} containerIdSelector 
+   */
+  resetSocialRobot(containerIdSelector) {
+    this.robotComponentsFactory.resetSocialRobot();
+  };
+
+  /**
+   * Add a robot component of the specified type to the simulation container.
+   * @param {TypesEnum} type 
+   */
+  addRobotComponent(type) {
+    this.robotComponentsFactory.addRobotComponent(type);
+  };
+
+  /**
+   * Remove the lastly created robot component of the specified type from the simulation container.
+   *
+   * @param {TypesEnum} type 
+   */
+  removeRobotComponent(type) {
+    this.robotComponentsFactory.removeRobotComponent(type);
+    this.renderer.render(this.robotComponentsFactory.getRobot());
+  };
+
+  /**
+   * Changes the color of led canvas i to the given color.
+   *
+   * @param {int} i 
+   * @param {string} color 
+   */
+  setLedColor(i, color) {
+    let led = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.LED, i);
+    if(led !== undefined){
+      led.setOnColor(color);
+    }
+  }
+
+  /*********************
+   *  XML HANDLING     *
+   ********************/
+
+  /**
+   * Writes the current scenario state to an Xml document and return it.
+   */
+  loadToXml() {
+    
+    if (window.localStorage) {
+      var localStorage = window.localStorage;
+      var canvasId = '';
+      if (localStorage.getItem('socialRobotScenario')) {
+        return this.robotToXml();
+      }
+    }
+    
+  }
+
+  /**
+   * Convert the current robot config to xml format
+   */
+  robotToXml(){
+    let data = '&lt;xml xmlns="http://www.w3.org/1999/xhtml">';
+    data = data.concat(this.backgroundToXml());
+
+    let robot = this.robotComponentsFactory.getRobot();
+
+    for(var i = 0; i &lt; robot.length; i++){
+      data = data.concat(robot[i].toXml());
+    }
+    data = data.concat('&lt;/xml>');
+    return data;
+  }
+
+  /**
+   * Converts an robot xml string into a robot on the screen
+   * @param {string} xml - the xml string to be converted
+   */
+  xmlToRobot(xml){
+    var data = this.scenarioUtils.textToDom(xml);
+
+    var childCount = data.childNodes.length;
+    for (var i = 0; i &lt; childCount; i++) {
+      var xmlChild = data.childNodes[i];
+      let type = xmlChild.getAttribute('Type');
+      if(type !== 'background'){
+        this.robotComponentsFactory.addRobotComponentFromXml(xmlChild);
+        this.simulationComponentsMenu.changeValue(type, 1);
+      } else {
+        this._background = parseInt(xmlChild.getAttribute('Id'));
+        document.getElementById('sim_background_img').className = xmlChild.getAttribute('Class');
+      }
+    }
+  }
+
+    /**********************
+   *  LOCAL STORAGE     *
+   **********************/
+
+  /**
+   * Converts the robot to xml and saves it into the local storage of the browser
+   * @param {boolean} permanent 
+   * @param {string} uniqeIdentifier 
+   */
+  saveRobot(permanent = false, uniqeIdentifier = ""){
+    let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c saving robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      let robotXml = this.robotToXml();
+      localStorage.setItem(storageKey, robotXml)
+    }
+  }
+
+  /**
+   * Check the local storage if an item exists and load the xml
+   * @param {boolean} permanent 
+   * @param {string} uniqeIdentifier 
+   */
+  loadRobot(permanent = false, uniqeIdentifier = ""){
+    let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c loading robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      let robotXml = localStorage.getItem(storageKey);
+      if (robotXml){
+        this.xmlToRobot(robotXml);
+      }
+    }
+  }
+
+  /**
+   * Removes the localstorage entry for the robot
+   * @param {string} uniqeIdentifier 
+   */
+  clearRobot(uniqeIdentifier = ""){
+    let storageKey = "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c clearing robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      localStorage.removeItem(storageKey);
+    }
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="module.exports.html">exports</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addTutorial">addTutorial</a></li><li><a href="global.html#addTutorialDialogEventHandlers">addTutorialDialogEventHandlers</a></li><li><a href="global.html#calculateWireLengths">calculateWireLengths</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#endTutorial">endTutorial</a></li><li><a href="global.html#generateSimulatedData">generateSimulatedData</a></li><li><a href="global.html#getPointsOnLineAtSetDistanceFromOtherPointOnLine">getPointsOnLineAtSetDistanceFromOtherPointOnLine</a></li><li><a href="global.html#getPointsPerpendicular">getPointsPerpendicular</a></li><li><a href="global.html#hideTutorialDialog">hideTutorialDialog</a></li><li><a href="global.html#initDebuggerState">initDebuggerState</a></li><li><a href="global.html#initTutorialMenu">initTutorialMenu</a></li><li><a href="global.html#loadTutorialDialog">loadTutorialDialog</a></li><li><a href="global.html#loadTutorialsMenu">loadTutorialsMenu</a></li><li><a href="global.html#pir">pir</a></li><li><a href="global.html#resetDwenguino">resetDwenguino</a></li><li><a href="global.html#servoWithPin">servoWithPin</a></li><li><a href="global.html#setupCanvas">setupCanvas</a></li><li><a href="global.html#showTutorialDialog">showTutorialDialog</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#stepperMotorStep">stepperMotorStep</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li><li><a href="global.html#uploadXml">uploadXml</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 14:23:28 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

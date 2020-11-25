@@ -11,7 +11,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node .",
-    "build": "webpack --debug --progress --config webpack.config.cjs"
+    "build": "webpack --debug --progress --config webpack.config.cjs",
+    "build-dev": "webpack --debug --progress --config webpack.config.dev.cjs"
   },
   "keywords": [
     "logging",
@@ -53,6 +54,7 @@
     "babel-loader": "^8.1.0",
     "babel-preset-env": "^1.7.0",
     "electron": "^9.0.2",
+    "jsdoc": "~3.6.6",
     "open-cli": "^6.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

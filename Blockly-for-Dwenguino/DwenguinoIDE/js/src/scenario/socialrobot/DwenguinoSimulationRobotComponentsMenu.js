@@ -2,10 +2,25 @@
 import { TypesEnum} from "./RobotComponentsFactory.js"
 import { EventsEnum } from "./ScenarioEvent.js"
 import { EventBus} from "./EventBus.js"
+import { DwenguinoSimulationScenarioSocialRobot } from "./DwenguinoSimulationScenarioSocialRobot.js";
 
+/**
+ * This class is responsible for building and maintaining the social robot components menu in 
+ * the simulation pane. It allows the user to add social robot components to the scenario. Each 
+ * social robot component can only be added a certain number of times. 
+ * 
+ * @author zimcke@gmail.com
+ */
 export default class DwenguinoSimulationRobotComponentsMenu {
 
   socialRobotScenario = {};
+
+  /**
+   * Constructs the social robot components menu object and defines which robot components can be added.
+   * Additionally it sets the maximum amount a certain component can be added to the simulation.
+   * @constructs
+   * @param {EventBus} eventBus - The eventBus that can be used to monitor certain events in the simulator.
+   */
   constructor(eventBus){
     this._eventBus = eventBus;
     this._components = [
@@ -37,10 +52,11 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     ]
   }
 
-  /** 
-  * Initializes the robot components menu environment when loading 
-  * the social robot scenario.
-  */
+  /**
+   * Initializes the robot components menu environment by constructing and displaying the menu. This function
+   * has to be called when the social robot scenario is created.
+   * @param {DwenguinoSimulationScenarioSocialRobot} socialRobotScenario - The social robot scenario to which the social robot components are added.
+   */
   setupEnvironment(socialRobotScenario) {
     this.socialRobotScenario = socialRobotScenario;
     console.log('setupEnvironment');
@@ -55,8 +71,7 @@ export default class DwenguinoSimulationRobotComponentsMenu {
   }
 
   /**
-   * Initialize the robot components menu 
-   * when the scenario is loaded. 
+   * Load the robot components html menu into the simulator top pane.
    */
   initMenu() {
     $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
@@ -108,7 +123,8 @@ export default class DwenguinoSimulationRobotComponentsMenu {
 
   /** 
    * Add buttons to the robot components menu to add or remove robot components 
-   * in the scenario.
+   * in the scenario. Each button has an event handler to handle clicks from the client to add or remove robot component
+   * robot components.
    */
   initButtons() {
   
@@ -208,6 +224,9 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     });
   }
 
+  /**
+   * Reset the buttons to add or remove robot components to zero.
+   */
   resetButtons() {
     for (const [type, t] of Object.entries(TypesEnum)) {
       var input = $("input[name='"+ t +"']");
@@ -215,6 +234,11 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     }
   }
 
+  /**
+   * 
+   * @param {TypesEnum} type 
+   * @param {int} number 
+   */
   changeValue(type, number) {
     var input = $("input[name='"+ type +"']");
     var currentVal = parseInt(input.val())
@@ -230,6 +254,11 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     }
   }
 
+  /**
+   * 
+   * @param {TypesEnum} type 
+   * @returns {string} The html code to be inserted in the simulator top pane
+   */
   generateButtonTemplate(type){
     let template = '';
     this._components.forEach(function (component) {
@@ -250,9 +279,10 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     return template
   }
 
-  /*
+  /** 
    * This function adds the specified robot component to the 
    * social robot scenario.
+   * @param {string} id 
    */
   addRobotComponent(id) {
     switch (id) {
@@ -288,9 +318,10 @@ export default class DwenguinoSimulationRobotComponentsMenu {
     this._eventBus.dispatchEvent(EventsEnum.SAVE);
   }
 
-  /*
+  /**
    * This functions removes the last created specified robot component
    * from the social robot scenario.
+   * @param {string} id 
    */
   removeRobotComponent(id) {
     switch (id) {

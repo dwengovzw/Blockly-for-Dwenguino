@@ -1,6 +1,9 @@
 import LoggingMenu from './LoggingMenu.js'
 import ServerConfig from '../ServerConfig.js'
 
+/**
+ * 
+ */
 export default class DwenguinoEventLogger {
     sessionId = null;
     tutorialId = null;
@@ -15,6 +18,10 @@ export default class DwenguinoEventLogger {
     workshopId = "-1";
 
     loggingModal = null;
+
+    /**
+     * @constructs
+     */
     constructor(){
         this.loggingModal = new LoggingMenu(this);
     }

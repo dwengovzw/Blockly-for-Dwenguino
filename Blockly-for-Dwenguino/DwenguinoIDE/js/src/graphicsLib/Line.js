@@ -20,7 +20,7 @@ export default class Line{
      * @brief get a point on "distanceFromLine" distance from the line measuring perpendicular from "pointOnLine"
      * @param {Point} pointOnLine A point on the line
      * @param {Number} distanceFromLine The distance perpendicular from pointOnLine
-     * @returns {[Point, Point]} the point perpendicular above the line and below the line
+     * @returns {Array} Array of two points perpendicular above the line and below the line
      */
     getPointsPerpendicular(pointOnLine, distanceFromLine){
         let perpendicularSlope = 1/this.getSlope()*-1;
@@ -40,7 +40,7 @@ export default class Line{
      * @brief returns the two points on the line at a set distance from a point on the line
      * @param {Point} pointOnLine 
      * @param {Number} distanceFromPoint 
-     * @returns {[Point, Point]} 
+     * @returns {Array} Array of two points 
      */
     getPointsOnLineAtSetDistanceFromOtherPointOnLine(pointOnLine, distanceFromPoint){
         return this.getPointAtDistanceFromPointWithSlope(pointOnLine, distanceFromPoint, this.getSlope());

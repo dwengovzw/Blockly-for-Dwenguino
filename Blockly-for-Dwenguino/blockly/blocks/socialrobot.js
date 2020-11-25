@@ -15,8 +15,8 @@
  */
 
 /**
- * @fileoverview Dwenguino blocks for Blockly.
- * @author Tom.Neutens@UGent.be
+ * @fileoverview Dwenguino social robot blocks for Blockly.
+ * @author zimcke.vandestaey@ugent.be
  */
 'use strict';
 

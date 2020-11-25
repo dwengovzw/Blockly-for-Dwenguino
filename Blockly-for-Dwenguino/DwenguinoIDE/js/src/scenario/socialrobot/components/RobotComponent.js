@@ -1,5 +1,14 @@
 export { RobotComponent }
 
+/**
+ * RobotComponent is an abstract class representing a robot component in the simulation pane 
+ * of the social robot scenario. 
+ * 
+ * All inheriting classes must provide an implementation for the following methods: 
+ * toString, toggleVisiblity, reset, insertHtml, removeHtml and toXml.
+ * 
+ * @abstract
+ */
 class RobotComponent{
     constructor(eventBus, htmlClasses){
       this._eventBus = eventBus;
@@ -30,10 +39,17 @@ class RobotComponent{
         }
     }
 
+    /**
+     * Add a string containting a concatination of css classes to the robot component.
+     * @param {string} htmlClasses 
+     */
     setHtmlClasses(htmlClasses){
       this._htmlClasses = htmlClasses;
     }
     
+    /**
+     * @returns {string} a concatination of css classes of the robot component devided by spaces.
+     */
     getHtmlClasses(){
       return this._htmlClasses;
     }

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/simulation/BoardState.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/simulation/BoardState.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import ButtonMap from "./ButtonMap.js";
+
+export { BoardState }
+/**
+ * This class is used as a datastructure to save the state of the simulated Dwenguino board.
+ */
+class BoardState {
+    pins = new Array(33);
+    pinMapping = {};
+    lcdContent = new Array(2);
+    // sonarDistance = -1; // now has to be fetched as values with getIOPinState(echoPin)
+    
+
+    constructor(){
+        // Map pin numbers to simulated pin indexes
+        for (let i = 0 ; i &lt; 24 ; ++i){
+            this.pinMapping[i + ""] = i;
+        }
+
+        // Map analog pin names to simulated pin indexes
+        for (let i = 0 ; i &lt; 8 ; ++i){
+            this.pinMapping["A" + i] = 24 + i;
+        }
+        // Map switch names to corresponding switch numbers
+        this.pinMapping["SW_N"] = 16;
+        this.pinMapping["SW_E"] = 17;
+        this.pinMapping["SW_S"] = 18;
+        this.pinMapping["SW_W"] = 19;
+        this.pinMapping["SW_C"] = 32;
+        // Map BUZZER pin name to number
+        this.pinMapping["BUZZER"] = 33;
+        // Map backlight pin
+        this.pinMapping["LCD_BACKLIGHT"] = 20;
+        // Motor pin mappings: normally uses 2 pins but simulated by one 
+        // since it cannot interfere with other connections since not exposed on external connector
+        this.pinMapping["DC_MOTOR_1"] = 34;
+        this.pinMapping["DC_MOTOR_2"] = 35;
+        // Same for servo motors
+        this.pinMapping["SERVO_MOTOR_1"] = 36;
+        this.pinMapping["SERVO_MOTOR_2"] = 37;
+        // Same for leds, only save the index of the first LED, rest is after
+        for (let i = 0 ; i &lt; 8 ; ++i){
+            this.pinMapping["LED" + i] = 38 + i;
+        }
+        
+        // In case built-in components are directly programmed on the pins
+        for (let i = 33 ; i &lt; 45 ; i++){
+            this.pinMapping[i + ""] = i;
+        }
+
+        this.pinMapping["LED13"] = 13;
+
+        this.lcdContent[0] = " ".repeat(16);
+        this.lcdContent[1] = " ".repeat(16);
+
+        this.resetBoard();
+    }
+
+    resetBoard(){
+        this.lcdContent = new Array(2);
+        this.lcdContent[0] = " ".repeat(16);
+        this.lcdContent[1] = " ".repeat(16);
+
+        for (let i = 0 ; i &lt; 24 ; ++i){
+            this.pins[this.pinMapping[i + ""]] = 0;
+        }
+
+        for (let i = 0 ; i &lt; 8 ; ++i){
+            this.pins[this.pinMapping["A" + i]] = 0;
+        }
+
+        this.pins[this.pinMapping["LCD_BACKLIGHT"]] = 0;
+        // Set no frequency playing on BUZZER
+        this.pins[this.pinMapping["BUZZER"]] = 0;
+        
+        //Set servo angles to 0 and DC speeds to 0
+        this.pins[this.pinMapping["DC_MOTOR_1"]] = 0;
+        this.pins[this.pinMapping["DC_MOTOR_2"]] = 0;
+        this.pins[this.pinMapping["SERVO_MOTOR_1"]] = 0;
+        this.pins[this.pinMapping["SERVO_MOTOR_2"]] = 0;
+        // Turn leds off
+        for (let i = 0 ; i &lt; 8 ; ++i){
+            this.pins[this.pinMapping["LED0"] + i] = 0;
+        }
+        // Turn led 13 off
+        this.pins[this.pinMapping["LED13"]] = 0;
+        // Set buttons to default on state
+        this.pins[this.pinMapping["SW_N"]] = 1;
+        this.pins[this.pinMapping["SW_E"]] = 1;
+        this.pins[this.pinMapping["SW_S"]] = 1;
+        this.pins[this.pinMapping["SW_W"]] = 1;
+        this.pins[this.pinMapping["SW_C"]] = 1;
+        //this.sonarDistance = -1;
+    }
+
+    setTonePlaying(tone){
+        this.setTonePlayingOnPin(tone, "BUZZER");
+    }
+
+    getTonePlaying(){
+        return this.getTonePlayingOnPin("BUZZER");
+    }
+
+    setTonePlayingOnPin(tone, pinName){
+        this.pins[this.pinMapping[pinName]] = tone;
+    }
+
+    getTonePlayingOnPin(pinName){
+        return this.pins[this.pinMapping[pinName]];
+    }
+
+
+    setLcdContent(line, text){
+        let textForLine = text;
+        if (line &lt; 0 || line > 1){
+            return; // Not on the screen
+        }
+        if (text.length > 16){
+            // Drop part of text if too long
+            textForLine = text.substr(0, 16);
+        }
+        this.lcdContent[line] = textForLine;
+    }
+
+    getLcdContent(line){
+        if (line &lt; 0 || line > 1){
+            throw new Error("This is not a valid line number");
+        }
+        return this.lcdContent[line];
+    }
+
+    setBacklight(status){
+        if (status == 1 || status == 0){
+            this.pins[this.pinMapping["LCD_BACKLIGHT"]] = status;
+        } else {
+            throw new Error("Invalid status");
+        }
+    }
+
+    getBackLightStatus(){
+        return this.pins[this.pinMapping["LCD_BACKLIGHT"]];
+    }
+
+    setServoAngle(servoNr, angle){
+        this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]] = angle;
+        console.log('setServoAngle', this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]]);
+    }
+
+    getServoAngle(servoNr){
+        return this.pins[this.pinMapping["SERVO_MOTOR_" + servoNr]];
+    }
+
+    setMotorSpeed(motorNr, speed){
+        if (motorNr >2 || motorNr &lt; 1){
+            throw Error("No motor with this number")
+        }
+        let motorSpeed = speed;
+        if (speed &lt; -255){
+            motorSpeed = -255;
+        }
+        if (speed > 255){
+            motorspeed = 255;
+        }
+        this.pins[this.pinMapping["DC_MOTOR_" + motorNr]] = speed;
+    }
+
+    getMotorSpeed(motorNr){
+        if (motorNr >2 || motorNr &lt; 1){
+            throw Error("No motor with this number")
+        }
+        return this.pins[this.pinMapping["DC_MOTOR_" + motorNr]];
+    }
+
+    setLedState(index, state){
+        if (index == 8){
+            this.pins[this.pinMapping["LED13"]] = state; 
+        } else {
+            this.pins[this.pinMapping["LED" + index]] = state;
+        }
+    }
+
+    getLedState(index){
+        if (index == 8){
+            return this.pins[this.pinMapping["LED13"]]; 
+        } else {
+            return this.pins[this.pinMapping["LED" + index]];
+        }
+    }
+
+    setButtonState(index, state){
+        let switchName = ButtonMap.mapIndexToButtonPinName(index);
+        this.pins[this.pinMapping[switchName]] = state
+    }
+
+    getButtonState(index){
+        let switchName = ButtonMap.mapIndexToButtonPinName(index);
+        return this.pins[this.pinMapping[switchName]];
+    }
+
+    setSonarDistance(trigPin, echoPin, dist){
+        this.setIoPinState(trigPin, dist);
+        this.setIoPinState(echoPin, dist);
+        //this.sonarDistance = dist;
+    }
+
+    getSonarDistance(trigPin, echoPin){
+        return this.getIoPinState(echoPin);
+    }
+
+    setIoPinState(pinName, state){
+        // Convert pin name to string
+        let index = pinName + "";
+        this.pins[this.pinMapping[index]] = state;
+    }
+
+    getIoPinState(pinName){
+        // Convert pin name to string
+        let index = pinName + "";
+        return this.pins[this.pinMapping[index]];
+    }
+
+    setAnalogIoPinState(pinName, value){
+        if (!pinName.startsWith("A")){
+            throw new Error("Not a valid analog pin name!")
+        }
+        this.setIoPinState(pinName, value);
+    }
+
+    getAnalogIoPinState(pinName){
+        if (!pinName.startsWith("A")){
+            throw new Error("Not a valid analog pin name!")
+        }
+        return this.getIoPinState(pinName);
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="module.exports.html">exports</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addTutorial">addTutorial</a></li><li><a href="global.html#addTutorialDialogEventHandlers">addTutorialDialogEventHandlers</a></li><li><a href="global.html#calculateWireLengths">calculateWireLengths</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#endTutorial">endTutorial</a></li><li><a href="global.html#generateSimulatedData">generateSimulatedData</a></li><li><a href="global.html#getPointsOnLineAtSetDistanceFromOtherPointOnLine">getPointsOnLineAtSetDistanceFromOtherPointOnLine</a></li><li><a href="global.html#getPointsPerpendicular">getPointsPerpendicular</a></li><li><a href="global.html#hideTutorialDialog">hideTutorialDialog</a></li><li><a href="global.html#initDebuggerState">initDebuggerState</a></li><li><a href="global.html#initTutorialMenu">initTutorialMenu</a></li><li><a href="global.html#loadTutorialDialog">loadTutorialDialog</a></li><li><a href="global.html#loadTutorialsMenu">loadTutorialsMenu</a></li><li><a href="global.html#pir">pir</a></li><li><a href="global.html#resetDwenguino">resetDwenguino</a></li><li><a href="global.html#servoWithPin">servoWithPin</a></li><li><a href="global.html#setupCanvas">setupCanvas</a></li><li><a href="global.html#showTutorialDialog">showTutorialDialog</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#stepperMotorStep">stepperMotorStep</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li><li><a href="global.html#uploadXml">uploadXml</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 14:23:28 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
