@@ -1,4 +1,4 @@
-export { Button as Button }
+export { Button }
 
 /**
  * Example usage:
@@ -22,7 +22,7 @@ export { Button as Button }
  * 
  */
 class Button {
-    /***
+    /**
      * @param {String} id | unique id for the button
      * @param {String} parentId | css id of the parent element for the slider
      * @param {String} label | label to put above the button

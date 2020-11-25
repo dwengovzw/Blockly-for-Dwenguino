@@ -18,7 +18,7 @@ export { Slider as Slider }
  * 
  */
 class Slider {
-    /***
+    /**
      * @param {String} id
      * @param {String} parentId | css id of the parent element for the slider
      * @param {number} minValue | minimum value of the slider

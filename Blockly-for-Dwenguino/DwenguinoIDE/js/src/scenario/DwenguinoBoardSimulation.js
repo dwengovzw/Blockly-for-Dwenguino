@@ -1,6 +1,11 @@
 import ButtonMap from "../simulation/ButtonMap.js"
 import DwenguinoSimulationScenario from "./DwenguinoSimulationScenario.js"
 
+/**
+ * This class implements the DwenguinoSimulationScenario
+ * 
+ * @extends DwenguinoSimulationScenario
+ */
 export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     inputsState = null;
     audiocontext = null;
@@ -45,7 +50,6 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     }
 
     initSimulationState(boardState){
-
 
     }
 
@@ -208,10 +212,6 @@ export default class DwenguinoBoardSimulation extends DwenguinoSimulationScenari
     }
 
     updateScenarioDisplay(board){
-
-        // Change the visuals of the pir sensor
-        // TODO: Figure out how to update the pir sensor visuals
-    
         // Show the sonar value
         var distance = board.getSonarDistance(11, 12);
         if (distance <= -1){

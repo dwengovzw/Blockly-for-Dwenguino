@@ -11,6 +11,8 @@ export default class SimulationCanvasRenderer {
 
   /**
    * This function draws the current robot components in the simulation container
+   *
+   * @param {RobotComponent[]} robot 
    */
   render(robot) {
     this.clearCanvases();
@@ -24,7 +26,8 @@ export default class SimulationCanvasRenderer {
   }
 
     /**
-     * Draw the lines of text on the lcd screen
+     * Draw the lines of text on the lcd screen 
+     * @param {RobotComponent[]} robot 
      */
     drawLcd(robot){
         for(var i = 0; i < robot.length; i++){
@@ -48,7 +51,10 @@ export default class SimulationCanvasRenderer {
     }
 
     /**
-     * Initialized the canvas with the given id (string) to the right dimensions and subsequently updates the simulation
+     * Initialized the canvas with the given id (string) to the right dimensions and 
+     * subsequently updates the simulation.
+     * @param {RobotComponent[]} robot 
+     * @param {RobotComponent} component 
      */
     initializeCanvas(robot, component){
         let canvasId = component.getCanvasId();
@@ -75,6 +81,10 @@ export default class SimulationCanvasRenderer {
         }
     }
 
+    /**
+     * 
+     * @param {string} canvasId 
+     */
     clearCanvas(canvasId){
         var canvas = document.getElementById(canvasId);
         if (canvas.getContext) {
@@ -85,6 +95,7 @@ export default class SimulationCanvasRenderer {
 
     /***
      * Draw all leds on led canvases with the states specified in robot.
+     * @param {RobotComponent[]} robot 
      */
     drawLeds(robot){
         for(var i = 0; i < robot.length; i++){
@@ -97,6 +108,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw an led on the given canvas with the state specified in robot.
+     * @param {SocialRobotLed} led 
+     * @param {HTMLCanvasElement} canvas 
      */
     drawLed(led, canvas){
         if(canvas.getContext){
@@ -118,6 +131,7 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw all servos on servo canvases with the states and images specified in robot.
+     * @param {RobotComponent[]} robot 
      */
     drawServos(robot){
         for(var i = 0; i < robot.length; i++){
@@ -131,6 +145,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a servo  on the given canvas with the state and image specified in robot.
+     * @param {SocialRobotServo} servo 
+     * @param {HTMLCanvasElement} canvas 
      */
     drawServo(servo, canvas){
         if (canvas.getContext) {
@@ -200,6 +216,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw all pir sensors on pir canvases with the image specified in robot.
+     *
+     * @param {RobotComponent[]} robot 
      */
     drawPirs(robot){
         for(var i = 0; i < robot.length; i++){
@@ -212,6 +230,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a pir sensor on the given canvas with the image specified in robot.
+     * @param {SocialRobotPir} pir 
+     * @param {HTMLCanvasElement} canvas 
      */
     drawPir(pir, canvas){
         if (canvas.getContext) {
@@ -232,6 +252,7 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw all sonar sensors on sonar canvases with the image specified in robot.
+     * @param {RobotComponent[]} robot 
      */
     drawSonars(robot){
         for(var i = 0; i < robot.length; i++){
@@ -244,6 +265,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a sonar sensor on the given canvas with the image specified in robot.
+     * @param {SocialRobotSonar} sonar 
+     * @param {HTMLCanvasElement} canvas 
      */
     drawSonar(sonar, canvas){
         if (canvas.getContext) {
@@ -262,6 +285,11 @@ export default class SimulationCanvasRenderer {
         }
     }   
 
+    /**
+     * 
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
+     */
     drawServoBackground(ctx, servo){
         ctx.translate(0,servo.getY());
         ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(),servo.getHeight());
@@ -270,6 +298,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draws a plain servohead of the given servo at the correct angle on the given context
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
      */
     drawRotatedServohead(ctx, servo){
         // make the servo rotate stepwise
@@ -303,16 +333,34 @@ export default class SimulationCanvasRenderer {
         }
     }
 
+    /**
+     * 
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
+     * @param {HTMLCanvasElement} canvas 
+     */
     drawEye(ctx, servo, canvas){
         this.renderEyeBall(ctx, servo, canvas);
         this.renderIris(ctx, servo, canvas);    
     }
 
+    /**
+     * 
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
+     * @param {HTMLCanvasElement} canvas 
+     */
     renderEyeBall(ctx, servo,canvas){
         let image = servo.getImage(0);
         ctx.drawImage(image,0,0,100,100);
     }
 
+    /**
+     * 
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
+     * @param {HTMLCanvasElement} canvas 
+     */
     renderIris(ctx, servo, canvas){
         let image = servo.getImage(1);
         image.src = './DwenguinoIDE/img/socialrobot/eye1_forground.svg';
@@ -355,6 +403,8 @@ export default class SimulationCanvasRenderer {
     /**
      * Draws the servohead of the given servo at the correct angle on the given context. 
      * The selected servo skin is a right hand.
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
      */
     drawRightHand(ctx, servo){
         var diff = servo.getAngle()-servo.getPrevAngle();
@@ -373,6 +423,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a counterclockwise downward movement of the given servo to the specified angle.
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
      */
     drawDown(ctx, servo){
         var diff2 = (servo.getAngle()-servo.getPrevAngle());
@@ -397,6 +449,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a clockwase upward movement of the given servo to the specified angle.
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
      */
     drawUp(ctx, servo){
         var diff3 = servo.getPrevAngle() - servo.getAngle();
@@ -422,6 +476,8 @@ export default class SimulationCanvasRenderer {
     /**
      * Draws the servohead of the given servo at the correct angle on the given context. 
      * The selected servo skin is a left hand.
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
      */
     drawLeftHand(ctx, servo){
         // make the servo rotate stepwise
@@ -457,6 +513,7 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw all sound sensors on sound canvases with the image specified in robot.
+     * @param {RobotComponent[]} robot 
      */
     drawSoundSensors(robot){
         for(var i = 0; i < robot.length; i++){
@@ -469,6 +526,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a pir sensor on the given canvas with the image specified in robot.
+     * @param {SocialRobotSoundSensor} soundSensor 
+     * @param {HTMLCanvasElement} canvas 
      */
     drawSoundSensor(soundSensor, canvas){
         if (canvas.getContext) {
@@ -487,8 +546,9 @@ export default class SimulationCanvasRenderer {
         } 
     }
 
-        /**
+    /**
      * Draw all light sensors on light canvases with the image specified in robot.
+     * @param {RobotComponent[]} robot 
      */
     drawLightSensors(robot){
         for(var i = 0; i < robot.length; i++){
@@ -501,6 +561,8 @@ export default class SimulationCanvasRenderer {
 
     /**
      * Draw a pir sensor on the given canvas with the image specified in robot.
+     * @param {SocialRobotLightSensor} lightSensor 
+     * @param {HTMLCanvasElement} canvas 
      */
     drawLightSensor(lightSensor, canvas){
         if (canvas.getContext) {
@@ -522,6 +584,7 @@ export default class SimulationCanvasRenderer {
     /**
      * Correctly onfigure the canvas dimensions based on the device pixel ratio 
      * to avoid blurry drawings.
+     * @param {HTMLCanvasElement} canvas 
      */
     configureCanvasDimensions(canvas){
 
@@ -541,6 +604,11 @@ export default class SimulationCanvasRenderer {
         }
     };
 
+    /**
+     * 
+     * @param {int} previousAngle 
+     * @param {int} angle 
+     */
     getDirection(previousAngle, angle){
         var direction = 0;
         if((angle-previousAngle) > 0) {

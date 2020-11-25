@@ -2,21 +2,26 @@ import DwenguinoSimulationRobotComponentsMenu from "./DwenguinoSimulationRobotCo
 import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
 import SimulationCanvasRenderer from "./SimulationCanvasRenderer.js"
 import { TypesEnum, RobotComponentsFactory } from "./RobotComponentsFactory.js"
-import DwenguinoSimulationRobotComponents from "./DwenguinoSimulationRobotComponents.js"
+import DwenguinoSimulationDraggable from "./DwenguinoSimulationDraggable.js"
 import {DwenguinoScenarioUtils} from "./DwenguinoScenarioUtils.js"
 import { EventsEnum } from "./ScenarioEvent.js"
 import {EventBus} from "./EventBus.js"
 import { CostumesEnum } from "./components/Servo.js"
 
-/*
- * This Object is the abstraction of the social robot simulator scenario.
+/**
+ * This class is the abstraction of the social robot simulator scenario.
  * It handles the layout and behaviour of a certain simulator scenario.
  * It provides a step function which uses and updates the state of the dwenguino board.
- *
+ * @extends DwenguinoSimulationScenario
  */
 export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
+
+  /**
+   * 
+   * @param {DwenguinoEventLogger} logger 
+   */
   constructor(logger) {
     super(logger);
 
@@ -25,15 +30,18 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     this._eventBus.registerEvent(EventsEnum.SAVE);
     this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.saveRobot()});
 
-    this.simulationRobotComponents = new DwenguinoSimulationRobotComponents(this, this._eventBus);
+    this.simulationRobotComponents = new DwenguinoSimulationDraggable(this, this._eventBus);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
   }
 
 
-  /* @brief Initializes the simulator robot.
+  /**
+   * Initializes the simulator robot. This function also creates the SimulationCanvasRenderer, 
+   * DenguinoScenarioUtils and RobotComponentsFactory.
    * This resets the simulation state.
+   * 
    *
-   * @param containerIdSelector The jquery selector of the conainer to put the robot display.
+   * @param {DwenguinoBoardSimulation} boardState - Object that represents the state of the Dwenguino microcontroller.
    *
    */
   initSimulationState(boardState) {
@@ -55,8 +63,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   }
 
-  /* @brief Initializes the simulator social robot display.
-   * @param containerIdSelector The jquery selector of the conainer to put the robot display.
+  /**
+   * Initializes the simulator social robot display.
+   * @param {string} containerIdSelector - The jquery selector of the conainer to put the robot display.
    *
    */
   initSimulationDisplay(containerIdSelector) {
@@ -99,6 +108,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   }
 
+  /**
+   * 
+   */
   initScenarioOptions() {
     var self = this;
 
@@ -123,6 +135,10 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     });
   }
 
+  /**
+   * 
+   * @param {string} containerIdSelector 
+   */
   initSimulation(containerIdSelector) {
 
     console.log("init simulation display");
@@ -147,42 +163,48 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
   }
 
 
-  /* @brief updates the simulation state and display
+  /** 
+   * Updates the simulation state and display
    * This function updates the simulation state and display using the supplied board state.
    *
-   * @param boardState The state of the Dwenguino board.
-   * @return The updated Dwenguino board state.
+   * @param {BoardState} boardState - The state of the Dwenguino board.
    *
    */
-  updateScenario(dwenguinoState) {
-    super.updateScenario(dwenguinoState);
-    this.updateScenarioState(dwenguinoState);
-    this.updateScenarioDisplay(dwenguinoState);
+  updateScenario(boardState) {
+    super.updateScenario(boardState);
+    this.updateScenarioState(boardState);
+    this.updateScenarioDisplay(boardState);
   };
 
-  /* @brief updates the simulation state
-   * This function updates the simulation state using the supplied board state.
+  /** 
+   * Updates the simulation state
+   * This function updates the simulation state with the help of the robotComponentsFactory,
+   * using the supplied board state.
    *
-   * @param boardState The state of the Dwenguino board. 
-   * @return The updated Dwenguino board state.
+   * @param {BoardState} boardState - The state of the Dwenguino board. 
    *
    */
-  updateScenarioState(dwenguinoState) {
-    super.updateScenarioState(dwenguinoState);
-    this.robotComponentsFactory.updateScenarioState(dwenguinoState);
+  updateScenarioState(boardState) {
+    super.updateScenarioState(boardState);
+    this.robotComponentsFactory.updateScenarioState(boardState);
   };
 
-  /* @brief updates the simulation display
-   * This function updates the simulation display using the supplied board state.
+  /** 
+   * Updates the simulation display
+   * This function updates the simulation display using the supplied board state. It requires
+   * the SimulationCanvasRenderer to render the updated display.
    *
-   * @param boardState The state of the Dwenguino board.
+   * @param {BoardState} boardState - The state of the Dwenguino board.
    *
    */
-  updateScenarioDisplay(dwenguinoState) {
-    super.updateScenarioDisplay(dwenguinoState);
+  updateScenarioDisplay(boardState) {
+    super.updateScenarioDisplay(boardState);
     this.renderer.render(this.robotComponentsFactory.getRobot());
   };
 
+  /**
+   * 
+   */
   setSensorOptions() {
     if (!document.getElementById('sensor_options')) {
       var sensorOptions = $("<div>").attr("id", "sensor_options");
@@ -190,6 +212,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     }
   }
 
+  /**
+   * 
+   */
   setBackground() {
     console.log('set background');
     $('#sim_container').append("<div id='sim_background' class='sim_element row'></div>");
@@ -204,6 +229,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   };
 
+  /**
+   * 
+   */
   switchBackground() {
     if (this._background < 3){
       this._background += 1;
@@ -216,6 +244,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     this._eventBus.dispatchEvent(EventsEnum.SAVE);
   }
 
+  /**
+   * 
+   */
   backgroundToXml() {
     let data = '';
         
@@ -230,6 +261,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
   /**
    * Resets the robot components of the simulation container to their initial state. This function doesn't
    * remove the components from the container or move them around, but merely puts them in their initial off state.
+   * @param {string} containerIdSelector 
    */
   resetSocialRobot(containerIdSelector) {
     this.robotComponentsFactory.resetSocialRobot();
@@ -237,6 +269,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Add a robot component of the specified type to the simulation container.
+   * @param {TypesEnum} type 
    */
   addRobotComponent(type) {
     this.robotComponentsFactory.addRobotComponent(type);
@@ -244,6 +277,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Remove the lastly created robot component of the specified type from the simulation container.
+   *
+   * @param {TypesEnum} type 
    */
   removeRobotComponent(type) {
     this.robotComponentsFactory.removeRobotComponent(type);
@@ -252,6 +287,9 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Changes the color of led canvas i to the given color.
+   *
+   * @param {int} i 
+   * @param {string} color 
    */
   setLedColor(i, color) {
     let led = this.robotComponentsFactory.getRobotComponentWithTypeAndId(TypesEnum.LED, i);
@@ -297,7 +335,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Converts an robot xml string into a robot on the screen
-   * @param {the xml string to be converted} xml 
+   * @param {string} xml - the xml string to be converted
    */
   xmlToRobot(xml){
     var data = this.scenarioUtils.textToDom(xml);
@@ -322,6 +360,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Converts the robot to xml and saves it into the local storage of the browser
+   * @param {boolean} permanent 
+   * @param {string} uniqeIdentifier 
    */
   saveRobot(permanent = false, uniqeIdentifier = ""){
     let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
@@ -335,6 +375,8 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Check the local storage if an item exists and load the xml
+   * @param {boolean} permanent 
+   * @param {string} uniqeIdentifier 
    */
   loadRobot(permanent = false, uniqeIdentifier = ""){
     let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
@@ -350,6 +392,7 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
 
   /**
    * Removes the localstorage entry for the robot
+   * @param {string} uniqeIdentifier 
    */
   clearRobot(uniqeIdentifier = ""){
     let storageKey = "dwenguinoSocialRobot" + uniqeIdentifier;

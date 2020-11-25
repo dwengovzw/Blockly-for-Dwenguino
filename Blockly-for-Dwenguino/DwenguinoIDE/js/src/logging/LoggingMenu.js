@@ -1,11 +1,11 @@
 import Validator from './Validator.js'
 import ServerConfig from '../ServerConfig.js'
+
 /**
  * This class builds and displays the logging menu on the screen.
  * It is used by the DwenguinoEventLogger to gather data about the user.
  * 
  */
-
 export default class LoggingMenu{
     username = null;
     password = null;

@@ -4,8 +4,8 @@ export default class FileIOController {
     }
     /**
      * Downloads a file with the name "filename" and contents "text" to the user his/her computer.
-     * @param {the name under which the file should be saved} filename 
-     * @param {the contents of the file} text 
+     * @param {string} filename - the name under which the file should be saved 
+     * @param {string} text - the contents of the file 
      */
     download(filename, text) {
         let element = document.createElement('a');

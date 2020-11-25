@@ -11,9 +11,10 @@ import { SocialRobotLightSensor } from "./components/LightSensor.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
-
 /**
  * The supported robot component types
+ * @readonly
+ * @enum {string}
  */
 const TypesEnum = {
   SERVO: 'servo',
@@ -27,7 +28,7 @@ const TypesEnum = {
 Object.freeze(TypesEnum);
 
 /**
- * This factory produces robot components for the given robot
+ * This factory produces robot components of certain types.
  * @param {SocialRobot} robot 
  */
 class RobotComponentsFactory {
@@ -37,6 +38,14 @@ class RobotComponentsFactory {
     buttons: [1, 1, 1, 1, 1],
     sonarDistance: -1
   }
+
+  /**
+   * 
+   * @constructs
+   * @param {DwenguinoScenarioUtils} scenarioUtils 
+   * @param {DwenguinoEventLogger} logger 
+   * @param {EventBus} eventBus 
+   */
   constructor(scenarioUtils, logger, eventBus) {
     this.logger = logger;
     this._eventBus = eventBus;
@@ -50,16 +59,28 @@ class RobotComponentsFactory {
     }
   }
 
+  /**
+   * 
+   * @returns {RobotComponent[]} The array of RobotComponent objects in social robot scenario
+   */
   getRobot(){
     return this._robot;
   }
 
+  /**
+   * Resets all social robot components to their initial state.
+   */
   resetSocialRobot(){
     for(var i = 0; i < this._robot.length; i++){
       this._robot[i].reset();
     }
   }
 
+  /**
+   * Update the state and other properties of the robot components when an update of
+   * the Dwenguino Boardstate is received.
+   * @param {DwenguinoBoardSimulation} dwenguinoState 
+   */
   updateScenarioState(dwenguinoState){
     for(var i = 0; i < this._robot.length; i++){
       let type = this._robot[i].getType();
@@ -127,10 +148,12 @@ class RobotComponentsFactory {
     }
   }
 
-  getInputState(){
-    return this.inputState;
-  }
 
+  /**
+   * Get the robot component in the simulation with a given type and id.
+   * @param {TypesEnum} type 
+   * @param {string} id 
+   */
   getRobotComponentWithTypeAndId(type, id){
     for(let i = 0; i < this._robot.length; i++){
       if(this._robot[i].getType() == type && this._robot[i].getId() == id){
@@ -139,6 +162,11 @@ class RobotComponentsFactory {
     }
   }
 
+  /**
+   * Remove the robot component from the simulation with a given type and id.
+   * @param {TypesEnum} type 
+   * @param {string} id 
+   */
   removeRobotComponentWithTypeAndId(type, id){
     let component = this.getRobotComponentWithTypeAndId(type, id);
 
@@ -152,6 +180,11 @@ class RobotComponentsFactory {
 
   }
   
+  /**
+   * Add a new robot component with a certain type and a unique id to the social robot simulation. 
+   * The robot component is instanciated with the default properties.
+   * @param {TypesEnum} type 
+   */
   addRobotComponent(type) {
     switch (type) {
       case TypesEnum.SERVO:
@@ -178,6 +211,10 @@ class RobotComponentsFactory {
     }
   }
 
+  /**
+   * Remove the most recently created robot component of the specified type from the simulation.
+   * @param {TypesEnum} type 
+   */
   removeRobotComponent(type) {
     switch (type) {
       case TypesEnum.SERVO:
@@ -204,6 +241,11 @@ class RobotComponentsFactory {
     }
   }
 
+  /**
+   * Add a robot component to the simulation scenario from a data object containing one robot component
+   * in XML format.
+   * @param {Object} data - Data object containing one robot component in XML format.
+   */
   addRobotComponentFromXml(data){
     let type = data.getAttribute('Type');
 
@@ -281,7 +323,18 @@ class RobotComponentsFactory {
   }
 
   /**
-    * Add a new servo to the simulation container.
+    * Add a new servo to the simulation container using default or custom values for the properties.
+    * @param {int} pin 
+    * @param {CostumesEnum} costume 
+    * @param {int} angle 
+    * @param {boolean} visible 
+    * @param {int} x 
+    * @param {int} y 
+    * @param {int} width 
+    * @param {int} height 
+    * @param {int} offsetLeft 
+    * @param {int} offsetTop 
+    * @param {string} htmlClasses 
     */
   addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, x=0, y=0, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
 
@@ -302,7 +355,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created servo from the simulation container.
+   * Remove the most recently created servo from the simulation container.
    */
   removeServo(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
@@ -312,6 +365,21 @@ class RobotComponentsFactory {
   }
 
 
+  /**
+   * 
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} radius 
+   * @param {int} x 
+   * @param {int} y 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} onColor 
+   * @param {string} offColor 
+   * @param {string} borderColor 
+   * @param {string} htmlClasses 
+   */
   addLed(pin=0, state=0, visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, onColor='yellow', offColor='gray', borderColor='black', htmlClasses='sim_canvas led_canvas') {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
     this.incrementNumberOf(TypesEnum.LED);
@@ -324,7 +392,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created LED from the simulation container.
+   * Remove the most recently created LED from the simulation container.
    */
   removeLed(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LED));
@@ -335,6 +403,14 @@ class RobotComponentsFactory {
 
   /**
    * Add a new PIR sensor to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
    */
   addPir(pin=0, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
@@ -348,7 +424,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created PIR sensor from the simulation container.
+   * Remove the most recently created PIR sensor from the simulation container.
    */
   removePir(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.PIR));
@@ -359,6 +435,16 @@ class RobotComponentsFactory {
 
   /**
    * Add a new SONAR sensor to the simulation container.
+   * 
+   * @param {int} echoPin 
+   * @param {int} triggerPin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
    */
   addSonar(echoPin=0, triggerPin=0, state=0, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
 
@@ -373,7 +459,7 @@ class RobotComponentsFactory {
   }
   
   /**
-   * Remove the most recent created SONAR sensor from the simulation container.
+   * Remove the most recently created SONAR sensor from the simulation container.
    */
   removeSonar(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SONAR));
@@ -384,6 +470,10 @@ class RobotComponentsFactory {
 
   /**
    * Add a new decoration component to the simulation container.
+   * @param {boolean} visible 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
    */
   addLcd(visible=true, offsetLeft=5, offsetTop=5, htmlClasses=''){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LCD));
@@ -396,7 +486,7 @@ class RobotComponentsFactory {
   
 
   /**
-  * Remove the most recent created decoration element from the simulation container.
+  * Remove the most recently created decoration element from the simulation container.
   */
   removeLcd(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.Lcd));
@@ -408,7 +498,15 @@ class RobotComponentsFactory {
 
   /**
    * Add a new Sound sensor to the simulation container.
-   */
+    * @param {int} pin 
+    * @param {int} state 
+    * @param {boolean} visible 
+    * @param {int} width 
+    * @param {int} height 
+    * @param {int} offsetLeft 
+    * @param {int} offsetTop 
+    * @param {string} htmlClasses 
+    */
   addSoundSensor(pin=0, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
     this.incrementNumberOf(TypesEnum.SOUND);
@@ -421,7 +519,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created Sound sensor from the simulation container.
+   * Remove the most recently created Sound sensor from the simulation container.
    */
   removeSoundSensor(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SOUND));
@@ -432,6 +530,14 @@ class RobotComponentsFactory {
 
     /**
    * Add a new Light sensor to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
    */
   addLightSensor(pin=0, state=0, visible=true, width=100, height=45, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LIGHT));
@@ -445,7 +551,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created Light sensor from the simulation container.
+   * Remove the most recently created Light sensor from the simulation container.
    */
   removeLightSensor(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LIGHT));
@@ -454,13 +560,19 @@ class RobotComponentsFactory {
     this.removeRobotComponentWithTypeAndId(TypesEnum.LIGHT, id);
   }
 
+  /**
+   * Increment the number of a certain robot component in the scenario.
+   * @param {TypesEnum} type 
+   */
   incrementNumberOf(type) {
-    //this.robot.numberOf[type] += 1;
     this._numberOfComponentsOfType[type] += 1;
   }
 
+  /**
+   * Decrement the number of a certain robot component in the scenario.
+   * @param {TypesEnum} type 
+   */
   decrementNumberOf(type) {
-    //this.robot.numberOf[type] -= 1;
     this._numberOfComponentsOfType[type] -= 1;
   }
 

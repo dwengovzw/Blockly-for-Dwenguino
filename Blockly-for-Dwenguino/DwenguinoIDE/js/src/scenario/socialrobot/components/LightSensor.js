@@ -2,8 +2,11 @@ import { RobotComponent } from './RobotComponent.js'
 import { TypesEnum } from '../RobotComponentsFactory.js';
 import { EventsEnum } from '../ScenarioEvent.js';
 
-export { SocialRobotLightSensor as SocialRobotLightSensor }
+export { SocialRobotLightSensor }
 
+/**
+ * @extends RobotComponent
+ */
 class SocialRobotLightSensor extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);

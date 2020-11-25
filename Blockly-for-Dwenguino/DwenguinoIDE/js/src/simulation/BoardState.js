@@ -1,9 +1,8 @@
-/*
- * This class is used as a datastructure to save the state of the simulated Dwenguino board.
-*/
-
 import ButtonMap from "./ButtonMap.js";
 
+/**
+ * This class is used as a datastructure to save the state of the simulated Dwenguino board.
+ */
 export default class BoardState {
     pins = new Array(33);
     pinMapping = {};

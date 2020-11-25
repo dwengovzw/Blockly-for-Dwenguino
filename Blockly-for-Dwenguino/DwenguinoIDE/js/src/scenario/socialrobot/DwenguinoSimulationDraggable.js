@@ -1,16 +1,28 @@
 import { EVENT_NAMES } from "../../logging/EventNames.js"
 import { EventsEnum } from "./ScenarioEvent.js";
 
-export default class DwenguinoSimulationRobotComponents {
+/**
+ * This class is responsible to make the social robot components in the scenario draggable 
+ * within their container.
+ * @requires interact.js
+ */
+export default class DwenguinoSimulationDraggable {
   socialRobotScenario = null;
+
+  /**
+   * @constructs
+   * @param {Object} socialRobotScenario - The social robot scenario in which the components become draggable.
+   * @param {Object} eventBus - The eventBus that can be used to monitor certain events in the simulator.
+   */
   constructor(socialRobotScenario, eventBus){
     this.socialRobotScenario = socialRobotScenario;
     this._eventBus = eventBus;
     this.setupInteract();
+
     // this is used later in the resizing and gesture demos
     window.dragMoveListener = this.dragMoveListener;
-
   }
+
 
   setupInteract(){
     let self = this;
@@ -83,12 +95,6 @@ export default class DwenguinoSimulationRobotComponents {
         element.fireEvent("on" + event.eventType, event);
     }
   }
-
 }
-/**
- * Functions for interact.js to make the robot components
- * in the scenario draggable within the simulation container.
- * 
- **/ 
 
 

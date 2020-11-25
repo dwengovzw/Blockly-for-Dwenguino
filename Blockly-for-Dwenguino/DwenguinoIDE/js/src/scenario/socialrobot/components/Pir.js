@@ -4,8 +4,11 @@ import { EventsEnum } from '../ScenarioEvent.js';
 import { SoundSensor } from '../../../tutorials/components/SoundSensor.js';
 import { Button } from '../../utilities/Button.js';
 
-export { SocialRobotPir as SocialRobotPir }
+export { SocialRobotPir }
 
+/**
+ * @extends RobotComponent
+ */
 class SocialRobotPir extends RobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);

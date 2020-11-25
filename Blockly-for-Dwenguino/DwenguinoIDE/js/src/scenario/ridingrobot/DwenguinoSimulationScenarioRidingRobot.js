@@ -1,15 +1,13 @@
 import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
 import DwenguinoBoardSimulation from "../DwenguinoBoardSimulation.js";
 
-/*
+/**
  * This class is the abstraction of the riding robot simulator scenario.
  * It handles the layout and behaviour of a certain simulator scenario.
  * It provides a step function which uses and updates the state of the dwenguino board.
  * For example it uses the motor speed states to change the location of a robot or changes the sonar distance state depending on how far it is form an object.
  *
  */
-
-
 export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario {
 
     dwenguinoBoardSimulation = null;
@@ -19,10 +17,11 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         this.initSimulationState(null);
     }
 
-    /* @brief Initializes the simulator robot.
+    /**
+    * Initializes the simulator robot.
     * This resets the simulation state.
     *
-    * @param containerIdSelector The jquery selector of the conainer to put the robot display.
+    * @param {BoardState} boardState - The current state of the Dwenguino simulation board.
     *
     */
     initSimulationState(boardState) {
@@ -55,12 +54,13 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
     }
 
 
-    /* @brief Initializes the simulator robot display.
+    /**
+     * Initializes the simulator robot display.
      * This function puts all the nececary visuals inside the container with the id containerId.
      * Additionally, it sets up the state of the simulated robot.
      * The function also resets the internal state of the simulation so the display is initialized from its original position.
      *
-     * @param containerIdSelector The jquery selector of the conainer to put the robot display.
+     * @param {string} containerId - The jquery selector of the conainer to put the robot display.
      *
      */
     initSimulationDisplay(containerId) {
@@ -144,51 +144,40 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
             .css("background-image", "url('DwenguinoIDE/img/board/robot.png')")
             .css("background-size", "100%")
             .css('top', this.robot.position.y + 'px')
-            .css('left', this.robot.position.x + 'px');
-
-        
+            .css('left', this.robot.position.x + 'px');  
     }
 
 
-    /* @brief updates the simulation state and display
+    /**
+     * Updates the simulation state and display
      * This function updates the simulation state and display using the supplied board state.
      *
-     * @param boardState The state of the Dwenguino board.
-     * @return The updated Dwenguino board state.
-     *
+     * @param {BoardState} boardState - The state of the Dwenguino board.
      */
-    updateScenario(dwenguinoState) {
-        super.updateScenario(dwenguinoState);
-        this.updateScenarioState(dwenguinoState);
-        this.updateScenarioDisplay(dwenguinoState);
-        this.dwenguinoBoardSimulation.updateScenario(dwenguinoState);
+    updateScenario(boardState) {
+        super.updateScenario(boardState);
+        this.updateScenarioState(boardState);
+        this.updateScenarioDisplay(boardState);
+        this.dwenguinoBoardSimulation.updateScenario(boardState);
     }
 
-    /* @brief updates the simulation state
+    /** 
+     * Updates the simulation state
      * This function updates the simulation state using the supplied board state.
      *
-     * @param boardState The state of the Dwenguino board. It has the following structure:
+     * @param {BoardState} boardState - The state of the Dwenguino board. It has the following structure:
      * {
-       lcdContent: new Array(2),
-       buzzer: {
-         osc: null,
-         audiocontext: null,
-         tonePlaying: 0
-       },
-       servoAngles: [0, 0],
-       motorSpeeds: [0, 0],
-       leds: [0,0,0,0,0,0,0,0,0],
-       buttons: [1,1,1,1,1],
-       sonarDistance: 50
-     }
-     * @return The updated Dwenguino board state.
+     *   pins = new Array(33);
+     *   pinMapping = {};
+     *   lcdContent = new Array(2);
+     *  }
      *
      */
-    updateScenarioState(dwenguinoState) {
-        super.updateScenarioState(dwenguinoState);
+    updateScenarioState(boardState) {
+        super.updateScenarioState(boardState);
 
         // update the state of the board simulation
-        //this.dwenguinoBoardSimulation.updateScenarioState(dwenguinoState);
+        //this.dwenguinoBoardSimulation.updateScenarioState(boardState);
 
         //Save the current dimensions of the container
         this.containerWidth = $("#sim_container").width();
@@ -196,8 +185,8 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
 
         // update the state of this simulation
 
-        var speed1 = dwenguinoState.getMotorSpeed(1);
-        var speed2 = dwenguinoState.getMotorSpeed(2);
+        var speed1 = boardState.getMotorSpeed(1);
+        var speed2 = boardState.getMotorSpeed(2);
 
 
         // Save the current state of the robot into local variables.
@@ -233,17 +222,17 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
         };
     }
 
-    /* @brief updates the simulation display
-     * This function updates the simulation display using the supplied board state.
+    /** Updates the simulation display
+     *  This function updates the simulation display using the supplied board state.
      *
-     * @param boardState The state of the Dwenguino board.
+     *  @param {BoardState} boardState - The state of the Dwenguino board.
      *
      */
-    updateScenarioDisplay(dwenguinoState) {
-        super.updateScenarioDisplay(dwenguinoState);
+    updateScenarioDisplay(boardState) {
+        super.updateScenarioDisplay(boardState);
 
         // update the display of the dwenguino board simulation
-        //this.dwenguinoBoardSimulation.updateScenarioDisplay(dwenguinoState);
+        //this.dwenguinoBoardSimulation.updateScenarioDisplay(boardState);
 
         // update the state of this scenario
 
@@ -259,6 +248,4 @@ export default class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSim
             .css('left', this.robot.position.x + 'px')
             .css('transform', 'rotate(' + this.robot.position.angle + 'deg)');
     }
-
-
 }

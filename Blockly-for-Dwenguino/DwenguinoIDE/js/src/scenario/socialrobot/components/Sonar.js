@@ -3,8 +3,11 @@ import { TypesEnum } from '../RobotComponentsFactory.js'
 import { EventsEnum } from '../ScenarioEvent.js'
 import { Slider } from '../../utilities/Slider.js'
 
-export { SocialRobotSonar as SocialRobotSonar }
+export { SocialRobotSonar }
 
+/**
+ * @extends RobotComponent
+ */
 class SocialRobotSonar extends RobotComponent{
     constructor(eventBus, id, echoPin = 0, triggerPin = 0, state = 0, visible = true, width = 100, height = 58, offsetLeft = 5, offsetTop = 5, htmlClasses = 'sim_canvas sonar_canvas'){
         super(eventBus, htmlClasses);

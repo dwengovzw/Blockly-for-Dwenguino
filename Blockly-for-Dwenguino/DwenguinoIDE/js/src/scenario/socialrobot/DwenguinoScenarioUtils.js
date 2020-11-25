@@ -6,12 +6,17 @@ import { EventsEnum } from "./ScenarioEvent.js";
 export { DwenguinoScenarioUtils }
 
 /**
- * The different states robot components can be in. 
- * Not all states are supported for each robot component.
+ * This class is responsible to download or upload the current social robot scenario components configuration
+ * to disk as an XML file. 
  */
-
 class DwenguinoScenarioUtils{
     ioController = null;
+
+    /**
+     * @constructs
+     * @param {Object} scenario - The social robot scenario from which the XML file is composed or uploaded to.
+     * @param {Object} eventBus - The eventBus that can be used to monitor certain events in the simulator.
+     */
     constructor(scenario, eventBus){
         this.scenario = scenario;
         this._eventBus = eventBus;
@@ -19,23 +24,28 @@ class DwenguinoScenarioUtils{
     }
 
     /**
-     * Clear all canvases in the simulator that are part
-     * of the "sim_canvas" class.
+     * This function will download the XML file to the client and record a downloadScenario event.
+     * @param {string} data - The XML data to be downloaded to the client.
      */
     saveScenario(data){
         console.log('save scenario');
         this.ioController.download("scenario.xml", data);
-        //DwenguinoBlockly.download("scenario.xml", data);
         this.scenario.logger.recordEvent(this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, ""));
     }
 
+    /**
+     * This function loads the XML file selected by the client and converts it to 
+     * social robot components in the social robot scenario. It also dispatches a 
+     * save event to save the current scenario state to local storage.
+     * @async
+     */
     async loadScenario(){
-        try{
+        try {
             let xml = await this.ioController.uploadXml();
             this.scenario.xmlToRobot(xml);
             this._eventBus.dispatchEvent(EventsEnum.SAVE);
 
-        }catch(err){
+        } catch(err){
             console.error(err);
         }
     }
