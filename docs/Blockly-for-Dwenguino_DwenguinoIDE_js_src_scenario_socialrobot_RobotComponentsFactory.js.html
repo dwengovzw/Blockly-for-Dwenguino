@@ -178,7 +178,7 @@ class RobotComponentsFactory {
 
 
   /**
-   * 
+   * Get the robot component in the simulation with a given type and id.
    * @param {TypesEnum} type 
    * @param {string} id 
    */
@@ -191,7 +191,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * 
+   * Remove the robot component from the simulation with a given type and id.
    * @param {TypesEnum} type 
    * @param {string} id 
    */
@@ -209,7 +209,8 @@ class RobotComponentsFactory {
   }
   
   /**
-   * 
+   * Add a new robot component with a certain type and a unique id to the social robot simulation. 
+   * The robot component is instanciated with the default properties.
    * @param {TypesEnum} type 
    */
   addRobotComponent(type) {
@@ -239,7 +240,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * 
+   * Remove the most recently created robot component of the specified type from the simulation.
    * @param {TypesEnum} type 
    */
   removeRobotComponent(type) {
@@ -269,8 +270,9 @@ class RobotComponentsFactory {
   }
 
   /**
-   * 
-   * @param {Object} data 
+   * Add a robot component to the simulation scenario from a data object containing one robot component
+   * in XML format.
+   * @param {Object} data - Data object containing one robot component in XML format.
    */
   addRobotComponentFromXml(data){
     let type = data.getAttribute('Type');
@@ -349,7 +351,7 @@ class RobotComponentsFactory {
   }
 
   /**
-    * Add a new servo to the simulation container.
+    * Add a new servo to the simulation container using default or custom values for the properties.
     * @param {int} pin 
     * @param {CostumesEnum} costume 
     * @param {int} angle 
@@ -381,7 +383,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created servo from the simulation container.
+   * Remove the most recently created servo from the simulation container.
    */
   removeServo(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
@@ -418,7 +420,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created LED from the simulation container.
+   * Remove the most recently created LED from the simulation container.
    */
   removeLed(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LED));
@@ -450,7 +452,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created PIR sensor from the simulation container.
+   * Remove the most recently created PIR sensor from the simulation container.
    */
   removePir(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.PIR));
@@ -485,7 +487,7 @@ class RobotComponentsFactory {
   }
   
   /**
-   * Remove the most recent created SONAR sensor from the simulation container.
+   * Remove the most recently created SONAR sensor from the simulation container.
    */
   removeSonar(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SONAR));
@@ -512,7 +514,7 @@ class RobotComponentsFactory {
   
 
   /**
-  * Remove the most recent created decoration element from the simulation container.
+  * Remove the most recently created decoration element from the simulation container.
   */
   removeLcd(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.Lcd));
@@ -545,7 +547,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created Sound sensor from the simulation container.
+   * Remove the most recently created Sound sensor from the simulation container.
    */
   removeSoundSensor(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SOUND));
@@ -577,7 +579,7 @@ class RobotComponentsFactory {
   }
 
   /**
-   * Remove the most recent created Light sensor from the simulation container.
+   * Remove the most recently created Light sensor from the simulation container.
    */
   removeLightSensor(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LIGHT));
@@ -612,13 +614,13 @@ class RobotComponentsFactory {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="module.exports.html">exports</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addTutorial">addTutorial</a></li><li><a href="global.html#addTutorialDialogEventHandlers">addTutorialDialogEventHandlers</a></li><li><a href="global.html#calculateWireLengths">calculateWireLengths</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#endTutorial">endTutorial</a></li><li><a href="global.html#generateSimulatedData">generateSimulatedData</a></li><li><a href="global.html#getPointsOnLineAtSetDistanceFromOtherPointOnLine">getPointsOnLineAtSetDistanceFromOtherPointOnLine</a></li><li><a href="global.html#getPointsPerpendicular">getPointsPerpendicular</a></li><li><a href="global.html#hideTutorialDialog">hideTutorialDialog</a></li><li><a href="global.html#initDebuggerState">initDebuggerState</a></li><li><a href="global.html#initTutorialMenu">initTutorialMenu</a></li><li><a href="global.html#loadTutorialDialog">loadTutorialDialog</a></li><li><a href="global.html#loadTutorialsMenu">loadTutorialsMenu</a></li><li><a href="global.html#pir">pir</a></li><li><a href="global.html#resetDwenguino">resetDwenguino</a></li><li><a href="global.html#servoWithPin">servoWithPin</a></li><li><a href="global.html#setupCanvas">setupCanvas</a></li><li><a href="global.html#showTutorialDialog">showTutorialDialog</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#stepperMotorStep">stepperMotorStep</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li><li><a href="global.html#uploadXml">uploadXml</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 14:23:28 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:58:58 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

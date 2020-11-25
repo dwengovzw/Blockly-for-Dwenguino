@@ -1,6 +1,6 @@
 {
     "source": {
-        "include": [ "backend/controllers", "backend/functionalGenerator", "backend/models", "backend/routes", "backend/index.js", "Blockly-for-Dwenguino/blockly/blocks", "Blockly-for-Dwenguino/DwenguinoIDE/js/src" ],
+        "include": [ "backend/controllers", "backend/functional_generator", "backend/models", "backend/routes", "backend/index.js", "Blockly-for-Dwenguino/blockly/blocks", "Blockly-for-Dwenguino/DwenguinoIDE/js/src" ],
         "exclude": [  ],
         "includePattern": ".+\\.js(doc|x)?$",
         "excludePattern": "(^|\\/|\\\\)_"
