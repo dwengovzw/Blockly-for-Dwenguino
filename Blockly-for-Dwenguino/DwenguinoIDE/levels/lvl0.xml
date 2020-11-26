@@ -192,12 +192,12 @@
     <block type="socialrobot_arms_down">
             <value name="servo_right_hand1">
                 <block type="math_number" id="202">
-                    <field name="NUM">1</field>
+                    <field name="NUM">36</field>
                 </block>
             </value>
             <value name="servo_left_hand1">
                 <block type="math_number" id="203">
-                    <field name="NUM">2</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
     </block>
