@@ -271,3 +271,12 @@ Blockly.Arduino.scrub_ = function(block, code) {
   var nextCode = Blockly.Arduino.blockToCode(nextBlock);
   return commentCode + code + nextCode;
 };
+
+/**
+ * Empties the Arduino setups array to remove unused setup definitions.
+ * This function needs to be called before generating the code for the workspace.
+ */
+Blockly.Arduino.emptySetup = function(){
+  Blockly.Arduino.definitions_ = Object.create(null);
+  Blockly.Arduino.setups_ = Object.create(null);
+}

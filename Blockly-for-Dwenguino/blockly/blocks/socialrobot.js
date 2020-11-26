@@ -214,7 +214,7 @@ Blockly.Blocks['socialrobot_arms_up'] = {
 
 var socialrobot_wave_arms_json = {
     "id": "socialrobot_wave_arms",
-    "message0": MSG.socialrobotWaveArmesBlock + " %1 %2 " + MSG.socialRobotServoRightHand + " %3 %4 " + MSG.socialrobotServoLeftHand + " %5 %6",
+    "message0": MSG.socialrobotWaveArmesBlock + " %1 %2 " + MSG.socialRobotServoRightHand + " %3 %4 " + MSG.socialRobotServoLeftHand + " %5 %6",
     "args0": [
     {
         "type": "input_dummy"

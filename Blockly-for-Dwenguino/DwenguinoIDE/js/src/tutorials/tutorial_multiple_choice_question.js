@@ -1,4 +1,4 @@
-import TutorialQuestion from "./TutorialQuestion.js"
+import TutorialQuestion from "./tutorial_question.js"
 
 class TutorialMultipleChoiceQuestion extends TutorialQuestion{
     constructor(name, questionText, answers, correctAnswer){

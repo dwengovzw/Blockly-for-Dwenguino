@@ -143,11 +143,9 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $('#sim_buttons').append('<div id="sim_buttons_bottom"></div>');
 
         $('#sim_buttons_top').append('<div id="sim_button_N" class="sim_button"></div>');
-
         $('#sim_buttons_middle').append('<div id="sim_button_W" class="sim_button"></div>');
         $('#sim_buttons_middle').append('<div id="sim_button_C" class="sim_button"></div>');
         $('#sim_buttons_middle').append('<div id="sim_button_E" class="sim_button"></div>');
-
         $('#sim_buttons_bottom').append('<div id="sim_button_S" class="sim_button"></div>');
 
         this.hideSonar();

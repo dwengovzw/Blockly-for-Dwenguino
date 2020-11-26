@@ -89,6 +89,8 @@ let DwenguinoBlockly = {
 
         //save/upload buttons
         $("#db_menu_item_run").click(function(){
+          // TODO reset setup
+          Blockly.Arduino.emptySetup();
           var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
           DwenguinoBlockly.runEventHandler(code);
         });
@@ -380,6 +382,7 @@ let DwenguinoBlockly = {
     },
     resetRunButton: function(){
           $("#db_menu_item_run").click(function(){
+            Blockly.Arduino.emptySetup();
             var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
             DwenguinoBlockly.runEventHandler(code);
           });
@@ -449,6 +452,7 @@ let DwenguinoBlockly = {
         // Log code change if code has changed
         DwenguinoBlockly.logCodeChange();
 
+        Blockly.Arduino.emptySetup();
         var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
 
         // display code

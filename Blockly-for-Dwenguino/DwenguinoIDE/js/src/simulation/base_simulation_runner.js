@@ -1,7 +1,9 @@
 import BoardState from './board_state.js'
 import SimulationSandbox from './simulation_sandbox.js'
 
-
+/**
+ * 
+ */
 class BaseSimulationRunner{
     board = null;
     debugger = null;
@@ -38,6 +40,11 @@ class BaseSimulationRunner{
         this.resetDwenguino();
     }
 
+    /**
+     * Resets and initializes the current scenario by resetting the Dwenguino board state and 
+     * the simulation display. Ensures that all events and interactions with the Dwenguino
+     * board and scenario are handled appropriately.
+     */
     initScenario(){
         // reset scenario state
         this.currentScenario.initSimulationState(this.board);
@@ -94,8 +101,9 @@ class BaseSimulationRunner{
         
     }
 
-    /*
+    /**
     * While the simulation is running, this function keeps being called with "speeddelay" timeouts in between
+    * @param {boolean} once 
     */
    step(once = false) {
         if (this.isSimulationPaused) {
@@ -133,8 +141,9 @@ class BaseSimulationRunner{
         this.checkForEnd();
     }
 
-    /*
+    /**
    *  This function iterates until the delay has passed
+   * @param {boolean} once 
    */
   performDelayLoop(once) {
         // Here we want the simulation to keep running but not let the board state update.
@@ -158,7 +167,7 @@ class BaseSimulationRunner{
         }
     }
 
-    /*
+    /**
     * Displays the values of the variables during the simulation
     */
     handleScope() {
@@ -169,7 +178,7 @@ class BaseSimulationRunner{
         }
     }
 
-    /*
+    /**
     * Checks if the simulation has been interrupted
     */
     checkForEnd() {

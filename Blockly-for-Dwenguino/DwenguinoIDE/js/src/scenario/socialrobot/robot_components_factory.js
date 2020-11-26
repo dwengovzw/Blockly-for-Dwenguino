@@ -23,7 +23,7 @@ const TypesEnum = {
   SONAR: 'sonar',
   LCD: 'lcd',
   SOUND: 'sound',
-  LIGHT: 'light',
+  LIGHT: 'light'
 };
 Object.freeze(TypesEnum);
 
