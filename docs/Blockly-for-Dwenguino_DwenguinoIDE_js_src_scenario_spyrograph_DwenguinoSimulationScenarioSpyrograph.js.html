@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/spyrograph/DwenguinoSimulationScenarioSpyrograph.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/spyrograph/DwenguinoSimulationScenarioSpyrograph.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import DwenguinoSimulationScenario from "../DwenguinoSimulationScenario.js"
+import SpyrographGraphicsLib from "./SpyrographGraphicsLib.js"
+import Point from "../../graphicsLib/Point.js";
+import DwenguinoBoardSimulation from "../DwenguinoBoardSimulation.js"
+
+class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
+    startScale = 400;
+    currentScale = 400;
+    currentColor = "#4a9234";
+    representationScale = {
+        // The coordinates of the different joints (in mm)
+        motorAxes: [[30, 30], [280, 30]],
+        motorAngles: [0, 0], // Determined by the simulation
+        // [Motor1 connector, motor2 connector, length to central hinge motor1, 
+        // length to central hinge motor2, central hinge to point above motor1, central hinge to point above motor 2,
+        // length from point above motor one to top hinge, length from point above motor 2 to top hinge, 
+        //top hinge to drawing point]
+        segmentLengths: [30, 20, 150, 170, 120, 150, 160, 150, 50],
+        segmentCount: [3, 2, 15, 17, 12, 15, 14, 16, 5], 
+        segmentRanges: [[2, 3], [2, 3], [10, 20], [10, 20], [5, 15], [5, 15], [5, 15], [5, 15], [0, 2]],
+        segmentIncrement: 10,
+        armWidth: 10,
+        holeDiameter: 2.5,
+        // The following values have to be calulated based on the values above
+        hinges: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]]
+    }
+
+    drawingScale = {
+        motorAxes: [[0, 0], [0, 0]],
+        segmentLengths: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        hinges: [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]],
+        armWidth: 0,
+        holeDiameter: 10
+    }
+
+    canvases = [];
+    contexts = [];
+    canvasNames = {
+        SPYROGRAPH_CANVAS: 0,
+        SPYROGRAPH_DRAWING_CANVAS: 1,
+    };
+    container = null;
+    imageData = null;
+
+    graphicsLib = null;
+
+
+    dwenguinoBoardSimulation = null;
+
+    scaleFactorForDisplay = 0.8;
+    
+    constructor(logger){
+        super(logger);
+        this.initSimulationState(null);
+        this.graphicsLib = new SpyrographGraphicsLib();
+        this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
+        this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
+    }
+
+    initSimulationState(boardState){
+        super.initSimulationState(boardState);
+        this.representationScale.motorAngles = [0, 0] // Determined by the simulation       
+    }
+
+    initSimulationDisplay(containerId){
+        super.initSimulationDisplay(containerId);       // Removes the container
+        // Remove previous canvas and context
+        this.canvases = [];
+        this.contexts = [];
+
+        this.initDrawingEnvironment(containerId);       // Setup drawing canvases
+        this.loadPreviousImageIfExists();               // Check if an image was saved before and load it
+        this.createControlsMenu();                      // Create the controls for scaling segments and changing color
+        this.convertToDisplayAndRender(false);                                  // Render the initial drawing
+
+        this.container = $(`#${containerId}`);
+        let boardContainerId = "boardContainer";
+
+        let boardContainer = $("&lt;div>").attr("id", boardContainerId).css({"position": "absolute", "width": "40%", "right": "10px", "top": "10px"});
+        this.container.append(boardContainer);
+        
+        // init board simulation
+        this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
+        this.dwenguinoBoardSimulation.setComponentsTopOffset("55%");
+        this.dwenguinoBoardSimulation.setComponentsRightPosition("55px");
+        this.dwenguinoBoardSimulation.initSimulationState(null);
+        this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);
+
+        // Render on resize of container
+        new ResizeObserver(() => {
+            for (let i = 0 ; i &lt; this.canvases.length ; ++i){
+                this.canvases[i].width = this.container.width();
+                this.canvases[i].height = this.container.height();
+            }
+            this.loadPreviousImageIfExists(); 
+            this.convertToDisplayAndRender(true);
+        }).observe(document.querySelector(`#${containerId}`));
+ 
+        
+        
+    }
+
+    initDrawingEnvironment(containerId){
+        this.container = $(`#${containerId}`);
+        this.container.css({"position": "relative"});
+
+        // Create two canvasses, one for the robot and one for the drawing it makes.
+        let canvasIds = ["spyrograph_canvas", "spyrograph_drawing_canvas"];
+        for (let id of canvasIds){
+            this.setupCanvas(id, this.container);
+        }       
+    }
+
+    loadPreviousImageIfExists(){
+        // If there is a previous image, redraw it
+        if (this.imageData != null){
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].putImageData(this.imageData, 0, 0);
+        }
+    }
+    /**
+     * Adds canvas to dom and to the local array of canvases
+     * @param {String} id the dom id the canvas should have
+     */
+    setupCanvas(id, container){
+        let canvas = $("&lt;canvas>").attr("id", id).css({"position": "absolute", "left": "10px", "top": 0})[0];
+        let context = canvas.getContext("2d");
+        canvas.width = container.width();
+        canvas.height = container.height();
+        this.canvases.push(canvas);
+        this.contexts.push(context);
+        this.container.append(canvas);
+    }
+
+    createControlsMenu(){
+        // Create slider for the different arm segments
+        let controlscontainer = $("&lt;span>").css({"position": "absolute", 
+                                                "right": 0,
+                                                "bottom": 0, 
+                                                "width": "15%", 
+                                                "text-align": "center", 
+                                                "margin-right": "20px",
+                                                "margin-bottom": "20px"
+                                            });
+
+        // Create segment sliders
+        //this.createSlidersForSegments(controlscontainer);
+
+        // Create color picker
+        let colorpicker = $("&lt;input>").attr("type", "color").attr("value", this.currentColor);
+        let self = this;
+        colorpicker.on("change", function(event){
+            console.log($(this).val());
+            self.currentColor = $(this).val();
+        });
+        controlscontainer.append(colorpicker);
+
+        //Create clear button
+        let clearbutton = $("&lt;button>").attr("value", "Clear").html(MSG.clear).css({"width": "90%", "margin-top": "5px"});
+        clearbutton.on("click", (evt) => {
+            // Clear drawing canvas
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].clearRect(
+                0, 
+                0, 
+                this.canvases[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].width, 
+                this.canvases[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].height);
+            this.imageData = null;
+        });
+        controlscontainer.append(clearbutton);
+
+        //Create save button
+        let saveButton = $("&lt;button>").attr("value", "Save").html(MSG.save).css({"width": "90%", "margin-top": "5px"});
+        saveButton.on("click", (evt) => {
+            // Clear drawing canvas
+            var img = this.canvases[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].toDataURL('image/png');
+            var link = document.createElement('a');
+            link.download = 'tekening.png';
+            link.href = img;
+            link.click();
+        });
+        controlscontainer.append(saveButton);
+        this.container.append(controlscontainer);
+    }
+
+    
+
+    createSlidersForSegments(controlscontainer){
+        for (let i = 0 ; i &lt; this.representationScale.segmentLengths.length - 1 ; ++i){
+             // Add sliders for adjusting the arm lengths
+            let l1SliderContainer = $("&lt;span>")
+            let l1SliderLabel = $("&lt;span>").html("l" + i);
+            let l1Slider = $("&lt;input>").attr("type", "range")
+                .attr("min", this.representationScale.segmentRanges[i][0])
+                .attr("max", this.representationScale.segmentRanges[i][1])
+                .attr("value", this.representationScale.segmentCount[i]);
+            l1Slider.css({"border-radius": "5px"});
+            let self = this;
+            l1Slider.on("change", function(event){
+                let sliderValue = parseInt($(this).val());
+                console.log(sliderValue);
+                self.representationScale.segmentCount[i] = sliderValue;
+                self.representationScale.segmentLengths[i] = self.representationScale.segmentIncrement*sliderValue;
+                self.calculateHingePoints();
+                self.convertToDisplayAndRender(false); 
+            });
+
+            l1SliderContainer.append(l1SliderLabel);
+            l1SliderContainer.append(l1Slider);
+            controlscontainer.append(l1SliderContainer);
+        }
+    }
+
+    updateScenario(boardState){
+        super.updateScenario(boardState)
+        this.updateScenarioState(boardState);
+        this.updateScenarioDisplay(boardState);
+        this.dwenguinoBoardSimulation.updateScenario(boardState);
+    }
+
+    updateScenarioState(boardState){
+        super.updateScenarioState(boardState);
+        this.timestep++;
+        for (let i = 0 ; i &lt; 2 ; i++){
+            this.representationScale.motorAngles[i] += boardState.getMotorSpeed(i+1)/(255*15);
+        }
+        this.calculateHingePoints();
+    }
+
+    calculateHingePoints(){
+        //Calculate hinges for short arms attached to the motor.
+        for (let i = 0 ; i &lt; 2 ;i++){
+            this.representationScale.hinges[i] = 
+                [this.representationScale.motorAxes[i][0] + this.representationScale.segmentLengths[i]*Math.cos(this.representationScale.motorAngles[i]), 
+                this.representationScale.motorAxes[i][1] + this.representationScale.segmentLengths[i]*Math.sin(this.representationScale.motorAngles[i])];
+        }
+        this.calulateFirstHingePoint();
+        this.calculateCentralHingePoints();
+        this.calculateFinalHingePoint();
+    }
+
+    calulateFirstHingePoint(){
+        // These variables are used for clarity
+        let l1 = this.representationScale.segmentLengths[2];
+        let l2 = this.representationScale.segmentLengths[3];
+        let x1 = this.representationScale.hinges[0][0];
+        let y1 = this.representationScale.hinges[0][1];
+        let x2 = this.representationScale.hinges[1][0];
+        let y2 = this.representationScale.hinges[1][1];
+        let hingepoint = this.calculateHingePoint(x1, y1, x2, y2, l1, l2);
+        this.representationScale.hinges[2][0] = hingepoint[0];
+        this.representationScale.hinges[2][1] = hingepoint[1];
+    }
+
+    calculateCentralHingePoints(){
+        // Caculate the next point past the central hinge
+        // Hinge above motor 1
+        let l1 = this.representationScale.segmentLengths[3];
+        let l2 = this.representationScale.segmentLengths[4];
+        let x1 = this.representationScale.hinges[1][0];
+        let y1 = this.representationScale.hinges[1][1];
+        let x2 = this.representationScale.hinges[2][0];
+        let y2 = this.representationScale.hinges[2][1];
+        this.representationScale.hinges[3][0] = x1 + (l1+l2)*(x2-x1)/l1;
+        this.representationScale.hinges[3][1] = y1 + (l1+l2)*(y2-y1)/l1;
+        // Hinge above motor 2
+        l1 = this.representationScale.segmentLengths[2];
+        l2 = this.representationScale.segmentLengths[5];
+        x1 = this.representationScale.hinges[0][0];
+        y1 = this.representationScale.hinges[0][1];
+        x2 = this.representationScale.hinges[2][0];
+        y2 = this.representationScale.hinges[2][1];
+        this.representationScale.hinges[4][0] = x1 + (l1+l2)*(x2-x1)/l1;
+        this.representationScale.hinges[4][1] = y1 + (l1+l2)*(y2-y1)/l1;
+    }
+
+    calculateFinalHingePoint(){
+        // Second central hinge point
+        let x1 = this.representationScale.hinges[3][0];
+        let y1 = this.representationScale.hinges[3][1];
+        let x2 = this.representationScale.hinges[4][0]
+        let y2 = this.representationScale.hinges[4][1]
+        let l1 = this.representationScale.segmentLengths[6]
+        let l2 = this.representationScale.segmentLengths[7]
+        let hingepoint = this.calculateHingePoint(x1, y1, x2, y2, l1, l2);
+        this.representationScale.hinges[5][0] = hingepoint[0];
+        this.representationScale.hinges[5][1] = hingepoint[1];
+    }
+
+    calculateHingePoint(x1, y1, x2, y2, l1, l2){
+        let p = l2*l2-l1*l1-x2*x2+x1*x1-y2*y2+y1*y1;
+        let q = 2*(x1-x2);
+        let a = ((4*(y2-y1)*(y2-y1))/(q*q))+1;
+        let tellerA = (4*(y2-y1)*(y2-y1)) + q*q;
+        let noemerA = q*q;
+        let b = ((4*p*(y2-y1))/(q*q))-((4*x1*(y2-y1))/q)-(2*y1);
+        let c = ((p*p)/(q*q))-((2*x1*p)/q)+(x1*x1)+(y1*y1)-(l1*l1);
+
+        let y31 = (-1*b + Math.sqrt(b*b-4*a*c))*noemerA/(2*tellerA);
+        let y32 = (-1*b - Math.sqrt(b*b-4*a*c))*noemerA/(2*tellerA);
+        /*let y31 = (-1*b + Math.sqrt(b*b-4*a*c))/(2*a);
+        let y32 = (-1*b - Math.sqrt(b*b-4*a*c))/(2*a);*/
+
+        let x31 = (2*y31*(y2-y1) + p)/q;
+        let x32 = (2*y32*(y2-y1) + p)/q;
+
+
+        if (y31 > y32){
+            return [x31, y31];
+        }else{
+            return [x32, y32];
+        }
+    }
+
+  
+    updateScenarioDisplay(boardState){
+        super.updateScenarioDisplay(boardState);
+        this.convertToDisplayAndRender(true);
+    }
+
+    convertToDisplayAndRender(paintOnDrawingCanvas = true){
+        this.scaleRepresentationToDrawing(this.canvases[this.canvasNames.SPYROGRAPH_CANVAS].width);  // Rescale based on canvas width
+        this.mirrorDisplayVertically(this.canvases[this.canvasNames.SPYROGRAPH_CANVAS].height);
+        // Next time the screen gets repainted the render function 
+        // will be called before the screen is repainted
+        window.requestAnimationFrame(() => { this.render(paintOnDrawingCanvas) });
+    }
+
+    mirrorDisplayVertically(currentHeight){
+        for (let i = 0 ; i &lt; this.drawingScale.motorAxes.length ; ++i){
+            this.drawingScale.motorAxes[i][1] = -1*this.drawingScale.motorAxes[i][1] + currentHeight;
+        }
+        for (let i = 0 ; i &lt; this.drawingScale.hinges.length ; ++i ){
+            this.drawingScale.hinges[i][1] = -1*this.drawingScale.hinges[i][1] + currentHeight; 
+        }
+    }
+
+    scaleRepresentationToDrawing(currentWidth){
+        this.scaleSegementLengths(currentWidth);
+        this.scaleHingePoints(currentWidth);
+        this.scaleArmProperties(currentWidth);
+    }
+
+    scaleArmProperties(screenwidth){
+        this.drawingScale.armWidth = this.representationScale.armWidth/this.startScale*screenwidth;
+        this.drawingScale.holeDiameter = this.representationScale.holeDiameter/this.startScale*screenwidth;
+    }
+
+    scaleHingePoints(screenwidth){
+        let scale = screenwidth * this.scaleFactorForDisplay;
+        for (let i = 0 ; i &lt; this.representationScale.motorAxes.length ; ++i){
+            for (let j = 0 ; j &lt; this.representationScale.motorAxes[i].length ; ++j){
+                this.drawingScale.motorAxes[i][j] = this.representationScale.motorAxes[i][j]/this.startScale*scale;
+            }
+        }
+        for (let i = 0 ; i &lt; this.representationScale.hinges.length ; ++i){
+            for (let j = 0 ; j &lt; this.representationScale.hinges[i].length ; ++j){
+                this.drawingScale.hinges[i][j] = this.representationScale.hinges[i][j]/this.startScale*scale;
+            }
+        }
+    }
+
+    scaleSegementLengths(screenwidth){
+        let scale = screenwidth * this.scaleFactorForDisplay;
+        for (let i = 0 ; i &lt; this.representationScale.motorAxes.length ; i++){
+            for (let j = 0 ; j &lt; this.representationScale.motorAxes[i].length ; j++){
+                this.drawingScale.motorAxes[i][j] = this.representationScale.motorAxes[i][j]/this.startScale*scale;
+            }
+        }
+        for (let i = 0 ; i &lt; this.representationScale.segmentLengths.length ; i++){
+            this.drawingScale.segmentLengths[i] = this.representationScale.segmentLengths[i]/this.startScale*scale
+        }
+        this.currentScale = scale;
+    }
+
+    render(paintOnDrawingCanvas = TextTrackCueList){
+        let canvasWidth = this.canvases[this.canvasNames.SPYROGRAPH_CANVAS].width;
+        let canvasHeight = this.canvases[this.canvasNames.SPYROGRAPH_CANVAS].height;
+        // Clear canvas
+        this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].clearRect(
+            0, 
+            0, 
+            canvasWidth, 
+            canvasHeight);
+        
+        this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].fillStyle = "#000000";
+        this.graphicsLib.drawBasePlate(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS],
+            new Point(this.drawingScale.motorAxes[0][0], this.drawingScale.motorAxes[0][1]),
+            new Point(this.drawingScale.motorAxes[1][0], this.drawingScale.motorAxes[1][1])
+        );
+
+        
+        this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].fillStyle = "#FF0000";
+        let allHinges = this.drawingScale.hinges.concat(this.drawingScale.motorAxes);
+        for (let i = 0 ; i &lt; allHinges.length ;i++){
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].beginPath();
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].arc(
+                allHinges[i][0], 
+                allHinges[i][1], 3, 0, 360);
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].closePath();
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS].fill();
+        }
+
+        // Draw the arms
+        this.graphicsLib.drawRobotArm(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS], 
+            new Point(this.drawingScale.motorAxes[0][0], this.drawingScale.motorAxes[0][1]),
+            new Point(this.drawingScale.hinges[0][0], this.drawingScale.hinges[0][1]),
+            this.representationScale.segmentCount[0],
+            this.drawingScale.armWidth,
+            this.drawingScale.holeDiameter);
+        this.graphicsLib.drawRobotArm(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS], 
+            new Point(this.drawingScale.motorAxes[1][0], this.drawingScale.motorAxes[1][1]),
+            new Point(this.drawingScale.hinges[1][0], this.drawingScale.hinges[1][1]),
+            this.representationScale.segmentCount[1],
+            this.drawingScale.armWidth,
+            this.drawingScale.holeDiameter);
+        this.graphicsLib.drawRobotArm(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS], 
+            new Point(this.drawingScale.hinges[0][0], this.drawingScale.hinges[0][1]),
+            new Point(this.drawingScale.hinges[4][0], this.drawingScale.hinges[4][1]),
+            this.representationScale.segmentCount[2] + this.representationScale.segmentCount[5],
+            this.drawingScale.armWidth,
+            this.drawingScale.holeDiameter);
+        this.graphicsLib.drawRobotArm(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS], 
+            new Point(this.drawingScale.hinges[1][0], this.drawingScale.hinges[1][1]),
+            new Point(this.drawingScale.hinges[3][0], this.drawingScale.hinges[3][1]),
+            this.representationScale.segmentCount[3] + this.representationScale.segmentCount[4],
+            this.drawingScale.armWidth,
+            this.drawingScale.holeDiameter);
+        this.graphicsLib.drawRobotArm(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS], 
+            new Point(this.drawingScale.hinges[3][0], this.drawingScale.hinges[3][1]),
+            new Point(this.drawingScale.hinges[5][0], this.drawingScale.hinges[5][1]),
+            this.representationScale.segmentCount[6],
+            this.drawingScale.armWidth,
+            this.drawingScale.holeDiameter);
+        this.graphicsLib.drawRobotArm(
+            this.contexts[this.canvasNames.SPYROGRAPH_CANVAS], 
+            new Point(this.drawingScale.hinges[4][0], this.drawingScale.hinges[4][1]),
+            new Point(this.drawingScale.hinges[5][0], this.drawingScale.hinges[5][1]),
+            this.representationScale.segmentCount[7],
+            this.drawingScale.armWidth,
+            this.drawingScale.holeDiameter);
+
+
+        /*let p1 = new Point(this.representationScale.hinges[0][0], this.representationScale.hinges[0][1]);
+        let p2 = new Point(this.representationScale.hinges[4][0], this.representationScale.hinges[4][1]);
+        console.log("Arm 1 length:" + p1.getEuclideanDistanceTo(p2));
+        p1 = new Point(this.representationScale.hinges[1][0], this.representationScale.hinges[1][1]);
+        p2 = new Point(this.representationScale.hinges[3][0], this.representationScale.hinges[3][1]);
+        console.log("Arm 2 length:" + p1.getEuclideanDistanceTo(p2));*/
+        
+        // Draw a point on the drawingcanvas
+        if (paintOnDrawingCanvas){
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].fillStyle = this.currentColor;
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].beginPath();
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].arc(
+                this.drawingScale.hinges[5][0], 
+                this.drawingScale.hinges[5][1], 1, 0, 360);
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].closePath();
+            this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].fill();
+        }
+
+        // Save drawing in imageData
+        this.imageData = this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].getImageData(0, 0, this.container.width(), this.container.height());
+
+    }
+
+}
+
+export default DwenguinoSimulationScenarioSpyrograph;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:58:58 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

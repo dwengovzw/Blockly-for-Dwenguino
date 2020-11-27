@@ -21,6 +21,14 @@
         <div class="db_logo">
           <!-- <img id="db_wegostem_logo_top_left" src="./DwenguinoIDE/img/wegostem.png" alt="The WeGoSTEM logo" /> -->
           <img id="db_dwengo_logo_top_left" src="./DwenguinoIDE/img/dwengo_logo.png" alt="The dwengo logo" />
+        <div id="switch_code_view">
+            <span id="switch_to_blockly">Blockly</span>
+            <label class="code-switch">
+                <input id="code_checkbox" type="checkbox">
+                <span class="code-slider round"></span>
+              </label>
+            <span id="switch_to_code">Code</span>
+        </div>
         </div><div class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
             <span id="db_menu_item_dwengo_robot_teacher" alt="DwengoRobotteacher"><img id="db_menu_item_dwengo_robot_teacher_image" src="./DwenguinoIDE/img/dwengo_robot_plain.svg" alt="The dwengo logo" /></span>
             <span id="db_menu_item_simulator" class="db_menu_item glyphicon glyphicon-dashboard" alt="Open or close simulator"></span>
@@ -39,6 +47,11 @@
     </div>
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
+            <div id="db_code_pane">
+                <pre id="db_arduino_code" class="content">    
+            </div>
+
+            </pre>
         </div>
         <div id="db_infopane">
             <div id="db_simulator_panes">
@@ -137,17 +150,18 @@
               </value>
           </block>
           <block type="dwenguino_servo">
-              <value name="channel">
-                  <block type="math_number" id="111">
-                      <field name="NUM">1</field>
-                  </block>
-              </value>
+                <value name="pin">
+                    <block type="dwenguino_servo_dropdown">
+                        <field name="SERVO_DROPDOWN">SERVO1</field>
+                    </block>
+                </value>
               <value name="angle">
                   <block type="math_number" id="116">
                       <field name="NUM">45</field>
                   </block>
               </value>
           </block>
+          <block type="dwenguino_servo_dropdown"></block>
           <block type="dwenguino_pins">
               <field name="PIN">0</field>
           </block>
@@ -218,7 +232,7 @@
         <block type="socialrobot_servo">
             <value name="pin">
                 <block type="math_number" id="212">
-                    <field name="NUM">0</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
             <value name="angle">
@@ -230,60 +244,60 @@
         <block type="socialrobot_arms_down">
             <value name="servo_right_hand1">
                 <block type="math_number" id="202">
-                    <field name="NUM">1</field>
+                    <field name="NUM">36</field>
                 </block>
             </value>
             <value name="servo_left_hand1">
                 <block type="math_number" id="203">
-                    <field name="NUM">2</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
         </block>
         <block type="socialrobot_arms_up">
             <value name="servo_right_hand2">
                 <block type="math_number" id="204">
-                    <field name="NUM">1</field>
+                    <field name="NUM">36</field>
                 </block>
             </value>
             <value name="servo_left_hand2">
                 <block type="math_number" id="205">
-                    <field name="NUM">2</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
         </block>
         <block type="socialrobot_wave_arms">
             <value name="servo_right_hand">
                 <block type="math_number" id="200">
-                    <field name="NUM">1</field>
+                    <field name="NUM">36</field>
                 </block>
             </value>
             <value name="servo_left_hand">
                 <block type="math_number" id="201">
-                    <field name="NUM">2</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
         </block>
         <block type="socialrobot_eyes_left">
             <value name="servo_right_eye">
                 <block type="math_number" id="206">
-                    <field name="NUM">1</field>
+                    <field name="NUM">36</field>
                 </block>
             </value>
             <value name="servo_left_eye">
                 <block type="math_number" id="207">
-                    <field name="NUM">2</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
         </block>
         <block type="socialrobot_eyes_right">
             <value name="servo_right_eye1">
                 <block type="math_number" id="208">
-                    <field name="NUM">1</field>
+                    <field name="NUM">36</field>
                 </block>
             </value>
             <value name="servo_left_eye1">
                 <block type="math_number" id="209">
-                    <field name="NUM">2</field>
+                    <field name="NUM">37</field>
                 </block>
             </value>
         </block>
@@ -363,22 +377,6 @@
 
     <!--Scripts for step by step tutorials -->
     <script src="./DwenguinoIDE/js/lib/hopscotch.js"></script>
-    <!--<script src="./DwenguinoIDE/tutorials/tutorials.js"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/name_on_lcd.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/show_name_and_disappear.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/introduce_yourself.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem1.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/poem2.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/wegostem_debugging/lampje_aan_uit.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/drive_forward.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_in_square.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/ride_to_wall.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/ridingrobot/avoid_wall.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/dwenguino/introduction.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/socialrobot/introduction.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/socialrobot/socialrobots.js" type="module"></script>
-    <script src="./DwenguinoIDE/tutorials/socialrobot/hello.js" type="module"></script>-->
-
 
     <script src="./blockly/generators/arduino.js"></script>
 

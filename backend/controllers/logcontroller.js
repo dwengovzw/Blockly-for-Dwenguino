@@ -1,8 +1,8 @@
 // Import contact model
-//import FunctionalVectorGenerator from '../functionalGenerator/functionalVectorGenerator.js'
-import Logitem from '../models/logModel.js';
+//import FunctionalVectorGenerator from '../functional_generator/functional_vector_generator.js'
+import Logitem from '../models/log_model.js';
 import uuidv4 from 'uuid/v4.js';
-import { EVENT_NAMES } from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/logging/EventNames.js';
+import { EVENT_NAMES } from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/logging/event_names.js';
 import path from 'path'
 
 import { Worker, isMainThread, parentPort } from 'worker_threads';

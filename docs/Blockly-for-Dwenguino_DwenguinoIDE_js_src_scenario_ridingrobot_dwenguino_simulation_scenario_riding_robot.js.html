@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/ridingrobot/dwenguino_simulation_scenario_riding_robot.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/ridingrobot/dwenguino_simulation_scenario_riding_robot.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js"
+import DwenguinoBoardSimulation from "../dwenguino_board_simulation.js";
+
+/**
+ * This class is the abstraction of the riding robot simulator scenario.
+ * It handles the layout and behaviour of a certain simulator scenario.
+ * It provides a step function which uses and updates the state of the dwenguino board.
+ * For example it uses the motor speed states to change the location of a robot or changes the sonar distance state depending on how far it is form an object.
+ *
+ */
+class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario {
+
+    dwenguinoBoardSimulation = null;
+    constructor(logger) {
+        super(logger);
+        this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
+        this.initSimulationState(null);
+    }
+
+    /**
+    * Initializes the simulator robot.
+    * This resets the simulation state.
+    *
+    * @param {BoardState} boardState - The current state of the Dwenguino simulation board.
+    *
+    */
+    initSimulationState(boardState) {
+        // init superclass
+        super.initSimulationState(boardState);
+        //init robot statecontainerIdSelector
+        this.robot = {
+            image: {
+                width: 65,
+                height: 83
+            },
+            start: {
+                x: 100,
+                y: 100,
+                angle: 0
+            },
+            position: {
+                x: 100,
+                y: 100,
+                angle: 0
+            },
+            collision: [{
+                type: 'circle',
+                radius: 25
+            }]
+        };
+        this.containerWidth = 0;
+        this.containerHeight = 0;
+
+    }
+
+
+    /**
+     * Initializes the simulator robot display.
+     * This function puts all the nececary visuals inside the container with the id containerId.
+     * Additionally, it sets up the state of the simulated robot.
+     * The function also resets the internal state of the simulation so the display is initialized from its original position.
+     *
+     * @param {string} containerId - The jquery selector of the conainer to put the robot display.
+     *
+     */
+    initSimulationDisplay(containerId) {
+        // init superclass
+        super.initSimulationDisplay(containerId);
+
+
+        // Create the bottom and top pane and init the Board simulation into the top pane
+        let db_simulator_panes = $(`#${containerId}`);
+
+        let top_pane = $("&lt;div>").attr("id", "db_simulator_top_pane");
+        let bottom_pane = $("&lt;div>").attr("id", "db_simulator_bottom_pane");//.attr("class", "resize-sensor");
+
+        let tab_pane = $("&lt;div>").attr("id", "db_simulator_tab_selection");
+        let tabs = $("&lt;ul>").attr("class", "tabs");
+        //tabs.append('&lt;li id="robot_pane_tab">&lt;a href="#db_robot_pane" class="active">Robot&lt;/a>&lt;/li>&lt;li>&lt;a href="#db_code_pane">Code&lt;/a>&lt;/li>');
+        tab_pane.append(tabs);
+        bottom_pane.append(tab_pane);
+
+
+        let robot_pane = $("&lt;div>").attr("id", "db_robot_pane"); //.attr("class", "resize-sensor");
+        let sim_container = $("&lt;div>").attr("id", "sim_container");
+        let sim_animation = $("&lt;div>").attr("id", "sim_animation");
+        //sim_animation.append('&lt;canvas id="sim_canvas">&lt;/canvas>');
+        sim_container.append(sim_animation);
+        robot_pane.append(sim_container);
+        bottom_pane.append(robot_pane);
+
+
+        /*let code_pane = $("&lt;div>").attr("id", "db_code_pane");
+        code_pane.append('&lt;pre id="content_arduino" class="content">&lt;/pre>');
+        bottom_pane.append(code_pane);*/
+
+        db_simulator_panes.append(top_pane).append(bottom_pane);
+
+        // init board simulation
+        this.dwenguinoBoardSimulation.initSimulationState(null);
+        this.dwenguinoBoardSimulation.initSimulationDisplay("db_simulator_top_pane");
+
+
+        //Init the display elements
+        var container = $("#db_robot_pane");
+
+        //Add resize listerner to the conainer and update width and height accordingly
+        var self = this;
+        new ResizeSensor(sim_container, function () {
+            console.log('myelement has been resized');
+            self.containerWidth = sim_container.width();
+            self.containerHeight = sim_container.height();
+        });
+
+        var animationSprite = $("&lt;div>").attr("id", "sim_animation");
+
+
+        sim_container.append(animationSprite);
+        container.append(sim_container);
+
+
+        $("#db_simulator_bottom_pane")
+            .css("display", "flex")
+            .css("flex-direction", "column");
+
+        $("#db_simulator_tab_selection")
+            .css("height", "30px");
+
+        $("#db_robot_pane")
+            .css("flex: 1");
+
+        $("#sim_container")
+            .css("position", "relative")
+            .css("width", "80%")
+            .css("height", "80%")
+            .css("box-sizing", "border-box");
+
+        $("#sim_animation")
+            .css("width", this.robot.image.width + "px")
+            .css("height", this.robot.image.height + "px")
+            .css("maring-left", "-25px")
+            .css("maring-right", "-20px")
+            .css("position", "absolute")
+            .css("background-image", "url('DwenguinoIDE/img/board/robot.png')")
+            .css("background-size", "100%")
+            .css('top', this.robot.position.y + 'px')
+            .css('left', this.robot.position.x + 'px');  
+    }
+
+
+    /**
+     * Updates the simulation state and display
+     * This function updates the simulation state and display using the supplied board state.
+     *
+     * @param {BoardState} boardState - The state of the Dwenguino board.
+     */
+    updateScenario(boardState) {
+        super.updateScenario(boardState);
+        this.updateScenarioState(boardState);
+        this.updateScenarioDisplay(boardState);
+        this.dwenguinoBoardSimulation.updateScenario(boardState);
+    }
+
+    /** 
+     * Updates the simulation state
+     * This function updates the simulation state using the supplied board state.
+     *
+     * @param {BoardState} boardState - The state of the Dwenguino board. It has the following structure:
+     * {
+     *   pins = new Array(33);
+     *   pinMapping = {};
+     *   lcdContent = new Array(2);
+     *  }
+     *
+     */
+    updateScenarioState(boardState) {
+        super.updateScenarioState(boardState);
+
+        // update the state of the board simulation
+        //this.dwenguinoBoardSimulation.updateScenarioState(boardState);
+
+        //Save the current dimensions of the container
+        this.containerWidth = $("#sim_container").width();
+        this.containerHeight = $("#sim_container").height();
+
+        // update the state of this simulation
+
+        var speed1 = boardState.getMotorSpeed(1);
+        var speed2 = boardState.getMotorSpeed(2);
+
+
+        // Save the current state of the robot into local variables.
+        var x = this.robot.position.x;
+        var y = this.robot.position.y;
+        var angle = this.robot.position.angle;
+
+        // decide on angle (in deg) and distance (in px) based on 2 motor speeds
+        var distance = (speed1 + speed2) / 100;
+
+        if (speed1 !== speed2) {
+            angle += (speed2 - speed1) / 30;
+        }
+
+        x += distance * Math.cos(Math.PI / 180 * angle);
+        y += distance * Math.sin(Math.PI / 180 * angle);
+
+        // move to other side of frame if out of frame
+        if (x > this.containerWidth) {
+            x = 0;
+        } else if (x &lt; 0) {
+            x = this.containerWidth;
+        }
+        if (y > this.containerHeight) {
+            y = 0;
+        } else if (y &lt; 0) {
+            y = this.containerHeight;
+        }
+        this.robot.position = {
+            x: x,
+            y: y,
+            angle: angle
+        };
+    }
+
+    /** Updates the simulation display
+     *  This function updates the simulation display using the supplied board state.
+     *
+     *  @param {BoardState} boardState - The state of the Dwenguino board.
+     *
+     */
+    updateScenarioDisplay(boardState) {
+        super.updateScenarioDisplay(boardState);
+
+        // update the display of the dwenguino board simulation
+        //this.dwenguinoBoardSimulation.updateScenarioDisplay(boardState);
+
+        // update the state of this scenario
+
+        var robot = this.robot;
+        var $robot = $('#sim_animation');
+
+        // Update field size
+        this.containerWidth = $("#sim_container").width();
+        this.containerHeight = $("#sim_container").height();
+
+        $robot
+            .css('top', this.robot.position.y + 'px')
+            .css('left', this.robot.position.x + 'px')
+            .css('transform', 'rotate(' + this.robot.position.angle + 'deg)');
+    }
+}
+
+export default DwenguinoSimulationScenarioRidingRobot;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 19:18:16 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

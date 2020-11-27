@@ -1,7 +1,7 @@
 import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
 import TutorialAnswer from "../../js/src/tutorials/TutorialAnswer.js"
 import TutorialMultipleChoiceQuestion from "../../js/src/tutorials/TutorialMultipleChoiceQuestion.js"
-import { EVENT_NAMES } from "../../js/src/logging/EventNames.js"
+import { EVENT_NAMES } from "../../js/src/logging/event_names.js"
 import { tutorialTargets } from "../tutorialTargets.js"
 
 
