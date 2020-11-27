@@ -384,7 +384,7 @@ var dc_motor_json = {
 
 var dwenguino_servo_json = {
   "id": "dwenguino_servo",
-  "message0": MSG.dwenguinoServoBlock + " %1 %2 %3 " + MSG.channel + " %4 " + MSG.angle + " %5",
+  "message0": MSG.dwenguinoServoBlock + " %1 %2 %3 " + MSG.pin + " %4 " + MSG.angle + " %5",
   "args0": [
     {
       "type": "input_dummy"
@@ -401,7 +401,7 @@ var dwenguino_servo_json = {
     },
     {
       "type": "input_value",
-      "name": "channel",
+      "name": "pin",
       "check": "Number"
     },
     {
@@ -421,6 +421,29 @@ var dwenguino_servo_json = {
 Blockly.Blocks['dwenguino_servo'] = {
   init: function() {
     this.jsonInit(dwenguino_servo_json);
+  }
+};
+
+var dwenguino_servo_dropdown = {
+  "id": "dwenguino_servo_dropdown",
+  "message0": MSG.dwenguinoServoBlock +  " %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "SERVO_DROPDOWN",
+      "check": "Number",
+      "options": [[MSG.dwenguinoServoOne, 'SERVO1'], [MSG.dwenguinoServoTwo, 'SERVO2']]
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Msg.DWENGUINO_HUE,
+  "tooltip": MSG.dwenguinoServoDropdownTooltip,
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_servo_dropdown'] = {
+  init: function(){
+      this.jsonInit(dwenguino_servo_dropdown);
   }
 };
 
