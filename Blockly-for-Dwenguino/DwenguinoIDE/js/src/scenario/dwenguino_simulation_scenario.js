@@ -9,6 +9,7 @@
  */
 class DwenguinoSimulationScenario {
 
+    isSimulationRunning = false;
     logger = null;
     constructor(logger) {
         this.logger = logger;
@@ -24,7 +25,6 @@ class DwenguinoSimulationScenario {
     */
     initSimulationState(boardState) {
         console.log("initSimulationState");
-
     }
 
     /** 
@@ -67,6 +67,15 @@ class DwenguinoSimulationScenario {
     */
     updateScenarioDisplay(dwenguinoState) {
     }
+
+    setIsSimulationRunning(isSimulationRunning){
+        this.isSimulationRunning = isSimulationRunning;
+    }
+
+    getIsSimulationRunning() {
+        return this.isSimulationRunning;
+    }
+
 }
 
 export default DwenguinoSimulationScenario;

@@ -422,6 +422,11 @@ class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulationScenario {
         
 
     }
+
+    setIsSimulationRunning(isSimulationRunning){
+        this.isSimulationRunning = isSimulationRunning;
+        this.dwenguinoBoardSimulation.setIsSimulationRunning(isSimulationRunning);
+    }
 }
 
 export default DwenguinoSimulationScenarioPlotter;

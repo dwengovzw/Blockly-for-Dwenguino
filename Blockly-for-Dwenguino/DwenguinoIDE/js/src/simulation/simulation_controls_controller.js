@@ -86,22 +86,22 @@ class SimulationControlsController {
             this.setButtonsStart();
             // start
             if (!this.simulationRunner.isSimulationRunning && !this.simulationRunner.isSimulationPaused) {
-                this.simulationRunner.isSimulationRunning = true;
+                this.simulationRunner.setIsSimulationRunning(true);
                 this.startSimulation();
                 this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStart, ""));
                 // resume
             } else if (!this.simulationRunner.isSimulationRunning) {
                 this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simResume, ""));
-                this.simulationRunner.isSimulationPaused = false;
-                this.simulationRunner.isSimulationRunning = true;
+                this.simulationRunner.setIsSimulationPaused(false);
+                this.simulationRunner.setIsSimulationRunning(true);
                 this.resumeSimulation();
             }
         });
 
         $("#sim_pause").click(() => {
             this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simPause, ""));
-            this.simulationRunner.isSimulationRunning = false;
-            this.simulationRunner.isSimulationPaused = true;
+            this.simulationRunner.setIsSimulationRunning(false);
+            this.simulationRunner.setIsSimulationPaused(true);
             this.setButtonsPause();
         });
 
@@ -116,12 +116,12 @@ class SimulationControlsController {
             // step 1
             if (!this.simulationRunner.isSimulationPaused && !this.simulationRunner.isSimulationRunning) {
                 this.startStepSimulation();
-                this.simulationRunner.isSimulationPaused = true;
+                this.simulationRunner.setIsSimulationPaused(true);
                 // step n
             } else if (!this.simulationRunner.isSimulationRunning) {
-                this.simulationRunner.isSimulationPaused = false;
+                this.simulationRunner.setIsSimulationPaused(false);
                 this.simulationRunner.step(true);
-                this.isSimulationPaused = true;
+                this.setIsSimulationPaused(true);
             }
         });
 
@@ -223,8 +223,8 @@ class SimulationControlsController {
 
     handleSimulationStop() {
         this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStop, ""));
-        this.simulationRunner.isSimulationRunning = false;
-        this.simulationRunner.isSimulationPaused = false;
+        this.simulationRunner.setIsSimulationRunning(false);
+        this.simulationRunner.setIsSimulationPaused(false);
         this.setButtonsStop();
         this.stopSimulation();
     }

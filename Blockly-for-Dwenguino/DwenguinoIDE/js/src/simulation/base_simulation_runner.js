@@ -106,10 +106,11 @@ class BaseSimulationRunner{
     * @param {boolean} once 
     */
    step(once = false) {
-        if (this.isSimulationPaused) {
+        if (this.isSimulationPaused || !this.isSimulationRunning) {
             return;
         }
 
+        
         // Read the next line and execute it. The sandbox environment will update the board state
         var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
         this.debugger.debuggerjs.machine.step();
@@ -126,7 +127,7 @@ class BaseSimulationRunner{
             if (!once){
                 setTimeout(this.step.bind(this), this.speedDelay);
             } else {
-                this.isSimulationPaused = true;
+                this.setIsSimulationPaused(true);
             }
             
         } else {
@@ -162,7 +163,7 @@ class BaseSimulationRunner{
             if (!once) { 
                 setTimeout(()=> { this.step() }, this.delayRemainingAfterSteps);
             } else {
-                this.isSimulationPaused = true;
+                this.setIsSimulationPaused(true);
             }
         }
     }
@@ -184,9 +185,18 @@ class BaseSimulationRunner{
     checkForEnd() {
         if ((this.isSimulationRunning || this.isSimulationPaused) &&
             this.debugger.debuggerjs.machine.halted) {
-            this.isSimulationRunning = false;
-            this.isSimulationPaused = false;
+            this.setIsSimulationRunning(false);
+            this.setIsSimulationPaused(false);
         }
+    }
+
+    setIsSimulationRunning(isSimulationRunning){
+        this.isSimulationRunning = isSimulationRunning;
+        this.currentScenario.setIsSimulationRunning(this.isSimulationRunning);
+    }
+
+    setIsSimulationPaused(isSimulationPaused){
+        this.isSimulationPaused = isSimulationPaused;
     }
 }
 
