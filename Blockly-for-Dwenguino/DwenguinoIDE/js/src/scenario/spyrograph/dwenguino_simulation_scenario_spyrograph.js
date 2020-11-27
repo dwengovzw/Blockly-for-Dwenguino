@@ -468,6 +468,11 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
 
     }
 
+    setIsSimulationRunning(isSimulationRunning){
+        this.isSimulationRunning = isSimulationRunning;
+        this.dwenguinoBoardSimulation.setIsSimulationRunning(isSimulationRunning);
+    }
+
 }
 
 export default DwenguinoSimulationScenarioSpyrograph;

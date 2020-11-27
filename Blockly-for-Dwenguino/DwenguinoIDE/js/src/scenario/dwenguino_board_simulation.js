@@ -40,7 +40,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         this.rightSimComponentsPosition = position;
     }
 
-
     initAudioContext(){
         try {
             this.audiocontext = new AudioContext();
@@ -49,9 +48,9 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         }
     }
 
-    initSimulationState(boardState){
+    // initSimulationState(boardState){
 
-    }
+    // }
 
     initSimulationDisplay(containerId){
 
@@ -153,11 +152,15 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         let self = this;
         // push buttons
         $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mousedown', function() {
-            self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 0;
+            if(self.getIsSimulationRunning()){
+                self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 0;
+            }
         });
 
         $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mouseup', function() {
-            self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 1;
+            if(self.getIsSimulationRunning()){
+                self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 1;
+            }
         });
 
         $('#db_simulator_mute').on("click", () => {
@@ -227,9 +230,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
                 console.log('Sonar input element is undefined');
             }
         }
-        
-
-
     
         // Play audio on the buzzer
         
@@ -313,15 +313,15 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
                 classValue = "sim_light sim_light_on";
             }
             document.getElementById('sim_light_' + i).className = classValue;
-          }
+        }
           // Set led 13 to right value
         if (board.getLedState(8) === 0){
             document.getElementById('sim_light_13').className = "sim_light sim_light_off";
-        }else{
+        } else{
             document.getElementById('sim_light_13').className = "sim_light sim_light_on";
         }
-    
-      }
+    }
+     
 }
 
 export default DwenguinoBoardSimulation;

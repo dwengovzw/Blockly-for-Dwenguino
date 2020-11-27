@@ -248,6 +248,11 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
             .css('left', this.robot.position.x + 'px')
             .css('transform', 'rotate(' + this.robot.position.angle + 'deg)');
     }
+
+    setIsSimulationRunning(isSimulationRunning){
+        this.isSimulationRunning = isSimulationRunning;
+        this.dwenguinoBoardSimulation.setIsSimulationRunning(isSimulationRunning);
+    }
 }
 
 export default DwenguinoSimulationScenarioRidingRobot;

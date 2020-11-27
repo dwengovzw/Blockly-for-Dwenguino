@@ -24,8 +24,6 @@ class SimulationRunner extends BaseSimulationRunner{
         }
         this.debugger.blocks.lastColours = [-1, -1];
         this.debugger.blocks.lastBlocks = [null, null];
-        
-
     }
 
     initScenario(){
@@ -51,6 +49,10 @@ class SimulationRunner extends BaseSimulationRunner{
     */
     step(once = false) {
         super.step(once);
+
+        if (this.isSimulationPaused || !this.isSimulationRunning) {
+            return;
+        }
         // highlight the current block
         this.updateBlocklyColour();
     }

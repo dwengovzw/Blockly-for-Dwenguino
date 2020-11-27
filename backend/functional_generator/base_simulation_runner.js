@@ -45,6 +45,11 @@ class BaseSimulationRunner{
         this.resetDwenguino();
     }
 
+    /**
+     * Resets and initializes the current scenario by resetting the Dwenguino board state and 
+     * the simulation display. Ensures that all events and interactions with the Dwenguino
+     * board and scenario are handled appropriately.
+     */
     initScenario(){
         // reset scenario state
         this.currentScenario.initSimulationState(this.board);
@@ -67,12 +72,11 @@ class BaseSimulationRunner{
         this.initScenario();
     }
 
-    /*
-    * initialize the debugging environment 
-    * This is different in the frontend.
+    /**
+    * initialize the debugging environment
     */
    createDebugger(options = {}) {
-    return new Debugger(new Machine(options.sandbox, options));
+    return debugjs.createDebugger(options);
    }
 
    initDebugger(code) {
@@ -102,8 +106,9 @@ class BaseSimulationRunner{
         
     }
 
-    /*
+    /**
     * While the simulation is running, this function keeps being called with "speeddelay" timeouts in between
+    * @param {boolean} once 
     */
    step(once = false) {
         if (this.isSimulationPaused) {
@@ -126,7 +131,7 @@ class BaseSimulationRunner{
             if (!once){
                 setTimeout(this.step.bind(this), this.speedDelay);
             } else {
-                this.isSimulationPaused = true;
+                this.setIsSimulationPaused(true);
             }
             
         } else {
@@ -141,8 +146,9 @@ class BaseSimulationRunner{
         this.checkForEnd();
     }
 
-    /*
+    /**
    *  This function iterates until the delay has passed
+   * @param {boolean} once 
    */
   performDelayLoop(once) {
         // Here we want the simulation to keep running but not let the board state update.
@@ -161,12 +167,12 @@ class BaseSimulationRunner{
             if (!once) { 
                 setTimeout(()=> { this.step() }, this.delayRemainingAfterSteps);
             } else {
-                this.isSimulationPaused = true;
+                this.setIsSimulationPaused(true);
             }
         }
     }
 
-    /*
+    /**
     * Displays the values of the variables during the simulation
     */
     handleScope() {
@@ -177,17 +183,25 @@ class BaseSimulationRunner{
         }
     }
 
-    /*
+    /**
     * Checks if the simulation has been interrupted
     */
     checkForEnd() {
         if ((this.isSimulationRunning || this.isSimulationPaused) &&
             this.debugger.debuggerjs.machine.halted) {
-            this.isSimulationRunning = false;
-            this.isSimulationPaused = false;
+            this.setIsSimulationRunning(false);
+            this.setIsSimulationPaused(false);
         }
     }
 
+    setIsSimulationRunning(isSimulationRunning){
+        this.isSimulationRunning = isSimulationRunning;
+        this.currentScenario.setIsSimulationRunning(this.isSimulationRunning);
+    }
+
+    setIsSimulationPaused(isSimulationPaused){
+        this.isSimulationPaused = isSimulationPaused;
+    }
 }
 
 export default BaseSimulationRunner;
