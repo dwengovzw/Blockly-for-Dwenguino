@@ -1,5 +1,5 @@
-import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
-import { EVENT_NAMES } from "../../js/src/logging/EventNames.js"
+import DwenguinoBlockly from "../../js/src/dwenguino_blockly.js"
+import { EVENT_NAMES } from "../../js/src/logging/event_names.js"
 import { tutorialTargets } from "../tutorialTargets.js"
 
 let lampOnOffWeGoSTEM = {

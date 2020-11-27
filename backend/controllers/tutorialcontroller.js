@@ -1,5 +1,5 @@
-import Useritem from '../models/userModel.js';
-import Tutorialitem from '../models/tutorialModel.js';
+import Useritem from '../models/user_model.js';
+import Tutorialitem from '../models/tutorial_model.js';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 

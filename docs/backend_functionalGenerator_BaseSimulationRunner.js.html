@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: backend/functionalGenerator/BaseSimulationRunner.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: backend/functionalGenerator/BaseSimulationRunner.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import BoardState from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/simulation/BoardState.js'
+import SimulationSandbox from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/simulation/SimulationSandbox.js'
+import Machine from '../debugjs/lib/machine.js';
+import Debugger from '../debugjs/lib/debugger.js';
+
+/**
+ * NOTICE! This is a copy of the file in the frontend. It should be the same file.
+ * However, because of issues with the EMS syntax I cannot import it in a proper way in both
+ * node as the browser.
+ */
+
+export default class BaseSimulationRunner{
+    board = null;
+    debugger = null;
+    simulationSandbox = null;
+    currentScenario = null;
+    speedDelay = 16;
+    baseSpeedDelay = 16;
+    isSimulationRunning = false;
+    isSimulationPaused = false;
+    constructor(){
+        this.board = new BoardState();
+        this.simulationSandbox = new SimulationSandbox(this.board);
+        this.initDebuggerState();
+    }
+
+    /**
+     * This function initializes the debugger state to prepare it for step by step execution.
+     */
+    initDebuggerState() {
+        this.debugger = {
+            debuggerjs: null,
+            code: "",
+            blocks: {
+                lastBlocks: [null, null],
+                lastColours: [-1, -1],
+                blockMapping: {}
+            }
+        };
+    }
+
+    setCurrentScenario(scenario){
+        this.currentScenario = scenario;
+        this.simulationSandbox.setCurrentScenario(this.currentScenario);
+        this.resetDwenguino();
+    }
+
+    initScenario(){
+        // reset scenario state
+        this.currentScenario.initSimulationState(this.board);
+        this.currentScenario.initSimulationDisplay("");
+        this.currentScenario.updateScenario(this.board);
+    }
+
+    /**
+    * Resets the dwenguino (drawing) to its initial state (remove text, no sound etc)
+    */
+   resetDwenguino() {
+        // delete debugger
+        this.debugger.debuggerjs = null;
+        this.debugger.code = "";
+        this.debugger.blocks.blockMapping = {};
+
+        // Reset the board state
+        this.board.resetBoard();
+        
+        this.initScenario();
+    }
+
+    /*
+    * initialize the debugging environment 
+    * This is different in the frontend.
+    */
+   createDebugger(options = {}) {
+    return new Debugger(new Machine(options.sandbox, options));
+   }
+
+   initDebugger(code) {
+        // initialize simulation
+        this.resetDwenguino();
+        // get code
+        this.debugger.code = code;
+        // create debugger
+        this.debugger.debuggerjs = this.createDebugger({
+            //iframeParentElement: document.getElementById('debug'),
+            // declare context that should be available in debugger
+            sandbox: {
+                DwenguinoSimulation: this.simulationSandbox
+            }
+        });
+
+        this.debugger.debuggerjs.machine.on('error', function (err) {
+            console.log(err);
+            console.error(err.message);
+        });
+
+        var filename = 'DwenguinoSimulation';
+        this.debugger.debuggerjs.load(this.debugger.code, filename);
+
+        // Performs a single step to start the debugging process, hihglights the setup loop block.
+        this.debugger.debuggerjs.machine.step();
+        
+    }
+
+    /*
+    * While the simulation is running, this function keeps being called with "speeddelay" timeouts in between
+    */
+   step(once = false) {
+        if (this.isSimulationPaused) {
+            return;
+        }
+
+        // Read the next line and execute it. The sandbox environment will update the board state
+        var line = this.debugger.getCurrentLoc().start.line - 1;
+        this.debugger.debuggerjs.machine.step();
+
+
+        // Get current line
+        var code = this.debugger.code.split("\n")[line] === undefined ? '' : this.debugger.code.split("\n")[line];
+
+        // Update the scenario View
+        this.currentScenario.updateScenario(this.board);
+
+        // check if current line is not a sleep
+        if (!code.trim().startsWith("DwenguinoSimulation.sleep")) {
+            if (!once){
+                setTimeout(this.step.bind(this), this.speedDelay);
+            } else {
+                this.isSimulationPaused = true;
+            }
+            
+        } else {
+            // sleep
+            var delayTime = Number(this.debugger.code.split("\n")[line].replace(/\D+/g, ''));
+            this.delayStepsTaken = 0;
+            this.delayStepsToTake = Math.floor(delayTime / this.baseSpeedDelay);
+            this.delayRemainingAfterSteps = delayTime % this.baseSpeedDelay;
+            this.performDelayLoop(once);
+        }
+        //this.simulationController.updateSimulationDisplay(this.board);
+        this.checkForEnd();
+    }
+
+    /*
+   *  This function iterates until the delay has passed
+   */
+  performDelayLoop(once) {
+        // Here we want the simulation to keep running but not let the board state update.
+        // To do so we execute the updateScenario() function of the current scenario delay/speedDelay times
+        // with an interval of speedDelay.
+        if (this.delayStepsTaken &lt; this.delayStepsToTake) {
+            // Update the scenario View
+            // TODO: Do not reassign board, make sure updateScenario just changes the state of board
+            this.currentScenario.updateScenario(this.board);
+            //this.simulationController.updateSimulationDisplay(this.board);     // Update the simulator view
+            this.delayStepsTaken++;
+            setTimeout(() => {
+                this.performDelayLoop(once);
+            }, this.speedDelay);
+        } else {
+            if (!once) { 
+                setTimeout(()=> { this.step() }, this.delayRemainingAfterSteps);
+            } else {
+                this.isSimulationPaused = true;
+            }
+        }
+    }
+
+    /*
+    * Displays the values of the variables during the simulation
+    */
+    handleScope() {
+        var scope = this.debugger.debuggerjs.machine.getCurrentStackFrame().scope;
+        for (var i in scope) {
+            var item = scope[i];
+            var value = this.debugger.debuggerjs.machine.$runner.gen.stackFrame.evalInScope(item.name);
+        }
+    }
+
+    /*
+    * Checks if the simulation has been interrupted
+    */
+    checkForEnd() {
+        if ((this.isSimulationRunning || this.isSimulationPaused) &amp;&amp;
+            this.debugger.debuggerjs.machine.halted) {
+            this.isSimulationRunning = false;
+            this.isSimulationPaused = false;
+        }
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Button.html">Button</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="module.exports.html">exports</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addIconToId">addIconToId</a></li><li><a href="global.html#addRobotComponent">addRobotComponent</a></li><li><a href="global.html#addTutorial">addTutorial</a></li><li><a href="global.html#addTutorialDialogEventHandlers">addTutorialDialogEventHandlers</a></li><li><a href="global.html#backgroundToXml">backgroundToXml</a></li><li><a href="global.html#calcDistanceBetweenPoints">calcDistanceBetweenPoints</a></li><li><a href="global.html#calculateWireLengths">calculateWireLengths</a></li><li><a href="global.html#changeValue">changeValue</a></li><li><a href="global.html#clearCanvas">clearCanvas</a></li><li><a href="global.html#clearCanvases">clearCanvases</a></li><li><a href="global.html#clearRobot">clearRobot</a></li><li><a href="global.html#configureCanvasDimensions">configureCanvasDimensions</a></li><li><a href="global.html#createIconGrid">createIconGrid</a></li><li><a href="global.html#createIconModule">createIconModule</a></li><li><a href="global.html#createInitialMenu">createInitialMenu</a></li><li><a href="global.html#createLoginMenu">createLoginMenu</a></li><li><a href="global.html#download">download</a></li><li><a href="global.html#draw">draw</a></li><li><a href="global.html#drawDown">drawDown</a></li><li><a href="global.html#drawEye">drawEye</a></li><li><a href="global.html#drawLcd">drawLcd</a></li><li><a href="global.html#drawLed">drawLed</a></li><li><a href="global.html#drawLeftHand">drawLeftHand</a></li><li><a href="global.html#drawLightSensor">drawLightSensor</a></li><li><a href="global.html#drawLightSensors">drawLightSensors</a></li><li><a href="global.html#drawPir">drawPir</a></li><li><a href="global.html#drawPirs">drawPirs</a></li><li><a href="global.html#drawRightHand">drawRightHand</a></li><li><a href="global.html#drawRotatedServohead">drawRotatedServohead</a></li><li><a href="global.html#drawServo">drawServo</a></li><li><a href="global.html#drawServoBackground">drawServoBackground</a></li><li><a href="global.html#drawServos">drawServos</a></li><li><a href="global.html#drawSonar">drawSonar</a></li><li><a href="global.html#drawSonars">drawSonars</a></li><li><a href="global.html#drawSoundSensor">drawSoundSensor</a></li><li><a href="global.html#drawSoundSensors">drawSoundSensors</a></li><li><a href="global.html#drawUp">drawUp</a></li><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#endTutorial">endTutorial</a></li><li><a href="global.html#generateButtonTemplate">generateButtonTemplate</a></li><li><a href="global.html#generateSimulatedData">generateSimulatedData</a></li><li><a href="global.html#getDirection">getDirection</a></li><li><a href="global.html#getPointsOnLineAtSetDistanceFromOtherPointOnLine">getPointsOnLineAtSetDistanceFromOtherPointOnLine</a></li><li><a href="global.html#getPointsPerpendicular">getPointsPerpendicular</a></li><li><a href="global.html#hideTutorialDialog">hideTutorialDialog</a></li><li><a href="global.html#initButtons">initButtons</a></li><li><a href="global.html#initDebuggerState">initDebuggerState</a></li><li><a href="global.html#initializeCanvas">initializeCanvas</a></li><li><a href="global.html#initMenu">initMenu</a></li><li><a href="global.html#initScenarioOptions">initScenarioOptions</a></li><li><a href="global.html#initSimulation">initSimulation</a></li><li><a href="global.html#initSimulationDisplay">initSimulationDisplay</a></li><li><a href="global.html#initSimulationState">initSimulationState</a></li><li><a href="global.html#initTutorialMenu">initTutorialMenu</a></li><li><a href="global.html#loadRobot">loadRobot</a></li><li><a href="global.html#loadToXml">loadToXml</a></li><li><a href="global.html#loadTutorialDialog">loadTutorialDialog</a></li><li><a href="global.html#loadTutorialsMenu">loadTutorialsMenu</a></li><li><a href="global.html#makeIconsResponsive">makeIconsResponsive</a></li><li><a href="global.html#pir">pir</a></li><li><a href="global.html#removeRobotComponent">removeRobotComponent</a></li><li><a href="global.html#render">render</a></li><li><a href="global.html#renderEyeBall">renderEyeBall</a></li><li><a href="global.html#renderIris">renderIris</a></li><li><a href="global.html#resetButtons">resetButtons</a></li><li><a href="global.html#resetDwenguino">resetDwenguino</a></li><li><a href="global.html#resetSelectedIcons">resetSelectedIcons</a></li><li><a href="global.html#resetSocialRobot">resetSocialRobot</a></li><li><a href="global.html#robotToXml">robotToXml</a></li><li><a href="global.html#saveRobot">saveRobot</a></li><li><a href="global.html#servoWithPin">servoWithPin</a></li><li><a href="global.html#setBackground">setBackground</a></li><li><a href="global.html#setLedColor">setLedColor</a></li><li><a href="global.html#setSensorOptions">setSensorOptions</a></li><li><a href="global.html#setupCanvas">setupCanvas</a></li><li><a href="global.html#setupEnvironment">setupEnvironment</a></li><li><a href="global.html#showSettingsMenu">showSettingsMenu</a></li><li><a href="global.html#showTutorialDialog">showTutorialDialog</a></li><li><a href="global.html#sleep">sleep</a></li><li><a href="global.html#stepperMotorStep">stepperMotorStep</a></li><li><a href="global.html#switchBackground">switchBackground</a></li><li><a href="global.html#translateRobotComponents">translateRobotComponents</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li><li><a href="global.html#updateScenario">updateScenario</a></li><li><a href="global.html#updateScenarioDisplay">updateScenarioDisplay</a></li><li><a href="global.html#updateScenarioState">updateScenarioState</a></li><li><a href="global.html#uploadXml">uploadXml</a></li><li><a href="global.html#xmlToRobot">xmlToRobot</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:35:43 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
