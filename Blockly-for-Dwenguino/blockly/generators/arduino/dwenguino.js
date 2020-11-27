@@ -99,18 +99,25 @@ Blockly.Arduino['sonar_sensor'] = function (block) {
 };
 
 Blockly.Arduino['dwenguino_servo'] = function (block) {
-    var value_channel = Blockly.Arduino.valueToCode(block, 'channel', Blockly.Arduino.ORDER_ATOMIC);
+    var value_pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_ATOMIC);
     var value_angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_ATOMIC);
 
-    //define sonar settings
     Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-    Blockly.Arduino.definitions_['define_servo_' + value_channel] = "Servo servo" + value_channel + ";\n";
 
-    Blockly.Arduino.setups_['define_dwenguino_servo' + value_channel] = 'servo' + value_channel + '.attach(SERVO_' + value_channel + ');\n';
-
-    // Assemble JavaScript into code variable.
-    var code = 'servo' + value_channel + '.write(' + value_angle + ');\n';
+    var code = '';
+  
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +"\n" 
+                                                                 + "Servo servoOnPin" + value_pin + ";\n";
+    Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');\n';
+    code = 'servoOnPin' + value_pin + '.write(' + value_angle + ');\n';
+    
     return code;
+};
+
+Blockly.Arduino.dwenguino_servo_dropdown = function() {
+  // Boolean values HIGH and LOW.
+  var code = (this.getFieldValue('SERVO_DROPDOWN') == 'SERVO1') ? 36 : 37;
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
 Blockly.Arduino['dwenguino_controls_while'] = function (block) {

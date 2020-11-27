@@ -175,6 +175,9 @@ var MSG = {
   speed: "Geschwindigheit", 
   dwenguinoServoBlock: "Servomotor",
   dwenguinoServoBlockTooltip: "Servomotor 1 oder 2 auf einen Winkel zwischen 0 und 180 Grad einstellen",
+  dwenguinoServoOne: "1",
+  dwenguinoServoTwo: "2",
+  dwenguinoServoDropdownTooltip: "Select one of the two internal servo motors",
   dwenguinoDCMotorBlock: "DC Motor",
   dwenguinoDCMotorBlockTooltip: "Stell die Geschwindigkeit eines an die Platine angeschlossenen Motors ein. Die Geschwindigkeit ist ein Wert zwischen -255 (volle Geschwindigkeit rückwärts) und 255 (volle Geschwindigkeit vorwärts).",
 

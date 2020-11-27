@@ -150,17 +150,18 @@
               </value>
           </block>
           <block type="dwenguino_servo">
-              <value name="channel">
-                  <block type="math_number" id="111">
-                      <field name="NUM">1</field>
-                  </block>
-              </value>
+                <value name="pin">
+                    <block type="dwenguino_servo_dropdown">
+                        <field name="SERVO_DROPDOWN">SERVO1</field>
+                    </block>
+                </value>
               <value name="angle">
                   <block type="math_number" id="116">
                       <field name="NUM">45</field>
                   </block>
               </value>
           </block>
+          <block type="dwenguino_servo_dropdown"></block>
           <block type="dwenguino_pins">
               <field name="PIN">0</field>
           </block>
