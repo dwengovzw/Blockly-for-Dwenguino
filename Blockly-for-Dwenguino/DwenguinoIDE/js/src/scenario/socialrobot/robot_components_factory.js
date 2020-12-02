@@ -290,9 +290,9 @@ class RobotComponentsFactory {
         var radius = parseFloat(data.getAttribute('Radius'));
         var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
         var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
-        var redPin = parseInt(data.getAttribute('RedPin'));
-        var greenPin = parseInt(data.getAttribute('GreenPin'));
-        var bluePin = parseInt(data.getAttribute('BluePin'));
+        var redPin = data.getAttribute('RedPin');
+        var greenPin = data.getAttribute('GreenPin');
+        var bluePin = data.getAttribute('BluePin');
         var htmlClasses = data.getAttribute('Classes');
         this.addRgbLed(redPin, greenPin, bluePin, [0, 0, 0], true, radius, 0, 0, offsetLeft, offsetTop, htmlClasses);
         break;
@@ -440,7 +440,7 @@ class RobotComponentsFactory {
    * @param {string} borderColor 
    * @param {string} htmlClasses 
    */
-  addRgbLed(redPin=18, greenPin=19, bluePin=20, state=[0,0,0], visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas rgbled_canvas') {
+  addRgbLed(redPin='A0', greenPin='A1', bluePin='A2', state=[0,0,0], visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas rgbled_canvas') {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.RGBLED));
     this.incrementNumberOf(TypesEnum.RGBLED);
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];

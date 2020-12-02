@@ -84,7 +84,7 @@ class SocialRobotRgbLed extends RobotComponent{
     reset(){
         this.setX(0);
         this.setY(0);
-        this.setState(0);
+        this.setState([0,0,0]);
     }
 
     toggleVisibility(visible){
@@ -269,29 +269,6 @@ class SocialRobotRgbLed extends RobotComponent{
     getOffset(){
         return this._offset;
     }
-    setOnColor(onColor){
-        this._onColor = onColor;
-    }
-
-    getOnColor(){
-        return this._onColor;
-    }
-
-    setOffColor(offColor){
-        this._offColor = offColor;
-    }
-
-    getOffColor(){
-        return this._offColor;
-    }
-
-    setBorderColor(borderColor){
-        this._borderColor = borderColor;
-    }
-
-    getBorderColor(){
-        return this._borderColor;
-    }
 
     setRedPin(redPin){
         this._redPin = redPin;
@@ -302,6 +279,7 @@ class SocialRobotRgbLed extends RobotComponent{
     }
 
     setGreenPin(greenPin){
+
         this._greenPin = greenPin;
     }
 
