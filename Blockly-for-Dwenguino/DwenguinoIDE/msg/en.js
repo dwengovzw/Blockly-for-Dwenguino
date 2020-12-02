@@ -216,6 +216,8 @@ MSG.simulator = {
   sonar: "Sonar",
   led: "LED",
   ledDescription: "A light-emitting diode (LED) is a semiconductor device that <b>emits light</b> when an electric current passes through it. Different semiconductor materials produce <b>different colors of light</b>. ",
+  rgbled: "RGB LED",
+  rgbledDescription: "",
   lcd: "LCD screen",
   lcdDescription: "The LCD display on the Dwengo board is a 16x2 character display with backlight.",
   button: "Button",

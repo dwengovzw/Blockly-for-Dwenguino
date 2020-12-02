@@ -106,7 +106,7 @@ Blockly.JavaScript['dwenguino_controls_while'] = function (block) {
 
 Blockly.JavaScript.dwenguino_pins = function() {
   var dropdown_value = this.getFieldValue('PIN');
-  return [dropdown_value, Blockly.JavaScript.ORDER_ATOMIC];
+  return dropdown_value;
 };
 
 Blockly.JavaScript.dwenguino_tone_on_pin = function() {

@@ -78,7 +78,7 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     removeHtml(){
-        $('#sim_sound' + this.getId()).remove();
+        $('#sim_' + this.getType() + this.getId()).remove();
 
         let buttonLabel = '#' + this.getType() + '_button' + this.getId() + '_label';
         let soundButtonId = '#' + this.getType() + '_button' + this.getId();

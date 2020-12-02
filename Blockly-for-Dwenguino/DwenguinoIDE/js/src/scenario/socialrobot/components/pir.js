@@ -91,7 +91,7 @@ class SocialRobotPir extends RobotComponent{
     // }
 
     removeHtml(){
-        $('#sim_pir' + this.getId()).remove();
+        $('#sim_' + this.getType() + this.getId()).remove();
 
         let buttonLabel = '#button' + this.getId() + '_label';
         let pirButtonId = '#pir_button' + this.getId();

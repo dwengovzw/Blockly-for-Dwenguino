@@ -228,6 +228,8 @@ MSG.simulator = {
   lightDescription: "Gebruik deze sensor om veel of weinig licht te detecteren. In de simulator is een schuifbalk voorzien om licht en donker te simuleren. Bij veel licht geeft de lichtsensor van de simulator een hoge waarde terug, bij weinig licht een lage.",
   led: "Led",
   ledDescription: "In de simulator beschik je over leds in vier kleuren. Een led wordt aangestuurd door een pin die je zelf aanduidt. Als de pin in toestand HOOG verkeert, dan brandt de led. Bij status LAAG is de led gedoofd. Deze actuator wordt gebruikt in les 2 die volgt.",
+  rgbled: "Rgb-led",
+  rgbledDescription: "",
   lcd: "Lcd-scherm",
   lcdDescription: "Het lcd-scherm bevat twee lijnen met elk 16 karakters. De gewenste tekst geef je mee in je programma. Deze actuator wordt gebruikt in les 1 die volgt.",
   touchsensor: "Tastsensor",

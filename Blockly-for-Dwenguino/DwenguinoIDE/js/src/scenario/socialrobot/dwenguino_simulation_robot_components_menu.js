@@ -31,6 +31,9 @@ class DwenguinoSimulationRobotComponentsMenu {
         type: TypesEnum.LED,
         maximumAmount: 3
       }, {
+        type: TypesEnum.RGBLED,
+        maximumAmount: 1
+      }, {
         type: TypesEnum.PIR,
         maximumAmount: 2
       }, {
@@ -86,6 +89,11 @@ class DwenguinoSimulationRobotComponentsMenu {
     $('#rc_led').append('<div id="rc_led_img"></div>');
     $('#rc_led').append('<div id="rc_led_options"></div>');
 
+    $('#robot_components_menu').append('<div id="rc_rgbled" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_img"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_options"></div>');
+
     $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag"></div>');
     $('#rc_pir').append('<div id="rc_pir_img"></div>');
@@ -133,6 +141,9 @@ class DwenguinoSimulationRobotComponentsMenu {
 
     let ledOptions = this.generateButtonTemplate(TypesEnum.LED);
     $('#rc_led_options').append(ledOptions);
+
+    let rgbLedOptions = this.generateButtonTemplate(TypesEnum.RGBLED);
+    $('#rc_rgbled_options').append(rgbLedOptions);
 
     let pirOptions = this.generateButtonTemplate(TypesEnum.PIR);
     $('#rc_pir_options').append(pirOptions);
@@ -292,6 +303,9 @@ class DwenguinoSimulationRobotComponentsMenu {
       case "rc_led_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.LED);
         break;
+      case "rc_rgbled_plus_button":
+        this.socialRobotScenario.addRobotComponent(TypesEnum.RGBLED);
+        break;
       case "rc_pir_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.PIR);
         break;
@@ -330,6 +344,9 @@ class DwenguinoSimulationRobotComponentsMenu {
         break;
       case "rc_led_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.LED);
+        break;
+      case "rc_rgbled_minus_button":
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.RGBLED);
         break;
       case "rc_pir_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.PIR);
