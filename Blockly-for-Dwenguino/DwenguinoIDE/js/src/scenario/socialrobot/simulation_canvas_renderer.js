@@ -161,11 +161,12 @@ class SimulationCanvasRenderer {
                 ctx.beginPath();
                 ctx.arc(25, 15, rgbLed.getRadius(), 0, 2 * Math.PI);
                 let rgbColor = rgbLed.getState();
-                console.log(rgbColor);
                 if(rgbColor[0] == 0 && rgbColor[1] == 0 && rgbColor[2] == 0){
                     ctx.fillStyle = "#CCCCCC";
                 } else {
-                    ctx.fillStyle = self.rgbToHex(rgbColor);
+                    let hex = self.rgbToHex(rgbColor);
+                    console.log(rgbColor, hex, 'hex color');
+                    ctx.fillStyle = hex;
                 }
                 ctx.fill();
 
@@ -181,11 +182,12 @@ class SimulationCanvasRenderer {
             ctx.beginPath();
             ctx.arc(25, 15, rgbLed.getRadius(), 0, 2 * Math.PI);
             let rgbColor = rgbLed.getState();
-            console.log(rgbColor);
             if(rgbColor[0] == 0 && rgbColor[1] == 0 && rgbColor[2] == 0){
                 ctx.fillStyle = "#CCCCCC";
             } else {
-                ctx.fillStyle = this.rgbToHex(rgbColor);
+                let hex = self.rgbToHex(rgbColor);
+                console.log(rgbColor, hex, 'hex color');
+                ctx.fillStyle = hex;
             }
             ctx.fill();
 
@@ -199,6 +201,7 @@ class SimulationCanvasRenderer {
     }
 
     rgbToHex(rgbColor) {
+        console.log(rgbColor);
         return "#" + this.componentToHex(rgbColor[0]) + this.componentToHex(rgbColor[1]) + this.componentToHex(rgbColor[2]);
     }
 

@@ -27,22 +27,37 @@ Blockly.JavaScript['pir_sensor'] = function (block) {
 };
 
 Blockly.JavaScript['socialrobot_rgbled'] = function(block){
-  var code = '';
+  var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
+  var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
+  var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
+  var color = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
+  var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + color + ');\n';
   return code;
 };
 
 Blockly.JavaScript['socialrobot_rgbled_off'] = function(block) {
-  var code = ''; 
+  var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
+  var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
+  var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
+  var code = machine + 'rgbLed([' + pin_red + ', ' + pin_green + ', ' + pin_blue + '],[0,0,0]);\n';
   return code;
 };
 
 Blockly.JavaScript['socialrobot_rgb_color'] = function(block){
-  var code = '';
-  return code;
+  var redComponent = block.getFieldValue('RED');
+  var greenComponent = block.getFieldValue('GREEN');
+  var blueComponent = block.getFieldValue('BLUE');
+
+  var code = '[' + redComponent + ',' + greenComponent + ',' + blueComponent + ']';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['socialrobot_rgb_color_with_numbers'] = function(block){
-  var code = '';
+  var redComponent = Blockly.JavaScript.valueToCode(block, 'RED', Blockly.JavaScript.ORDER_NONE);
+  var greenComponent = Blockly.JavaScript.valueToCode(block, 'GREEN', Blockly.JavaScript.ORDER_NONE);
+  var blueComponent = Blockly.JavaScript.valueToCode(block, 'BLUE', Blockly.JavaScript.ORDER_NONE);
+
+  var code = '[' + redComponent + ',' + greenComponent + ',' + blueComponent + ']';
   return code;
 };
 
