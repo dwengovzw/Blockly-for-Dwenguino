@@ -65,6 +65,178 @@ Blockly.Blocks['pir_sensor'] = {
   }
 };
 
+var socialrobot_rgbled_json = {
+  "id": "socialrobot_rgbled",
+  "message0": "rgbled" + " %1 %2 " + "pin rood" +  " %3 " + "pin groen" + " %4 " + "pin blauw" + " %5 ",
+  "args0": [
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/pir.png",
+      "width": 40,
+      "height": 40,
+      "alt":  "rgbled"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_red",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_green",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_blue",
+      "check": "Number"
+    }
+  ],
+  "message1": "color" + " %1",
+  "args1":[
+    {
+      "type": "input_value",
+      "name": "color",
+      "check": "Color"
+    },
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+  
+};
+
+Blockly.Blocks['socialrobot_rgbled'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgbled_json);
+  }
+};
+
+var socialrobot_rgbled_off_json = {
+  "id": "socialrobot_rgbled_off",
+  "message0": "turn rgbled with "  + "pin rood" +  " %1 " + "pin groen" + " %2 " + "pin blauw" + " %3 off",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pin_red",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_green",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_blue",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+  
+};
+
+Blockly.Blocks['socialrobot_rgbled_off'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgbled_off_json);
+  }
+};
+
+var socialrobot_rgb_color_json = {
+  "id": "socialrobot_rgb_color",
+  "message0": "rgb color %1 %2 %3",
+  "type": "rgb_color",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "RED",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "field_number",
+      "name": "GREEN",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "field_number",
+      "name": "BLUE",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    }
+  ],
+  "output": "Color",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_rgb_color'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgb_color_json);
+  }
+};
+
+var socialrobot_rgb_color_with_numbers_json = {
+  "id": "socialrobot_rgb_color",
+  "message0": "rgb %1 %2 %3",
+  "type": "rgb_color",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "RED",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+      
+    },
+    {
+      "type": "input_value",
+      "name": "GREEN",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "input_value",
+      "name": "BLUE",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    }
+  ],
+  "inputsInline": true,
+  "output": "Color",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_rgb_color_with_numbers'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgb_color_with_numbers_json);
+  }
+};
 
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",

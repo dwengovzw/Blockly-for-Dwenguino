@@ -55,7 +55,7 @@ class SocialRobotLed extends RobotComponent{
     }
 
     removeHtml(){
-        $('#sim_' + this.toString() + this.getId()).remove();
+        $('#sim_' + this.getType() + this.getId()).remove();
     }
 
     toXml(){

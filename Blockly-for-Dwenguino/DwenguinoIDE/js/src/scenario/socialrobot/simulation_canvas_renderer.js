@@ -1,3 +1,4 @@
+import csvtojson from "csvtojson";
 import { TypesEnum } from "./robot_components_factory.js"
 
 /**
@@ -18,6 +19,7 @@ class SimulationCanvasRenderer {
     this.clearCanvases();
     this.drawLcd(robot);
     this.drawLeds(robot);
+    this.drawRgbLeds(robot);
     this.drawServos(robot);
     this.drawPirs(robot);
     this.drawSonars(robot);
@@ -127,6 +129,82 @@ class SimulationCanvasRenderer {
         } else {
             console.log(canvas, "This canvas has no context");   
         }
+    }
+
+    /***
+     * Draw all rgb leds on rgb led canvases with the states specified in robot.
+     * @param {RobotComponent[]} robot 
+     */
+    drawRgbLeds(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.RGBLED){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawRgbLed(robot[i], canvas);
+            }
+        }
+    }
+
+    /**
+     * Draw an RGB LED on the given canvas with the state specified in robot.
+     * @param {SocialRobotRgbLed} rgbLed 
+     * @param {HTMLCanvasElement} canvas 
+     */
+    drawRgbLed(rgbLed, canvas){
+        // TODO
+        if(canvas.getContext){
+            var self = this;
+            rgbLed.getLedSvg().onload = function() {
+                var ctx = canvas.getContext('2d');
+                ctx.fillStyle = "#000000";
+                ctx.fillRect(0,0,40,30);
+
+                ctx.beginPath();
+                ctx.arc(25, 15, rgbLed.getRadius(), 0, 2 * Math.PI);
+                let rgbColor = rgbLed.getState();
+                console.log(rgbColor);
+                if(rgbColor[0] == 0 && rgbColor[1] == 0 && rgbColor[2] == 0){
+                    ctx.fillStyle = "#CCCCCC";
+                } else {
+                    ctx.fillStyle = self.rgbToHex(rgbColor);
+                }
+                ctx.fill();
+
+                ctx.translate(16,6);
+                let image = rgbLed.getLedSvg();
+                ctx.drawImage(image,0,0,18,18);
+                ctx.translate(-16, -6);   
+            }
+            var ctx = canvas.getContext('2d');
+            ctx.fillStyle = "#000000";
+            ctx.fillRect(0,0,40,30);
+
+            ctx.beginPath();
+            ctx.arc(25, 15, rgbLed.getRadius(), 0, 2 * Math.PI);
+            let rgbColor = rgbLed.getState();
+            console.log(rgbColor);
+            if(rgbColor[0] == 0 && rgbColor[1] == 0 && rgbColor[2] == 0){
+                ctx.fillStyle = "#CCCCCC";
+            } else {
+                ctx.fillStyle = this.rgbToHex(rgbColor);
+            }
+            ctx.fill();
+
+            ctx.translate(16,6);
+            let image = rgbLed.getLedSvg();
+            ctx.drawImage(image,0,0,18,18);
+            ctx.translate(-16, -6); 
+        } else {
+            console.log(canvas, "This canvas has no context");   
+        }
+    }
+
+    rgbToHex(rgbColor) {
+        return "#" + this.componentToHex(rgbColor[0]) + this.componentToHex(rgbColor[1]) + this.componentToHex(rgbColor[2]);
+    }
+
+    componentToHex(c) {
+        var hex = c.toString(16);
+        return hex.length == 1 ? "0" + hex : hex;
     }
 
     /**

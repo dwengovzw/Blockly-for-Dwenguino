@@ -757,6 +757,14 @@ body{
     background-repeat: no-repeat;
 }
 
+#rc_rgbled_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/socialrobot/led.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 #rc_pir_img {
     width: 100%;
     height: 100%;
@@ -832,6 +840,12 @@ body{
     width: 65px;
     height: 30px;
 }
+
+.sim_element_rgbled{
+    width: 90px;
+    height: 30px;
+}
+
 
 .sim_element_button{
     width: 65px;
@@ -954,6 +968,12 @@ body{
 }
 
 .led_canvas{
+    margin-left: 25px;
+    width: 40px;
+    height: 40px;
+}
+
+.rgbled_canvas{
     margin-left: 25px;
     width: 40px;
     height: 40px;

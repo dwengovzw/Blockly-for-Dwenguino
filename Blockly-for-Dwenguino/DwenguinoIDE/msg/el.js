@@ -213,6 +213,8 @@ MSG.simulator = {
   pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
   sonar: "Sonar",
   led: "LED",
+  rgbled: "RGB LED",
+  rgbledDescription: "",
   lcd: "Οθόνη LCD",
   button: "Κουμπί",
   sound: "Αισθητήρας Sound",
