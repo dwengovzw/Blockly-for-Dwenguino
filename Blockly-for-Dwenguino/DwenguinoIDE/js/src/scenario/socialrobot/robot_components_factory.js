@@ -79,6 +79,15 @@ class RobotComponentsFactory {
   }
 
   /**
+   * Remove all social robot components from the scenario.
+   */
+  removeAllSocialRobotComponents(){
+    for(var i = 0; i < this._robot.length; i++){
+      this.removeRobotComponent(this._robot[i]);
+    }
+  }
+
+  /**
    * Update the state and other properties of the robot components when an update of
    * the Dwenguino Boardstate is received.
    * @param {DwenguinoBoardSimulation} dwenguinoState 

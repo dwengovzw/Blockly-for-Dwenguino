@@ -60,7 +60,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     this._eventBus.registerEvent(EventsEnum.INITIALIZECANVAS);
     this._eventBus.addEventListener(EventsEnum.INITIALIZECANVAS, (component)=>{ this.renderer.initializeCanvas(this.robotComponentsFactory.getRobot(), component)});
 
-
   }
 
   /**
@@ -121,6 +120,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     scenarioOptions.append("<div id='switch_background' class='glyphicon glyphicon-refresh'></div>")
 
     $("#load_scenario").click(function () {
+      self.removeSocialRobotComponents();
       self.scenarioUtils.loadScenario();
     });
 
@@ -267,6 +267,10 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     this.robotComponentsFactory.resetSocialRobot();
   };
 
+  removeSocialRobotComponents(){
+    this.robotComponentsFactory.removeAllSocialRobotComponents();
+  }
+
   /**
    * Add a robot component of the specified type to the simulation container.
    * @param {TypesEnum} type 
@@ -306,11 +310,9 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * Writes the current scenario state to an Xml document and return it.
    */
   loadToXml() {
-    
     if (window.localStorage) {
       var localStorage = window.localStorage;
-      var canvasId = '';
-      if (localStorage.getItem('socialRobotScenario')) {
+      if (localStorage.getItem('dwenguinoSocialRobot')) {
         return this.robotToXml();
       }
     }
@@ -354,7 +356,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     }
   }
 
-    /**********************
+  /**********************
    *  LOCAL STORAGE     *
    **********************/
 
