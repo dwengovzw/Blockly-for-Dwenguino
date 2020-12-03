@@ -24,7 +24,7 @@ Blockly.Arduino['pir_sensor'] = function (block) {
   Blockly.Arduino.setups_['define_dwenguino_pir' + value_trig] = "pinMode(TRIGGER_PIN_" + value_trig + ", INPUT)\n";
   var code = "digitalRead(TRIGGER_PIN_" + value_trig + ")";
 
-  return code;
+  return [code, Blockly.Arduino.ORDER_NONE];
 };
 
 Blockly.Arduino['socialrobot_rgbled'] = function(block) {

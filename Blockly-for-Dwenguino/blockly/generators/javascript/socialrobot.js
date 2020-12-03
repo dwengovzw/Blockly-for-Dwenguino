@@ -23,7 +23,7 @@ Blockly.JavaScript['pir_sensor'] = function (block) {
 
   //  Assemble JavaScript into code variable.
   var code = machine + "pir(" + value_trig + ')';
-  return code;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 Blockly.JavaScript['socialrobot_rgbled'] = function(block){

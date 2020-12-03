@@ -1,6 +1,7 @@
 import { RobotComponent } from './robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js';
+import { Slider } from '../../utilities/slider.js';
 
 export { SocialRobotLightSensor }
 
@@ -22,6 +23,7 @@ class SocialRobotLightSensor extends RobotComponent{
         this._state = state;
         this._stateUpdated = false;
         this._canvasId = 'sim_light_canvas' + this._id;
+        this._slider = null;
 
         this.insertHtml();
         this.toggleVisibility(visible);
@@ -37,14 +39,16 @@ class SocialRobotLightSensor extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let buttonLabel = this.getType() + '_button' + this.getId() + '_label';
-        let lightButtonId = this.getType() + '_button' + this.getId();
-        
-        if (!document.getElementById(lightButtonId)) {
-            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.lightButtonLabel + ' ' + this.getId() + "</div>");
-            $('#sensor_options').append("<div id='" + lightButtonId + "' class='light_button' alt='Load'></div>");
+        let label = MSG.lightSensorSliderLabel + " " + this.getId();
+        let id = '' + this.getType() + this.getId();
+        this._slider = new Slider(id, 'sensor_options', 0, 4095, 0, label, '' , '', 'light_sensor_slider');
 
-            this.addLightSensorEventHandler(lightButtonId);
+        var self = this;
+        let sliderElement = this._slider.getSliderElement();
+        sliderElement.oninput = function() {
+            let id = self.getId();
+            self.changeLightSensorValue(this.value, id);
+            self._slider.updateValueLabel(this.value);
         }
 
         let simLightSensor = document.getElementById('sim_'+this.getType() + this.getId());
@@ -55,35 +59,16 @@ class SocialRobotLightSensor extends RobotComponent{
         });
     }
 
-    addLightSensorEventHandler(lightButtonId) {
-        var self = this;
-        $("#" + lightButtonId).on('click', function () {
-            let classesActive = "light_button light_button_pushed";
-            let classesInactive = "light_button";
-
-            if (document.getElementById(lightButtonId).className === classesInactive) {
-                document.getElementById(lightButtonId).className = classesActive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/light_sensor.png');
-                self.setState(1);
-                self._stateUpdated = true;
-                self._eventBus.dispatchEvent(EventsEnum.SAVE);
-            } else {
-                document.getElementById(lightButtonId).className = classesInactive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/light_sensor.png');
-                self.setState(0);
-                self._stateUpdated = true; 
-                self._eventBus.dispatchEvent(EventsEnum.SAVE); 
-            }
-        });
+    changeLightSensorValue(value) {
+        this.setState(value);
+        this._stateUpdated = true;
+        this._eventBus.dispatchEvent(EventsEnum.SAVE);
     }
 
     removeHtml(){
         $('#sim_light' + this.getId()).remove();
 
-        let buttonLabel = '#' + this.getType() + '_button' + this.getId() + '_label';
-        let lightButtonId = '#' + this.getType() + '_button' + this.getId();
-        $(buttonLabel).remove();
-        $(lightButtonId).remove();
+        this.getSlider().remove();
     }
 
     toggleVisibility(visible){
@@ -182,7 +167,7 @@ class SocialRobotLightSensor extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+        return ['A0', 'A1', 'A2', 'A3', 'A4', 'A5'];
     }
 
     getId(){
@@ -247,5 +232,9 @@ class SocialRobotLightSensor extends RobotComponent{
 
     getCanvasId(){
         return this._canvasId;
+    }
+
+    getSlider(){
+        return this._slider;
     }
 }

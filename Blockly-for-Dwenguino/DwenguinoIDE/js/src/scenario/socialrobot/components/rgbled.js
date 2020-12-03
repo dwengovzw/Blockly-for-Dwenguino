@@ -43,7 +43,7 @@ class SocialRobotRgbLed extends RobotComponent{
         let simLed = document.getElementById('sim_'+this.getType() + this.getId());
 
         simLed.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.ledOptions);
+            this.createComponentOptionsModalDialog(MSG.rgbLedOptions);
             this.showDialog();
         });
     }
@@ -123,7 +123,6 @@ class SocialRobotRgbLed extends RobotComponent{
         this.createPinOptionsInModalDialog();
     }
 
-    // TODO
     createPinOptionsInModalDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsRedPin" class="ui-widget row mb-4"></div>');
         $('#componentOptionsRedPin').append('<div class="col-md-2">'+'Red pin'+'</div>');
@@ -280,7 +279,6 @@ class SocialRobotRgbLed extends RobotComponent{
     }
 
     setGreenPin(greenPin){
-
         this._greenPin = greenPin;
     }
 
