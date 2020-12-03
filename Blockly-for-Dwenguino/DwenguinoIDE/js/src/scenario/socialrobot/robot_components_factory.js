@@ -8,6 +8,7 @@ import { SocialRobotSonar } from "./components/sonar.js"
 import { SocialRobotPir } from "./components/pir.js"
 import { SocialRobotSoundSensor } from "./components/sound_sensor.js"
 import { SocialRobotLightSensor } from "./components/light_sensor.js"
+import { SocialRobotRgbLed } from "./components/rgbled.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
@@ -19,6 +20,7 @@ export { TypesEnum as TypesEnum, RobotComponentsFactory }
 const TypesEnum = {
   SERVO: 'servo',
   LED: 'led',
+  RGBLED: 'rgbled',
   PIR: 'pir',
   SONAR: 'sonar',
   LCD: 'lcd',
@@ -109,6 +111,13 @@ class RobotComponentsFactory {
           pin = this._robot[i].getPin();
           this._robot[i].setState(dwenguinoState.getIoPinState(pin));  
           break;
+        case TypesEnum.RGBLED:
+          let redPin = this._robot[i].getRedPin();
+          let greenPin = this._robot[i].getGreenPin(); 
+          let bluePin = this._robot[i].getBluePin();
+          let state = [dwenguinoState.getIoPinState(redPin), dwenguinoState.getIoPinState(greenPin), dwenguinoState.getIoPinState(bluePin)];
+          this._robot[i].setState(state);
+          break;
         case TypesEnum.PIR:
           pin = this._robot[i].getPin();
           if(this._robot[i].isStateUpdated()){
@@ -193,7 +202,10 @@ class RobotComponentsFactory {
       case TypesEnum.LED:
         this.addLed();
         break;
-      case TypesEnum.PIR:
+      case TypesEnum.RGBLED:
+        this.addRgbLed();
+        break;
+      case TypesEnum.PIR:;
         this.addPir();
         break;
       case TypesEnum.SONAR:
@@ -223,6 +235,9 @@ class RobotComponentsFactory {
       case TypesEnum.LED:
         this.removeLed();
         break;
+      case TypesEnum.RGBLED:
+        this.removeRgbLed();
+        break;
       case TypesEnum.PIR:
         this.removePir();
         break;
@@ -248,7 +263,6 @@ class RobotComponentsFactory {
    */
   addRobotComponentFromXml(data){
     let type = data.getAttribute('Type');
-
     switch (type) {
       case TypesEnum.SERVO:
         var width = parseFloat(data.getAttribute('Width'));
@@ -272,6 +286,16 @@ class RobotComponentsFactory {
         var htmlClasses = data.getAttribute('Classes');
         this.addLed(pin, 0, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
         break;
+      case TypesEnum.RGBLED:
+        var radius = parseFloat(data.getAttribute('Radius'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var redPin = data.getAttribute('RedPin');
+        var greenPin = data.getAttribute('GreenPin');
+        var bluePin = data.getAttribute('BluePin');
+        var htmlClasses = data.getAttribute('Classes');
+        this.addRgbLed(redPin, greenPin, bluePin, [0, 0, 0], true, radius, 0, 0, offsetLeft, offsetTop, htmlClasses);
+        break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
         var height = parseFloat(data.getAttribute('Height'));
@@ -280,6 +304,7 @@ class RobotComponentsFactory {
         var pin = parseInt(data.getAttribute('Pin'));
         var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
+        console.log('addPir from xml')
         this.addPir(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.SONAR:
@@ -399,6 +424,41 @@ class RobotComponentsFactory {
 
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
     this.removeRobotComponentWithTypeAndId(TypesEnum.LED, id);
+  }
+
+  /**
+   * 
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} radius 
+   * @param {int} x 
+   * @param {int} y 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} offColor 
+   * @param {string} borderColor 
+   * @param {string} htmlClasses 
+   */
+  addRgbLed(redPin='A0', greenPin='A1', bluePin='A2', state=[0,0,0], visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas rgbled_canvas') {
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.RGBLED));
+    this.incrementNumberOf(TypesEnum.RGBLED);
+    let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
+
+    let rgbled = new SocialRobotRgbLed(this._eventBus, id, redPin, greenPin, bluePin, state, visible, radius, x, y, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(rgbled);
+
+    this.renderer.initializeCanvas(this._robot, rgbled); 
+  }
+
+  /**
+   * Remove the most recently created LED from the simulation container.
+   */
+  removeRgbLed(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.RGBLED));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.RGBLED, id);
   }
 
   /**

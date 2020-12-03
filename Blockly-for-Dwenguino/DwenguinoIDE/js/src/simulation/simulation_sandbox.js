@@ -236,6 +236,20 @@ class SimulationSandbox {
   }
 
   /**
+   * 
+   * @param {Array<String>} pins - an array with 3 pins for an RGB LED 
+   * @param {Array<int>} rgbColor - an array with 3 integers between 0 and 255
+   */
+  rgbLed(pins,rgbColor){
+    console.log(pins, 'pins');
+    console.log(rgbColor, 'rgbColor');
+    this.analogWrite(pins[0], rgbColor[0]);
+    this.analogWrite(pins[1], rgbColor[1]);
+    this.analogWrite(pins[2], rgbColor[2]);
+    return;
+  }
+
+  /**
    * This function is just a stub for the debugging environment 
    * The acutal waiting is done in the step function in DwenguinoSimulation
    * @param {int} time The time that should be waited in miliseconds
