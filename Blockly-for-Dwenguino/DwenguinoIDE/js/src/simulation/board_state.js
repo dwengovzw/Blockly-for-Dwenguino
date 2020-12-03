@@ -4,7 +4,7 @@ import ButtonMap from "./button_map.js";
  * This class is used as a datastructure to save the state of the simulated Dwenguino board.
  */
 class BoardState {
-    pins = new Array(33);
+    pins = new Array(44);
     pinMapping = {};
     lcdContent = new Array(2);
     // sonarDistance = -1; // now has to be fetched as values with getIOPinState(echoPin)

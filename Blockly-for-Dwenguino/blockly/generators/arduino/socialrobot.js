@@ -27,6 +27,72 @@ Blockly.Arduino['pir_sensor'] = function (block) {
   return [code, Blockly.Arduino.ORDER_NONE];
 };
 
+Blockly.Arduino['socialrobot_rgbled'] = function(block) {
+  var pin_red = Blockly.Arduino.valueToCode(block, 'pin_red', Blockly.Arduino.ORDER_NONE);
+  var pin_green = Blockly.Arduino.valueToCode(block, 'pin_green', Blockly.Arduino.ORDER_NONE);
+  var pin_blue = Blockly.Arduino.valueToCode(block, 'pin_blue', Blockly.Arduino.ORDER_NONE);
+  var color = Blockly.Arduino.valueToCode(block, 'color', Blockly.Arduino.ORDER_NONE);
+
+  // var pin_value = Blockly.Arduino.valueToCode(this, "VAL", Blockly.Arduino.ORDER_ATOMIC);
+  Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
+  Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
+  Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
+
+  var code = '';
+  code += color;
+  code += 'analogWrite(' + pin_red + ', ' + 'rgb[0]' + ');\n';
+  code += 'analogWrite(' + pin_green + ', ' + 'rgb[1]' + ');\n';
+  code += 'analogWrite(' + pin_blue + ', ' + 'rgb[2]' + ');\n';
+  return code;
+}
+
+Blockly.Arduino['socialrobot_rgbled_off'] = function(block) {
+  var pin_red = Blockly.Arduino.valueToCode(block, 'pin_red', Blockly.Arduino.ORDER_NONE);
+  var pin_green = Blockly.Arduino.valueToCode(block, 'pin_green', Blockly.Arduino.ORDER_NONE);
+  var pin_blue = Blockly.Arduino.valueToCode(block, 'pin_blue', Blockly.Arduino.ORDER_NONE);
+
+  // var pin_value = Blockly.Arduino.valueToCode(this, "VAL", Blockly.Arduino.ORDER_ATOMIC);
+  Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
+  Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
+  Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
+
+  var code = '';
+  code += 'analogWrite(' + pin_red + ', ' + '0' + ');\n';
+  code += 'analogWrite(' + pin_green + ', ' + '0' + ');\n';
+  code += 'analogWrite(' + pin_blue + ', ' + '0' + ');\n';
+  return code;
+}
+
+Blockly.Arduino['socialrobot_rgb_color'] = function(block) {
+
+  Blockly.Arduino.definitions_['define_rgb_color'] = "int rgb[3];\n";
+  var redComponent = block.getFieldValue('RED');
+  var greenComponent = block.getFieldValue('GREEN');
+  var blueComponent = block.getFieldValue('BLUE');
+
+  var code = '';
+  code += 'rgb[0] = ' + redComponent + ';\n';
+  code += 'rgb[1] = ' + greenComponent + ';\n';
+  code += 'rgb[2] = ' + blueComponent + ';\n';
+
+  return [code, Blockly.Arduino.ORDER_ATOMIC];
+}
+
+Blockly.Arduino['socialrobot_rgb_color_with_numbers'] = function(block) {
+  Blockly.Arduino.definitions_['define_rgb_color'] = "int rgb[3];\n";
+
+  var redComponent = Blockly.Arduino.valueToCode(block, 'RED', Blockly.Arduino.ORDER_NONE);
+  var greenComponent = Blockly.Arduino.valueToCode(block, 'GREEN', Blockly.Arduino.ORDER_NONE);
+  var blueComponent = Blockly.Arduino.valueToCode(block, 'BLUE', Blockly.Arduino.ORDER_NONE);
+
+  var code = '';
+  code += 'rgb[0] = ' + redComponent + ';\n';
+  code += 'rgb[1] = ' + greenComponent + ';\n';
+  code += 'rgb[2] = ' + blueComponent + ';\n';
+
+  return code;
+}
+
 Blockly.Arduino['socialrobot_servo'] = function (block) {
   let value_pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_ATOMIC);
   let value_angle = Blockly.Arduino.valueToCode(block, 'angle', Blockly.Arduino.ORDER_ATOMIC);
@@ -161,6 +227,8 @@ Blockly.Arduino['socialrobot_set_pin'] = function(block){
   var pin_number = Blockly.Arduino.valueToCode(block, "PIN", Blockly.Arduino.ORDER_ATOMIC);
   var led_state = Blockly.Arduino.valueToCode(block, "PIN_STATE", Blockly.Arduino.ORDER_ATOMIC);
 
+  Blockly.Arduino.setups_['setup_output_'+pin_number] = 'pinMode('+pin_number+', OUTPUT);';
+  
   var code = 'digitalWrite(' + pin_number + ', ' + led_state + ');\n'
   return code;
 };

@@ -24,6 +24,7 @@ class SocialRobotPir extends RobotComponent{
         this._state = state;
         this._stateUpdated = false;
         this._canvasId = 'sim_pir_canvas' + this._id;
+        this._button = null;
 
         this.insertHtml();
         this.toggleVisibility(visible);
@@ -68,35 +69,9 @@ class SocialRobotPir extends RobotComponent{
         });
     }
 
-    // addPirEventHandler(pirButtonId) {
-    //     var self = this;
-    //     $("#" + pirButtonId).on('click', function () {
-    //         let classesActive = "pir_button pir_button_pushed";
-    //         let classesInactive = "pir_button";
-
-    //         if (document.getElementById(pirButtonId).className === classesInactive) {
-    //             document.getElementById(pirButtonId).className = classesActive;
-    //             self.setImage('./DwenguinoIDE/img/socialrobot/pir_on.png');
-    //             self.setState(1);
-    //             self._stateUpdated = true;
-    //             self._eventBus.dispatchEvent(EventsEnum.SAVE);
-    //         } else {
-    //             document.getElementById(pirButtonId).className = classesInactive;
-    //             self.setImage('./DwenguinoIDE/img/socialrobot/pir.png');
-    //             self.setState(0);
-    //             self._stateUpdated = true; 
-    //             self._eventBus.dispatchEvent(EventsEnum.SAVE);
-    //         }
-    //       });
-    // }
-
     removeHtml(){
-        $('#sim_pir' + this.getId()).remove();
-
-        let buttonLabel = '#button' + this.getId() + '_label';
-        let pirButtonId = '#pir_button' + this.getId();
-        $(buttonLabel).remove();
-        $(pirButtonId).remove();
+        $('#sim_' + this.getType() + this.getId()).remove();
+        this.getButton().remove();
     }
 
     toggleVisibility(visible){
@@ -259,5 +234,9 @@ class SocialRobotPir extends RobotComponent{
 
     getCanvasId(){
         return this._canvasId;
+    }
+
+    getButton(){
+        return this._button;
     }
 }

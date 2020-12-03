@@ -1,6 +1,8 @@
 import { RobotComponent } from './robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js';
+import { Button } from '../../utilities/button.js';
+
 
 export { SocialRobotSoundSensor }
 
@@ -22,6 +24,7 @@ class SocialRobotSoundSensor extends RobotComponent{
         this._state = state;
         this._stateUpdated = false;
         this._canvasId = 'sim_sound_canvas' + this._id;
+        this._button = null;
 
         this.insertHtml();
         this.toggleVisibility(visible);
@@ -37,14 +40,26 @@ class SocialRobotSoundSensor extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let buttonLabel = this.getType() + '_button' + this.getId() + '_label';
-        let soundButtonId = this.getType() + '_button' + this.getId();
+        let label = MSG.soundButtonLabel + " " + this.getId();
+        let id = '' + this.getType() + this.getId();
         
-        if (!document.getElementById(soundButtonId)) {
-            $('#sensor_options').append("<div id='" + buttonLabel + "' class='sensor_options_label' alt='Load'>" + MSG.soundButtonLabel + ' ' + this.getId() + "</div>");
-            $('#sensor_options').append("<div id='" + soundButtonId + "' class='sound_button' alt='Load'></div>");
+        this._button = new Button(id, 'sensor_options', label);
+        
+        var self = this;
+        this._button.getButtonElement().onclick = function (){
+            self._button.update();
 
-            this.addSoundSensorEventHandler(soundButtonId);
+            if (self._button.isActive()) {
+                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+                self.setState(1);
+                self._stateUpdated = true;
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            } else {
+                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+                self.setState(0);
+                self._stateUpdated = true; 
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            }
         }
 
         let simSoundSensor = document.getElementById('sim_'+this.getType() + this.getId());
@@ -55,35 +70,10 @@ class SocialRobotSoundSensor extends RobotComponent{
         });
     }
 
-    addSoundSensorEventHandler(soundButtonId) {
-        var self = this;
-        $("#" + soundButtonId).on('click', function () {
-            let classesActive = "sound_button sound_button_pushed";
-            let classesInactive = "sound_button";
-
-            if (document.getElementById(soundButtonId).className === classesInactive) {
-                document.getElementById(soundButtonId).className = classesActive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
-                self.setState(1);
-                self._stateUpdated = true;
-                self._eventBus.dispatchEvent(EventsEnum.SAVE);
-            } else {
-                document.getElementById(soundButtonId).className = classesInactive;
-                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
-                self.setState(0);
-                self._stateUpdated = true; 
-                self._eventBus.dispatchEvent(EventsEnum.SAVE); 
-            }
-        });
-    }
-
     removeHtml(){
-        $('#sim_sound' + this.getId()).remove();
+        $('#sim_' + this.getType() + this.getId()).remove();
 
-        let buttonLabel = '#' + this.getType() + '_button' + this.getId() + '_label';
-        let soundButtonId = '#' + this.getType() + '_button' + this.getId();
-        $(buttonLabel).remove();
-        $(soundButtonId).remove();
+        this.getButton().remove();
     }
 
     toggleVisibility(visible){
@@ -247,5 +237,9 @@ class SocialRobotSoundSensor extends RobotComponent{
 
     getCanvasId(){
         return this._canvasId;
+    }
+
+    getButton(){
+        return this._button;
     }
 }

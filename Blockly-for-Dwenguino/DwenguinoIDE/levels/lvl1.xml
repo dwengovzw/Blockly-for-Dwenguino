@@ -200,6 +200,25 @@
             </block>
         </value>
     </block>
+     <block type="socialrobot_rgbled">
+        <value name="pin_red">
+            <block type="math_number" id="216">
+                <field name="NUM">18</field>
+            </block>
+        </value>
+        <value name="pin_green">
+            <block type="math_number" id="217">
+                <field name="NUM">19</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="math_number" id="218">
+                <field name="NUM">20</field>
+            </block>
+        </value>
+        <value name="color">
+        </value>
+    </block>
     <block type="socialrobot_servo">
         <value name="pin">
             <block type="math_number" id="212">
