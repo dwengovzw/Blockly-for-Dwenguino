@@ -150,13 +150,13 @@ class SimulationCanvasRenderer {
      * @param {HTMLCanvasElement} canvas 
      */
     drawRgbLed(rgbLed, canvas){
-        // TODO
+
         if(canvas.getContext){
             var self = this;
-            rgbLed.getLedSvg().onload = function() {
+            rgbLed.getLedBackground().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.fillStyle = "#000000";
-                ctx.fillRect(0,0,40,30);
+                let background = rgbLed.getLedBackground();
+                ctx.drawImage(background,0, 0, 40, 30);
 
                 ctx.beginPath();
                 ctx.arc(25, 15, rgbLed.getRadius(), 0, 2 * Math.PI);
@@ -165,7 +165,6 @@ class SimulationCanvasRenderer {
                     ctx.fillStyle = "#CCCCCC";
                 } else {
                     let hex = self.rgbToHex(rgbColor);
-                    console.log(rgbColor, hex, 'hex color');
                     ctx.fillStyle = hex;
                 }
                 ctx.fill();
@@ -176,9 +175,12 @@ class SimulationCanvasRenderer {
                 ctx.translate(-16, -6);   
             }
             var ctx = canvas.getContext('2d');
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(0,0,40,30);
 
+            // RGB Led background
+            let background = rgbLed.getLedBackground();
+            ctx.drawImage(background,0, 0, 40, 30);
+
+            // RGB Led color layer
             ctx.beginPath();
             ctx.arc(25, 15, rgbLed.getRadius(), 0, 2 * Math.PI);
             let rgbColor = rgbLed.getState();
@@ -186,11 +188,11 @@ class SimulationCanvasRenderer {
                 ctx.fillStyle = "#CCCCCC";
             } else {
                 let hex = self.rgbToHex(rgbColor);
-                console.log(rgbColor, hex, 'hex color');
                 ctx.fillStyle = hex;
             }
             ctx.fill();
 
+            // RGB Led top layer
             ctx.translate(16,6);
             let image = rgbLed.getLedSvg();
             ctx.drawImage(image,0,0,18,18);
@@ -201,7 +203,6 @@ class SimulationCanvasRenderer {
     }
 
     rgbToHex(rgbColor) {
-        console.log(rgbColor);
         return "#" + this.componentToHex(rgbColor[0]) + this.componentToHex(rgbColor[1]) + this.componentToHex(rgbColor[2]);
     }
 

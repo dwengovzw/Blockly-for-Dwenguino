@@ -760,7 +760,7 @@ body{
 #rc_rgbled_img {
     width: 100%;
     height: 100%;
-    background-image: url("../img/socialrobot/led.png");
+    background-image: url("../img/socialrobot/rgb_led.svg");
     background-size: contain;
     background-repeat: no-repeat;
 }
@@ -976,7 +976,7 @@ body{
 .rgbled_canvas{
     margin-left: 25px;
     width: 40px;
-    height: 40px;
+    height: 30px;
 }
 
 .sonar_canvas{

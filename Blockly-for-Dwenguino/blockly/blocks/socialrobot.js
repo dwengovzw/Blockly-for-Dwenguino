@@ -67,7 +67,7 @@ Blockly.Blocks['pir_sensor'] = {
 
 var socialrobot_rgbled_json = {
   "id": "socialrobot_rgbled",
-  "message0": "rgbled" + " %1 %2 " + "pin rood" +  " %3 " + "pin groen" + " %4 " + "pin blauw" + " %5 ",
+  "message0": MSG.socialRobotRgbLedBlock + " %1 %2 " + MSG.socialRobotPinRed +  " %3 " + MSG.socialRobotPinGreen + " %4 " + MSG.socialRobotPinBlue + " %5 ",
   "args0": [
     {
       "type": "field_image",
@@ -95,7 +95,7 @@ var socialrobot_rgbled_json = {
       "check": "Number"
     }
   ],
-  "message1": "color" + " %1",
+  "message1": MSG.socialRobotRgbColorBlock + " %1",
   "args1":[
     {
       "type": "input_value",
@@ -119,7 +119,7 @@ Blockly.Blocks['socialrobot_rgbled'] = {
 
 var socialrobot_rgbled_off_json = {
   "id": "socialrobot_rgbled_off",
-  "message0": "turn rgbled with "  + "pin rood" +  " %1 " + "pin groen" + " %2 " + "pin blauw" + " %3 off",
+  "message0": MSG.socialRobotRgbLedOffBlock + " " + MSG.socialRobotPinRed +  " %1 " + MSG.socialRobotPinGreen + " %2 " + MSG.socialRobotPinBlue + " %3 ",
   "args0": [
     {
       "type": "input_value",
@@ -154,13 +154,13 @@ Blockly.Blocks['socialrobot_rgbled_off'] = {
 
 var socialrobot_rgb_color_json = {
   "id": "socialrobot_rgb_color",
-  "message0": "rgb color %1 %2 %3",
+  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
   "type": "rgb_color",
   "args0": [
     {
       "type": "field_number",
       "name": "RED",
-      "value": 100,
+      "value": 133,
       "min": 0,
       "max": 255,
       "precision": 0
@@ -168,7 +168,7 @@ var socialrobot_rgb_color_json = {
     {
       "type": "field_number",
       "name": "GREEN",
-      "value": 100,
+      "value": 196,
       "min": 0,
       "max": 255,
       "precision": 0
@@ -176,7 +176,7 @@ var socialrobot_rgb_color_json = {
     {
       "type": "field_number",
       "name": "BLUE",
-      "value": 100,
+      "value": 65,
       "min": 0,
       "max": 255,
       "precision": 0
@@ -196,7 +196,7 @@ Blockly.Blocks['socialrobot_rgb_color'] = {
 
 var socialrobot_rgb_color_with_numbers_json = {
   "id": "socialrobot_rgb_color",
-  "message0": "rgb %1 %2 %3",
+  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
   "type": "rgb_color",
   "args0": [
     {
