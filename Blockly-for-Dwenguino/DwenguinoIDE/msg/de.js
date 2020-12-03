@@ -219,7 +219,6 @@ var MSG = {
   with_type: "mit Typ",
   create_global: "Erstellen (Global)",
 
-  //TODO: translate:
   dwenguinoStepperMotorBlock: "Schrittmotor %1 %2 %3 Nummer %4 Anzahl Schritte %5",
   dwenguinoStepperMotorBlockTooltip: "TODO",
   drawingrobotMove:"Bewege den Stift im Winkel von %1 Grad in %2 Schritten",
@@ -242,13 +241,6 @@ var MSG = {
   stepperMotorOne: "SCHRITTMOTOR1", 
   stepperMotorTwo: "SCHRITTMOTOR2",
   stepperMotorTooltip: "Wähle welchen Schrittmotor des Zeichenroboters du verwenden möchtest.",
-  clear: "Löschen",
-  save: "Speichern",
-  runError: "Ups, beim Ausführen deines Codes am Board ist ein Fehler aufgetreten.",
-  uploadError: "Code konnte nicht aufs Board geladen werden. \nBitte überprüfe ob das Board mit dem USB-Kabel verbunden ist.\n Sollte das Kabel mit dem Board verbunden sein, versuch es abzustecken, und gleich darauf wieder einzustecken.",
-  cleanError: "Entfernen von vorherigem Code fehlgeschlagen.\nBitte überprüfe, ob .cpp files eventuell von einer anderen Applikation verwendet werden.\n Schließe diese Applikation.",
-  compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
-
   socialrobotSetPinBlock: "Set",
   socialrobotReadPinBlock: "Lies Wert von Pin aus",
   socialrobotPirBlock: "Pir",
@@ -264,6 +256,28 @@ var MSG = {
   socialRobotServoLeftEye: "Servo linkes Auge",
   sonarSliderLabel: "Sonarabstand",
   pirButtonLabel: "PIR Button",
+  soundButtonLabel: "Sound button",
+  lightSensorSliderLabel: "Light sensor slider",
+  servoCostume: "Costume",
+  servoOptions: "Servo motor options",
+  sonarOptions: "Sonar sensor options",
+  lcdOptions: "LCD screen options",
+  pirOptions: "PIR sensor options",
+  soundOptions: "Sound sensor options",
+  lightOptions: "Light sensor options",
+  rgbLedOptions: "RGB LED options",
+  ledOptions: "LED options",
+  pinOptions: "Pin",
+  colorOptions: "Color",
+  clear: "Löschen",
+  save: "Speichern",
+  runError: "Ups, beim Ausführen deines Codes am Board ist ein Fehler aufgetreten.",
+  uploadError: "Code konnte nicht aufs Board geladen werden. \nBitte überprüfe ob das Board mit dem USB-Kabel verbunden ist.\n Sollte das Kabel mit dem Board verbunden sein, versuch es abzustecken, und gleich darauf wieder einzustecken.",
+  cleanError: "Entfernen von vorherigem Code fehlgeschlagen.\nBitte überprüfe, ob .cpp files eventuell von einer anderen Applikation verwendet werden.\n Schließe diese Applikation.",
+  compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
+
+
+  
   };
 
 MSG.logging = {

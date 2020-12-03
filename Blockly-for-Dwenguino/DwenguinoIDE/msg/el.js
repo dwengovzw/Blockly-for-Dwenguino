@@ -143,6 +143,8 @@ var MSG = {
   lightOptions: "Επιλογές αισθητήρα φωτός",
   rgbLedOptions: "Επιλογές RGB LED",
   ledOptions: "Επιλογές LED",
+  pinOptions: "Ακροδέκτης",
+  colorOptions: "Color",
   runError: "Ωχ, σφάλμα κατά την προσπάθεια να τρέξει ο κώδικάς σου στην πλακέτα.",
   uploadError: "Ακολούθησε τα παρακάτω βήματα για να επανεκκινήσεις την πλακέτα Dwenguino: \n    1. Αποσύνδεσε το καλώδιο USB \n    2. Σύνδεσε ξανά με το καλώδιο USB τον υπολογιστή και την πλακέτα Dwenguino \n    3. Πίεσε ταυτόχρονα τα κουμπιά RESET και SOUTH της πλακέτας Dwenguino \n    4. Άφησε πρώτα το κουμπί RESET \n    5. Ύστερα άφησε το κουμπί SOUTH \n    6. Μεταφόρτωσε ξανά το πρόγραμμα πατώντας το <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span> κουμπί στο κύριο μενού",
   cleanError: "Ο προηγούμενος κώδικας δε μπορεί να αφαιρεθεί.\nΈλεγξε παρακαλώ αν κάποια άλλη εφαρμογή χρησιμοποιεί κάποιο αρχείο .cpp.\nΤερμάτισε αυτή την εφαρμογή.",
