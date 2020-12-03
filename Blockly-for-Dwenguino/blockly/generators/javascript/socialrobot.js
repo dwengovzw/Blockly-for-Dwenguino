@@ -39,7 +39,8 @@ Blockly.JavaScript['socialrobot_rgbled_off'] = function(block) {
   var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
   var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
   var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
-  var code = machine + 'rgbLed([' + pin_red + ', ' + pin_green + ', ' + pin_blue + '],[0,0,0]);\n';
+  var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + '[0,0,0]);\n';
+  console.log(code);
   return code;
 };
 

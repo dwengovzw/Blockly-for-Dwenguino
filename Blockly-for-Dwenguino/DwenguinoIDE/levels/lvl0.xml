@@ -196,26 +196,26 @@
         </value>
         <value name="color">
             <block type="socialrobot_rgb_color" id="219">
-                <field name="RED">100</field>
-                <field name="GREEN">100</field>
-                <field name="BLUE">100</field>
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
             </block>
         </value>
     </block>
     <block type="socialrobot_rgb_color_with_numbers">
         <value name="RED">
             <block type="math_number" id="220">
-                <field name="NUM">100</field>
+                <field name="NUM">133</field>
             </block>
         </value>
         <value name="GREEN">
             <block type="math_number" id="221">
-                <field name="NUM">100</field>
+                <field name="NUM">196</field>
             </block>
         </value>
         <value name="BLUE">
             <block type="math_number" id="222">
-                <field name="NUM">100</field>
+                <field name="NUM">65</field>
             </block>
         </value>
     </block>
@@ -232,7 +232,7 @@
         </value>
         <value name="pin_blue">
             <block type="dwenguino_pins">
-                <field name="PIN">A3</field>
+                <field name="PIN">A2</field>
             </block>
         </value>
     </block>
