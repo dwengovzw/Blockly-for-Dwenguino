@@ -13,7 +13,6 @@ class DwenguinoSimulationScenario {
     logger = null;
     constructor(logger) {
         this.logger = logger;
-        console.log("Constructor");
     }
 
     /**

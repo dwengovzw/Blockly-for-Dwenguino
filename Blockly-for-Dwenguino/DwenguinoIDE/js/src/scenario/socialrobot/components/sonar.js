@@ -23,7 +23,7 @@ class SocialRobotSonar extends RobotComponent{
         this._triggerPin = triggerPin;
         this._state = state;
         this._stateUpdated = false;
-
+        this._slider = null;
         this._canvasId = 'sim_sonar_canvas' + this._id;
 
         this.insertHtml();
@@ -41,7 +41,8 @@ class SocialRobotSonar extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
 
         let label = MSG.sonarSliderLabel + " " + this.getId();
-        this._slider = new Slider(this.getId(), 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider');
+        let id = '' + this.getType() + this.getId();
+        this._slider = new Slider(id, 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider');
 
         var self = this;
         let sliderElement = this._slider.getSliderElement();
@@ -67,10 +68,7 @@ class SocialRobotSonar extends RobotComponent{
 
     removeHtml(){
         $('#sim_' + this.getType() + this.getId()).remove();
-
-        $('#' + this.getSliderLabelId()).remove();
-        $('#' + this.getSliderValueId()).remove();
-        $('#' + this.getSliderId()).remove();
+        this.getSlider().remove();
     }
 
     toXml(){
@@ -279,20 +277,8 @@ class SocialRobotSonar extends RobotComponent{
         return this._canvasId;
     }
 
-    getSliderId(){
-        return this._sliderId;
-    }
-
-    getSliderLabelId(){
-        return this._sliderLabelId;
-    }
-    
-    getSliderValueId(){
-        return this._sliderValueId;
-    }
-
-    getSliderRangeId(){
-        return this._sliderRangeId;
+    getSlider(){
+        return this._slider;
     }
 
 }
