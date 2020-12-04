@@ -133,6 +133,7 @@ var MSG = {
   sonarSliderLabel: " مسافة السونار  ",
   pirButtonLabel: " PIR زر   ",
   soundButtonLabel: " زر الصوت  ",
+  touchButtonLabel: "Touch button",
   lightSensorSliderLabel: " زر مستشعر الضوء  ",
   servoCostume: " زي  ",
   servoOptions: " خيارات محرك سيرفو  ",

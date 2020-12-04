@@ -132,6 +132,7 @@ var MSG = {
   sonarSliderLabel: "Απόσταση από αισθητήρα υπερήχων",
   pirButtonLabel: "Κουμπί PIR",
   soundButtonLabel: "Κουμπί ήχου",
+  touchButtonLabel: "Touch button",
   lightSensorSliderLabel: "Απόσταση από αισθητήρα φωτός",
   servoCostume: "Στολή",
   servoOptions: "Επιλογές σερβοκινητήρα",

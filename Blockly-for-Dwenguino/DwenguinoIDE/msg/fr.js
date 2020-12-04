@@ -127,6 +127,7 @@ var MSG = {
   sonarSliderLabel: "Sonar distance",
   pirButtonLabel: "PIR button",
   soundButtonLabel: "Sound button",
+  touchButtonLabel: "Touch button",
   lightSensorSliderLabel: "Light sensor button",
   servoCostume: "Costume",
   servoOptions: "Servo motor options",
