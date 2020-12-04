@@ -21,6 +21,7 @@ class SimulationCanvasRenderer {
     this.drawLeds(robot);
     this.drawRgbLeds(robot);
     this.drawServos(robot);
+    this.drawTouchSensors(robot);
     this.drawPirs(robot);
     this.drawSonars(robot);
     this.drawSoundSensors(robot);
@@ -327,6 +328,42 @@ class SimulationCanvasRenderer {
 
             var ctx = canvas.getContext('2d');
             ctx.drawImage(pir.getImage(),0,0,pir.getWidth(),pir.getHeight());
+        } else {
+            console.log(canvas, "This canvas has no context");
+        } 
+    }
+
+        /**
+     * Draw all touch sensors on canvases with the image specified in robot.
+     *
+     * @param {RobotComponent[]} robot 
+     */
+    drawTouchSensors(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.TOUCH){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawTouchSensor(robot[i], canvas);
+            }
+        }
+    }
+
+    /**
+     * Draw a touch sensor on the given canvas with the image specified in robot.
+     * @param {SocialRobotTouchSensor} touchSensor 
+     * @param {HTMLCanvasElement} canvas 
+     */
+    drawTouchSensor(touchSensor, canvas){
+        if (canvas.getContext) {
+
+            // in case the image isn't loaded yet.
+            var self = this;
+            touchSensor.getImage().onload = function() {
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(touchSensor.getImage(),0,0,touchSensor.getWidth(),touchSensor.getHeight()); 
+            }
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(touchSensor.getImage(),0,0,touchSensor.getWidth(),touchSensor.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         } 

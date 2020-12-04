@@ -765,6 +765,14 @@ body{
     background-repeat: no-repeat;
 }
 
+#rc_touch_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/socialrobot/touch_sensor.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
 #rc_pir_img {
     width: 100%;
     height: 100%;
@@ -859,6 +867,11 @@ body{
     left: 5px;
 }
 
+.sim_element_touch{
+    width:140px;
+    height: 60px;
+}
+
 .sim_element_pir{
     width:120px;
     height: 60px;
@@ -888,6 +901,18 @@ body{
 }
 
 .pir_button_pushed {
+    background-image: url("../img/board/button_pushed.png");
+}
+
+.touch_button {
+    background-image: url("../img/board/button.png");
+    background-size: 100% 100%;
+    height: 26px;
+    width: 26px;
+    display: inline-block;
+}
+
+.touch_button_pushed {
     background-image: url("../img/board/button_pushed.png");
 }
 
@@ -953,6 +978,12 @@ body{
     width: 100px;
     height: 100px;
     margin-top: 10px;
+}
+
+.touch_canvas{
+    margin-left: 25px;
+    width: 60px;
+    height: 60px;
 }
 
 .led_canvas{

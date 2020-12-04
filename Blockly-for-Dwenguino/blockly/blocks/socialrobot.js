@@ -100,6 +100,41 @@ Blockly.Blocks['sound_sensor'] = {
   }
 };
 
+var touch_sensor_json = {
+  "id": "touch_sensor",
+  "message0": MSG.socialRobotTouchSensorBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/touch_sensor.png",
+      "width": 50,
+      "height": 50,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['touch_sensor'] = {
+  init: function() {
+    this.jsonInit(touch_sensor_json);
+  }
+};
+
 var socialrobot_rgbled_json = {
   "id": "socialrobot_rgbled",
   "message0": MSG.socialRobotRgbLedBlock + " %1 %2 " + MSG.socialRobotPinRed +  " %3 " + MSG.socialRobotPinGreen + " %4 " + MSG.socialRobotPinBlue + " %5 ",
