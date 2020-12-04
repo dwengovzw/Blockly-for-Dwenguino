@@ -32,7 +32,7 @@ class DwenguinoSimulationRobotComponentsMenu {
         maximumAmount: 3
       }, {
         type: TypesEnum.RGBLED,
-        maximumAmount: 1
+        maximumAmount: 3
       }, {
         type: TypesEnum.PIR,
         maximumAmount: 2

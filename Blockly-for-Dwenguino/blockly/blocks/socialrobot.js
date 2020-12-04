@@ -71,9 +71,9 @@ var socialrobot_rgbled_json = {
   "args0": [
     {
       "type": "field_image",
-      "src": "DwenguinoIDE/img/pir.png",
-      "width": 40,
-      "height": 40,
+      "src": "DwenguinoIDE/img/socialrobot/rgb_led.svg",
+      "width": 30,
+      "height": 30,
       "alt":  "rgbled"
     },
     {
