@@ -26,6 +26,15 @@ Blockly.JavaScript['pir_sensor'] = function (block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['sound_sensor_sensor'] = function (block) {
+  var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
+  //define pir settings
+
+  //  Assemble JavaScript into code variable.
+  var code = machine + "soundSensor(" + pin + ')';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
 Blockly.JavaScript['socialrobot_rgbled'] = function(block){
   var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
   var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);

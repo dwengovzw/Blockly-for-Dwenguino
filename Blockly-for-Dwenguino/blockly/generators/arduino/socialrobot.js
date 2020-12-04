@@ -27,6 +27,18 @@ Blockly.Arduino['pir_sensor'] = function (block) {
   return [code, Blockly.Arduino.ORDER_NONE];
 };
 
+Blockly.Arduino['sound_sensor'] = function (block) {
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
+  //define pir settings
+  Blockly.Arduino.definitions_['define_sound_sensor_' + pin] = "#define SOUND_SENSOR_PIN_" + pin + " " + pin + "\n";
+
+  //define pir sensor
+  Blockly.Arduino.setups_['define_dwenguino_sound_sensor' + pin] = "pinMode(SOUND_SENSOR_PIN_" + pin + ", INPUT)\n";
+  var code = "digitalRead(SOUND_SENSOR_PIN_" + pin + ")";
+
+  return [code, Blockly.Arduino.ORDER_NONE];
+};
+
 Blockly.Arduino['socialrobot_rgbled'] = function(block) {
   var pin_red = Blockly.Arduino.valueToCode(block, 'pin_red', Blockly.Arduino.ORDER_NONE);
   var pin_green = Blockly.Arduino.valueToCode(block, 'pin_green', Blockly.Arduino.ORDER_NONE);

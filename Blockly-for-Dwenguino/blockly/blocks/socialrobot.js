@@ -32,7 +32,7 @@ Blockly.Blocks.socialrobot.HUE = 25;
 
 var pir_sensor_json = {
   "id": "pir_sensor",
-  "message0": MSG.socialrobotPirBlock + " %1 %2 %3" + MSG.trig + "%4",
+  "message0": MSG.socialRobotPirBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -62,6 +62,41 @@ var pir_sensor_json = {
 Blockly.Blocks['pir_sensor'] = {
   init: function() {
     this.jsonInit(pir_sensor_json);
+  }
+};
+
+var sound_sensor_json = {
+  "id": "sound_sensor",
+  "message0": MSG.socialRobotSoundSensorBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/sound_sensor.png",
+      "width": 80,
+      "height": 34,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['sound_sensor'] = {
+  init: function() {
+    this.jsonInit(sound_sensor_json);
   }
 };
 
