@@ -15,8 +15,8 @@
  */
 
 /**
- * @fileoverview Dwenguino blocks for Blockly.
- * @author Tom.Neutens@UGent.be
+ * @fileoverview Dwenguino social robot blocks for Blockly.
+ * @author zimcke.vandestaey@ugent.be
  */
 'use strict';
 
@@ -32,7 +32,7 @@ Blockly.Blocks.socialrobot.HUE = 25;
 
 var pir_sensor_json = {
   "id": "pir_sensor",
-  "message0": "nabijheidssensor %1 %2 %3" + MSG.trig + "%4",
+  "message0": MSG.socialrobotPirBlock + " %1 %2 %3" + MSG.trig + "%4",
   "args0": [
     {
       "type": "input_dummy"
@@ -65,10 +65,182 @@ Blockly.Blocks['pir_sensor'] = {
   }
 };
 
+var socialrobot_rgbled_json = {
+  "id": "socialrobot_rgbled",
+  "message0": MSG.socialRobotRgbLedBlock + " %1 %2 " + MSG.socialRobotPinRed +  " %3 " + MSG.socialRobotPinGreen + " %4 " + MSG.socialRobotPinBlue + " %5 ",
+  "args0": [
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/rgb_led.svg",
+      "width": 30,
+      "height": 30,
+      "alt":  "rgbled"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_red",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_green",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_blue",
+      "check": "Number"
+    }
+  ],
+  "message1": MSG.socialRobotRgbColorBlock + " %1",
+  "args1":[
+    {
+      "type": "input_value",
+      "name": "color",
+      "check": "Color"
+    },
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+  
+};
+
+Blockly.Blocks['socialrobot_rgbled'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgbled_json);
+  }
+};
+
+var socialrobot_rgbled_off_json = {
+  "id": "socialrobot_rgbled_off",
+  "message0": MSG.socialRobotRgbLedOffBlock + " " + MSG.socialRobotPinRed +  " %1 " + MSG.socialRobotPinGreen + " %2 " + MSG.socialRobotPinBlue + " %3 ",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pin_red",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_green",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_blue",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+  
+};
+
+Blockly.Blocks['socialrobot_rgbled_off'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgbled_off_json);
+  }
+};
+
+var socialrobot_rgb_color_json = {
+  "id": "socialrobot_rgb_color",
+  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
+  "type": "rgb_color",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "RED",
+      "value": 133,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "field_number",
+      "name": "GREEN",
+      "value": 196,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "field_number",
+      "name": "BLUE",
+      "value": 65,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    }
+  ],
+  "output": "Color",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_rgb_color'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgb_color_json);
+  }
+};
+
+var socialrobot_rgb_color_with_numbers_json = {
+  "id": "socialrobot_rgb_color",
+  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
+  "type": "rgb_color",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "RED",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+      
+    },
+    {
+      "type": "input_value",
+      "name": "GREEN",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "input_value",
+      "name": "BLUE",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    }
+  ],
+  "inputsInline": true,
+  "output": "Color",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_rgb_color_with_numbers'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgb_color_with_numbers_json);
+  }
+};
 
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",
-  "message0": MSG.socialrobotServoBlock,
+  "message0": MSG.socialrobotServoBlock + " %1 %2 %3 " + MSG.pin + " %4 " + MSG.angle + " %5",
   "args0": [
     { "type": "input_dummy"
     },
@@ -107,7 +279,7 @@ Blockly.Blocks['socialrobot_servo'] = {
 
 var socialrobot_arms_down_json = {
   "id": "socialrobot_arms_down",
-  "message0": MSG.socialRobotArmsDownBlock,
+  "message0": MSG.socialRobotArmsDownBlock + " %1 %2 %3 " + MSG.socialRobotServoRightHand + " %4 %5 " + MSG.socialRobotServoLeftHand + " %6 %7",
   "args0": [
   {
       "type": "input_dummy"
@@ -161,7 +333,7 @@ Blockly.Blocks['socialrobot_arms_down'] = {
 
 var socialrobot_arms_up_json = {
   "id": "socialrobot_arms_up",
-  "message0": MSG.socialRobotArmsUpBlock,
+  "message0": MSG.socialRobotArmsUpBlock + " %1 %2 %3 " + MSG.socialRobotServoRightHand + " %4 %5 " + MSG.socialRobotServoLeftHand + " %6 %7",
   "args0": [
   {
       "type": "input_dummy"
@@ -214,7 +386,7 @@ Blockly.Blocks['socialrobot_arms_up'] = {
 
 var socialrobot_wave_arms_json = {
     "id": "socialrobot_wave_arms",
-    "message0": MSG.socialrobotWaveArmesBlock,
+    "message0": MSG.socialrobotWaveArmesBlock + " %1 %2 " + MSG.socialRobotServoRightHand + " %3 %4 " + MSG.socialRobotServoLeftHand + " %5 %6",
     "args0": [
     {
         "type": "input_dummy"
@@ -261,7 +433,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_eyes_left_json = {
     "id": "socialrobot_eyes_left",
-    "message0": MSG.socialRobotEyesLeftBlock,
+    "message0": MSG.socialRobotEyesLeftBlock + " %1 %2 %3 " + MSG.socialRobotServoRightEye + " %4 %5 " + MSG.socialRobotServoLeftEye + " %6 %7",
     "args0": [
     {
         "type": "input_dummy"
@@ -314,7 +486,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_eyes_right_json = {
     "id": "socialrobot_eyes_right",
-    "message0": MSG.socialRobotEyesRightBlock,
+    "message0": MSG.socialRobotEyesRightBlock + " %1 %2 %3 " + MSG.socialRobotServoRightEye + " %4 %5 " + MSG.socialRobotServoLeftEye + " %6 %7",
     "args0": [
     {
         "type": "input_dummy"
@@ -367,7 +539,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_set_pin = {
     "id": "socialrobot_set_pin",
-    "message0": MSG.socialrobotSetPinState,
+    "message0": MSG.socialrobotSetPinBlock + " %1 %2",
     "args0": [
       {
         "type": "input_value",
@@ -396,7 +568,7 @@ Blockly.Blocks['socialrobot_set_pin'] = {
 
   var socialrobot_read_pin_json = {
     "id": "socialrobot_read_pin",
-    "message0": MSG.socialrobotReadPinBlock,
+    "message0": MSG.socialrobotReadPinBlock + " %1 %2",
     "args0": [
         {
         "type": "input_dummy"

@@ -1,4 +1,4 @@
-import DwenguinoBlockly from "../../js/src/DwenguinoBlockly.js"
+import DwenguinoBlockly from "../../js/src/dwenguino_blockly.js"
 import { tutorialTargets } from "../tutorialTargets.js"
 
 let rideToWall = {

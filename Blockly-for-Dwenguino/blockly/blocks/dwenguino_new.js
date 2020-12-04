@@ -232,7 +232,7 @@ Blockly.Blocks['char_type'] = {
 
 var sonar_sensor_json = {
   "id": "sonar_sensor",
-  "message0": "sonar %1 %2 %3" + MSG.trig + "%4" + MSG.echo + "%5",
+  "message0": MSG.dwenguinoSonarBlock + " %1 %2 %3 " + MSG.trig + " %4 " + MSG.echo + " %5",
   "args0": [
     {
       "type": "input_dummy"
@@ -349,7 +349,7 @@ Blockly.Blocks['dwenguino_pressed'] = {
 
 var dc_motor_json = {
   "id": "dc_motor",
-  "message0": MSG.dwenguinoDCMotorBlock,
+  "message0": MSG.dwenguinoDCMotorBlock + " %1 %2 %3 " + MSG.channel + " %4 " + MSG.speed + " %5",
   "args0": [
     {
       "type": "input_dummy"
@@ -384,7 +384,7 @@ var dc_motor_json = {
 
 var dwenguino_servo_json = {
   "id": "dwenguino_servo",
-  "message0": MSG.dwenguinoServoBlock,
+  "message0": MSG.dwenguinoServoBlock + " %1 %2 %3 " + MSG.pin + " %4 " + MSG.angle + " %5",
   "args0": [
     {
       "type": "input_dummy"
@@ -401,7 +401,7 @@ var dwenguino_servo_json = {
     },
     {
       "type": "input_value",
-      "name": "channel",
+      "name": "pin",
       "check": "Number"
     },
     {
@@ -424,6 +424,29 @@ Blockly.Blocks['dwenguino_servo'] = {
   }
 };
 
+var dwenguino_servo_dropdown = {
+  "id": "dwenguino_servo_dropdown",
+  "message0": MSG.dwenguinoServoBlock +  " %1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "SERVO_DROPDOWN",
+      "check": "Number",
+      "options": [[MSG.dwenguinoServoOne, 'SERVO1'], [MSG.dwenguinoServoTwo, 'SERVO2']]
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Msg.DWENGUINO_HUE,
+  "tooltip": MSG.dwenguinoServoDropdownTooltip,
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['dwenguino_servo_dropdown'] = {
+  init: function(){
+      this.jsonInit(dwenguino_servo_dropdown);
+  }
+};
+
 
 Blockly.Blocks['dc_motor'] = {
   init: function() {
@@ -433,7 +456,7 @@ Blockly.Blocks['dc_motor'] = {
 
 var dwenguino_set_led = {
     "id": "dwenguin_set_led",
-    "message0": MSG.setLedState,
+    "message0": MSG.setLedState + " %1 %2 ",
     "args0": [
       {
         "type": "input_value",
@@ -462,7 +485,7 @@ Blockly.Blocks['dwenguino_set_led'] = {
 
 var dwenguino_led_pins = {
     "id": "dwenguino_led_pins",
-    "message0": "LED %1 ",
+    "message0": MSG.dwenguinoLedBlock + " %1 ",
     "args0": [
       {
         "type": "field_dropdown",
@@ -507,7 +530,7 @@ Blockly.Blocks['dwenguino_on_off'] = {
 
 var dwenguino_analog_write = {
     "id": "dwenguino_analog_wirte",
-    "message0": MSG.dwenguinoAnalogWrite,
+    "message0": MSG.dwenguinoAnalogWriteBlock + " %1 " + MSG.dwenguinoAnalogValue + " %2",
     "args0":[
         {
             "type": "input_value",
@@ -536,7 +559,7 @@ Blockly.Blocks['dwenguino_analog_write'] = {
 
 var dwenguino_analog_read = {
     "id": "dwenguino_analog_read",
-    "message0": MSG.dwenguinoAnalogRead,
+    "message0": MSG.dwenguinoAnalogReadBlock + " %1",
     "args0": [
         {
             "type": "input_value",

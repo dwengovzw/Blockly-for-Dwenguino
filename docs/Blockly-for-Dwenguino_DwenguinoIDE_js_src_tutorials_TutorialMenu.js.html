@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/tutorials/TutorialMenu.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/tutorials/TutorialMenu.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { EVENT_NAMES } from "../logging/EventNames.js"
+import ServerConfig from "../ServerConfig.js"
+import { Buzzer } from "./components/Buzzer.js";
+import { Lcd } from "./components/Lcd.js";
+import { Led } from "./components/Led.js";
+import { LightSensor } from "./components/LightSensor.js";
+import { Pir } from "./components/Pir.js";
+import { Servo } from "./components/Servo.js";
+import { Sonar } from "./components/Sonar.js";
+import { SoundSensor } from "./components/SoundSensor.js";
+import { tutorials } from "../../../tutorials/tutorials.js";
+
+/**
+ * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
+ * the menu.
+ */
+class TutorialMenu {
+
+    tutorialCategory = "";
+    eventLogger = null;
+
+    constructor(eventLogger){
+        this.eventLogger = eventLogger;
+        this.initTutorialMenu();
+    }
+
+    /**
+     * Initialize the tutorial menu.
+     */
+    initTutorialMenu(){
+        $("#db_tutorials").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
+            this.showTutorialDialog();
+        });
+    }
+
+    /**
+     * Loads the general tutorial menu user interface displaying all tutorial categories.
+     */
+    loadTutorialDialog(){
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
+        $("#tutorialModal .modal-body .message").empty();
+        $("#tutorialModal .modal-body .message").append('&lt;div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'&lt;/div>');
+        $("#tutorialModal .modal-body .message").append('&lt;div id="tutorialModal_categories_menu" class="tutorial_categories_wrapper">&lt;/div>');
+        
+        $('#tutorialModal_categories_menu').append('&lt;div id="tutorial_category_dwenguino_components" class="tutorial_categories_item card">&lt;/div>');
+        $("#tutorial_category_dwenguino_components").append('&lt;div class="category_tag">' + MSG.tutorialMenu.catDwenguinoComponents + '&lt;/div>');
+        $("#tutorial_category_dwenguino_compoentns").append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
+
+        $("#tutorialModal_categories_menu").append('&lt;div id="tutorial_category_wegostem" class="tutorial_categories_item card">&lt;/div>');
+        $("#tutorial_category_wegostem").append('&lt;div class="category_tag">'+ MSG.tutorialMenu.catWeGoStem +'&lt;/div>');
+        $("#tutorial_category_wegostem").append('&lt;div id="tutorial_categories_wegostem_img">&lt;/div>');
+
+        $("#tutorialModal_categories_menu").append('&lt;div id="tutorial_category_dwenguino" class="tutorial_categories_item card">&lt;/div>');
+        $("#tutorial_category_dwenguino").append('&lt;div class="category_tag">'+ MSG.tutorialMenu.catDwenguino +'&lt;/div>');
+        $("#tutorial_category_dwenguino").append('&lt;div id="tutorial_categories_dwenguino_img">&lt;/div>');
+
+        $("#tutorialModal_categories_menu").append('&lt;div id="tutorial_category_riding_robot" class="tutorial_categories_item card">&lt;/div>');
+        $("#tutorial_category_riding_robot").append('&lt;div class="category_tag">'+ MSG.tutorialMenu.catRidingRobot +'&lt;/div>');
+        $("#tutorial_category_riding_robot").append('&lt;div id="tutorial_categories_riding_robot_img">&lt;/div>');
+
+        $("#tutorialModal_categories_menu").append('&lt;div id="tutorial_category_social_robot" class="tutorial_categories_item card">&lt;/div>');
+        $("#tutorial_category_social_robot").append('&lt;div class="category_tag">'+ MSG.tutorialMenu.catSocialRobot +'&lt;/div>');
+        $("#tutorial_category_social_robot").append('&lt;div id="tutorial_categories_social_robot_img">&lt;/div>');      
+        
+        $("#tutorialModal .modal-footer").empty();
+        $("#tutorialModal .modal-footer").append('&lt;button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'&lt;/button>');
+    }
+
+    /**
+     * Adds event handlers for the general tutorial menu user interface.
+     */
+    addTutorialDialogEventHandlers(){
+        $('#tutorial_category_dwenguino_components').click(() => {
+            this.loadComponentsOverview();
+        });
+
+        $("#tutorial_category_wegostem").click(() => {
+            this.loadTutorialsMenu("wegostem");
+        });
+
+        $("#tutorial_category_dwenguino").click(() => {
+            this.loadTutorialsMenu("dwenguino");
+        });
+    
+        $("#tutorial_category_riding_robot").click(() => {
+            this.loadTutorialsMenu("ridingrobot");
+        });
+    
+        $("#tutorial_category_social_robot").click(() => {
+            this.loadTutorialsMenu("socialrobot");
+        });
+
+        $('.close').click(() => {
+            this.hideTutorialDialog();
+        });
+    }
+
+    /**
+     * Makes the tutorial menu visible
+     */
+    showTutorialDialog(){
+        $("#tutorialModal").modal('show');
+    }
+
+    /**
+     * Makes the tutorial menu hidden
+     */
+    hideTutorialDialog(){
+        $('#tutorialModal').modal("hide");
+    }
+
+    /**
+     * Loads a list of tutorials from a specific category.
+     * @param {String} category The tutorial category to load tutorials from 
+     */
+    loadTutorialsMenu(category){
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
+        $("#tutorialModal .modal-body .message").empty();
+        $("#tutorialModal .modal-body .message").append('&lt;div class="tutorial_label">'+ MSG.tutorialMenu.chooseTutorial +'&lt;/div>');
+        $("#tutorialModal .modal-body .message").append('&lt;div id="tutorialModal_tutorials_menu">&lt;/div>');
+
+        $("#tutorialModal .modal-footer").empty();
+        $("#tutorialModal .modal-footer").append('&lt;button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'&lt;/button>');
+        $("#tutorialModal .modal-footer").append('&lt;button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'&lt;/button>');
+        
+        $("#previous_tutorial_dialog").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
+        });
+
+        var serverSubmission = {
+            "username": User.username,
+            "password": User.password,
+            "category": category
+        };
+
+        let self = this;
+        $.ajax({
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/tutorials/completedTutorials",
+            data: serverSubmission,
+        }).done(function(completedTutorials){
+
+            $.each(tutorials, function(index, tutorial){
+                if(tutorial.category == category){
+                    var isCompleted = false;
+                    $.each(completedTutorials, function(i, completedTutorial){
+                        if(tutorial.id == completedTutorial['tutorial_id']){
+                            isCompleted = true;
+                        }
+                    });
+                    self.addTutorial(tutorial, isCompleted);
+                }
+            });
+        }).fail(function(response, status)  {
+            console.warn('Failed to get completed tutorials:', status);
+            $.each(tutorials, function(index, tutorial){
+                if(tutorial.category == category){
+                    var isCompleted = false;
+                    self.addTutorial(tutorial, isCompleted);
+                }
+            });
+        });
+
+    }
+
+    loadComponentsOverview(){
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.dwenguinoComponents);
+        $("#tutorialModal .modal-body .message").empty();
+
+        $("#tutorialModal .modal-body .message").append('&lt;div class="container">&lt;/div>');
+
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="row1" class="row">&lt;/div>');
+        $("#row1").append('&lt;h2>Sensors&lt;/h2>');
+        
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_sensors_menu" class="components_overview row">&lt;/div>');
+
+        let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir];
+
+        for (let i = 0; i &lt; sensorsArray.length; i++) {
+            $('#tutorialModal_sensors_menu').append('&lt;div id="tutorial_sensors_'+ sensorsArray[i].getType() +'" class="col-3 bg-c-4 card">&lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[sensorsArray[i].getType()] + '&lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div>'+sensorsArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="input_pins' + sensorsArray[i].getType() + '">IN: &lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="output_pins' + sensorsArray[i].getType() + '">OUT: &lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="circuit_pins' + sensorsArray[i].getType() + '">CIRCUIT: &lt;/div>');
+        }
+
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="row2" class="row">&lt;/div>');
+        $("#row2").append('&lt;h2>Actuators&lt;/h2>');
+
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="row3" class="row">&lt;/div>');
+        $("#row3").append('&lt;h3>Movement&lt;/h3>');
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_movement_menu" class="components_overview row">&lt;/div>');
+
+        let movementArray = [Servo];
+
+        for (let i = 0; i &lt; movementArray.length; i++) {
+            $('#tutorialModal_movement_menu').append('&lt;div id="tutorial_movement_'+ movementArray[i].getType() +'" class="col-3 bg-c-11 card">&lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[movementArray[i].getType()] + '&lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div>'+movementArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="input_pins' + movementArray[i].getType() + '">IN: &lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="output_pins' + movementArray[i].getType() + '">OUT: &lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="circuit_pins' + movementArray[i].getType() + '">CIRCUIT: &lt;/div>');
+        }
+
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="row4" class="row">&lt;/div>');
+        $("#row4").append('&lt;h3>Display&lt;/h3>');
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_display_menu" class="components_overview row">&lt;/div>');
+        
+        let displayArray = [Lcd, Led];
+
+        for (let i = 0; i &lt; displayArray.length; i++) {
+            $('#tutorialModal_display_menu').append('&lt;div id="tutorial_display_'+ displayArray[i].getType() +'" class="col-3 bg-c-6 card">&lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[displayArray[i].getType()] + '&lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div>'+displayArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="input_pins' + displayArray[i].getType() + '">IN: &lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="output_pins' + displayArray[i].getType() + '">OUT: &lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="circuit_pins' + displayArray[i].getType() + '">CIRCUIT: &lt;/div>');
+        }
+
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="row5" class="row">&lt;/div>');
+        $("#row5").append('&lt;h3>Audio&lt;/h3>');
+        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_audio_menu" class="components_overview row">&lt;/div>');
+    
+        let audioArray = [Buzzer];
+
+        for (let i = 0; i &lt; audioArray.length; i++) {
+            $('#tutorialModal_audio_menu').append('&lt;div id="tutorial_audio_'+ audioArray[i].getType() +'" class="col-3 bg-c-3 card">&lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[audioArray[i].getType()] + '&lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div>'+audioArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="input_pins' + audioArray[i].getType() + '">IN: &lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="output_pins' + audioArray[i].getType() + '">OUT: &lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="circuit_pins' + audioArray[i].getType() + '">CIRCUIT: &lt;/div>');
+        }
+
+        let allComponents = sensorsArray.concat(movementArray).concat(displayArray).concat(audioArray);
+
+        for(let i = 0; i &lt; allComponents.length; i++){
+            let inputPins = allComponents[i].getInputPins();
+            for(let j = 0; j &lt; inputPins.length; j++){
+                $('#input_pins' + allComponents[i].getType()).append('&lt;span class="badge badge-pill">'+inputPins[j]+'&lt;/span> ');
+            }
+        
+            let outputPins = allComponents[i].getOutputPins();
+            for(let j = 0; j &lt; outputPins.length; j++){
+                $('#output_pins' + allComponents[i].getType()).append('&lt;span class="badge badge-pill">'+outputPins[j]+'&lt;/span> ');
+            }
+            
+            $('#circuit_pins' + allComponents[i].getType()).append('&lt;span class="badge badge-pill">5V&lt;/span> ');
+            $('#circuit_pins' + allComponents[i].getType()).append('&lt;span class="badge badge-pill">GND&lt;/span> ');
+        }
+
+        $("#tutorialModal .modal-footer").empty();
+        $("#tutorialModal .modal-footer").append('&lt;button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'&lt;/button>');
+        $("#tutorialModal .modal-footer").append('&lt;button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'&lt;/button>');
+
+        $("#previous_tutorial_dialog").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
+        });
+    }
+
+    /**
+     * Add a specific tutorial to the tutorial list interface
+     * @param {Tutorial} tutorial The tutorial object to add to the list
+     */
+    addTutorial(tutorial, isCompleted){
+
+        var newLi = $("&lt;div>").attr("class", "tutorial_item row").attr("id", tutorial.id).attr("role", "presentation");
+        $("#tutorialModal_tutorials_menu").append(newLi);
+        newLi.click(() => {
+            this.eventLogger.tutorialId = tutorial.id;
+            this.tutorialCategory = tutorial.category;
+            this.eventLogger.tutorialIdSetting = tutorial.id;
+            tutorial.initSteps();
+            hopscotch.configure({showPrevButton: "true"}); //configure tutorial views
+            this.hideTutorialDialog(); // hide the tutorial dialog before starting the tutorial
+            hopscotch.startTour(tutorial);
+            this.eventLogger.recordEvent(this.eventLogger.createEvent(EVENT_NAMES.startTutorial, tutorial.id));
+        });
+
+        if(isCompleted){
+            $("#" + tutorial.id).append('&lt;div class="glyphicon glyphicon-ok c-6 col-auto">&lt;/div>'); 
+            $("#" + tutorial.id).append('&lt;div class="col-auto">'+ tutorial.label + '&lt;/div>'); 
+        } else {
+            $("#" + tutorial.id).append('&lt;div class="glyphicon glyphicon-remove c-1 col-auto">&lt;/div>'); 
+            $("#" + tutorial.id).append('&lt;div class="col-auto">'+ tutorial.label + '&lt;/div>'); 
+        }
+  
+    }
+
+    /**
+     * Event handler for endig a tutorial. Triggers the 'endTutorial' event for logging.
+     */
+    endTutorial(){
+        this.saveCompleteTutorial(this.tutorialId, this.tutorialCategory);
+        this.eventLogger.tutorialId = "";
+        this.eventLogger.tutorialIdSetting = "";
+        this.tutorialCategory = "";
+        this.eventLogger.recordEvent(this.eventLogger.createEvent(EVENT_NAMES.endTutorial, ""));
+        this.showTutorialDialog();
+    }
+
+    saveCompleteTutorial(tutorialId, category){
+        console.log(tutorialId, category);
+        var serverSubmission = {
+            "username": User.username,
+            "password": User.password,
+            "tutorialId": tutorialId,
+            "category": category,
+        };
+
+        if (this.eventLogger.sessionId !== undefined){
+            $.ajax({
+                type: "POST",
+                url: ServerConfig.getServerUrl() + "/tutorials/completeTutorial",
+                data: serverSubmission,
+            }).done(function(data){
+                console.debug('Recording submitted', data);
+            }).fail(function(response, status)  {
+                console.warn('Failed to submit recording:', status);
+            });
+        }
+    }
+}
+
+export default TutorialMenu;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:58:58 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
