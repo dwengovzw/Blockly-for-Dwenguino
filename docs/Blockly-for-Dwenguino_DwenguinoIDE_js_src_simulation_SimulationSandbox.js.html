@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/simulation/SimulationSandbox.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/simulation/SimulationSandbox.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import ButtonMap from "./ButtonMap.js";
+import PlotterConstants from "../scenario/plotter/PlotterConstants.js"
+
+/**
+ * Contains all the functions that can be executed by the code that was created by the students.
+ * Block translations can use these functions. If extra bocks are added, this is the place to add the 
+ * code behind those blocks.
+*/
+class SimulationSandbox {
+  boardState = null;
+  currentScenario = null;
+  constructor(boardState) {
+    this.boardState = boardState;
+  }
+
+  setCurrentScenario(scenario){
+    this.currentScenario = scenario;
+  }
+
+  /*
+  * Clears the lcd display.
+  *
+  */
+  clearLcd() {
+    // clear lcd by writing spaces to it
+    for (var i = 0; i &lt; 2; i++) {
+      this.writeLcd(" ".repeat(16), i, 0);
+    }
+  }
+
+  /*
+  * Writes text to the lcd on the given row starting fro position column
+  * @param {string} text: text to write
+  * @param {int} row: 0 or 1 addresses the row
+  * @param {int} column: 0-15: the start position on the given row
+  */
+  writeLcd(text, row, column) {
+    // Turn on lcd backlight
+    this.boardState.setBacklight(1);
+    // replace text in current content (if text is hello and then a is written this gives aello)
+    let existingText = this.boardState.getLcdContent(row).substr(0, column);
+    let spaces = 0;
+    if (existingText.length &lt; column){
+      spaces = column - existingText.length;
+    }
+    text = existingText + " ".repeat(spaces) + text.substring(0, 16 - column)
+    this.boardState.getLcdContent(row).substr(text.length + column, 16);
+    this.boardState.setLcdContent(row, text);
+
+  }
+
+  /*
+  * Write value 'HIGH' or 'LOW' to a pin, used to turn light on and off
+  * @param {int} pinNumber: 13 or 32-39 adresses a light
+  * @param {string} state: 'HIGH' to trun light on or 'LOW' to turn light off
+  */
+  digitalWrite(pinNumber, state) {
+    // turns light on or off
+    var pin = Number(pinNumber);
+    if ((pin >= 32 &amp;&amp; pin &lt;= 39) || pin === 13) {
+      if (pin >= 32 &amp;&amp; pin &lt;= 39) {
+        pin -= 32;
+      }
+      if (state === 'HIGH' || state == 1) {
+        pin === 13 ? this.boardState.setLedState(8, 1) : this.boardState.setLedState(pin, 1);
+      } else {
+        pin === 13 ? this.boardState.setLedState(8, 0) : this.boardState.setLedState(pin, 0);
+      }
+    } else {
+      this.boardState.setIoPinState(pin, state);
+    }
+  }
+
+  analogWrite(pinName, state) {
+    this.boardState.setAnalogIoPinState(pinName, state);
+  }
+
+
+  /*
+  * Reads the value of the given pin, used to know the value of a button
+  * @param {string} id of the button "SW_N","SW_W,SW_C","SW_E" or "SW_S"
+  * @returns {int} 1 if not pressed, 0 if pressed
+  */
+  digitalRead(pin) {
+    // read value from buttons
+    if (pin.startsWith("SW_")) {
+      let pinIndex = ButtonMap.mapButtonPinNameToIndex(pin);
+      return this.boardState.getButtonState(pinIndex);
+    }
+
+    // Return the value that is set to the leds
+    pin = Number(pin);
+    if ((pin >= 32 &amp;&amp; pin &lt;= 39) || pin === 13) {
+      if (pin >= 32 &amp;&amp; pin &lt;= 39) {
+        pin -= 32;
+      }
+      return this.boardState.getButtonState(pin);
+    }
+
+    // Otherwise, assume the value of the pin is high can possibly be extended.
+    return 1;
+  }
+
+  // TODO: implement this when the time is right :p
+  analogRead(pinName) {
+    return this.boardState.getAnalogIoPinState(pinName);
+  }
+
+  /*
+  * Changes the state of all eight lights
+  * @param {String} bin "0b00000000" to turn all lights off, "0b11111111" to turn all lights on
+  */
+  setLeds(bin) {
+    //Convert number to binary string
+    bin = bin.toString(2);
+
+    // Turn all leds off
+    for (var i = 0; i &lt; 8; i++) {
+      this.digitalWrite(32 + i, 0);
+    }
+    // Turn on the respective leds
+    var diff = 8 - bin.length;
+    if (diff &lt; 0) {
+      diff = 0
+    }
+    for (var i = 0; i &lt; Math.min(bin.length, 8); i++) {
+      this.digitalWrite(39 - (diff + i), bin[i]);
+    }
+  }
+
+  /*
+  * Turns the buzzer to a given frequancy
+  * @param {string} id of the pin "BUZZER"
+  * @param {int} frequency of the wanted sound
+  */
+  tone(pin, frequency) {
+    if (pin !== "BUZZER") {
+      return;
+    }
+    this.boardState.setTonePlaying(frequency);
+  }
+
+  /*
+  * Stops the buzzer
+  * @param {string} id of the pin "BUZZER"
+  */
+  noTone(pin) {
+    if (pin === "BUZZER") {
+      // stop tone
+      this.boardState.setTonePlaying(0);
+    }
+  }
+
+  /*
+  * Sets the servo to a given angle
+  * @param {int} channel id of servo 1 or 2
+  * @param {int} angle between 0 and 180
+  */
+  servo(channel, angle) {
+    //set angle
+    if (angle > 180) {
+      angle = 180;
+    }
+    if (angle &lt; 0) {
+      angle = 0;
+    }
+
+    let pin = channel + 35;
+
+    if (angle !== this.boardState.getServoAngle(channel)) {
+      this.boardState.setServoAngle(channel, angle);
+      this.boardState.setIoPinState(pin, angle); // for completion also save the angle on the corresponding pin
+    }
+  }
+
+  /**
+   * Sets the (extra) servo on the given pin to a given angle
+   * @param {int} pin 
+   * @param {int} angle 
+   */
+  servoWithPin(pin, angle) {
+    if (angle !== this.boardState.getIoPinState(pin)) {
+      this.boardState.setIoPinState(pin, angle);
+    }
+  }
+
+
+  /*
+  * Turn a motor on at given speed
+  * @param {int} channel id of motor 1 or 2
+  * @param {int} speed between 0 and 255
+  */
+  startDcMotor(channel, speed) {
+
+    //set angle
+    if (speed > 255) {
+      speed = 255;
+    }
+    if (speed &lt; -255) {
+      speed = -255;
+    }
+
+    // change view of motor
+    if (speed === this.boardState.getMotorSpeed(channel)) {
+      return;
+    }
+    this.boardState.setMotorSpeed(channel, speed);
+
+  }
+
+
+  /*
+  * Returns the distance between the sonar and the wall
+  * @param {int} trigPin 11
+  * @param {int} echoPin 12
+  * @returns {int} distance in cm
+  */
+  sonar(trigPin, echoPin) {
+    //return Math.round(this.boardState.getSonarDistance());
+    return Math.round(this.boardState.getSonarDistance(trigPin, echoPin));
+  }
+
+  /**
+   * Returns the state of PIR sensor if it was added to the scenario. Otherwise it returns a low signal by default.
+   * Displays the pin number that is used by the PIR sensor as output.
+   * 
+   * !!!! For now we assume the pir sensor is connected to io pin 0
+   * 
+   * @param {int} trigPin 
+   */
+  pir(trigPin) {
+    // TODO: figure out hou to access the pir data
+
+    //invert state (low = pressed)
+    return this.boardState.getIoPinState(trigPin);
+  }
+
+  /**
+   * This function is just a stub for the debugging environment 
+   * The acutal waiting is done in the step function in DwenguinoSimulation
+   * @param {int} time The time that should be waited in miliseconds
+   */
+  sleep(time) {
+    return;
+  }
+
+
+  stepmotorQueue = [];
+  servoAngleQueue = [];
+  colorQueue = [];
+  stepperPins = [33, 34];
+  penPositionPins = [36, 37];
+  colorPin = 35;
+  stylusPosPin =38;
+  drawingActive = false;
+
+  /**
+   * 
+   * @param {Number} channel The pin on which the stepper motor is connected.
+   * @param {Number} direction The direction of the step positive = right, negative = left.
+   */
+  stepperMotorStep(channel, direction) {
+    let step = (direction > 0) ? 1 : -1;
+    this.boardState.setIoPinState(channel, this.boardState.getIoPinState(channel) + step);
+  }
+
+  stepMotorSteps(channel, steps) {
+    for (let i = 0; i &lt; Math.abs(steps); ++i) {
+      this.stepperMotorStep(channel, steps);
+    }
+  }
+
+  stepMotorsTo(increments) {
+    let newPosition  = [0, 0];
+    for (let i = 0 ; i &lt; newPosition.length ; ++i){
+      newPosition[i] = this.boardState.getIoPinState(this.penPositionPins[i]) + increments[i];
+    }
+    let steps = this.coordinatesToSteps(newPosition);
+    for (let i = 0; i &lt; steps.length; ++i) {
+      this.boardState.setIoPinState(
+        this.stepperPins[i],
+        steps[i]
+      );
+    }
+  }
+
+  coordinatesToSteps(coords){
+    let l1 = Math.sqrt(coords[0]**2 + coords[1]**2);
+    let l2 = Math.sqrt(coords[1]**2 + (PlotterConstants.motorDistance - coords[0])**2);
+    let steplength = 2*Math.PI*PlotterConstants.motorRadius/PlotterConstants.nrOfSteps;
+    l1 /= steplength;
+    l2 /= steplength;
+    
+    return [l1, l2]
+  }
+
+  drawRobotCheckPosition(position) {
+    var sc = DwenguinoSimulation.currentScenario;
+    if (position[0] &lt; sc.paper.position.x || position[0] > sc.paper.position.x + sc.paper.width || position[1] &lt; sc.paper.position.y || position[1] > sc.paper.position.y + sc.paper.height) {
+      if (!window.stepMotorError) {
+        alert(MSG.bounds);
+        DwenguinoSimulation.handleSimulationStop();
+        window.stepMotorError = true;
+      }
+    }
+  };
+
+
+  drawRobotLine(x, y, screenCoord) {
+    if (screenCoord) { //if the coordinates are taken from the screen
+      x += 20;
+      y += 40;
+    }
+
+    // Find the starting position
+    let currentPosition  = [0, 0];
+    for (let i = 0 ; i &lt; currentPosition.length ; ++i){
+      currentPosition[i] = this.boardState.getIoPinState(this.penPositionPins[i]);
+    }
+    var pStart = currentPosition;
+
+    // Find all the points between start and end
+    let angle  = Math.atan((y - pStart[1])/(x - pStart[0]));
+    let length = Math.sqrt((pStart[0] - x)**2 + (pStart[1] - y)**2);
+    let xIncrement = Math.cos(angle);
+    let yIncrement = Math.sin(angle);
+    this.update(length, xIncrement, yIncrement);
+    this.drawingActive = true;
+
+  };
+
+  update(stepsLeft, xIncrement, yIncrement){
+    if (stepsLeft > 0){
+      this.stepMotorsTo([xIncrement, yIncrement]);
+      this.currentScenario.updateScenario(this.boardState);
+      setTimeout(() => {this.update(stepsLeft-1, xIncrement, yIncrement)}, 30);
+    }else{
+      this.drawingActive = false;
+    }
+  }
+
+
+
+  drawRobotLowerStylus() {
+    this.boardState.setIoPinState(this.stylusPosPin, 0);
+
+  };
+
+  drawRobotLiftStylus() {
+    this.boardState.setIoPinState(this.stylusPosPin, 90);
+
+  };
+
+  changeColor(color) {
+    this.boardState.setIoPinState(this.colorPin, color);
+
+  };
+}
+
+export default SimulationSandbox;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:58:58 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

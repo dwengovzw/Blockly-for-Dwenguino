@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: DwenguinoIDE/js/src/logging/logging_menu.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: DwenguinoIDE/js/src/logging/logging_menu.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import Validator from './validator.js'
+import ServerConfig from '../server_config.js'
+
+/**
+ * This class builds and displays the logging menu on the screen.
+ * It is used by the DwenguinoEventLogger to gather data about the user.
+ * 
+ */
+class LoggingMenu{
+    username = null;
+    password = null;
+    currentlySelectedIcons= [null,null,null,null];
+    SIZE = 4;
+    icons = [
+        {id: 1, name: MSG.logging['person'], html: '&lt;span class="glyphicon icon-user">&lt;/span>'},
+        {id: 2, name: MSG.logging['dog'], html: '&lt;span class="glyphicon icon-dog">&lt;/span>'},
+        {id: 3, name: MSG.logging['car'], html: '&lt;span class="glyphicon icon-car">&lt;/span>'},
+        {id: 4, name: MSG.logging['camera'], html: '&lt;span class="glyphicon icon-camera">&lt;/span>'},
+        {id: 5, name: MSG.logging['heart'], html: '&lt;span class="glyphicon icon-heart">&lt;/span>'},
+        {id: 6, name: MSG.logging['plane'], html: '&lt;span class="glyphicon icon-plane">&lt;/span>'},
+        {id: 7, name: MSG.logging['house'], html: '&lt;span class="glyphicon icon-house">&lt;/span>'},
+        {id: 8, name: MSG.logging['umbrella'], html: '&lt;span class="glyphicon icon-umbrella">&lt;/span>'},
+        {id: 9, name: MSG.logging['star'], html: '&lt;span class="glyphicon icon-star">&lt;/span>'},
+        {id: 10, name: MSG.logging['money'], html: '&lt;span class="glyphicon icon-money">&lt;/span>'},
+        {id: 11, name: MSG.logging['gift'], html: '&lt;span class="glyphicon icon-gift">&lt;/span>'},
+        {id: 12, name: MSG.logging['keys'], html: '&lt;span class="glyphicon icon-keys">&lt;/span>'},
+        {id: 13, name: MSG.logging['music'], html: '&lt;span class="glyphicon icon-music">&lt;/span>'},
+        {id: 14, name: MSG.logging['snowflake'], html: '&lt;span class="glyphicon icon-snowflake">&lt;/span>'},
+        {id: 15, name: MSG.logging['fire'], html: '&lt;span class="glyphicon icon-fire">&lt;/span>'},
+        {id: 16, name: MSG.logging['envelope'], html: '&lt;span class="glyphicon icon-envelope">&lt;/span>'}
+    ];
+    schools = null;
+    validator = null;
+    eventLogger = null;
+    constructor(eventLogger){
+        this.validator = new Validator(); 
+        this.eventLogger = eventLogger;
+    }
+
+    /**
+     * Show the general user menu on the screen
+     */
+    createInitialMenu(){
+        this.createLoggingModalDialogWithoutFooter(MSG.logging['login']);
+
+        $('#loggingModalBody').append('&lt;p id="loggingModalBody1">&lt;/p>')
+        $("#loggingModalBody").append('&lt;div id="authentication_menu" class="tutorial_categories_wrapper">&lt;/div>');
+
+        $("#authentication_menu").append('&lt;div id="authentication_new_user" class="tutorial_categories_item card">&lt;/div>');
+        $("#authentication_new_user").append('&lt;div class="category_tag">'+ MSG.logging['newuser'] +'&lt;/div>');
+        $("#authentication_new_user").append('&lt;div id="new_user_img">&lt;/div>');
+
+        $("#authentication_menu").append('&lt;div id="authentication_existing_user" class="tutorial_categories_item card">&lt;/div>');
+        $("#authentication_existing_user").append('&lt;div class="category_tag">'+ MSG.logging['login'] +'&lt;/div>');
+        $("#authentication_existing_user").append('&lt;div id="school_user_img">&lt;/div>');
+
+        this.showDialog();
+
+        var self = this;
+        $("#authentication_new_user").click(function(){
+            self.createUserMenu();
+        });
+
+        $("#authentication_existing_user").click(function(){
+            self.createLoginMenu();
+        });
+    }
+
+    /**
+     * Build and display the login menu as a modal on the screen.
+     * The user needs to enter a username and graphical password to log in.
+     */
+    createLoginMenu(){
+        var self = this;
+        this.createLoggingModalDialog(MSG.logging['login']);
+        $('#loggingModalBody').append('&lt;div id="inputUsername" class="ui-widget row mb-4">');
+        $('#inputUsername').append('&lt;label for="myusernametag" class="col-md-3">'+ MSG.logging['username']+'&lt;/label>');
+        $('#inputUsername').append('&lt;input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="Enter username">');
+
+        self.createIconModule();
+
+        $('#loggingModalBody').append('&lt;button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'&lt;/button>');   
+        $('#loggingModalFooter').append('&lt;button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'&lt;/button>');
+
+        this.showDialog();
+
+        self.makeIconsResponsive();
+
+        // Reset the graphical password.
+        $("#reset_modal_dialog_button").click(function(){
+            self.resetSelectedIcons();
+        });
+
+        // Log in.
+        $("#submit_modal_dialog_button").click(function(){
+            self.login();
+        });
+    }
+
+    login(){
+        var self = this;
+        var errors = [];
+        User.username = $( "input[name=myusernametag]").val();
+        User.password = JSON.stringify(self.currentlySelectedIcons);
+    
+        errors.push(self.validator.validateId(self.currentlySelectedIcons));
+    
+        if(self.validator.hasErrors(errors)){
+            self.showErrors(errors);
+        } else {
+            var serverSubmission = {
+                "userId": User.username,
+                "password": JSON.stringify(self.currentlySelectedIcons)
+            };
+    
+            $.ajax({
+                type: "POST",
+                url: ServerConfig.getServerUrl() + "/authentication/authenticate",
+                data: serverSubmission,
+            }).done(function(data){
+                self.eventLogger.setUserId(data['id']);
+                self.resetSelectedIcons();
+                self.removeDialog();
+            }).fail(function(response, status)  {
+                console.warn('Failed to log in:', status);
+                console.log(response);
+            });
+        }
+    }
+
+    createUserMenu(){
+        var self = this;
+        self.createLoggingModalDialog(MSG.logging['newuser']);
+    
+        $('#loggingModalBody').append('&lt;div id="inputUsername" class="ui-widget row mb-4">');
+        $('#inputUsername').append('&lt;label for="myusernametag" class="col-md-3">'+MSG.logging['username']+'&lt;/label>');
+        $('#inputUsername').append('&lt;input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="'+ MSG.logging['chooseUsername']+'">');
+    
+        self.createIconModule();
+    
+        $('#loggingModalBody').append('&lt;button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'&lt;/button>');   
+        $('#loggingModalFooter').append('&lt;button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'&lt;/button>');
+        
+        self.showDialog();
+    
+        self.makeIconsResponsive();
+    
+        // Reset the graphical password.
+        $("#reset_modal_dialog_button").click(function(){
+            self.resetSelectedIcons();
+        });
+    
+        // Register the new user.
+        $("#submit_modal_dialog_button").click(function(){
+            self.registerUser();
+        });
+    }
+
+    registerUser(){
+        var self = this;
+        var errors = [];
+        User.username = $( "input[name=myusernametag]").val();
+        User.password = JSON.stringify(self.currentlySelectedIcons);
+    
+        errors.push(self.validator.validateId(self.currentlySelectedIcons));
+    
+        if(self.validator.hasErrors(errors)){
+            self.showErrors(errors);
+        } else {
+            var serverSubmission = {
+                "userId": User.username,
+                "password": JSON.stringify(self.currentlySelectedIcons)
+            };
+    
+            $.ajax({
+                type: "POST",
+                url: ServerConfig.getServerUrl() + "/authentication/new",
+                data: serverSubmission,
+            }).done(function(data){
+                self.eventLogger.setUserId(self.username);
+                self.resetSelectedIcons();
+                self.removeDialog();
+                self.showSettingsMenu();
+            }).fail(function(response, status)  {
+                console.log('Failed to register:', status);
+            });
+        }
+    }
+
+    /**
+     * Show the menu on the screen
+     */
+    showSettingsMenu(){
+        var self = this;
+        $.ajax({
+            type: "GET",
+            url: ServerConfig.getServerUrl() + "/schools/"}
+        ).done(function(data){
+            self.schools = data;
+            self.createLoggingModalDialog(MSG.logging['setup']);
+
+            $('#loggingModalBody').append('&lt;div id="inputSchool" class="ui-widget row mb-4">');
+            $('#inputSchool').append('&lt;label for="myschooltags" class="col-md-2">'+MSG.logging['school']+'&lt;/label>');
+            $('#inputSchool').append('&lt;input id="myschooltags" name="myschooltags" class="form-control col-md-8" placeholder="'+MSG.logging['selectSchool']+'">');
+
+            $('#loggingModalBody').append('&lt;div id="inputAge" class="ui-widget row mb-4">&lt;/div>');
+            $('#inputAge').append('&lt;label for="birth" class="col-md-3">'+MSG.logging['birth']+'&lt;/label>');
+            $('#inputAge').append('&lt;input type="date" class="form-control col-md-7" id="birth">');
+
+            $('#loggingModalBody').append('&lt;div id="inputGender" class="ui-widget row mb-4">&lt;/div>');
+            $('#inputGender').append('&lt;label for="birth" class="col-md-3">'+MSG.logging['gender']+'&lt;/label>');
+            $('#inputGender').append('&lt;div id="genderOptions" class="col-md-7">');
+
+            $('#genderOptions').append('&lt;label class="radio-inline">&lt;input type="radio" name="genderRadio" value="f">'+MSG.logging['gender1']+'&lt;/label>');
+            $('#genderOptions').append('&lt;label class="radio-inline">&lt;input type="radio" name="genderRadio" value="m">'+MSG.logging['gender2']+'&lt;/label>');
+            $('#genderOptions').append('&lt;label class="radio-inline">&lt;input type="radio" name="genderRadio" value="x">'+MSG.logging['gender3']+'&lt;/label>');
+            $('#genderOptions').append('&lt;label class="radio-inline">&lt;input type="radio" name="genderRadio" value="na">'+MSG.logging['gender4']+'&lt;/label>');
+
+            // Set date to today
+            var db_now = new Date();
+            var db_day = ("0" + db_now.getDate()).slice(-2);
+            var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
+            var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
+            $('#birth').val(db_today);
+
+            $('#loggingModalFooter').append('&lt;button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'&lt;/button>');
+
+            $("#loggingModal").modal('show');
+
+            // Schools autocomplete
+            self.schoolsAutocomplete = new autoComplete({
+                selector: 'input[name="myschooltags"]',
+                minChars: 2,
+                source: function(term, suggest){
+                    term = term.toLowerCase();
+                    var choices = data;
+                    var matches = [];
+                    for (i=0; i&lt;choices.length; i++)
+                        if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
+                    suggest(matches);
+                }
+            });
+
+            $("#submit_modal_dialog_button").click(function(){
+
+                var errors = [];
+                let school = $( "input[name=myschooltags]" ).val();
+                let dateOfBirth = $("#birth").val();
+                let gender = $("input[name=genderRadio]:checked").val();
+
+                // TODO validate settings on server side
+                errors.push(self.validator.validateSchool(school));
+                //errors.push(self.validator.validateAgeGroup(ageGroup));
+                errors.push(self.validator.validateGender(gender));
+                
+                if(self.validator.hasErrors(errors)){
+                    self.showErrors(errors);
+                } else {
+                    self.eventLogger.setSchool(school);
+                    self.eventLogger.setDateOfBirth(dateOfBirth);
+                    self.eventLogger.setGender(gender);
+
+                    var serverSubmission = {
+                        "userId": User.username,
+                        "password": User.password,
+                        "school": school,
+                        "dateOfBirth": dateOfBirth,
+                        "gender": gender
+                    };
+
+                    $.ajax({
+                        type: "POST",
+                        url: ServerConfig.getServerUrl() + "/authentication/updateUser",
+                        data: serverSubmission,
+                    }).done(function(data){
+                        self.removeDialog();
+                        console.log("[act;" + (self.eventLogger.dateOfBirth || "") 
+                                        + ";" + (self.eventLogger.userId || "")
+                                        + ";" + (self.eventLogger.school || "")
+                                        + "]");
+                    }).fail(function(response, status)  {
+                        console.warn('Failed to log in:', status);
+                    });
+                }
+            });
+
+        }).fail(function(response, status)  {
+            console.warn('Failed to fetch schools:', status);
+        });
+    }
+
+    showDialog(){
+        $("#loggingModal").modal('show');
+    }
+    
+    removeDialog(){
+        $('div').remove('#loggingModal');
+        $('.modal-backdrop').remove();
+    }
+
+    createLoggingModalDialog(headerTitle){
+        // Make sure there is no duplicate logging menu
+        this.removeDialog();
+    
+        $('#db_body').append('&lt;div id="loggingModal" class="modal fade" role="dialog">&lt;/div>');
+        $('#loggingModal').append('&lt;div id="loggingModalDialog" class="modal-dialog">&lt;/div>');
+    
+        $('#loggingModalDialog').append('&lt;div id="loggingModalContent" class="modal-content">&lt;/div>');
+    
+        $('#loggingModalContent').append('&lt;div id="loggingModalHeader" class="modal-header">&lt;/div>');
+        $('#loggingModalContent').append('&lt;div id="loggingModalBody" class="modal-body">&lt;/div>');
+        $('#loggingModalContent').append('&lt;div id="loggingModalFooter" class="modal-footer">&lt;/div>');
+    
+        $('#loggingModalHeader').append('&lt;button type="button" class="close" data-dismiss="modal">&amp;times;&lt;/button>');
+        $('#loggingModalHeader').append('&lt;h4 class="modal-title">'+ headerTitle +'&lt;/h4>');
+    }
+
+    createLoggingModalDialogWithoutFooter(headerTitle){
+        // Make sure there is no duplicate logging menu
+        this.removeDialog();
+    
+        $('#db_body').append('&lt;div id="loggingModal" class="modal fade" role="dialog">&lt;/div>');
+        $('#loggingModal').append('&lt;div id="loggingModalDialog" class="modal-dialog">&lt;/div>');
+    
+        $('#loggingModalDialog').append('&lt;div id="loggingModalContent" class="modal-content">&lt;/div>');
+    
+        $('#loggingModalContent').append('&lt;div id="loggingModalHeader" class="modal-header">&lt;/div>');
+        $('#loggingModalContent').append('&lt;div id="loggingModalBody" class="modal-body">&lt;/div>');
+    
+        $('#loggingModalHeader').append('&lt;button type="button" class="close" data-dismiss="modal">&amp;times;&lt;/button>');
+        $('#loggingModalHeader').append('&lt;h4 class="modal-title">'+ headerTitle +'&lt;/h4>');
+    }
+
+    showErrors(errors){
+        $('div').remove('#loggingModalErrors');
+        $('#loggingModalBody').append('&lt;div id="loggingModalErrors" class="mt-4">&lt;/div>');
+        var arrayLength = errors.length;
+        for (var i = 0; i &lt; arrayLength; i++) {
+            if(errors[i] != null){
+                $('#loggingModalErrors').append('&lt;p>' + errors[i].message + '&lt;/p>');
+            }
+        }
+    }
+
+    /**
+     * Graphical password grid
+     */
+
+    /**
+     * Create the module and add the graphical password grid
+     */
+    createIconModule(){
+        $('#loggingModalBody').append('&lt;div class="row">&lt;div class="col-md-12 mt-4">&lt;b>'+MSG.logging['choosePassword']+'&lt;/b>&lt;/div>&lt;/div>');
+        $('#loggingModalBody').append('&lt;div class="row">&lt;div class="col-md-3 mt-4 mb-4">'+MSG.logging['currentlySelected']+'&lt;/div>&lt;div class="col-md-8 mt-4 mb-4">&lt;div id="currentlySelected" class="row">&lt;/div>&lt;/div>');
+
+        $('#currentlySelected').append('&lt;div id="currentlySelected0" class="col-2">&lt;/div>');
+        $('#currentlySelected').append('&lt;div id="currentlySelected1" class="col-2">&lt;/div>');
+        $('#currentlySelected').append('&lt;div id="currentlySelected2" class="col-2">&lt;/div>');
+        $('#currentlySelected').append('&lt;div id="currentlySelected3" class="col-2">&lt;/div>');
+
+        this.createIconGrid();
+    }
+
+    /**
+     * Make the icons of the graphical password grid responsive to the click event
+     */
+    makeIconsResponsive(){
+        var self = this;
+        for(let i=1; i&lt;5; i++){
+            for(let j=1; j&lt;5; j++){
+                $("#r" + i +"c" + j).click(function(){
+                    self.addIconToId(i,j);
+                });    
+            }
+        }
+    }
+
+    /**
+     * Create the graphical password grid within the modal dialog body.
+     * The grid is a 4x4 matrix.
+     */
+    createIconGrid(){
+        $('#loggingModalBody').append('&lt;div id="inputIcons">&lt;/div>');
+
+        $('#inputIcons').append('&lt;div id="row1" class="ui-widget row ml-1">&lt;/div>');
+        $('#inputIcons').append('&lt;div id="row2" class="ui-widget row ml-1">&lt;/div>');
+        $('#inputIcons').append('&lt;div id="row3" class="ui-widget row ml-1">&lt;/div>');
+        $('#inputIcons').append('&lt;div id="row4" class="ui-widget row ml-1">&lt;/div>');
+
+        for (let i = 1; i &lt; 5; i++) {
+            for(let j = 1; j &lt; 5; j++){
+                $("#row"+i).append('&lt;div id="r'+i+'c'+j+'" class="col-md-2 authentication_item mr-1 mb-1">&lt;/div>');
+                var n = ((i-1)*4)+j;
+                var icon = this.icons[n-1];
+                $("#r"+i+"c"+j).append('&lt;div class="category_tag">'+ icon.name + '&lt;/div>');
+                $("#r"+i+"c"+j).append('&lt;div id="school_user_img">' + icon.html + '&lt;/div>');
+            }
+        }
+    }
+
+    /**
+     * Reset the icons that were selected by the user.
+     */
+    resetSelectedIcons(){
+        for(let k = 0; k &lt; 4; k++){
+            this.currentlySelectedIcons[k] = null;
+            $('#currentlySelected'+k).html("");
+        }
+    }
+
+
+    /**
+     * Add an icon at position i j to the graphical password grid.
+     */
+    addIconToId(i,j){
+        for(let k = 0; k &lt; 4; k++){
+            if(this.currentlySelectedIcons[k] == null){
+                let n = ((i-1)*4)+j;
+                let icon = this.icons[n-1];
+                this.currentlySelectedIcons[k] = icon.id;
+                $('#currentlySelected'+k).html(icon.name + '&lt;p>' + icon.html + '&lt;/p>');
+                break;
+            }
+        }
+    }
+}
+
+export default LoggingMenu;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 19:17:45 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

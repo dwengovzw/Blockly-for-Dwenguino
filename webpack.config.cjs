@@ -3,7 +3,7 @@ const path = require("path");
 module.exports = {
     mode: "production",
     entry: {
-        app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/DwenguinoBlockly.js'
+        app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
     },
     output: {
         path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),

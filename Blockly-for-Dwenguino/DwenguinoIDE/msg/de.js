@@ -158,7 +158,7 @@ var MSG = {
 
   simulator: "Simulator",
 
-  setLedState: "Setz %1 %2",
+  setLedState: "Setz",
 
   setLedStateTooltip: "Schalte einen DwenguinoDCMotorBlock auf der Platine ein oder aus.",
 
@@ -167,22 +167,24 @@ var MSG = {
   dwenguinoOn: "AN",
 
   dwenguinoOff: 'AUS',
-
+  dwenguinoLedBlock: "LED",
   dwenguinoOnOffTooltip: "Wähle AN oder AUS",
-
-  dwenguinoServoBlock: "Servomotor %1 %2 %3 Nummer %4 Winkel %5",
-
+  dwenguinoSonarBlock: "Sonar",
+  channel: "Nummer",
+  angle: "Winkel",
+  speed: "Geschwindigheit", 
+  dwenguinoServoBlock: "Servomotor",
   dwenguinoServoBlockTooltip: "Servomotor 1 oder 2 auf einen Winkel zwischen 0 und 180 Grad einstellen",
-
-  dwenguinoDCMotorBlock: "DC Motor %1 %2 %3 Nummer %4 Geschwindigkeit %5",
-
+  dwenguinoServoOne: "1",
+  dwenguinoServoTwo: "2",
+  dwenguinoServoDropdownTooltip: "Select one of the two internal servo motors",
+  dwenguinoDCMotorBlock: "DC Motor",
   dwenguinoDCMotorBlockTooltip: "Stell die Geschwindigkeit eines an die Platine angeschlossenen Motors ein. Die Geschwindigkeit ist ein Wert zwischen -255 (volle Geschwindigkeit rückwärts) und 255 (volle Geschwindigkeit vorwärts).",
 
-  dwenguinoAnalogWrite: "Schreibe an %1 der analoge Wert %2",
-
+  dwenguinoAnalogWriteBlock: "Schreibe an",
+  dwenguinoAnalogValue: "der analoge Wert",
   dwenguinoAnalogWriteTooltip: "Schreibe einen analogen Wert zwischen 0 und 255 an einem bestimmten Stift",
-
-  dwenguinoAnalogRead: "Lese den analogen Wert %1",
+  dwenguinoAnalogReadBlock: "Lese den analogen Wert",
 
   dwenguinoAnalogWriteTooltip: "Lese einen analogen Wert zwischen 0 und 255 vom angegebenen Stift",
 
@@ -212,111 +214,208 @@ var MSG = {
 
   pressedTooltip: "Stellt den Wert einer Taste dar. Vergleiche diesen Wert mit dem Wert, den du von einer bestimmten Taste gelesen hast.",
 
-  sureYouWantToChangeTutorial: "Möchtest du dieses Buch wirklich starten?\n Die Blöcke im aktuellen Arbeitsbereich werden ersetzt!",
-
+  sureYouWantToChangeTutorial: "Bist du sicher, dass du das Tutorial starten möchtest?\n Alle Blöcke im momentanen Arbeitsbereich werden entfernt.",
   create: "Erstellen",
-
   with_type: "mit Typ",
+  create_global: "Erstellen (Global)",
 
-  create_global: "Global erstellen",
-
-  //TODO: translate:
-  dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
+  dwenguinoStepperMotorBlock: "Schrittmotor %1 %2 %3 Nummer %4 Anzahl Schritte %5",
   dwenguinoStepperMotorBlockTooltip: "TODO",
-  drawingrobotMove:"Verplaats de stift onder een van hoek %1 graden met %2 stappen",
-  drawingrobotMoveXY:"Verplaats de stift %1 naar rechts en %2 naar links",
-  drawingrobotLine:"Teken een lijn naar x: %1 y: %2",
-  drawingrobotCircle:"Teken een cirkel met straal: %1",
-  drawingrobotRectangle:"Teken een rechthoek met breedte: %1 en hoogte: %2",
-  drawingrobotLiftStylus: "Stift opheffen",
-  drawingrobotLowerStylus: "Stift neerzetten",
-  drawingrobotChangeColor: "Kleur %1",
-  up:"omhoog",
-  down:"omlaag",
-  left:"links",
-  right:"rechts",
-  bounds:"Opgelet\nJe probeert buiten het papier te tekenen",
-  drawingrobotgrid: "raster",
-  colorpicker:"Kleur",
-  drawingrobotSaveImage:"Tekening opslaan",
-  drawingrobotDrawing:"Tekening",
-  stepperMotorOne: "STEPPER1", 
-  stepperMotorTwo: "STEPPER2",
-  stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
-  clear: "Clear",
-  save: "Save",
-  runError: "<h3>Sorry, I was unable to upload the code to the board</h3>",
-  uploadError: "Follow these steps to restart the Dwenguino board: \n    1. Disconnect the USB cable \n    2. Connect the computer and Dwenguino board with the USB cable \n    3. Simultaneously press the RESET and the SOUTH button of the Dwenguino board \n    4. Then first release the RESET button \n    5. Then release the SOUTH button \n    6. Upload the program again via the <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span> button in the main menu",
-  
+  drawingrobotMove:"Bewege den Stift im Winkel von %1 Grad in %2 Schritten",
+  drawingrobotMoveXY:"Bewege den Stift %1 nach rechts und %2 nach links",
+  drawingrobotLine:"Zeichne eine Linie nach x: %1 y: %2",
+  drawingrobotCircle:"Zeichne einen Kreis mit Radius: %1",
+  drawingrobotRectangle:"Zeichne ein Rechteck mit Breite: %1 und Höhe: %2",
+  drawingrobotLiftStylus: "Stift heben",
+  drawingrobotLowerStylus: "Stift senken",
+  drawingrobotChangeColor: "Farbe %1",
+  up:"Nach oben",
+  down:"Nach unten",
+  left:"Links",
+  right:"Rechts",
+  bounds:"Achtung\nDu versuchst außerhalb des Papieres zu zeichnen",
+  drawingrobotgrid: "Raster",
+  colorpicker:"Farbe",
+  drawingrobotSaveImage:"Zeichnung speichern",
+  drawingrobotDrawing:"Zeichnung",
+  stepperMotorOne: "SCHRITTMOTOR1", 
+  stepperMotorTwo: "SCHRITTMOTOR2",
+  stepperMotorTooltip: "Wähle welchen Schrittmotor des Zeichenroboters du verwenden möchtest.",
+  socialrobotSetPinBlock: "Set",
+  socialrobotReadPinBlock: "Lies Wert von Pin aus",
+  socialrobotPirBlock: "Pir",
+  socialrobotServoBlock: "Servo",
+  socialrobotWaveArmesBlock: "Winke mit beiden Armen",
+  socialRobotArmsDownBlock: "Arme nach unten",
+  socialRobotArmsUpBlock: "Arme nach oben",
+  socialRobotEyesLeftBlock: "Augen nach links",
+  socialRobotEyesRightBlock: "Augen nach rechts",
+  socialRobotServoRightHand: "Servo rechte Hand",
+  socialRobotServoLeftHand: "Servo linke Hand",
+  socialRobotServoRightEye: "Servo rechtes Auge",
+  socialRobotServoLeftEye: "Servo linkes Auge",
+  sonarSliderLabel: "Sonarabstand",
+  pirButtonLabel: "PIR Button",
+  soundButtonLabel: "Sound button",
+  lightSensorSliderLabel: "Light sensor slider",
+  servoCostume: "Costume",
+  servoOptions: "Servo motor options",
+  sonarOptions: "Sonar sensor options",
+  lcdOptions: "LCD screen options",
+  pirOptions: "PIR sensor options",
+  soundOptions: "Sound sensor options",
+  lightOptions: "Light sensor options",
+  rgbLedOptions: "RGB LED options",
+  ledOptions: "LED options",
+  pinOptions: "Pin",
+  colorOptions: "Color",
+  clear: "Löschen",
+  save: "Speichern",
+  runError: "Ups, beim Ausführen deines Codes am Board ist ein Fehler aufgetreten.",
+  uploadError: "Code konnte nicht aufs Board geladen werden. \nBitte überprüfe ob das Board mit dem USB-Kabel verbunden ist.\n Sollte das Kabel mit dem Board verbunden sein, versuch es abzustecken, und gleich darauf wieder einzustecken.",
+  cleanError: "Entfernen von vorherigem Code fehlgeschlagen.\nBitte überprüfe, ob .cpp files eventuell von einer anderen Applikation verwendet werden.\n Schließe diese Applikation.",
+  compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
 
+
+  
+  };
+
+MSG.logging = {
+  setup: "Testkonfiguration",
+  login: "Login",
+  newuser: "Neuer Benutzer",
+  username: "Benutzername",
+  chooseUsername: "Wähle einen Benutzernamen",
+  choosePassword: "Wähle 4 persönliche Symbole (Zeichen) als Passwort. Merke sie dir in der richtigen Reihenfolge.",
+  currentlySelected: "Ausgewählt: ",
+  birth: "Geburtsdatum",
+  school: "Schule",
+  selectSchool: "Suche nach Schulnamen...",
+  agegroup: "Altersgruppe:",
+  primary1: "Primärstufe 1",
+  primary2: "Primärstufe 2",
+  primary3: "Primärstufe 3",
+  primary4: "Primärstufe 4",
+  primary5: "Sekundärstufe 1",
+  primary6: "Sekundärstufe 2",
+  secondary1: "Sekundärstufe 3",
+  secondary2: "Sekundärstufe 4",
+  secondary3: "Sekundärstufe 5",
+  secondary4: "Sekundärstufe 6",
+  secondary5: "Sekundärstufe 7",
+  secondary6: "Sekundärstufe 8",
+  gender: "Geschlecht: ",
+  gender1: "F",
+  gender2: "M",
+  gender3: "X",
+  gender4: "Das möchte ich nicht sagen",
+  activity: "Aktivität: ",
+  name: "Name ",
+  date: "Datum ",
+  ok: "Ok",
+  reset: "Reset (Zurücksetzen)",
+  person: "Person",
+  dog: "Hund",
+  car: "Katze",
+  camera: "Kamera",
+  heart: "Herz",
+  plane: "Flugzeug",
+  house: "Haus",
+  umbrella: "Regenschirm",
+  star: "Stern",
+  money: "Geld",
+  gift: "Geschenk",
+  keys: "Schlüssel",
+  music: "Musik",
+  snowflake: "Schneeflocke",
+  fire: "Feuer",
+  envelope: "Umschlag"
 };
 
+MSG.validator = {
+  errSchool: "Wähle eine Schule.",
+  errId: "Du hast nicht genug Symbole ausgewählt.",
+  errAgeGroup: "Wähle deine Altersgruppe.",
+  errGender: "Wähle dein Geschlecht.",
+  errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein."
+};
 
+MSG.socialrobot = {
+  plain: "Standard",
+  eye: "Auge",
+  mouth: "Mund",
+  righthand: "Rechte Hand",
+  lefthand: "Linke Hand",
+};
+
+MSG.tutorialMenu = {
+  header: "Tutorials",
+  catDwenguino: "Lerne programmieren<br>mit DwenguinoBlockly",
+  catRidingRobot: "reitender Roboter",
+  catSocialRobot: "sozialer Roboter",
+  catWeGoStem: "WeGoSTEM",
+  chooseCategory: "Wähle eine Tutorial-Kategorie aus",
+  chooseTutorial: "Wähle ein Tutorial aus",
+  previous: "Zurück",
+  close: "Schließen",
+  checkAnswer: "Antwort überprüfen",
+  correctAnswer: "Die Antwort war richtig!",
+  wrongAnswer: "Die Antwort war nicht richtig. Versuch es nochmal!"
+};
 
 MSG.simulator = {
-
   start: "Start",
-
-  stop: "Stop",
-
+  stop: "Stopp",
   pause: "Pause",
-
   step: "1 Schritt",
-
   speed: "Geschwindigkeit",
-
-  speedVerySlow: "40 mal langsamer",
-
-  speedSlow: "20 mal langsamer",
-
-  speedMedium: "10 mal langsamer",
-
-  speedFast: "5 mal langsamer",
-
-  speedVeryFast: "2 mal langsamer",
-
+  speedVerySlow: "40-mal so langsam",
+  speedSlow: "20-mal so langsam",
+  speedMedium: "10-mal so langsam",
+  speedFast: "5-mal so langsam",
+  speedVeryFast: "2-mal so langsam",
   speedRealTime: "Echtzeit",
-
-  components: "Komponenten auswählen",
-
-  servo: "Servomotor",
-
+  components: "Wähle Komponenten aus",
+  servo: "Servo",
   motor: "Motor",
-
-  scope: "Werte",
-
-  alertDebug: "Beende die Simulation, bevor du zurück programmieren kannst",
-
-  distance: "Entfernung",
-
+  scope: "Variablen",
+  alertDebug: "Die Simulation stoppt wenn du weiter programmierst.",
+  distance: "Abstand",
   scenario: "Szenario",
-
-  scenario_default: "Normal",
-
-  scenario_moving: "beweglicher Roboter",
-
-  scenario_wall: "beweglicher Roboter mit Mauer",
-
-  scenario_spyrograph: "Spirograph",
-
+  scenario_default: "Normales Board",
+  scenario_moving: "Bewegender Roboter",
+  scenario_wall: "Bewegender Roboter mit Wand",
+  scenario_socialrobot:"Sozialer Roboter",
   code: "Code",
-
+  pir: "PIR Sensor",
+  pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
+  sonar: "Sonar",
+  led: "LED",
+  ledDescription: "A light-emitting diode (LED) is a semiconductor device that <b>emits light</b> when an electric current passes through it. Different semiconductor materials produce <b>different colors of light</b>. ",
+  lcd: "LCD Schirm",
+  lcdDescription: "The LCD display on the Dwengo board is a 16x2 character display with backlight.",
+  button: "Button",
+  sound: "Sound sensor",
+  light: "Light sensor",
+  buzzer: "Buzzer",
+  buzzerDescription: "The buzzer on the Dwengo board can be used to <b>play a series of tones</b> or short sound fragments. The height of each tone is controlled by defining the <b>frequency</b> of the buzzer. Use a delay block to change the length of a tone.",
+  decoration: "Dekoration",
 };
 
 MSG.dropzone = {
-  dictSelectFile: "Select a file.",
-  dictChooseFile: "Choose file",
-  dictDefaultMessage: "Drop files here to upload",
-  dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
-  dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
-  dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
-  dictInvalidFileType: "You can't upload files of this type.",
-  dictResponseError: "Server responded with {{statusCode}} code.",
-  dictCancelUpload: "Cancel upload",
-  dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
-  dictRemoveFile: "Remove file",
-  dictMaxFilesExceeded: "You can not upload any more files.",
-}
+  dictSelectFile: "Wähle eine Datei aus",
+  dictChooseFile: "Wähle eine Datei",
+  dictDefaultMessage: "Ziehe deine Files hier her um den Upload zu starten",
+  dictFallbackMessage: "Dateien hochladen mittels Drag'n'Drop wird von deinem Browser nicht unterstützt.",
+  dictFileTooBig: "Datei ist zu groß ({{filesize}}MiB). Maximale Dateigröße: {{maxFilesize}}MiB.",
+  dictFallbackText: "Bitte verwende das Ersatzformular um deine Dateien hochzuladen, wie in alten Zeiten.",
+  dictInvalidFileType: "Dateien dieses Typs können nicht hochgeladen werden.",
+  dictResponseError: "Server antwortet mit Code {{statusCode}}.",
+  dictCancelUpload: "Upload abbrechen",
+  dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
+  dictRemoveFile: "Datei entfernen",
+  dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
+};
 
 
 

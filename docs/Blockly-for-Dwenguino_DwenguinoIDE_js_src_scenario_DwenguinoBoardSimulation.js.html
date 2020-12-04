@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/DwenguinoBoardSimulation.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/DwenguinoBoardSimulation.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import ButtonMap from "../simulation/ButtonMap.js"
+import DwenguinoSimulationScenario from "./DwenguinoSimulationScenario.js"
+
+/**
+ * This class implements the DwenguinoSimulationScenario
+ * 
+ * @extends DwenguinoSimulationScenario
+ */
+class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
+    inputsState = null;
+    audiocontext = null;
+    osc = null;
+    audioStarted = false;
+    muted = true;
+    prevFreq = 0;
+    boardDisplayWidth = "80%";
+    componentsTopOffset = "0%";
+    rightSimComponentsPosition = "auto";
+    sonarDistance = 0;
+    sonarInputChanged = false;
+    sonarFieldBeingEdited = false;
+
+    constructor(logger){
+        super(logger);
+        this.inputsState = {
+            buttons: [1, 1, 1, 1, 1],
+            reset: 1,
+        }
+    }
+
+    setBoardDisplayWidthWidth(width){
+        this.boardDisplayWidth = width;
+    }
+
+    setComponentsTopOffset(offset){
+        this.componentsTopOffset = offset;
+    }
+
+    setComponentsRightPosition(position){
+        this.rightSimComponentsPosition = position;
+    }
+
+
+    initAudioContext(){
+        try {
+            this.audiocontext = new AudioContext();
+        } catch (e) {
+            console.log('Web Audio API is not supported in this browser');
+        }
+    }
+
+    initSimulationState(boardState){
+
+    }
+
+    initSimulationDisplay(containerId){
+
+        //db_simulator_top_pane
+        $(`#${containerId}`).append('&lt;div id="db_simulator_pane">&lt;/div>');
+
+        $('#db_simulator_pane').append('&lt;div id="debug">&lt;/div>');
+        $('#db_simulator_pane').append('&lt;div id="sim_components">&lt;/div>');
+
+        let containerHack = $("&lt;div>").css(
+            {"position": "absolute", "display": "inline-block", "width": this.boardDisplayWidth, "max-width": "30vw", "right": 0}
+            );
+        let containerHackDummy = $("&lt;div>").attr("id", "dummy").css({"margin-top": "70%"});
+        let boardContainer =$("&lt;div>").attr("id", "sim_board").css({"position": "absolute", "right": 0, "bottom": 0, "left": 0});
+        containerHack.append(containerHackDummy);
+        containerHack.append(boardContainer);
+
+        $('#db_simulator_pane').append(containerHack);  
+        $('#db_simulator_pane').append('&lt;span id="db_simulator_mute">&lt;/span>');
+        $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
+
+        let sonar = $('&lt;div id="sim_sonar" class="sim_sonar">&lt;/div>');
+        let sonarDist = $('&lt;div id="sim_sonar_distance" class="sim_sonar_distance">&lt;/div>');
+        let sonarInput = $('&lt;div id="sim_sonar_input">&lt;/div>').text("Sonar " + MSG.simulator['distance'] + ":");
+        let setButton = $('&lt;button id="set_sonar_value">&lt;/button>').text("OK");
+
+        $('#sim_components').append(sonar);
+        $('#sim_components').append(sonarDist);
+        $('#sim_components').append(sonarInput);
+        $('#sim_components').append(setButton);
+        $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
+
+        
+        $('#sim_sonar_input').append('&lt;input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 &amp;&amp; event.charCode &lt;= 57">&amp;nbsp;cm');
+
+
+        $("#sonar_input").on('keyup', (e) => {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                this.sonarInputChanged = true;
+                let value = $("#sonar_input").val();
+                console.log(parseInt(value.trim()));
+                this.sonarDistance = parseInt(value.trim());
+            }
+        });
+
+        $("#sonar_input").change((e) => {
+            this.sonarInputChanged = true;
+            let value = $("#sonar_input").val();
+            console.log(parseInt(value.trim()));
+            this.sonarDistance = parseInt(value.trim());
+        });
+
+        $('#set_sonar_value').click((e) => {
+            let value = $("#sonar_input").val();
+            console.log(parseInt(value.trim()));
+            this.sonarDistance = parseInt(value.trim());
+        });
+
+        $("#sonar_input").focus(() => {
+            console.log("focus gained");
+            this.sonarFieldBeingEdited = true;
+        });
+
+        $("#sonar_input").focusout(() => {
+            console.log("focus lost");
+            this.sonarFieldBeingEdited = false;
+        });
+
+        $('#sim_board').append('&lt;div class="sim_light sim_light_off" id ="sim_light_13">&lt;/div>');
+        $('#sim_board').append('&lt;div id="sim_lcds">&lt;/div>');
+        $('#sim_board').append('&lt;div id="sim_lights">&lt;/div>');
+        $('#sim_board').append('&lt;div id="sim_buttons">&lt;/div>');
+        $('#sim_board').append('&lt;div id="sim_button_reset" class="sim_button">&lt;/div>');
+
+        $('#sim_lcds').append('&lt;div class="sim_lcd" id="sim_lcd_row0">&lt;/div>');
+        $('#sim_lcds').append('&lt;div class="sim_lcd" id="sim_lcd_row1">&lt;/div>');
+
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_7">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_6">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_5">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_4">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_3">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_2">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_1">&lt;/div>');
+        $('#sim_lights').append('&lt;div class="sim_light sim_light_off" id ="sim_light_0">&lt;/div>');
+
+        $('#sim_buttons').append('&lt;div id="sim_buttons_top">&lt;/div>');
+        $('#sim_buttons').append('&lt;div id="sim_buttons_middle">&lt;/div>');
+        $('#sim_buttons').append('&lt;div id="sim_buttons_bottom">&lt;/div>');
+
+        $('#sim_buttons_top').append('&lt;div id="sim_button_N" class="sim_button">&lt;/div>');
+
+        $('#sim_buttons_middle').append('&lt;div id="sim_button_W" class="sim_button">&lt;/div>');
+        $('#sim_buttons_middle').append('&lt;div id="sim_button_C" class="sim_button">&lt;/div>');
+        $('#sim_buttons_middle').append('&lt;div id="sim_button_E" class="sim_button">&lt;/div>');
+
+        $('#sim_buttons_bottom').append('&lt;div id="sim_button_S" class="sim_button">&lt;/div>');
+
+        this.hideSonar();
+
+        let self = this;
+        // push buttons
+        $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mousedown', function() {
+            self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 0;
+        });
+
+        $("#sim_button_N, #sim_button_E, #sim_button_C, #sim_button_S, #sim_button_W").on('mouseup', function() {
+            self.inputsState.buttons[ButtonMap.mapButtonIdToIndex(this.id)] = 1;
+        });
+
+        $('#db_simulator_mute').on("click", () => {
+            if (this.audiocontext == null){
+                this.initAudioContext();
+            }
+            if (this.muted){
+                this.muted = false;
+                $('#db_simulator_mute').removeClass();
+                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-up")
+            }else{
+                this.muted = true;
+                $('#db_simulator_mute').removeClass();
+                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-off")
+            }
+
+        });
+    
+    }
+
+    showSonar(){
+        $("#sim_sonar").show();
+        $("#sim_sonar_distance").show();
+        $("#sim_sonar_input").show();
+    }
+
+    hideSonar(){
+        $("#sim_sonar").hide();
+        $("#sim_sonar_distance").hide();
+        $("#sim_sonar_input").hide();
+    }
+
+
+    updateScenarioState(board){
+       // board.reset = this.inputsState.reset;
+       for (let i = 0 ; i &lt; this.inputsState.buttons.length ; ++i){
+           board.setButtonState(i, this.inputsState.buttons[i])
+       }
+       if (this.sonarInputChanged){
+           board.setSonarDistance(11, 12, this.sonarDistance);
+           this.sonarInputChanged = false;
+       }
+       this.sonarDistance = board.getSonarDistance(11, 12);
+
+    }
+
+    updateScenario(dwenguinoState){
+        this.updateScenarioState(dwenguinoState);
+        this.updateScenarioDisplay(dwenguinoState);
+    }
+
+    updateScenarioDisplay(board){
+        // Show the sonar value
+        var distance = board.getSonarDistance(11, 12);
+        if (distance &lt;= -1){
+            this.hideSonar();
+        } else {
+            this.showSonar();
+            var sim_sonar  = document.getElementById('sonar_input');
+            
+            if(typeof(sim_sonar) != 'undefined' &amp;&amp; sim_sonar != null){
+                // Only change value when not being edited
+                if (!this.sonarFieldBeingEdited){
+                    sim_sonar.value = distance;
+                }
+            } else {
+                console.log('Sonar input element is undefined');
+            }
+        }
+        
+
+
+    
+        // Play audio on the buzzer
+        
+        if (this.audiocontext){
+            // Check if freq has changed
+            if (this.prevFreq != board.getTonePlaying() &amp;&amp; this.prevFreq != 0 &amp;&amp; board.getTonePlaying != 0){
+                this.prevFreq = board.getTonePlaying();
+                // stop the current tone
+                this.osc.stop(this.audiocontext.currentTime);
+                this.osc.disconnect(this.audiocontext.destination);
+                this.osc = null;
+                this.audioStarted = false;
+            }
+            if (board.getTonePlaying() === 0 || this.muted) {
+                if (this.audioStarted){
+                    console.log("stop");
+                    this.audioStarted = false;
+                    this.osc.stop(this.audiocontext.currentTime);
+                    this.osc.disconnect(this.audiocontext.destination);
+                    this.osc = null;
+                }
+            } else if (board.getTonePlaying() !== 0 &amp;&amp; !this.muted) {
+                if ( !this.audioStarted ){
+                    // Create a new oscillator to play a specific tone and set the type to sin
+                    this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
+                    this.osc.frequency.value = board.getTonePlaying(); // Hz
+                    this.osc.start(this.audiocontext.currentTime);
+                    this.osc.connect(this.audiocontext.destination); // connect it to the destination
+                    console.log("start");
+                    this.audioStarted = true;
+                }
+            }
+        }
+    
+        // Update the button view
+        for (let i = 0 ; i &lt; 5 ; i++){
+            if (board.getButtonState(i) === 0){
+                document.getElementById(ButtonMap.mapIndexToButtonId(i)).className = "sim_button sim_button_pushed";
+            }else{
+                document.getElementById(ButtonMap.mapIndexToButtonId(i)).className = "sim_button";    
+            }
+        }
+        
+    
+        // Turn lcd backlight on or off.
+        if (board.getBackLightStatus() == 1){
+            $("#sim_lcds").addClass("on");
+        }else{
+            $("#sim_lcds").removeClass("on");
+        }
+        
+        // Set the board text on the screen
+        for (var row = 0 ; row &lt; 2 ; ++row){
+            // write new text to lcd screen and replace spaces with &amp;nbsp;
+            $("#sim_lcd_row" + row).text(board.getLcdContent(row));
+            if(document.getElementById('sim_lcd_row' + row) !== null){
+                document.getElementById('sim_lcd_row' + row).innerHTML =
+                document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&amp;nbsp;');
+            }
+        }
+        // repaint
+        var element = document.getElementById("sim_lcds");
+        if(element !== null){
+          element.style.display = 'none';
+          element.offsetHeight;
+          element.style.display = 'block';
+          let lcdElement = $(".sim_lcd");
+          let boardElement = $("#sim_board")
+          let boardElementWidth = boardElement.width();
+          let fontSize = boardElementWidth/16*1.25;
+          lcdElement.css({"font-size": fontSize});
+        }
+        
+    
+        // Set leds to right value
+        for (var i = 0; i &lt; 8; i++) {
+            let classValue = "";
+            if (board.getLedState(i) === 0){
+                classValue = "sim_light sim_light_off";
+            }else{
+                classValue = "sim_light sim_light_on";
+            }
+            document.getElementById('sim_light_' + i).className = classValue;
+          }
+          // Set led 13 to right value
+        if (board.getLedState(8) === 0){
+            document.getElementById('sim_light_13').className = "sim_light sim_light_off";
+        }else{
+            document.getElementById('sim_light_13').className = "sim_light sim_light_on";
+        }
+    
+      }
+}
+
+export default DwenguinoBoardSimulation;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 17:58:58 GMT+0100 (Central European Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
