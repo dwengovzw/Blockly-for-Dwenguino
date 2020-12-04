@@ -263,6 +263,7 @@ var MSG = {
   sonarSliderLabel: "Sonarabstand",
   pirButtonLabel: "PIR Button",
   soundButtonLabel: "Sound button",
+  touchButtonLabel: "Touch button",
   lightSensorSliderLabel: "Light sensor slider",
   servoCostume: "Costume",
   servoOptions: "Servo motor options",
