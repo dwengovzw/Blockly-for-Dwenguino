@@ -144,6 +144,7 @@ var MSG = {
   sonarSliderLabel: "Afstand sonar",
   pirButtonLabel: "Nabijheidssensorknop",
   soundButtonLabel: "Geluidssensorknop",
+  touchButtonLabel: "Aanraaksensorknop",
   lightSensorSliderLabel: "Lichtsensorknop",
   servoCostume: "Uiterlijk",
   servoOptions: "Opties van de servomotor",

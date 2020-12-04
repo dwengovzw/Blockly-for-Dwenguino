@@ -39,7 +39,7 @@ class SocialRobotTouchSensor extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let label = MSG.pirButtonLabel + " " + this.getId();
+        let label = MSG.touchButtonLabel + " " + this.getId();
         let id = '' + this.getType() + this.getId();
         this._button = new Button(id, 'sensor_options', label);
         
