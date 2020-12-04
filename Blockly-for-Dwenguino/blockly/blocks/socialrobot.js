@@ -32,7 +32,7 @@ Blockly.Blocks.socialrobot.HUE = 25;
 
 var pir_sensor_json = {
   "id": "pir_sensor",
-  "message0": MSG.socialrobotPirBlock + " %1 %2 %3" + MSG.trig + "%4",
+  "message0": MSG.socialRobotPirBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -62,6 +62,41 @@ var pir_sensor_json = {
 Blockly.Blocks['pir_sensor'] = {
   init: function() {
     this.jsonInit(pir_sensor_json);
+  }
+};
+
+var sound_sensor_json = {
+  "id": "sound_sensor",
+  "message0": MSG.socialRobotSoundSensorBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/sound_sensor.png",
+      "width": 80,
+      "height": 34,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['sound_sensor'] = {
+  init: function() {
+    this.jsonInit(sound_sensor_json);
   }
 };
 
@@ -240,7 +275,7 @@ Blockly.Blocks['socialrobot_rgb_color_with_numbers'] = {
 
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",
-  "message0": MSG.socialrobotServoBlock + " %1 %2 %3 " + MSG.pin + " %4 " + MSG.angle + " %5",
+  "message0": MSG.socialrobotServoBlock,
   "args0": [
     { "type": "input_dummy"
     },
@@ -279,7 +314,7 @@ Blockly.Blocks['socialrobot_servo'] = {
 
 var socialrobot_arms_down_json = {
   "id": "socialrobot_arms_down",
-  "message0": MSG.socialRobotArmsDownBlock + " %1 %2 %3 " + MSG.socialRobotServoRightHand + " %4 %5 " + MSG.socialRobotServoLeftHand + " %6 %7",
+  "message0": MSG.socialRobotArmsDownBlock,
   "args0": [
   {
       "type": "input_dummy"
@@ -333,7 +368,7 @@ Blockly.Blocks['socialrobot_arms_down'] = {
 
 var socialrobot_arms_up_json = {
   "id": "socialrobot_arms_up",
-  "message0": MSG.socialRobotArmsUpBlock + " %1 %2 %3 " + MSG.socialRobotServoRightHand + " %4 %5 " + MSG.socialRobotServoLeftHand + " %6 %7",
+  "message0": MSG.socialRobotArmsUpBlock,
   "args0": [
   {
       "type": "input_dummy"
@@ -386,7 +421,7 @@ Blockly.Blocks['socialrobot_arms_up'] = {
 
 var socialrobot_wave_arms_json = {
     "id": "socialrobot_wave_arms",
-    "message0": MSG.socialrobotWaveArmesBlock + " %1 %2 " + MSG.socialRobotServoRightHand + " %3 %4 " + MSG.socialRobotServoLeftHand + " %5 %6",
+    "message0": MSG.socialrobotWaveArmesBlock,
     "args0": [
     {
         "type": "input_dummy"
@@ -433,7 +468,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_eyes_left_json = {
     "id": "socialrobot_eyes_left",
-    "message0": MSG.socialRobotEyesLeftBlock + " %1 %2 %3 " + MSG.socialRobotServoRightEye + " %4 %5 " + MSG.socialRobotServoLeftEye + " %6 %7",
+    "message0": MSG.socialRobotEyesLeftBlock,
     "args0": [
     {
         "type": "input_dummy"
@@ -486,7 +521,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_eyes_right_json = {
     "id": "socialrobot_eyes_right",
-    "message0": MSG.socialRobotEyesRightBlock + " %1 %2 %3 " + MSG.socialRobotServoRightEye + " %4 %5 " + MSG.socialRobotServoLeftEye + " %6 %7",
+    "message0": MSG.socialRobotEyesRightBlock,
     "args0": [
     {
         "type": "input_dummy"
@@ -539,7 +574,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_set_pin = {
     "id": "socialrobot_set_pin",
-    "message0": MSG.socialrobotSetPinBlock + " %1 %2",
+    "message0": MSG.socialrobotSetPinState,
     "args0": [
       {
         "type": "input_value",
@@ -568,7 +603,7 @@ Blockly.Blocks['socialrobot_set_pin'] = {
 
   var socialrobot_read_pin_json = {
     "id": "socialrobot_read_pin",
-    "message0": MSG.socialrobotReadPinBlock + " %1 %2",
+    "message0": MSG.socialrobotReadPinBlock,
     "args0": [
         {
         "type": "input_dummy"
