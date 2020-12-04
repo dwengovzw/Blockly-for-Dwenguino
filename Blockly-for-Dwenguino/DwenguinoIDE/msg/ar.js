@@ -78,6 +78,7 @@ var MSG = {
   dwenguinoOn: " افتح  ",
   dwenguinoOff: "  إيقاف ",
   dwenguinoOnOffTooltip: " حدد قيمة لتشغيل أو إيقاف تشغيل شاشات الكريستال السائل ",
+<<<<<<< HEAD
   dwenguinoLedBlock: "LED",
   dwenguinoSonarBlock: "sonar %1 %2 %3 trig pin number %4 echo pin number %5",
   dwenguinoServoBlock: "  محرك سيرفو٪ 1٪ 2٪ 3 قناة #٪ 4 زاوية٪ 5 ",
@@ -85,6 +86,10 @@ var MSG = {
   dwenguinoServoBlockTooltip: " اضبط إحدى الماكينات المتصلة بـ دوينجوينو بزاوية محددة بين 0 و 180 درجة  ",
   dwenguinoServoOne: "1",
   dwenguinoServoTwo: "2",
+=======
+  dwenguinoServoBlock: "  محرك سيرفو٪ 1٪ 2٪ 3 قناة #٪ 4 زاوية٪ 5 ",
+  dwenguinoServoBlockTooltip: " اضبط إحدى الماكينات المتصلة بـ دوينجوينو بزاوية محددة بين 0 و 180 درجة  ",
+>>>>>>> 4dfb02fdf6adac3883eed0633ae728c7d417c39f
   dwenguinoDCMotorBlock: " محرك التيار المستمر٪ 1٪ 2٪ 3 القناة٪ 4 السرعة٪ 5  ",
   dwenguinoDCMotorBlockTooltip: " اضبط سرعة أحد محركاتي دوينجوينو. السرعة = القيمة بين -255 (السرعة الكاملة للخلف) و 255 (السرعة الكاملة للأمام)  ",
   dwenguinoAnalogWrite: " اكتب إلى القيمة التناظرية٪ 1٪ 2  ",
@@ -108,6 +113,7 @@ var MSG = {
   create:  " خلق  ",
   with_type:  " مع النوع  ",
   create_global: " خلق عالمية  ",
+<<<<<<< HEAD
   socialRobotRgbLedBlock: "RGB LED",
   socialRobotPinRed: "pin red",
   socialRobotPinGreen: "pin green",
@@ -115,6 +121,8 @@ var MSG = {
   socialRobotRgbLedOffBlock: "Turn the RGB LED off with",
   socialRobotRgbColorBlock: "RGB color",
   socialrobotPirBlock: "Pir",
+=======
+>>>>>>> 4dfb02fdf6adac3883eed0633ae728c7d417c39f
   socialrobotSetPinState: " قم بتعيين٪ 1٪ 2  ",
   socialrobotServoBlock: "  محرك سيرفو٪ 1٪ 2٪ 3 طرف٪ 4 زاوية٪ 5 ",
   socialrobotWaveArmesBlock: " أذرع الموجة٪ 1٪ 2 الذراع الأيمن للدبوس المؤازر٪ 3٪ 4 الذراع الأيسر المؤازر٪ 5٪ 6  ",
@@ -128,7 +136,11 @@ var MSG = {
   sonarSliderLabel: " مسافة السونار  ",
   pirButtonLabel: " PIR زر   ",
   soundButtonLabel: " زر الصوت  ",
+<<<<<<< HEAD
   lightSensorSliderLabel: " زر مستشعر الضوء  ",
+=======
+  lightButtonLabel: " زر مستشعر الضوء  ",
+>>>>>>> 4dfb02fdf6adac3883eed0633ae728c7d417c39f
   servoCostume: " زي  ",
   servoOptions: " خيارات محرك سيرفو  ",
   sonarOptions:  " خيارات مستشعر السونار  ",
