@@ -222,8 +222,15 @@
     </block>
     <block type="sound_sensor">
         <value name="pin">
-            <block type="char_type" id="sound_sensor_pin"> 
-            <field name="BITMASK">15</field>
+            <block type="math_number" id="sound_sensor_pin"> 
+            <field name="NUM">15</field>
+            </block>
+        </value>
+    </block>
+    <block type="touch_sensor">
+        <value name="pin">
+            <block type="math_number" id="touch_sensor_pin"> 
+            <field name="NUM">14</field>
             </block>
         </value>
     </block>
