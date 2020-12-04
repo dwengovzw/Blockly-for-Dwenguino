@@ -232,7 +232,7 @@ Blockly.Blocks['char_type'] = {
 
 var sonar_sensor_json = {
   "id": "sonar_sensor",
-  "message0": MSG.dwenguinoSonarBlock + " %1 %2 %3 " + MSG.trig + " %4 " + MSG.echo + " %5",
+  "message0": MSG.dwenguinoSonarBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -349,7 +349,7 @@ Blockly.Blocks['dwenguino_pressed'] = {
 
 var dc_motor_json = {
   "id": "dc_motor",
-  "message0": MSG.dwenguinoDCMotorBlock + " %1 %2 %3 " + MSG.channel + " %4 " + MSG.speed + " %5",
+  "message0": MSG.dwenguinoDCMotorBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -384,7 +384,7 @@ var dc_motor_json = {
 
 var dwenguino_servo_json = {
   "id": "dwenguino_servo",
-  "message0": MSG.dwenguinoServoBlock + " %1 %2 %3 " + MSG.pin + " %4 " + MSG.angle + " %5",
+  "message0": MSG.dwenguinoServoBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -426,7 +426,7 @@ Blockly.Blocks['dwenguino_servo'] = {
 
 var dwenguino_servo_dropdown = {
   "id": "dwenguino_servo_dropdown",
-  "message0": MSG.dwenguinoServoBlock +  " %1",
+  "message0": MSG.dwenguinoServoDropdownBlock,
   "args0": [
     {
       "type": "field_dropdown",
@@ -456,7 +456,7 @@ Blockly.Blocks['dc_motor'] = {
 
 var dwenguino_set_led = {
     "id": "dwenguin_set_led",
-    "message0": MSG.setLedState + " %1 %2 ",
+    "message0": MSG.setLedState,
     "args0": [
       {
         "type": "input_value",
@@ -530,7 +530,7 @@ Blockly.Blocks['dwenguino_on_off'] = {
 
 var dwenguino_analog_write = {
     "id": "dwenguino_analog_wirte",
-    "message0": MSG.dwenguinoAnalogWriteBlock + " %1 " + MSG.dwenguinoAnalogValue + " %2",
+    "message0": MSG.dwenguinoAnalogWrite,
     "args0":[
         {
             "type": "input_value",
@@ -559,7 +559,7 @@ Blockly.Blocks['dwenguino_analog_write'] = {
 
 var dwenguino_analog_read = {
     "id": "dwenguino_analog_read",
-    "message0": MSG.dwenguinoAnalogReadBlock + " %1",
+    "message0": MSG.dwenguinoAnalogRead,
     "args0": [
         {
             "type": "input_value",
