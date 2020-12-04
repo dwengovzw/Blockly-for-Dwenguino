@@ -7,7 +7,8 @@ DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'fr': 'français',
       'de': 'Deutsch',
       'my': 'Malay',
-      'el': 'Ελληνικά'
+      'el': 'Ελληνικά',
+      'ar': 'عربى'
       
   };
 
