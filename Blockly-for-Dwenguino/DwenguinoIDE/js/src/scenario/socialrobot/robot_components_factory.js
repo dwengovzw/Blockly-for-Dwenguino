@@ -9,6 +9,7 @@ import { SocialRobotPir } from "./components/pir.js"
 import { SocialRobotSoundSensor } from "./components/sound_sensor.js"
 import { SocialRobotLightSensor } from "./components/light_sensor.js"
 import { SocialRobotRgbLed } from "./components/rgbled.js"
+import { SocialRobotTouchSensor } from "./components/touch_sensor.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
@@ -21,6 +22,7 @@ const TypesEnum = {
   SERVO: 'servo',
   LED: 'led',
   RGBLED: 'rgbled',
+  TOUCH: 'touch',
   PIR: 'pir',
   SONAR: 'sonar',
   LCD: 'lcd',
@@ -127,6 +129,13 @@ class RobotComponentsFactory {
           let state = [dwenguinoState.getIoPinState(redPin), dwenguinoState.getIoPinState(greenPin), dwenguinoState.getIoPinState(bluePin)];
           this._robot[i].setState(state);
           break;
+        case TypesEnum.TOUCH:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
         case TypesEnum.PIR:
           pin = this._robot[i].getPin();
           if(this._robot[i].isStateUpdated()){
@@ -214,6 +223,9 @@ class RobotComponentsFactory {
       case TypesEnum.RGBLED:
         this.addRgbLed();
         break;
+      case TypesEnum.TOUCH:
+        this.addTouchSensor();
+        break;
       case TypesEnum.PIR:;
         this.addPir();
         break;
@@ -246,6 +258,9 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.RGBLED:
         this.removeRgbLed();
+        break;
+      case TypesEnum.TOUCH:
+        this.removeTouchSensor();
         break;
       case TypesEnum.PIR:
         this.removePir();
@@ -305,6 +320,16 @@ class RobotComponentsFactory {
         var htmlClasses = data.getAttribute('Classes');
         this.addRgbLed(redPin, greenPin, bluePin, [0, 0, 0], true, radius, 0, 0, offsetLeft, offsetTop, htmlClasses);
         break;
+      case TypesEnum.TOUCH:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addTouchSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
         var height = parseFloat(data.getAttribute('Height'));
@@ -313,7 +338,6 @@ class RobotComponentsFactory {
         var pin = parseInt(data.getAttribute('Pin'));
         var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
-        console.log('addPir from xml')
         this.addPir(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.SONAR:
@@ -468,6 +492,38 @@ class RobotComponentsFactory {
 
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
     this.removeRobotComponentWithTypeAndId(TypesEnum.RGBLED, id);
+  }
+
+  /**
+   * Add a new touch sensor to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addTouchSensor(pin=14, state=0, visible=true, width=60, height=60, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas touch_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.TOUCH));
+    this.incrementNumberOf(TypesEnum.TOUCH);
+    let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
+
+    let touchSensor = new SocialRobotTouchSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(touchSensor);
+
+    this.renderer.initializeCanvas(this._robot, touchSensor); 
+  }
+
+  /**
+   * Remove the most recently created PIR sensor from the simulation container.
+   */
+  removeTouchSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.TOUCH));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.TOUCH, id);
   }
 
   /**

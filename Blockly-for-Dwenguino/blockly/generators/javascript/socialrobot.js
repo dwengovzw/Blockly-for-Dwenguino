@@ -19,7 +19,7 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
 
 Blockly.JavaScript['pir_sensor'] = function (block) {
   var value_trig = Blockly.JavaScript.valueToCode(block, 'trig', Blockly.JavaScript.ORDER_NONE);
-  
+
   var code = machine + "pir(" + value_trig + ')';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
@@ -28,6 +28,13 @@ Blockly.JavaScript['sound_sensor'] = function (block) {
   var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
 
   var code = machine + "soundSensor(" + pin + ')';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
+
+Blockly.JavaScript['touch_sensor'] = function (block) {
+  var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
+
+  var code = machine + "touchSensor(" + pin + ')';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
