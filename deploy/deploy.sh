@@ -11,7 +11,7 @@ export PM2_HOME=/etc/pm2deamon
 rm -Rf node_modules
 npm install
 
-echo "export default class ServerConfig{static getServerUrl(){return 'http://blockly-backend.dwengo.org';}}" > Blockly-for-Dwenguino/DwenguinoIDE/js/src/ServerConfig.js
+echo "export default class ServerConfig{static getServerUrl(){return 'http://blockly-backend.dwengo.org';}}" > Blockly-for-Dwenguino/DwenguinoIDE/js/src/server_config.js
 
 # Copy the new files to the deployment directory
 sudo cp -r * /home/ubuntu/blockly-build/
