@@ -14,10 +14,10 @@ rm -Rf node_modules
 npm install
 
 # Overwrite the default server configuration with the server configuration for production
-echo "export default class ServerConfig{static getServerUrl(){return 'http://blockly-backend.dwengo.org';}}" > Blockly-for-Dwenguino/DwenguinoIDE/js/src/server_config.js
+# echo "export default class ServerConfig{static getServerUrl(){return 'http://blockly-backend.dwengo.org';}}" > Blockly-for-Dwenguino/DwenguinoIDE/js/src/server_config.js
 
 # Build the new bundle that uses the new server configuration with webpack 
-npm run build 
+# npm run build 
 
 # Copy the new files to the deployment directory
 sudo cp -r * /home/ubuntu/blockly-build/
