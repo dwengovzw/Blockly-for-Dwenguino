@@ -16,6 +16,6 @@ npm install
 sudo cp -r * /home/ubuntu/blockly-build/
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-forever restart backend/index.js
+forever restart backend/index.js || forever start backend/index.js
 exit
 
