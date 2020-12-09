@@ -1286,7 +1286,7 @@ span.grippy::after {
 }
 
 .modal-body .message{
-    white-space: pre-wrap;
+   /* white-space: pre-wrap;*/
 }
 
 #errorModal .modal-body .error_details{
@@ -1339,11 +1339,76 @@ span.grippy::after {
     cursor: pointer;
 }
 
-.components_overview > .card { 
+/* .components_overview > .card { 
     padding: 10px;
     margin-top: 5px;
     margin-right: 10px;
+} */
+
+
+.components_overview_cards {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+
+@media(min-width: 40rem) {
+    .components_overview_cards_item {
+        display: flex;
+        padding: 1rem;
+        width: 50%;
+    }
 }
+
+@media(min-width: 56rem) {
+    .components_overview_cards_item {
+        display: flex;
+        padding: 1rem;
+        width: 25%;
+    }
+}
+  
+  .components_overview_card {
+    border-radius: 0.4rem;
+    box-shadow: 0 20px 20px -14px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  
+  .components_overview_card_content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 1rem;
+  }
+  
+  
+  .components_overview_card_title {
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+  }
+  
+  .components_overview_card_text {
+    flex: 1 1 auto;
+    line-height: 1.5;
+    margin-bottom: 1.25rem;
+  }
+
+  .components_overview_card_label {
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
+  }
+
 
 .tutorial_categories_wrapper {
     display: flex;

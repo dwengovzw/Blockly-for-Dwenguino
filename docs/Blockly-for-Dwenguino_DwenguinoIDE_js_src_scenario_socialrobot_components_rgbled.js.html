@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/light_sensor.js</title>
+    <title>JSDoc: Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/rgbled.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/light_sensor.js</h1>
+    <h1 class="page-title">Source: Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/rgbled.js</h1>
 
     
 
@@ -28,37 +28,38 @@
         <article>
             <pre class="prettyprint source linenums"><code>import { RobotComponent } from './robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
-import { EventsEnum } from '../scenario_event.js';
-import { Slider } from '../../utilities/slider.js';
+import { EventsEnum } from '../scenario_event.js'
 
-export { SocialRobotLightSensor }
-
+export { SocialRobotRgbLed }
 /**
  * @extends RobotComponent
  */
-class SocialRobotLightSensor extends RobotComponent{
-    constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+class SocialRobotRgbLed extends RobotComponent{
+    constructor(eventBus, id, redPin, greenPin, bluePin, state, visible, radius, x, y, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.LIGHT;
-        this._width = width;
-        this._height = height;
+        this._type = TypesEnum.RGBLED;
+        this._radius = radius;
+        this._x = x;
+        this._y = y;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
-        this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/socialrobot/light_sensor.png';
-        this._pin = pin;
+        this._offColor = 'gray';
+        this._redPin = redPin;
+        this._greenPin = greenPin;
+        this._bluePin = bluePin;
         this._state = state;
-        this._stateUpdated = false;
-        this._canvasId = 'sim_light_canvas' + this._id;
-        this._slider = null;
-
+        this._canvasId = 'sim_rgbled_canvas' + this._id; 
+        this._ledSvg = new Image();
+        this._ledSvg.src = './DwenguinoIDE/img/socialrobot/rgb_led_top.svg';
+        this._ledBackground = new Image();
+        this._ledBackground.src = './DwenguinoIDE/img/socialrobot/rgb_led_background.svg';
         this.insertHtml();
         this.toggleVisibility(visible);
     }
 
     toString(){
-        return 'light sensor';
+        return 'RGB LED';
     }
 
     insertHtml(){
@@ -66,45 +67,17 @@ class SocialRobotLightSensor extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("&lt;canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'>&lt;/canvas>");
-    
-        let label = MSG.lightSensorSliderLabel + " " + this.getId();
-        let id = '' + this.getType() + this.getId();
-        this._slider = new Slider(id, 'sensor_options', 0, 4095, 0, label, '' , '', 'light_sensor_slider');
 
-        var self = this;
-        let sliderElement = this._slider.getSliderElement();
-        sliderElement.oninput = function() {
-            let id = self.getId();
-            self.changeLightSensorValue(this.value, id);
-            self._slider.updateValueLabel(this.value);
-        }
+        let simLed = document.getElementById('sim_'+this.getType() + this.getId());
 
-        let simLightSensor = document.getElementById('sim_'+this.getType() + this.getId());
-
-        simLightSensor.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.lightOptions);
+        simLed.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog(MSG.rgbLedOptions);
             this.showDialog();
         });
     }
 
-    changeLightSensorValue(value) {
-        this.setState(value);
-        this._stateUpdated = true;
-        this._eventBus.dispatchEvent(EventsEnum.SAVE);
-    }
-
     removeHtml(){
-        $('#sim_light' + this.getId()).remove();
-
-        this.getSlider().remove();
-    }
-
-    toggleVisibility(visible){
-        if (visible) {
-            $('#sim_light' + this.getId()).css('visibility', 'visible');
-        } else {
-            $('#sim_light' + this.getId()).css('visibility', 'hidden');
-        }
+        $('#sim_' + this.getType() + this.getId()).remove();
     }
 
     toXml(){
@@ -113,8 +86,7 @@ class SocialRobotLightSensor extends RobotComponent{
         data = data.concat("&lt;Item ");
         data = data.concat(" Type='", this.getType(), "'");
         data = data.concat(" Id='", this.getId(), "'");
-        data = data.concat(" Width='", this.getWidth(), "'");
-        data = data.concat(" Height='", this.getHeight(), "'");
+        data = data.concat(" Radius='", this.getRadius(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
@@ -128,8 +100,9 @@ class SocialRobotLightSensor extends RobotComponent{
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }
 
-        data = data.concat(" Pin='", this.getPin(), "'");
-        data = data.concat(" State='", this.getState(), "'");
+        data = data.concat(" RedPin='", this.getRedPin(), "'");
+        data = data.concat(" GreenPin='", this.getGreenPin(), "'");
+        data = data.concat(" BluePin='", this.getBluePin(), "'");
         data = data.concat(" Classes='", this.getHtmlClasses(), "'");
 
         data = data.concat('>&lt;/Item>');
@@ -138,8 +111,17 @@ class SocialRobotLightSensor extends RobotComponent{
     }
 
     reset(){
-        this.setState(0);
-        this._stateUpdated = false;
+        this.setX(0);
+        this.setY(0);
+        this.setState([0,0,0]);
+    }
+
+    toggleVisibility(visible){
+        if (visible) {
+            $('#sim_led' + this.getId()).css('visibility', 'visible');
+        } else {
+            $('#sim_led' + this.getId()).css('visibility', 'hidden');
+        }
     }
 
     showDialog(){
@@ -167,29 +149,107 @@ class SocialRobotLightSensor extends RobotComponent{
         $('#componentOptionsModalHeader').append('&lt;h4 class="modal-title">'+ headerTitle +'&lt;/h4>');
 
         this.createPinOptionsInModalDialog();
-
     }
 
     createPinOptionsInModalDialog(){
-        $('#componentOptionsModalBody').append('&lt;div id="componentOptionsPin" class="ui-widget row mb-4">');
-        $('#componentOptionsPin').append('&lt;div class="col-md-2">'+'Pin'+'&lt;/div>');
-        $('#componentOptionsPin').append('&lt;div id="pin" class="col-md-10">&lt;/div>');
-
+        $('#componentOptionsModalBody').append('&lt;div id="componentOptionsRedPin" class="ui-widget row mb-4">&lt;/div>');
+        $('#componentOptionsRedPin').append('&lt;div class="col-md-2">'+'Red pin'+'&lt;/div>');
+        $('#componentOptionsRedPin').append('&lt;div id="redPin" class="col-md-10">&lt;/div>');
+        $('#componentOptionsModalBody').append('&lt;div id="componentOptionsGreenPin" class="ui-widget row mb-4">&lt;/div>');
+        $('#componentOptionsGreenPin').append('&lt;div class="col-md-2">'+'Green pin'+'&lt;/div>');
+        $('#componentOptionsGreenPin').append('&lt;div id="greenPin" class="col-md-10">&lt;/div>');
+        $('#componentOptionsModalBody').append('&lt;div id="componentOptionsBluePin" class="ui-widget row mb-4">&lt;/div>');
+        $('#componentOptionsBluePin').append('&lt;div class="col-md-2">'+'Blue pin'+'&lt;/div>');
+        $('#componentOptionsBluePin').append('&lt;div id="bluePin" class="col-md-10">&lt;/div>');
+    
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin &lt; pins.length; pin++){
-            $('#pin').append('&lt;button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'&lt;/button>');
-            if(this.getPin() == pins[pin]){
-                $('#pin' + pins[pin]).addClass('option_button_selected');
+            $('#redPin').append('&lt;button type="button" id=redPin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 redPinButton pinButton option_button_enabled">'+pins[pin]+'&lt;/button>');
+            $('#greenPin').append('&lt;button type="button" id=greenPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 greenPinButton pinButton option_button_enabled">'+pins[pin]+'&lt;/button>');
+            $('#bluePin').append('&lt;button type="button" id=bluePin'+pins[pin]+ ' name='+pins[pin]+ ' class="col-md-1 ml-2 mb-2 bluePinButton pinButton option_button_enabled">'+pins[pin]+'&lt;/button>');
+        }
+
+        for(let p = 0; p &lt; pins.length; p++){
+            if(this.getRedPin() == pins[p]){
+                $('#redPin' + pins[p]).addClass('option_button_selected');
+                $('#greenPin' + pins[p]).addClass('option_button_disabled');
+                $('#greenPin' + pins[p]).prop('disabled', true);
+                $('#bluePin' + pins[p]).addClass('option_button_disabled');
+                $('#bluePin' + pins[p]).prop('disabled', true);
             }
 
-            let pinButton = document.getElementById('pin'+pins[pin]);
+            if(this.getGreenPin() == pins[p]){
+                $('#greenPin' + pins[p]).addClass('option_button_selected');
+                $('#redPin' + pins[p]).addClass('option_button_disabled');
+                $('#redPin' + pins[p]).prop('disabled', true);
+                $('#bluePin' + pins[p]).addClass('option_button_disabled');
+                $('#bluePin' + pins[p]).prop('disabled', true);
+            }
 
-            pinButton.addEventListener('click', () => { 
-                let newPin = pinButton.name;
-                this.setPin(newPin);
-                $('.pinButton').removeClass('option_button_selected');
-                pinButton.classList.add('option_button_selected');
+            if(this.getBluePin() == pins[p]){
+                $('#bluePin' + pins[p]).addClass('option_button_selected');
+                $('#redPin' + pins[p]).addClass('option_button_disabled');
+                $('#redPin' + pins[p]).prop('disabled', true);
+                $('#greenPin' + pins[p]).addClass('option_button_disabled');
+                $('#greenPin' + pins[p]).prop('disabled', true);
+            }
+
+            let redPinButton = document.getElementById('redPin'+pins[p]);
+            let greenPinButton = document.getElementById('greenPin' + pins[p]);
+            let bluePinButton = document.getElementById('bluePin' + pins[p]);
+
+            redPinButton.addEventListener('click', () => { 
+                let newPin = redPinButton.name;
+                this.setRedPin(newPin);
+                $('.redPinButton').removeClass('option_button_selected');
+                redPinButton.classList.add('option_button_selected');
                 this._eventBus.dispatchEvent(EventsEnum.SAVE);
+
+                $('.greenPinButton').removeClass('option_button_disabled');
+                $('.greenPinButton').prop('disabled', false);
+                $('#greenPin' + newPin).addClass('option_button_disabled');
+                $('#greenPin' + newPin).prop('disabled', true);
+
+                $('.bluePinButton').removeClass('option_button_disabled');
+                $('.bluePinButton').prop('disabled', false);
+                $('#bluePin' + newPin).addClass('option_button_disabled');
+                $('#bluePin' + newPin).prop('disabled', true);
+            });
+
+            greenPinButton.addEventListener('click', () => { 
+                let newPin = greenPinButton.name;
+                this.setGreenPin(newPin);
+                $('.greenPinButton').removeClass('option_button_selected');
+                greenPinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+
+                $('.redPinButton').removeClass('option_button_disabled');
+                $('.redPinButton').prop('disabled', false);
+                $('#redPin' + newPin).addClass('option_button_disabled');
+                $('#redPin' + newPin).prop('disabled', true);
+
+                $('.bluePinButton').removeClass('option_button_disabled');
+                $('.bluePinButton').prop('disabled', false);
+                $('#bluePin' + newPin).addClass('option_button_disabled');
+                $('#bluePin' + newPin).prop('disabled', true);
+            });
+
+            bluePinButton.addEventListener('click', () => { 
+                let newPin = redPinButton.name;
+                this.setBluePin(newPin);
+                $('.bluePinButton').removeClass('option_button_selected');
+                bluePinButton.classList.add('option_button_selected');
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+
+                $('.redPinButton').removeClass('option_button_disabled');
+                $('.redPinButton').prop('disabled', false);
+                $('#redPin' + newPin).addClass('option_button_disabled');
+                $('#redPin' + newPin).prop('disabled', true);
+
+                $('.greenPinButton').removeClass('option_button_disabled');
+                $('.greenPinButton').prop('disabled', false);
+                $('#greenPin' + newPin).addClass('option_button_disabled');
+                $('#greenPin' + newPin).prop('disabled', true);
             });
         }
     }
@@ -206,20 +266,28 @@ class SocialRobotLightSensor extends RobotComponent{
         return this._type;
     }
 
-    setWidth(width){
-        this._width = width;
+    setRadius(radius){
+        this._radius = radius;
     }
 
-    getWidth(){
-        return this._width;
+    getRadius(){
+        return this._radius;
     }
 
-    setHeight(height){
-        this._height = height;
+    setX(x){
+        this._x = x;
     }
 
-    getHeight(){
-        return this._height;
+    getX(){
+        return this._x;
+    }
+
+    setY(y){
+        this._y = y;
+    }
+
+    getY(){
+        return this._y;
     }
 
     setOffset(offset){
@@ -230,20 +298,28 @@ class SocialRobotLightSensor extends RobotComponent{
         return this._offset;
     }
 
-    setImage(image){
-        this._image.src = image;
-    }
-
-    getImage(){
-        return this._image;
+    setRedPin(redPin){
+        this._redPin = redPin;
     }
     
-    setPin(pin){
-        this._pin = pin;
+    getRedPin() {
+        return this._redPin;
     }
 
-    getPin(){
-        return this._pin;
+    setGreenPin(greenPin){
+        this._greenPin = greenPin;
+    }
+
+    getGreenPin() {
+        return this._greenPin;
+    }
+
+    setBluePin(bluePin){
+        this._bluePin = bluePin;
+    }
+
+    getBluePin(){
+        return this._bluePin;
     }
 
     setState(state){
@@ -254,16 +330,16 @@ class SocialRobotLightSensor extends RobotComponent{
         return this._state;
     }
 
-    isStateUpdated(){
-        return this._stateUpdated;
-    }
-
     getCanvasId(){
         return this._canvasId;
     }
 
-    getSlider(){
-        return this._slider;
+    getLedSvg(){
+        return this._ledSvg;
+    }
+
+    getLedBackground(){
+        return this._ledBackground;
     }
 }</code></pre>
         </article>
