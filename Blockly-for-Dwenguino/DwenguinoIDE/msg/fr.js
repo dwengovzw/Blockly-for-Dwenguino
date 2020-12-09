@@ -188,7 +188,9 @@ MSG.simulator = {
   speedRealTime: "Real-time",
   components: "Select components",
   servo: "Servo",
+  servoDescription: "A servo motor is an actuator that can <b>rotate an object over a certain angle</b>. In the simulator servo motors can be put at an angle between 0 and 180 degrees. Servo motors can easily be decorated and are thus ideal to make periodically moving components.",
   motor: "Motor",
+  DCMotorDescription: "",
   scope: "Variables",
   alertDebug: "The simulation stops when you resume programming.",
   distance: "distance",
@@ -200,6 +202,7 @@ MSG.simulator = {
   pir: "PIR sensor",
   pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
   sonar: "Sonar",
+  sonarDescription: "",
   led: "LED",
   ledDescription: "A light-emitting diode (LED) is a semiconductor device that <b>emits light</b> when an electric current passes through it. Different semiconductor materials produce <b>different colors of light</b>. ",
   rgbled: "RGB LED",
@@ -209,8 +212,11 @@ MSG.simulator = {
   lcd: "LCD screen",
   lcdDescription: "The LCD display on the Dwengo board is a 16x2 character display with backlight.",
   button: "Button",
+  buttonDescription: "",
   sound: "Sound sensor",
+  soundDescription: "",
   light: "Light sensor",
+  lightDescription: "",
   buzzer: "Buzzer",
   buzzerDescription: "The buzzer on the Dwengo board can be used to <b>play a series of tones</b> or short sound fragments. The height of each tone is controlled by defining the <b>frequency</b> of the buzzer. Use a delay block to change the length of a tone.",
   decoration: "Decoration"
@@ -249,6 +255,15 @@ MSG.tutorialMenu = {
   chooseTutorial: "Choisissez un tutoriel",
   previous: "Précedent",
   close: "Fermer",
+  checkAnswer: "Check answer",
+  correctAnswer: "The answer was correct!",
+  wrongAnswer: "The answer was not correct. Try again!",
+  dwenguinoComponents: "Dwenguino components",
+  sensors: "Sensors",
+  actuators: "Actuators",
+  movement: "Movement",
+  audio: "Audio",
+  display: "Display"
 }
 
 MSG.tutorials = {

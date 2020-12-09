@@ -8,6 +8,9 @@ import { Pir } from "./components/Pir.js";
 import { Servo } from "./components/Servo.js";
 import { Sonar } from "./components/Sonar.js";
 import { SoundSensor } from "./components/SoundSensor.js";
+import { TouchSensor } from "./components/touch_sensor.js";
+import { RgbLed } from "./components/rgb_led.js";
+import { DCMotor } from "./components/dc_motor.js";
 import { tutorials } from "../../../tutorials/tutorials.js";
 import { User } from "../logging/user.js";
 
@@ -185,11 +188,11 @@ class TutorialMenu {
         $("#tutorialModal .modal-body .message").append('<div class="container"></div>');
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row1" class="row"></div>');
-        $("#row1").append('<h2>Sensors</h2>');
+        $("#row1").append('<h2>'+MSG.tutorialMenu.sensors+'</h2>');
         
         $("#tutorialModal .modal-body .message .container").append('<ul id="tutorialModal_sensors_menu" class=" row components_overview_cards"></ul>');
 
-        let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir];
+        let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir, TouchSensor];
 
         for (let i = 0; i < sensorsArray.length; i++) {
             $('#tutorialModal_sensors_menu').append('<li id="tutorial_sensors_item_'+ sensorsArray[i].getType() +'" class="components_overview_cards_item"></li>');
@@ -204,13 +207,13 @@ class TutorialMenu {
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row2" class="row"></div>');
-        $("#row2").append('<h2>Actuators</h2>');
+        $("#row2").append('<h2>'+MSG.tutorialMenu.actuators+'</h2>');
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row3" class="row"></div>');
-        $("#row3").append('<h3>Movement</h3>');
+        $("#row3").append('<h3>'+MSG.tutorialMenu.movement+'</h3>');
         $("#tutorialModal .modal-body .message .container").append('<ul id="tutorialModal_movement_menu" class=" row components_overview_cards"></ul>');
 
-        let movementArray = [Servo];
+        let movementArray = [Servo, DCMotor];
 
         for (let i = 0; i < movementArray.length; i++) {
             $('#tutorialModal_movement_menu').append('<li id="tutorial_movement_item_'+ movementArray[i].getType() +'" class="components_overview_cards_item"></li>');
@@ -225,11 +228,11 @@ class TutorialMenu {
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row4" class="row"></div>');
-        $("#row4").append('<h3>Display</h3>');
+        $("#row4").append('<h3>'+MSG.tutorialMenu.display+'</h3>');
         $("#tutorialModal .modal-body .message .container").append('<ul id="tutorialModal_display_menu" class=" row components_overview_cards"></ul>');
 
         
-        let displayArray = [Lcd, Led];
+        let displayArray = [Lcd, Led, RgbLed];
 
         for (let i = 0; i < displayArray.length; i++) {
             $('#tutorialModal_display_menu').append('<li id="tutorial_display_item_'+ displayArray[i].getType() +'" class="components_overview_cards_item"></li>');
@@ -244,7 +247,7 @@ class TutorialMenu {
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row5" class="row"></div>');
-        $("#row5").append('<h3>Audio</h3>');
+        $("#row5").append('<h3>'+MSG.tutorialMenu.audio+'</h3>');
         $("#tutorialModal .modal-body .message .container").append('<div id="tutorialModal_audio_menu" class="components_overview row"></div>');
     
         let audioArray = [Buzzer];

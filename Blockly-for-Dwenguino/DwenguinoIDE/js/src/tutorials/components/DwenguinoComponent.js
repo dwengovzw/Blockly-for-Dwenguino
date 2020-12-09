@@ -5,7 +5,10 @@ export { DwenguinoComponent, DwenguinoComponentTypesEnum }
  */
 const DwenguinoComponentTypesEnum = {
   SERVO: 'servo',
+  DCMOTOR: 'dcmotor',
   LED: 'led',
+  RGBLED: 'rgbled',
+  TOUCH: 'touch',
   PIR: 'pir',
   SONAR: 'sonar',
   LCD: 'lcd',

@@ -206,6 +206,7 @@ MSG.simulator = {
   servo: "  ",
   servoDescription: " محرك السيرفو عبارة عن مشغل يمكنه <b> تدوير كائن بزاوية معينة </ b>. يمكن وضع المحركات المؤازرة في المحاكاة بزاوية بين 0 و 180 درجة. يمكن تزيين المحركات المؤازرة بسهولة وبالتالي فهي مثالية لصنع مكونات متحركة بشكل دوري ",
   motor:  " محرك ",
+  DCMotorDescriptino: "",
   scope: "المتغيرات  ",
   alertDebug: " تتوقف المحاكاة عند استئناف البرمجة. ",
   distance:  " مسافة ",
@@ -218,6 +219,7 @@ MSG.simulator = {
   pir: "مستشعر   ",
   pirDescription: "يتيح لك مستشعر الأشعة تحت الحمراء (PIR) <b> استشعار الحركة </ b> ، لأنه يكتشف تغيرات الأشعة تحت الحمراء في بيئتها  ",
   sonar: " سونار ",
+  sonarDescription: "",
   led: " ليد ",
   ledDescription: " الصمام الثنائي الباعث للضوء (LED) هو جهاز من أشباه الموصلات <b> يُصدر ضوءًا </ b> عندما يمر تيار كهربائي خلاله. تنتج مواد أشباه الموصلات المختلفة <b> ألوانًا مختلفة من الضوء </ b>. ",
   rgbled: "RGB LED",
@@ -227,8 +229,11 @@ MSG.simulator = {
   lcd: " شاشة عرض من الكريستال السائل ",
   lcdDescription: "شاشة LCD على لوحة عبارة عن شاشة عرض 16x2 مع إضاءة خلفية.  ",
   button: " زر ",
+  buttonDescription: "",
   sound: " مستشعر الصوت ",
+  soundDescription: "",
   light:  " مستشعر الضوء ",
+  lightDescription: "",
   buzzer: " صفارة ",
   buzzerDescription: " يمكن استخدام الجرس الموجود على لوحة Dwengo <b> لتشغيل سلسلة من النغمات </ b> أو أجزاء صوتية قصيرة. يتم التحكم في ارتفاع كل نغمة عن طريق تحديد <b> تردد </ b> الجرس. استخدم كتلة تأخير لتغيير طول النغمة. ",
   decoration: " زخرفة ",
@@ -257,6 +262,11 @@ MSG.tutorialMenu = {
   correctAnswer: " كانت الإجابة صحيحة! ",
   wrongAnswer: "لم تكن الإجابة صحيحة. حاول مرة أخري!  ",
   dwenguinoComponents: "مكونات  دوينجوينو  ",
+  sensors: "Sensors",
+  actuators: "Actuators",
+  movement: "Movement",
+  audio: "Audio",
+  display: "Display"
 };
 
 MSG.tutorials = {

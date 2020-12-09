@@ -834,7 +834,11 @@ body{
 }
 
 .rc_tag {
-    margin-bottom: 5px;
+    font-size: 1.25rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding-bottom: 5px;
 }
 
 .sim_element{
