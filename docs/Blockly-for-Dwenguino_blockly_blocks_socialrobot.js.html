@@ -60,7 +60,7 @@ Blockly.Blocks.socialrobot.HUE = 25;
 
 var pir_sensor_json = {
   "id": "pir_sensor",
-  "message0": MSG.socialrobotPirBlock + " %1 %2 %3" + MSG.trig + "%4",
+  "message0": MSG.socialRobotPirBlock,
   "args0": [
     {
       "type": "input_dummy"
@@ -93,10 +93,252 @@ Blockly.Blocks['pir_sensor'] = {
   }
 };
 
+var sound_sensor_json = {
+  "id": "sound_sensor",
+  "message0": MSG.socialRobotSoundSensorBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/sound_sensor.png",
+      "width": 80,
+      "height": 34,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['sound_sensor'] = {
+  init: function() {
+    this.jsonInit(sound_sensor_json);
+  }
+};
+
+var touch_sensor_json = {
+  "id": "touch_sensor",
+  "message0": MSG.socialRobotTouchSensorBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/touch_sensor.png",
+      "width": 50,
+      "height": 50,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['touch_sensor'] = {
+  init: function() {
+    this.jsonInit(touch_sensor_json);
+  }
+};
+
+var socialrobot_rgbled_json = {
+  "id": "socialrobot_rgbled",
+  "message0": MSG.socialRobotRgbLedBlock + " %1 %2 " + MSG.socialRobotPinRed +  " %3 " + MSG.socialRobotPinGreen + " %4 " + MSG.socialRobotPinBlue + " %5 ",
+  "args0": [
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/rgb_led.svg",
+      "width": 30,
+      "height": 30,
+      "alt":  "rgbled"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_red",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_green",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_blue",
+      "check": "Number"
+    }
+  ],
+  "message1": MSG.socialRobotRgbColorBlock + " %1",
+  "args1":[
+    {
+      "type": "input_value",
+      "name": "color",
+      "check": "Color"
+    },
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+  
+};
+
+Blockly.Blocks['socialrobot_rgbled'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgbled_json);
+  }
+};
+
+var socialrobot_rgbled_off_json = {
+  "id": "socialrobot_rgbled_off",
+  "message0": MSG.socialRobotRgbLedOffBlock + " " + MSG.socialRobotPinRed +  " %1 " + MSG.socialRobotPinGreen + " %2 " + MSG.socialRobotPinBlue + " %3 ",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "pin_red",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_green",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "pin_blue",
+      "check": "Number"
+    }
+  ],
+  "inputsInline": true,
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+  
+};
+
+Blockly.Blocks['socialrobot_rgbled_off'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgbled_off_json);
+  }
+};
+
+var socialrobot_rgb_color_json = {
+  "id": "socialrobot_rgb_color",
+  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
+  "type": "rgb_color",
+  "args0": [
+    {
+      "type": "field_number",
+      "name": "RED",
+      "value": 133,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "field_number",
+      "name": "GREEN",
+      "value": 196,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "field_number",
+      "name": "BLUE",
+      "value": 65,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    }
+  ],
+  "output": "Color",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_rgb_color'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgb_color_json);
+  }
+};
+
+var socialrobot_rgb_color_with_numbers_json = {
+  "id": "socialrobot_rgb_color",
+  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
+  "type": "rgb_color",
+  "args0": [
+    {
+      "type": "input_value",
+      "name": "RED",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+      
+    },
+    {
+      "type": "input_value",
+      "name": "GREEN",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    },
+    {
+      "type": "input_value",
+      "name": "BLUE",
+      "value": 100,
+      "min": 0,
+      "max": 255,
+      "precision": 0
+    }
+  ],
+  "inputsInline": true,
+  "output": "Color",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+Blockly.Blocks['socialrobot_rgb_color_with_numbers'] = {
+  init: function() {
+    this.jsonInit(socialrobot_rgb_color_with_numbers_json);
+  }
+};
 
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",
-  "message0": MSG.socialrobotServoBlock + " %1 %2 %3 " + MSG.pin + " %4 " + MSG.angle + " %5",
+  "message0": MSG.socialrobotServoBlock,
   "args0": [
     { "type": "input_dummy"
     },
@@ -135,7 +377,7 @@ Blockly.Blocks['socialrobot_servo'] = {
 
 var socialrobot_arms_down_json = {
   "id": "socialrobot_arms_down",
-  "message0": MSG.socialRobotArmsDownBlock + " %1 %2 %3 " + MSG.socialRobotServoRightHand + " %4 %5 " + MSG.socialRobotServoLeftHand + " %6 %7",
+  "message0": MSG.socialRobotArmsDownBlock,
   "args0": [
   {
       "type": "input_dummy"
@@ -189,7 +431,7 @@ Blockly.Blocks['socialrobot_arms_down'] = {
 
 var socialrobot_arms_up_json = {
   "id": "socialrobot_arms_up",
-  "message0": MSG.socialRobotArmsUpBlock + " %1 %2 %3 " + MSG.socialRobotServoRightHand + " %4 %5 " + MSG.socialRobotServoLeftHand + " %6 %7",
+  "message0": MSG.socialRobotArmsUpBlock,
   "args0": [
   {
       "type": "input_dummy"
@@ -242,7 +484,7 @@ Blockly.Blocks['socialrobot_arms_up'] = {
 
 var socialrobot_wave_arms_json = {
     "id": "socialrobot_wave_arms",
-    "message0": MSG.socialrobotWaveArmesBlock + " %1 %2 " + MSG.socialRobotServoRightHand + " %3 %4 " + MSG.socialrobotServoLeftHand + " %5 %6",
+    "message0": MSG.socialrobotWaveArmesBlock,
     "args0": [
     {
         "type": "input_dummy"
@@ -289,7 +531,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_eyes_left_json = {
     "id": "socialrobot_eyes_left",
-    "message0": MSG.socialRobotEyesLeftBlock + " %1 %2 %3 " + MSG.socialRobotServoRightEye + " %4 %5 " + MSG.socialRobotServoLeftEye + " %6 %7",
+    "message0": MSG.socialRobotEyesLeftBlock,
     "args0": [
     {
         "type": "input_dummy"
@@ -342,7 +584,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_eyes_right_json = {
     "id": "socialrobot_eyes_right",
-    "message0": MSG.socialRobotEyesRightBlock + " %1 %2 %3 " + MSG.socialRobotServoRightEye + " %4 %5 " + MSG.socialRobotServoLeftEye + " %6 %7",
+    "message0": MSG.socialRobotEyesRightBlock,
     "args0": [
     {
         "type": "input_dummy"
@@ -395,7 +637,7 @@ var socialrobot_wave_arms_json = {
 
   var socialrobot_set_pin = {
     "id": "socialrobot_set_pin",
-    "message0": MSG.socialrobotSetPinBlock + " %1 %2",
+    "message0": MSG.socialrobotSetPinState,
     "args0": [
       {
         "type": "input_value",
@@ -424,7 +666,7 @@ Blockly.Blocks['socialrobot_set_pin'] = {
 
   var socialrobot_read_pin_json = {
     "id": "socialrobot_read_pin",
-    "message0": MSG.socialrobotReadPinBlock + " %1 %2",
+    "message0": MSG.socialrobotReadPinBlock,
     "args0": [
         {
         "type": "input_dummy"
@@ -456,13 +698,13 @@ Blockly.Blocks['socialrobot_read_pin'] = {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotRgbLed.html">SocialRobotRgbLed</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="SocialRobotTouchSensor.html">SocialRobotTouchSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 19:18:16 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 09 2020 11:21:27 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
