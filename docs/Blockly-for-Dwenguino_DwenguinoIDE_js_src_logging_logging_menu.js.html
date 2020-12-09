@@ -28,6 +28,7 @@
         <article>
             <pre class="prettyprint source linenums"><code>import Validator from './validator.js'
 import ServerConfig from '../server_config.js'
+import User from './user.js'
 
 /**
  * This class builds and displays the logging menu on the screen.
@@ -35,9 +36,8 @@ import ServerConfig from '../server_config.js'
  * 
  */
 class LoggingMenu{
-    username = null;
-    password = null;
-    currentlySelectedIcons= [null,null,null,null];
+    user = null;
+    currentlySelectedIcons= ['0','0','0','0'];
     SIZE = 4;
     icons = [
         {id: 1, name: MSG.logging['person'], html: '&lt;span class="glyphicon icon-user">&lt;/span>'},
@@ -105,14 +105,14 @@ class LoggingMenu{
         $('#inputUsername').append('&lt;label for="myusernametag" class="col-md-3">'+ MSG.logging['username']+'&lt;/label>');
         $('#inputUsername').append('&lt;input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="Enter username">');
 
-        self.createIconModule();
+        this.createIconModule();
 
         $('#loggingModalBody').append('&lt;button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'&lt;/button>');   
         $('#loggingModalFooter').append('&lt;button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'&lt;/button>');
 
         this.showDialog();
 
-        self.makeIconsResponsive();
+        this.makeIconsResponsive();
 
         // Reset the graphical password.
         $("#reset_modal_dialog_button").click(function(){
@@ -127,18 +127,20 @@ class LoggingMenu{
 
     login(){
         var self = this;
-        var errors = [];
-        User.username = $( "input[name=myusernametag]").val();
-        User.password = JSON.stringify(self.currentlySelectedIcons);
+        let errors = [];
+        let username = $( "input[name=myusernametag]").val();
+        let password = this.currentlySelectedIcons;
+        this.user = new User(username, password);
+
     
-        errors.push(self.validator.validateId(self.currentlySelectedIcons));
+        errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
-        if(self.validator.hasErrors(errors)){
-            self.showErrors(errors);
+        if(this.validator.hasErrors(errors)){
+            this.showErrors(errors);
         } else {
             var serverSubmission = {
-                "userId": User.username,
-                "password": JSON.stringify(self.currentlySelectedIcons)
+                "userId": this.user.username,
+                "password": JSON.stringify(this.user.password)
             };
     
             $.ajax({
@@ -151,27 +153,28 @@ class LoggingMenu{
                 self.removeDialog();
             }).fail(function(response, status)  {
                 console.warn('Failed to log in:', status);
-                console.log(response);
+                self.resetSelectedIcons();
+                this.user = null;
             });
         }
     }
 
     createUserMenu(){
         var self = this;
-        self.createLoggingModalDialog(MSG.logging['newuser']);
+        this.createLoggingModalDialog(MSG.logging['newuser']);
     
         $('#loggingModalBody').append('&lt;div id="inputUsername" class="ui-widget row mb-4">');
         $('#inputUsername').append('&lt;label for="myusernametag" class="col-md-3">'+MSG.logging['username']+'&lt;/label>');
         $('#inputUsername').append('&lt;input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="'+ MSG.logging['chooseUsername']+'">');
     
-        self.createIconModule();
+        this.createIconModule();
     
         $('#loggingModalBody').append('&lt;button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'&lt;/button>');   
         $('#loggingModalFooter').append('&lt;button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'&lt;/button>');
         
-        self.showDialog();
+        this.showDialog();
     
-        self.makeIconsResponsive();
+        this.makeIconsResponsive();
     
         // Reset the graphical password.
         $("#reset_modal_dialog_button").click(function(){
@@ -186,31 +189,33 @@ class LoggingMenu{
 
     registerUser(){
         var self = this;
-        var errors = [];
-        User.username = $( "input[name=myusernametag]").val();
-        User.password = JSON.stringify(self.currentlySelectedIcons);
+        let errors = [];
+        let username = $( "input[name=myusernametag]").val();
+        let password = this.currentlySelectedIcons.slice();
+        this.user = new User( username, password );
+
+        console.log(this.user.password);
+        errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
-        errors.push(self.validator.validateId(self.currentlySelectedIcons));
-    
-        if(self.validator.hasErrors(errors)){
-            self.showErrors(errors);
+        if(this.validator.hasErrors(errors)){
+            this.showErrors(errors);
         } else {
-            var serverSubmission = {
-                "userId": User.username,
-                "password": JSON.stringify(self.currentlySelectedIcons)
+            let serverSubmission = {
+                "userId": this.user.username,
+                "password": JSON.stringify(this.user.password)
             };
-    
             $.ajax({
                 type: "POST",
                 url: ServerConfig.getServerUrl() + "/authentication/new",
                 data: serverSubmission,
             }).done(function(data){
-                self.eventLogger.setUserId(self.username);
+                self.eventLogger.setUserId(self.user.username);
                 self.resetSelectedIcons();
                 self.removeDialog();
                 self.showSettingsMenu();
             }).fail(function(response, status)  {
                 console.log('Failed to register:', status);
+                self.resetSelectedIcons();
             });
         }
     }
@@ -263,7 +268,7 @@ class LoggingMenu{
                     term = term.toLowerCase();
                     var choices = data;
                     var matches = [];
-                    for (i=0; i&lt;choices.length; i++)
+                    for (let i=0; i&lt;choices.length; i++)
                         if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
                     suggest(matches);
                 }
@@ -271,7 +276,7 @@ class LoggingMenu{
 
             $("#submit_modal_dialog_button").click(function(){
 
-                var errors = [];
+                let errors = [];
                 let school = $( "input[name=myschooltags]" ).val();
                 let dateOfBirth = $("#birth").val();
                 let gender = $("input[name=genderRadio]:checked").val();
@@ -288,14 +293,15 @@ class LoggingMenu{
                     self.eventLogger.setDateOfBirth(dateOfBirth);
                     self.eventLogger.setGender(gender);
 
-                    var serverSubmission = {
-                        "userId": User.username,
-                        "password": User.password,
+                    console.log(self.user.password);
+                    let serverSubmission = {
+                        "userId": self.user.username,
+                        "password": JSON.stringify(self.user.password),
                         "school": school,
                         "dateOfBirth": dateOfBirth,
                         "gender": gender
                     };
-
+                    console.log(serverSubmission);
                     $.ajax({
                         type: "POST",
                         url: ServerConfig.getServerUrl() + "/authentication/updateUser",
@@ -431,7 +437,7 @@ class LoggingMenu{
      */
     resetSelectedIcons(){
         for(let k = 0; k &lt; 4; k++){
-            this.currentlySelectedIcons[k] = null;
+            this.currentlySelectedIcons[k] = '0';
             $('#currentlySelected'+k).html("");
         }
     }
@@ -442,10 +448,10 @@ class LoggingMenu{
      */
     addIconToId(i,j){
         for(let k = 0; k &lt; 4; k++){
-            if(this.currentlySelectedIcons[k] == null){
+            if(this.currentlySelectedIcons[k] == '0'){
                 let n = ((i-1)*4)+j;
                 let icon = this.icons[n-1];
-                this.currentlySelectedIcons[k] = icon.id;
+                this.currentlySelectedIcons[k] = JSON.stringify(icon.id);
                 $('#currentlySelected'+k).html(icon.name + '&lt;p>' + icon.html + '&lt;/p>');
                 break;
             }
@@ -463,13 +469,13 @@ export default LoggingMenu;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotRgbLed.html">SocialRobotRgbLed</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="SocialRobotTouchSensor.html">SocialRobotTouchSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 19:18:16 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 09 2020 11:21:27 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
