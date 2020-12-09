@@ -5,14 +5,13 @@ import mongoose from 'mongoose';
 let exports = {};
 
 exports.new = function(req, res) {
-  mongoose.connect('mongodb://localhost/dwenguinoblocklyexit', { useNewUrlParser: true });
+  mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
   let db = mongoose.connection;
   const rounds = 10;
 
   db.collection('authentications').findOne({username: req.body.userId})
   .then(function(doc) {
       if(!doc){
-
         bcrypt.hash(req.body.password, rounds, (err, hashPassword) => {
           if (err) {
             res.status(401).send("Hashing has error.");

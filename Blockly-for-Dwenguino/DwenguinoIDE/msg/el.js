@@ -210,6 +210,7 @@ MSG.simulator = {
   servo: "Σερβοκινητήρας",
   servoDescription: "A servo motor is an actuator that can <b>rotate an object over a certain angle</b>. In the simulator servo motors can be put at an angle between 0 and 180 degrees. Servo motors can easily be decorated and are thus ideal to make periodically moving components",
   motor: "Κινητήρας DC",
+  DCMotorDescription: "",
   scope: "Μεταβλητές",
   alertDebug: "Πρέπει να διακοπεί η προσομοίωση πριν τη συνέχιση του προγραμματισμού.",
   distance: "απόσταση",
@@ -221,16 +222,23 @@ MSG.simulator = {
   pir: "Αισθητήρας PIR",
   pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
   sonar: "Sonar",
+  sonarDescription: "",
   led: "LED",
+  ledDescription: "",
   rgbled: "RGB LED",
   rgbledDescription: "",
   touch: "Touch sensor",
   touchDescription: "",
   lcd: "Οθόνη LCD",
+  lcdDescription: "",
   button: "Κουμπί",
+  buttonDescription: "",
   sound: "Αισθητήρας Sound",
+  soundDescription: "",
   light: "Αισθητήρας Light",
+  lightDescription: "",
   buzzer: "Buzzer",
+  buzzerDescription: "",
   decoration: "Διακόσμηση",
 };
 
@@ -256,7 +264,12 @@ MSG.tutorialMenu = {
   checkAnswer: "Έλεγξε την απάντηση",
   correctAnswer: "Η απάντηση ήταν σωστή!",
   wrongAnswer: "Η απάντηση ήταν λάθος. Προσπάθησε ξανά!",
-  dwenguinoComponents: "Εξαρτήματα του Dwenguino"
+  dwenguinoComponents: "Εξαρτήματα του Dwenguino",
+  sensors: "Sensors",
+  actuators: "Actuators",
+  movement: "Movement",
+  audio: "Audio",
+  display: "Display"
 };
 
 MSG.tutorials = {

@@ -367,7 +367,12 @@ MSG.tutorialMenu = {
   close: "Schließen",
   checkAnswer: "Antwort überprüfen",
   correctAnswer: "Die Antwort war richtig!",
-  wrongAnswer: "Die Antwort war nicht richtig. Versuch es nochmal!"
+  wrongAnswer: "Die Antwort war nicht richtig. Versuch es nochmal!",
+  sensors: "Sensoren",
+  actuators: "Aktoren",
+  movement: "Bewegung",
+  audio: "Audio",
+  display: "Visuell"
 };
 
 MSG.simulator = {

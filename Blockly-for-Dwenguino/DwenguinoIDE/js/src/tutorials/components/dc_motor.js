@@ -1,22 +1,22 @@
 import { DwenguinoComponent, DwenguinoComponentTypesEnum } from './DwenguinoComponent.js';
 
-export { LightSensor }
+export { DCMotor }
 
-class LightSensor extends DwenguinoComponent{
+class DCMotor extends DwenguinoComponent{
     constructor(){
         super();
     }
 
     toString(){
-        return 'light sensor';
+        return 'DC Motor';
     }
 
     static getType(){
-        return DwenguinoComponentTypesEnum.LIGHT;
+        return DwenguinoComponentTypesEnum.DCMOTOR;
     }
 
     static getDescription(){
-        return MSG.simulator['lightDescription'];
+        return MSG.simulator['DCMotorDescription'];
     }
 
     static getInputPins(){
@@ -24,7 +24,6 @@ class LightSensor extends DwenguinoComponent{
     }
 
     static getOutputPins(){
-        return [];
+        return ['speed'];
     }
-    
 }
