@@ -8,8 +8,6 @@ import DwenguinoSimulationScenario from "./dwenguino_simulation_scenario.js"
  */
 class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     inputsState = null;
-    audiocontext = null;
-    osc = null;
     audioStarted = false;
     muted = true;
     prevFreq = 0;
@@ -245,7 +243,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             }
             if (board.getTonePlaying() === 0 || this.muted) {
                 if (this.audioStarted){
-                    console.log("stop");
                     this.audioStarted = false;
                     this.osc.stop(this.audiocontext.currentTime);
                     this.osc.disconnect(this.audiocontext.destination);
@@ -258,7 +255,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
                     this.osc.frequency.value = board.getTonePlaying(); // Hz
                     this.osc.start(this.audiocontext.currentTime);
                     this.osc.connect(this.audiocontext.destination); // connect it to the destination
-                    console.log("start");
                     this.audioStarted = true;
                 }
             }

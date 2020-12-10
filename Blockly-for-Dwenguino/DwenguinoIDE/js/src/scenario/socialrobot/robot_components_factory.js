@@ -157,11 +157,9 @@ class RobotComponentsFactory {
           break;
         case TypesEnum.SOUND:
           pin = this._robot[i].getPin();
-          console.log(pin);
           if(this._robot[i].isStateUpdated()){
             dwenguinoState.setIoPinState(pin, this._robot[i].getState());
             this._robot[i]._stateUpdated = false;
-            console.log(this._robot[i].getState());
           }
           break;
         case TypesEnum.LIGHT:

@@ -85,54 +85,54 @@ class DwenguinoSimulationRobotComponentsMenu {
     $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag"></div>');
     $('#rc_servo').append('<div id="rc_servo_img"></div>');
-    $('#rc_servo').append('<div id="rc_servo_options"></div>');
+    $('#rc_servo').append('<div id="rc_servo_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_led').append('<div id="rc_led_tag" class="rc_tag"></div>');
     $('#rc_led').append('<div id="rc_led_img"></div>');
-    $('#rc_led').append('<div id="rc_led_options"></div>');
+    $('#rc_led').append('<div id="rc_led_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_rgbled" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag"></div>');
     $('#rc_rgbled').append('<div id="rc_rgbled_img"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_options"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_touch" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag"></div>');
     $('#rc_touch').append('<div id="rc_touch_img"></div>');
-    $('#rc_touch').append('<div id="rc_touch_options"></div>');
+    $('#rc_touch').append('<div id="rc_touch_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag"></div>');
     $('#rc_pir').append('<div id="rc_pir_img"></div>');
     $('#rc_pir').append('<div id="rc_pir_value"></div>');
-    $('#rc_pir').append('<div id="rc_pir_options"></div>');
+    $('#rc_pir').append('<div id="rc_pir_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_sonar" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_tag" class="rc_tag"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_img"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_value"></div>');
-    $('#rc_sonar').append('<div id="rc_sonar_options"></div>');
+    $('#rc_sonar').append('<div id="rc_sonar_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_img"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_options"></div>');
+    $('#rc_lcd').append('<div id="rc_lcd_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag"></div>');
     $('#rc_sound').append('<div id="rc_sound_img"></div>');
-    $('#rc_sound').append('<div id="rc_sound_options"></div>');
+    $('#rc_sound').append('<div id="rc_sound_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_light').append('<div id="rc_light_tag" class="rc_tag"></div>');
     $('#rc_light').append('<div id="rc_light_img"></div>');
-    $('#rc_light').append('<div id="rc_light_options"></div>');
+    $('#rc_light').append('<div id="rc_light_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_img"></div>');
-    $('#rc_decoration').append('<div id="rc_decoration_options"></div>');
+    $('#rc_decoration').append('<div id="rc_decoration_options" class="rc_options"></div>');
 
     this.initButtons();
   }
@@ -291,7 +291,7 @@ class DwenguinoSimulationRobotComponentsMenu {
             '</span>' +
             '</button>' +
         '<input type="text" name="'+type+'" class="component_item_input input-number" size="2" value="0" min="0" max="' + component.maximumAmount + '">' +
-          '<button type="button" id="rc_'+type+'_plus_button" class="component_item_input btn-number" data-type="plus" data-field="'+type+'">' +
+          '<button type="button" id="rc_'+type+'_plus_button" class="component_item_input btn-number float-right" data-type="plus" data-field="'+type+'">' +
           '<span class="glyphicon glyphicon-plus" id="rc_'+type+'_plus_button">' +
           '</span>' + 
           '</button>' +
