@@ -11,6 +11,10 @@ class DwenguinoSimulationScenario {
 
     isSimulationRunning = false;
     logger = null;
+
+    audiocontext = null;
+    osc = null;
+
     constructor(logger) {
         this.logger = logger;
     }
