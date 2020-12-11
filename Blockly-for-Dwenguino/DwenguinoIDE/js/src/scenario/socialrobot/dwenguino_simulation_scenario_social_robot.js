@@ -121,9 +121,9 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     var scenarioOptions = $("<div>").attr("id", "scenario_options");
     $('#sim_container').append(scenarioOptions);
-    scenarioOptions.append("<div id='load_scenario' class='glyphicon glyphicon-cloud-upload' alt='Load'></div>");
-    scenarioOptions.append("<div id='save_scenario' class='glyphicon glyphicon-cloud-download' alt='Save'></div>");
-    scenarioOptions.append("<div id='switch_background' class='glyphicon glyphicon-refresh'></div>")
+    scenarioOptions.append("<div id='load_scenario' class='' alt='Load'><span class='fas fa-cloud-upload-alt'></span></div>");
+    scenarioOptions.append("<div id='save_scenario' class='fas fa-cloud-download-alt' alt='Save'></div>");
+    scenarioOptions.append("<div id='switch_background' class='fas fa-sync-alt'></div>")
 
     $("#load_scenario").click(function () {
       self.removeSocialRobotComponents();

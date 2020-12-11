@@ -287,12 +287,12 @@ class DwenguinoSimulationRobotComponentsMenu {
       if(component.type == type){
         template = '<fieldset>' +
         '<button type="button" id="rc_'+type+'_minus_button" class="component_item_input btn-number" disabled="disabled" data-type="minus" data-field="'+type+'">' +
-            '<span class="glyphicon glyphicon-minus" id="rc_'+type+'_minus_button">' +
+            '<span class="fas fa-minus" id="rc_'+type+'_minus_button">' +
             '</span>' +
             '</button>' +
         '<input type="text" name="'+type+'" class="component_item_input input-number" size="2" value="0" min="0" max="' + component.maximumAmount + '">' +
           '<button type="button" id="rc_'+type+'_plus_button" class="component_item_input btn-number float-right" data-type="plus" data-field="'+type+'">' +
-          '<span class="glyphicon glyphicon-plus" id="rc_'+type+'_plus_button">' +
+          '<span class="fas fa-plus" id="rc_'+type+'_plus_button">' +
           '</span>' + 
           '</button>' +
           '</fieldset>';
