@@ -175,10 +175,10 @@ class SimulationControlsController {
 
     translateSimulatorInterface() {
         // translation
-        document.getElementById('sim_start').innerHTML = "<span class='glyphicon glyphicon-play' alt='" + MSG.simulator['start'] + "'></span>";
-        document.getElementById('sim_stop').innerHTML = "<span class='glyphicon glyphicon-stop' alt='" + MSG.simulator['stop'] + "'></span>";
-        document.getElementById('sim_pause').innerHTML = "<span class='glyphicon glyphicon-pause' alt='" + MSG.simulator['pause'] + "'></span>";
-        document.getElementById('sim_step').innerHTML = "<span class='glyphicon glyphicon-step-forward' alt='" + MSG.simulator['step'] + "'></span>";
+        document.getElementById('sim_start').innerHTML = "<span class='fas fa-play' alt='" + MSG.simulator['start'] + "'></span>";
+        document.getElementById('sim_stop').innerHTML = "<span class='fas fa-stop' alt='" + MSG.simulator['stop'] + "'></span>";
+        document.getElementById('sim_pause').innerHTML = "<span class='fas fa-pause' alt='" + MSG.simulator['pause'] + "'></span>";
+        document.getElementById('sim_step').innerHTML = "<span class='fas fa-step-forward' alt='" + MSG.simulator['step'] + "'></span>";
         document.getElementById('sim_scenarioTag').textContent = MSG.simulator['scenario'] + ":";
 
     }
