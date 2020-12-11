@@ -146,7 +146,7 @@ pinOptions: "Pin",
 colorOptions: "Color",
 runError: "Oops there was an error when trying to run your code on the board.",
 runError: "<h3>Sorry, I was unable to upload the code to the board</h3>",
-uploadError: "Follow these steps to restart the Dwenguino board: \n    1. Disconnect the USB cable \n    2. Connect the computer and Dwenguino board with the USB cable \n    3. Simultaneously press the RESET and the SOUTH button of the Dwenguino board \n    4. Then first release the RESET button \n    5. Then release the SOUTH button \n    6. Upload the program again via the <span id='db_menu_item_run' class='glyphicon glyphicon-play' alt='Upload code to Dwenguino board'></span> button in the main menu",
+uploadError: "Follow these steps to restart the Dwenguino board: \n    1. Disconnect the USB cable \n    2. Connect the computer and Dwenguino board with the USB cable \n    3. Simultaneously press the RESET and the SOUTH button of the Dwenguino board \n    4. Then first release the RESET button \n    5. Then release the SOUTH button \n    6. Upload the program again via the <span id='db_menu_item_run' class='fas fa-play-circle' alt='Upload code to Dwenguino board'></span> button in the main menu",
 compileError: "The code could not be compiled.\nYou should check your code, did you forget a block someware?",
 
 //TODO: translate

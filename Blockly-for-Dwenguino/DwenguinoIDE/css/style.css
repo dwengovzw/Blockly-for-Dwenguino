@@ -2,11 +2,12 @@
  font-family:'lcd-matrix-font';
  src: url('../fonts/repet.ttf');
 }
-
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 body{
     min-height: 100vh;
     font-size: 1rem;
+    font-family: Roboto, sans-serif!important;
 }
 
 .db_header{
@@ -48,14 +49,7 @@ body{
     position: absolute;
     width:150px;
     margin-top:15px;
-}
-
-.switch_to_blockly{
-    float:left;
-}
-
-.switch_to_code{
-    float:right;
+    font-weight: 300;
 }
 
 .code-switch {
@@ -119,11 +113,15 @@ body{
   }
 
 .db_menu_item{
-    padding: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     float: right;
     height: 100%;
-    font-size: 30px;
+    font-size: 1.5rem;
     vertical-align: center;
+    font-weight: 600;
 }
 
 #file-upload-dropzone {
@@ -177,11 +175,11 @@ body{
 
 #db_menu_item_language_selection{
     /* width: 200px; */
-    font-size: 20px;
     margin: 15px 0;
     background-color: #ffffff;
     border: 1px #8bab42 solid;
-    
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
 }
 
 #db_menu_item_language{
@@ -225,12 +223,12 @@ body{
     min-height: 180px;
     width: 100%;
     position: relative;
-    flex: 1;
+    flex: 11;
 }
 
 #db_simulator_menu{
     position: relative;
-    flex: 0 0 70px;
+    flex: 1 0 20px;
     border-bottom: black solid 1px;
 }
 
@@ -264,15 +262,16 @@ body{
 }
 
 #db_simulator_bottom_pane{
-  flex: 1;
+  flex: 10;
   position: relative;
   width: 100%;
+  border-top: solid black 2px;
 }
 
-#db_simulator_tab_selection{
+/* #db_simulator_tab_selection{
     flex: 0 1 auto;
     border-bottom: solid black 2px;
-}
+} */
 
 #sim_point {
     width: 2px;
@@ -329,7 +328,7 @@ body{
 
 #db_simulator_panes{
     flex-direction: column;
-    flex: 1;
+    flex: 12 0 auto;
     overflow: hidden;
     display: flex;
 }
@@ -351,14 +350,15 @@ pre.content {
 
 #sim_menu {
     width: 100%;
-    height: 70px;
+    /* height: 70px; */
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 
 #sim_menu * {
     float: left;
-    padding: 0 5px;
+    /* padding: 0 5px; */
 }
 
 .sim_item:hover {
@@ -377,21 +377,48 @@ pre.content {
     cursor: default;
 }
 
-/*#sim_start,
-#sim_pause,
-#sim_stop,
-#sim_step,
-#sim_scenario,
-#sim_scenarioTag {
-    font-size: 20px;
-    flex: 0 0 auto;
-}*/
-
 #sim_menu > * {
     font-size: 1.25rem;
-    flex: 0 0 auto;
-    margin: auto 1px;
+    /* margin: auto 1px; */
+    margin: 0.5rem;
     text-align: center;
+}
+
+#sim_menu_buttons {
+    flex: 1;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+}
+
+#sim_start,
+#sim_pause,
+#sim_stop,
+#sim_step {
+    flex: 1 1 auto;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+#sim_scenarioTag {
+    flex: 1;
+}
+
+#sim_scenarios {
+    flex: 2;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+.sim_scenario_item {
+    flex: 20%;
+}
+
+.sim_scenario_radio {
+    display: none;
 }
 
 #scenario_radio_container{
@@ -402,14 +429,18 @@ pre.content {
 #sim_scenarioTag{
     margin: auto 10px;
     text-align: center;
+    font-size: 1rem;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
 #sim_board {
     /*background-color: #2a7709; */
     background-image: url("../img/board/dwenguino.png");
     background-size: 100% 100%;
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     position: absolute;
     top: 50%;
     /*left: 30%;*/
@@ -590,8 +621,14 @@ pre.content {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
-  width: 50;
-  height: 50px;
+  /* width: 50px;
+  height: 50px; */
+  width: 100%;
+  height: 100%;
+  max-width: 50px;
+  max-height: 50px;
+  min-width: 20px;
+  min-height: 20px;
 }
 
 #sim_background {
@@ -653,8 +690,8 @@ pre.content {
 }
 
 .sim_sonar {
-    height: 50px;
-    width: 85px;
+    min-height: 50px;
+    min-width: 85px;
     background-image: url("../img/board/sonar.png");
     background-size: 100% 100%;
     margin-top: 40px;
@@ -687,16 +724,16 @@ pre.content {
     outline-offset: -2px!important;
 }
 
+.sim_scenario_btn{
+    padding:2px;
+}
+
 .sim_scenario {
   box-sizing: border-box;
   width: 100px;
   height: 100%;
   float: left;
   clear: left;
-}
-
-#sim_start {
-    padding-left: 10px;
 }
 
 .tabs{
@@ -767,6 +804,7 @@ pre.content {
     background-image: url("../img/socialrobot/servo.png");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_led_img {
@@ -775,6 +813,7 @@ pre.content {
     background-image: url("../img/socialrobot/led.png");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_rgbled_img {
@@ -783,6 +822,7 @@ pre.content {
     background-image: url("../img/socialrobot/rgb_led.svg");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_touch_img {
@@ -791,6 +831,17 @@ pre.content {
     background-image: url("../img/socialrobot/touch_sensor.svg");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
+}
+
+#rc_button_img {
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/socialrobot/button.svg");
+    margin: 0.25rem;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_pir_img {
@@ -799,6 +850,7 @@ pre.content {
     background-image: url("../img/socialrobot/pir.png");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_sonar_img {
@@ -807,6 +859,7 @@ pre.content {
     background-image: url("../img/board/sonar.png");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_lcd_img {
@@ -815,6 +868,7 @@ pre.content {
     background-image: url("../img/socialrobot/lcd.jpg");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_sound_img {
@@ -823,6 +877,7 @@ pre.content {
     background-image: url("../img/socialrobot/sound_sensor.png");
     background-size: contain;
     background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_light_img {
@@ -831,14 +886,7 @@ pre.content {
     background-image: url("../img/socialrobot/light_sensor.png");
     background-size: contain;
     background-repeat: no-repeat;
-}
-
-#rc_button_img {
-    width: 50%;
-    height: 50%;
-    background-image: url("../img/board/button.png");
-    background-size: contain;
-    background-repeat: no-repeat;
+    background-position: center;
 }
 
 #rc_decoration_img {
@@ -880,8 +928,8 @@ pre.content {
 
 
 .sim_element_button{
-    width: 65px;
-    height: 30px;
+    width: 90px;
+    height: 65px;
 }
 
 .sim_element_servo{
@@ -1002,6 +1050,21 @@ pre.content {
     width: 100px;
     height: 100px;
     margin-top: 10px;
+}
+
+.button_canvas{
+    width: 50px;
+    height:50px;
+}
+
+.button_canvas_pushed {
+    background-image: url("../img/socialrobot/button_pushed.svg");
+    background-size: contain;
+}
+
+.button_canvas_unpushed {
+    background-image: url("../img/socialrobot/button.svg");
+    background-size: contain;
 }
 
 .touch_canvas{

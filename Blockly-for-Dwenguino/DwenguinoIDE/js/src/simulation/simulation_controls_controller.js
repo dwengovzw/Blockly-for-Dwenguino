@@ -33,15 +33,17 @@ class SimulationControlsController {
         $('#db_infopane').prepend('<div id="db_simulator_menu"></div>');
         $('#db_simulator_menu').append('<div id="sim_menu"></div>');
 
-        $('#sim_menu').append('<div id="sim_start" class="sim_item"></div>');
-        $('#sim_menu').append('<div id="sim_pause" class="sim_item_disabled"></div>');
-        $('#sim_menu').append('<div id="sim_stop" class="sim_item_disabled"></div>');
-        $('#sim_menu').append('<div id="sim_step" class="sim_item"></div>');
+        $('#sim_menu').append('<div id="sim_menu_buttons"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_start" class="sim_item"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_pause" class="sim_item_disabled"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_stop" class="sim_item_disabled"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_step" class="sim_item"></div>');
 
-        $('#sim_menu').append('<div id="sim_scenarioTag" ></div>');
+
         $('#sim_menu').append('<div id="sim_scenarios" class="btn-group btn-group-toggle" data-toggle="buttons"></div>');
-        
+        $('#sim_scenarios').append('<div id="sim_scenarioTag" ></div>');
         $.each(Object.keys(this.scenarios), (index, value) => {
+            let scenarioItem = '<div id="scenario_item_' + value + '" class="sim_scenario_item"></div>';
             let label = '<label id="scenario_label_' + value + '" class="btn sim_scenario_btn"></label>';
             let radioButton = '<input id="sim_scenario_' + value + '"' + 
                 'type="radio" ' +
@@ -51,7 +53,9 @@ class SimulationControlsController {
                 'autocomplete="off">' +
                 '<img src="DwenguinoIDE/img/scenarios/scenario_' + value + '.png" class="scenario_image">';
             
-            $('#sim_scenarios').append(label);
+            
+            $('#sim_scenarios').append(scenarioItem);
+            $('#scenario_item_' + value).append(label);
             $('#scenario_label_' + value).append(radioButton);
             if (value == this.scenarioView){
                 $('#sim_scenario_' + value).attr("checked", "checked");

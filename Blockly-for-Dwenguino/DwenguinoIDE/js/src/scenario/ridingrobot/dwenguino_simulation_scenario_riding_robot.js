@@ -74,12 +74,6 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         let top_pane = $("<div>").attr("id", "db_simulator_top_pane");
         let bottom_pane = $("<div>").attr("id", "db_simulator_bottom_pane");//.attr("class", "resize-sensor");
 
-        let tab_pane = $("<div>").attr("id", "db_simulator_tab_selection");
-        let tabs = $("<ul>").attr("class", "tabs");
-        //tabs.append('<li id="robot_pane_tab"><a href="#db_robot_pane" class="active">Robot</a></li><li><a href="#db_code_pane">Code</a></li>');
-        tab_pane.append(tabs);
-        bottom_pane.append(tab_pane);
-
 
         let robot_pane = $("<div>").attr("id", "db_robot_pane"); //.attr("class", "resize-sensor");
         let sim_container = $("<div>").attr("id", "sim_container");
@@ -122,9 +116,6 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         $("#db_simulator_bottom_pane")
             .css("display", "flex")
             .css("flex-direction", "column");
-
-        $("#db_simulator_tab_selection")
-            .css("height", "30px");
 
         $("#db_robot_pane")
             .css("flex: 1");
