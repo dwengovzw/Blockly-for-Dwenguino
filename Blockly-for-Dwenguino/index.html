@@ -5,12 +5,12 @@
     <meta name="google" value="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Blockly Demo:</title>
+    <link rel="stylesheet" href="./DwenguinoIDE/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="./DwenguinoIDE/css/style.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/colors.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/dist/css/bootstrap-grid.css">
-    <link rel="stylesheet" href="./DwenguinoIDE/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/prettify.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/hopscotch.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/jquery.contextMenu.css">
@@ -32,12 +32,12 @@
         </div>
         </div><div class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
             <span id="db_menu_item_dwengo_robot_teacher" alt="DwengoRobotteacher"><img id="db_menu_item_dwengo_robot_teacher_image" src="./DwenguinoIDE/img/dwengo_robot_plain.svg" alt="The dwengo logo" /></span>
-            <span id="db_menu_item_simulator" class="db_menu_item glyphicon glyphicon-dashboard" alt="Open or close simulator"></span>
-            <span id="db_menu_item_download" class="db_menu_item glyphicon glyphicon-download" alt="Download blocks to file" /></span>
-            <span id="db_menu_item_upload" class="db_menu_item glyphicon glyphicon-upload" alt="Upload blocks to file" /></span>
-            <span id="db_menu_item_run" class="db_menu_item glyphicon glyphicon-play" alt="Upload code to Dwenguino board" /></span>
-            <span id="db_tutorials" class="db_menu_item glyphicon glyphicon-book" alt="Tutorials"/></span>
-            <span id="db_menu_item_clear" class="db_menu_item glyphicon glyphicon glyphicon-remove-sign" alt="Upload empty sketch" /></span>
+            <span id="db_menu_item_simulator" class="db_menu_item fas fa-tachometer-alt" alt="Open or close simulator"></span>
+            <span id="db_menu_item_download" class="db_menu_item fas fa-download" alt="Download blocks to file" /></span>
+            <span id="db_menu_item_upload" class="db_menu_item fas fa-upload" alt="Upload blocks to file" /></span>
+            <span id="db_menu_item_run" class="db_menu_item fas fa-play-circle" alt="Upload code to Dwenguino board" /></span>
+            <span id="db_tutorials" class="db_menu_item fas fa-book" alt="Tutorials"/></span>
+            <span id="db_menu_item_clear" class="db_menu_item fas fa-times-circle" alt="Upload empty sketch" /></span>
             <span id="db_menu_item_language" alt="Dropdown menu to select language">
                 <select name="language" id="db_menu_item_language_selection">
 
@@ -423,9 +423,6 @@
     <div id="tutorialModal" class="modal fade" role="dialog">
         <div class="modal-dialog"><!-- Modal content-->
             <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
                 <div class="modal-header h1">
                 </div>
                 <div class="modal-body">

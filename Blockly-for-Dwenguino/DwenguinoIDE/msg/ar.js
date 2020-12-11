@@ -144,7 +144,7 @@ var MSG = {
   lightOptions: " خيارات مستشعر الضوء  ",
   ledOptions:  "  خيارات ",
   runError: "<h3> معذرة ، لم أتمكن من تحميل الكود على اللوحة </ h3>   ", 
-  uploadError: "اتبع هذه الخطوات لإعادة تشغيل لوحة Dwenguino: \ n 1. افصل كبل USB \ n 2. قم بتوصيل الكمبيوتر ولوحة Dwenguino بكبل USB \ n 3. اضغط في نفس الوقت على زر RESET والزر SOUTH بلوحة Dwenguino \ n 4 . ثم حرر زر RESET أولاً \ n 5. ثم حرر الزر SOUTH \ n 6. قم بتحميل البرنامج مرة أخرى عبر <span id = 'db_menu_item_run' class = 'glyphicon glyphicon-play' alt = 'تحميل الكود إلى لوحة Dwenguino' > </span> في القائمة الرئيسية   ",
+  uploadError: "اتبع هذه الخطوات لإعادة تشغيل لوحة Dwenguino: \ n 1. افصل كبل USB \ n 2. قم بتوصيل الكمبيوتر ولوحة Dwenguino بكبل USB \ n 3. اضغط في نفس الوقت على زر RESET والزر SOUTH بلوحة Dwenguino \ n 4 . ثم حرر زر RESET أولاً \ n 5. ثم حرر الزر SOUTH \ n 6. قم بتحميل البرنامج مرة أخرى عبر <span id = 'db_menu_item_run' class = 'fas fa-play-circle' alt = 'تحميل الكود إلى لوحة Dwenguino' > </span> في القائمة الرئيسية   ",
   cleanError:  " تعذر إزالة الرمز السابق. \ n الرجاء التحقق مما إذا كان هناك تطبيق آخر يستخدم أي ملفات .cpp. \ n أغلق التطبيق.  ",
   compileError: " تعذر تجميع الرمز. \ n يجب عليك التحقق من التعليمات البرمجية ، هل نسيت كتلة في مكان ما؟  ",
   clear: " واضح  ",

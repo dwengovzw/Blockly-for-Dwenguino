@@ -68,7 +68,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
 
         $('#db_simulator_pane').append(containerHack);  
         $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
-        $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
+        $('#db_simulator_mute').attr("class", "fas fa-volume-mute")
 
         let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
@@ -168,11 +168,11 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             if (this.muted){
                 this.muted = false;
                 $('#db_simulator_mute').removeClass();
-                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-up")
+                $('#db_simulator_mute').attr("class", "fas fa-volume-up")
             }else{
                 this.muted = true;
                 $('#db_simulator_mute').removeClass();
-                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-off")
+                $('#db_simulator_mute').attr("class", "fas fa-volume-mute")
             }
 
         });

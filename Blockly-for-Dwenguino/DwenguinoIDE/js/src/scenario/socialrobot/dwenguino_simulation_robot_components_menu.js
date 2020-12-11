@@ -37,6 +37,9 @@ class DwenguinoSimulationRobotComponentsMenu {
         type: TypesEnum.TOUCH,
         maximumAmount: 3
       }, {
+        type: TypesEnum.BUTTON,
+        maximumAmount: 3
+      }, {
         type: TypesEnum.PIR,
         maximumAmount: 2
       }, {
@@ -83,54 +86,59 @@ class DwenguinoSimulationRobotComponentsMenu {
     $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
 
     $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag"></div>');
+    $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag text-center"></div>');
     $('#rc_servo').append('<div id="rc_servo_img"></div>');
     $('#rc_servo').append('<div id="rc_servo_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_led').append('<div id="rc_led_tag" class="rc_tag"></div>');
+    $('#rc_led').append('<div id="rc_led_tag" class="rc_tag text-center"></div>');
     $('#rc_led').append('<div id="rc_led_img"></div>');
     $('#rc_led').append('<div id="rc_led_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_rgbled" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag text-center"></div>');
     $('#rc_rgbled').append('<div id="rc_rgbled_img"></div>');
     $('#rc_rgbled').append('<div id="rc_rgbled_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_touch" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag"></div>');
+    $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag text-center"></div>');
     $('#rc_touch').append('<div id="rc_touch_img"></div>');
     $('#rc_touch').append('<div id="rc_touch_options" class="rc_options"></div>');
 
+    $('#robot_components_menu').append('<div id="rc_button" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_button').append('<div id="rc_button_tag" class="rc_tag text-center"></div>');
+    $('#rc_button').append('<div id="rc_button_img"></div>');
+    $('#rc_button').append('<div id="rc_button_options" class="rc_options"></div>');
+
     $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag"></div>');
+    $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag text-center"></div>');
     $('#rc_pir').append('<div id="rc_pir_img"></div>');
     $('#rc_pir').append('<div id="rc_pir_value"></div>');
     $('#rc_pir').append('<div id="rc_pir_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_sonar" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_sonar').append('<div id="rc_sonar_tag" class="rc_tag"></div>');
+    $('#rc_sonar').append('<div id="rc_sonar_tag" class="rc_tag text-center"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_img"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_value"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag"></div>');
+    $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag text-center"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_img"></div>');
     $('#rc_lcd').append('<div id="rc_lcd_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag"></div>');
+    $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag text-center"></div>');
     $('#rc_sound').append('<div id="rc_sound_img"></div>');
     $('#rc_sound').append('<div id="rc_sound_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_light').append('<div id="rc_light_tag" class="rc_tag"></div>');
+    $('#rc_light').append('<div id="rc_light_tag" class="rc_tag text-center"></div>');
     $('#rc_light').append('<div id="rc_light_img"></div>');
     $('#rc_light').append('<div id="rc_light_options" class="rc_options"></div>');
 
     $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag"></div>');
+    $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag text-center"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_img"></div>');
     $('#rc_decoration').append('<div id="rc_decoration_options" class="rc_options"></div>');
 
@@ -155,6 +163,9 @@ class DwenguinoSimulationRobotComponentsMenu {
 
     let touchOptions = this.generateButtonTemplate(TypesEnum.TOUCH);
     $('#rc_touch_options').append(touchOptions);
+
+    let buttonOptions = this.generateButtonTemplate(TypesEnum.BUTTON);
+    $('#rc_button_options').append(buttonOptions);
 
     let pirOptions = this.generateButtonTemplate(TypesEnum.PIR);
     $('#rc_pir_options').append(pirOptions);
@@ -320,6 +331,9 @@ class DwenguinoSimulationRobotComponentsMenu {
       case "rc_touch_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.TOUCH);
         break;
+      case "rc_button_plus_button":
+        this.socialRobotScenario.addRobotComponent(TypesEnum.BUTTON);
+        break;
       case "rc_pir_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.PIR);
         break;
@@ -364,6 +378,9 @@ class DwenguinoSimulationRobotComponentsMenu {
         break;
       case "rc_touch_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.TOUCH);
+        break;
+      case "rc_button_minus_button":
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.BUTTON);
         break;
       case "rc_pir_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.PIR);
