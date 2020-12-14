@@ -119,6 +119,8 @@ var MSG = {
   socialRobotSoundSensorBlockTooltip: "",
   socialRobotTouchSensorBlock: "Touch sensor %1 %2 %3 pin %4",
   socialRobotTouchSensorBlockTooltip: "",
+  socialRobotButtonBlock: "Button %1 %2 %3 pin %4",
+  socialRobotButtonBlockTooltip: "",
   socialrobotSetPinState: "Set %1 %2",
   socialrobotServoBlock: "Σερβοκινητήρας %1 %2 %3  κανάλι %4 Ακροδέκτης %5",
   socialrobotWaveArmesBlock: "Κούνα τα χέρια %1 %2 Σερβοκινητήρας δεξιού χεριού %3 %4 Σερβοκινητήρας αριστερού χεριού %5 %6",

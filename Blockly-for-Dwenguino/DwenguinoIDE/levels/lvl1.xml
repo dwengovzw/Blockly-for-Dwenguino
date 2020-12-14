@@ -234,6 +234,13 @@
             </block>
         </value>
     </block>
+    <block type="button">
+    <value name="pin">
+        <block type="math_number" id="button_pin"> 
+        <field name="NUM">16</field>
+        </block>
+    </value>
+    </block>
     <block type="socialrobot_servo">
         <value name="pin">
             <block type="math_number" id="212">

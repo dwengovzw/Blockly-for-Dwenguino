@@ -1475,7 +1475,7 @@ span.grippy::after {
   
   
   .components_overview_card_title {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 300;
     letter-spacing: 2px;
     text-transform: uppercase;
@@ -1489,7 +1489,7 @@ span.grippy::after {
   }
 
   .components_overview_card_label {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 300;
     letter-spacing: 2px;
     text-transform: uppercase;

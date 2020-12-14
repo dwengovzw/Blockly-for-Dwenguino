@@ -120,6 +120,8 @@ var MSG = {
   socialRobotSoundSensorBlockTooltip: "",
   socialRobotTouchSensorBlock: "Touch sensor %1 %2 %3 pin %4",
   socialRobotTouchSensorBlockTooltip: "",
+  socialRobotButtonBlock: "Button %1 %2 %3 pin %4",
+  socialRobotButtonBlockTooltip: "",
   socialrobotSetPinState: " قم بتعيين٪ 1٪ 2  ",
   socialrobotServoBlock: "  محرك سيرفو٪ 1٪ 2٪ 3 طرف٪ 4 زاوية٪ 5 ",
   socialrobotWaveArmesBlock: " أذرع الموجة٪ 1٪ 2 الذراع الأيمن للدبوس المؤازر٪ 3٪ 4 الذراع الأيسر المؤازر٪ 5٪ 6  ",
