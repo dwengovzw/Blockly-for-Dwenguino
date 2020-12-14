@@ -130,6 +130,8 @@ var MSG = {
   lcdOptions: "LCD screen options",
   pirOptions: "PIR sensor options",
   soundOptions: "Sound sensor options",
+  touchOptions: "Touch sensor options",
+  buttonOptions: "Button options",
   lightOptions: "Light sensor options",
   rgbLedOptions: "RGB LED options",
   ledOptions: "LED options",
@@ -179,6 +181,7 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Are you sure you want to cancel this upload?",
   dictRemoveFile: "Remove file",
   dictMaxFilesExceeded: "You can not upload any more files.",
+  dictUploadBlocks: "Upload blocks"
 }
 
 MSG.simulator = {

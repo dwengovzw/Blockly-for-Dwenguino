@@ -241,6 +241,7 @@ class SimulationSandbox {
   }
 
   readButton(pin){
+    console.log(this.boardState.getIoPinState(pin));
     return this.boardState.getIoPinState(pin);
   }
 

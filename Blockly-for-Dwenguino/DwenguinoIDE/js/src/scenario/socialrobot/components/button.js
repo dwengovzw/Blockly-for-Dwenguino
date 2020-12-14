@@ -41,6 +41,7 @@ class SocialRobotButton extends RobotComponent{
         // let id = '' + this.getType() + this.getId();
         // this._button = new Button(id, 'sensor_options', label);
         
+        console.log(this.getState());
         var self = this;
         this._button = document.getElementById(this.getCanvasId());
         this._button.onmousedown = function (){
@@ -48,6 +49,7 @@ class SocialRobotButton extends RobotComponent{
             self._button.className = 'button_canvas_pushed ' + self.getHtmlClasses();
             self.setState(1);
             self._stateUpdated = true;
+            console.log(self.getState(), 'mousedown');
             self._eventBus.dispatchEvent(EventsEnum.SAVE);
         };
 
@@ -56,8 +58,16 @@ class SocialRobotButton extends RobotComponent{
             self._button.className = 'button_canvas_unpushed ' + self.getHtmlClasses();
             self.setState(0);
             self._stateUpdated = true;
+            console.log(self.getState(), 'mouseup');
             self._eventBus.dispatchEvent(EventsEnum.SAVE);
         };      
+
+        let simButton = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simButton.addEventListener('dblclick', () => { 
+            this.createComponentOptionsModalDialog(MSG.buttonOptions);
+            this.showDialog();
+        });
     }
 
     removeHtml(){
@@ -127,8 +137,8 @@ class SocialRobotButton extends RobotComponent{
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
     
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
 
         this.createPinOptionsInModalDialog();
 

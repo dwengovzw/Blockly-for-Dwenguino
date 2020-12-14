@@ -154,6 +154,8 @@ var MSG = {
   lcdOptions: "Opties van het lcd-scherm",
   pirOptions: "Opties van de nabijheidssensor",
   soundOptions: "Opties van de geluidssensor",
+  touchOptions: "Opties van de aanraaksensor",
+  buttonOptions: "Opties van de knop",
   lightOptions: "Opties van de lichtsensor",
   rgbLedOptions: "Opties van de rgb-led",
   ledOptions: "Opties van de led",
@@ -202,6 +204,7 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Ben je zeker dat je deze upload wil annuleren?",
   dictRemoveFile: "Verwijder bestand",
   dictMaxFilesExceeded: "Je kan niet meer bestanden uploaden.",
+  dictUploadBlocks: "Upload blocks"
 }
 
 MSG.simulator = {

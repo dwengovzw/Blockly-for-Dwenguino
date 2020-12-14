@@ -141,6 +141,7 @@ class RobotComponentsFactory {
         case TypesEnum.BUTTON:
           pin = this._robot[i].getPin();
           if(this._robot[i].isStateUpdated()){
+            console.log(this._robot[i].getState(), 'updateScenarioState');
             dwenguinoState.setIoPinState(pin, this._robot[i].getState());
             this._robot[i]._stateUpdated = false;
           }
@@ -349,9 +350,8 @@ class RobotComponentsFactory {
         var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
         var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
         var pin = parseInt(data.getAttribute('Pin'));
-        var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
-        this.addButton(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        this.addButton(pin, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
@@ -560,7 +560,7 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addButton(pin=16, state=0, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas'){
+  addButton(pin=21, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas', state=0){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTOn));
     this.incrementNumberOf(TypesEnum.BUTTON);
     let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
