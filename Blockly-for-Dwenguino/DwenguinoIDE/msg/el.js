@@ -142,6 +142,8 @@ var MSG = {
   lcdOptions: "Επιλογές οθόνης LCD",
   pirOptions: "Επιλογές αισθητήρα PIR",
   soundOptions: "Επιλογές αισθητήρα ήχου",
+  touchOptions: "Touch sensor options",
+  buttonOptions: "Button options",
   lightOptions: "Επιλογές αισθητήρα φωτός",
   rgbLedOptions: "Επιλογές RGB LED",
   ledOptions: "Επιλογές LED",
@@ -194,6 +196,7 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Είσαι σίγουρος ότι θες να ακυρώσεις τη μεταφόρτωση του αρχείου;",
   dictRemoveFile: "Διαγραφή αρχείου",
   dictMaxFilesExceeded: "Δεν μπορείς να μεταφορτώσεις επιπλέον αρχεία.",
+  dictUploadBlocks: "Upload blocks"
 }
 
 MSG.simulator = {

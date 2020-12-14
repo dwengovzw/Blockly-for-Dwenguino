@@ -273,6 +273,8 @@ var MSG = {
   lcdOptions: "LCD screen options",
   pirOptions: "PIR sensor options",
   soundOptions: "Sound sensor options",
+  touchOptions: "Touch sensor options",
+  buttonOptions: "Button options",
   lightOptions: "Light sensor options",
   rgbLedOptions: "RGB LED options",
   ledOptions: "LED options",
@@ -433,6 +435,7 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
   dictRemoveFile: "Datei entfernen",
   dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
+  dictUploadBlocks: "Upload blocks"
 };
 
 

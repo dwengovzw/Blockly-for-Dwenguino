@@ -143,6 +143,8 @@ var MSG = {
   lcdOptions:  " خيارات شاشة  ",
   pirOptions: "PIR خيارات مستشعر   ",
   soundOptions: " خيارات مستشعر الصوت  ",
+  touchOptions: "Touch sensor options",
+  buttonOptions: "Button options",
   lightOptions: " خيارات مستشعر الضوء  ",
   ledOptions:  "  خيارات ",
   runError: "<h3> معذرة ، لم أتمكن من تحميل الكود على اللوحة </ h3>   ", 
@@ -190,6 +192,7 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: " هل أنت متأكد أنك تريد إلغاء هذا التحميل؟ ",
   dictRemoveFile: " إزالة الملف ",
   dictMaxFilesExceeded: "لا يمكنك تحميل المزيد من الملفات.  ",
+  dictUploadBlocks: "Upload blocks"
 }
 
 MSG.simulator = {
