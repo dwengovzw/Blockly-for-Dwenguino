@@ -29,7 +29,7 @@ class DwenguinoScenarioUtils{
      */
     saveScenario(data){
         console.log('save scenario');
-        this.ioController.download("scenario.xml", data);
+        FileIOController.download("scenario.xml", data);
         this.scenario.logger.recordEvent(this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, ""));
     }
 
@@ -41,7 +41,7 @@ class DwenguinoScenarioUtils{
      */
     async loadScenario(){
         try {
-            let xml = await this.ioController.uploadXml();
+            let xml = await FileIOController.uploadXml();
             this.scenario.xmlToRobot(xml);
             this._eventBus.dispatchEvent(EventsEnum.SAVE);
 

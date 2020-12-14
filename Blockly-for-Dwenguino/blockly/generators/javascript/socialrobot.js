@@ -38,6 +38,13 @@ Blockly.JavaScript['touch_sensor'] = function (block) {
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
+Blockly.JavaScript['button'] = function(block) {
+  var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
+
+  var code = machine + "readButton('" + pin + "')";
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+}
+
 Blockly.JavaScript['socialrobot_rgbled'] = function(block){
   var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
   var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);

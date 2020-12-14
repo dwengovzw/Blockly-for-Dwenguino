@@ -21,7 +21,7 @@ Blockly.Arduino['pir_sensor'] = function (block) {
   Blockly.Arduino.definitions_['define_pir_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
 
   //define pir sensor
-  Blockly.Arduino.setups_['define_dwenguino_pir' + value_trig] = "pinMode(TRIGGER_PIN_" + value_trig + ", INPUT)\n";
+  Blockly.Arduino.setups_['define_dwenguino_pir_' + value_trig] = "pinMode(TRIGGER_PIN_" + value_trig + ", INPUT)\n";
   var code = "digitalRead(TRIGGER_PIN_" + value_trig + ")";
 
   return [code, Blockly.Arduino.ORDER_NONE];
@@ -31,7 +31,7 @@ Blockly.Arduino['sound_sensor'] = function (block) {
   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
   Blockly.Arduino.definitions_['define_sound_sensor_' + pin] = "#define SOUND_SENSOR_PIN_" + pin + " " + pin + "\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_sound_sensor' + pin] = "pinMode(SOUND_SENSOR_PIN_" + pin + ", INPUT)\n";
+  Blockly.Arduino.setups_['define_dwenguino_sound_sensor_' + pin] = "pinMode(SOUND_SENSOR_PIN_" + pin + ", INPUT)\n";
   var code = "digitalRead(SOUND_SENSOR_PIN_" + pin + ")";
 
   return [code, Blockly.Arduino.ORDER_NONE];
@@ -41,11 +41,22 @@ Blockly.Arduino['touch_sensor'] = function (block) {
   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
   Blockly.Arduino.definitions_['define_touch_sensor_' + pin] = "#define TOUCH_SENSOR_PIN_" + pin + " " + pin + "\n";
 
-  Blockly.Arduino.setups_['define_dwenguino_touch_sensor' + pin] = "pinMode(TOUCH_SENSOR_PIN_" + pin + ", INPUT)\n";
+  Blockly.Arduino.setups_['define_dwenguino_touch_sensor_' + pin] = "pinMode(TOUCH_SENSOR_PIN_" + pin + ", INPUT)\n";
   var code = "digitalRead(TOUCH_SENSOR_PIN_" + pin + ")";
 
   return [code, Blockly.Arduino.ORDER_NONE];
 };
+
+Blockly.Arduino['button'] = function (block) {
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
+  Blockly.Arduino.definitions_['define_button_' + pin] = "#define BUTTON_PIN_" + pin + " " + pin + "\n";
+
+  Blockly.Arduino.setups_['define_dwenguino_button_' + pin] = "pinMode(BUTTON_PIN_" + pin + ", INPUT)\n";
+  var code = "digitalRead(BUTTON_PIN_" + pin + ")";
+
+  return [code, Blockly.Arduino.ORDER_NONE];
+};
+
 
 Blockly.Arduino['socialrobot_rgbled'] = function(block) {
   var pin_red = Blockly.Arduino.valueToCode(block, 'pin_red', Blockly.Arduino.ORDER_NONE);

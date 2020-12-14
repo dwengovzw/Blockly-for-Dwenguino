@@ -131,6 +131,8 @@ var MSG = {
   socialRobotSoundSensorBlockTooltip: "",
   socialRobotTouchSensorBlock: "aanraakssensor %1 %2 %3 pin %4",
   socialRobotTouchSensorBlockTooltip: "",
+  socialRobotButtonBlock: "Button %1 %2 %3 pin %4",
+  socialRobotButtonBlockTooltip: "",
   socialrobotSetPinState: "zet %1 %2",
   socialrobotServoBlock: "servo motor %1 %2 %3 pin %4 hoek %5",
   socialrobotWaveArmesBlock: "zwaai armen %1 %2 servo pin rechterarm %3 %4 servo pin linkerarm %5 %6",

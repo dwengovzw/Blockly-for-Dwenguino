@@ -9,8 +9,9 @@
     <link rel="stylesheet" href="./DwenguinoIDE/css/style.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/colors.css">
     <link rel="stylesheet" href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
-    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/dist/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap-reboot.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/prettify.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/hopscotch.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/jquery.contextMenu.css">
@@ -44,7 +45,6 @@
                 </select>
             </span>
         </div>
-
     </div>
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
@@ -62,7 +62,8 @@
     </div>
 
     <!--Blockly is injected into the following div, therafter it is positioned over the db_blockly div -->
-    <div id="blocklyDiv" style="position: absolute"></div>
+    <div id="blocklyDiv" style="position: absolute">
+    </div>
 
     <xml id="startBlocks" style="display: none">
         <block type="setup_loop_structure"></block>
@@ -302,6 +303,13 @@
                 </block>
             </value>
         </block>
+        <block type="button">
+            <value name="pin">
+                <block type="math_number" id="button_pin"> 
+                <field name="NUM">16</field>
+                </block>
+            </value>
+        </block>
         <block type="socialrobot_servo">
             <value name="pin">
                 <block type="math_number" id="212">
@@ -400,6 +408,22 @@
 
     </xml>
 
+
+    <div id="dropzoneModal" class="modal fade" role="dialog">
+        <div id="modalDialog" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="message"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal dialog to show error information-->
     <div id="errorModal" class="modal fade" role="dialog">
             <div class="modal-dialog"><!-- Modal content-->
@@ -423,7 +447,7 @@
     <div id="tutorialModal" class="modal fade" role="dialog">
         <div class="modal-dialog"><!-- Modal content-->
             <div class="modal-content">
-                <div class="modal-header h1">
+                <div class="modal-header">
                 </div>
                 <div class="modal-body">
                     <div class="message"></div>
