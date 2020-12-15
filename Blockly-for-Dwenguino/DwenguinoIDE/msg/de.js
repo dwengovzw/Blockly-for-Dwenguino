@@ -435,7 +435,8 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
   dictRemoveFile: "Datei entfernen",
   dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
-  dictUploadBlocks: "Upload blocks"
+  dictUploadBlocks: "Upload blocks",
+  dictFileNotSupported: "This file is not supported.",
 };
 
 

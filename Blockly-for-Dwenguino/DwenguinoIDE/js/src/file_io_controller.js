@@ -21,17 +21,14 @@ class FileIOController {
     }
 
     /**
-     * Displays a dialog to upload a text file
+     * Displays a dialog to upload a text (XML) file
      * @returns a promise which returns the contents of the file
      */
     static uploadXml() {
         return new Promise((res, rej) => {
             let xml = "";
             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                // Great success! All the File APIs are supported.
-                console.log("yay, files supported");
 
-                // reset form
                 $('#dropzoneModal .modal-header').empty();
                 $('#dropzoneModal .modal-header').append('<h4 class="modal-title">Upload</h4>');
                 $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
@@ -58,7 +55,7 @@ class FileIOController {
 
                         reader.readAsText(file);
                     } else {
-                        fileDisplayArea.innerText = "File not supported!"
+                        fileDisplayArea.innerText = MSG.dropzone['dictFileNotSupported'];
                     }
                 }
 
@@ -97,7 +94,6 @@ class FileIOController {
                     let target  = $(e.target);
                     console.log(target);
                     if (target.is("button.close") || target.is("div#dropzoneModal.modal.fade")){
-                        console.log("closed");
                         rej("Dialog closed without result");
                     }
                 });

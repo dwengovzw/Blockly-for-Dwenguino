@@ -196,7 +196,8 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Είσαι σίγουρος ότι θες να ακυρώσεις τη μεταφόρτωση του αρχείου;",
   dictRemoveFile: "Διαγραφή αρχείου",
   dictMaxFilesExceeded: "Δεν μπορείς να μεταφορτώσεις επιπλέον αρχεία.",
-  dictUploadBlocks: "Upload blocks"
+  dictUploadBlocks: "Upload blocks",
+  dictFileNotSupported: "This file is not supported.",
 }
 
 MSG.simulator = {

@@ -53,7 +53,7 @@ class TutorialMenu {
         
         $('#tutorialModal_categories_menu').append('<div id="tutorial_category_dwenguino_components" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_dwenguino_components").append('<div class="category_tag">' + MSG.tutorialMenu.catDwenguinoComponents + '</div>');
-        $("#tutorial_category_dwenguino_compoentns").append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        $("#tutorial_category_dwenguino_components").append('<div id="tutorial_categories_dwenguino_components_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_wegostem" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_wegostem").append('<div class="category_tag">'+ MSG.tutorialMenu.catWeGoStem +'</div>');
