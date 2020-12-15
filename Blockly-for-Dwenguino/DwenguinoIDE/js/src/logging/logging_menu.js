@@ -317,8 +317,8 @@ class LoggingMenu{
         $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
         $('#loggingModalContent').append('<div id="loggingModalFooter" class="modal-footer"></div>');
     
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
     }
 
     createLoggingModalDialogWithoutFooter(headerTitle){
@@ -333,8 +333,8 @@ class LoggingMenu{
         $('#loggingModalContent').append('<div id="loggingModalHeader" class="modal-header"></div>');
         $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
     
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
     }
 
     showErrors(errors){

@@ -10,6 +10,7 @@ import { SocialRobotSoundSensor } from "./components/sound_sensor.js"
 import { SocialRobotLightSensor } from "./components/light_sensor.js"
 import { SocialRobotRgbLed } from "./components/rgbled.js"
 import { SocialRobotTouchSensor } from "./components/touch_sensor.js"
+import { SocialRobotButton } from "./components/button.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
@@ -27,7 +28,8 @@ const TypesEnum = {
   SONAR: 'sonar',
   LCD: 'lcd',
   SOUND: 'sound',
-  LIGHT: 'light'
+  LIGHT: 'light',
+  BUTTON: 'button',
 };
 Object.freeze(TypesEnum);
 
@@ -136,6 +138,14 @@ class RobotComponentsFactory {
             this._robot[i]._stateUpdated = false;
           }
           break;
+        case TypesEnum.BUTTON:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            console.log(this._robot[i].getState(), 'updateScenarioState');
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
         case TypesEnum.PIR:
           pin = this._robot[i].getPin();
           if(this._robot[i].isStateUpdated()){
@@ -157,11 +167,9 @@ class RobotComponentsFactory {
           break;
         case TypesEnum.SOUND:
           pin = this._robot[i].getPin();
-          console.log(pin);
           if(this._robot[i].isStateUpdated()){
             dwenguinoState.setIoPinState(pin, this._robot[i].getState());
             this._robot[i]._stateUpdated = false;
-            console.log(this._robot[i].getState());
           }
           break;
         case TypesEnum.LIGHT:
@@ -226,6 +234,9 @@ class RobotComponentsFactory {
       case TypesEnum.TOUCH:
         this.addTouchSensor();
         break;
+      case TypesEnum.BUTTON:
+        this.addButton();
+        break;
       case TypesEnum.PIR:;
         this.addPir();
         break;
@@ -261,6 +272,9 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.TOUCH:
         this.removeTouchSensor();
+        break;
+      case TypesEnum.BUTTON:
+        this.removeButton();
         break;
       case TypesEnum.PIR:
         this.removePir();
@@ -329,6 +343,15 @@ class RobotComponentsFactory {
         var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
         this.addTouchSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.BUTTON:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addButton(pin, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
@@ -524,6 +547,36 @@ class RobotComponentsFactory {
 
     let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
     this.removeRobotComponentWithTypeAndId(TypesEnum.TOUCH, id);
+  }
+
+    /**
+   * Add a new button to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addButton(pin=21, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas', state=0){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTOn));
+    this.incrementNumberOf(TypesEnum.BUTTON);
+    let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
+
+    let button = new SocialRobotButton(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(button);
+  }
+
+  /**
+   * Remove the most recently created button from the simulation container.
+   */
+  removeButton(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.BUTTON));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.BUTTON, id);
   }
 
   /**

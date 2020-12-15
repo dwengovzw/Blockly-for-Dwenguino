@@ -8,8 +8,6 @@ import DwenguinoSimulationScenario from "./dwenguino_simulation_scenario.js"
  */
 class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     inputsState = null;
-    audiocontext = null;
-    osc = null;
     audioStarted = false;
     muted = true;
     prevFreq = 0;
@@ -70,7 +68,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
 
         $('#db_simulator_pane').append(containerHack);  
         $('#db_simulator_pane').append('<span id="db_simulator_mute"></span>');
-        $('#db_simulator_mute').attr("class", "glyphicon glyphicon-volume-off")
+        $('#db_simulator_mute').attr("class", "fas fa-volume-mute")
 
         let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
@@ -170,11 +168,11 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             if (this.muted){
                 this.muted = false;
                 $('#db_simulator_mute').removeClass();
-                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-up")
+                $('#db_simulator_mute').attr("class", "fas fa-volume-up")
             }else{
                 this.muted = true;
                 $('#db_simulator_mute').removeClass();
-                $('#db_simulator_mute').attr("class", "glyphicon  glyphicon-volume-off")
+                $('#db_simulator_mute').attr("class", "fas fa-volume-mute")
             }
 
         });
@@ -245,7 +243,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             }
             if (board.getTonePlaying() === 0 || this.muted) {
                 if (this.audioStarted){
-                    console.log("stop");
                     this.audioStarted = false;
                     this.osc.stop(this.audiocontext.currentTime);
                     this.osc.disconnect(this.audiocontext.destination);
@@ -258,7 +255,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
                     this.osc.frequency.value = board.getTonePlaying(); // Hz
                     this.osc.start(this.audiocontext.currentTime);
                     this.osc.connect(this.audiocontext.destination); // connect it to the destination
-                    console.log("start");
                     this.audioStarted = true;
                 }
             }

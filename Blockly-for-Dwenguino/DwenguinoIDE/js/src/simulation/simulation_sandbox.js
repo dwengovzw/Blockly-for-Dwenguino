@@ -240,6 +240,11 @@ class SimulationSandbox {
     return this.boardState.getIoPinState(pin);
   }
 
+  readButton(pin){
+    console.log(this.boardState.getIoPinState(pin));
+    return this.boardState.getIoPinState(pin);
+  }
+
   /**
    * 
    * @param {Array<String>} pins - an array with 3 pins for an RGB LED 

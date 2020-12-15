@@ -45,13 +45,15 @@ class TutorialMenu {
      */
     loadTutorialDialog(){
         $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
+        let closeButton = '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+        $("#tutorialModal .modal-header").append(closeButton);
         $("#tutorialModal .modal-body .message").empty();
         $("#tutorialModal .modal-body .message").append('<div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'</div>');
         $("#tutorialModal .modal-body .message").append('<div id="tutorialModal_categories_menu" class="tutorial_categories_wrapper"></div>');
         
         $('#tutorialModal_categories_menu').append('<div id="tutorial_category_dwenguino_components" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_dwenguino_components").append('<div class="category_tag">' + MSG.tutorialMenu.catDwenguinoComponents + '</div>');
-        $("#tutorial_category_dwenguino_compoentns").append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        $("#tutorial_category_dwenguino_components").append('<div id="tutorial_categories_dwenguino_components_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_wegostem" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_wegostem").append('<div class="category_tag">'+ MSG.tutorialMenu.catWeGoStem +'</div>');
@@ -312,10 +314,10 @@ class TutorialMenu {
         });
 
         if(isCompleted){
-            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-ok c-6 col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="fas fa-check c-6 col-auto"></div>'); 
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         } else {
-            $("#" + tutorial.id).append('<div class="glyphicon glyphicon-remove c-1 col-auto"></div>'); 
+            $("#" + tutorial.id).append('<div class="fas fa-times c-1 col-auto"></div>'); 
             $("#" + tutorial.id).append('<div class="col-auto">'+ tutorial.label + '</div>'); 
         }
   
