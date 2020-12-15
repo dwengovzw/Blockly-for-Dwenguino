@@ -134,7 +134,7 @@ let DwenguinoBlockly = {
     
                 reader.readAsText(file);
               } else {
-                fileDisplayArea.innerText = "File not supported!"
+                fileDisplayArea.innerText = MSG.dropzone['dictFileNotSupported'];
               }
             }
     

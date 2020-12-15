@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Mixin: LOGIC_TERNARY_ONCHANGE_MIXIN</title>
+    <title>JSDoc: Class: SocialRobotButton</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Mixin: LOGIC_TERNARY_ONCHANGE_MIXIN</h1>
+    <h1 class="page-title">Class: SocialRobotButton</h1>
 
     
 
@@ -28,7 +28,7 @@
 
 <header>
     
-        <h2>LOGIC_TERNARY_ONCHANGE_MIXIN</h2>
+        <h2><span class="attribs"><span class="type-signature"></span></span>SocialRobotButton<span class="signature">()</span><span class="type-signature"></span></h2>
         
     
 </header>
@@ -37,10 +37,27 @@
     <div class="container-overview">
     
         
-            <div class="description">Adds type coordination between inputs and output.</div>
-        
 
-        
+    
+
+    
+    <h4 class="name" id="SocialRobotButton"><span class="type-signature"></span>new SocialRobotButton<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 <dl class="details">
@@ -72,7 +89,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Blockly-for-Dwenguino_blockly_blocks_logic.js.html">Blockly-for-Dwenguino/blockly/blocks/logic.js</a>, <a href="Blockly-for-Dwenguino_blockly_blocks_logic.js.html#line607">line 607</a>
+        <a href="Blockly-for-Dwenguino_DwenguinoIDE_js_src_scenario_socialrobot_components_button.js.html">Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/button.js</a>, <a href="Blockly-for-Dwenguino_DwenguinoIDE_js_src_scenario_socialrobot_components_button.js.html#line11">line 11</a>
     </li></ul></dd>
     
 
@@ -84,7 +101,24 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     </div>
 
@@ -95,7 +129,7 @@
 
 
     <ul>
-        <li>Blockly.Block</li>
+        <li><a href="RobotComponent.html">RobotComponent</a></li>
     </ul>
 
 
@@ -122,7 +156,118 @@
     
 
     
-    <h4 class="name" id=".onchange"><span class="type-signature">(static) </span>onchange<span class="signature">(e<span class="signature-attributes">non-null</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="getHtmlClasses"><span class="type-signature"></span>getHtmlClasses<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="RobotComponent.html#getHtmlClasses">RobotComponent#getHtmlClasses</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="Blockly-for-Dwenguino_DwenguinoIDE_js_src_scenario_socialrobot_components_robot_component.js.html">Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/robot_component.js</a>, <a href="Blockly-for-Dwenguino_DwenguinoIDE_js_src_scenario_socialrobot_components_robot_component.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    a concatination of css classes of the robot component devided by spaces.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setHtmlClasses"><span class="type-signature"></span>setHtmlClasses<span class="signature">(htmlClasses)</span><span class="type-signature"></span></h4>
     
 
     
@@ -130,8 +275,7 @@
 
 
 <div class="description">
-    Called whenever anything on the workspace changes.
-Prevent mismatched types.
+    Add a string containting a concatination of css classes to the robot component.
 </div>
 
 
@@ -139,9 +283,6 @@ Prevent mismatched types.
 
 
 
-
-    <h5>This:</h5>
-    <ul><li>{Blockly.Block}</li></ul>
 
 
 
@@ -170,13 +311,13 @@ Prevent mismatched types.
 
         <tr>
             
-                <td class="name"><code>e</code></td>
+                <td class="name"><code>htmlClasses</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Blockly.Events.Abstract</span>
+<span class="param-type">string</span>
 
 
             
@@ -186,7 +327,7 @@ Prevent mismatched types.
 
             
 
-            <td class="description last">Change event.</td>
+            <td class="description last"></td>
         </tr>
 
     
@@ -206,6 +347,11 @@ Prevent mismatched types.
 
     
 
+    
+    <dt class="tag-overrides">Overrides:</dt>
+    <dd class="tag-overrides"><ul class="dummy"><li>
+        <a href="RobotComponent.html#setHtmlClasses">RobotComponent#setHtmlClasses</a>
+    </li></ul></dd>
     
 
     
@@ -227,7 +373,7 @@ Prevent mismatched types.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="Blockly-for-Dwenguino_blockly_blocks_logic.js.html">Blockly-for-Dwenguino/blockly/blocks/logic.js</a>, <a href="Blockly-for-Dwenguino_blockly_blocks_logic.js.html#line616">line 616</a>
+        <a href="Blockly-for-Dwenguino_DwenguinoIDE_js_src_scenario_socialrobot_components_robot_component.js.html">Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/socialrobot/components/robot_component.js</a>, <a href="Blockly-for-Dwenguino_DwenguinoIDE_js_src_scenario_socialrobot_components_robot_component.js.html#line46">line 46</a>
     </li></ul></dd>
     
 

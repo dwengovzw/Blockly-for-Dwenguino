@@ -192,7 +192,8 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: " هل أنت متأكد أنك تريد إلغاء هذا التحميل؟ ",
   dictRemoveFile: " إزالة الملف ",
   dictMaxFilesExceeded: "لا يمكنك تحميل المزيد من الملفات.  ",
-  dictUploadBlocks: "Upload blocks"
+  dictUploadBlocks: "Upload blocks",
+  dictFileNotSupported: "This file is not supported.",
 }
 
 MSG.simulator = {

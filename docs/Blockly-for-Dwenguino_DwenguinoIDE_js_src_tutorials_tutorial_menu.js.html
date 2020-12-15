@@ -36,6 +36,9 @@ import { Pir } from "./components/Pir.js";
 import { Servo } from "./components/Servo.js";
 import { Sonar } from "./components/Sonar.js";
 import { SoundSensor } from "./components/SoundSensor.js";
+import { TouchSensor } from "./components/touch_sensor.js";
+import { RgbLed } from "./components/rgb_led.js";
+import { DCMotor } from "./components/dc_motor.js";
 import { tutorials } from "../../../tutorials/tutorials.js";
 import { User } from "../logging/user.js";
 
@@ -70,6 +73,8 @@ class TutorialMenu {
      */
     loadTutorialDialog(){
         $("#tutorialModal .modal-header").text(MSG.tutorialMenu.header);
+        let closeButton = '&lt;button type="button" class="close" data-dismiss="modal" aria-label="Close">&lt;span aria-hidden="true">&amp;times;&lt;/span>&lt;/button>';
+        $("#tutorialModal .modal-header").append(closeButton);
         $("#tutorialModal .modal-body .message").empty();
         $("#tutorialModal .modal-body .message").append('&lt;div class="tutorial_label">'+ MSG.tutorialMenu.chooseCategory +'&lt;/div>');
         $("#tutorialModal .modal-body .message").append('&lt;div id="tutorialModal_categories_menu" class="tutorial_categories_wrapper">&lt;/div>');
@@ -213,71 +218,80 @@ class TutorialMenu {
         $("#tutorialModal .modal-body .message").append('&lt;div class="container">&lt;/div>');
 
         $("#tutorialModal .modal-body .message .container").append('&lt;div id="row1" class="row">&lt;/div>');
-        $("#row1").append('&lt;h2>Sensors&lt;/h2>');
+        $("#row1").append('&lt;h2>'+MSG.tutorialMenu.sensors+'&lt;/h2>');
         
-        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_sensors_menu" class="components_overview row">&lt;/div>');
+        $("#tutorialModal .modal-body .message .container").append('&lt;ul id="tutorialModal_sensors_menu" class=" row components_overview_cards">&lt;/ul>');
 
-        let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir];
+        let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir, TouchSensor];
 
         for (let i = 0; i &lt; sensorsArray.length; i++) {
-            $('#tutorialModal_sensors_menu').append('&lt;div id="tutorial_sensors_'+ sensorsArray[i].getType() +'" class="col-3 bg-c-4 card">&lt;/div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[sensorsArray[i].getType()] + '&lt;/div>');
+            $('#tutorialModal_sensors_menu').append('&lt;li id="tutorial_sensors_item_'+ sensorsArray[i].getType() +'" class="components_overview_cards_item">&lt;/li>');
+            $('#tutorial_sensors_item_'+ sensorsArray[i].getType()).append('&lt;div id="tutorial_sensors_card_'+ sensorsArray[i].getType() +'" class="components_overview_card bg-c-4">&lt;/div>');
+            $('#tutorial_sensors_card_' + sensorsArray[i].getType()).append('&lt;div id="tutorial_sensors_'+ sensorsArray[i].getType() +'" class="components_overview_card_content">&lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div class="components_overview_card_title">' + MSG.simulator[sensorsArray[i].getType()] + '&lt;/div>');
             $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div>'+sensorsArray[i].getDescription()+'&lt;/div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="input_pins' + sensorsArray[i].getType() + '">IN: &lt;/div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="output_pins' + sensorsArray[i].getType() + '">OUT: &lt;/div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="circuit_pins' + sensorsArray[i].getType() + '">CIRCUIT: &lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div class="components_overview_card_text">'+sensorsArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="input_pins' + sensorsArray[i].getType() + '" class="components_overview_card_label">in: &lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="output_pins' + sensorsArray[i].getType() + '" class="components_overview_card_label">out: &lt;/div>');
+            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('&lt;div id="circuit_pins' + sensorsArray[i].getType() + '" class="components_overview_card_label">circuit: &lt;/div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('&lt;div id="row2" class="row">&lt;/div>');
-        $("#row2").append('&lt;h2>Actuators&lt;/h2>');
+        $("#row2").append('&lt;h2>'+MSG.tutorialMenu.actuators+'&lt;/h2>');
 
         $("#tutorialModal .modal-body .message .container").append('&lt;div id="row3" class="row">&lt;/div>');
-        $("#row3").append('&lt;h3>Movement&lt;/h3>');
-        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_movement_menu" class="components_overview row">&lt;/div>');
+        $("#row3").append('&lt;h3>'+MSG.tutorialMenu.movement+'&lt;/h3>');
+        $("#tutorialModal .modal-body .message .container").append('&lt;ul id="tutorialModal_movement_menu" class=" row components_overview_cards">&lt;/ul>');
 
-        let movementArray = [Servo];
+        let movementArray = [Servo, DCMotor];
 
         for (let i = 0; i &lt; movementArray.length; i++) {
-            $('#tutorialModal_movement_menu').append('&lt;div id="tutorial_movement_'+ movementArray[i].getType() +'" class="col-3 bg-c-11 card">&lt;/div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[movementArray[i].getType()] + '&lt;/div>');
+            $('#tutorialModal_movement_menu').append('&lt;li id="tutorial_movement_item_'+ movementArray[i].getType() +'" class="components_overview_cards_item">&lt;/li>');
+            $('#tutorial_movement_item_'+ movementArray[i].getType()).append('&lt;div id="tutorial_movement_card_'+ movementArray[i].getType() +'" class="components_overview_card bg-c-11">&lt;/div>');
+            $('#tutorial_movement_card_' + movementArray[i].getType()).append('&lt;div id="tutorial_movement_'+ movementArray[i].getType() +'" class="components_overview_card_content">&lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div class="components_overview_card_title">' + MSG.simulator[sensorsArray[i].getType()] + '&lt;/div>');
             $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div>'+movementArray[i].getDescription()+'&lt;/div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="input_pins' + movementArray[i].getType() + '">IN: &lt;/div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="output_pins' + movementArray[i].getType() + '">OUT: &lt;/div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="circuit_pins' + movementArray[i].getType() + '">CIRCUIT: &lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div class="components_overview_card_text">'+movementArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="input_pins' + movementArray[i].getType() + '" class="components_overview_card_label">in: &lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="output_pins' + movementArray[i].getType() + '" class="components_overview_card_label">out: &lt;/div>');
+            $('#tutorial_movement_'+movementArray[i].getType()).append('&lt;div id="circuit_pins' + movementArray[i].getType() + '" class="components_overview_card_label">circuit: &lt;/div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('&lt;div id="row4" class="row">&lt;/div>');
-        $("#row4").append('&lt;h3>Display&lt;/h3>');
-        $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_display_menu" class="components_overview row">&lt;/div>');
+        $("#row4").append('&lt;h3>'+MSG.tutorialMenu.display+'&lt;/h3>');
+        $("#tutorialModal .modal-body .message .container").append('&lt;ul id="tutorialModal_display_menu" class=" row components_overview_cards">&lt;/ul>');
+
         
-        let displayArray = [Lcd, Led];
+        let displayArray = [Lcd, Led, RgbLed];
 
         for (let i = 0; i &lt; displayArray.length; i++) {
-            $('#tutorialModal_display_menu').append('&lt;div id="tutorial_display_'+ displayArray[i].getType() +'" class="col-3 bg-c-6 card">&lt;/div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[displayArray[i].getType()] + '&lt;/div>');
+            $('#tutorialModal_display_menu').append('&lt;li id="tutorial_display_item_'+ displayArray[i].getType() +'" class="components_overview_cards_item">&lt;/li>');
+            $('#tutorial_display_item_'+ displayArray[i].getType()).append('&lt;div id="tutorial_display_card_'+ displayArray[i].getType() +'" class="components_overview_card bg-c-6">&lt;/div>');
+            $('#tutorial_display_card_' + displayArray[i].getType()).append('&lt;div id="tutorial_display_'+ displayArray[i].getType() +'" class="components_overview_card_content">&lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div class="components_overview_card_title">' + MSG.simulator[displayArray[i].getType()] + '&lt;/div>');
             $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div>'+displayArray[i].getDescription()+'&lt;/div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="input_pins' + displayArray[i].getType() + '">IN: &lt;/div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="output_pins' + displayArray[i].getType() + '">OUT: &lt;/div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="circuit_pins' + displayArray[i].getType() + '">CIRCUIT: &lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div class="components_overview_card_text">'+displayArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="input_pins' + displayArray[i].getType() + '" class="components_overview_card_label">in: &lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="output_pins' + displayArray[i].getType() + '" class="components_overview_card_label">out: &lt;/div>');
+            $('#tutorial_display_'+displayArray[i].getType()).append('&lt;div id="circuit_pins' + displayArray[i].getType() + '" class="components_overview_card_label">circuit: &lt;/div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('&lt;div id="row5" class="row">&lt;/div>');
-        $("#row5").append('&lt;h3>Audio&lt;/h3>');
+        $("#row5").append('&lt;h3>'+MSG.tutorialMenu.audio+'&lt;/h3>');
         $("#tutorialModal .modal-body .message .container").append('&lt;div id="tutorialModal_audio_menu" class="components_overview row">&lt;/div>');
     
         let audioArray = [Buzzer];
 
         for (let i = 0; i &lt; audioArray.length; i++) {
-            $('#tutorialModal_audio_menu').append('&lt;div id="tutorial_audio_'+ audioArray[i].getType() +'" class="col-3 bg-c-3 card">&lt;/div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div class="category_tag">' + MSG.simulator[audioArray[i].getType()] + '&lt;/div>');
+            $('#tutorialModal_audio_menu').append('&lt;li id="tutorial_audio_item_'+ audioArray[i].getType() +'" class="components_overview_cards_item">&lt;/li>');
+            $('#tutorial_audio_item_'+ audioArray[i].getType()).append('&lt;div id="tutorial_audio_card_'+ audioArray[i].getType() +'" class="components_overview_card bg-c-3">&lt;/div>');
+            $('#tutorial_audio_card_' + audioArray[i].getType()).append('&lt;div id="tutorial_audio_'+ audioArray[i].getType() +'" class="components_overview_card_content">&lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div class="components_overview_card_title">' + MSG.simulator[audioArray[i].getType()] + '&lt;/div>');
             $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="tutorial_categories_dwenguino_components_img">&lt;/div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div>'+audioArray[i].getDescription()+'&lt;/div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="input_pins' + audioArray[i].getType() + '">IN: &lt;/div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="output_pins' + audioArray[i].getType() + '">OUT: &lt;/div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="circuit_pins' + audioArray[i].getType() + '">CIRCUIT: &lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div class="components_overview_card_text">'+audioArray[i].getDescription()+'&lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="input_pins' + audioArray[i].getType() + '" class="components_overview_card_label">in: &lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="output_pins' + audioArray[i].getType() + '" class="components_overview_card_label">out: &lt;/div>');
+            $('#tutorial_audio_'+audioArray[i].getType()).append('&lt;div id="circuit_pins' + audioArray[i].getType() + '" class="components_overview_card_label">circuit: &lt;/div>');
         }
 
         let allComponents = sensorsArray.concat(movementArray).concat(displayArray).concat(audioArray);
@@ -328,10 +342,10 @@ class TutorialMenu {
         });
 
         if(isCompleted){
-            $("#" + tutorial.id).append('&lt;div class="glyphicon glyphicon-ok c-6 col-auto">&lt;/div>'); 
+            $("#" + tutorial.id).append('&lt;div class="fas fa-check c-6 col-auto">&lt;/div>'); 
             $("#" + tutorial.id).append('&lt;div class="col-auto">'+ tutorial.label + '&lt;/div>'); 
         } else {
-            $("#" + tutorial.id).append('&lt;div class="glyphicon glyphicon-remove c-1 col-auto">&lt;/div>'); 
+            $("#" + tutorial.id).append('&lt;div class="fas fa-times c-1 col-auto">&lt;/div>'); 
             $("#" + tutorial.id).append('&lt;div class="col-auto">'+ tutorial.label + '&lt;/div>'); 
         }
   
@@ -386,13 +400,13 @@ export default TutorialMenu;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotRgbLed.html">SocialRobotRgbLed</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="SocialRobotTouchSensor.html">SocialRobotTouchSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotButton.html">SocialRobotButton</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotRgbLed.html">SocialRobotRgbLed</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="SocialRobotTouchSensor.html">SocialRobotTouchSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Dec 09 2020 11:21:27 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Dec 14 2020 16:10:14 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1510,7 +1510,15 @@ span.grippy::after {
 
 
 .tutorial_categories_item > .category_tag {
-    min-height: 40px;
+    min-height: 50px; 
+}
+
+#tutorial_categories_dwenguino_components_img{
+    width: 100%;
+    height: 100%;
+    background-image: url("../img/tutorials/computationeel_denken.png");
+    background-size: contain;
+    background-repeat: no-repeat;
 }
 
 #tutorial_categories_wegostem_img {
