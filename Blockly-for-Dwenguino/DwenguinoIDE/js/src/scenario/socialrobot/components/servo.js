@@ -159,8 +159,8 @@ class SocialRobotServo extends RobotComponent{
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
     
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
 
         this.createPinOptionsInModalDialog();
         this.createCostumeOptionsDialog();

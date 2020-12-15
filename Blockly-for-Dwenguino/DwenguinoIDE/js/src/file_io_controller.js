@@ -7,7 +7,7 @@ class FileIOController {
      * @param {string} filename - the name under which the file should be saved 
      * @param {string} text - the contents of the file 
      */
-    download(filename, text) {
+    static download(filename, text) {
         let element = document.createElement('a');
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         element.setAttribute('download', filename);
@@ -21,24 +21,24 @@ class FileIOController {
     }
 
     /**
-     * Displays a dialog to upload a text file
+     * Displays a dialog to upload a text (XML) file
      * @returns a promise which returns the contents of the file
      */
-    uploadXml() {
+    static uploadXml() {
         return new Promise((res, rej) => {
             let xml = "";
             if (window.File && window.FileReader && window.FileList && window.Blob) {
-                // Great success! All the File APIs are supported.
-                console.log("yay, files supported");
 
-                // reset form
-                $('div').remove('#dropzoneModal');
-
-                $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
-                $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
-                $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
-                $('#modalDialog').append('<div class="modal-body">' + MSG.dropzone['dictSelectFile'] + '<input type="file" id="fileInput"><div id="filedrag">' + MSG.dropzone['dictDefaultMessage'] + '</div><pre id="fileDisplayArea"><pre></div>');
-                $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
+                $('#dropzoneModal .modal-header').empty();
+                $('#dropzoneModal .modal-header').append('<h4 class="modal-title">Upload</h4>');
+                $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $('#dropzoneModal .modal-body .message').empty();
+                $('#dropzoneModal .modal-body .message').append('<p>' + MSG.dropzone['dictSelectFile'] + '</p>');
+                $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">Choose file </label><input type="file" id="fileInput" class="form-control">');
+                $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + MSG.dropzone['dictDefaultMessage'] + '</div>');
+                $('#dropzoneModal .modal-body .message').append('<pre id="fileDisplayArea"></pre>');
+                $('#dropzoneModal .modal-footer').empty();
+                $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>');
 
                 $("#dropzoneModal").modal('show');
 
@@ -55,7 +55,7 @@ class FileIOController {
 
                         reader.readAsText(file);
                     } else {
-                        fileDisplayArea.innerText = "File not supported!"
+                        fileDisplayArea.innerText = MSG.dropzone['dictFileNotSupported'];
                     }
                 }
 
@@ -94,7 +94,6 @@ class FileIOController {
                     let target  = $(e.target);
                     console.log(target);
                     if (target.is("button.close") || target.is("div#dropzoneModal.modal.fade")){
-                        console.log("closed");
                         rej("Dialog closed without result");
                     }
                 });

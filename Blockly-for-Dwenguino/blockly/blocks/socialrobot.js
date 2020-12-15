@@ -135,6 +135,41 @@ Blockly.Blocks['touch_sensor'] = {
   }
 };
 
+var button_json = {
+  "id": "button_on",
+  "message0": MSG.socialRobotButtonBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/button.svg",
+      "width": 50,
+      "height": 50,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.socialrobot.HUE,
+  "tooltip": "",
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['button'] = {
+  init: function() {
+    this.jsonInit(button_json);
+  }
+};
+
 var socialrobot_rgbled_json = {
   "id": "socialrobot_rgbled",
   "message0": MSG.socialRobotRgbLedBlock + " %1 %2 " + MSG.socialRobotPinRed +  " %3 " + MSG.socialRobotPinGreen + " %4 " + MSG.socialRobotPinBlue + " %5 ",

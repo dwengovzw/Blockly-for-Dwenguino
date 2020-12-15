@@ -120,6 +120,8 @@ var MSG = {
   socialRobotSoundSensorBlockTooltip: "",
   socialRobotTouchSensorBlock: "Touch sensor %1 %2 %3 pin %4",
   socialRobotTouchSensorBlockTooltip: "",
+  socialRobotButtonBlock: "Button %1 %2 %3 pin %4",
+  socialRobotButtonBlockTooltip: "",
   socialrobotSetPinState: " قم بتعيين٪ 1٪ 2  ",
   socialrobotServoBlock: "  محرك سيرفو٪ 1٪ 2٪ 3 طرف٪ 4 زاوية٪ 5 ",
   socialrobotWaveArmesBlock: " أذرع الموجة٪ 1٪ 2 الذراع الأيمن للدبوس المؤازر٪ 3٪ 4 الذراع الأيسر المؤازر٪ 5٪ 6  ",
@@ -141,10 +143,12 @@ var MSG = {
   lcdOptions:  " خيارات شاشة  ",
   pirOptions: "PIR خيارات مستشعر   ",
   soundOptions: " خيارات مستشعر الصوت  ",
+  touchOptions: "Touch sensor options",
+  buttonOptions: "Button options",
   lightOptions: " خيارات مستشعر الضوء  ",
   ledOptions:  "  خيارات ",
   runError: "<h3> معذرة ، لم أتمكن من تحميل الكود على اللوحة </ h3>   ", 
-  uploadError: "اتبع هذه الخطوات لإعادة تشغيل لوحة Dwenguino: \ n 1. افصل كبل USB \ n 2. قم بتوصيل الكمبيوتر ولوحة Dwenguino بكبل USB \ n 3. اضغط في نفس الوقت على زر RESET والزر SOUTH بلوحة Dwenguino \ n 4 . ثم حرر زر RESET أولاً \ n 5. ثم حرر الزر SOUTH \ n 6. قم بتحميل البرنامج مرة أخرى عبر <span id = 'db_menu_item_run' class = 'glyphicon glyphicon-play' alt = 'تحميل الكود إلى لوحة Dwenguino' > </span> في القائمة الرئيسية   ",
+  uploadError: "اتبع هذه الخطوات لإعادة تشغيل لوحة Dwenguino: \ n 1. افصل كبل USB \ n 2. قم بتوصيل الكمبيوتر ولوحة Dwenguino بكبل USB \ n 3. اضغط في نفس الوقت على زر RESET والزر SOUTH بلوحة Dwenguino \ n 4 . ثم حرر زر RESET أولاً \ n 5. ثم حرر الزر SOUTH \ n 6. قم بتحميل البرنامج مرة أخرى عبر <span id = 'db_menu_item_run' class = 'fas fa-play-circle' alt = 'تحميل الكود إلى لوحة Dwenguino' > </span> في القائمة الرئيسية   ",
   cleanError:  " تعذر إزالة الرمز السابق. \ n الرجاء التحقق مما إذا كان هناك تطبيق آخر يستخدم أي ملفات .cpp. \ n أغلق التطبيق.  ",
   compileError: " تعذر تجميع الرمز. \ n يجب عليك التحقق من التعليمات البرمجية ، هل نسيت كتلة في مكان ما؟  ",
   clear: " واضح  ",
@@ -188,6 +192,8 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: " هل أنت متأكد أنك تريد إلغاء هذا التحميل؟ ",
   dictRemoveFile: " إزالة الملف ",
   dictMaxFilesExceeded: "لا يمكنك تحميل المزيد من الملفات.  ",
+  dictUploadBlocks: "Upload blocks",
+  dictFileNotSupported: "This file is not supported.",
 }
 
 MSG.simulator = {

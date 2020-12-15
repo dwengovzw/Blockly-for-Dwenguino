@@ -102,23 +102,24 @@ let DwenguinoBlockly = {
         //1) Using the upload button.
         //2) Using the drag and drop system.
         $("#db_menu_item_upload").click(function(){
-          var xml = "";
+          let xml = "";
           if (window.File && window.FileReader && window.FileList && window.Blob) {
             // Great success! All the File APIs are supported.
             console.log("yay, files supported");
 
             // reset form
-            $('div').remove('#dropzoneModal');
-
-            $('#blocklyDiv').append('<div id="dropzoneModal" class="modal fade" role="dialog"></div>');
-            $('#dropzoneModal').append('<div id="modalDialog" class="modal-dialog"></div>');
-            $('#modalDialog').append('<div class="modal-header"><button type="button" class="close" data-dismiss="modal">&times;</button><h4 class="modal-title">Upload</h4></div>');
-            $('#modalDialog').append('<div class="modal-body">'+ MSG.dropzone['dictSelectFile']+'<input type="file" id="fileInput"><div id="filedrag">'+ MSG.dropzone['dictDefaultMessage'] +'</div><pre id="fileDisplayArea"><pre></div>');
-            $('#modalDialog').append('<div class="modal-footer"><button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button></div>');
+            $('#dropzoneModal .modal-header').empty();
+            $('#dropzoneModal .modal-header').append('<h4 class="modal-title">'+ MSG.dropzone['dictUploadBlocks'] +'</h4>');
+            $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+            $('#dropzoneModal .modal-body .message').empty();
+            $('#dropzoneModal .modal-body .message').append('<p>' + MSG.dropzone['dictSelectFile'] + '</p>');
+            $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">' + MSG.dropzone['dictChooseFile'] + '</label><input type="file" id="fileInput" class="form-control">');
+            $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + MSG.dropzone['dictDefaultMessage'] + '</div>');
+            $('#dropzoneModal .modal-body .message').append('<pre id="fileDisplayArea"></pre>');
+            $('#dropzoneModal .modal-footer').empty();
+            $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>');
 
             $("#dropzoneModal").modal('show');
-
-            
 
             var processFile = function(file){
               var textType = /text.*/;
@@ -133,14 +134,16 @@ let DwenguinoBlockly = {
     
                 reader.readAsText(file);
               } else {
-                fileDisplayArea.innerText = "File not supported!"
+                fileDisplayArea.innerText = MSG.dropzone['dictFileNotSupported'];
               }
             }
     
-            var fileInput = document.getElementById('fileInput');
+            let fileInput = document.getElementById('fileInput');
             var fileDisplayArea = document.getElementById('fileDisplayArea');
     
+            console.log(fileInput);
             fileInput.addEventListener('change', function(e) {
+              console.log("file input changed");
               var file = fileInput.files[0];
               processFile(file);
             });

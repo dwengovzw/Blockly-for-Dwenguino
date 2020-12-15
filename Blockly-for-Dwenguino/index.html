@@ -5,11 +5,13 @@
     <meta name="google" value="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Blockly Demo:</title>
+    <link rel="stylesheet" href="./DwenguinoIDE/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="./DwenguinoIDE/css/style.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/colors.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap-grid.css">
-    <link rel="stylesheet" href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" href="./DwenguinoIDE/css/bootstrap/css/bootstrap-reboot.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/prettify.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/hopscotch.css">
     <link rel="stylesheet" href="./DwenguinoIDE/css/jquery.contextMenu.css">
@@ -31,19 +33,18 @@
         </div>
         </div><div class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
             <span id="db_menu_item_dwengo_robot_teacher" alt="DwengoRobotteacher"><img id="db_menu_item_dwengo_robot_teacher_image" src="./DwenguinoIDE/img/dwengo_robot_plain.svg" alt="The dwengo logo" /></span>
-            <span id="db_menu_item_simulator" class="db_menu_item glyphicon glyphicon-dashboard" alt="Open or close simulator"></span>
-            <span id="db_menu_item_download" class="db_menu_item glyphicon glyphicon-download" alt="Download blocks to file" /></span>
-            <span id="db_menu_item_upload" class="db_menu_item glyphicon glyphicon-upload" alt="Upload blocks to file" /></span>
-            <span id="db_menu_item_run" class="db_menu_item glyphicon glyphicon-play" alt="Upload code to Dwenguino board" /></span>
-            <span id="db_tutorials" class="db_menu_item glyphicon glyphicon-book" alt="Tutorials"/></span>
-            <span id="db_menu_item_clear" class="db_menu_item glyphicon glyphicon glyphicon-remove-sign" alt="Upload empty sketch" /></span>
+            <span id="db_menu_item_simulator" class="db_menu_item fas fa-tachometer-alt" alt="Open or close simulator"></span>
+            <span id="db_menu_item_download" class="db_menu_item fas fa-download" alt="Download blocks to file" /></span>
+            <span id="db_menu_item_upload" class="db_menu_item fas fa-upload" alt="Upload blocks to file" /></span>
+            <span id="db_menu_item_run" class="db_menu_item fas fa-play-circle" alt="Upload code to Dwenguino board" /></span>
+            <span id="db_tutorials" class="db_menu_item fas fa-book" alt="Tutorials"/></span>
+            <span id="db_menu_item_clear" class="db_menu_item fas fa-times-circle" alt="Upload empty sketch" /></span>
             <span id="db_menu_item_language" alt="Dropdown menu to select language">
                 <select name="language" id="db_menu_item_language_selection">
 
                 </select>
             </span>
         </div>
-
     </div>
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
@@ -61,7 +62,8 @@
     </div>
 
     <!--Blockly is injected into the following div, therafter it is positioned over the db_blockly div -->
-    <div id="blocklyDiv" style="position: absolute"></div>
+    <div id="blocklyDiv" style="position: absolute">
+    </div>
 
     <xml id="startBlocks" style="display: none">
         <block type="setup_loop_structure"></block>
@@ -301,6 +303,13 @@
                 </block>
             </value>
         </block>
+        <block type="button">
+            <value name="pin">
+                <block type="math_number" id="button_pin"> 
+                <field name="NUM">21</field>
+                </block>
+            </value>
+        </block>
         <block type="socialrobot_servo">
             <value name="pin">
                 <block type="math_number" id="212">
@@ -399,6 +408,22 @@
 
     </xml>
 
+
+    <div id="dropzoneModal" class="modal fade" role="dialog">
+        <div id="modalDialog" class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="message"></div>
+                </div>
+                <div class="modal-footer">
+                    <button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal dialog to show error information-->
     <div id="errorModal" class="modal fade" role="dialog">
             <div class="modal-dialog"><!-- Modal content-->
@@ -408,7 +433,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="message"></div>
-                        <button class="error_details"><span class="glyphicon glyphicon-console"></span></button>
+                        <button class="error_details"><span class="fas fa-terminal"></span></button>
                         <div class="console"></div>
                     </div>
                     <div class="modal-footer">
@@ -422,10 +447,7 @@
     <div id="tutorialModal" class="modal fade" role="dialog">
         <div class="modal-dialog"><!-- Modal content-->
             <div class="modal-content">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <div class="modal-header h1">
+                <div class="modal-header">
                 </div>
                 <div class="modal-body">
                     <div class="message"></div>

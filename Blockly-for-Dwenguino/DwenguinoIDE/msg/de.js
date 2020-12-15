@@ -250,6 +250,8 @@ var MSG = {
   socialRobotSoundSensorBlockTooltip: "",
   socialRobotTouchSensorBlock: "Touch sensor %1 %2 %3 pin %4",
   socialRobotTouchSensorBlockTooltip: "",
+  socialRobotButtonBlock: "Button %1 %2 %3 pin %4",
+  socialRobotButtonBlockTooltip: "",
   socialrobotSetPinState: "Setz %1 %2",
   socialrobotServoBlock: "Servo %1 %2 %3 Pin %4 Winkel %5",
   socialrobotWaveArmesBlock: "Winke mit beiden Armen %1 %2 Servo rechter Arm %3 %4 Servo linker Arm %5 %6",
@@ -271,6 +273,8 @@ var MSG = {
   lcdOptions: "LCD screen options",
   pirOptions: "PIR sensor options",
   soundOptions: "Sound sensor options",
+  touchOptions: "Touch sensor options",
+  buttonOptions: "Button options",
   lightOptions: "Light sensor options",
   rgbLedOptions: "RGB LED options",
   ledOptions: "LED options",
@@ -431,6 +435,8 @@ MSG.dropzone = {
   dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
   dictRemoveFile: "Datei entfernen",
   dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
+  dictUploadBlocks: "Upload blocks",
+  dictFileNotSupported: "This file is not supported.",
 };
 
 
