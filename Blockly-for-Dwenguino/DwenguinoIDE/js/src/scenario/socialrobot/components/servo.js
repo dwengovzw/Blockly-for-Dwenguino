@@ -231,7 +231,7 @@ class SocialRobotServo extends RobotComponent{
             console.log(t);
             $('#costume').append('<div id="costume_inner" class="row"></div>');
             $('#costume_inner').append('<div id=costume'+t+' name='+t+' class="col-lg-3 col-md-2 col-sm-3 col-xs-4 ml-2 mb-2 costumeButton"></div>');
-            $('#costume'+t).append('<img src="' + costumeIcons[t] +'" class="img-responsive">');
+            $('#costume'+t).append('<img src="' + costumeIcons[t] +'" class="img-fluid">');
 
             let costumeButton = document.getElementById('costume'+t);
             costumeButton.addEventListener('click', () => {
