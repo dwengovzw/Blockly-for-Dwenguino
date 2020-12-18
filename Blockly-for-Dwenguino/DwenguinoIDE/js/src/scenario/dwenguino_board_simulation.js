@@ -82,7 +82,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
 
         
-        $('#sim_sonar_input').append('<input type="text" id="sonar_input" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
+        $('#sim_sonar_input').append('<input type="text" id="sonar_input" size="3" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
 
 
         $("#sonar_input").on('keyup', (e) => {
