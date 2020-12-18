@@ -196,7 +196,7 @@ MSG.dropzone = {
   dictMaxFilesExceeded: "You can not upload any more files.",
   dictUploadBlocks: "Upload blocks",
   dictFileNotSupported: "This file is not supported.",
-}
+};
 
 MSG.simulator = {
   start: "Start",

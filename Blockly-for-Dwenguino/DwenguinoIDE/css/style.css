@@ -265,7 +265,7 @@ body{
   flex: 10;
   position: relative;
   width: 100%;
-  border-top: solid black 2px;
+  border-top: solid #8bab42 5px;
 }
 
 /* #db_simulator_tab_selection{
@@ -695,10 +695,6 @@ pre.content {
     background-image: url("../img/board/sonar.png");
     background-size: 100% 100%;
     margin-top: 40px;
-}
-
-#sonar_input {
-    width: 40px;
 }
 
 .sim_menu_next_line {
