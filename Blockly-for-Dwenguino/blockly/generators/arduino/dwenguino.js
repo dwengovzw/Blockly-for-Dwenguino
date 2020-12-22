@@ -106,7 +106,7 @@ Blockly.Arduino['dwenguino_servo'] = function (block) {
 
     var code = '';
   
-    Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +"\n" 
+    Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +";\n" 
                                                                  + "Servo servoOnPin" + value_pin + ";\n";
     Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');\n';
     code = 'servoOnPin' + value_pin + '.write(' + value_angle + ');\n';
