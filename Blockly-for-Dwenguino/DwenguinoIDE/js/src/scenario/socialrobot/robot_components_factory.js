@@ -9,6 +9,8 @@ import { SocialRobotPir } from "./components/pir.js"
 import { SocialRobotSoundSensor } from "./components/sound_sensor.js"
 import { SocialRobotLightSensor } from "./components/light_sensor.js"
 import { SocialRobotRgbLed } from "./components/rgbled.js"
+import { SocialRobotTouchSensor } from "./components/touch_sensor.js"
+import { SocialRobotButton } from "./components/button.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
@@ -21,11 +23,13 @@ const TypesEnum = {
   SERVO: 'servo',
   LED: 'led',
   RGBLED: 'rgbled',
+  TOUCH: 'touch',
   PIR: 'pir',
   SONAR: 'sonar',
   LCD: 'lcd',
   SOUND: 'sound',
-  LIGHT: 'light'
+  LIGHT: 'light',
+  BUTTON: 'button',
 };
 Object.freeze(TypesEnum);
 
@@ -127,6 +131,21 @@ class RobotComponentsFactory {
           let state = [dwenguinoState.getIoPinState(redPin), dwenguinoState.getIoPinState(greenPin), dwenguinoState.getIoPinState(bluePin)];
           this._robot[i].setState(state);
           break;
+        case TypesEnum.TOUCH:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
+        case TypesEnum.BUTTON:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].isStateUpdated()){
+            console.log(this._robot[i].getState(), 'updateScenarioState');
+            dwenguinoState.setIoPinState(pin, this._robot[i].getState());
+            this._robot[i]._stateUpdated = false;
+          }
+          break;
         case TypesEnum.PIR:
           pin = this._robot[i].getPin();
           if(this._robot[i].isStateUpdated()){
@@ -148,11 +167,9 @@ class RobotComponentsFactory {
           break;
         case TypesEnum.SOUND:
           pin = this._robot[i].getPin();
-          console.log(pin);
           if(this._robot[i].isStateUpdated()){
             dwenguinoState.setIoPinState(pin, this._robot[i].getState());
             this._robot[i]._stateUpdated = false;
-            console.log(this._robot[i].getState());
           }
           break;
         case TypesEnum.LIGHT:
@@ -214,6 +231,12 @@ class RobotComponentsFactory {
       case TypesEnum.RGBLED:
         this.addRgbLed();
         break;
+      case TypesEnum.TOUCH:
+        this.addTouchSensor();
+        break;
+      case TypesEnum.BUTTON:
+        this.addButton();
+        break;
       case TypesEnum.PIR:;
         this.addPir();
         break;
@@ -246,6 +269,12 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.RGBLED:
         this.removeRgbLed();
+        break;
+      case TypesEnum.TOUCH:
+        this.removeTouchSensor();
+        break;
+      case TypesEnum.BUTTON:
+        this.removeButton();
         break;
       case TypesEnum.PIR:
         this.removePir();
@@ -305,6 +334,25 @@ class RobotComponentsFactory {
         var htmlClasses = data.getAttribute('Classes');
         this.addRgbLed(redPin, greenPin, bluePin, [0, 0, 0], true, radius, 0, 0, offsetLeft, offsetTop, htmlClasses);
         break;
+      case TypesEnum.TOUCH:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var state = parseInt(data.getAttribute('State'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addTouchSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.BUTTON:
+        var width = parseFloat(data.getAttribute('Width'));
+        var height = parseFloat(data.getAttribute('Height'));
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var pin = parseInt(data.getAttribute('Pin'));
+        var htmlClasses = data.getAttribute('Classes');
+        this.addButton(pin, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        break;
       case TypesEnum.PIR:
         var width = parseFloat(data.getAttribute('Width'));
         var height = parseFloat(data.getAttribute('Height'));
@@ -313,7 +361,6 @@ class RobotComponentsFactory {
         var pin = parseInt(data.getAttribute('Pin'));
         var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
-        console.log('addPir from xml')
         this.addPir(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.SONAR:
@@ -471,6 +518,68 @@ class RobotComponentsFactory {
   }
 
   /**
+   * Add a new touch sensor to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addTouchSensor(pin=14, state=0, visible=true, width=60, height=60, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas touch_canvas'){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.TOUCH));
+    this.incrementNumberOf(TypesEnum.TOUCH);
+    let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
+
+    let touchSensor = new SocialRobotTouchSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(touchSensor);
+
+    this.renderer.initializeCanvas(this._robot, touchSensor); 
+  }
+
+  /**
+   * Remove the most recently created PIR sensor from the simulation container.
+   */
+  removeTouchSensor(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.TOUCH));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.TOUCH, id);
+  }
+
+    /**
+   * Add a new button to the simulation container.
+   * @param {int} pin 
+   * @param {int} state 
+   * @param {boolean} visible 
+   * @param {int} width 
+   * @param {int} height 
+   * @param {int} offsetLeft 
+   * @param {int} offsetTop 
+   * @param {string} htmlClasses 
+   */
+  addButton(pin=21, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas', state=0){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTOn));
+    this.incrementNumberOf(TypesEnum.BUTTON);
+    let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
+
+    let button = new SocialRobotButton(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(button);
+  }
+
+  /**
+   * Remove the most recently created button from the simulation container.
+   */
+  removeButton(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.BUTTON));
+
+    let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.BUTTON, id);
+  }
+
+  /**
    * Add a new PIR sensor to the simulation container.
    * @param {int} pin 
    * @param {int} state 
@@ -481,7 +590,7 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addPir(pin=0, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
+  addPir(pin=13, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
@@ -576,7 +685,7 @@ class RobotComponentsFactory {
     * @param {int} offsetTop 
     * @param {string} htmlClasses 
     */
-  addSoundSensor(pin=0, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
+  addSoundSensor(pin=15, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
     this.incrementNumberOf(TypesEnum.SOUND);
     let id = this._numberOfComponentsOfType[TypesEnum.SOUND];

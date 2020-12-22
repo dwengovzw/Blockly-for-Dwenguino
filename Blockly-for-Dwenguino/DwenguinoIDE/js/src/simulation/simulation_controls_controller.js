@@ -33,15 +33,17 @@ class SimulationControlsController {
         $('#db_infopane').prepend('<div id="db_simulator_menu"></div>');
         $('#db_simulator_menu').append('<div id="sim_menu"></div>');
 
-        $('#sim_menu').append('<div id="sim_start" class="sim_item"></div>');
-        $('#sim_menu').append('<div id="sim_pause" class="sim_item_disabled"></div>');
-        $('#sim_menu').append('<div id="sim_stop" class="sim_item_disabled"></div>');
-        $('#sim_menu').append('<div id="sim_step" class="sim_item"></div>');
+        $('#sim_menu').append('<div id="sim_menu_buttons"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_start" class="sim_item"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_pause" class="sim_item_disabled"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_stop" class="sim_item_disabled"></div>');
+        $('#sim_menu_buttons').append('<div id="sim_step" class="sim_item"></div>');
 
-        $('#sim_menu').append('<div id="sim_scenarioTag" ></div>');
+
         $('#sim_menu').append('<div id="sim_scenarios" class="btn-group btn-group-toggle" data-toggle="buttons"></div>');
-        
+        $('#sim_scenarios').append('<div id="sim_scenarioTag" ></div>');
         $.each(Object.keys(this.scenarios), (index, value) => {
+            let scenarioItem = '<div id="scenario_item_' + value + '" class="sim_scenario_item"></div>';
             let label = '<label id="scenario_label_' + value + '" class="btn sim_scenario_btn"></label>';
             let radioButton = '<input id="sim_scenario_' + value + '"' + 
                 'type="radio" ' +
@@ -51,7 +53,9 @@ class SimulationControlsController {
                 'autocomplete="off">' +
                 '<img src="DwenguinoIDE/img/scenarios/scenario_' + value + '.png" class="scenario_image">';
             
-            $('#sim_scenarios').append(label);
+            
+            $('#sim_scenarios').append(scenarioItem);
+            $('#scenario_item_' + value).append(label);
             $('#scenario_label_' + value).append(radioButton);
             if (value == this.scenarioView){
                 $('#sim_scenario_' + value).attr("checked", "checked");
@@ -175,10 +179,10 @@ class SimulationControlsController {
 
     translateSimulatorInterface() {
         // translation
-        document.getElementById('sim_start').innerHTML = "<span class='glyphicon glyphicon-play' alt='" + MSG.simulator['start'] + "'></span>";
-        document.getElementById('sim_stop').innerHTML = "<span class='glyphicon glyphicon-stop' alt='" + MSG.simulator['stop'] + "'></span>";
-        document.getElementById('sim_pause').innerHTML = "<span class='glyphicon glyphicon-pause' alt='" + MSG.simulator['pause'] + "'></span>";
-        document.getElementById('sim_step').innerHTML = "<span class='glyphicon glyphicon-step-forward' alt='" + MSG.simulator['step'] + "'></span>";
+        document.getElementById('sim_start').innerHTML = "<span class='fas fa-play' alt='" + MSG.simulator['start'] + "'></span>";
+        document.getElementById('sim_stop').innerHTML = "<span class='fas fa-stop' alt='" + MSG.simulator['stop'] + "'></span>";
+        document.getElementById('sim_pause').innerHTML = "<span class='fas fa-pause' alt='" + MSG.simulator['pause'] + "'></span>";
+        document.getElementById('sim_step').innerHTML = "<span class='fas fa-step-forward' alt='" + MSG.simulator['step'] + "'></span>";
         document.getElementById('sim_scenarioTag').textContent = MSG.simulator['scenario'] + ":";
 
     }

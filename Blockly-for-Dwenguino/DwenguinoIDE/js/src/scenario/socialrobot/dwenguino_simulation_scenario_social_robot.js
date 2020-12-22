@@ -18,6 +18,10 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
 
+  // For buzzer which is not an extra robot component
+  audioStarted = false;
+  prevFreq = 0;
+
   /**
    * 
    * @param {DwenguinoEventLogger} logger 
@@ -32,6 +36,8 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     this.simulationRobotComponents = new DwenguinoSimulationDraggable(this, this._eventBus);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
+
+    this.initAudioContext();
   }
 
 
@@ -115,9 +121,9 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     var scenarioOptions = $("<div>").attr("id", "scenario_options");
     $('#sim_container').append(scenarioOptions);
-    scenarioOptions.append("<div id='load_scenario' class='glyphicon glyphicon-cloud-upload' alt='Load'></div>");
-    scenarioOptions.append("<div id='save_scenario' class='glyphicon glyphicon-cloud-download' alt='Save'></div>");
-    scenarioOptions.append("<div id='switch_background' class='glyphicon glyphicon-refresh'></div>")
+    scenarioOptions.append("<div id='load_scenario' class='' alt='Load'><span class='fas fa-cloud-upload-alt'></span></div>");
+    scenarioOptions.append("<div id='save_scenario' class='fas fa-cloud-download-alt' alt='Save'></div>");
+    scenarioOptions.append("<div id='switch_background' class='fas fa-sync-alt'></div>")
 
     $("#load_scenario").click(function () {
       self.removeSocialRobotComponents();
@@ -140,8 +146,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * @param {string} containerIdSelector 
    */
   initSimulation(containerIdSelector) {
-
-    console.log("init simulation display");
 
     let container = $(`#${containerIdSelector}`);
 
@@ -200,7 +204,49 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   updateScenarioDisplay(boardState) {
     super.updateScenarioDisplay(boardState);
     this.renderer.render(this.robotComponentsFactory.getRobot());
+    this.renderAudio(boardState);
   };
+
+  renderAudio(boardState){
+    if (this.audiocontext){
+      // Check if freq has changed
+      if (this.prevFreq != boardState.getTonePlaying() && this.prevFreq != 0 && boardState.getTonePlaying != 0){
+          this.prevFreq = boardState.getTonePlaying();
+          // stop the current tone
+          this.osc.stop(this.audiocontext.currentTime);
+          this.osc.disconnect(this.audiocontext.destination);
+          this.osc = null;
+          this.audioStarted = false;
+      }
+      if (boardState.getTonePlaying() === 0) {
+          if (this.audioStarted){
+              this.audioStarted = false;
+              this.osc.stop(this.audiocontext.currentTime);
+              this.osc.disconnect(this.audiocontext.destination);
+              this.osc = null;
+          }
+      } else if (boardState.getTonePlaying() !== 0) {
+          if ( !this.audioStarted ){
+              // Create a new oscillator to play a specific tone and set the type to sin
+              this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
+              this.osc.frequency.value = boardState.getTonePlaying(); // Hz
+              this.osc.start(this.audiocontext.currentTime);
+              this.osc.connect(this.audiocontext.destination); // connect it to the destination
+              this.audioStarted = true;
+          }
+      }
+    }
+  }
+
+  initAudioContext(){
+    if(this.audiocontext == null){
+      try {
+        this.audiocontext = new AudioContext();
+    } catch (e) {
+        console.log('Web Audio API is not supported in this browser');
+    }
+    }
+  }
 
   /**
    * 
@@ -216,7 +262,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * 
    */
   setBackground() {
-    console.log('set background');
     $('#sim_container').append("<div id='sim_background' class='sim_element row'></div>");
     $('#sim_background').append("<div id='sim_background_img' class='background1'></div>");
     this._background = 1;
