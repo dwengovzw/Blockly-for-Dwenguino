@@ -224,15 +224,25 @@ class SimulationSandbox {
    * Returns the state of PIR sensor if it was added to the scenario. Otherwise it returns a low signal by default.
    * Displays the pin number that is used by the PIR sensor as output.
    * 
-   * !!!! For now we assume the pir sensor is connected to io pin 0
    * 
    * @param {int} trigPin 
    */
   pir(trigPin) {
-    // TODO: figure out hou to access the pir data
-
     //invert state (low = pressed)
     return this.boardState.getIoPinState(trigPin);
+  }
+
+  soundSensor(pin){
+    return this.boardState.getIoPinState(pin);
+  }
+
+  touchSensor(pin){
+    return this.boardState.getIoPinState(pin);
+  }
+
+  readButton(pin){
+    console.log(this.boardState.getIoPinState(pin));
+    return this.boardState.getIoPinState(pin);
   }
 
   /**

@@ -16,7 +16,7 @@ class LightSensor extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return '';
+        return MSG.simulator['lightDescription'];
     }
 
     static getInputPins(){

@@ -16,7 +16,7 @@ class Sonar extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return '';
+        return MSG.simulator['sonarDescription'];
     }
 
     static getInputPins(){

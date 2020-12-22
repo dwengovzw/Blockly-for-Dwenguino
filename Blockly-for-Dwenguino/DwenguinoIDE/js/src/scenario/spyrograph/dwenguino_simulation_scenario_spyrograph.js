@@ -464,7 +464,12 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         }
 
         // Save drawing in imageData
-        this.imageData = this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].getImageData(0, 0, this.container.width(), this.container.height());
+        try { 
+            this.imageData = this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].getImageData(0, 0, this.container.width(), this.container.height());
+        } catch(err){
+            
+        }
+        
 
     }
 

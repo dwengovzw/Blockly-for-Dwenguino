@@ -1,5 +1,6 @@
 import Validator from './validator.js'
 import ServerConfig from '../server_config.js'
+import User from './user.js'
 
 /**
  * This class builds and displays the logging menu on the screen.
@@ -7,9 +8,8 @@ import ServerConfig from '../server_config.js'
  * 
  */
 class LoggingMenu{
-    username = null;
-    password = null;
-    currentlySelectedIcons= [null,null,null,null];
+    user = null;
+    currentlySelectedIcons= ['0','0','0','0'];
     SIZE = 4;
     icons = [
         {id: 1, name: MSG.logging['person'], html: '<span class="glyphicon icon-user"></span>'},
@@ -77,14 +77,14 @@ class LoggingMenu{
         $('#inputUsername').append('<label for="myusernametag" class="col-md-3">'+ MSG.logging['username']+'</label>');
         $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="Enter username">');
 
-        self.createIconModule();
+        this.createIconModule();
 
         $('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
 
         this.showDialog();
 
-        self.makeIconsResponsive();
+        this.makeIconsResponsive();
 
         // Reset the graphical password.
         $("#reset_modal_dialog_button").click(function(){
@@ -99,18 +99,20 @@ class LoggingMenu{
 
     login(){
         var self = this;
-        var errors = [];
-        User.username = $( "input[name=myusernametag]").val();
-        User.password = JSON.stringify(self.currentlySelectedIcons);
+        let errors = [];
+        let username = $( "input[name=myusernametag]").val();
+        let password = this.currentlySelectedIcons;
+        this.user = new User(username, password);
+
     
-        errors.push(self.validator.validateId(self.currentlySelectedIcons));
+        errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
-        if(self.validator.hasErrors(errors)){
-            self.showErrors(errors);
+        if(this.validator.hasErrors(errors)){
+            this.showErrors(errors);
         } else {
             var serverSubmission = {
-                "userId": User.username,
-                "password": JSON.stringify(self.currentlySelectedIcons)
+                "userId": this.user.username,
+                "password": JSON.stringify(this.user.password)
             };
     
             $.ajax({
@@ -123,27 +125,28 @@ class LoggingMenu{
                 self.removeDialog();
             }).fail(function(response, status)  {
                 console.warn('Failed to log in:', status);
-                console.log(response);
+                self.resetSelectedIcons();
+                this.user = null;
             });
         }
     }
 
     createUserMenu(){
         var self = this;
-        self.createLoggingModalDialog(MSG.logging['newuser']);
+        this.createLoggingModalDialog(MSG.logging['newuser']);
     
         $('#loggingModalBody').append('<div id="inputUsername" class="ui-widget row mb-4">');
         $('#inputUsername').append('<label for="myusernametag" class="col-md-3">'+MSG.logging['username']+'</label>');
         $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="'+ MSG.logging['chooseUsername']+'">');
     
-        self.createIconModule();
+        this.createIconModule();
     
         $('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
         
-        self.showDialog();
+        this.showDialog();
     
-        self.makeIconsResponsive();
+        this.makeIconsResponsive();
     
         // Reset the graphical password.
         $("#reset_modal_dialog_button").click(function(){
@@ -158,31 +161,33 @@ class LoggingMenu{
 
     registerUser(){
         var self = this;
-        var errors = [];
-        User.username = $( "input[name=myusernametag]").val();
-        User.password = JSON.stringify(self.currentlySelectedIcons);
+        let errors = [];
+        let username = $( "input[name=myusernametag]").val();
+        let password = this.currentlySelectedIcons.slice();
+        this.user = new User( username, password );
+
+        console.log(this.user.password);
+        errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
-        errors.push(self.validator.validateId(self.currentlySelectedIcons));
-    
-        if(self.validator.hasErrors(errors)){
-            self.showErrors(errors);
+        if(this.validator.hasErrors(errors)){
+            this.showErrors(errors);
         } else {
-            var serverSubmission = {
-                "userId": User.username,
-                "password": JSON.stringify(self.currentlySelectedIcons)
+            let serverSubmission = {
+                "userId": this.user.username,
+                "password": JSON.stringify(this.user.password)
             };
-    
             $.ajax({
                 type: "POST",
                 url: ServerConfig.getServerUrl() + "/authentication/new",
                 data: serverSubmission,
             }).done(function(data){
-                self.eventLogger.setUserId(self.username);
+                self.eventLogger.setUserId(self.user.username);
                 self.resetSelectedIcons();
                 self.removeDialog();
                 self.showSettingsMenu();
             }).fail(function(response, status)  {
                 console.log('Failed to register:', status);
+                self.resetSelectedIcons();
             });
         }
     }
@@ -235,7 +240,7 @@ class LoggingMenu{
                     term = term.toLowerCase();
                     var choices = data;
                     var matches = [];
-                    for (i=0; i<choices.length; i++)
+                    for (let i=0; i<choices.length; i++)
                         if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
                     suggest(matches);
                 }
@@ -243,7 +248,7 @@ class LoggingMenu{
 
             $("#submit_modal_dialog_button").click(function(){
 
-                var errors = [];
+                let errors = [];
                 let school = $( "input[name=myschooltags]" ).val();
                 let dateOfBirth = $("#birth").val();
                 let gender = $("input[name=genderRadio]:checked").val();
@@ -260,14 +265,15 @@ class LoggingMenu{
                     self.eventLogger.setDateOfBirth(dateOfBirth);
                     self.eventLogger.setGender(gender);
 
-                    var serverSubmission = {
-                        "userId": User.username,
-                        "password": User.password,
+                    console.log(self.user.password);
+                    let serverSubmission = {
+                        "userId": self.user.username,
+                        "password": JSON.stringify(self.user.password),
                         "school": school,
                         "dateOfBirth": dateOfBirth,
                         "gender": gender
                     };
-
+                    console.log(serverSubmission);
                     $.ajax({
                         type: "POST",
                         url: ServerConfig.getServerUrl() + "/authentication/updateUser",
@@ -311,8 +317,8 @@ class LoggingMenu{
         $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
         $('#loggingModalContent').append('<div id="loggingModalFooter" class="modal-footer"></div>');
     
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
     }
 
     createLoggingModalDialogWithoutFooter(headerTitle){
@@ -327,8 +333,8 @@ class LoggingMenu{
         $('#loggingModalContent').append('<div id="loggingModalHeader" class="modal-header"></div>');
         $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
     
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
     }
 
     showErrors(errors){
@@ -403,7 +409,7 @@ class LoggingMenu{
      */
     resetSelectedIcons(){
         for(let k = 0; k < 4; k++){
-            this.currentlySelectedIcons[k] = null;
+            this.currentlySelectedIcons[k] = '0';
             $('#currentlySelected'+k).html("");
         }
     }
@@ -414,10 +420,10 @@ class LoggingMenu{
      */
     addIconToId(i,j){
         for(let k = 0; k < 4; k++){
-            if(this.currentlySelectedIcons[k] == null){
+            if(this.currentlySelectedIcons[k] == '0'){
                 let n = ((i-1)*4)+j;
                 let icon = this.icons[n-1];
-                this.currentlySelectedIcons[k] = icon.id;
+                this.currentlySelectedIcons[k] = JSON.stringify(icon.id);
                 $('#currentlySelected'+k).html(icon.name + '<p>' + icon.html + '</p>');
                 break;
             }

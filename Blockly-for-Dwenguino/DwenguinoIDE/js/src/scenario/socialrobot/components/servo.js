@@ -159,8 +159,8 @@ class SocialRobotServo extends RobotComponent{
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
     
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
 
         this.createPinOptionsInModalDialog();
         this.createCostumeOptionsDialog();
@@ -231,7 +231,7 @@ class SocialRobotServo extends RobotComponent{
             console.log(t);
             $('#costume').append('<div id="costume_inner" class="row"></div>');
             $('#costume_inner').append('<div id=costume'+t+' name='+t+' class="col-lg-3 col-md-2 col-sm-3 col-xs-4 ml-2 mb-2 costumeButton"></div>');
-            $('#costume'+t).append('<img src="' + costumeIcons[t] +'" class="img-responsive">');
+            $('#costume'+t).append('<img src="' + costumeIcons[t] +'" class="img-fluid">');
 
             let costumeButton = document.getElementById('costume'+t);
             costumeButton.addEventListener('click', () => {

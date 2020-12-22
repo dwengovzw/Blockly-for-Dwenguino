@@ -84,9 +84,9 @@
         </value>
     </block>
     <block type="dwenguino_servo">
-        <value name="channel">
-            <block type="math_number" id="111">
-                <field name="NUM">1</field>
+        <value name="pin">
+            <block type="dwenguino_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO1</field>
             </block>
         </value>
         <value name="angle">
@@ -95,6 +95,7 @@
             </block>
         </value>
     </block>
+    <block type="dwenguino_servo_dropdown"></block>
     <block type="dwenguino_pins">
         <field name="PIN">0</field>
     </block>
@@ -217,6 +218,27 @@
             </block>
         </value>
         <value name="color">
+        </value>
+    </block>
+    <block type="sound_sensor">
+        <value name="pin">
+            <block type="math_number" id="sound_sensor_pin"> 
+            <field name="NUM">15</field>
+            </block>
+        </value>
+    </block>
+    <block type="touch_sensor">
+        <value name="pin">
+            <block type="math_number" id="touch_sensor_pin"> 
+            <field name="NUM">14</field>
+            </block>
+        </value>
+    </block>
+    <block type="button">
+        <value name="pin">
+            <block type="math_number" id="button_pin"> 
+            <field name="NUM">21</field>
+            </block>
         </value>
     </block>
     <block type="socialrobot_servo">

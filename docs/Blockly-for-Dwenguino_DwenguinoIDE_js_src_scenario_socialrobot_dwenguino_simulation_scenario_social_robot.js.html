@@ -46,6 +46,10 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
 
+  // For buzzer which is not an extra robot component
+  audioStarted = false;
+  prevFreq = 0;
+
   /**
    * 
    * @param {DwenguinoEventLogger} logger 
@@ -60,6 +64,8 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     this.simulationRobotComponents = new DwenguinoSimulationDraggable(this, this._eventBus);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
+
+    this.initAudioContext();
   }
 
 
@@ -87,7 +93,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     this._eventBus.registerEvent(EventsEnum.INITIALIZECANVAS);
     this._eventBus.addEventListener(EventsEnum.INITIALIZECANVAS, (component)=>{ this.renderer.initializeCanvas(this.robotComponentsFactory.getRobot(), component)});
-
 
   }
 
@@ -144,11 +149,12 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     var scenarioOptions = $("&lt;div>").attr("id", "scenario_options");
     $('#sim_container').append(scenarioOptions);
-    scenarioOptions.append("&lt;div id='load_scenario' class='glyphicon glyphicon-cloud-upload' alt='Load'>&lt;/div>");
-    scenarioOptions.append("&lt;div id='save_scenario' class='glyphicon glyphicon-cloud-download' alt='Save'>&lt;/div>");
-    scenarioOptions.append("&lt;div id='switch_background' class='glyphicon glyphicon-refresh'>&lt;/div>")
+    scenarioOptions.append("&lt;div id='load_scenario' class='' alt='Load'>&lt;span class='fas fa-cloud-upload-alt'>&lt;/span>&lt;/div>");
+    scenarioOptions.append("&lt;div id='save_scenario' class='fas fa-cloud-download-alt' alt='Save'>&lt;/div>");
+    scenarioOptions.append("&lt;div id='switch_background' class='fas fa-sync-alt'>&lt;/div>")
 
     $("#load_scenario").click(function () {
+      self.removeSocialRobotComponents();
       self.scenarioUtils.loadScenario();
     });
 
@@ -168,8 +174,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * @param {string} containerIdSelector 
    */
   initSimulation(containerIdSelector) {
-
-    console.log("init simulation display");
 
     let container = $(`#${containerIdSelector}`);
 
@@ -228,7 +232,49 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   updateScenarioDisplay(boardState) {
     super.updateScenarioDisplay(boardState);
     this.renderer.render(this.robotComponentsFactory.getRobot());
+    this.renderAudio(boardState);
   };
+
+  renderAudio(boardState){
+    if (this.audiocontext){
+      // Check if freq has changed
+      if (this.prevFreq != boardState.getTonePlaying() &amp;&amp; this.prevFreq != 0 &amp;&amp; boardState.getTonePlaying != 0){
+          this.prevFreq = boardState.getTonePlaying();
+          // stop the current tone
+          this.osc.stop(this.audiocontext.currentTime);
+          this.osc.disconnect(this.audiocontext.destination);
+          this.osc = null;
+          this.audioStarted = false;
+      }
+      if (boardState.getTonePlaying() === 0) {
+          if (this.audioStarted){
+              this.audioStarted = false;
+              this.osc.stop(this.audiocontext.currentTime);
+              this.osc.disconnect(this.audiocontext.destination);
+              this.osc = null;
+          }
+      } else if (boardState.getTonePlaying() !== 0) {
+          if ( !this.audioStarted ){
+              // Create a new oscillator to play a specific tone and set the type to sin
+              this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
+              this.osc.frequency.value = boardState.getTonePlaying(); // Hz
+              this.osc.start(this.audiocontext.currentTime);
+              this.osc.connect(this.audiocontext.destination); // connect it to the destination
+              this.audioStarted = true;
+          }
+      }
+    }
+  }
+
+  initAudioContext(){
+    if(this.audiocontext == null){
+      try {
+        this.audiocontext = new AudioContext();
+    } catch (e) {
+        console.log('Web Audio API is not supported in this browser');
+    }
+    }
+  }
 
   /**
    * 
@@ -244,7 +290,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * 
    */
   setBackground() {
-    console.log('set background');
     $('#sim_container').append("&lt;div id='sim_background' class='sim_element row'>&lt;/div>");
     $('#sim_background').append("&lt;div id='sim_background_img' class='background1'>&lt;/div>");
     this._background = 1;
@@ -295,6 +340,10 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     this.robotComponentsFactory.resetSocialRobot();
   };
 
+  removeSocialRobotComponents(){
+    this.robotComponentsFactory.removeAllSocialRobotComponents();
+  }
+
   /**
    * Add a robot component of the specified type to the simulation container.
    * @param {TypesEnum} type 
@@ -334,11 +383,9 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * Writes the current scenario state to an Xml document and return it.
    */
   loadToXml() {
-    
     if (window.localStorage) {
       var localStorage = window.localStorage;
-      var canvasId = '';
-      if (localStorage.getItem('socialRobotScenario')) {
+      if (localStorage.getItem('dwenguinoSocialRobot')) {
         return this.robotToXml();
       }
     }
@@ -382,7 +429,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     }
   }
 
-    /**********************
+  /**********************
    *  LOCAL STORAGE     *
    **********************/
 
@@ -442,13 +489,13 @@ export default DwenguinoSimulationScenarioSocialRobot;</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BaseSimulationRunner.html">BaseSimulationRunner</a></li><li><a href="BoardState.html">BoardState</a></li><li><a href="Button.html">Button</a></li><li><a href="DwenguinoBoardSimulation.html">DwenguinoBoardSimulation</a></li><li><a href="DwenguinoEventLogger.html">DwenguinoEventLogger</a></li><li><a href="DwenguinoScenarioUtils.html">DwenguinoScenarioUtils</a></li><li><a href="DwenguinoSimulationDraggable.html">DwenguinoSimulationDraggable</a></li><li><a href="DwenguinoSimulationRobotComponentsMenu.html">DwenguinoSimulationRobotComponentsMenu</a></li><li><a href="DwenguinoSimulationScenario.html">DwenguinoSimulationScenario</a></li><li><a href="DwenguinoSimulationScenarioRidingRobot.html">DwenguinoSimulationScenarioRidingRobot</a></li><li><a href="DwenguinoSimulationScenarioRidingRobotWithWall.html">DwenguinoSimulationScenarioRidingRobotWithWall</a></li><li><a href="DwenguinoSimulationScenarioSocialRobot.html">DwenguinoSimulationScenarioSocialRobot</a></li><li><a href="EventBus.html">EventBus</a></li><li><a href="LoggingMenu.html">LoggingMenu</a></li><li><a href="RobotComponent.html">RobotComponent</a></li><li><a href="RobotComponentsFactory.html">RobotComponentsFactory</a></li><li><a href="ServerConfig.html">ServerConfig</a></li><li><a href="SimulationCanvasRenderer.html">SimulationCanvasRenderer</a></li><li><a href="SimulationSandbox.html">SimulationSandbox</a></li><li><a href="Slider.html">Slider</a></li><li><a href="SocialRobotButton.html">SocialRobotButton</a></li><li><a href="SocialRobotLcd.html">SocialRobotLcd</a></li><li><a href="SocialRobotLed.html">SocialRobotLed</a></li><li><a href="SocialRobotLightSensor.html">SocialRobotLightSensor</a></li><li><a href="SocialRobotPir.html">SocialRobotPir</a></li><li><a href="SocialRobotRgbLed.html">SocialRobotRgbLed</a></li><li><a href="SocialRobotServo.html">SocialRobotServo</a></li><li><a href="SocialRobotSonar.html">SocialRobotSonar</a></li><li><a href="SocialRobotSoundSensor.html">SocialRobotSoundSensor</a></li><li><a href="SocialRobotTouchSensor.html">SocialRobotTouchSensor</a></li><li><a href="TutorialMenu.html">TutorialMenu</a></li></ul><h3>Mixins</h3><ul><li><a href="Blockly.Constants.Logic.CONTROLS_IF_MUTATOR_MIXIN.html">CONTROLS_IF_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_COMPARE_ONCHANGE_MIXIN.html">LOGIC_COMPARE_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Logic.LOGIC_TERNARY_ONCHANGE_MIXIN.html">LOGIC_TERNARY_ONCHANGE_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CONTROL_FLOW_IN_LOOP_CHECK_MIXIN.html">CONTROL_FLOW_IN_LOOP_CHECK_MIXIN</a></li><li><a href="Blockly.Constants.Loops.CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN.html">CUSTOM_CONTEXT_MENU_CREATE_VARIABLES_GET_MIXIN</a></li><li><a href="Blockly.Constants.Math.IS_DIVISIBLEBY_MUTATOR_MIXIN.html">IS_DIVISIBLEBY_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Math.LIST_MODES_MUTATOR_MIXIN.html">LIST_MODES_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.QUOTE_IMAGE_MIXIN.html">QUOTE_IMAGE_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_CHARAT_MUTATOR_MIXIN.html">TEXT_CHARAT_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Text.TEXT_JOIN_MUTATOR_MIXIN.html">TEXT_JOIN_MUTATOR_MIXIN</a></li><li><a href="Blockly.Constants.Variables.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li><li><a href="Blockly.Constants.VariablesDynamic.CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN.html">CUSTOM_CONTEXT_MENU_VARIABLE_GETTER_SETTER_MIXIN</a></li></ul><h3>Global</h3><ul><li><a href="global.html#DwenguinoComponentTypesEnum">DwenguinoComponentTypesEnum</a></li><li><a href="global.html#TypesEnum">TypesEnum</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Wed Nov 25 2020 19:18:16 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Mon Dec 14 2020 16:10:14 GMT+0100 (Central European Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
