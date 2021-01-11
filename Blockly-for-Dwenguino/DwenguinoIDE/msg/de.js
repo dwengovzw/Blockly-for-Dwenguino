@@ -65,9 +65,6 @@ var MSG = {
   loop: "Wiederhole",
 
   dwenguino_main_program_structure: "Der erste Code wird beim Programmstart nur einmal ausgeführt. Der Code in der 'Wiederhole' wird immer wieder wiederholt, bis das Programm stoppt (zB wenn du den Stecker aus der Platine ziehst).",
-
-  catDwenguino: "Dwenguino",
-
   catSocialRobot: "sozialer Roboter",
 
   delay_help: "Warte einige Millisekunden (1 Sekunde = 1000 Millisekunden)",
@@ -362,7 +359,8 @@ MSG.socialrobot = {
 MSG.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Lerne programmieren<br>mit DwenguinoBlockly",
-  catRidingRobot: "reitender Roboter",
+  catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
+  catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "reitender Roboter",
   catSocialRobot: "sozialer Roboter",
   catWeGoStem: "WeGoSTEM",
   chooseCategory: "Wähle eine Tutorial-Kategorie aus",

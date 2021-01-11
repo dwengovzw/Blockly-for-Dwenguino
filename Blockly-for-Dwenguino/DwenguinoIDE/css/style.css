@@ -1509,44 +1509,35 @@ span.grippy::after {
     min-height: 50px; 
 }
 
-#tutorial_categories_dwenguino_components_img{
+.tutorial_categories_img {
     width: 100%;
     height: 100%;
-    background-image: url("../img/tutorials/computationeel_denken.png");
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+#tutorial_categories_dwenguino_components_img{
+    background-image: url("../img/tutorials/computationeel_denken.png");
+}
+
+#tutorial_categories_dwenguino_connector_img{
+    background-image: url("../img/board/Breadbord.png");
 }
 
 #tutorial_categories_wegostem_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/wegostem.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #tutorial_categories_dwenguino_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/tutorials/dwenguino.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #tutorial_categories_riding_robot_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/tutorials/scenario_moving.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #tutorial_categories_social_robot_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/tutorials/scenario_socialrobot.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .tutorial_item{

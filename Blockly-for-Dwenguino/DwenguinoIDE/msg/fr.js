@@ -28,7 +28,6 @@ var MSG = {
   setup: "initialiser",
   loop: "répéter",
   dwenguino_main_program_structure: "Le code dans le bloc setup est exécuté une fois au début du programme. Le code dans la block répéter est répété jusqu'à ce que le programme s'arrête.",
-  catDwenguino: "Dwenguino",
   delay_help: "Attendez une quantité spécifiée de millisecondes (1 milliseconde = 1000 secondes)",
   delay: "attends",
   clearLCD: "efface l'écran lcd",
@@ -254,7 +253,8 @@ MSG.dropzone = {
 MSG.tutorialMenu = {
   header: "Tutoriels",
   catDwenguino: "Programmer<br>avec DwenguinoBlockly",
-  catRidingRobot: "Robot roulant",
+  catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
+  catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "Robot roulant",
   catSocialRobot: "Robot social",
   catWeGoStem: "WeGoSTEM",
   chooseCategory: "Choisissez une catégorie de tutoriels",
