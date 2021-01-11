@@ -259,6 +259,7 @@ MSG.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Learn to program<br>with DwenguinoBlockly",
   catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
+  catDwenguinoConnector: "Pin mapping &<br>Expansion connector",
   catRidingRobot: "Riding robot",
   catSocialRobot: "Social robot",
   catWeGoStem: "WeGoSTEM",

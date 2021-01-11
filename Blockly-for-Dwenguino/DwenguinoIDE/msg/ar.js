@@ -256,7 +256,7 @@ MSG.tutorialMenu = {
   header: "دروس  ",
   catDwenguino: " تعلم البرمجة مع  بلوكلي دوينجوينو ",
   catDwenguinoComponents: "نظرة عامة مفيدة  دوينجوينو <br> مكونات   ",
-  catRidingRobot: "ركوب الروبوت  ",
+  catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "ركوب الروبوت  ",
   catSocialRobot: " روبوت اجتماعي ",
   catWeGoStem: " نحن نذهب إيقاف ",
   chooseCategory:  " حدد فئة البرنامج التعليمي ",
