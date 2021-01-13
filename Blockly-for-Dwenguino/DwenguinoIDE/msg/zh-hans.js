@@ -114,7 +114,7 @@ var MSG = {
   socialRobotPinGreen: "pin green",
   socialRobotPinBlue: "pin blue",
   socialRobotRgbLedOffBlock: "Turn the RGB LED off with",
-  socialRobotRgbColorBlock: "RGB color",
+  socialRobotRgbColorBlock: "RGB color red %1 green %2 blue %3",
   socialRobotPirBlock: "Pir %1 %2 %3 trig pin number %4",
   socialRobotSoundSensorBlock: "Sound sensor %1 %2 %3 pin %4",
   socialRobotSoundSensorBlockTooltip: "",
