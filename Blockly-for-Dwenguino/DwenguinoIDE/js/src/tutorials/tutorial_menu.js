@@ -53,23 +53,27 @@ class TutorialMenu {
         
         $('#tutorialModal_categories_menu').append('<div id="tutorial_category_dwenguino_components" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_dwenguino_components").append('<div class="category_tag">' + MSG.tutorialMenu.catDwenguinoComponents + '</div>');
-        $("#tutorial_category_dwenguino_components").append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+        $("#tutorial_category_dwenguino_components").append('<div id="tutorial_categories_dwenguino_components_img" class="tutorial_categories_img"></div>');
+
+        $('#tutorialModal_categories_menu').append('<div id="tutorial_category_dwenguino_connector" class="tutorial_categories_item card"></div>');
+        $("#tutorial_category_dwenguino_connector").append('<div class="category_tag">' + MSG.tutorialMenu.catDwenguinoConnector + '</div>');
+        $("#tutorial_category_dwenguino_connector").append('<div id="tutorial_categories_dwenguino_connector_img" class="tutorial_categories_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_wegostem" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_wegostem").append('<div class="category_tag">'+ MSG.tutorialMenu.catWeGoStem +'</div>');
-        $("#tutorial_category_wegostem").append('<div id="tutorial_categories_wegostem_img"></div>');
+        $("#tutorial_category_wegostem").append('<div id="tutorial_categories_wegostem_img" class="tutorial_categories_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_dwenguino" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_dwenguino").append('<div class="category_tag">'+ MSG.tutorialMenu.catDwenguino +'</div>');
-        $("#tutorial_category_dwenguino").append('<div id="tutorial_categories_dwenguino_img"></div>');
+        $("#tutorial_category_dwenguino").append('<div id="tutorial_categories_dwenguino_img" class="tutorial_categories_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_riding_robot" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_riding_robot").append('<div class="category_tag">'+ MSG.tutorialMenu.catRidingRobot +'</div>');
-        $("#tutorial_category_riding_robot").append('<div id="tutorial_categories_riding_robot_img"></div>');
+        $("#tutorial_category_riding_robot").append('<div id="tutorial_categories_riding_robot_img" class="tutorial_categories_img"></div>');
 
         $("#tutorialModal_categories_menu").append('<div id="tutorial_category_social_robot" class="tutorial_categories_item card"></div>');
         $("#tutorial_category_social_robot").append('<div class="category_tag">'+ MSG.tutorialMenu.catSocialRobot +'</div>');
-        $("#tutorial_category_social_robot").append('<div id="tutorial_categories_social_robot_img"></div>');      
+        $("#tutorial_category_social_robot").append('<div id="tutorial_categories_social_robot_img" class="tutorial_categories_img"></div>');      
         
         $("#tutorialModal .modal-footer").empty();
         $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
@@ -81,6 +85,10 @@ class TutorialMenu {
     addTutorialDialogEventHandlers(){
         $('#tutorial_category_dwenguino_components').click(() => {
             this.loadComponentsOverview();
+        });
+
+        $('#tutorial_category_dwenguino_connector').click(() => {
+            this.loadConnectorOverview();
         });
 
         $("#tutorial_category_wegostem").click(() => {
@@ -292,6 +300,33 @@ class TutorialMenu {
             this.addTutorialDialogEventHandlers();
         });
     }
+
+    loadConnectorOverview(){
+        $("#tutorialModal .modal-header").text(MSG.tutorialMenu.catDwenguinoConnector);
+        $("#tutorialModal .modal-body .message").empty();
+
+        $("#tutorialModal .modal-body .message").append('<div class="container"></div>');
+
+        $("#tutorialModal .modal-body .message .container").append('<div id="row1" class="row"></div>');
+        $('#tutorialModal .modal-body .message .container').append('<div id="row2" class="row"></div>');
+        $('#tutorialModal .modal-body .message .container').append('<div id="row3" class="row"></div>');
+
+        $("#row2").append('<div id="pin_mapping" class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>');
+        $('#pin_mapping').append('<img src="DwenguinoIDE/img/tutorials/pin_mapping.svg" class="img-fluid">');
+
+        $("#row3").append('<div id="connector_overview" class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>');
+        $('#connector_overview').append('<img src="DwenguinoIDE/img/tutorials/expansion_connector.svg" class="img-fluid">');
+
+        $("#tutorialModal .modal-footer").empty();
+        $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'</button>');
+        $("#tutorialModal .modal-footer").append('<button id="close_tutorial_dialog" type="button" class="btn btn-default" data-dismiss="modal">'+ MSG.tutorialMenu.close +'</button>');
+
+        $("#previous_tutorial_dialog").click(() => {
+            this.loadTutorialDialog();
+            this.addTutorialDialogEventHandlers();
+        });
+    }
+
 
     /**
      * Add a specific tutorial to the tutorial list interface

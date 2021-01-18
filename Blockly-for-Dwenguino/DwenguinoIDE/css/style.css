@@ -794,95 +794,57 @@ pre.content {
     background-color: white;
 }
 
-#rc_servo_img {
+.rc_img {
     width: 100%;
     height: 100%;
-    background-image: url("../img/socialrobot/servo.png");
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
+}
+
+#rc_servo_img {
+    background-image: url("../img/socialrobot/servo.png");
 }
 
 #rc_led_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/led.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_rgbled_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/rgb_led.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
+}
+
+#rc_ledmatrix_img {
+    background-image: url("../img/socialrobot/led_matrix.svg");
 }
 
 #rc_touch_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/touch_sensor.svg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_button_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/button.svg");
     margin: 0.25rem;
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_pir_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/pir.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_sonar_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/board/sonar.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_lcd_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/lcd.jpg");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_sound_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/sound_sensor.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_light_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/socialrobot/light_sensor.png");
-    background-size: contain;
-    background-repeat: no-repeat;
-    background-position: center;
 }
 
 #rc_decoration_img {
@@ -1509,44 +1471,35 @@ span.grippy::after {
     min-height: 50px; 
 }
 
-#tutorial_categories_dwenguino_components_img{
+.tutorial_categories_img {
     width: 100%;
     height: 100%;
-    background-image: url("../img/tutorials/computationeel_denken.png");
     background-size: contain;
     background-repeat: no-repeat;
+}
+
+#tutorial_categories_dwenguino_components_img{
+    background-image: url("../img/tutorials/computationeel_denken.png");
+}
+
+#tutorial_categories_dwenguino_connector_img{
+    background-image: url("../img/board/Breadbord.png");
 }
 
 #tutorial_categories_wegostem_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/wegostem.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #tutorial_categories_dwenguino_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/tutorials/dwenguino.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #tutorial_categories_riding_robot_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/tutorials/scenario_moving.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 #tutorial_categories_social_robot_img {
-    width: 100%;
-    height: 100%;
     background-image: url("../img/tutorials/scenario_socialrobot.png");
-    background-size: contain;
-    background-repeat: no-repeat;
 }
 
 .tutorial_item{

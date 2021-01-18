@@ -11,6 +11,7 @@ import { SocialRobotLightSensor } from "./components/light_sensor.js"
 import { SocialRobotRgbLed } from "./components/rgbled.js"
 import { SocialRobotTouchSensor } from "./components/touch_sensor.js"
 import { SocialRobotButton } from "./components/button.js"
+import { SocialRobotLedMatrix } from "./components/ledmatrix.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
@@ -23,6 +24,7 @@ const TypesEnum = {
   SERVO: 'servo',
   LED: 'led',
   RGBLED: 'rgbled',
+  LEDMATRIX: 'ledmatrix',
   TOUCH: 'touch',
   PIR: 'pir',
   SONAR: 'sonar',
@@ -100,6 +102,7 @@ class RobotComponentsFactory {
     for(var i = 0; i < this._robot.length; i++){
       let type = this._robot[i].getType();
       let pin = 0;
+      let state = 0;
       switch (type) {
         case TypesEnum.SERVO:;
           pin = this._robot[i].getPin();
@@ -128,7 +131,12 @@ class RobotComponentsFactory {
           let redPin = this._robot[i].getRedPin();
           let greenPin = this._robot[i].getGreenPin(); 
           let bluePin = this._robot[i].getBluePin();
-          let state = [dwenguinoState.getIoPinState(redPin), dwenguinoState.getIoPinState(greenPin), dwenguinoState.getIoPinState(bluePin)];
+          state = [dwenguinoState.getIoPinState(redPin), dwenguinoState.getIoPinState(greenPin), dwenguinoState.getIoPinState(bluePin)];
+          this._robot[i].setState(state);
+          break;
+        case TypesEnum.LEDMATRIX:
+          let dataPin = this._robot[i].getDataPin();
+          state = dwenguinoState.getIoPinState(dataPin);
           this._robot[i].setState(state);
           break;
         case TypesEnum.TOUCH:
@@ -231,6 +239,9 @@ class RobotComponentsFactory {
       case TypesEnum.RGBLED:
         this.addRgbLed();
         break;
+      case TypesEnum.LEDMATRIX:
+        this.addLedmatrix();
+        break;
       case TypesEnum.TOUCH:
         this.addTouchSensor();
         break;
@@ -269,6 +280,9 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.RGBLED:
         this.removeRgbLed();
+        break;
+      case TypesEnum.LEDMATRIX:
+        this.removeLedmatrix();
         break;
       case TypesEnum.TOUCH:
         this.removeTouchSensor();
@@ -333,6 +347,15 @@ class RobotComponentsFactory {
         var bluePin = data.getAttribute('BluePin');
         var htmlClasses = data.getAttribute('Classes');
         this.addRgbLed(redPin, greenPin, bluePin, [0, 0, 0], true, radius, 0, 0, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LEDMATRIX:
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var dataPin = data.getAttribute('DataPin');
+        var csPin = data.getAttribute('csPin');
+        var clkPin = data.getAttribute('clkPin');
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLedmatrix(dataPin, csPin, clkPin, true, 0, 0, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.TOUCH:
         var width = parseFloat(data.getAttribute('Width'));
@@ -515,6 +538,24 @@ class RobotComponentsFactory {
 
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
     this.removeRobotComponentWithTypeAndId(TypesEnum.RGBLED, id);
+  }
+
+  addLedmatrix(dataPin='2', csPin='10', clkPin='13', visible=true, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas ledmatrix_canvas') {
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LEDMATRIX));
+    this.incrementNumberOf(TypesEnum.LEDMATRIX);
+    let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIX];
+
+    let ledmatrix = new SocialRobotLedMatrix(this._eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(ledmatrix);
+
+    this.renderer.initializeCanvas(this._robot, ledmatrix);
+  }
+
+  removeLedmatrix(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LEDMATRIX));
+  
+    let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIX];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LEDMATRIX, id);
   }
 
   /**
