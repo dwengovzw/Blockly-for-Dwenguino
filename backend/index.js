@@ -61,7 +61,6 @@ if (process.env.NODE_ENV === 'production') {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-    app.use("/.well-known/pki-validation", express.static(path.join(__dirname, '.well-known/pki-validation'));
     //sapp.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 }
 
