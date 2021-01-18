@@ -227,6 +227,43 @@ class SimulationCanvasRenderer {
         }
     }
 
+    // static getLedmatrixLedPositions(){
+    //     let coordinates =   
+    //         [   [   [[21.75, 1.25], [30.4, 1.25], [], [], [], [], [], []], 
+    //                 [[21.81], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ],
+    //             [   [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ],
+    //             [   [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ],
+    //             [   [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ]];
+    //     return coordinates;
+    // }
+
     /**
      * Draw an RGB LED on the given canvas with the state specified in robot.
      * @param {SocialRobotLedMatrix} ledmatrix 
@@ -250,7 +287,7 @@ class SimulationCanvasRenderer {
                     for(var row = 0; row < 8; row++){
                         for(var column = 0; column < 8; column++){
                             if(Array.isArray(state) && state[currentSegment][column][row] == 1){
-                                let x = ledOffsets['led_x'] + (column * ledOffsets['led_between_x']) + (currentSegment * ledOffsets['matrix_segment_between_x']);
+                                let x = ledOffsets['left'] + ledOffsets['led_x'] + (column * ledOffsets['led_between_x']) + (currentSegment * ledOffsets['matrix_segment_between_x']);
                                 let y = ledOffsets['led_y'] + (row * ledOffsets['led_between_y']);
                                 let width = ledOffsets['led_radius'];
                                 let height = ledOffsets['led_radius'];
@@ -272,7 +309,7 @@ class SimulationCanvasRenderer {
                     for(var column = 0; column < 8; column++){
                         if(Array.isArray(state)){
                             if(state[currentSegment][column][row] == 1){
-                                let x = ledOffsets['led_x'] + (column * ledOffsets['led_between_x']) + (currentSegment * ledOffsets['matrix_segment_between_x']);
+                                let x = ledOffsets['left'] + ledOffsets['led_x'] + (column * ledOffsets['led_between_x']) + (currentSegment * ledOffsets['matrix_segment_between_x']);
                                 let y = ledOffsets['led_y'] + (row * ledOffsets['led_between_y']);
                                 let width = ledOffsets['led_radius'];
                                 let height = ledOffsets['led_radius'];

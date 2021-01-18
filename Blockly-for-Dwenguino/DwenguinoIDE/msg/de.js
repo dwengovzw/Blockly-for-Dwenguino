@@ -243,6 +243,15 @@ var MSG = {
   socialRobotRgbLedOffBlock: "Turn the RGB LED off with",
   socialRobotRgbColorBlock: "RGB color  %1",
   socialRobotRgbColor: "red %1 green %2 blue %3",
+  socialRobotLedmatrixImageBlock: "Display pattern on LED matrix segment",
+  socialRobotLedmatrixImageBlockTooltip: "Show the given led pattern on the LED matrix display.",
+  socialRobotLedmatrixEyePatternBlock: "Display eye pattern",
+  socialRobotLedmatrixEyePatternBlockTooltip: 'Show the given eye pattern on the LED matrix display.',
+  socialRobotLedmatrixEyePatternSegmentBlock: "on LED matrix segment",
+  socialRobotLedmatrixClearSegmentBlock: "Clear LED matrix segment",
+  socialRobotLedmatrixClearSegmentBlockTooltip: 'Clear a segment of the LED matrix display.',
+  socialRobotLedmatrixClearDisplayBlock: "Clear LED matrix",
+  socialRobotLedmatrixClearDisplayBlockTooltip: 'Clear the complete LED matrix display.',
   socialRobotPirBlock: "Pir %1 %2 %3 trig pin number %4",
   socialRobotSoundSensorBlock: "Sound sensor %1 %2 %3 pin %4",
   socialRobotSoundSensorBlockTooltip: "",
@@ -284,10 +293,151 @@ var MSG = {
   uploadError: "Code konnte nicht aufs Board geladen werden. \nBitte überprüfe ob das Board mit dem USB-Kabel verbunden ist.\n Sollte das Kabel mit dem Board verbunden sein, versuch es abzustecken, und gleich darauf wieder einzustecken.",
   cleanError: "Entfernen von vorherigem Code fehlgeschlagen.\nBitte überprüfe, ob .cpp files eventuell von einer anderen Applikation verwendet werden.\n Schließe diese Applikation.",
   compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
-
-
-  
   };
+
+  MSG.dropzone = {
+    dictSelectFile: "Wähle eine Datei aus",
+    dictChooseFile: "Wähle eine Datei",
+    dictDefaultMessage: "Ziehe deine Files hier her um den Upload zu starten",
+    dictFallbackMessage: "Dateien hochladen mittels Drag'n'Drop wird von deinem Browser nicht unterstützt.",
+    dictFileTooBig: "Datei ist zu groß ({{filesize}}MiB). Maximale Dateigröße: {{maxFilesize}}MiB.",
+    dictFallbackText: "Bitte verwende das Ersatzformular um deine Dateien hochzuladen, wie in alten Zeiten.",
+    dictInvalidFileType: "Dateien dieses Typs können nicht hochgeladen werden.",
+    dictResponseError: "Server antwortet mit Code {{statusCode}}.",
+    dictCancelUpload: "Upload abbrechen",
+    dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
+    dictRemoveFile: "Datei entfernen",
+    dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
+    dictUploadBlocks: "Upload blocks",
+    dictFileNotSupported: "This file is not supported.",
+  };
+  
+  MSG.ledmatrix = {
+    restPosition: 'Rest position', 
+    blink1: 'Blink 1',
+    blink2: 'Blink 2',
+    blink3: 'Blink 3',
+    blink4: 'Blink 4',
+    blink5: 'Blink 5',
+    right1: 'Right 1',
+    right2: 'Right 2',
+    left1: 'Left 1',
+    left2: 'Left 2',
+    up1: 'Up 1',
+    up2: 'Up 2',
+    up3: 'Up 3',
+    down1: 'Down 1',
+    down2: 'Down 2',
+    down3: 'Down 3',
+    angryLeft1: 'Angry left 1',
+    angryLeft2: 'Angry left 2',
+    angryLeft3: 'Angry left 3',
+    angryLeft4: 'Angry left 4',
+    angryRight1: 'Angry right 1',
+    angryRight2: 'Angry right 2',
+    angryRight3: 'Angry right 3',
+    angryRight4: 'Angry right 4',
+    sadLeft1: 'Sad left 1',
+    sadLeft2: 'Sad left 2',
+    sadLeft3: 'Sad left 3',
+    sadRight1: 'Sad right 1',
+    sadRight2: 'Sad right 2',
+    sadRight3: 'Sad right 3',
+    evilLeft1: 'Evil left 1',
+    evilLeft2: 'Evil left 2',
+    evilRight1: 'Evil right 1',
+    evilRight2: 'Evil right 2',
+    scanHorizontal1: 'Scan horizontal 1',
+    scanHorizontal2: 'Scan horizontal 2',
+    scanHorizontal3: 'Scan horizontal 3',
+    scanHorizontal4: 'Scan horizontal 4',
+    scanVertical1: 'Scan vertical 1',
+    scanVertical2: 'Scan vertical 2',
+    scanVertical3: 'Scan vertical 3',
+    scanVertical4: 'Scan vertical 4',
+    scanVertical5: 'Scan vertical 5',
+    scanVertical6: 'Scan vertical 6',
+    rip1: 'RIP 1',
+    rip2: 'RIP 2',
+    peering1: 'Peering 1',
+    peering2: 'Peering 2',
+    peering3: 'Peering 3',
+    peering4: 'Peering 4'
+  };
+
+  MSG.simulator = {
+    start: "Start",
+    stop: "Stopp",
+    pause: "Pause",
+    step: "1 Schritt",
+    speed: "Geschwindigkeit",
+    speedVerySlow: "40-mal so langsam",
+    speedSlow: "20-mal so langsam",
+    speedMedium: "10-mal so langsam",
+    speedFast: "5-mal so langsam",
+    speedVeryFast: "2-mal so langsam",
+    speedRealTime: "Echtzeit",
+    components: "Wähle Komponenten aus",
+    servo: "Servo",
+    motor: "Motor",
+    scope: "Variablen",
+    alertDebug: "Die Simulation stoppt wenn du weiter programmierst.",
+    distance: "Abstand",
+    scenario: "Szenario",
+    scenario_default: "Normales Board",
+    scenario_moving: "Bewegender Roboter",
+    scenario_wall: "Bewegender Roboter mit Wand",
+    scenario_socialrobot:"Sozialer Roboter",
+    code: "Code",
+    pir: "PIR Sensor",
+    pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
+    sonar: "Sonar %1 %2 %3 trig pin number %4 echo pin number %5",
+    led: "LED",
+    ledDescription: "A light-emitting diode (LED) is a semiconductor device that <b>emits light</b> when an electric current passes through it. Different semiconductor materials produce <b>different colors of light</b>. ",
+    rgbled: "RGB LED",
+    rgbledDescription: "",
+    ledmatrix: "LED matrix",
+    ledmatrixDescription: "",
+    touch: "Touch sensor",
+    touchDescription: "",
+    lcd: "LCD Schirm",
+    lcdDescription: "The LCD display on the Dwengo board is a 16x2 character display with backlight.",
+    button: "Button",
+    sound: "Sound sensor",
+    light: "Light sensor",
+    buzzer: "Buzzer",
+    buzzerDescription: "The buzzer on the Dwengo board can be used to <b>play a series of tones</b> or short sound fragments. The height of each tone is controlled by defining the <b>frequency</b> of the buzzer. Use a delay block to change the length of a tone.",
+    decoration: "Dekoration",
+  };
+  
+  MSG.socialrobot = {
+    plain: "Standard",
+    eye: "Auge",
+    mouth: "Mund",
+    righthand: "Rechte Hand",
+    lefthand: "Linke Hand",
+  };
+  
+  MSG.tutorialMenu = {
+    header: "Tutorials",
+    catDwenguino: "Lerne programmieren<br>mit DwenguinoBlockly",
+    catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
+    catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "reitender Roboter",
+    catSocialRobot: "sozialer Roboter",
+    catWeGoStem: "WeGoSTEM",
+    chooseCategory: "Wähle eine Tutorial-Kategorie aus",
+    chooseTutorial: "Wähle ein Tutorial aus",
+    previous: "Zurück",
+    close: "Schließen",
+    checkAnswer: "Antwort überprüfen",
+    correctAnswer: "Die Antwort war richtig!",
+    wrongAnswer: "Die Antwort war nicht richtig. Versuch es nochmal!",
+    sensors: "Sensoren",
+    actuators: "Aktoren",
+    movement: "Bewegung",
+    audio: "Audio",
+    display: "Visuell"
+  };  
 
 MSG.logging = {
   setup: "Testkonfiguration",
@@ -349,99 +499,6 @@ MSG.validator = {
   errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein."
 };
 
-MSG.socialrobot = {
-  plain: "Standard",
-  eye: "Auge",
-  mouth: "Mund",
-  righthand: "Rechte Hand",
-  lefthand: "Linke Hand",
-};
-
-MSG.tutorialMenu = {
-  header: "Tutorials",
-  catDwenguino: "Lerne programmieren<br>mit DwenguinoBlockly",
-  catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
-  catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "reitender Roboter",
-  catSocialRobot: "sozialer Roboter",
-  catWeGoStem: "WeGoSTEM",
-  chooseCategory: "Wähle eine Tutorial-Kategorie aus",
-  chooseTutorial: "Wähle ein Tutorial aus",
-  previous: "Zurück",
-  close: "Schließen",
-  checkAnswer: "Antwort überprüfen",
-  correctAnswer: "Die Antwort war richtig!",
-  wrongAnswer: "Die Antwort war nicht richtig. Versuch es nochmal!",
-  sensors: "Sensoren",
-  actuators: "Aktoren",
-  movement: "Bewegung",
-  audio: "Audio",
-  display: "Visuell"
-};
-
-MSG.simulator = {
-  start: "Start",
-  stop: "Stopp",
-  pause: "Pause",
-  step: "1 Schritt",
-  speed: "Geschwindigkeit",
-  speedVerySlow: "40-mal so langsam",
-  speedSlow: "20-mal so langsam",
-  speedMedium: "10-mal so langsam",
-  speedFast: "5-mal so langsam",
-  speedVeryFast: "2-mal so langsam",
-  speedRealTime: "Echtzeit",
-  components: "Wähle Komponenten aus",
-  servo: "Servo",
-  motor: "Motor",
-  scope: "Variablen",
-  alertDebug: "Die Simulation stoppt wenn du weiter programmierst.",
-  distance: "Abstand",
-  scenario: "Szenario",
-  scenario_default: "Normales Board",
-  scenario_moving: "Bewegender Roboter",
-  scenario_wall: "Bewegender Roboter mit Wand",
-  scenario_socialrobot:"Sozialer Roboter",
-  code: "Code",
-  pir: "PIR Sensor",
-  pirDescription: "A passif infrared (PIR) sensor allows you to <b>sense motion</b>, because it detects changes of infrared radiation in its environment",
-  sonar: "Sonar %1 %2 %3 trig pin number %4 echo pin number %5",
-  led: "LED",
-  ledDescription: "A light-emitting diode (LED) is a semiconductor device that <b>emits light</b> when an electric current passes through it. Different semiconductor materials produce <b>different colors of light</b>. ",
-  rgbled: "RGB LED",
-  rgbledDescription: "",
-  ledmatrix: "LED matrix",
-  ledmatrixDescription: "",
-  touch: "Touch sensor",
-  touchDescription: "",
-  lcd: "LCD Schirm",
-  lcdDescription: "The LCD display on the Dwengo board is a 16x2 character display with backlight.",
-  button: "Button",
-  sound: "Sound sensor",
-  light: "Light sensor",
-  buzzer: "Buzzer",
-  buzzerDescription: "The buzzer on the Dwengo board can be used to <b>play a series of tones</b> or short sound fragments. The height of each tone is controlled by defining the <b>frequency</b> of the buzzer. Use a delay block to change the length of a tone.",
-  decoration: "Dekoration",
-};
-
-MSG.dropzone = {
-  dictSelectFile: "Wähle eine Datei aus",
-  dictChooseFile: "Wähle eine Datei",
-  dictDefaultMessage: "Ziehe deine Files hier her um den Upload zu starten",
-  dictFallbackMessage: "Dateien hochladen mittels Drag'n'Drop wird von deinem Browser nicht unterstützt.",
-  dictFileTooBig: "Datei ist zu groß ({{filesize}}MiB). Maximale Dateigröße: {{maxFilesize}}MiB.",
-  dictFallbackText: "Bitte verwende das Ersatzformular um deine Dateien hochzuladen, wie in alten Zeiten.",
-  dictInvalidFileType: "Dateien dieses Typs können nicht hochgeladen werden.",
-  dictResponseError: "Server antwortet mit Code {{statusCode}}.",
-  dictCancelUpload: "Upload abbrechen",
-  dictCancelUploadConfirmation: "Bist du dir sicher dass du den Upload abbrechen möchtest?",
-  dictRemoveFile: "Datei entfernen",
-  dictMaxFilesExceeded: "Du kannst keine weiteren Dateien hochladen.",
-  dictUploadBlocks: "Upload blocks",
-  dictFileNotSupported: "This file is not supported.",
-};
-
-
-
 MSG.tutorials = {
 
     introduction: {},
@@ -460,8 +517,6 @@ MSG.tutorials = {
 
 };
 
-
-
 MSG.tutorials.general = {
 
   sureTitle: "Bist du sicher?",
@@ -469,8 +524,6 @@ MSG.tutorials.general = {
   sureText: "Wenn du auf 'Weiter' klickst, werden die Blöcke im Arbeitsblatt ersetzt.",
 
 };
-
-
 
 MSG.tutorials.introduction = {
 
