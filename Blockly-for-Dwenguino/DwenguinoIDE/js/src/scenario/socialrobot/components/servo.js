@@ -193,26 +193,26 @@ class SocialRobotServo extends RobotComponent{
         if(this.getId() == 1){
             $('.pinButton').prop('disabled', true);
             $('.pinButton').addClass('option_button_disabled');
-            $('#pin36.pinButton').prop('disabled', false);
-            $('#pin36.pinButton').removeClass('option_button_disabled');
-            $('#pin36.pinButton').addClass('option_button_selected');
+            $('#pin40.pinButton').prop('disabled', false);
+            $('#pin40.pinButton').removeClass('option_button_disabled');
+            $('#pin40.pinButton').addClass('option_button_selected');
         } else if(this.getId() == 2){
             $('.pinButton').prop('disabled', true);
             $('.pinButton').addClass('option_button_disabled');
-            $('#pin37.pinButton').prop('disabled', false);
-            $('#pin37.pinButton').removeClass('option_button_disabled');
-            $('#pin37.pinButton').addClass('option_button_selected');
+            $('#pin41.pinButton').prop('disabled', false);
+            $('#pin41.pinButton').removeClass('option_button_disabled');
+            $('#pin41.pinButton').addClass('option_button_selected');
         } else {
             $('.pinButton').removeClass('option_button_disabled');
-            $('#pin36.pinButton').prop('disabled', true);
-            $('#pin37.pinButton').prop('disabled', true);
-            $('#pin36.pinButton').addClass('option_button_disabled');
-            $('#pin37.pinButton').addClass('option_button_disabled');
+            $('#pin40.pinButton').prop('disabled', true);
+            $('#pin41.pinButton').prop('disabled', true);
+            $('#pin40.pinButton').addClass('option_button_disabled');
+            $('#pin41.pinButton').addClass('option_button_disabled');
         }
     }
 
     getAllPossibleServoPins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 36, 37];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 40, 41];
     }
 
     createCostumeOptionsDialog(){
