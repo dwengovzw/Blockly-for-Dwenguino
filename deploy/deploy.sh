@@ -18,7 +18,7 @@ sudo cp -r * /home/ubuntu/blockly-build/
 sudo mkdir /home/ubuntu/blockly-build/.well-known
 sudo mkdir /home/ubuntu/blockly-build/.well-known/pki-validation
 sudo cp /home/ubuntu/FC37FD18104CADF4FA7E11F21D8D4894.txt /home/ubuntu/blockly-build/.well-known/pki-validation/
-sudo chmod -r 775 /home/ubuntu/blockly-build/.well-known/
+sudo chmod -R 775 /home/ubuntu/blockly-build/.well-known/
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
 forever restart backend/index.js || forever start backend/index.js
