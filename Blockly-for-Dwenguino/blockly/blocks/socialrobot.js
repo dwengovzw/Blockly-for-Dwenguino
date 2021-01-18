@@ -38,57 +38,57 @@ var ledmatrixDropdown = [
 ];
 
 let eyePatternDropdown = [
-  [ 'Rest Position',"0"], 
-  [ 'Blink 1','1'],
-  [ 'Blink 2','2'],
-  [ 'Blink 3','3'],
-  [ 'Blink 4','4'],
-  [ 'Blink 5','5'],
-  [ 'Right 1','6'],
-  [ 'Right 2','7'],
-  [ 'Left 1','8'],
-  [ 'Left 2','9'],
-  ['Up 1','11'],
-  ['Up 2','12'],
-  ['Up 3','13'],
-  ['Down 1','14'],
-  ['Down 2','15'],
-  ['Down 3','16'],
-  ['Angry L 1','17'],
-  ['Angry L 2','18'],
-  ['Angry L 3','19'],
-  ['Angry L 4','20'],
-  ['Angry R 1','22'],
-  ['Angry R 2','23'],
-  ['Angry R 3','24'],
-  ['Angry R 4','25'],
-  ['Sad L 1','27'],
-  ['Sad L 2','28'],
-  ['Sad L 3','29'],
-  ['Sad R 1','32'],
-  ['Sad R 2','33'],
-  ['Sad R 3','34'],
-  ['Evil L 1','37'],
-  ['Evil L 2','38'],
-  ['Evil R 1','39'],
-  ['Evil R 2','40'],
-  ['Scan H 1','41'],
-  ['Scan H 2','42'],
-  ['Scan H 3','43'],
-  ['Scan H 4','44'],
-  ['Scan V 1','46'],
-  ['Scan V 2','47'],
-  ['Scan V 3','48'],
-  ['Scan V 4','49'],
-  ['Scan V 5','50'],
-  ['Scan V 6','51'],
-  ['RIP 1','52'],
-  ['RIP 2','53'],
-  ['Peering 1','54'],
-  ['Peering 2','55'],
-  ['Peering 3','56'],
-  ['Peering 4','57']
-]
+  [MSG.ledmatrix['restPosition'],'0'],
+  [MSG.ledmatrix['blink1'], '1'],
+  [MSG.ledmatrix['blink2'],'2'],
+  [MSG.ledmatrix['blink3'],'3'],
+  [MSG.ledmatrix['blink4'],'4'],
+  [MSG.ledmatrix['blink5'],'5'],
+  [MSG.ledmatrix['right1'],'6'],
+  [MSG.ledmatrix['right2'],'7'],
+  [MSG.ledmatrix['left1'],'8'],
+  [MSG.ledmatrix['left2'],'9'],
+  [MSG.ledmatrix['up1'],'11'],
+  [MSG.ledmatrix['up2'],'12'],
+  [MSG.ledmatrix['up3'],'13'],
+  [MSG.ledmatrix['down1'],'14'],
+  [MSG.ledmatrix['down2'],'15'],
+  [MSG.ledmatrix['down3'],'16'],
+  [MSG.ledmatrix['angryLeft1'],'17'],
+  [MSG.ledmatrix['angryLeft2'],'18'],
+  [MSG.ledmatrix['angryLeft3'],'19'],
+  [MSG.ledmatrix['angryLeft4'],'20'],
+  [MSG.ledmatrix['angryRight1'],'22'],
+  [MSG.ledmatrix['angryRight2'],'23'],
+  [MSG.ledmatrix['angryRight3'],'24'],
+  [MSG.ledmatrix['angryRight4'],'25'],
+  [MSG.ledmatrix['sadLeft1'],'27'],
+  [MSG.ledmatrix['sadLeft2'],'28'],
+  [MSG.ledmatrix['sadLeft3'],'29'],
+  [MSG.ledmatrix['sadRight1'],'32'],
+  [MSG.ledmatrix['sadRight2'],'33'],
+  [MSG.ledmatrix['sadRight3'],'34'],
+  [MSG.ledmatrix['evilLeft1'],'37'],
+  [MSG.ledmatrix['evilLeft2'],'38'],
+  [MSG.ledmatrix['evilRight1'],'39'],
+  [MSG.ledmatrix['evilRight2'],'40'],
+  [MSG.ledmatrix['scanHorizontal1'],'41'],
+  [MSG.ledmatrix['scanHorizontal2'],'42'],
+  [MSG.ledmatrix['scanHorizontal3'],'43'],
+  [MSG.ledmatrix['scanHorizontal4'],'44'],
+  [MSG.ledmatrix['scanVertical1'],'46'],
+  [MSG.ledmatrix['scanVertical2'],'47'],
+  [MSG.ledmatrix['scanVertical3'],'48'],
+  [MSG.ledmatrix['scanVertical4'],'49'],
+  [MSG.ledmatrix['scanVertical5'],'50'],
+  [MSG.ledmatrix['scanVertical6'],'51'],
+  [MSG.ledmatrix['rip1'],'52'],
+  [MSG.ledmatrix['rip2'],'53'],
+  [MSG.ledmatrix['peering1'],'54'],
+  [MSG.ledmatrix['peering2'],'55'],
+  [MSG.ledmatrix['peering3'],'56'],
+  [MSG.ledmatrix['peering4'],'57']
+];
 
 var pir_sensor_json = {
   "id": "pir_sensor",
@@ -409,7 +409,7 @@ Blockly.Blocks['socialrobot_show_ledmatrix_image'] = {
       this.setPreviousStatement(true);
       this.setNextStatement(true);
       this.appendDummyInput()
-            .appendField("Display pattern on LED matrix segment")
+            .appendField(MSG.socialRobotLedmatrixImageBlock)
             .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
       this.appendDummyInput().appendField("    0     1     2     3     4     5     6     7");
       this.appendDummyInput().appendField("0").appendField(new Blockly.FieldCheckbox("FALSE"), "LED00").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED10").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED20").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED30").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED40").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED50").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED60").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED70");
@@ -420,7 +420,7 @@ Blockly.Blocks['socialrobot_show_ledmatrix_image'] = {
       this.appendDummyInput().appendField("5").appendField(new Blockly.FieldCheckbox("FALSE"), "LED05").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED15").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED25").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED35").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED45").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED55").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED65").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED75");
       this.appendDummyInput().appendField("6").appendField(new Blockly.FieldCheckbox("FALSE"), "LED06").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED16").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED26").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED36").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED46").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED56").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED66").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED76");
       this.appendDummyInput().appendField("7").appendField(new Blockly.FieldCheckbox("FALSE"), "LED07").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED17").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED27").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED37").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED47").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED57").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED67").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED77");
-      this.setTooltip('Show the given led pattern on the LED matrix display.');
+      this.setTooltip(MSG.socialRobotLedmatrixImageBlockTooltip);
   }
 };
 
@@ -430,12 +430,12 @@ Blockly.Blocks['socialrobot_show_ledmatrix_eye_pattern'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendDummyInput()
-        .appendField("Display eye pattern")
+        .appendField(MSG.socialRobotLedmatrixEyePatternBlock)
         .appendField(new Blockly.FieldDropdown(eyePatternDropdown), "EYEPATTERN");
     this.appendDummyInput()
-          .appendField("on LED matrix segment")
+          .appendField(MSG.socialRobotLedmatrixEyePatternSegmentBlock)
           .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
-    this.setTooltip('Show the given eye pattern on the LED matrix display.');
+    this.setTooltip(MSG.socialRobotLedmatrixEyePatternBlockTooltip);
   }
 }
 
@@ -445,9 +445,9 @@ Blockly.Blocks['socialrobot_clear_ledmatrix_segment'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendDummyInput()
-          .appendField("Clear LED matrix segment")
+          .appendField(MSG.socialRobotLedmatrixClearSegmentBlock)
           .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
-    this.setTooltip('Clear a segment of the LED matrix display.');
+    this.setTooltip(MSG.socialRobotLedmatrixClearSegmentBlockTooltip);
   }
 }
 
@@ -457,8 +457,8 @@ Blockly.Blocks['socialrobot_clear_ledmatrix'] = {
     this.setPreviousStatement(true);
     this.setNextStatement(true);
     this.appendDummyInput()
-          .appendField("Clear LED matrix")
-    this.setTooltip('Clear the complete LED matrix display.');
+          .appendField(MSG.socialRobotLedmatrixClearDisplayBlock)
+    this.setTooltip(MSG.socialRobotLedmatrixClearDisplayBlockTooltip);
   }
 }
 

@@ -36,12 +36,13 @@ class SocialRobotLedMatrix extends RobotComponent{
         this._ledSvg = new Image();
         this._ledSvg.src = './DwenguinoIDE/img/socialrobot/led_matrix_on.svg';
         this._ledOffsets = { 
-            'led_x' : 1.2, 
-            'led_y' : 1.14,
-            'led_between_x' : 8.64,
+            'left' : 15,
+            'led_x' : 1.14, 
+            'led_y' : 1.25,
+            'led_between_x' : 8.65,
             'led_between_y' : 8.53,
             'led_radius' : 6.35,
-            'matrix_segment_between_x' : 71 };
+            'matrix_segment_between_x' : 71.01 };
         this._ledmatrixBackground = new Image();
         this._ledmatrixBackground.src = './DwenguinoIDE/img/socialrobot/led_matrix_1x4.svg';
         this.insertHtml();
@@ -148,9 +149,9 @@ class SocialRobotLedMatrix extends RobotComponent{
 
     toggleVisibility(visible){
         if (visible) {
-            $('#sim_led' + this.getId()).css('visibility', 'visible');
+            $('#sim_ledmatrix' + this.getId()).css('visibility', 'visible');
         } else {
-            $('#sim_led' + this.getId()).css('visibility', 'hidden');
+            $('#sim_ledmatrix' + this.getId()).css('visibility', 'hidden');
         }
     }
 
