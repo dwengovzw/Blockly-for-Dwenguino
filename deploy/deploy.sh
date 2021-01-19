@@ -21,6 +21,6 @@ sudo cp /home/ubuntu/certs/index.js /home/ubuntu/blockly-build/backend/
 cd /home/ubuntu/blockly-build/
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-forever restart backend/index.js || forever start backend/index.js
+sudo forever restart backend/index.js || sudo forever start backend/index.js
 exit
 
