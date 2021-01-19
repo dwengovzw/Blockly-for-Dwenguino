@@ -223,7 +223,7 @@ body{
     min-height: 180px;
     width: 100%;
     position: relative;
-    flex: 11;
+    flex: 7;
 }
 
 #db_simulator_menu{
@@ -439,15 +439,29 @@ pre.content {
     /*background-color: #2a7709; */
     background-image: url("../img/board/dwenguino.png");
     background-size: 100% 100%;
-    width: 90%;
-    height: 90%;
     position: absolute;
-    top: 50%;
-    /*left: 30%;*/
-    right: 50px;
     transform: translate(0%, -50%);
     -webkit-transform: translate(0%, -50%);
     -ms-transform: translate(0%, -50%);
+    right: 0px;
+    bottom: 0px;
+
+}
+
+/* When the board should not take up too much space vertically */
+.sim_board_row_placement {
+    width: 60%;
+    height: 60%;
+    top: 40%;
+    left: 30%;
+}
+
+/* When the board should not take up too much space horizontally */
+.sim_board_column_placement {
+    width: 90%;
+    height: 90%;
+    top: 50%;
+    left: 0px;
 }
 
 #sim_lcds {
@@ -543,7 +557,7 @@ pre.content {
 }
 
 #sim_button_N{
-    flex: 1;
+    /* flex: 1; */
     justify-content: space-around;
 }
 
@@ -563,7 +577,7 @@ pre.content {
     min-height: 10px;
     width: 30%;
     height: 100%;
-    flex: 1;
+    /* flex: 1; */
 }
 
 .sim_button_pushed {
@@ -588,7 +602,7 @@ pre.content {
 
 #sim_components {
     position: absolute;
-    top: 20px;
+    /* top: 20px; */
     padding-left: 20px;
     height: 100px;
     width: 120px;

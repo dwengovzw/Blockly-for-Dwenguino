@@ -62,7 +62,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             {"position": "absolute", "display": "inline-block", "width": this.boardDisplayWidth, "max-width": "30vw", "right": 0}
             );
         let containerHackDummy = $("<div>").attr("id", "dummy").css({"margin-top": "70%"});
-        let boardContainer =$("<div>").attr("id", "sim_board").css({"position": "absolute", "right": 0, "bottom": 0, "left": 0});
+        let boardContainer =$("<div>").attr("id", "sim_board"); //.css({"position": "absolute", "right": 0, "bottom": 0, "left": 0});
         containerHack.append(containerHackDummy);
         containerHack.append(boardContainer);
 
