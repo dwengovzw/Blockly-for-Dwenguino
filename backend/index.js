@@ -1,6 +1,10 @@
 // FileName: index.js
 // Import express
 import express from 'express';
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
+
 //let express = require('express');
 // Import body parser
 import bodyParser from 'body-parser';
@@ -23,6 +27,17 @@ import helmet from 'helmet';
 
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
+
+// For SSL certificates
+let key = fs.readFileSync('/home/ubuntu/certs/private.key');
+let cert = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
+let ca = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
+
+let options = {
+        key: key,
+        cert: cert,
+        ca: ca
+};
 
 // Initialize the app
 let app = express();
@@ -56,7 +71,7 @@ if (!db) {
 }
 
 if (process.env.NODE_ENV === 'production') {
-    app.use('', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+    app.use(express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 } else {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
@@ -72,15 +87,19 @@ app.get("/", (req, res) => res.send('Welcome to blockly'));
 // Setup server port
 var port = process.env.PORT || 12032;
 console.log("Port: " + port);
+
+const httpsServer = https.createServer(options, app);
+
 // Launch app to listen to specified port
 let server = app.listen(port, function () {
-    console.log("Running RestHub on port " + port);
+    console.log("Running HTTP server on port " + port);
 });
 
+httpsServer.listen(443, funnction () {
+   console.log("Running HTTPS server on port 443");
+});
 
 //This is depricated, now the electron browser is which is started using a bash script
-
-
 /*if (process.env.NODE_ENV === 'production') {
     module.export = app;
 } else {
