@@ -126,6 +126,8 @@ class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulationScenario {
         this.dwenguinoBoardSimulation.initSimulationState(null);
         this.dwenguinoBoardSimulation.initSimulationDisplay("db_simulator_top_pane");
 
+        $("#sim_board").addClass("sim_board_row_placement");
+
         //Add canvas
         bottom_pane.append($("<canvas>").attr("id", "sim_canvas").attr("class", "canvas"));
         //Add canvas for drawing

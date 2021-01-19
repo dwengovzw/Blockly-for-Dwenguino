@@ -462,6 +462,24 @@ Blockly.Blocks['socialrobot_clear_ledmatrix'] = {
   }
 }
 
+// Blockly.Blocks['socialrobot_play_animation'] = {
+//   init: function() {
+//     this.setColour(Blockly.Blocks.socialrobot.HUE);
+//     this.setPreviousStatement(true);
+//     this.setNextStatement(true);
+//     this.appendDummyInput()
+//           .appendField(MSG.socialRobotLedmatrixDisplayAnimationBlock)
+//           .appendField(new Blockly.FieldDropdown(animationDropdown), "ANIMATION");
+//     this.appendDummyInput()
+//           .appendField(MSG.socialRobotLedmatrixLeftSegmentBlock)
+//           .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+//     this.appendDummyInput().appendField(MSG.socialRobotLedmatrixRightSegmentBlock)
+//           .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+
+//     this.setTooltip(MSG.socialRobotLedmatrixClearDisplayBlockTooltip);
+//   }
+// }
+
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",
   "message0": MSG.socialrobotServoBlock,
