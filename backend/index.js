@@ -95,7 +95,7 @@ let server = app.listen(port, function () {
     console.log("Running HTTP server on port " + port);
 });
 
-httpsServer.listen(443, funnction () {
+httpsServer.listen(443, function () {
    console.log("Running HTTPS server on port 443");
 });
 
