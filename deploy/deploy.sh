@@ -15,6 +15,9 @@ npm install
 # Copy the new files to the deployment directory
 sudo cp -r * /home/ubuntu/blockly-build/
 
+sudo rm /home/ubuntu/blockly-build/backend/index.js
+sudo cp /home/ubuntu/certs/index.js /home/ubuntu/blockly-build/backend/
+
 # go to backend and stop the previous app version and restart the new nodeJS app in back
 forever restart backend/index.js || forever start backend/index.js
 exit
