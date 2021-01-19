@@ -64,6 +64,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
 
     initSimulationDisplay(containerId){
         super.initSimulationDisplay(containerId);       // Removes the container
+    
         // Remove previous canvas and context
         this.canvases = [];
         this.contexts = [];
@@ -85,6 +86,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         this.dwenguinoBoardSimulation.setComponentsRightPosition("55px");
         this.dwenguinoBoardSimulation.initSimulationState(null);
         this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);
+        $("#sim_board").addClass("sim_board_column_placement");
 
         // Render on resize of container
         new ResizeObserver(() => {

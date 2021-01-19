@@ -67,7 +67,6 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         // init superclass
         super.initSimulationDisplay(containerId);
 
-
         // Create the bottom and top pane and init the Board simulation into the top pane
         let db_simulator_panes = $(`#${containerId}`);
 
@@ -93,7 +92,7 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         // init board simulation
         this.dwenguinoBoardSimulation.initSimulationState(null);
         this.dwenguinoBoardSimulation.initSimulationDisplay("db_simulator_top_pane");
-
+        $("#sim_board").addClass("sim_board_row_placement");
 
         //Init the display elements
         var container = $("#db_robot_pane");
