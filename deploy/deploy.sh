@@ -15,8 +15,8 @@ npm install
 # Copy the new files to the deployment directory
 sudo cp -r * /home/ubuntu/blockly-build/
 
-sudo rm /home/ubuntu/blockly-build/backend/index.js
-sudo cp /home/ubuntu/certs/index.js /home/ubuntu/blockly-build/backend/
+# sudo rm /home/ubuntu/blockly-build/backend/index.js
+# sudo cp /home/ubuntu/certs/index.js /home/ubuntu/blockly-build/backend/
 
 cd /home/ubuntu/blockly-build/
 
