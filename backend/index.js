@@ -70,6 +70,13 @@ if (!db) {
     console.log("db connection succesfull");
 }
 
+app.use((req, res, next) => {
+        if(req.protocol ==='http') {
+                res.redirect(301, `https://${req.headers.host}${req.url}`);
+        }
+        next();
+});
+
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 } else {
@@ -88,10 +95,11 @@ app.get("/", (req, res) => res.send('Welcome to blockly'));
 var port = process.env.PORT || 12032;
 console.log("Port: " + port);
 
+const httpServer = http.createServer(app);
 const httpsServer = https.createServer(options, app);
 
 // Launch app to listen to specified port
-let server = app.listen(port, function () {
+httpServer.listen(port, function () {
     console.log("Running HTTP server on port " + port);
 });
 
