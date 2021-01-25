@@ -7,6 +7,6 @@ class User {
         this.password = password.slice();
         Object.freeze(this.password);
     }
-};
+}
 
 export default User;
