@@ -260,7 +260,7 @@ MSG.tutorialMenu = {
   header: "Μαθήματα",
   catDwenguino: "Μάθε προγραμματισμό<br>με το DwenguinoBlockly",
   catDwenguinoComponents: "Πρακτική επισκόπηση<br>των εξαρτημάτων του Dwenguino",
-  catRidingRobot: "Riding robot",
+  catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "Riding robot",
   catSocialRobot: "Social robot",
   catWeGoStem: "WeGoSTEM",
   chooseCategory: "Επίλεξε κατηγορία μαθημάτων",

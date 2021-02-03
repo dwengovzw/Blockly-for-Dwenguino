@@ -1,5 +1,6 @@
 import ButtonMap from "./button_map.js";
 import PlotterConstants from "../scenario/plotter/plotter_constants.js"
+import { DisplayDataTypesEnum, SocialRobotLedMatrix } from "../scenario/socialrobot/components/ledmatrix.js"
 
 /**
  * Contains all the functions that can be executed by the code that was created by the students.
@@ -72,7 +73,11 @@ class SimulationSandbox {
   }
 
   analogWrite(pinName, state) {
-    this.boardState.setAnalogIoPinState(pinName, state);
+    if(this.boardState.isPWMPin(pinName)){
+      this.boardState.setIoPinState(pinName, state);
+    } else {
+      this.boardState.setAnalogIoPinState(pinName, state);
+    }
   }
 
 
@@ -251,12 +256,34 @@ class SimulationSandbox {
    * @param {Array<int>} rgbColor - an array with 3 integers between 0 and 255
    */
   rgbLed(pins,rgbColor){
-    console.log(pins, 'pins');
-    console.log(rgbColor, 'rgbColor');
     this.analogWrite(pins[0], rgbColor[0]);
     this.analogWrite(pins[1], rgbColor[1]);
     this.analogWrite(pins[2], rgbColor[2]);
     return;
+  }
+
+  ledmatrixDisplaySegment(data){
+    let dataObject = {
+      "dataType" : DisplayDataTypesEnum.SEGMENT,
+      "data" : data
+    };
+    this.boardState.setIoPinState(2, dataObject);
+  }
+
+  clearLedmatrixDisplaySegment(segment){
+    let dataObject = {
+      "dataType" : DisplayDataTypesEnum.SEGMENT,
+      "data" : [segment, SocialRobotLedMatrix.getEmptyLedMatrix()[0]]
+    };
+    this.boardState.setIoPinState(2, dataObject);
+  }
+
+  clearLedmatrixDisplay(){
+    let dataObject = {
+      "dataType" : DisplayDataTypesEnum.DISPLAY,
+      "data" : SocialRobotLedMatrix.getEmptyLedMatrix()
+    };
+    this.boardState.setIoPinState(2, dataObject);
   }
 
   /**
