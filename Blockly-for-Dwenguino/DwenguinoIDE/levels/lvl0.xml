@@ -236,6 +236,82 @@
             </block>
         </value>
     </block>
+    <block type="socialrobot_show_ledmatrix_image">
+        <field name="NUMBERDISPLAY">0</field>
+        <field name="LED00">FALSE</field>
+        <field name="LED10">FALSE</field>
+        <field name="LED20">FALSE</field>
+        <field name="LED30">FALSE</field>
+        <field name="LED40">FALSE</field>
+        <field name="LED50">FALSE</field>
+        <field name="LED60">FALSE</field>
+        <field name="LED70">FALSE</field>
+        <field name="LED01">FALSE</field>
+        <field name="LED11">TRUE</field>
+        <field name="LED21">TRUE</field>
+        <field name="LED31">FALSE</field>
+        <field name="LED41">FALSE</field>
+        <field name="LED51">TRUE</field>
+        <field name="LED61">TRUE</field>
+        <field name="LED71">FALSE</field>
+        <field name="LED02">TRUE</field>
+        <field name="LED12">TRUE</field>
+        <field name="LED22">TRUE</field>
+        <field name="LED32">TRUE</field>
+        <field name="LED42">TRUE</field>
+        <field name="LED52">TRUE</field>
+        <field name="LED62">TRUE</field>
+        <field name="LED72">TRUE</field>
+        <field name="LED03">TRUE</field>
+        <field name="LED13">TRUE</field>
+        <field name="LED23">TRUE</field>
+        <field name="LED33">TRUE</field>
+        <field name="LED43">TRUE</field>
+        <field name="LED53">TRUE</field>
+        <field name="LED63">TRUE</field>
+        <field name="LED73">TRUE</field>
+        <field name="LED04">FALSE</field>
+        <field name="LED14">TRUE</field>
+        <field name="LED24">TRUE</field>
+        <field name="LED34">TRUE</field>
+        <field name="LED44">TRUE</field>
+        <field name="LED54">TRUE</field>
+        <field name="LED64">TRUE</field>
+        <field name="LED74">FALSE</field>
+        <field name="LED05">FALSE</field>
+        <field name="LED15">FALSE</field>
+        <field name="LED25">TRUE</field>
+        <field name="LED35">TRUE</field>
+        <field name="LED45">TRUE</field>
+        <field name="LED55">TRUE</field>
+        <field name="LED65">FALSE</field>
+        <field name="LED75">FALSE</field>
+        <field name="LED06">FALSE</field>
+        <field name="LED16">FALSE</field>
+        <field name="LED26">FALSE</field>
+        <field name="LED36">TRUE</field>
+        <field name="LED46">TRUE</field>
+        <field name="LED56">FALSE</field>
+        <field name="LED66">FALSE</field>
+        <field name="LED76">FALSE</field>
+        <field name="LED07">FALSE</field>
+        <field name="LED17">FALSE</field>
+        <field name="LED27">FALSE</field>
+        <field name="LED37">FALSE</field>
+        <field name="LED47">FALSE</field>
+        <field name="LED57">FALSE</field>
+        <field name="LED67">FALSE</field>
+        <field name="LED77">FALSE</field>
+    </block>
+    <block type="socialrobot_show_ledmatrix_eye_pattern">
+        <field name="NUMBERDISPLAY">0</field>
+        <field name="EYEPATTERN">0</field>
+    </block>
+    <block type="socialrobot_clear_ledmatrix_segment">
+        <field name="NUMBERDISPLAY">0</field>
+    </block>
+    <block type="socialrobot_clear_ledmatrix">
+    </block>
     <block type="sound_sensor">
         <value name="pin">
             <block type="math_number" id="sound_sensor_pin"> 

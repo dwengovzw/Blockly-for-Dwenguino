@@ -116,7 +116,7 @@ Blockly.Arduino['dwenguino_servo'] = function (block) {
 
 Blockly.Arduino.dwenguino_servo_dropdown = function() {
   // Boolean values HIGH and LOW.
-  var code = (this.getFieldValue('SERVO_DROPDOWN') == 'SERVO1') ? 36 : 37;
+  var code = (this.getFieldValue('SERVO_DROPDOWN') == 'SERVO1') ? 40 : 41;
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 

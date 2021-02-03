@@ -218,6 +218,16 @@ class BoardState {
         return this.pins[this.pinMapping[index]];
     }
 
+    isPWMPin(pinName){
+        let index = pinName + "";
+        let pin = this.pinMapping[index];
+        if(pin == 15 || pin == 14 || pin == 11 || pin == 6 || pin == 5 || pin == 3){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     setAnalogIoPinState(pinName, value){
         if (!pinName.startsWith("A")){
             throw new Error("Not a valid analog pin name!")

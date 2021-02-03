@@ -1,4 +1,5 @@
 import csvtojson from "csvtojson";
+import { SocialRobotLedMatrix } from "./components/ledmatrix.js";
 import { TypesEnum } from "./robot_components_factory.js"
 
 /**
@@ -20,6 +21,7 @@ class SimulationCanvasRenderer {
     this.drawLcd(robot);
     this.drawLeds(robot);
     this.drawRgbLeds(robot);
+    this.drawLedmatrices(robot);
     this.drawServos(robot);
     this.drawTouchSensors(robot);
     this.drawPirs(robot);
@@ -211,6 +213,117 @@ class SimulationCanvasRenderer {
         var hex = c.toString(16);
         return hex.length == 1 ? "0" + hex : hex;
     }
+
+    /***
+     * Draw all led matrices on led matrix canvases with the states specified in robot.
+     * @param {RobotComponent[]} robot 
+     */
+    drawLedmatrices(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.LEDMATRIX){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawLedmatrix(robot[i], canvas);
+            }
+        }
+    }
+
+    // static getLedmatrixLedPositions(){
+    //     let coordinates =   
+    //         [   [   [[21.75, 1.25], [30.4, 1.25], [], [], [], [], [], []], 
+    //                 [[21.81], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ],
+    //             [   [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ],
+    //             [   [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ],
+    //             [   [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []], 
+    //                 [[], [], [], [], [], [], [], []],
+    //                 [[], [], [], [], [], [], [], []] ]];
+    //     return coordinates;
+    // }
+
+    /**
+     * Draw an RGB LED on the given canvas with the state specified in robot.
+     * @param {SocialRobotLedMatrix} ledmatrix 
+     * @param {HTMLCanvasElement} canvas 
+     */
+    drawLedmatrix(ledmatrix, canvas){
+
+        if(canvas.getContext){
+            var self = this;
+            ledmatrix.getLedmatrixBackground().onload = function() {
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(ledmatrix.getLedmatrixBackground(),0, 0, 296, 70);
+            }
+
+            ledmatrix.getLedSvg().onload = function() {
+                var ctx = canvas.getContext('2d');
+                let ledOffsets = ledmatrix.getLedOffsets();
+                let state = ledmatrix.getState();
+
+                for(var currentSegment = 0; currentSegment < 4; currentSegment++) {
+                    for(var row = 0; row < 8; row++){
+                        for(var column = 0; column < 8; column++){
+                            if(Array.isArray(state) && state[currentSegment][column][row] == 1){
+                                let x = ledOffsets['left'] + ledOffsets['led_x'] + (column * ledOffsets['led_between_x']) + (currentSegment * ledOffsets['matrix_segment_between_x']);
+                                let y = ledOffsets['led_y'] + (row * ledOffsets['led_between_y']);
+                                let width = ledOffsets['led_radius'];
+                                let height = ledOffsets['led_radius'];
+                                ctx.drawImage(ledmatrix.getLedSvg(),x,y,width,height);
+                            }
+                        }
+                    }
+                }
+            }
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(ledmatrix.getLedmatrixBackground(),0, 0, 296, 70);
+
+            let ledOffsets = ledmatrix.getLedOffsets();
+            let state = ledmatrix.getState();
+
+            for(var currentSegment = 0; currentSegment < 4; currentSegment++) {
+                for(var row = 0; row < 8; row++){
+                    for(var column = 0; column < 8; column++){
+                        if(Array.isArray(state)){
+                            if(state[currentSegment][column][row] == 1){
+                                let x = ledOffsets['left'] + ledOffsets['led_x'] + (column * ledOffsets['led_between_x']) + (currentSegment * ledOffsets['matrix_segment_between_x']);
+                                let y = ledOffsets['led_y'] + (row * ledOffsets['led_between_y']);
+                                let width = ledOffsets['led_radius'];
+                                let height = ledOffsets['led_radius'];
+                                ctx.drawImage(ledmatrix.getLedSvg(),x,y,width,height);
+                            }
+                        }
+                    }
+                }
+            }
+        } else {
+            console.log(canvas, "This canvas has no context");   
+        }
+    }
+
 
     /**
      * Draw all servos on servo canvases with the states and images specified in robot.

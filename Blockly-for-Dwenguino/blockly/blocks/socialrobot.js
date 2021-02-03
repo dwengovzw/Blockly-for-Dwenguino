@@ -30,6 +30,66 @@ var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
 
 Blockly.Blocks.socialrobot.HUE = 25;
 
+var ledmatrixDropdown = [
+  ["0", "0"],
+  ["1", "1"],
+  ["2", "2"],
+  ["3", "3"]
+];
+
+let eyePatternDropdown = [
+  [MSG.ledmatrix['restPosition'],'0'],
+  [MSG.ledmatrix['blink1'], '1'],
+  [MSG.ledmatrix['blink2'],'2'],
+  [MSG.ledmatrix['blink3'],'3'],
+  [MSG.ledmatrix['blink4'],'4'],
+  [MSG.ledmatrix['blink5'],'5'],
+  [MSG.ledmatrix['right1'],'6'],
+  [MSG.ledmatrix['right2'],'7'],
+  [MSG.ledmatrix['left1'],'8'],
+  [MSG.ledmatrix['left2'],'9'],
+  [MSG.ledmatrix['up1'],'11'],
+  [MSG.ledmatrix['up2'],'12'],
+  [MSG.ledmatrix['up3'],'13'],
+  [MSG.ledmatrix['down1'],'14'],
+  [MSG.ledmatrix['down2'],'15'],
+  [MSG.ledmatrix['down3'],'16'],
+  [MSG.ledmatrix['angryLeft1'],'17'],
+  [MSG.ledmatrix['angryLeft2'],'18'],
+  [MSG.ledmatrix['angryLeft3'],'19'],
+  [MSG.ledmatrix['angryLeft4'],'20'],
+  [MSG.ledmatrix['angryRight1'],'22'],
+  [MSG.ledmatrix['angryRight2'],'23'],
+  [MSG.ledmatrix['angryRight3'],'24'],
+  [MSG.ledmatrix['angryRight4'],'25'],
+  [MSG.ledmatrix['sadLeft1'],'27'],
+  [MSG.ledmatrix['sadLeft2'],'28'],
+  [MSG.ledmatrix['sadLeft3'],'29'],
+  [MSG.ledmatrix['sadRight1'],'32'],
+  [MSG.ledmatrix['sadRight2'],'33'],
+  [MSG.ledmatrix['sadRight3'],'34'],
+  [MSG.ledmatrix['evilLeft1'],'37'],
+  [MSG.ledmatrix['evilLeft2'],'38'],
+  [MSG.ledmatrix['evilRight1'],'39'],
+  [MSG.ledmatrix['evilRight2'],'40'],
+  [MSG.ledmatrix['scanHorizontal1'],'41'],
+  [MSG.ledmatrix['scanHorizontal2'],'42'],
+  [MSG.ledmatrix['scanHorizontal3'],'43'],
+  [MSG.ledmatrix['scanHorizontal4'],'44'],
+  [MSG.ledmatrix['scanVertical1'],'46'],
+  [MSG.ledmatrix['scanVertical2'],'47'],
+  [MSG.ledmatrix['scanVertical3'],'48'],
+  [MSG.ledmatrix['scanVertical4'],'49'],
+  [MSG.ledmatrix['scanVertical5'],'50'],
+  [MSG.ledmatrix['scanVertical6'],'51'],
+  [MSG.ledmatrix['rip1'],'52'],
+  [MSG.ledmatrix['rip2'],'53'],
+  [MSG.ledmatrix['peering1'],'54'],
+  [MSG.ledmatrix['peering2'],'55'],
+  [MSG.ledmatrix['peering3'],'56'],
+  [MSG.ledmatrix['peering4'],'57']
+];
+
 var pir_sensor_json = {
   "id": "pir_sensor",
   "message0": MSG.socialRobotPirBlock,
@@ -200,7 +260,7 @@ var socialrobot_rgbled_json = {
       "check": "Number"
     }
   ],
-  "message1": MSG.socialRobotRgbColorBlock + " %1",
+  "message1": MSG.socialRobotRgbColorBlock,
   "args1":[
     {
       "type": "input_value",
@@ -259,7 +319,7 @@ Blockly.Blocks['socialrobot_rgbled_off'] = {
 
 var socialrobot_rgb_color_json = {
   "id": "socialrobot_rgb_color",
-  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
+  "message0": MSG.socialRobotRgbColor,
   "type": "rgb_color",
   "args0": [
     {
@@ -301,7 +361,7 @@ Blockly.Blocks['socialrobot_rgb_color'] = {
 
 var socialrobot_rgb_color_with_numbers_json = {
   "id": "socialrobot_rgb_color",
-  "message0": MSG.socialRobotRgbColorBlock + " %1 %2 %3",
+  "message0": MSG.socialRobotRgbColor,
   "type": "rgb_color",
   "args0": [
     {
@@ -342,6 +402,83 @@ Blockly.Blocks['socialrobot_rgb_color_with_numbers'] = {
     this.jsonInit(socialrobot_rgb_color_with_numbers_json);
   }
 };
+
+Blockly.Blocks['socialrobot_show_ledmatrix_image'] = {
+  init: function () {
+      this.setColour(Blockly.Blocks.socialrobot.HUE);
+      this.setPreviousStatement(true);
+      this.setNextStatement(true);
+      this.appendDummyInput()
+            .appendField(MSG.socialRobotLedmatrixImageBlock)
+            .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+      this.appendDummyInput().appendField("    0     1     2     3     4     5     6     7");
+      this.appendDummyInput().appendField("0").appendField(new Blockly.FieldCheckbox("FALSE"), "LED00").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED10").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED20").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED30").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED40").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED50").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED60").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED70");
+      this.appendDummyInput().appendField("1").appendField(new Blockly.FieldCheckbox("FALSE"), "LED01").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED11").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED21").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED31").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED41").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED51").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED61").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED71");
+      this.appendDummyInput().appendField("2").appendField(new Blockly.FieldCheckbox("FALSE"), "LED02").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED12").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED22").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED32").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED42").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED52").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED62").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED72");
+      this.appendDummyInput().appendField("3").appendField(new Blockly.FieldCheckbox("FALSE"), "LED03").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED13").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED23").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED33").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED43").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED53").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED63").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED73");
+      this.appendDummyInput().appendField("4").appendField(new Blockly.FieldCheckbox("FALSE"), "LED04").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED14").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED24").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED34").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED44").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED54").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED64").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED74");
+      this.appendDummyInput().appendField("5").appendField(new Blockly.FieldCheckbox("FALSE"), "LED05").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED15").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED25").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED35").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED45").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED55").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED65").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED75");
+      this.appendDummyInput().appendField("6").appendField(new Blockly.FieldCheckbox("FALSE"), "LED06").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED16").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED26").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED36").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED46").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED56").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED66").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED76");
+      this.appendDummyInput().appendField("7").appendField(new Blockly.FieldCheckbox("FALSE"), "LED07").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED17").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED27").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED37").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED47").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED57").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED67").appendField(" ").appendField(new Blockly.FieldCheckbox("FALSE"), "LED77");
+      this.setTooltip(MSG.socialRobotLedmatrixImageBlockTooltip);
+  }
+};
+
+Blockly.Blocks['socialrobot_show_ledmatrix_eye_pattern'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.socialrobot.HUE);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.appendDummyInput()
+        .appendField(MSG.socialRobotLedmatrixEyePatternBlock)
+        .appendField(new Blockly.FieldDropdown(eyePatternDropdown), "EYEPATTERN");
+    this.appendDummyInput()
+          .appendField(MSG.socialRobotLedmatrixEyePatternSegmentBlock)
+          .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+    this.setTooltip(MSG.socialRobotLedmatrixEyePatternBlockTooltip);
+  }
+}
+
+Blockly.Blocks['socialrobot_clear_ledmatrix_segment'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.socialrobot.HUE);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.appendDummyInput()
+          .appendField(MSG.socialRobotLedmatrixClearSegmentBlock)
+          .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+    this.setTooltip(MSG.socialRobotLedmatrixClearSegmentBlockTooltip);
+  }
+}
+
+Blockly.Blocks['socialrobot_clear_ledmatrix'] = {
+  init: function() {
+    this.setColour(Blockly.Blocks.socialrobot.HUE);
+    this.setPreviousStatement(true);
+    this.setNextStatement(true);
+    this.appendDummyInput()
+          .appendField(MSG.socialRobotLedmatrixClearDisplayBlock)
+    this.setTooltip(MSG.socialRobotLedmatrixClearDisplayBlockTooltip);
+  }
+}
+
+// Blockly.Blocks['socialrobot_play_animation'] = {
+//   init: function() {
+//     this.setColour(Blockly.Blocks.socialrobot.HUE);
+//     this.setPreviousStatement(true);
+//     this.setNextStatement(true);
+//     this.appendDummyInput()
+//           .appendField(MSG.socialRobotLedmatrixDisplayAnimationBlock)
+//           .appendField(new Blockly.FieldDropdown(animationDropdown), "ANIMATION");
+//     this.appendDummyInput()
+//           .appendField(MSG.socialRobotLedmatrixLeftSegmentBlock)
+//           .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+//     this.appendDummyInput().appendField(MSG.socialRobotLedmatrixRightSegmentBlock)
+//           .appendField(new Blockly.FieldDropdown(ledmatrixDropdown), "NUMBERDISPLAY");
+
+//     this.setTooltip(MSG.socialRobotLedmatrixClearDisplayBlockTooltip);
+//   }
+// }
 
 var socialrobot_servo_json = {
   "id": "socialrobot_servo",

@@ -227,7 +227,7 @@ class SocialRobotRgbLed extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return ['A0', 'A1', 'A2', 'A3', 'A4', 'A5'];
+        return ['3', '5', '6', '11', '14', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5'];
     }
 
     getId(){

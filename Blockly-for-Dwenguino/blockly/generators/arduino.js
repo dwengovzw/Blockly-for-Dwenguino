@@ -185,8 +185,15 @@ Blockly.Arduino.finish = function(code) {
 
   // Convert the setups dictionary into a list.
   var setups = [];
+
+  // Ensure that initDwenguino() is always on the first command in setup()
+  if('userSetupCode' in Blockly.Arduino.setups_){
+    setups.push(Blockly.Arduino.setups_['userSetupCode']);
+  }
+
   for (var name in Blockly.Arduino.setups_) {
-    setups.push(Blockly.Arduino.setups_[name]);
+    if(name != 'userSetupCode')
+      setups.push(Blockly.Arduino.setups_[name]);
   }
 
   var allDefs = imports.join('\n') + '\n\n' + definitions.join('\n') + '\nvoid setup() \n{\n  '+setups.join('\n  ') + '\n}'+ '\n\n';

@@ -8,9 +8,9 @@ class DwenguinoEventLogger {
     sessionId = null;
     tutorialId = null;
 
-    school = null;
     userId = null;
-
+    school = null;
+    
     dataOfBirth = "";
     genderSetting = "";
     tutialIdSetting = "";
@@ -64,10 +64,9 @@ class DwenguinoEventLogger {
         "name": eventName,
         "simulatorState": simulatorState,
         "selectedDifficulty": difficultyLevel,
-        "activeTutorial": DwenguinoEventLogger.tutorialIdSetting,
-        "groupId": DwenguinoEventLogger.activityIdSetting,
-        "computerId": DwenguinoEventLogger.computerId,
-        "workshopId": DwenguinoEventLogger.workshopId,
+        "activeTutorial": this.tutorialIdSetting,
+        "computerId": this.computerId,
+        "workshopId": this.workshopId,
         "data": data
         };
         return event;
@@ -76,24 +75,23 @@ class DwenguinoEventLogger {
     recordEvent(eventToRecord){
         var serverSubmission = {
         "timestamp": $.now(),
-        "userId": DwenguinoEventLogger.userId,
-        "school": DwenguinoEventLogger.school,
-        "sessionId": DwenguinoEventLogger.sessionId,
-        "dateOfBirth": DwenguinoEventLogger.agegroupSetting,
-        "gender": DwenguinoEventLogger.genderSetting,
+        "userId": this.userId,
+        "school": this.school,
+        "sessionId": this.sessionId,
         "event": eventToRecord
         };
         console.log(eventToRecord);
+        console.log(serverSubmission);
         if (this.sessionId !== undefined){
-        $.ajax({
-            type: "POST",
-            url: ServerConfig.getServerUrl() + "/logging/event",
-            data: serverSubmission,
-        }).done(function(data){
-            console.debug('Recording submitted', data);
-        }).fail(function(response, status)  {
-            console.warn('Failed to submit recording:', status);
-        });
+            $.ajax({
+                type: "POST",
+                url: ServerConfig.getServerUrl() + "/logging/event",
+                data: serverSubmission,
+            }).done(function(data){
+                console.debug('Recording submitted', data);
+            }).fail(function(response, status)  {
+                console.warn('Failed to submit recording:', status);
+            });
         }
     }
 

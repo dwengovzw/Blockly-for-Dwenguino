@@ -43,6 +43,8 @@ class DwenguinoSimulationScenarioRidingRobotWithWall extends DwenguinoSimulation
         // init superclass
         super.initSimulationDisplay(containerId);
 
+        $("#sim_board").addClass("sim_board_row_placement");
+
         // Add a border to the container
         $("#sim_container")
             .css("border", "solid")
