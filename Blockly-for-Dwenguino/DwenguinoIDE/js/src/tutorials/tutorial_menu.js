@@ -145,29 +145,23 @@ class TutorialMenu {
             this.addTutorialDialogEventHandlers();
         });
 
-        let serverSubmission = { };
-        if(this.eventLogger.loggingModal.user != null){
-            serverSubmission = {
-                "username": this.eventLogger.loggingModal.user.username,
-                "password": JSON.stringify(this.eventLogger.loggingModal.user.password),
-                "category": category
-            }; 
-        } else {
-            serverSubmission = {
-                "username": "",
-                "password": "",
-                "category": category
-            }
-        }
+        let serverSubmission = {
+            "category": category
+        };
+
         console.log(serverSubmission);
     
         let self = this;
-        $.ajax({
-            type: "POST",
+        let ajaxSettings = {
+            type: "GET",
             url: ServerConfig.getServerUrl() + "/tutorials/completedTutorials",
             data: serverSubmission,
-        }).done(function(completedTutorials){
+            retryLimit: 1
+        };
 
+        $.ajax(ajaxSettings).done(onDone).fail(onFail);
+        
+        function onDone(completedTutorials) {
             $.each(tutorials, function(index, tutorial){
                 if(tutorial.category == category){
                     var isCompleted = false;
@@ -179,16 +173,22 @@ class TutorialMenu {
                     self.addTutorial(tutorial, isCompleted);
                 }
             });
-        }).fail(function(response, status)  {
-            console.warn('Failed to get completed tutorials:', status);
-            $.each(tutorials, function(index, tutorial){
-                if(tutorial.category == category){
-                    var isCompleted = false;
-                    self.addTutorial(tutorial, isCompleted);
-                }
-            });
-        });
-    
+        };
+
+        function onFail(response, status) {
+            if(ajaxSettings.retryLimit > 0){
+                this.retryLimit--;
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/renewToken"
+                }).done(function(data){
+                    $.ajax(ajaxSettings).done(onDone).fail(onFail);
+                }).fail(function(response, status)  {
+                    console.log(status);
+                    console.warn('Failed to log in:', response);
+                });
+            } 
+        };
     }
 
     loadComponentsOverview(){
@@ -240,7 +240,6 @@ class TutorialMenu {
         $("#tutorialModal .modal-body .message .container").append('<div id="row4" class="row"></div>');
         $("#row4").append('<h3>'+MSG.tutorialMenu.display+'</h3>');
         $("#tutorialModal .modal-body .message .container").append('<ul id="tutorialModal_display_menu" class=" row components_overview_cards"></ul>');
-
         
         let displayArray = [Lcd, Led, RgbLed];
 
