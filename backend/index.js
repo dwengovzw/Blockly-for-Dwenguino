@@ -1,16 +1,11 @@
-// FileName: index.js
-// Import express
 import express from 'express';
-//let express = require('express');
-// Import body parser
 import bodyParser from 'body-parser';
-// Import mongoose
+import cookieParser from 'cookie-parser';
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 //mongoose.set('debug', true);
-// Import path
 import path from 'path';
 
-// Import chrome launcher
 import ChromeLauncher from 'chrome-launcher';
 
 // Import blockly router
@@ -32,6 +27,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet());
 }
 
+app.use(cookieParser());
+
 // Configure bodyparser to handle post requests
 app.use(bodyParser.urlencoded({
     extended: true
@@ -40,8 +37,8 @@ app.use(bodyParser.json({ type: 'application/*+json' }));
 
 // connect to Mongoose and set connection variable
 // Depricate: mongoose.connect();
-//let dev_db_url = 'mongodb://localhost/dwenguinoblockly';
-let dev_db_url = 'mongodb://localhost/testingFuncSave';
+let dev_db_url = 'mongodb://localhost/dwenguinoblockly';
+//let dev_db_url = 'mongodb://localhost/testingFuncSave';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB, {
     useNewUrlParser: true,
@@ -60,8 +57,8 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-    //sapp.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+    //app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+    app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 }
 
 // Use blockly routes for the app

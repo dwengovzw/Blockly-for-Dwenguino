@@ -101,8 +101,8 @@ class LoggingMenu{
         var self = this;
         let errors = [];
         let username = $( "input[name=myusernametag]").val();
-        let password = this.currentlySelectedIcons;
-        this.user = new User(username, password);
+        let password = this.currentlySelectedIcons.slice();
+        this.user = new User(username); // not needed because we have access token
 
     
         errors.push(this.validator.validateId(this.currentlySelectedIcons));
@@ -110,20 +110,21 @@ class LoggingMenu{
         if(this.validator.hasErrors(errors)){
             this.showErrors(errors);
         } else {
-            var serverSubmission = {
-                "userId": this.user.username,
-                "password": JSON.stringify(this.user.password)
+            let serverSubmission = {
+                "username": username,
+                "password": JSON.stringify(password),
             };
-    
+            console.log(serverSubmission);
             $.ajax({
                 type: "POST",
-                url: ServerConfig.getServerUrl() + "/authentication/authenticate",
+                url: ServerConfig.getServerUrl() + "/login",
                 data: serverSubmission,
             }).done(function(data){
-                self.eventLogger.setUserId(data['id']);
+                //self.eventLogger.setUserId(data['username']); // TODO derive using access token
                 self.resetSelectedIcons();
                 self.removeDialog();
             }).fail(function(response, status)  {
+                console.log(status);
                 console.warn('Failed to log in:', status);
                 self.resetSelectedIcons();
                 this.user = null;
@@ -139,6 +140,10 @@ class LoggingMenu{
         $('#inputUsername').append('<label for="myusernametag" class="col-md-3">'+MSG.logging['username']+'</label>');
         $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="'+ MSG.logging['chooseUsername']+'">');
     
+        $('#loggingModalBody').append('<div id="inputEmail" class="ui-widget row mb-4">');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+MSG.logging['email']+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ 'Email address'+'">');
+
         this.createIconModule();
     
         $('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
@@ -163,22 +168,24 @@ class LoggingMenu{
         var self = this;
         let errors = [];
         let username = $( "input[name=myusernametag]").val();
+        let email = $( "input[name=emailTag]").val();
         let password = this.currentlySelectedIcons.slice();
-        this.user = new User( username, password );
+        this.user = new User( username);
 
-        console.log(this.user.password);
         errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
         if(this.validator.hasErrors(errors)){
             this.showErrors(errors);
         } else {
             let serverSubmission = {
-                "userId": this.user.username,
-                "password": JSON.stringify(this.user.password)
+                "username": this.user.username,
+                "password": JSON.stringify(password),
+                "email": email
             };
+            console.log(serverSubmission);
             $.ajax({
                 type: "POST",
-                url: ServerConfig.getServerUrl() + "/authentication/new",
+                url: ServerConfig.getServerUrl() + "/register",
                 data: serverSubmission,
             }).done(function(data){
                 self.eventLogger.setUserId(self.user.username);
@@ -267,8 +274,6 @@ class LoggingMenu{
 
                     console.log(self.user.password);
                     let serverSubmission = {
-                        "userId": self.user.username,
-                        "password": JSON.stringify(self.user.password),
                         "school": school,
                         "dateOfBirth": dateOfBirth,
                         "gender": gender
@@ -276,7 +281,7 @@ class LoggingMenu{
                     console.log(serverSubmission);
                     $.ajax({
                         type: "POST",
-                        url: ServerConfig.getServerUrl() + "/authentication/updateUser",
+                        url: ServerConfig.getServerUrl() + "/user/update",
                         data: serverSubmission,
                     }).done(function(data){
                         self.removeDialog();
