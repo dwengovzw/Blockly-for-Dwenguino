@@ -85,7 +85,7 @@ Blockly.JavaScript['dwenguino_servo'] = function (block) {
 
 Blockly.JavaScript.dwenguino_servo_dropdown = function() {
   // Boolean values HIGH and LOW.
-  var code = (this.getFieldValue('SERVO_DROPDOWN') === 'SERVO1') ? 36 : 37;
+  var code = (this.getFieldValue('SERVO_DROPDOWN') === 'SERVO1') ? 40 : 41;
   return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
