@@ -8,6 +8,7 @@ import https from 'https';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 //mongoose.set('debug', true);
 import path from 'path';
@@ -44,7 +45,7 @@ let app = express();
 
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
-    app.use(helmet());false
+    app.use(helmet());
 }
 
 app.use(cookieParser());
