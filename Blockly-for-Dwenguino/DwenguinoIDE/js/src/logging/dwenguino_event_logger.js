@@ -7,12 +7,7 @@ import ServerConfig from '../server_config.js'
 class DwenguinoEventLogger {
     sessionId = null;
     tutorialId = null;
-
-    userId = null;
-    school = null;
     
-    dataOfBirth = "";
-    genderSetting = "";
     tutialIdSetting = "";
     computerId = "-1";
     workshopId = "-1";
@@ -75,8 +70,6 @@ class DwenguinoEventLogger {
     recordEvent(eventToRecord){
         var serverSubmission = {
         "timestamp": $.now(),
-        "userId": this.userId,
-        "school": this.school,
         "sessionId": this.sessionId,
         "event": eventToRecord
         };
@@ -93,22 +86,6 @@ class DwenguinoEventLogger {
                 console.warn('Failed to submit recording:', status);
             });
         }
-    }
-
-    setUserId(userId){
-        this.userId = userId;
-    }
-
-    setSchool(school){
-        this.school = school;
-    }
-
-    setDateOfBirth(dateOfBirth){
-        this.dateOfBirth = dateOfBirth;
-    }
-
-    setGender(gender){
-        this.genderSetting = gender;
     }
 }
 
