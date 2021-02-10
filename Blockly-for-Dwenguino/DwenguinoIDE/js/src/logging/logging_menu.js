@@ -8,7 +8,6 @@ import User from './user.js'
  * 
  */
 class LoggingMenu{
-    user = null;
     currentlySelectedIcons= ['0','0','0','0'];
     SIZE = 4;
     icons = [
@@ -102,9 +101,7 @@ class LoggingMenu{
         let errors = [];
         let username = $( "input[name=myusernametag]").val();
         let password = this.currentlySelectedIcons.slice();
-        this.user = new User(username); // not needed because we have access token
 
-    
         errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
         if(this.validator.hasErrors(errors)){
@@ -114,20 +111,16 @@ class LoggingMenu{
                 "username": username,
                 "password": JSON.stringify(password),
             };
-            console.log(serverSubmission);
             $.ajax({
                 type: "POST",
                 url: ServerConfig.getServerUrl() + "/login",
                 data: serverSubmission,
             }).done(function(data){
-                //self.eventLogger.setUserId(data['username']); // TODO derive using access token
                 self.resetSelectedIcons();
                 self.removeDialog();
             }).fail(function(response, status)  {
-                console.log(status);
                 console.warn('Failed to log in:', status);
                 self.resetSelectedIcons();
-                this.user = null;
             });
         }
     }
@@ -170,7 +163,6 @@ class LoggingMenu{
         let username = $( "input[name=myusernametag]").val();
         let email = $( "input[name=emailTag]").val();
         let password = this.currentlySelectedIcons.slice();
-        this.user = new User( username);
 
         errors.push(this.validator.validateId(this.currentlySelectedIcons));
     
@@ -178,17 +170,15 @@ class LoggingMenu{
             this.showErrors(errors);
         } else {
             let serverSubmission = {
-                "username": this.user.username,
+                "username": username,
                 "password": JSON.stringify(password),
                 "email": email
             };
-            console.log(serverSubmission);
             $.ajax({
                 type: "POST",
                 url: ServerConfig.getServerUrl() + "/register",
                 data: serverSubmission,
             }).done(function(data){
-                self.eventLogger.setUserId(self.user.username);
                 self.resetSelectedIcons();
                 self.removeDialog();
                 self.showSettingsMenu();
@@ -272,23 +262,17 @@ class LoggingMenu{
                     self.eventLogger.setDateOfBirth(dateOfBirth);
                     self.eventLogger.setGender(gender);
 
-                    console.log(self.user.password);
                     let serverSubmission = {
                         "school": school,
                         "dateOfBirth": dateOfBirth,
                         "gender": gender
                     };
-                    console.log(serverSubmission);
                     $.ajax({
                         type: "POST",
                         url: ServerConfig.getServerUrl() + "/user/update",
                         data: serverSubmission,
                     }).done(function(data){
                         self.removeDialog();
-                        console.log("[act;" + (self.eventLogger.dateOfBirth || "") 
-                                        + ";" + (self.eventLogger.userId || "")
-                                        + ";" + (self.eventLogger.school || "")
-                                        + "]");
                     }).fail(function(response, status)  {
                         console.warn('Failed to log in:', status);
                     });

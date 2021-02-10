@@ -148,8 +148,6 @@ class TutorialMenu {
         let serverSubmission = {
             "category": category
         };
-
-        console.log(serverSubmission);
     
         let self = this;
         let ajaxSettings = {
@@ -373,26 +371,35 @@ class TutorialMenu {
     }
 
     saveCompleteTutorial(tutorialId, category){
-        if(this.eventLogger.loggingModal.user != null){
-            let serverSubmission = {
-                "username": this.eventLogger.loggingModal.user.username,
-                "password": JSON.stringify(this.eventLogger.loggingModal.user.password),
-                "tutorialId": tutorialId,
-                "category": category,
-            };
+        let serverSubmission = {
+            "tutorialId": tutorialId,
+            "category": category
+        };
     
-            if (this.eventLogger.sessionId !== undefined){
+        let self = this;
+        let ajaxSettings = {
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/tutorials/completeTutorial",
+            data: serverSubmission,
+            retryLimit: 1
+        };
+
+        $.ajax(ajaxSettings).fail(onFail);
+        
+        function onFail(response, status) {
+            if(ajaxSettings.retryLimit > 0){
+                this.retryLimit--;
                 $.ajax({
                     type: "POST",
-                    url: ServerConfig.getServerUrl() + "/tutorials/completeTutorial",
-                    data: serverSubmission,
+                    url: ServerConfig.getServerUrl() + "/renewToken"
                 }).done(function(data){
-                    console.debug('Recording submitted', data);
+                    $.ajax(ajaxSettings).fail(onFail);
                 }).fail(function(response, status)  {
-                    console.warn('Failed to submit recording:', status);
+                    console.log(status);
+                    console.warn('Failed to log in:', response);
                 });
-            }
-        }
+            } 
+        };
     }
 }
 
