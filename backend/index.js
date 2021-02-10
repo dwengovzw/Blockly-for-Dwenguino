@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 //mongoose.set('debug', true);
 import path from 'path';
@@ -16,6 +16,9 @@ import blocklyRoutes from './routes/blockly-routes.js';
 import compression from 'compression';
 import helmet from 'helmet';
 
+// Load environment variables
+dotenv.config();
+
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
@@ -24,7 +27,7 @@ let app = express();
 
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
-    app.use(helmet());
+    app.use(helmet());false
 }
 
 app.use(cookieParser());
@@ -76,8 +79,6 @@ let server = app.listen(port, function () {
 
 
 //This is depricated, now the electron browser is which is started using a bash script
-
-
 /*if (process.env.NODE_ENV === 'production') {
     module.export = app;
 } else {
