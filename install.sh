@@ -119,7 +119,7 @@ then
     echo "$work_dir/node_modules/electron/dist/electron $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> start.sh # Start electron
     echo 'electronPid=$!' >> start.sh # get process id for the latest command
     echo "cd $work_dir/backend/" >> start.sh # for some weird reason we have to be inside the folder, before calling node to run the js file
-    echo "node --experimental-modules index.js &" >> start.sh # start the backend
+    echo "node -r dotenv/config --experimental-modules index.js &" >> start.sh # start the backend
     echo "cd $work_dir" >> start.sh # and go back to wherever you came from
     echo 'nodePid=$!' >> start.sh # get the process id for the latest command
     echo 'echo "DwenguinoBlockly is running"' >> start.sh
