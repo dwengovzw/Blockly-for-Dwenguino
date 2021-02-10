@@ -4,6 +4,7 @@
 export NODE_ENV=production
 export PORT=8081
 export MONGODB_URI="mongodb://localhost/dwenguinoblockly"
+export SECURE=true
 
 # Remove all files in the deployment directory to make sure no unused files stay behind from the previous deployment
 sudo rm -rf /home/ubuntu/blockly-build/*
@@ -18,6 +19,6 @@ sudo cp -r * /home/ubuntu/blockly-build/
 cd /home/ubuntu/blockly-build/
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-forever restart backend/index.js || forever start backend/index.js
+forever restart backend/index.js -r dotenv/config || forever start backend/index.js -r dotenv/config
 exit
 
