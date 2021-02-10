@@ -7,7 +7,6 @@ import jwt from 'jsonwebtoken';
 let exports  = {};
 
 exports.getCompletedTutorials = function(req, res) {
-  mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
   let db = mongoose.connection;
 
   var query = Tutorialitem.find({});
@@ -16,13 +15,11 @@ exports.getCompletedTutorials = function(req, res) {
   query.select('tutorial_id');
   query.exec(function (err, docs) {
     res.send(docs);
-    db.close();
   });
 }
 
 
 exports.completeTutorial = function(req, res) {
-  mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
   let db = mongoose.connection;
 
   let completedTutorial = new Tutorialitem();
@@ -34,29 +31,24 @@ exports.completeTutorial = function(req, res) {
   completedTutorial.save()
     .then(item => {
       res.send("Tutorialitem saved to database");
-      db.close();
     })
     .catch(err => {
       console.debug(err);
       res.status(400).send("Unable to save to database");
-      db.close();
     });
 }
 
 exports.newCompletedTutorial = function(req, res) {  
-  mongoose.connect('mongodb://localhost/dwenguinoblockly', { useNewUrlParser: true });
   let db = mongoose.connection;
 
   db.collection('authentications').findOne({username: req.body.username})
   .then(function(doc) {
         if(!doc){
           res.status(401).send("The password was not correct or this username does not exist.");
-          db.close();
         } else {
           bcrypt.compare(req.body.password, doc.password, (err, result) => {
             if (err) {
               res.status(401).send("The password was not correct or this username does not exist.");
-              db.close();
             } else {
               if(result){
                 let completedTutorial = new Tutorialitem();
@@ -76,7 +68,6 @@ exports.newCompletedTutorial = function(req, res) {
                   });
               } else {
                   res.status(401).send("The password was not correct.");
-                  db.close();
               }
             }   
           });

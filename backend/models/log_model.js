@@ -6,10 +6,7 @@ var logSchema = mongoose.Schema({
         required: true
     },
     user_id: String,
-    school: String,
     session_id: String,
-    date_of_birth: Date,
-    gender: String,
     activity_id: Number,
     event: {
         name: {

@@ -14,12 +14,12 @@ let corsOptions = {
 };
 
 // // Set default API response
-// router.get('/', function (req, res) {
-//     res.json({
-//         status: 'The system is working!',
-//         message: 'To the moon and back.'
-//     });
-// });
+router.get('/', function (req, res) {
+    res.json({
+        status: 'The system is working!',
+        message: 'To the moon and back.'
+    });
+});
 // Import contact controller
 import logcontroller from '../controllers/log_controller.js';
 import utilscontroller from '../controllers/util_controller.js';
@@ -32,7 +32,7 @@ router.route('/logging/id')
     .get(logcontroller.newSessionId);
 
 router.route('/logging/event')
-    .post(logcontroller.event);
+    .post(authenticationcontroller.authenticateForLogging,logcontroller.event);
 
 router.route('/utilities/clean')
     .get(utilscontroller.clean);

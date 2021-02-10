@@ -6,15 +6,12 @@ import jwt from 'jsonwebtoken';
 let exports  = {};
 
 exports.getUserInfo = function(req, res) {
-    let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/dwenguinoblockly';
-    mongoose.connect(mongoDB, { useNewUrlParser: true });
     let db = mongoose.connection;
 
     db.collection('users').findOne({username: req.user.username})
     .then(function(doc){
         if(doc){
             res.send(doc);
-            db.close();
         } else {
             res.sendStatus(404);
         }
@@ -22,8 +19,6 @@ exports.getUserInfo = function(req, res) {
 }
 
 exports.updateUserInfo = function(req, res) {
-    let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/dwenguinoblockly';
-    mongoose.connect(mongoDB, { useNewUrlParser: true });
     let db = mongoose.connection;
 
     let conditions = { username: req.user.username };
@@ -42,10 +37,8 @@ exports.updateUserInfo = function(req, res) {
             if(error){
                 console.log(error);
                 res.sendStatus(400);
-                db.close();
             } else {
                 res.sendStatus(200);
-                db.close();
             }
         } 
     );
