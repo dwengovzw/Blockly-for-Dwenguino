@@ -109,4 +109,4 @@ class RandomSimulationEnvironment extends DwenguinoSimulationScenario{
 
 }
 
-export default randomSimulationEnvironment;
+export default RandomSimulationEnvironment;
