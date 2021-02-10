@@ -16,26 +16,21 @@ const SECURE = process.env.SECURE || false;
  * @param {*} res 
  */
 exports.register = function(req, res){
-  let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/dwenguinoblockly';
-  mongoose.connect(mongoDB, { useNewUrlParser: true });
   let db = mongoose.connection;
-  
   db.collection('users').findOne({username: req.body.username})
   .then(function(doc) {
-      console.log(doc);
+
       if(!doc){
         bcrypt.genSalt(10,(err,salt) => {
           bcrypt.hash(req.body.password, salt, (err, hashPassword) => {
             if (err) {
-              console.log(err);
+              console.debug(err);
               res.status(401).send("Hashing has error.");
-              db.close();
             } else {
               bcrypt.hash(req.body.username, salt, (err, hashUsername) => {
                 if (err) {
-                  console.log(err);
+                  console.debug(err);
                   res.status(401).send("Hashing has error.");
-                  db.close();
                 } else {
                   let user = new Useritem();
                   user.username = req.body.username;
@@ -48,7 +43,7 @@ exports.register = function(req, res){
                   user.language = null;
                   user.save()
                   .then(item => {
-                    const accessToken = jwt.sign({username: user.username}, ACCESS_TOKEN_SECRET, {expiresIn: '1m'});
+                    const accessToken = jwt.sign({username: user.username}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
                     const refreshToken = jwt.sign({username: user.username}, REFRESH_TOKEN_SECRET, {expiresIn:'180m'});
                     
                     const cookieConfig = {
@@ -74,11 +69,9 @@ exports.register = function(req, res){
                             username: user.username,
                             user: user.id, 
                           });
-                          db.close();
                         })
                         .catch(err => {
-                          console.log(err);
-                          db.close();
+                          console.debug(err);
                         });
                       } else {
                         res.cookie('dwengo', tokens, cookieConfig);
@@ -86,14 +79,12 @@ exports.register = function(req, res){
                           username: user.username,
                           user: user.id, 
                         });
-                        db.close();
                       }
                     });
                   })
                   .catch(err => {
-                    console.log(err);
+                    console.debug(err);
                     res.status(400).send("Unable to register the new user into the database.");
-                    db.close();
                   });
                 }
               });
@@ -102,26 +93,21 @@ exports.register = function(req, res){
         });
       } else {
         res.status(401).send("The username does already exist. Try a different one");
-        db.close();
       }
   });
 }
 
 exports.login = function(req, res){
-  let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/dwenguinoblockly';
-  mongoose.connect(mongoDB, { useNewUrlParser: true });
   let db = mongoose.connection;
-
   db.collection('users').findOne({username: req.body.username})
   .then(function(doc){
     if(doc){
       bcrypt.compare(req.body.password, doc.password, (err, result) => {
         if (err) {
           res.status(401).send("The password was not correct or this user does not exist.");
-          db.close();
         } else {
           if(result){
-            const accessToken = jwt.sign({username: doc.username}, ACCESS_TOKEN_SECRET, {expiresIn: '1m'});
+            const accessToken = jwt.sign({username: doc.username}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
             const refreshToken = jwt.sign({username: doc.username}, REFRESH_TOKEN_SECRET);
             db.collection('tokens').findOne({refreshToken: refreshToken})
             .then(function(doc) {
@@ -144,43 +130,34 @@ exports.login = function(req, res){
                 .then(item => {
                   res.cookie('dwengo', tokens, cookieConfig);
                   res.sendStatus(200);
-                  db.close();
                 })
                 .catch(err => {
-                  console.log(err);
-                  db.close();
+                  console.debug(err);
                 });
               } else {
                 res.cookie('dwengo', tokens, cookieConfig);
                 res.sendStatus(200);
-                db.close();
               }
             });
           } else {
             res.status(401).send("Username or password incorrect.");
-            db.close();
           } 
         }
       });
     } else {
       res.status(401).send('Username or password incorrect.');
-      db.close();
     }
   });
 }
 
 exports.refreshToken = function(req, res){
-  let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/dwenguinoblockly';
-  mongoose.connect(mongoDB, { useNewUrlParser: true });
   let db = mongoose.connection;
-
   const dwengoCookie = req.cookies.dwengo;
   if(dwengoCookie) {
     const token = dwengoCookie.refreshToken;
 
     if(!token){
       res.sendStatus(401);
-      db.close();
     }
 
     db.collection('tokens').findOne({token: token})
@@ -190,12 +167,10 @@ exports.refreshToken = function(req, res){
       } else {
         jwt.verify(token, REFRESH_TOKEN_SECRET, (err, decoded) => {
           if (err){
-            console.log(err);
-            console.log(decoded);
+            console.debug(err);
             res.sendStatus(403);
-            db.close();
           } else {
-            const accessToken = jwt.sign({username: decoded.username}, ACCESS_TOKEN_SECRET, {expiresIn: '1m'});
+            const accessToken = jwt.sign({username: decoded.username}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
             
             const cookieConfig = {
               httpOnly: true,
@@ -209,7 +184,6 @@ exports.refreshToken = function(req, res){
             
             res.cookie('dwengo', tokens, cookieConfig);
             res.sendStatus(200);
-            db.close();
           }
         });
       }
@@ -220,10 +194,7 @@ exports.refreshToken = function(req, res){
 }
 
 exports.logout = function(req, res){
-  let mongoDB = process.env.MONGODB_URI || 'mongodb://localhost/dwenguinoblockly';
-  mongoose.connect(mongoDB, { useNewUrlParser: true });
   let db = mongoose.connection;
-
   const refreshToken = req.body.refreshToken;
   const username = req.body.username;
 
@@ -234,15 +205,13 @@ exports.logout = function(req, res){
     if(doc){
       db.collection('tokens').deleteOne(query, function(err, obj){
         if (err) {
-          console.log(err);
+          console.debug(err);
         } else {
           res.send("Logout successful");
-          db.close();
         }
       });
     } else {
       res.send("Logout unsuccessful");
-      db.close();
     }
   });
 }
@@ -254,7 +223,7 @@ exports.authenticate = function(req, res, next) {
 
     jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, response) => {
       if(err) {
-        console.log(err);
+        console.debug(err);
         return res.sendStatus(403);
       }
       req.user = response;
@@ -262,6 +231,87 @@ exports.authenticate = function(req, res, next) {
     });
   } else {
     res.sendStatus(401);
+  }
+}
+
+/**
+ * Authenticate using the accessToken and add the user id to the request for event logging. 
+ * If the accessToken is invalid, then silently refresh the token using the refreshToken and 
+ * add the user id to the request for event logging.
+ * If the user is not authenticated (has no accessToken or refreshToken), then add an empty user id
+ * to the request for event logging.
+ * 
+ * This authentication function should only be used for event logging purposes, not to authenticate
+ * other requests. Use 'exports.authenticate' instead.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
+exports.authenticateForLogging = function(req, res, next) {
+  let db = mongoose.connection;
+  req.user = {};
+
+  const dwengoCookie = req.cookies.dwengo;
+  if(dwengoCookie) {
+    const accessToken = dwengoCookie.accessToken.split(' ')[1];
+
+    jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, response) => {
+      if(err) {
+        const refreshToken = dwengoCookie.refreshToken;
+        if(!refreshToken){
+          req.user.id = '';
+          next();
+        } else {
+          db.collection('tokens').findOne({token: refreshToken})
+          .then(function(doc) {
+            if(!doc){
+              req.user.id = '';
+              next();
+            } else {
+              jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
+                if (err){
+                  console.debug(err);
+                  req.user.id = '';
+                  next();
+                } else {
+                  const accessToken = jwt.sign({username: decoded.username}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
+                  const cookieConfig = {
+                    httpOnly: true,
+                    secure: SECURE,
+                    expires: new Date(Date.now() + 3 * 3600000)
+                  };
+                  const tokens = {
+                    accessToken: 'Bearer ' + accessToken, 
+                    refreshToken: refreshToken
+                  };
+                  res.cookie('dwengo', tokens, cookieConfig);
+                  db.collection('users').findOne({username: decoded.username})
+                  .then(function(doc) {
+                    req.user.id = '';
+                    if(doc){
+                      req.user.id = doc.id;
+                    }
+                    next();
+                  });
+                }
+              });
+            }
+          }); 
+        } 
+      } else {
+        db.collection('users').findOne({username: response.username})
+        .then(function(doc) {
+          req.user.id = '';
+          if(doc){
+            req.user.id = doc.id;
+          }
+          next();
+        });
+      }
+    });
+  } else {
+    req.user.id = '';
+    next();
   }
 }
 
