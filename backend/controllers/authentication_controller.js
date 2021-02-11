@@ -8,10 +8,6 @@ let exports = {};
 
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'ThF0yV1sY42aunmy1dUEVwn1ueZn3W67aIfCu9ieRJ9n7KkKWCyfj7MmaiRzawlNSUeSFbfyiUpal7cN4mpaSm8DsI4FFUWmqeP8h1INRtcUMwLokuw7SIvX0LfMGGuzqEnj9cQzABGlXg3Lk0vc5y';
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4cXauNhb2PxeHzcLEPlX1EzIemMFcN54bNeQHkGcWfQhbmLvWJL4BalUxa7KoTIqMf8NVXpC5a5ivAsAXENYWFFyMfJLiJylHqLBEAsSpgQ3C3SvtIwUrqDH896La8DJtJpIIiVwJv';
-let SECURE = false;
-if (process.env.SECURE === 'true') {
-  SECURE = true;
-}
 
 /**
  * 
@@ -51,7 +47,7 @@ exports.register = function(req, res){
                     
                     const cookieConfig = {
                       httpOnly: true,
-                      secure: SECURE,
+                      secure: process.env.NODE_ENV === 'production'? true: false,
                       expires: new Date(Date.now() + 3 * 3600000)
                     };
                     const tokens = {
@@ -117,7 +113,7 @@ exports.login = function(req, res){
 
               const cookieConfig = {
                 httpOnly: true,
-                secure: SECURE,
+                secure: process.env.NODE_ENV === 'production'? true: false,
                 expires: new Date(Date.now() + 3 * 3600000)
               };
               const tokens = {
@@ -177,7 +173,7 @@ exports.refreshToken = function(req, res){
             
             const cookieConfig = {
               httpOnly: true,
-              secure: SECURE,
+              secure: process.env.NODE_ENV === 'production'? true: false,
               expires: new Date(Date.now() + 3 * 3600000)
             };
             const tokens = {
@@ -280,7 +276,7 @@ exports.authenticateForLogging = function(req, res, next) {
                   const accessToken = jwt.sign({username: decoded.username}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
                   const cookieConfig = {
                     httpOnly: true,
-                    secure: SECURE,
+                    secure: process.env.NODE_ENV === 'production'? true: false,
                     expires: new Date(Date.now() + 3 * 3600000)
                   };
                   const tokens = {
