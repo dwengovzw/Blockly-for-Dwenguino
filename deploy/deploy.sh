@@ -1,10 +1,6 @@
 #!/bin/sh
 
-# make sure to set production flag of NodeJS
-export NODE_ENV=production
-export PORT=8081
-export MONGODB_URI="mongodb://localhost/dwenguinoblockly"
-export SECURE=true
+# Nodejs flags are now configured in ./backend/.env 
 
 # Remove all files in the deployment directory to make sure no unused files stay behind from the previous deployment
 sudo rm -rf /home/ubuntu/blockly-build/*
