@@ -21,6 +21,9 @@ import blocklyRoutes from './routes/blockly-routes.js';
 import compression from 'compression';
 import helmet from 'helmet';
 
+// For profiling the application in development
+import profiler from 'v8-profiler-node8'
+
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
