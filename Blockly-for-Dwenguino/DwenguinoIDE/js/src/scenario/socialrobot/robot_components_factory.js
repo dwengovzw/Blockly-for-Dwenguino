@@ -106,21 +106,9 @@ class RobotComponentsFactory {
       switch (type) {
         case TypesEnum.SERVO:;
           pin = this._robot[i].getPin();
-          if(pin === 36){
-            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(1)){
-              this._robot[i].setPrevAngle(this._robot[i].getAngle());
-              this._robot[i].setAngle(dwenguinoState.getServoAngle(1));
-            }
-          } else if(pin === 37){
-            if(this._robot[i].getAngle() != dwenguinoState.getServoAngle(2)){
-              this._robot[i].setPrevAngle(this._robot[i].getAngle());
-              this._robot[i].setAngle(dwenguinoState.getServoAngle(2));
-            }
-          } else {
-            if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
-              this._robot[i].setPrevAngle(this._robot[i].getAngle());
-              this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
-            }
+          if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
+            this._robot[i].setPrevAngle(this._robot[i].getAngle());
+            this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
           }
           break;
         case TypesEnum.LED:
@@ -447,9 +435,9 @@ class RobotComponentsFactory {
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
     if(id == 1){
-      pin = 36;
+      pin = 40;
     } else if (id == 2){
-      pin = 37;
+      pin = 41;
     } 
 
     let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
