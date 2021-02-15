@@ -13,7 +13,7 @@ let corsOptions = {
     origin: "*",
 };
 
-// Set default API response
+// // Set default API response
 router.get('/', function (req, res) {
     res.json({
         status: 'The system is working!',
@@ -21,17 +21,18 @@ router.get('/', function (req, res) {
     });
 });
 // Import contact controller
-import logcontroller from '../controllers/logcontroller.js';
-import utilscontroller from '../controllers/utilscontroller.js';
-import schoolscontroller from '../controllers/schoolscontroller.js';
-import authenticationcontroller from '../controllers/authenticationcontroller.js';
-import tutorialcontroller from '../controllers/tutorialcontroller.js';
+import logcontroller from '../controllers/log_controller.js';
+import utilscontroller from '../controllers/util_controller.js';
+import schoolscontroller from '../controllers/school_controller.js';
+import authenticationcontroller from '../controllers/authentication_controller.js';
+import tutorialcontroller from '../controllers/tutorial_controller.js';
+import usercontroller from '../controllers/user_controller.js';
 
 router.route('/logging/id')
     .get(logcontroller.newSessionId);
 
 router.route('/logging/event')
-    .post(logcontroller.event);
+    .post(authenticationcontroller.authenticateForLogging,logcontroller.event);
 
 router.route('/utilities/clean')
     .get(utilscontroller.clean);
@@ -48,21 +49,30 @@ router.route('/utilities/run', cors(corsOptions))
 router.route('/schools/')
     .get(schoolscontroller.getSchools);
 
-router.route('/authentication/new')
-    .post(authenticationcontroller.new);
+router.route('/register')
+    .post(authenticationcontroller.register);
 
-router.route('/authentication/authenticate')
-    .post(authenticationcontroller.authenticate);
+router.route('/login')
+    .post(authenticationcontroller.login);
 
-router.route('/authentication/updateUser')
-    .post(authenticationcontroller.update);
+router.route('/renewToken')
+    .post(authenticationcontroller.refreshToken);
+
+router.route('/logout')
+    .post(authenticationcontroller.logout);
 
 router.route('/tutorials/completedTutorials')
-    .post(tutorialcontroller.getCompletedTutorials);
+    .get(authenticationcontroller.authenticate, tutorialcontroller.getCompletedTutorials);
 
 router.route('/tutorials/completeTutorial')
-    .post(tutorialcontroller.newCompletedTutorial);
+    .post(authenticationcontroller.authenticate, tutorialcontroller.completeTutorial);
+
+router.route('/user/')
+    .get(authenticationcontroller.authenticate, usercontroller.getUserInfo);
+
+router.route('/user/update')
+    .post(authenticationcontroller.authenticate, usercontroller.updateUserInfo);
+
 
 // Export API routes
-//module.exports = router;
 export default router;
