@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "Kod",
   blocks: "Bloki",
   linkTooltip: "Zapisz i podlinkuj do bloków",

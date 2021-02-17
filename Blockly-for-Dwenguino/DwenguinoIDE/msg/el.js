@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
   blocks: "Μπλοκ",
   linkTooltip: "Αποθήκευση και σύνδεση σε μπλοκ.",
