@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "دوينجوينو بلوكلي",
   blocks: " كتل  ",
   linkTooltip: " حفظ وربط الكتل. ",

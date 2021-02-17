@@ -1,6 +1,7 @@
 /* dutch translation file */
 
 var MSG = {
+  arduinoCodeCopied: "Arduino-code werd gekopieerd naar het klembord",
   title: "DwenguinoBlockly",
   blocks: "Blokken",
   linkTooltip: "Opslaan en koppelen naar blokken.",

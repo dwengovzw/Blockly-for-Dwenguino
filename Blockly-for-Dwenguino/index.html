@@ -21,17 +21,18 @@
 <body id="db_body">
     <div class="db_header">
         <div class="db_logo">
-          <!-- <img id="db_wegostem_logo_top_left" src="./DwenguinoIDE/img/wegostem.png" alt="The WeGoSTEM logo" /> -->
-          <img id="db_dwengo_logo_top_left" src="./DwenguinoIDE/img/dwengo_logo.png" alt="The dwengo logo" />
-        <div id="switch_code_view">
-            <span id="switch_to_blockly">Blockly</span>
-            <label class="code-switch">
-                <input id="code_checkbox" type="checkbox">
-                <span class="code-slider round"></span>
-              </label>
-            <span id="switch_to_code">Code</span>
+            <!-- <img id="db_wegostem_logo_top_left" src="./DwenguinoIDE/img/wegostem.png" alt="The WeGoSTEM logo" /> -->
+            <img id="db_dwengo_logo_top_left" src="./DwenguinoIDE/img/dwengo_logo.png" alt="The dwengo logo" />
+            <div id="switch_code_view">
+                <span id="switch_to_blockly">Blockly</span>
+                <label class="code-switch">
+                    <input id="code_checkbox" type="checkbox">
+                    <span class="code-slider round"></span>
+                </label>
+                <span id="switch_to_code">Code</span>
+            </div>
         </div>
-        </div><div class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
+        <div class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
             <span id="db_menu_item_dwengo_robot_teacher" alt="DwengoRobotteacher"><img id="db_menu_item_dwengo_robot_teacher_image" src="./DwenguinoIDE/img/dwengo_robot_plain.svg" alt="The dwengo logo" /></span>
             <span id="db_menu_item_simulator" class="db_menu_item fas fa-tachometer-alt" alt="Open or close simulator"></span>
             <span id="db_menu_item_download" class="db_menu_item fas fa-download" alt="Download blocks to file" /></span>
@@ -41,7 +42,6 @@
             <span id="db_menu_item_clear" class="db_menu_item fas fa-times-circle" alt="Upload empty sketch" /></span>
             <span id="db_menu_item_language" alt="Dropdown menu to select language">
                 <select name="language" id="db_menu_item_language_selection">
-
                 </select>
             </span>
         </div>
@@ -49,10 +49,13 @@
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
             <div id="db_code_pane">
-                <pre id="db_arduino_code" class="content">    
+                <div id="copy-arduino-code" class="">
+                    <span id="copy-code" class="sim_item fas fa-copy"></span>
+                    <span id="notification-copy"></span>
+                </div>
+                <pre id="db_arduino_code" class="content">  
+                </pre>  
             </div>
-
-            </pre>
         </div>
         <div id="db_infopane">
             <div id="db_simulator_panes">

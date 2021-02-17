@@ -52,6 +52,15 @@ body{
     font-weight: 300;
 }
 
+#copy-arduino-code{
+    margin: 1em;
+    font-size: 1.25rem;
+}
+
+#notification-copy{
+    font-weight: 300;
+    font-size: 1rem;
+}
 .code-switch {
     position: relative;
     display: inline-block;
