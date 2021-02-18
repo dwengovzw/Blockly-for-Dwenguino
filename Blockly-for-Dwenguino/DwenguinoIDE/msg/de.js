@@ -295,6 +295,12 @@ var MSG = {
   compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
   };
 
+  MSG.cookieConsent = {
+    close: "Close",
+    cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+    cookieInfo: "More info on how we use cookies."
+  };
+  
   MSG.dropzone = {
     dictSelectFile: "Wähle eine Datei aus",
     dictChooseFile: "Wähle eine Datei",

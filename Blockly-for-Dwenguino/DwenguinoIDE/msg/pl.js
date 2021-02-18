@@ -186,7 +186,12 @@ var MSG = {
   stepperMotorOne: "STEPPER1", 
   stepperMotorTwo: "STEPPER2",
   stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use."
+};
 
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
 };
 
 MSG.dropzone = {

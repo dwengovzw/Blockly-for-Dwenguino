@@ -1563,6 +1563,35 @@ span.grippy::after {
     color: red;
 }
 
+#cookie-consent {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 45px;
+    color: #292929;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #8BAB42;
+    z-index: 120;
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+#cookie-consent a {
+    color: #ffffff;
+}
+
+.allow-button {
+    color: #292929;
+    border-radius: 3px;
+    /* border: 1px solid #88bd28;
+    background-color: #88bd28; */
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
+}
+
 .icon-user:before {
     content: url("../img/glyphicons_free/glyphicons/png/glyphicons-4-user.png");
 }
