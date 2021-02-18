@@ -192,6 +192,12 @@ var MSG = {
 
 };
 
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
+};
+
 MSG.dropzone = {
   dictSelectFile: "Select a file.",
   dictChooseFile: "Choose file",

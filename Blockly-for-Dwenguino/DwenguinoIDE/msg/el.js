@@ -184,6 +184,12 @@ var MSG = {
   save: "Αποθήκευση",
 };
 
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
+};
+
 MSG.dropzone = {
   dictSelectFile: "Επίλεξε ένα αρχείο.",
   dictChooseFile: "Επιλογή αρχείου",

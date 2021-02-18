@@ -44,6 +44,8 @@ let DwenguinoBlockly = {
         this.logger.init();
         var self = this;
 
+        DwenguinoBlockly.displayCookieConsent();
+
         // Create an instance of the tutorial menu (persists until the application stops).
         // Uses the event logger to capture tutorial actions.
         this.tutorialMenu = new TutorialMenu(this.logger);
@@ -94,7 +96,6 @@ let DwenguinoBlockly = {
           var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
           DwenguinoBlockly.runEventHandler(code);
         });
-
 
         //The following code handles the upload of a saved file.
         //If it is run as an arduino ide plugin its shows a filechooser and returns the xml string (depricated and removed)
@@ -826,9 +827,25 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.copyCodeToClipboard();
         });
     },
+    
     tearDownEnvironment: function(){
       // Called from the aruino IDE on close. For now do nothing.
     },
+
+    displayCookieConsent: function(){
+      let cookieConsent = MSG.cookieConsent['cookieConsent']
+                          + '<a href="#" class="ml-1">' + MSG.cookieConsent['cookieInfo'] + '</a>'
+                          + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+MSG.cookieConsent['close']+'</button></div>';
+
+      $('#cookie-consent').html(cookieConsent);
+
+      $('#allow-cookies').click(function () {
+        $('#cookie-consent').remove();
+      });      
+      
+      // <span>This site uses cookies to enhance user experience. see<a href="#" class="ml-1 text-decoration-none">Privacy policy</a> </span>
+      // <div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button class="allow-button mr-1">Allow cookies</button> <button class="allow-button">cancel</button> </div>
+    }
 };
 
 
