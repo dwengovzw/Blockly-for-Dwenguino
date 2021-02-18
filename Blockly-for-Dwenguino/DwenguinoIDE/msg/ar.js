@@ -7,7 +7,7 @@ var MSG = {
   loadBlocksFileTooltip: " قم بتحميل ملف كتل قمت بحفظه من قبل  ",
   saveBlocksFileTooltip:  "  احفظ الكتل في ملف محلي ",
   toggleSimulator: " تبديل عرض المحاكاة  ",
-  badCode:  "خطأ في البرنامج: \ n1%   ",
+  badCode:  "خطأ في البرنامج: \ n 1%   ",
   timeout: "تم تجاوز الحد الأقصى لتكرارات التنفيذ.  ",
   trashTooltip: " تجاهل كل الكتل.  ",
   catLogic: " منطق  ",
