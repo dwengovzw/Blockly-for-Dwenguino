@@ -28,11 +28,15 @@ import authenticationcontroller from '../controllers/authentication_controller.j
 import tutorialcontroller from '../controllers/tutorial_controller.js';
 import usercontroller from '../controllers/user_controller.js';
 
+/* Data collection */
+
 router.route('/logging/id')
     .get(logcontroller.newSessionId);
 
 router.route('/logging/event')
     .post(authenticationcontroller.authenticateForLogging,logcontroller.event);
+
+/* Dwenguino microcontroller */   
 
 router.route('/utilities/clean')
     .get(utilscontroller.clean);
@@ -46,8 +50,12 @@ router.route('/utilities/upload')
 router.route('/utilities/run', cors(corsOptions))
     .post(utilscontroller.run);
 
+/* Helper routes */
+
 router.route('/schools/')
     .get(schoolscontroller.getSchools);
+
+/* Authentication */
 
 router.route('/register')
     .post(authenticationcontroller.register);
@@ -55,11 +63,22 @@ router.route('/register')
 router.route('/login')
     .post(authenticationcontroller.login);
 
+router.route('/auth/verify-account/:userId/:secretCode')
+    .get(authenticationcontroller.verifyAccount);
+
+router.route('/getPasswordResetCode')
+    .get(authenticationcontroller.getPasswordResetCode);
+
+router.route('/resetPassword')
+    .post(authenticationcontroller.resetPassword);
+
 router.route('/renewToken')
     .post(authenticationcontroller.refreshToken);
 
 router.route('/logout')
     .post(authenticationcontroller.logout);
+
+/* Tutorials */
 
 router.route('/tutorials/completedTutorials')
     .get(authenticationcontroller.authenticate, tutorialcontroller.getCompletedTutorials);
@@ -67,12 +86,16 @@ router.route('/tutorials/completedTutorials')
 router.route('/tutorials/completeTutorial')
     .post(authenticationcontroller.authenticate, tutorialcontroller.completeTutorial);
 
+/* User */
+
 router.route('/user/')
     .get(authenticationcontroller.authenticate, usercontroller.getUserInfo);
 
 router.route('/user/update')
     .post(authenticationcontroller.authenticate, usercontroller.updateUserInfo);
 
+router.route('/user/delete')
+    .post(authenticationcontroller.authenticate, usercontroller.deleteAccount);
 
 // Export API routes
 export default router;
