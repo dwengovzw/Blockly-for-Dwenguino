@@ -20,7 +20,7 @@ exports.event = function(req, res) {
   let logitem = new Logitem();
 
   if(req.user.id){
-    logitem.user_id = req.user.id;
+    logitem.user_id = req.user._id;
   }
   logitem.activity_id = req.body.activityId;
   logitem.timestamp = req.body.timestamp;

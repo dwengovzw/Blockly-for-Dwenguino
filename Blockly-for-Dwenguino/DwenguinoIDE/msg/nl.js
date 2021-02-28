@@ -1,6 +1,7 @@
 /* dutch translation file */
 
 var MSG = {
+  arduinoCodeCopied: "Arduino-code werd gekopieerd naar het klembord",
   title: "DwenguinoBlockly",
   blocks: "Blokken",
   linkTooltip: "Opslaan en koppelen naar blokken.",
@@ -199,6 +200,12 @@ var MSG = {
   stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen.",
   clear: "Wissen",
   save: "Opslaan",
+};
+
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
 };
 
 MSG.dropzone = {
@@ -836,11 +843,28 @@ MSG.tutorials.socialrobot['hello'].answers = [
 MSG.logging = {
   setup: "Instellingen",
   login: "Aanmelden",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "Nieuwe gebruiker",
   username: "Gebruikersnaam",
   chooseUsername: "Kies een gebruikersnaam",
+  email: "E-mailadres",
+  enterEmail: "Voer een e-mailadres in",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
   choosePassword: "Kies 4 afbeeldingen als je paswoord. Je moet deze onthouden in de juiste volgorde.",
   currentlySelected: "Op dit moment geselecteerd: ",
+  language: "Taal",
+  role: "Rol",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth: "Geboortedatum",
   school: "School",
   selectSchool: "Zoek op naam van de school...",

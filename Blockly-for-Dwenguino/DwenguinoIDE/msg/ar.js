@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "دوينجوينو بلوكلي",
   blocks: " كتل  ",
   linkTooltip: " حفظ وربط الكتل. ",
@@ -6,7 +7,7 @@ var MSG = {
   loadBlocksFileTooltip: " قم بتحميل ملف كتل قمت بحفظه من قبل  ",
   saveBlocksFileTooltip:  "  احفظ الكتل في ملف محلي ",
   toggleSimulator: " تبديل عرض المحاكاة  ",
-  badCode:  "خطأ في البرنامج: \ n1%   ",
+  badCode:  "خطأ في البرنامج: \ n 1%   ",
   timeout: "تم تجاوز الحد الأقصى لتكرارات التنفيذ.  ",
   trashTooltip: " تجاهل كل الكتل.  ",
   catLogic: " منطق  ",
@@ -186,6 +187,12 @@ var MSG = {
   stepperMotorTwo:  " الخطوة 2 ",
   stepperMotorTooltip:  " حدد أي محرك متدرج من روبوت الراسمة الذي تريد استخدامه. ",
 
+};
+
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
 };
 
 MSG.dropzone = {
@@ -496,11 +503,28 @@ MSG.tutorials.nameOnLcdBasic = {
 MSG.logging = {
   setup: " إعداد الاختبار ",
   login: " تسجيل الدخول ",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "مستخدم جديد ",
+  email: "Email address",
+  enterEmail: "Enter email address",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
   username: "اسم المستخدم  ",
   chooseUsername: " اختر اسم المستخدم ",
   choosePassword: " حدد 4 رموز شخصية ككلمة المرور الخاصة بك. يجب أن تكون قادرًا على تذكرها بالترتيب الصحيح. ",
   currentlySelected:  " المحدد حاليا: ",
+  language: "Language",
+  role: "Role",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth:  "تاريخ الولادة  ",
   school: "مدرسة  ",
   selectSchool: "البحث باسم المدرسة ...  ",
