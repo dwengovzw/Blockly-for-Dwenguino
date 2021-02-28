@@ -21,6 +21,36 @@ class Validator{
         }
         return null;
     }
+
+    validateFirstname(firstname){
+        if(firstname == ""){
+            return new Error(MSG.validator['errFirstname']);
+        }
+    }
+
+    validateSecretCode(secretCode){
+        if(secretCode == ""){
+            return new Error(MSG.validator['errSecretCode']);
+        }
+    }
+
+    validatePassword(password){
+        if(password == ""){
+            return new Error(MSG.validator['errPassword']);
+        }
+    }
+
+    validatePasswords(password, repeated_password){
+        if(password != repeated_password){
+            return new Error(MSG.validator['errPasswordNotIdentical']);
+        }
+    }
+
+    validateEmail(email){
+        if(email == ""){
+            return new Error(MSG.validator['errEmail'])
+        }
+    }
     
     validateAgeGroup(ageGroup){
         if(typeof ageGroup !== 'undefined'){

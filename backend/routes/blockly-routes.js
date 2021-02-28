@@ -66,14 +66,14 @@ router.route('/login')
 router.route('/auth/verify-account/:userId/:secretCode')
     .get(authenticationcontroller.verifyAccount);
 
+router.route('/auth/renew')
+    .post(authenticationcontroller.refreshToken);
+
 router.route('/getPasswordResetCode')
-    .get(authenticationcontroller.getPasswordResetCode);
+    .post(authenticationcontroller.getPasswordResetCode);
 
 router.route('/resetPassword')
     .post(authenticationcontroller.resetPassword);
-
-router.route('/renewToken')
-    .post(authenticationcontroller.refreshToken);
 
 router.route('/logout')
     .post(authenticationcontroller.logout);
