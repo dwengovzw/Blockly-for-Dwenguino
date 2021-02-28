@@ -1,5 +1,5 @@
 var MSG = {
-
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
 
   blocks: "Blöcke",
@@ -295,6 +295,12 @@ var MSG = {
   compileError: "Code konnte nicht kompiliert werden.\nÜberprüfe deinen Code, hast du vielleicht einen Block vergessen?",
   };
 
+  MSG.cookieConsent = {
+    close: "Close",
+    cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+    cookieInfo: "More info on how we use cookies."
+  };
+  
   MSG.dropzone = {
     dictSelectFile: "Wähle eine Datei aus",
     dictChooseFile: "Wähle eine Datei",
@@ -442,11 +448,28 @@ var MSG = {
 MSG.logging = {
   setup: "Testkonfiguration",
   login: "Login",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "Neuer Benutzer",
   username: "Benutzername",
+  email: "Email address",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
+  enterEmail: "Enter email address",
   chooseUsername: "Wähle einen Benutzernamen",
   choosePassword: "Wähle 4 persönliche Symbole (Zeichen) als Passwort. Merke sie dir in der richtigen Reihenfolge.",
   currentlySelected: "Ausgewählt: ",
+  language: "Language",
+  role: "Role",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth: "Geburtsdatum",
   school: "Schule",
   selectSchool: "Suche nach Schulnamen...",

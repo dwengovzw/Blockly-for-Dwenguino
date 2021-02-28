@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 var refreshTokenSchema = mongoose.Schema({
     token: String,
-    username: String
+    email: String
 });
 
 var RefreshTokenItem = mongoose.model('tokens', refreshTokenSchema);
