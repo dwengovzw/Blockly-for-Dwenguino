@@ -42,26 +42,150 @@ class LoggingMenu{
     createInitialMenu(){
         this.createLoggingModalDialogWithoutFooter(MSG.logging['login']);
 
-        $('#loggingModalBody').append('<p id="loggingModalBody1"></p>')
-        $("#loggingModalBody").append('<div id="authentication_menu" class="tutorial_categories_wrapper"></div>');
+        let userInfo = 'user_info';
+        let authenticationMenu = 'authentication_menu';
 
-        $("#authentication_menu").append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
-        $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
-        $("#authentication_new_user").append('<div id="new_user_img"></div>');
+        $('#loggingModalBody').append('<div id="'+ userInfo +'"></div>');
+        $("#loggingModalBody").append('<div id="'+ authenticationMenu + '" class="tutorial_categories_wrapper"></div>');
 
-        $("#authentication_menu").append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
-        $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
-        $("#authentication_existing_user").append('<div id="school_user_img"></div>');
+        this.addUserInfoPanel(userInfo);
+        this.addAuthenticationPanel(authenticationMenu);
 
         this.showDialog();
+    }
 
+    /**
+     * Show the user info if the user is logged in (valid Dwengo cookie) or the user 
+     * was previously authenticated and the refresh token is still valid (renew access token).
+     */
+    addUserInfoPanel(userInfo){
         var self = this;
-        $("#authentication_new_user").click(function(){
-            self.createUserMenu();
-        });
+        $.ajax({
+            type: "GET",
+            url: ServerConfig.getServerUrl() + "/user"}
+        ).done(function(data){
+            // The user is still logged in
+            let firstname = data.firstname;
+            $('#' + userInfo).append('<p>Hello ' + firstname + '</p>');
 
-        $("#authentication_existing_user").click(function(){
-            self.createLoginMenu();
+        }).fail(function(response, status)  {
+            if(response.status == 403){
+                // The user was previously logged in, but the access token is invalid. Try to refresh the token.
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/auth/renew"}
+                ).done(function(data){
+                    // The user has successfully renewed the access token
+                    $.ajax({
+                        type: "GET",
+                        url: ServerConfig.getServerUrl() + "/user"}
+                    ).done(function(data){
+                        // The user is still logged in
+                        let firstname = data.firstname;
+                        $('#' + userInfo).append('<p>Hello ' + firstname + '</p>');
+            
+                    }).fail(function(response, status)  {
+                        console.log(status, response);
+                    });
+                }).fail(function(response, status)  {
+                    console.log(status, response);
+                });
+            } else if(response.status == 401){
+                // The user was never logged in so there is no user info.
+            } else {
+                console.log(status, response);
+            }
+        });
+    }
+
+    addAuthenticationPanel(authenticationMenu){
+        var self = this;
+        $.ajax({
+            type: "GET",
+            url: ServerConfig.getServerUrl() + "/user"}
+        ).done(function(data){
+            // The user is still logged in
+            $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
+            $("#authentication_logout").append('<div class="category_tag">'+ MSG.logging['logout'] +'</div>');
+            $("#authentication_logout").append('<div id="logout_img"></div>');
+
+            $("#authentication_logout").click(function(){
+                self.logout();
+            });
+        }).fail(function(response, status)  {
+            if(response.status == 403){
+                // The user was previously logged in, but the access token is invalid. Try to refresh the token.
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/auth/renew"}
+                ).done(function(data){
+                    // The user has successfully renewed the access token
+                    $.ajax({
+                        type: "GET",
+                        url: ServerConfig.getServerUrl() + "/user"}
+                    ).done(function(data){
+                        // The user is still logged in
+                        $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
+                        $("#authentication_logout").append('<div class="category_tag">'+ MSG.logging['logout'] +'</div>');
+                        $("#authentication_logout").append('<div id="logout_img"></div>');
+            
+                        $("#authentication_logout").click(function(){
+                            self.logout();
+                        });
+                    }).fail(function(response, status)  {
+                        // New access token invalid so the user is not logged in
+                        $("#" + authenticationMenu).append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
+                        $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
+                        $("#authentication_new_user").append('<div id="new_user_img"></div>');
+                
+                        $("#" + authenticationMenu).append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
+                        $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+                        $("#authentication_existing_user").append('<div id="school_user_img"></div>');
+                
+                        $("#authentication_new_user").click(function(){
+                            self.createUserMenu();
+                        });
+                
+                        $("#authentication_existing_user").click(function(){
+                            self.createLoginMenu();
+                        });
+                    });
+                }).fail(function(response, status)  {
+                    // Refresh token invalid so the user is not logged in again
+                    $("#" + authenticationMenu).append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
+                    $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
+                    $("#authentication_new_user").append('<div id="new_user_img"></div>');
+            
+                    $("#" + authenticationMenu).append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
+                    $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+                    $("#authentication_existing_user").append('<div id="school_user_img"></div>');
+            
+                    $("#authentication_new_user").click(function(){
+                        self.createUserMenu();
+                    });
+            
+                    $("#authentication_existing_user").click(function(){
+                        self.createLoginMenu();
+                    });
+                });
+            } else {
+                // The user was never logged in so there is no user info.
+                $("#" + authenticationMenu).append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
+                $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
+                $("#authentication_new_user").append('<div id="new_user_img"></div>');
+        
+                $("#" + authenticationMenu).append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
+                $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+                $("#authentication_existing_user").append('<div id="school_user_img"></div>');
+        
+                $("#authentication_new_user").click(function(){
+                    self.createUserMenu();
+                });
+        
+                $("#authentication_existing_user").click(function(){
+                    self.createLoginMenu();
+                });
+            }
         });
     }
 
@@ -72,122 +196,366 @@ class LoggingMenu{
     createLoginMenu(){
         var self = this;
         this.createLoggingModalDialog(MSG.logging['login']);
-        $('#loggingModalBody').append('<div id="inputUsername" class="ui-widget row mb-4">');
-        $('#inputUsername').append('<label for="myusernametag" class="col-md-3">'+ MSG.logging['username']+'</label>');
-        $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="Enter username">');
 
-        this.createIconModule();
+        $('#loggingModalBody').append('<form id="loginUser"></form>');
 
-        $('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
+        $('#loginUser').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+
+        $('#loginUser').append('<div id="inputPassword" class="ui-widget row mb-4"></div>');
+        $('#inputPassword').append('<label for="passwordTag" class="col-md-3">'+ MSG.logging['password']+'</label>');
+        $('#inputPassword').append('<input id="passwordTag" name="passwordTag" type="password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+
+        $('#loggingModalBody').append('<button id="forgot_password_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['forgotPassword']+'</button>');
+        //this.createIconModule();
+
+        //$('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
+        $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
 
         this.showDialog();
 
-        this.makeIconsResponsive();
+        // this.makeIconsResponsive();
 
         // Reset the graphical password.
-        $("#reset_modal_dialog_button").click(function(){
-            self.resetSelectedIcons();
+        // $("#reset_modal_dialog_button").click(function(){
+        //     self.resetSelectedIcons();
+        // });
+
+        $("#forgot_password_modal_dialog_button").click(function(){
+            self.forgotPassword();
         });
+
+        $("#back_modal_dialog_button").click(function(){
+            self.createInitialMenu();
+        })
 
         // Log in.
         $("#submit_modal_dialog_button").click(function(){
-            self.login();
+            let errors = [];
+            let email = $( "input[name=emailTag]").val();
+            let password = $( "input[name=passwordTag]").val();
+
+            errors.push(self.validator.validateEmail(email));
+            errors.push(self.validator.validatePassword(password));
+            //errors.push(this.validator.validateId(this.currentlySelectedIcons));
+        
+            if(self.validator.hasErrors(errors)){
+                self.showErrors(errors);
+            } else {
+                self.login();
+            }
+        });
+    }
+
+    forgotPassword(){
+        var self = this;
+        this.createLoggingModalDialog(MSG.logging['forgotPassword']);
+
+        $('#loggingModalBody').append('<form id="forgotPassword"></form>');
+
+        $('#forgotPassword').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+
+        $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+
+        this.showDialog();
+
+        $("#back_modal_dialog_button").click(function(){
+            self.createLoginMenu();
+        })
+
+        $("#submit_modal_dialog_button").click(function(){
+            let errors = [];
+            let email = $( "input[name=emailTag]").val();
+    
+            errors.push(self.validator.validateEmail(email));
+
+            if(self.validator.hasErrors(errors)){
+                self.showErrors(errors);
+            } else {
+                self.sendPasswordResetCode();
+            }
+        });
+    }
+
+    sendPasswordResetCode(){
+        var self = this;
+
+        let email = $( "input[name=emailTag]").val();
+
+        let serverSubmission = {
+            "email": email
+        };
+
+        $.ajax({
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/getPasswordResetCode",
+            data: serverSubmission
+        }).done(function(data){
+            self.showResetPasswordScreen();
+        }).fail(function(response, status)  { 
+            self.createLoggingModalDialog(MSG.logging['forgotPassword']);
+            $('#loggingModalBody').append('<p>'+ MSG.logging['userDoesNotExist'] +'</p>');
+
+            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
+            $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+    
+            $("#loggingModal").modal('show');
+
+            $("#back_modal_dialog_button").click(function() {
+                self.sendPasswordResetCode();
+            })
+    
+            $("#submit_modal_dialog_button").click(function(){
+                self.removeDialog();
+            });
+        });
+    }
+
+    showResetPasswordScreen(){
+        var self = this;
+        this.createLoggingModalDialog(MSG.logging['resetPassword']);
+        $('#loggingModalBody').append('<form id="resetPassword"></form>');
+
+        $('#resetPassword').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" autocomplete="username" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+
+        $('#resetPassword').append('<div id="inputSecretCode" class="ui-widget row mb-4"></div>');
+        $('#inputSecretCode').append('<label for="secretCodeTag" class="col-md-3">'+ MSG.logging['secretCode']+'</label>');
+        $('#inputSecretCode').append('<input id="secretCodeTag" name="secretCodeTag" class="col-md-8" placeholder="'+ MSG.logging['enterSecretCode']+'">');
+
+        $('#resetPassword').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
+        $('#inputPassword1').append('<label for="passwordTag1" class="col-md-3">'+ MSG.logging['password']+'</label>');
+        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+
+        $('#resetPassword').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
+        $('#inputPassword2').append('<label for="passwordTag2" class="col-md-3">'+ MSG.logging['password']+'</label>');
+        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+ 
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+
+        this.showDialog();
+
+        // Log in.
+        $("#submit_modal_dialog_button").click(function(){
+            let errors = [];
+
+            let email = $( "input[name=emailTag]").val();
+            let secretCode = $( "input[name=secretCodeTag]").val()
+            let password = $( "input[name=passwordTag1]").val();
+            let password_repeated = $( "input[name=passwordTag2]").val();
+
+            errors.push(self.validator.validateEmail(email));
+            errors.push(self.validator.validateSecretCode(secretCode));
+            errors.push(self.validator.validatePassword(password));
+            errors.push(self.validator.validatePassword(password_repeated));
+            errors.push(self.validator.validatePasswords(password, password_repeated));
+        
+            if(self.validator.hasErrors(errors)){
+                self.showErrors(errors);
+            } else {
+                self.resetPassword();
+            }
+        });
+    }
+
+    resetPassword(){
+        var self = this;
+       
+        let email = $( "input[name=emailTag]").val();
+        let secretCode = $( "input[name=secretCodeTag]").val()
+        let password = $( "input[name=passwordTag1]").val();
+        let password_repeated = $( "input[name=passwordTag2]").val();
+
+        let serverSubmission = {
+            "email": email,
+            "secretCode": secretCode,
+            "password": JSON.stringify(password),
+            "password_repeated": JSON.stringify(password_repeated)
+        };
+        $.ajax({
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/resetPassword",
+            data: serverSubmission,
+        }).done(function(data){
+            self.removeDialog();
+        }).fail(function(response, status)  {
+            console.log('Failed to register:', status);
+            console.log(response);
         });
     }
 
     login(){
         var self = this;
-        let errors = [];
-        let username = $( "input[name=myusernametag]").val();
-        let password = this.currentlySelectedIcons.slice();
+        
+        let email = $( "input[name=emailTag]").val();
+        let password = $( "input[name=passwordTag]").val();
 
-        errors.push(this.validator.validateId(this.currentlySelectedIcons));
-    
-        if(this.validator.hasErrors(errors)){
-            this.showErrors(errors);
-        } else {
-            let serverSubmission = {
-                "username": username,
-                "password": JSON.stringify(password),
-            };
-            $.ajax({
-                type: "POST",
-                url: ServerConfig.getServerUrl() + "/login",
-                data: serverSubmission,
-            }).done(function(data){
-                self.resetSelectedIcons();
-                self.removeDialog();
-            }).fail(function(response, status)  {
-                console.warn('Failed to log in:', status);
-                self.resetSelectedIcons();
-            });
-        }
+        let serverSubmission = {
+            "email": email,
+            "password": JSON.stringify(password),
+        };
+        $.ajax({
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/login",
+            data: serverSubmission,
+        }).done(function(data){
+            self.resetSelectedIcons();
+            self.removeDialog();
+        }).fail(function(response, status)  {
+            console.warn('Failed to log in:', status);
+            self.resetSelectedIcons();
+        });
+    }
+
+    logout(){
+        var self = this;
+        $.ajax({
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/logout"
+        }).done(function(data){
+            self.removeDialog();
+        }).fail(function(response, status) {
+            self.removeDialog();
+        })
     }
 
     createUserMenu(){
         var self = this;
         this.createLoggingModalDialog(MSG.logging['newuser']);
     
-        $('#loggingModalBody').append('<div id="inputUsername" class="ui-widget row mb-4">');
-        $('#inputUsername').append('<label for="myusernametag" class="col-md-3">'+MSG.logging['username']+'</label>');
-        $('#inputUsername').append('<input id="myusernametag" name="myusernametag" class="col-md-8" placeholder="'+ MSG.logging['chooseUsername']+'">');
-    
-        $('#loggingModalBody').append('<div id="inputEmail" class="ui-widget row mb-4">');
-        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+MSG.logging['email']+'</label>');
-        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ 'Email address'+'">');
+        $('#loggingModalBody').append('<form id="registerUser"></form>');
+        $('#registerUser').append('<div id="inputFirstname" class="ui-widget row mb-4">');
+        $('#inputFirstname').append('<label for="firstnameTag" class="col-md-3">'+ MSG.logging['firstname']+'</label>');
+        $('#inputFirstname').append('<input id="firstnameTag" name="firstnameTag" class="col-md-8" placeholder="'+ MSG.logging['enterFirstname']+'">');
 
-        this.createIconModule();
-    
-        $('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
+        $('#registerUser').append('<div id="inputEmail" class="ui-widget row mb-4">');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" autocomplete="username" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+
+        $('#registerUser').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
+        $('#inputPassword1').append('<label for="passwordTag1" class="col-md-3">'+ MSG.logging['password']+'</label>');
+        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+
+        $('#registerUser').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
+        $('#inputPassword2').append('<label for="passwordTag2" class="col-md-3">'+ MSG.logging['repeatedPassword']+'</label>');
+        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterRepeatedPassword']+'">');
+        //this.createIconModule();
+
+        let languageOptions = {
+            en: 'English'
+        };
+
+        $('#registerUser').append('<div id="inputLanguage" class="ui-widget row mb-4">');
+        $('#inputLanguage').append('<label for="languageTag" class="col-md-3">'+MSG.logging['language']+'</label>');
+        $('#inputLanguage').append('<select id="languageTag" name="languageTag" class="col-md-8"></select>');
+        
+        $.each(languageOptions, function(val, text) {
+            $('#languageTag').append(
+                $('<option></option>').val(val).html(text)
+            );
+        });
+
+        let roleOptions = {
+            student: 'Student',
+            teacher: 'Teacher'
+        };
+
+        $('#registerUser').append('<div id="inputRole" class="ui-widget row mb-4">');
+        $('#inputRole').append('<label for="roleTag" class="col-md-3">'+MSG.logging['role']+'</label>');
+        $('#inputRole').append('<select id="roleTag" name="roleTag" class="col-md-8"></select>');
+        
+        $.each(roleOptions, function(val, text) {
+            $('#roleTag').append(
+                $('<option></option>').val(val).html(text)
+            );
+        });
+
+        //$('#registerUser').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
         
         this.showDialog();
     
-        this.makeIconsResponsive();
+        //this.makeIconsResponsive();
     
         // Reset the graphical password.
-        $("#reset_modal_dialog_button").click(function(){
-            self.resetSelectedIcons();
-        });
+        // $("#reset_modal_dialog_button").click(function(){
+        //     self.resetSelectedIcons();
+        // });
     
         // Register the new user.
         $("#submit_modal_dialog_button").click(function(){
-            self.registerUser();
+            let errors = [];
+            let firstname = $("input[name=firstnameTag]").val();
+            let email = $( "input[name=emailTag]").val();
+            let password = $( "input[name=passwordTag1]").val();
+            let password_repeated = $( "input[name=passwordTag2]").val();
+
+            errors.push(self.validator.validateFirstname(firstname));
+            errors.push(self.validator.validateEmail(email));
+            errors.push(self.validator.validatePassword(password));
+            errors.push(self.validator.validatePassword(password_repeated));
+            errors.push(self.validator.validatePasswords(password, password_repeated));
+
+            if(self.validator.hasErrors(errors)){
+                self.showErrors(errors);
+            } else {
+                self.registerUser();
+            }
         });
     }
 
+    /**
+     * Register the user in the backend.
+     */
     registerUser(){
         var self = this;
-        let errors = [];
-        let username = $( "input[name=myusernametag]").val();
+        
+        let firstname = $("input[name=firstnameTag]").val();
         let email = $( "input[name=emailTag]").val();
-        let password = this.currentlySelectedIcons.slice();
+        let password = $( "input[name=passwordTag1]").val();
+        let password_repeated = $( "input[name=passwordTag2]").val();
+        let language = $("select[name=languageTag]").val();
+        let role = $("select[name=roleTag]").val();
 
-        errors.push(this.validator.validateId(this.currentlySelectedIcons));
-    
-        if(this.validator.hasErrors(errors)){
-            this.showErrors(errors);
-        } else {
-            let serverSubmission = {
-                "username": username,
-                "password": JSON.stringify(password),
-                "email": email
-            };
-            $.ajax({
-                type: "POST",
-                url: ServerConfig.getServerUrl() + "/register",
-                data: serverSubmission,
-            }).done(function(data){
-                self.resetSelectedIcons();
-                self.removeDialog();
-                self.showSettingsMenu();
-            }).fail(function(response, status)  {
-                console.log('Failed to register:', status);
-                self.resetSelectedIcons();
-            });
-        }
+        let serverSubmission = {
+            "firstname": firstname,
+            "email": email,
+            "password": JSON.stringify(password),
+            "password_repeated": JSON.stringify(password_repeated),
+            "language": language,
+            "role": role
+        };
+        $.ajax({
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/register",
+            data: serverSubmission,
+        }).done(function(data){
+            //self.resetSelectedIcons();
+            self.removeDialog();
+            self.showVerificationScreen();
+            //self.showSettingsMenu();
+        }).fail(function(response, status)  {
+            console.log('Failed to register:', status);
+            console.log(response);
+            //self.resetSelectedIcons();
+        });
     }
+
+    showVerificationScreen(){
+        this.createLoggingModalDialogWithoutFooter(MSG.logging['verification']);
+
+        $('#loggingModalBody').append('<p id="loggingModalBody1"></p>')
+        $('#loggingModalBody1').text(MSG.logging['verificationSentTo']);
+
+        this.showDialog();
+    }
+
 
     /**
      * Show the menu on the screen

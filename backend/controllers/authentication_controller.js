@@ -19,20 +19,21 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4c
  */
 exports.register = function(req, res){
   const { 
+    firstname,
     email,
     password,
     role,
     language 
   } = req.body;
+
   let errors = [];
 
-  if (!email || !password || !role || !language) {
+  if (!firstname || !email || !password || !role || !language) {
     errors.push({msg: "required-fields-error"});
   }
   if( role !== 'student' && role !== 'teacher'){
     errors.push({msg: "role-not-valid-error"});
   }
-
   if (errors.length > 0) {
     res.status(401).send(errors);
   } else {
@@ -48,6 +49,7 @@ exports.register = function(req, res){
               res.status(401).send("Hashing has error.");
             } else {
               let user = new Useritem();
+              user.firstname = firstname;
               user.email = email;
               user.password = hashPassword;
               user.role = role;
@@ -307,6 +309,8 @@ exports.getPasswordResetCode = function (req, res){
 
   let errors = [];
 
+  console.log(email);
+
   if(!email){
     errors.push({msg: "required-fields-error"});
     res.status(401).send(errors);
@@ -414,6 +418,7 @@ exports.logout = function(req, res){
     db.collection('tokens').findOne({token: refreshToken})
     .then(function(token) {
       if(!token){
+        res.clearCookie("dwengo");
         return res.sendStatus(200);
       } else {
         jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, (err, decoded) => {
@@ -421,8 +426,10 @@ exports.logout = function(req, res){
             let query = { token: refreshToken };
             db.collection('tokens').deleteMany(query, function(err, obj){
               if (err) {
+                res.clearCookie("dwengo");
                 console.debug(err);
               } else {
+                res.clearCookie("dwengo");
                 res.sendStatus(200);
               }
             });
@@ -434,8 +441,10 @@ exports.logout = function(req, res){
                 let query = { token: refreshToken };
                 db.collection('tokens').deleteMany(query, function(err, obj){
                   if (err) {
+                    res.clearCookie("dwengo");
                     console.debug(err);
                   } else {
+                    res.clearCookie("dwengo");
                     res.sendStatus(200);
                   }
                 });
@@ -446,8 +455,10 @@ exports.logout = function(req, res){
                 };
                 db.collection('tokens').deleteMany(query, function(err, obj){
                   if (err) {
+                    res.clearCookie("dwengo");
                     console.debug(err);
                   } else {
+                    res.clearCookie("dwengo");
                     res.sendStatus(200);
                   } 
                 });
@@ -458,6 +469,7 @@ exports.logout = function(req, res){
       } 
     });
   } else {
+    res.clearCookie("dwengo");
     res.sendStatus(200);
   }
 }
