@@ -895,6 +895,7 @@ pre.content {
     position: absolute;
     top: 5px;
     left: 5px;
+    touch-action: none;
 }
 
 .sim_element_led{
