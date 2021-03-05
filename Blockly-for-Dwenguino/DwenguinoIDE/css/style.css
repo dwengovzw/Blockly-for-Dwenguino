@@ -841,6 +841,10 @@ pre.content {
     background-image: url("../img/socialrobot/led_matrix.svg");
 }
 
+#rc_ledmatrixsegment_img {
+    background-image: url("../img/socialrobot/led_matrix.svg");
+}
+
 #rc_touch_img {
     background-image: url("../img/socialrobot/touch_sensor.svg");
 }
