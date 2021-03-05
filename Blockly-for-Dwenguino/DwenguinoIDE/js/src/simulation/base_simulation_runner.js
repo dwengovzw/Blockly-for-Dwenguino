@@ -13,6 +13,7 @@ class BaseSimulationRunner{
     baseSpeedDelay = 16;
     isSimulationRunning = false;
     isSimulationPaused = false;
+    isDebugging = false;
     constructor(){
         this.board = new BoardState();
         this.simulationSandbox = new SimulationSandbox(this.board);
@@ -106,7 +107,7 @@ class BaseSimulationRunner{
     * @param {boolean} once 
     */
    step(once = false) {
-        if(this.isSimulationPaused) {
+        if(!this.isDebugging && (this.isSimulationPaused || !this.isSimulationRunning)) {
             return;
         }
 
@@ -197,6 +198,10 @@ class BaseSimulationRunner{
 
     setIsSimulationPaused(isSimulationPaused){
         this.isSimulationPaused = isSimulationPaused;
+    }
+
+    setIsDebugging(isDebugging){
+        this.isDebugging = isDebugging;
     }
 }
 

@@ -50,6 +50,10 @@ class SimulationRunner extends BaseSimulationRunner{
     step(once = false) {
         super.step(once);
 
+        if(!this.isDebugging && (this.isSimulationPaused || !this.isSimulationRunning)) {
+            return;
+        }
+
         // highlight the current block
         this.updateBlocklyColour();
 
