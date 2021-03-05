@@ -421,7 +421,6 @@ class SimulationCanvasRenderer {
             ctx.fillStyle = servo.getBackgroundColor();
             switch(servo.getCostume()){
                 case 'plain':
-                    //ctx.fillRect(servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight());
                     self.drawServoBackground(ctx, servo)
                     self.drawRotatedServohead(ctx, servo);
                     break;
