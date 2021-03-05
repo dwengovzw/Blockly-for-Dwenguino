@@ -386,7 +386,6 @@ class SimulationCanvasRenderer {
                 switch(servo.getCostume()){
                     case 'plain':
                         self.drawServoBackground(ctx, servo);
-                        self.drawRotatedServohead(ctx, servo);
                         break;
                     case 'eye':
                         break;
