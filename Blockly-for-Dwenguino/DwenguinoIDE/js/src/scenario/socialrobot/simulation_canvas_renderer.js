@@ -22,6 +22,7 @@ class SimulationCanvasRenderer {
     this.drawLeds(robot);
     this.drawRgbLeds(robot);
     this.drawLedmatrices(robot);
+    this.drawLedmatricesSegments(robot);
     this.drawServos(robot);
     this.drawTouchSensors(robot);
     this.drawPirs(robot);
@@ -227,43 +228,6 @@ class SimulationCanvasRenderer {
         }
     }
 
-    // static getLedmatrixLedPositions(){
-    //     let coordinates =   
-    //         [   [   [[21.75, 1.25], [30.4, 1.25], [], [], [], [], [], []], 
-    //                 [[21.81], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []],
-    //                 [[], [], [], [], [], [], [], []] ],
-    //             [   [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []],
-    //                 [[], [], [], [], [], [], [], []] ],
-    //             [   [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []],
-    //                 [[], [], [], [], [], [], [], []] ],
-    //             [   [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []], 
-    //                 [[], [], [], [], [], [], [], []],
-    //                 [[], [], [], [], [], [], [], []] ]];
-    //     return coordinates;
-    // }
-
     /**
      * Draw an RGB LED on the given canvas with the state specified in robot.
      * @param {SocialRobotLedMatrix} ledmatrix 
@@ -324,6 +288,75 @@ class SimulationCanvasRenderer {
         }
     }
 
+    /***
+     * Draw all led matrices on led matrix segment canvases with the states specified in robot.
+     * @param {RobotComponent[]} robot 
+     */
+    drawLedmatricesSegments(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.LEDMATRIXSEGMENT){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.drawLedmatrixSegment(robot[i], canvas);
+            }
+        }
+    }
+
+        /**
+     * Draw an RGB LED on the given canvas with the state specified in robot.
+     * @param {SocialRobotLedMatrix} ledmatrix 
+     * @param {HTMLCanvasElement} canvas 
+     */
+    drawLedmatrixSegment(ledmatrix, canvas){
+
+        if(canvas.getContext){
+            var self = this;
+            ledmatrix.getLedmatrixBackground().onload = function() {
+                var ctx = canvas.getContext('2d');
+                ctx.drawImage(ledmatrix.getLedmatrixBackground(),0, 0, 84, 70);
+            }
+
+            ledmatrix.getLedSvg().onload = function() {
+                var ctx = canvas.getContext('2d');
+                let ledOffsets = ledmatrix.getLedOffsets();
+                let state = ledmatrix.getState();
+
+                let currentSegment = ledmatrix.getId() - 1;
+                for(var row = 0; row < 8; row++){
+                    for(var column = 0; column < 8; column++){
+                        if(Array.isArray(state) && state[currentSegment][column][row] == 1){
+                            let x = ledOffsets['left'] + ledOffsets['led_x'] + (column * ledOffsets['led_between_x']);
+                            let y = ledOffsets['led_y'] + (row * ledOffsets['led_between_y']);
+                            let width = ledOffsets['led_radius'];
+                            let height = ledOffsets['led_radius'];
+                            ctx.drawImage(ledmatrix.getLedSvg(),x,y,width,height);
+                        }
+                    }
+                }
+
+            }
+
+            var ctx = canvas.getContext('2d');
+            ctx.drawImage(ledmatrix.getLedmatrixBackground(),0, 0, 84, 70);
+
+            let ledOffsets = ledmatrix.getLedOffsets();
+            let state = ledmatrix.getState();
+
+            let currentSegment = ledmatrix.getId() - 1;
+            for(var row = 0; row < 8; row++){
+                for(var column = 0; column < 8; column++){
+                    if(Array.isArray(state) && state[currentSegment][column][row] == 1){
+                        let x = ledOffsets['left'] + ledOffsets['led_x'] + (column * ledOffsets['led_between_x']);
+                        let y = ledOffsets['led_y'] + (row * ledOffsets['led_between_y']);
+                        let width = ledOffsets['led_radius'];
+                        let height = ledOffsets['led_radius'];
+                        ctx.drawImage(ledmatrix.getLedSvg(),x,y,width,height);
+                    }
+                }
+            }
+        } else {
+            console.log(canvas, "This canvas has no context");   
+        }
+    }
 
     /**
      * Draw all servos on servo canvases with the states and images specified in robot.

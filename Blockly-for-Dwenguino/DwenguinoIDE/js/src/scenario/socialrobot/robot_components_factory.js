@@ -12,6 +12,7 @@ import { SocialRobotRgbLed } from "./components/rgbled.js"
 import { SocialRobotTouchSensor } from "./components/touch_sensor.js"
 import { SocialRobotButton } from "./components/button.js"
 import { SocialRobotLedMatrix } from "./components/ledmatrix.js"
+import { SocialRobotLedMatrixSegment } from "./components/ledmatrix_segment.js"
 
 export { TypesEnum as TypesEnum, RobotComponentsFactory }
 
@@ -25,6 +26,7 @@ const TypesEnum = {
   LED: 'led',
   RGBLED: 'rgbled',
   LEDMATRIX: 'ledmatrix',
+  LEDMATRIXSEGMENT: 'ledmatrixsegment',
   TOUCH: 'touch',
   PIR: 'pir',
   SONAR: 'sonar',
@@ -125,6 +127,11 @@ class RobotComponentsFactory {
         case TypesEnum.LEDMATRIX:
           let dataPin = this._robot[i].getDataPin();
           state = dwenguinoState.getIoPinState(dataPin);
+          this._robot[i].setState(state);
+          break;
+        case TypesEnum.LEDMATRIXSEGMENT:
+          let segmentDataPin = this._robot[i].getDataPin();
+          state = dwenguinoState.getIoPinState(segmentDataPin);
           this._robot[i].setState(state);
           break;
         case TypesEnum.TOUCH:
@@ -230,6 +237,9 @@ class RobotComponentsFactory {
       case TypesEnum.LEDMATRIX:
         this.addLedmatrix();
         break;
+      case TypesEnum.LEDMATRIXSEGMENT:
+        this.addLedmatrixSegment();
+        break;  
       case TypesEnum.TOUCH:
         this.addTouchSensor();
         break;
@@ -271,6 +281,9 @@ class RobotComponentsFactory {
         break;
       case TypesEnum.LEDMATRIX:
         this.removeLedmatrix();
+        break;
+      case TypesEnum.LEDMATRIXSEGMENT:
+        this.removeLedmatrixSegment();
         break;
       case TypesEnum.TOUCH:
         this.removeTouchSensor();
@@ -344,6 +357,15 @@ class RobotComponentsFactory {
         var clkPin = data.getAttribute('clkPin');
         var htmlClasses = data.getAttribute('Classes');
         this.addLedmatrix(dataPin, csPin, clkPin, true, 0, 0, offsetLeft, offsetTop, htmlClasses);
+        break;
+      case TypesEnum.LEDMATRIXSEGMENT:
+        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
+        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
+        var dataPin = data.getAttribute('DataPin');
+        var csPin = data.getAttribute('csPin');
+        var clkPin = data.getAttribute('clkPin');
+        var htmlClasses = data.getAttribute('Classes');
+        this.addLedmatrixSegment(dataPin, csPin, clkPin, true, 0, 0, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.TOUCH:
         var width = parseFloat(data.getAttribute('Width'));
@@ -544,6 +566,24 @@ class RobotComponentsFactory {
   
     let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIX];
     this.removeRobotComponentWithTypeAndId(TypesEnum.LEDMATRIX, id);
+  }
+
+  addLedmatrixSegment(dataPin='2', csPin='10', clkPin='13', visible=true, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas ledmatrix_canvas') {
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LEDMATRIXSEGMENT));
+    this.incrementNumberOf(TypesEnum.LEDMATRIXSEGMENT);
+    let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIXSEGMENT];
+
+    let ledmatrix = new SocialRobotLedMatrixSegment(this._eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(ledmatrix);
+
+    this.renderer.initializeCanvas(this._robot, ledmatrix);
+  }
+
+  removeLedmatrixSegment(){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.LEDMATRIXSEGMENT));
+  
+    let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIXSEGMENT];
+    this.removeRobotComponentWithTypeAndId(TypesEnum.LEDMATRIXSEGMENT, id);
   }
 
   /**

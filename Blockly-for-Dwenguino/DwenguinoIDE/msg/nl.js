@@ -169,6 +169,7 @@ var MSG = {
   buttonOptions: "Opties van de knop",
   lightOptions: "Opties van de lichtsensor",
   rgbLedOptions: "Opties van de rgb-led",
+  ledmatrixOptions: 'Opties van de led-matrix',
   ledOptions: "Opties van de led",
   pinOptions: "Pin",
   colorOptions: "Kleur",
@@ -203,9 +204,9 @@ var MSG = {
 };
 
 MSG.cookieConsent = {
-  close: "Close",
-  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
-  cookieInfo: "More info on how we use cookies."
+  close: "Sluiten",
+  cookieConsent: "We gebruiken functionele cookies voor de Dwenguino simulator. ",
+  cookieInfo: "Meer informatie over hoe we cookies gebruiken."
 };
 
 MSG.dropzone = {
@@ -318,6 +319,8 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "led-matrix",
   ledmatrixDescription: "",
+  ledmatrixsegment: "led-matrix segment",
+  ledmatrixsegmentDescription: "",
   touch: "Aanraaksensor",
   touchDescription: "Gebruik deze sensor om te detecteren of de robot wordt aangeraakt. In de simulator is een knopvvoorzien om aanraking te simuleren door de knop in te drukken. Bij aanraking geeft de sensor een 1 terug, anders een 0.",
   lcd: "Lcd-scherm",
