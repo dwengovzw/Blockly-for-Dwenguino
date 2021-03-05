@@ -125,7 +125,7 @@ class SimulationControlsController {
             } else if (!this.simulationRunner.isSimulationRunning) {
                 this.simulationRunner.setIsSimulationPaused(false);
                 this.simulationRunner.step(true);
-                this.setIsSimulationPaused(true);
+                this.simulationRunner.setIsSimulationPaused(true);
             }
         });
 

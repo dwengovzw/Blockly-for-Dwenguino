@@ -106,15 +106,15 @@ class BaseSimulationRunner{
     * @param {boolean} once 
     */
    step(once = false) {
-        if (this.isSimulationPaused || !this.isSimulationRunning) {
+        if(this.isSimulationPaused) {
             return;
         }
 
-        
-        // Read the next line and execute it. The sandbox environment will update the board state
-        var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
-        this.debugger.debuggerjs.machine.step();
-
+        if(this.debugger.debuggerjs){
+            // Read the next line and execute it. The sandbox environment will update the board state
+            var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
+            this.debugger.debuggerjs.machine.step();
+        }
 
         // Get current line
         var code = this.debugger.code.split("\n")[line] === undefined ? '' : this.debugger.code.split("\n")[line];
