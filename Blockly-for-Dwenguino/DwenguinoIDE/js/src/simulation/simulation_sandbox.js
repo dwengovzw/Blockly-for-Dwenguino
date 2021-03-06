@@ -99,11 +99,10 @@ class SimulationSandbox {
       if (pin >= 32 && pin <= 39) {
         pin -= 32;
       }
-      return this.boardState.getButtonState(pin);
+      return this.boardState.getLedState(pin);
+    } else {
+      return this.boardState.getIoPinState(pin);
     }
-
-    // Otherwise, assume the value of the pin is high can possibly be extended.
-    return 1;
   }
 
   // TODO: implement this when the time is right :p

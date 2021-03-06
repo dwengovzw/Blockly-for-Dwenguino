@@ -117,15 +117,20 @@ class SimulationControlsController {
         $("#sim_step").click(() => {
             this.setButtonsStep();
             this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStep, ""));
+            
             // step 1
             if (!this.simulationRunner.isSimulationPaused && !this.simulationRunner.isSimulationRunning) {
+                this.simulationRunner.setIsDebugging(true);
                 this.startStepSimulation();
                 this.simulationRunner.setIsSimulationPaused(true);
+                this.simulationRunner.setIsDebugging(false);
                 // step n
             } else if (!this.simulationRunner.isSimulationRunning) {
+                this.simulationRunner.setIsDebugging(true);
                 this.simulationRunner.setIsSimulationPaused(false);
                 this.simulationRunner.step(true);
-                this.setIsSimulationPaused(true);
+                this.simulationRunner.setIsSimulationPaused(true);
+                this.simulationRunner.setIsDebugging(false);
             }
         });
 
