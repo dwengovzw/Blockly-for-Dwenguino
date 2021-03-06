@@ -568,7 +568,7 @@ class RobotComponentsFactory {
     this.removeRobotComponentWithTypeAndId(TypesEnum.LEDMATRIX, id);
   }
 
-  addLedmatrixSegment(dataPin='2', csPin='10', clkPin='13', visible=true, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas ledmatrix_canvas') {
+  addLedmatrixSegment(dataPin='2', csPin='10', clkPin='13', visible=true, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas ledmatrixsegment_canvas') {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LEDMATRIXSEGMENT));
     this.incrementNumberOf(TypesEnum.LEDMATRIXSEGMENT);
     let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIXSEGMENT];
