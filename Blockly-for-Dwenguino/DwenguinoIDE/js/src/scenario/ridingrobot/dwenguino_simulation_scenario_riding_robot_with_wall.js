@@ -157,9 +157,6 @@ class DwenguinoSimulationScenarioRidingRobotWithWall extends DwenguinoSimulation
         var echoPin = 12;
         boardState.setSonarDistance(trigPin, echoPin, Math.abs(D - 25)); // Compensate for borders
 
-        console.log(boardState.getSonarDistance(trigPin, echoPin));
-
-
         this.robot.position = {
             x: x,
             y: y,

@@ -187,11 +187,14 @@ class BaseSimulationRunner{
     * Checks if the simulation has been interrupted
     */
     checkForEnd() {
-        if ((this.isSimulationRunning || this.isSimulationPaused) &&
-            this.debugger.debuggerjs.machine.halted) {
-            this.setIsSimulationRunning(false);
-            this.setIsSimulationPaused(false);
+        if(this.debugger.debuggerjs){
+            if ((this.isSimulationRunning || this.isSimulationPaused) &&
+                this.debugger.debuggerjs.machine.halted) {
+                this.setIsSimulationRunning(false);
+                this.setIsSimulationPaused(false);
+            }
         }
+        
     }
 
     setIsSimulationRunning(isSimulationRunning){

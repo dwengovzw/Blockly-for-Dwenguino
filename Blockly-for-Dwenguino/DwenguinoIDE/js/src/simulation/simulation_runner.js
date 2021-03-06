@@ -50,11 +50,13 @@ class SimulationRunner extends BaseSimulationRunner{
     step(once = false) {
         super.step(once);
 
-        if (this.isSimulationPaused || !this.isSimulationRunning) {
+        if(!this.isDebugging && (this.isSimulationPaused || !this.isSimulationRunning)) {
             return;
         }
+
         // highlight the current block
         this.updateBlocklyColour();
+
     }
 
     /*
@@ -123,22 +125,24 @@ class SimulationRunner extends BaseSimulationRunner{
     updateBlocklyColour() {
         var highlight_colour = 210;
 
-        var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
-        if (this.debugger.code !== "" && typeof this.debugger.blocks.blockMapping[line] !== 'undefined') {
-            // reset old block
-            if (this.debugger.blocks.lastBlocks[0] !== null) {
-                this.debugger.blocks.lastBlocks[0].setColour(this.debugger.blocks.lastColours[0]);
-            }
+        if(this.debugger.debuggerjs){
+            var line = this.debugger.debuggerjs.machine.getCurrentLoc().start.line - 1;
+            if (this.debugger.code !== "" && typeof this.debugger.blocks.blockMapping[line] !== 'undefined') {
+                // reset old block
+                if (this.debugger.blocks.lastBlocks[0] !== null) {
+                    this.debugger.blocks.lastBlocks[0].setColour(this.debugger.blocks.lastColours[0]);
+                }
 
-            this.debugger.blocks.lastBlocks[0] = this.debugger.blocks.lastBlocks[1];
-            this.debugger.blocks.lastColours[0] = this.debugger.blocks.lastColours[1];
+                this.debugger.blocks.lastBlocks[0] = this.debugger.blocks.lastBlocks[1];
+                this.debugger.blocks.lastColours[0] = this.debugger.blocks.lastColours[1];
 
-            // highlight current block
-            this.debugger.blocks.lastBlocks[1] = this.debugger.blocks.blockMapping[line];
-            this.debugger.blocks.lastColours[1] = this.debugger.blocks.blockMapping[line].getColour();
+                // highlight current block
+                this.debugger.blocks.lastBlocks[1] = this.debugger.blocks.blockMapping[line];
+                this.debugger.blocks.lastColours[1] = this.debugger.blocks.blockMapping[line].getColour();
 
-            if (this.debugger.blocks.lastBlocks[0] !== null) {
-                this.debugger.blocks.lastBlocks[0].setColour(highlight_colour);
+                if (this.debugger.blocks.lastBlocks[0] !== null) {
+                    this.debugger.blocks.lastBlocks[0].setColour(highlight_colour);
+                }
             }
         }
     }

@@ -36,7 +36,10 @@ class DwenguinoSimulationRobotComponentsMenu {
       }, {
         type: TypesEnum.LEDMATRIX,
         maximumAmount: 1
-      },{
+      }, {
+        type: TypesEnum.LEDMATRIXSEGMENT,
+        maximumAmount: 4
+      }, {
         type: TypesEnum.TOUCH,
         maximumAmount: 3
       }, {
@@ -108,6 +111,11 @@ class DwenguinoSimulationRobotComponentsMenu {
     $('#rc_ledmatrix').append('<div id="rc_ledmatrix_img" class="rc_img"></div>');
     $('#rc_ledmatrix').append('<div id="rc_ledmatrix_options" class="rc_options"></div>');
 
+    $('#robot_components_menu').append('<div id="rc_ledmatrixsegment" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_tag" class="rc_tag text-center"></div>');
+    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_img" class="rc_img"></div>');
+    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_options" class="rc_options"></div>');
+
     $('#robot_components_menu').append('<div id="rc_touch" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag text-center"></div>');
     $('#rc_touch').append('<div id="rc_touch_img" class="rc_img"></div>');
@@ -171,6 +179,9 @@ class DwenguinoSimulationRobotComponentsMenu {
 
     let ledmatrixOptions = this.generateButtonTemplate(TypesEnum.LEDMATRIX);
     $('#rc_ledmatrix_options').append(ledmatrixOptions);
+
+    let ledmatrixSegmentOptions = this.generateButtonTemplate(TypesEnum.LEDMATRIXSEGMENT);
+    $('#rc_ledmatrixsegment_options').append(ledmatrixSegmentOptions);
 
     let touchOptions = this.generateButtonTemplate(TypesEnum.TOUCH);
     $('#rc_touch_options').append(touchOptions);
@@ -342,6 +353,9 @@ class DwenguinoSimulationRobotComponentsMenu {
       case "rc_ledmatrix_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.LEDMATRIX);
         break;
+      case "rc_ledmatrixsegment_plus_button":
+        this.socialRobotScenario.addRobotComponent(TypesEnum.LEDMATRIXSEGMENT);
+        break;
       case "rc_touch_plus_button":
         this.socialRobotScenario.addRobotComponent(TypesEnum.TOUCH);
         break;
@@ -392,6 +406,9 @@ class DwenguinoSimulationRobotComponentsMenu {
         break;
       case "rc_ledmatrix_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.LEDMATRIX);
+        break;
+      case "rc_ledmatrixsegment_minus_button":
+        this.socialRobotScenario.removeRobotComponent(TypesEnum.LEDMATRIXSEGMENT);
         break;
       case "rc_touch_minus_button":
         this.socialRobotScenario.removeRobotComponent(TypesEnum.TOUCH);

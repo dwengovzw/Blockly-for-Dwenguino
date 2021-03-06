@@ -181,17 +181,17 @@
     <block type="socialrobot_rgbled">
         <value name="pin_red">
             <block type="dwenguino_pins">
-                <field name="PIN">A0</field>
+                <field name="PIN">3</field>
             </block>
         </value>
         <value name="pin_green">
             <block type="dwenguino_pins">
-                <field name="PIN">A1</field>
+                <field name="PIN">5</field>
             </block>
         </value>
         <value name="pin_blue">
             <block type="dwenguino_pins">
-                <field name="PIN">A2</field>
+                <field name="PIN">6</field>
             </block>
         </value>
         <value name="color">
@@ -222,17 +222,17 @@
     <block type="socialrobot_rgbled_off">
         <value name="pin_red">
             <block type="dwenguino_pins">
-                <field name="PIN">A0</field>
+                <field name="PIN">3</field>
             </block>
         </value>
         <value name="pin_green">
             <block type="dwenguino_pins">
-                <field name="PIN">A1</field>
+                <field name="PIN">5</field>
             </block>
         </value>
         <value name="pin_blue">
             <block type="dwenguino_pins">
-                <field name="PIN">A2</field>
+                <field name="PIN">6</field>
             </block>
         </value>
     </block>
