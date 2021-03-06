@@ -915,7 +915,7 @@ pre.content {
 
 .sim_element_button{
     width: 90px;
-    height: 65px;
+    height: 75px;
 }
 
 .sim_element_servo{
@@ -1032,9 +1032,8 @@ pre.content {
 }
 
 .pir_canvas{
-    margin-left: 25px;
     width: 100px;
-    height: 100px;
+    height: 80px;
     margin-top: 10px;
 }
 
@@ -1072,10 +1071,8 @@ pre.content {
 }
 
 .sonar_canvas{
-    margin-left: 25px;
     width: 100px;
     height: 58px;
-    margin-top: 10px;
 }
 
 .sound_canvas{
@@ -1086,10 +1083,19 @@ pre.content {
 }
 
 .light_canvas{
-    margin-left: 25px;
     width: 100px;
     height: 60px;
     margin-top: 10px;
+}
+
+.ledmatrix_canvas{
+    width: 300px;
+    height: 90px;
+}
+
+.ledmatrixsegment_canvas{
+    width: 175px;
+    height: 90px;
 }
 
 #db_simulator_mute{
