@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
   blocks: "Μπλοκ",
   linkTooltip: "Αποθήκευση και σύνδεση σε μπλοκ.",
@@ -146,6 +147,7 @@ var MSG = {
   buttonOptions: "Button options",
   lightOptions: "Επιλογές αισθητήρα φωτός",
   rgbLedOptions: "Επιλογές RGB LED",
+  ledmatrixOptions: 'Led  Matrix Options',
   ledOptions: "Επιλογές LED",
   pinOptions: "Ακροδέκτης",
   colorOptions: "Color",
@@ -181,6 +183,12 @@ var MSG = {
   stepperMotorTooltip: "Επίλεξε ποιον stepper κινητήρα του robot εκτυπωτή θες να χρησιμοποιήσεις.",
   clear: "Καθαρισμός",
   save: "Αποθήκευση",
+};
+
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
 };
 
 MSG.dropzone = {
@@ -233,6 +241,10 @@ MSG.simulator = {
   ledDescription: "",
   rgbled: "RGB LED",
   rgbledDescription: "",
+  ledmatrix: "LED matrix",
+  ledmatrixDescription: "",
+  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegmentDescription: "",
   touch: "Touch sensor",
   touchDescription: "",
   lcd: "Οθόνη LCD",
@@ -436,11 +448,28 @@ MSG.tutorials.nameOnLcdBasic = {
 MSG.logging = {
   setup: "Δοκιμαστική εγκατάσταση",
   login: "Σύνδεση",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "Νέος χρήστης",
   username: "Όνομα χρήστη",
   chooseUsername: "Επίλεξε όνομα χρήστη",
+  email: "Email address",
+  enterEmail: "Enter email address",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
   choosePassword: "Επίλεξε 4 προσωπικά εικονίδια ως το συνθηματικό σου. Θα χρειαστεί να τα απομνημονεύσεις με τη σωστή σειρά.",
   currentlySelected: "Τρέχοντα επιλεγμένα: ",
+  language: "Language",
+  role: "Role",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth: "Ημερομηνία γέννησης",
   school: "Σχολείο",
   selectSchool: "Αναζήτηση με το όνομα του σχολείου...",

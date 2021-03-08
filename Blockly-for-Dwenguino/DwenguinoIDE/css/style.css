@@ -52,6 +52,15 @@ body{
     font-weight: 300;
 }
 
+#copy-arduino-code{
+    margin: 1em;
+    font-size: 1.25rem;
+}
+
+#notification-copy{
+    font-weight: 300;
+    font-size: 1rem;
+}
 .code-switch {
     position: relative;
     display: inline-block;
@@ -832,6 +841,10 @@ pre.content {
     background-image: url("../img/socialrobot/led_matrix.svg");
 }
 
+#rc_ledmatrixsegment_img {
+    background-image: url("../img/socialrobot/led_matrix.svg");
+}
+
 #rc_touch_img {
     background-image: url("../img/socialrobot/touch_sensor.svg");
 }
@@ -886,6 +899,7 @@ pre.content {
     position: absolute;
     top: 5px;
     left: 5px;
+    touch-action: none;
 }
 
 .sim_element_led{
@@ -901,7 +915,7 @@ pre.content {
 
 .sim_element_button{
     width: 90px;
-    height: 65px;
+    height: 75px;
 }
 
 .sim_element_servo{
@@ -1018,9 +1032,8 @@ pre.content {
 }
 
 .pir_canvas{
-    margin-left: 25px;
     width: 100px;
-    height: 100px;
+    height: 80px;
     margin-top: 10px;
 }
 
@@ -1058,10 +1071,8 @@ pre.content {
 }
 
 .sonar_canvas{
-    margin-left: 25px;
     width: 100px;
     height: 58px;
-    margin-top: 10px;
 }
 
 .sound_canvas{
@@ -1072,10 +1083,19 @@ pre.content {
 }
 
 .light_canvas{
-    margin-left: 25px;
     width: 100px;
     height: 60px;
     margin-top: 10px;
+}
+
+.ledmatrix_canvas{
+    width: 300px;
+    height: 90px;
+}
+
+.ledmatrixsegment_canvas{
+    width: 175px;
+    height: 90px;
 }
 
 #db_simulator_mute{
@@ -1552,6 +1572,35 @@ span.grippy::after {
 
 #loggingModalErrors {
     color: red;
+}
+
+#cookie-consent {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: 45px;
+    color: #292929;
+    padding-left: 10px;
+    padding-right: 10px;
+    background: #8BAB42;
+    z-index: 120;
+    border-radius: 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+#cookie-consent a {
+    color: #ffffff;
+}
+
+.allow-button {
+    color: #292929;
+    border-radius: 3px;
+    /* border: 1px solid #88bd28;
+    background-color: #88bd28; */
+    border: 1px solid #ffffff;
+    background-color: #ffffff;
 }
 
 .icon-user:before {

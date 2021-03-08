@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
   blocks: "Blocs",
   linkTooltip: "Sauvegarder et lier aux blocs.",
@@ -150,6 +151,7 @@ var MSG = {
   buttonOptions: "Options du boutoun-poussoir",
   lightOptions: "Options du capteur de lumière",
   rgbLedOptions: "Options du LED RGB",
+  ledmatrixOptions: 'Led  Matrix Options',
   ledOptions: "Options du LED",
   pinOptions: "Broche",
   colorOptions: "Couleur",
@@ -181,6 +183,12 @@ var MSG = {
   stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
   clear: "Clear",
   save: "Save",
+};
+
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
 };
 
 MSG.dropzone = {
@@ -288,6 +296,8 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "Matrice à LED",
   ledmatrixDescription: "",
+  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegmentDescription: "",
   touch: "Capteur touche",
   touchDescription: "",
   lcd: "Afficheur LCD",
@@ -478,11 +488,26 @@ MSG.tutorials.nameOnLcdBasic = {
 MSG.logging = {
   setup: "Test setup",
   login: "Login",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "New user",
-  username: "Username",
-  chooseUsername: "Choose a username",
+  email: "Email address",
+  enterEmail: "Enter email address",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
   choosePassword: "Select 4 personal icons as your password. You need to be able to remember these in the right order.",
   currentlySelected: "Currently selected: ",
+  language: "Language",
+  role: "Role",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth: "Date of birth",
   school: "School",
   selectSchool: "Search by name of school...",

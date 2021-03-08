@@ -1,4 +1,5 @@
 var MSG = {
+  arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "دوينجوينو بلوكلي",
   blocks: " كتل  ",
   linkTooltip: " حفظ وربط الكتل. ",
@@ -156,6 +157,8 @@ var MSG = {
   touchOptions: "Touch sensor options",
   buttonOptions: "Button options",
   lightOptions: " خيارات مستشعر الضوء  ",
+  rgbLedOptions: "RGB LED options",
+  ledmatrixOptions: 'Led  Matrix Options',
   ledOptions:  "  خيارات ",
   runError: "<h3> معذرة ، لم أتمكن من تحميل الكود على اللوحة </ h3>   ", 
   uploadError: "اتبع هذه الخطوات لإعادة تشغيل لوحة Dwenguino: \ n 1. افصل كبل USB \ n 2. قم بتوصيل الكمبيوتر ولوحة Dwenguino بكبل USB \ n 3. اضغط في نفس الوقت على زر RESET والزر SOUTH بلوحة Dwenguino \ n 4 . ثم حرر زر RESET أولاً \ n 5. ثم حرر الزر SOUTH \ n 6. قم بتحميل البرنامج مرة أخرى عبر <span id = 'db_menu_item_run' class = 'fas fa-play-circle' alt = 'تحميل الكود إلى لوحة Dwenguino' > </span> في القائمة الرئيسية   ",
@@ -186,6 +189,12 @@ var MSG = {
   stepperMotorTwo:  " الخطوة 2 ",
   stepperMotorTooltip:  " حدد أي محرك متدرج من روبوت الراسمة الذي تريد استخدامه. ",
 
+};
+
+MSG.cookieConsent = {
+  close: "Close",
+  cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
+  cookieInfo: "More info on how we use cookies."
 };
 
 MSG.dropzone = {
@@ -294,6 +303,8 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "LED matrix",
   ledmatrixDescription: "",
+  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegmentDescription: "",
   touch: "Touch sensor",
   touchDescription: "",
   lcd: " شاشة عرض من الكريستال السائل ",
@@ -496,11 +507,28 @@ MSG.tutorials.nameOnLcdBasic = {
 MSG.logging = {
   setup: " إعداد الاختبار ",
   login: " تسجيل الدخول ",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "مستخدم جديد ",
+  email: "Email address",
+  enterEmail: "Enter email address",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
   username: "اسم المستخدم  ",
   chooseUsername: " اختر اسم المستخدم ",
   choosePassword: " حدد 4 رموز شخصية ككلمة المرور الخاصة بك. يجب أن تكون قادرًا على تذكرها بالترتيب الصحيح. ",
   currentlySelected:  " المحدد حاليا: ",
+  language: "Language",
+  role: "Role",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth:  "تاريخ الولادة  ",
   school: "مدرسة  ",
   selectSchool: "البحث باسم المدرسة ...  ",

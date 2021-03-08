@@ -44,6 +44,8 @@ let DwenguinoBlockly = {
         this.logger.init();
         var self = this;
 
+        DwenguinoBlockly.displayCookieConsent();
+
         // Create an instance of the tutorial menu (persists until the application stops).
         // Uses the event logger to capture tutorial actions.
         this.tutorialMenu = new TutorialMenu(this.logger);
@@ -94,7 +96,6 @@ let DwenguinoBlockly = {
           var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
           DwenguinoBlockly.runEventHandler(code);
         });
-
 
         //The following code handles the upload of a saved file.
         //If it is run as an arduino ide plugin its shows a filechooser and returns the xml string (depricated and removed)
@@ -448,7 +449,8 @@ let DwenguinoBlockly = {
     previouslyRenderedCode: null,
 
     /**
-     * Populate the db_blockly div with content generated from the blocks.
+     * Populate the db_blockly div with content generated from the blocks. This method highlights the Arduino C++ code that 
+     * has recently changed.
      */
     renderCode: function() {
 
@@ -456,7 +458,7 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.logCodeChange();
 
         Blockly.Arduino.emptySetup();
-        var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+        let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
 
         // display code
         if (DwenguinoBlockly.previouslyRenderedCode === null){
@@ -465,30 +467,34 @@ let DwenguinoBlockly = {
                 DwenguinoBlockly.previouslyRenderedCode = code;
         }
         else if (code !== DwenguinoBlockly.previouslyRenderedCode) {
-            //When the redered code changed log the block structures
-            //Do this because when the user moves blocks we do not want to log anything
-            //We want to log code progression not code movement
-            
+          //When the redered code changed log the block structures
+          //Do this because when the user moves blocks we do not want to log anything
+          //We want to log code progression not code movement
+          let resultStringArray = DwenguinoBlockly.highlightModifiedCode(code);            
 
-            var diff = JsDiff.diffWords(DwenguinoBlockly.previouslyRenderedCode, code);
-            var resultStringArray = [];
-            for (var i = 0; i < diff.length; i++) {
-              if (!diff[i].removed) {
-                var escapedCode = diff[i].value.replace(/</g, "&lt;")
-                                               .replace(/>/g, "&gt;");
-                if (diff[i].added) {
-                  resultStringArray.push(
-                      '<span class="code_highlight_new">' + escapedCode + '</span>');
-                } else {
-                  resultStringArray.push(escapedCode);
-                }
-              }
-            }
-            document.getElementById('db_arduino_code').innerHTML =
-                prettyPrintOne(resultStringArray.join(''), 'cpp', false);
-            DwenguinoBlockly.previouslyRenderedCode = code;  
-         }
+          document.getElementById('db_arduino_code').innerHTML =
+              prettyPrintOne(resultStringArray.join(''), 'cpp', false);
+          DwenguinoBlockly.previouslyRenderedCode = code;  
+        }
     },
+
+    highlightModifiedCode(code){
+      let diff = JsDiff.diffWords(DwenguinoBlockly.previouslyRenderedCode, code);
+      let resultStringArray = [];
+      for (let i = 0; i < diff.length; i++) {
+        if (!diff[i].removed) {
+          let escapedCode = diff[i].value.replace(/</g, "&lt;")
+                                          .replace(/>/g, "&gt;");
+          if (diff[i].added) {
+            resultStringArray.push(
+                '<span class="code_highlight_new">' + escapedCode + '</span>');
+          } else {
+            resultStringArray.push(escapedCode);
+          }
+        }
+      }
+      return resultStringArray
+    }, 
 
     setDifficultyLevel: function(level){
         DwenguinoBlockly.difficultyLevel = level;
@@ -496,6 +502,50 @@ let DwenguinoBlockly = {
             DwenguinoBlockly.doTranslation();
             DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
         });
+    },
+
+    fallbackCopyCodeToClipboard: function(text) {
+      var textArea = document.createElement("dummy-text-area");
+      textArea.value = text;
+      
+      // Avoid scrolling to bottom
+      textArea.style.top = "0";
+      textArea.style.left = "0";
+      textArea.style.position = "fixed";
+    
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+    
+      try {
+        document.execCommand('copy');
+        $('#notification-copy').show();
+        $('#notification-copy').text(MSG.arduinoCodeCopied);
+        setTimeout(function() {
+          $("#notification-copy").hide('blind', {}, 500)
+        }, 3000);
+      } catch (err) {
+        console.error('Unable to copy Arduino code: ', err);
+      }
+    
+      document.body.removeChild(textArea);
+    },
+
+    copyCodeToClipboard: function(){
+      let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+      if (!navigator.clipboard) {
+        fallbackCopyCodeToClipboard(code);
+        return;
+      }
+      navigator.clipboard.writeText(code).then(function() {
+        $('#notification-copy').show();
+        $('#notification-copy').text(MSG.arduinoCodeCopied);
+        setTimeout(function() {
+          $("#notification-copy").hide('blind', {}, 500)
+        }, 3000);
+      }, function(err) {
+        console.error('Unable to copy Arduino code: ', err);
+      });
     },
 
     /*
@@ -772,10 +822,30 @@ let DwenguinoBlockly = {
             document.getElementById('db_code_pane').style.visibility = 'hidden';
           }
         });
+
+        $('#copy-code').click(function () {
+          DwenguinoBlockly.copyCodeToClipboard();
+        });
     },
+    
     tearDownEnvironment: function(){
       // Called from the aruino IDE on close. For now do nothing.
     },
+
+    displayCookieConsent: function(){
+      let cookieConsent = MSG.cookieConsent['cookieConsent']
+                          + '<a href="#" class="ml-1">' + MSG.cookieConsent['cookieInfo'] + '</a>'
+                          + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+MSG.cookieConsent['close']+'</button></div>';
+
+      $('#cookie-consent').html(cookieConsent);
+
+      $('#allow-cookies').click(function () {
+        $('#cookie-consent').remove();
+      });      
+      
+      // <span>This site uses cookies to enhance user experience. see<a href="#" class="ml-1 text-decoration-none">Privacy policy</a> </span>
+      // <div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button class="allow-button mr-1">Allow cookies</button> <button class="allow-button">cancel</button> </div>
+    }
 };
 
 

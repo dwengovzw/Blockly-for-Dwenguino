@@ -2,7 +2,7 @@ import { RobotComponent } from './robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js'
 
-export { SocialRobotLedMatrix, DisplayDataTypesEnum }
+export { SocialRobotLedMatrixSegment, DisplayDataTypesEnum }
 
 /**
  * The supported robot component types
@@ -18,12 +18,12 @@ const DisplayDataTypesEnum = {
 /**
  * @extends RobotComponent
  */
-class SocialRobotLedMatrix extends RobotComponent{
+class SocialRobotLedMatrixSegment extends RobotComponent{
     constructor(eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
-        this._type = TypesEnum.LEDMATRIX;
+        this._type = TypesEnum.LEDMATRIXSEGMENT;
         this._x = x;
         this._y = y;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
@@ -31,8 +31,8 @@ class SocialRobotLedMatrix extends RobotComponent{
         this._csPin = csPin;
         this._clkPin = clkPin;
         console.log('state adjusted');
-        this._state = SocialRobotLedMatrix.getEmptyLedMatrix();
-        this._canvasId = 'sim_ledmatrix_canvas' + this._id; 
+        this._state = SocialRobotLedMatrixSegment.getEmptyLedMatrix();
+        this._canvasId = 'sim_ledmatrixsegment_canvas' + this._id; 
         this._ledSvg = new Image();
         this._ledSvg.src = './DwenguinoIDE/img/socialrobot/led_matrix_on.svg';
         this._ledOffsets = { 
@@ -41,10 +41,10 @@ class SocialRobotLedMatrix extends RobotComponent{
             'led_y' : 1.25,
             'led_between_x' : 8.65,
             'led_between_y' : 8.53,
-            'led_radius' : 6.35,
-            'matrix_segment_between_x' : 71.01 };
+            'led_radius' : 6.35 };  
         this._ledmatrixBackground = new Image();
-        this._ledmatrixBackground.src = './DwenguinoIDE/img/socialrobot/led_matrix_1x4.svg';
+        this._ledmatrixBackground.src = './DwenguinoIDE/img/socialrobot/led_matrix_1x1.svg';
+
         this.insertHtml();
         this.toggleVisibility(visible);
     }
@@ -99,7 +99,7 @@ class SocialRobotLedMatrix extends RobotComponent{
         let simLedMatrix = document.getElementById('sim_'+this.getType() + this.getId());
 
         simLedMatrix.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.ledmatrixOptions); 
+            this.createComponentOptionsModalDialog(MSG.ledmatrixOptions);
             this.showDialog();
         });
     }
@@ -142,7 +142,7 @@ class SocialRobotLedMatrix extends RobotComponent{
         this.setY(0);
         let dataObject = {
             "dataType": DisplayDataTypesEnum.DISPLAY,
-            "data": SocialRobotLedMatrix.getEmptyLedMatrix()
+            "data": SocialRobotLedMatrixSegment.getEmptyLedMatrix()
         }
         this.setState(dataObject);
     }
@@ -207,6 +207,7 @@ class SocialRobotLedMatrix extends RobotComponent{
         $('#clkPin' + clkPin).addClass('option_button_selected');
 
     }
+
 
     getPossibleDataPin(){
         return '2';
