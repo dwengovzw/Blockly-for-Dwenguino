@@ -1,6 +1,7 @@
 /* dutch translation file */
 
 var MSG = {
+  arduinoCodeCopied: "Arduino-code werd gekopieerd naar het klembord",
   title: "DwenguinoBlockly",
   blocks: "Blokken",
   linkTooltip: "Opslaan en koppelen naar blokken.",
@@ -168,6 +169,7 @@ var MSG = {
   buttonOptions: "Opties van de knop",
   lightOptions: "Opties van de lichtsensor",
   rgbLedOptions: "Opties van de rgb-led",
+  ledmatrixOptions: 'Opties van de led-matrix',
   ledOptions: "Opties van de led",
   pinOptions: "Pin",
   colorOptions: "Kleur",
@@ -199,6 +201,12 @@ var MSG = {
   stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen.",
   clear: "Wissen",
   save: "Opslaan",
+};
+
+MSG.cookieConsent = {
+  close: "Sluiten",
+  cookieConsent: "We gebruiken functionele cookies voor de Dwenguino simulator. ",
+  cookieInfo: "Meer informatie over hoe we cookies gebruiken."
 };
 
 MSG.dropzone = {
@@ -311,6 +319,8 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "led-matrix",
   ledmatrixDescription: "",
+  ledmatrixsegment: "led-matrix segment",
+  ledmatrixsegmentDescription: "",
   touch: "Aanraaksensor",
   touchDescription: "Gebruik deze sensor om te detecteren of de robot wordt aangeraakt. In de simulator is een knopvvoorzien om aanraking te simuleren door de knop in te drukken. Bij aanraking geeft de sensor een 1 terug, anders een 0.",
   lcd: "Lcd-scherm",
@@ -836,11 +846,28 @@ MSG.tutorials.socialrobot['hello'].answers = [
 MSG.logging = {
   setup: "Instellingen",
   login: "Aanmelden",
+  logout: "Log out",
+  firstname: "First name",
   newuser: "Nieuwe gebruiker",
   username: "Gebruikersnaam",
   chooseUsername: "Kies een gebruikersnaam",
+  email: "E-mailadres",
+  enterEmail: "Voer een e-mailadres in",
+  forgotPassword: "I forgot my password",
+  userDoesNotExist: "This user does not exist. Try a different email address.",
+  resetPassword: "Reset your password",
+  back: "Back",
+  enterFirstname: "Enter your first name",
+  password: "Password",
+  repeatedPassword: "Repeat password",
+  enterPassword: "Enter password",
+  enterRepeatedPassword: "Repeat your password",
   choosePassword: "Kies 4 afbeeldingen als je paswoord. Je moet deze onthouden in de juiste volgorde.",
   currentlySelected: "Op dit moment geselecteerd: ",
+  language: "Taal",
+  role: "Rol",
+  verification: "Verify your email address",
+  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
   birth: "Geboortedatum",
   school: "School",
   selectSchool: "Zoek op naam van de school...",
