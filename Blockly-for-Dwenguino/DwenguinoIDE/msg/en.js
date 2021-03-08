@@ -320,6 +320,7 @@ MSG.socialrobot = {
   lefthand: "Left hand",
 };
 
+
 MSG.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Learn to program<br>with DwenguinoBlockly",
