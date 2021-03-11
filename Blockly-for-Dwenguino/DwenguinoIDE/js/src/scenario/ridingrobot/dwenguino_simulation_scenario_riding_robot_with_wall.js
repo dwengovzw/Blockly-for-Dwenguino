@@ -82,7 +82,7 @@ class DwenguinoSimulationScenarioRidingRobotWithWall extends DwenguinoSimulation
      * @returns {BoardState} The updated Dwenguino board state.
      */
     updateScenarioState(boardState) {
-        super.updateScenarioState(boardState);
+        //super.updateScenarioState(boardState);
         
         var speed1 = boardState.getMotorSpeed(1);
         var speed2 = boardState.getMotorSpeed(2);
