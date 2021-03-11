@@ -726,9 +726,9 @@ let DwenguinoBlockly = {
 
     doTranslation: function() {
         // Inject language strings.
-        document.title += ' ' + MSG['title'];
+        document.title += ' ' + DwenguinoBlocklyLanguageSettings.translate(['title']);
 
-        document.getElementById('db_menu_item_upload').title = MSG['loadBlocksFileTooltip'];
+        document.getElementById('db_menu_item_upload').title = DwenguinoBlocklyLanguageSettings.translate(['loadBlocksFileTooltip']);
         document.getElementById('db_menu_item_download').title = MSG['saveBlocksFileTooltip'];
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
 
