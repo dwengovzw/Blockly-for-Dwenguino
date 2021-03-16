@@ -13,7 +13,8 @@ let exports = {};
 
 exports.newSessionId = function(req, res) {
     let id = uuidv4();
-    res.send(id);
+    console.debug(id);
+    res.status(200).send(id);
 };
 
 exports.event = function(req, res) {  

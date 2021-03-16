@@ -70,8 +70,6 @@ class SimulationControlsController {
             this.setSpeed();
         });
 
-
-
         // Ugly hack..
         let self = this;
         $("input[name=scenario_type]:radio").change(function () {
@@ -82,7 +80,6 @@ class SimulationControlsController {
             self.handleSimulationStop();
             self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
             self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, this.scenarioView));
-
         });
 
         // start/stop/pause
