@@ -22,6 +22,34 @@ check_for_root () {
     fi
 }
 
+# Check if mongodb is installed_
+check_mongodb_install() {
+    if [[ $(mongod --version) == "db version v"* ]]
+    then
+        echo "MongoDB already installed."
+    else
+        echo "MongoDB is not installed, trying to install."
+        mongo_public_key=$(wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -)
+        if [[ $mongo_public_key == *"OK"* ]]
+        then
+            echo "MongoDB public key added"
+        else 
+            sudo $install_command -y install gnupg
+            wget -qO - https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add -
+            echo "MongoDB public key added"
+        fi
+        # Install MongoDB for your specific OS release
+        . /etc/os-release # get you OS ID and VERSION CODENAME
+        echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/"$(ID)" "$(VERSION_CODENAME)"/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+        sudo $install_command update 
+        sudo $install_command install -y mongodb-org 
+    fi
+    # Make database directory writable for all users
+    sudo mkdir /data/
+    sudo mkdir /data/db
+    sudo chmod -R go+w /data/db
+}
+
 # Check if python3 is installed
 check_python_install () {
     if command -v python3 &>/dev/null
@@ -30,7 +58,7 @@ check_python_install () {
     else
         echo "Python 3 is not installed, trying to install."
         sudo $install_command update
-        sudo $install_command install python3.6
+        sudo $install_command install -y python3.6
     fi
     echo "Checking if pyserial is installed."
     python3 -c "import serial"
@@ -46,7 +74,7 @@ check_python_install () {
             echo "pip3 is installed, skipping..."
         else
             echo "Trying to install pip."
-            sudo $install_command install python3-pip
+            sudo $install_command install -y python3-pip
         fi
         echo "Installing pyserial using pip."
         python3 -m pip install pyserial
@@ -87,6 +115,9 @@ then
     # Check if script is run as root
     check_for_root
 
+    # Check if MongoDB is installed
+    check_mongodb_install
+
     # Check if python3 is installed
     check_python_install
 
@@ -115,35 +146,38 @@ then
     npm install
 
     # Configure local environment variables for nodejs application
-    echo "NODE_ENV=development" > ./backend/.env
-    echo "ACCESS_TOKEN_SECRET=ThF0yV1sY42aunmy1dUEVwn1ueZn3W67aIfCu9ieRJ9n7KkKWCyfj7MmaiRzawlNSUeSFbfyiUpal7cN4mpaSm8DsI4FFUWmqeP8h1INRtcUMwLokuw7SIvX0LfMGGuzqEnj9cQzABGlXg3Lk0vc5y" >> ./backend/.env
-    echo "REFRESH_TOKEN_SECRET=7cLkYItoMJHW4cXauNhb2PxeHzcLEPlX1EzIemMFcN54bNeQHkGcWfQhbmLvWJL4BalUxa7KoTIqMf8NVXpC5a5ivAsAXENYWFFyMfJLiJylHqLBEAsSpgQ3C3SvtIwUrqDH896La8DJtJpIIiVwJv" >> ./backend/.env
-    echo "EMAIL_HOST=smtp.ethereal.email" >> ./backend/.env
-    echo "EMAIL_PORT=587" >> ./backend/.env
-    echo "EMAIL_USER=lyda.grady61@ethereal.email" >> ./backend/.env
-    echo "EMAIL_PASSWORD=KdPMjvvxchp6ps5YXq" >> ./backend/.env
-    echo "EMAIL_FROM_ADDRESS=noreply@dwengo.org" >> ./backend/.env
-    echo "EMAIL_FROM_NAME=\"Dwengo\"" >> ./backend/.env
-    echo "SERVER_URL=http://localhost:12032/" >> ./backend/.env
-    echo "STATIC_SERVING_URL=http://localhost:12032/dwenguinoblockly" >> ./backend/.env
+    touch $work_dir/backend/.env
+    > $work_dir/backend/.env
+    echo "NODE_ENV=development" > $work_dir/backend/.env
+    echo "ACCESS_TOKEN_SECRET=ThF0yV1sY42aunmy1dUEVwn1ueZn3W67aIfCu9ieRJ9n7KkKWCyfj7MmaiRzawlNSUeSFbfyiUpal7cN4mpaSm8DsI4FFUWmqeP8h1INRtcUMwLokuw7SIvX0LfMGGuzqEnj9cQzABGlXg3Lk0vc5y" >> $work_dir/backend/.env
+    echo "REFRESH_TOKEN_SECRET=7cLkYItoMJHW4cXauNhb2PxeHzcLEPlX1EzIemMFcN54bNeQHkGcWfQhbmLvWJL4BalUxa7KoTIqMf8NVXpC5a5ivAsAXENYWFFyMfJLiJylHqLBEAsSpgQ3C3SvtIwUrqDH896La8DJtJpIIiVwJv" >> $work_dir/backend/.env
+    echo "EMAIL_HOST=smtp.ethereal.email" >> $work_dir/backend/.env
+    echo "EMAIL_PORT=587" >> $work_dir/backend/.env
+    echo "EMAIL_USER=lyda.grady61@ethereal.email" >> $work_dir/backend/.env
+    echo "EMAIL_PASSWORD=KdPMjvvxchp6ps5YXq" >> $work_dir/backend/.env
+    echo "EMAIL_FROM_ADDRESS=noreply@dwengo.org" >> $work_dir/backend/.env
+    echo "EMAIL_FROM_NAME=\"Dwengo\"" >> $work_dir/backend/.env
+    echo "SERVER_URL=http://localhost:12032/" >> $work_dir/backend/.env
+    echo "STATIC_SERVING_URL=http://localhost:12032/dwenguinoblockly" >> $work_dir/backend/.env
     
     # Configure start file
-    echo "#!/bin/bash" > start.sh
-    echo "$work_dir/node_modules/electron/dist/electron $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> start.sh # Start electron
-    echo 'electronPid=$!' >> start.sh # get process id for the latest command
-    echo "cd $work_dir/backend/" >> start.sh # for some weird reason we have to be inside the folder, before calling node to run the js file
-    echo "node -r dotenv/config --experimental-modules index.js &" >> start.sh # start the backend
-    echo "cd $work_dir" >> start.sh # and go back to wherever you came from
-    echo 'nodePid=$!' >> start.sh # get the process id for the latest command
-    echo 'echo "DwenguinoBlockly is running"' >> start.sh
-    echo 'wait $electronPid' >> start.sh # Wait until electron environment is closed
-    echo 'kill $nodePid' >> start.sh # Kill the backend application
-    echo 'echo "Quitting DwenguinoBlockly"' >> start.sh
-    chmod +x start.sh
+    echo "#!/bin/bash" > $work_dir/start.sh
+    echo "mongod --fork --syslog" > $work_dir/start.sh
+    echo "$work_dir/node_modules/electron/dist/electron $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> $work_dir/start.sh # Start electron
+    echo 'electronPid=$!' >> $work_dir/start.sh # get process id for the latest command
+    echo "cd $work_dir/backend/" >> $work_dir/start.sh # for some weird reason we have to be inside the folder, before calling node to run the js file
+    echo "node -r dotenv/config --experimental-modules index.js &" >> $work_dir/start.sh # start the backend
+    echo "cd $work_dir" >> $work_dir/start.sh # and go back to wherever you came from
+    echo 'nodePid=$!' >> $work_dir/start.sh # get the process id for the latest command
+    echo 'echo "DwenguinoBlockly is running"' >> $work_dir/start.sh
+    echo 'wait $electronPid' >> $work_dir/start.sh # Wait until electron environment is closed
+    echo 'kill $nodePid' >> $work_dir/start.sh # Kill the backend application
+    echo 'echo "Quitting DwenguinoBlockly"' >> $work_dir/start.sh
+    chmod +x $work_dir/start.sh
 
     # Configure make binaries
-    rm ./backend/compilation/bin/make
-    cp ./backend/compilation/bin/linux/make ./backend/compilation/bin/make
+    rm $work_dir/backend/compilation/bin/make
+    cp $work_dir/backend/compilation/bin/linux/make $work_dir/backend/compilation/bin/make
     echo "Configured make binaries for linux!"
 
     echo "Adding user to dialout group to get access to the USB ports"
