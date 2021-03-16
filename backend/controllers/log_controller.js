@@ -20,9 +20,8 @@ exports.newSessionId = function(req, res) {
 exports.event = function(req, res) {  
   let logitem = new Logitem();
 
-  if(req.user.id){
-    logitem.user_id = req.user._id;
-  }
+  logitem.user_id = req.user._id;
+  logitem.session_id = req.body.sessionId;
   logitem.activity_id = req.body.activityId;
   logitem.timestamp = req.body.timestamp;
   logitem.event.name = req.body.event.name;
