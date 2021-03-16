@@ -1,6 +1,6 @@
 export const EVENT_NAMES = Object.freeze({
     downloadClicked: "downloadClicked",
-    blockyBlockCreate: "blocklyBlockCreate",
+    blocklyBlockCreate: "blocklyBlockCreate",
     blocklyBlockDelete: "blocklyBlockDelete",
     blocklyBlockMove: "blocklyBlockMove",
     blocklyVarCreate: "blocklyVarCreate",
@@ -8,6 +8,7 @@ export const EVENT_NAMES = Object.freeze({
     blocklyVarRename: "blocklyVarRename",
     blocklyUI: "blocklyUI",
     blocklyChange: "blocklyChange",
+    difficultyLevel: "setDifficultyLevel",
     undo: "undo",
     uploadClicked: "uploadClicked",
     simButtonStateClicked: "simButtonStateClicked",

@@ -96,8 +96,7 @@ class DwenguinoEventLogger {
         "sessionId": this.sessionId,
         "event": eventToRecord
         };
-        console.log(eventToRecord);
-        console.log(serverSubmission);
+        console.debug('Record event ' + eventToRecord.name + ' with data ', serverSubmission);
         if (this.sessionId !== undefined){
             $.ajax({
                 type: "POST",
