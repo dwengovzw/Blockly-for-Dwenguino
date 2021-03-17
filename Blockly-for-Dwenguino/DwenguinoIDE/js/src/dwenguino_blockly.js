@@ -843,6 +843,12 @@ let DwenguinoBlockly = {
         $('#copy-code').click(function () {
           DwenguinoBlockly.copyCodeToClipboard();
         });
+
+        // If the user selects to render the code for Arduino or Dwenguino hardware, render the code in the right format again
+        let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
+        hardwareViewCheckbox.addEventListener('change', function () {
+          DwenguinoBlockly.renderCode();
+        });
     },
     
     tearDownEnvironment: function(){
