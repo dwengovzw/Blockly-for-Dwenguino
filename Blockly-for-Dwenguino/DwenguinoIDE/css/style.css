@@ -52,6 +52,12 @@ body{
     font-weight: 300;
 }
 
+#switch_hardware_view{
+    margin: 1em;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
 #copy-arduino-code{
     margin: 1em;
     font-size: 1.25rem;

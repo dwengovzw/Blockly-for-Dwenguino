@@ -49,12 +49,26 @@
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
             <div id="db_code_pane">
-                <div id="copy-arduino-code" class="">
-                    <span id="copy-code" class="sim_item fas fa-copy"></span>
-                    <span id="notification-copy"></span>
+                <div id="db_code_pane_utils" class="container">
+                    <div class="row">
+                        <div id="copy-arduino-code" class="col-6">
+                            <span id="copy-code" class="sim_item fas fa-copy"></span>
+                            <span id="notification-copy"></span>
+                        </div>
+                        <div id="switch_hardware_view" class="col-4">
+                            <span id="switch_to_dwenguino">Dwenguino</span>
+                            <label class="code-switch">
+                                <input id="hardware_checkbox" type="checkbox">
+                                <span class="code-slider round"></span>
+                            </label>
+                            <span id="switch_to_arduino">Arduino</span>
+                        </div>
+                    </div>
                 </div>
-                <pre id="db_arduino_code" class="content">  
-                </pre>  
+                <div id="db_code_pane_code">
+                    <pre id="db_arduino_code" class="content">  
+                    </pre>  
+                </div>
             </div>
         </div>
         <div id="db_infopane">
