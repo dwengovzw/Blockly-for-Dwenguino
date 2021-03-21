@@ -31,10 +31,10 @@ var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
 Blockly.Blocks.socialrobot.HUE = 25;
 
 var ledmatrixDropdown = [
-  ["0", "0"],
-  ["1", "1"],
-  ["2", "2"],
-  ["3", "3"]
+  ["1", "0"],
+  ["2", "1"],
+  ["3", "2"],
+  ["4", "3"]
 ];
 
 let eyePatternDropdown = [
