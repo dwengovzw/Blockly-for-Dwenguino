@@ -1,4 +1,4 @@
-var MSG = {
+var MSG_FALLBACK = {
   arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
   blocks: "Blocks",
@@ -115,12 +115,12 @@ var MSG = {
   socialRobotRgbLedOffBlock: "Turn the RGB LED off with",
   socialRobotRgbColorBlock: "RGB color %1",
   socialRobotRgbColor: "red %1 green %2 blue %3",
-  socialRobotLedmatrixImageBlock: "Display pattern on LED matrix",
+  socialRobotLedmatrixImageBlock: "Display pattern on LED matrix segment",
   socialRobotLedmatrixImageBlockTooltip: "Show the given led pattern on the LED matrix display.",
   socialRobotLedmatrixEyePatternBlock: "Display eye pattern",
   socialRobotLedmatrixEyePatternBlockTooltip: 'Show the given eye pattern on the LED matrix display.',
-  socialRobotLedmatrixEyePatternSegmentBlock: "on LED matrix",
-  socialRobotLedmatrixClearSegmentBlock: "Clear LED matrix",
+  socialRobotLedmatrixEyePatternSegmentBlock: "on LED matrix segment",
+  socialRobotLedmatrixClearSegmentBlock: "Clear LED matrix segment",
   socialRobotLedmatrixClearSegmentBlockTooltip: 'Clear a segment of the LED matrix display.',
   socialRobotLedmatrixClearDisplayBlock: "Clear LED matrix",
   socialRobotLedmatrixClearDisplayBlockTooltip: 'Clear the complete LED matrix display.',
@@ -193,13 +193,13 @@ var MSG = {
 
 };
 
-MSG.cookieConsent = {
+MSG_FALLBACK.cookieConsent = {
   close: "Close",
   cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
   cookieInfo: "More info on how we use cookies."
 };
 
-MSG.dropzone = {
+MSG_FALLBACK.dropzone = {
   dictSelectFile: "Select a file.",
   dictChooseFile: "Choose file",
   dictDefaultMessage: "Drop files here to upload",
@@ -216,7 +216,7 @@ MSG.dropzone = {
   dictFileNotSupported: "This file is not supported.",
 };
 
-MSG.ledmatrix = {
+MSG_FALLBACK.ledmatrix = {
   restPosition: 'Rest position', 
   blink1: 'Blink 1',
   blink2: 'Blink 2',
@@ -269,7 +269,7 @@ MSG.ledmatrix = {
   peering4: 'Peering 4'
 };
 
-MSG.simulator = {
+MSG_FALLBACK.simulator = {
   start: "Start",
   stop: "Stop",
   pause: "Pause",
@@ -322,7 +322,7 @@ MSG.simulator = {
   decoration: "Decoration",
 };
 
-MSG.socialrobot = {
+MSG_FALLBACK.socialrobot = {
   plain: "Default",
   eye: "Eye",
   mouth: "Mouth",
@@ -331,7 +331,7 @@ MSG.socialrobot = {
 };
 
 
-MSG.tutorialMenu = {
+MSG_FALLBACK.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Learn to program<br>with DwenguinoBlockly",
   catDwenguinoComponents: "Handy overview of<br>the Dwenguino components",
@@ -354,7 +354,7 @@ MSG.tutorialMenu = {
   display: "Display"
 };
 
-MSG.tutorials = {
+MSG_FALLBACK.tutorials = {
   introduction: {},
   /*theremin: {},
   robot: {},
@@ -362,13 +362,13 @@ MSG.tutorials = {
 };
 
 
-MSG.tutorials.general = {
+MSG_FALLBACK.tutorials.general = {
   sureTitle: "Are you sure?",
   sureText: "When you click 'Next' all blocks in the workspace will be removed.",
 };
 
 
-MSG.tutorials.introduction = {
+MSG_FALLBACK.tutorials.introduction = {
   step1Title: "Welcome to DwenguinoBlockly",
   step1Content: "Hi, my name is Dwenguino! I will help you to get to know the interface!",
   step2aTitle: "The Blockly code area",
@@ -392,7 +392,7 @@ MSG.tutorials.introduction = {
 };
 
 
-MSG.tutorials.nameOnLcd = {
+MSG_FALLBACK.tutorials.nameOnLcd = {
   step1Title: "Name on LCD-screen",
   step1Content: "Open the simulator view and test the code. What do you see?",
   step2Title: "Name on LCD-screen",
@@ -400,7 +400,7 @@ MSG.tutorials.nameOnLcd = {
 };
 
 
-MSG.tutorials.blinkLED = {
+MSG_FALLBACK.tutorials.blinkLED = {
   step1Title: "Blink LED",
   step1Content: "Open the simulator view and test the code. What do you see?",
   step2Title: "Blink LED",
@@ -410,7 +410,7 @@ MSG.tutorials.blinkLED = {
 };
 
 
-MSG.tutorials.ledOnButtonPress = {
+MSG_FALLBACK.tutorials.ledOnButtonPress = {
   step1Title: "LED on button press",
   step1Content: "Open the simulator view and test the code. What do you see?",
   step2Title: "LED on button press",
@@ -420,7 +420,7 @@ MSG.tutorials.ledOnButtonPress = {
 };
 
 
-MSG.tutorials.bitPatternOnLeds = {
+MSG_FALLBACK.tutorials.bitPatternOnLeds = {
   step1Title: "Pattern on LEDs",
   step1Content: "Open the simulator view and test the code. What do you see?",
   step2Title: "Pattern on LEDs",
@@ -430,7 +430,7 @@ MSG.tutorials.bitPatternOnLeds = {
 };
 
 
-MSG.tutorials.allButtons = {
+MSG_FALLBACK.tutorials.allButtons = {
   step1Title: "All buttons",
   step1Content: "Open the simulator view and test the code. What do you see?",
   step2Title: "All buttons",
@@ -440,7 +440,7 @@ MSG.tutorials.allButtons = {
 };
 
 
-MSG.tutorials.driveForward = {
+MSG_FALLBACK.tutorials.driveForward = {
   step1Title: "Drive forward",
   step1Content: "Open the simulator view.",
   step2Title: "Drive forward",
@@ -450,7 +450,7 @@ MSG.tutorials.driveForward = {
 };
 
 
-MSG.tutorials.rideInSquare = {
+MSG_FALLBACK.tutorials.rideInSquare = {
   step1Title: "Ride into square",
   step1Content: "Open the simulator view.",
   step2Title: "Ride into square",
@@ -462,7 +462,7 @@ MSG.tutorials.rideInSquare = {
 };
 
 
-MSG.tutorials.rideToWall = {
+MSG_FALLBACK.tutorials.rideToWall = {
   step1Title: "Ride to wall",
   step1Content: "Open the simulator view.",
   step2Title: "Ride to wall",
@@ -474,7 +474,7 @@ MSG.tutorials.rideToWall = {
 };
 
 
-MSG.tutorials.avoidWall = {
+MSG_FALLBACK.tutorials.avoidWall = {
   step1Title: "Avoid wall",
   step1Content: "Open the simulator view.",
   step2Title: "Avoid wall",
@@ -487,7 +487,7 @@ MSG.tutorials.avoidWall = {
 
 
 //TODO: Translate
-MSG.tutorials.nameOnLcdBasic = {
+MSG_FALLBACK.tutorials.nameOnLcdBasic = {
   step0Title: "Ben je zeker?",
   step0Content: "Ben je zeker? Waneer je op volgende klikt zullen de blokken op het werkblad vervangen worden.",
   step1Title: "Naam op LCD-scherm",
@@ -505,11 +505,11 @@ MSG.tutorials.nameOnLcdBasic = {
 };
 
 
-/*MSG.tutorials.hello_dwenguino = {
+/*MSG_FALLBACK.tutorials.hello_dwenguino = {
   label: "Hello World!",
 };*/
 
-MSG.logging = {
+MSG_FALLBACK.logging = {
   setup: "Test setup",
   login: "Login",
   logout: "Log out",
@@ -576,7 +576,7 @@ MSG.logging = {
   envelope: "Envelope"
 };
 
-MSG.validator = {
+MSG_FALLBACK.validator = {
   errSchool: "Select a school.",
   errId: "You didn't select enough icons.",
   errAgeGroup: "Select your age group.",

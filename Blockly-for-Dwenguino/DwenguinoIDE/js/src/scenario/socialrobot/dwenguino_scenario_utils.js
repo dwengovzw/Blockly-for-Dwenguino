@@ -30,7 +30,8 @@ class DwenguinoScenarioUtils{
     saveScenario(data){
         console.log('save scenario');
         FileIOController.download("scenario.xml", data);
-        this.scenario.logger.recordEvent(this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, ""));
+        let eventToRecord = this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, "");
+        this.scenario.logger.recordEvent(eventToRecord);
     }
 
     /**

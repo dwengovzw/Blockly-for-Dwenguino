@@ -5,16 +5,31 @@ var logSchema = mongoose.Schema({
         type: Date,
         required: true
     },
-    user_id: String,
-    session_id: String,
-    activity_id: Number,
+    user_id: {
+        type: String,
+        required: false
+    },
+    session_id: {
+        type: String,
+        required: false
+    },
+    activity_id: {
+        type: Number,
+        required: false
+    },
     event: {
         name: {
             type: String,
             required: true
         }, 
-        data: String,
-        functional_vector: Array,
+        data: {
+            type: String,
+            required: false
+        },
+        functional_vector: {
+            type: Array,
+            required: false
+        }
     }
 });
 

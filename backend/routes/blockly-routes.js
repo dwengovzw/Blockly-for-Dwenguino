@@ -20,6 +20,7 @@ router.get('/', function (req, res) {
         message: 'To the moon and back.'
     });
 });
+
 // Import contact controller
 import logcontroller from '../controllers/log_controller.js';
 import utilscontroller from '../controllers/util_controller.js';
@@ -30,7 +31,7 @@ import usercontroller from '../controllers/user_controller.js';
 
 /* Data collection */
 
-router.route('/logging/id')
+router.route('/logging/newSessionId')
     .get(logcontroller.newSessionId);
 
 router.route('/logging/event')
