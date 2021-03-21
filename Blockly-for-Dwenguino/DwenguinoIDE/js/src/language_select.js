@@ -14,6 +14,37 @@ DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
 //Set default language setting
 DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'nl';
 
+DwenguinoBlocklyLanguageSettings.translate = function(translationKey){
+  let translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG);
+  if (translation){
+    return translation;
+  }else{
+    translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK);
+    if (translation){
+      return translation;
+    }else{
+      return "No translation";
+    }
+  }
+};
+
+/**
+ * @Brief returns the value for a translation key
+ * @Param translationKey an array containing the the keys of the subsequent subobjects
+ */
+DwenguinoBlocklyLanguageSettings.findValueForTranslationKey = function(translationKey, translationObject){
+  let i = 0;
+  while (translationObject[translationKey[i]]){
+    translationObject = translationObject[translationKey[i]];
+    i++;
+  }
+  if (typeof translationObject === 'string'){
+    return translationObject;
+  }else{ 
+    return undefined;
+  }
+};
+
 /**
 * Extracts a parameter from the URL.
 * If the parameter is absent default_value is returned.

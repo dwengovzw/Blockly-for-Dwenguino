@@ -13,15 +13,15 @@ let exports = {};
 
 exports.newSessionId = function(req, res) {
     let id = uuidv4();
-    res.send(id);
+    console.debug(id);
+    res.status(200).send(id);
 };
 
 exports.event = function(req, res) {  
   let logitem = new Logitem();
 
-  if(req.user.id){
-    logitem.user_id = req.user._id;
-  }
+  logitem.user_id = req.user._id;
+  logitem.session_id = req.body.sessionId;
   logitem.activity_id = req.body.activityId;
   logitem.timestamp = req.body.timestamp;
   logitem.event.name = req.body.event.name;
