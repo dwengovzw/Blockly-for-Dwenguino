@@ -1,6 +1,7 @@
 import DwenguinoEventLogger from './logging/dwenguino_event_logger.js'
 import DwenguinoSimulation from './simulation/dwenguino_simulation.js'
 import TutorialMenu from './tutorials/tutorial_menu.js'
+import CookiesInformation from './user/cookies_information.js'
 import FileIOController from './file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
 import SeverConfig from "./server_config.js"
@@ -28,6 +29,7 @@ let DwenguinoBlockly = {
     simulationEnvironment: null,
 
     tutorialMenu: null,
+    cookiesInformation: null,
 
     fileIOController: null,
 
@@ -48,6 +50,7 @@ let DwenguinoBlockly = {
         // Create an instance of the tutorial menu (persists until the application stops).
         // Uses the event logger to capture tutorial actions.
         this.tutorialMenu = new TutorialMenu(this.logger);
+        this.cookiesInformation = new CookiesInformation();
 
         // Create new simulationenvironment
         this.simulationEnvironment = new DwenguinoSimulation(this.logger, this.workspace);  // This is weird, workspace should be created in a different place..
@@ -857,7 +860,7 @@ let DwenguinoBlockly = {
 
     displayCookieConsent: function(){
       let cookieConsent = MSG.cookieConsent['cookieConsent']
-                          + '<a href="#" class="ml-1">' + MSG.cookieConsent['cookieInfo'] + '</a>'
+                          + '<a id="cookie-info" href="#" class="ml-1">' + MSG.cookieConsent['cookieInfo'] + '</a>'
                           + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+MSG.cookieConsent['close']+'</button></div>';
 
       $('#cookie-consent').html(cookieConsent);

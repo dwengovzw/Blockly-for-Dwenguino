@@ -188,7 +188,17 @@ var MSG = {
 MSG.cookieConsent = {
   close: "Close",
   cookieConsent: "We use functional cookies to set up the Dwenguino simulator. ",
-  cookieInfo: "More info on how we use cookies."
+  cookieInfo: "More info on how we use cookies.",
+  whatAreCookiesTitle: "Wat zijn cookies?",
+  whatAreCookiesDescription1: "Cookies zijn kleine tekstbestanden die lokaal worden opgeslagen op uw computer. Deze cookies dienen voor tal van doeleinden: het onthouden van instellingen (login, taalkeuzes), het vergaren van informatie en het bijhouden van het bezoekgedrag van de gebruikers.",
+  whatAreCookiesDescription2: "De cookies die wij gebruiken zijn veilig: zij hebben geen toegang tot persoonlijke informatie op uw computer en kunnen deze niet beschadigen of besmetten met virussen. De cookies geven op geen enkele manier persoonlijke informatie aan ons door. De informatie die we via cookies verzamelen helpt ons om je van specifieke diensten te laten genieten.",
+  whatAreNecessaryCookiesTitle: "Wat zijn noodzakelijke cookies?",
+  whatAreNecessaryCookiesDescription: "Noodzakelijke cookies zijn cookies die je nodig hebt om te surfen op de website en gebruik te maken van de functionaliteit die we aanbieden. Bovendien zijn de cookies noodzakelijk om de beveiligde onderdelen van de website te kunnen zien.",
+  whichCookiesTitle: "Welke cookies gebruikt deze website?",
+  dwengoCookieTitle: "Aanmelden als gebruiker (Dwengo cookie)",
+  dwengoCookieDescription: "Bij het aanmelden op de website wordt een tijdelijke cookie gebruikt waardoor je herkend wordt als gebruiker. Met behulp van deze cookie wordt onder andere je taalinstelling en vooruitgang bewaard. De cookie zorgt er voor dat je toegang hebt tot de beveiligde delen van de website. Deze cookie is slechts geldig tot aan het einde van de sessie en is enkel beschikbaar voor en gemaakt door Dwengo vzw.",
+  jenkinsCookieTitle: "Jenkins configuratie (Jenkins cookie)",
+  jenkinsCookieDescription: "De Jenkins cookie is voor ons noodzakelijk om de Dwenguino simulator online op een server te kunnen installeren. Jenkins is software waarvan we gebruik maken om onze simulator te updaten. Die cookie bevat informatie over de instellingen van Jenkins en bevat dus ook geen enkele informatie over jou als gebruiker.",
 };
 
 MSG.dropzone = {
