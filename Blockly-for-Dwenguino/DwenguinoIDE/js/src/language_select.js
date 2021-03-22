@@ -28,6 +28,20 @@ DwenguinoBlocklyLanguageSettings.translate = function(translationKey){
   }
 };
 
+DwenguinoBlocklyLanguageSettings.translateFrom = function(subdevision, translationKey){
+  let translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG[subdevision]);
+  if (translation){
+    return translation;
+  }else{
+    translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK[subdevision]);
+    if (translation){
+      return translation;
+    }else{
+      return "No translation";
+    }
+  }
+};
+
 /**
  * @Brief returns the value for a translation key
  * @Param translationKey an array containing the the keys of the subsequent subobjects

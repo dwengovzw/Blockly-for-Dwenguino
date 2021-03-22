@@ -32,12 +32,12 @@ class SocialRobotButton extends RobotComponent{
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + MSG.simulator[this.getType()] + " " + this.getId() + "</div></div>");
+        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<div id='" + this.getCanvasId() + "' class='button_canvas_unpushed " + this.getHtmlClasses() + "'></div>");
     
-        // let label = MSG.pirButtonLabel + " " + this.getId();
+        // let label = DwenguinoBlocklyLanguageSettings.translate(['pirButtonLabel']) + " " + this.getId();
         // let id = '' + this.getType() + this.getId();
         // this._button = new Button(id, 'sensor_options', label);
         
@@ -65,7 +65,7 @@ class SocialRobotButton extends RobotComponent{
         let simButton = document.getElementById('sim_'+this.getType() + this.getId());
 
         simButton.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.buttonOptions);
+            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['buttonOptions']));
             this.showDialog();
         });
     }

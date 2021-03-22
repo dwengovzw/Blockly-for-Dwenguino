@@ -305,7 +305,7 @@ class DwenguinoSimulationRobotComponentsMenu {
    */
   translateRobotComponents() {
     for (const [type, t] of Object.entries(TypesEnum)) {
-      document.getElementById('rc_' + t + '_tag').textContent = MSG.simulator[t];
+      document.getElementById('rc_' + t + '_tag').textContent = DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[t]);
     }
   }
 

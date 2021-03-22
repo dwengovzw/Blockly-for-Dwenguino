@@ -16,7 +16,7 @@ class Pir extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['pirDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['pirDescription']);
     }
 
     static getInputPins(){

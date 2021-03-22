@@ -16,7 +16,7 @@ class Buzzer extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['buzzerDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['buzzerDescription']);
     }
 
     static getInputPins(){

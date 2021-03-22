@@ -16,7 +16,7 @@ class Lcd extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['lcdDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['lcdDescription']);
     }
 
     static getInputPins(){
