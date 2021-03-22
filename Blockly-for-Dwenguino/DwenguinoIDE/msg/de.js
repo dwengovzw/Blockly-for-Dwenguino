@@ -1,168 +1,88 @@
 var MSG = {
   arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
-
   blocks: "Blöcke",
-
   linkTooltip: "Speichern und Verknüpfen mit Blöcken",
-
   runTooltip: "Führe das Programm aus, das mit den Blöcken im Arbeitsbereich erstellt wurde",
-
   loadBlocksFileTooltip: "Lade eine zuvor gespeicherte Datei",
-
   saveBlocksFileTooltip: "Speichere die Blöcke in einer lokalen Datei",
-
   toggleSimulator: "Öffne oder schließe das Simulatorfenster",
-
   badCode: "Programmfehler:\n%1",
-
   timeout: "Die maximale Anzahl von Iterationen wurde überschritten",
-
   trashTooltip: "Lösche alle Blöcke",
-
   catLogic: "Logik",
-
   catLoops: "Schleifen",
-
   catMath: "Mathematik",
-
   catText: "Text",
-
   catLists: "Listen",
-
   catColour: "Farben",
-
   catVariables: "Variablen",
-
   catFunctions: "Funktionen",
-
   catArduino: "Arduino",
-
   catDwenguino: "Dwenguino",
-  catSocialRobot: "Soziale roboter",
+  catSocialRobot: "Sozialer roboter",
   catComments: "Kommentar",
   catBoardIO: "IO",
   createVar: "Lege neue Variable an",
-
   listVariable: "Liste",
-
   textVariable: "Text",
-
   httpRequestError: "Bei der Bearbeitung deiner Anfrage ist ein Problem aufgetreten",
-
   linkAlert: "Teile deine Blöcke mit diesem Link:\n\n%1",
-
   hashError: "\"%1\" stimmt nicht mit einer gespeicherten Datei überein.",
-
   xmlError: "Deine gespeicherte Datei konnte nicht geladen werden. Wurde es mit einer anderen version von Blockly erstellt?",
-
   badXml: "Fehler beim Verarbeiten der XML-Datei:\n%1\n\nWähle \"OK\" um deine Änderungen zu ignorieren oder  \"Abbrechen\" um die XML-Datei weiter zu bearbeiten.",
-
   pressed: "Gedrückt",
-
   setup: "Bereite vor",
-
   loop: "Wiederhole",
-
   dwenguino_main_program_structure: "Der erste Code wird beim Programmstart nur einmal ausgeführt. Der Code in der 'Wiederhole' wird immer wieder wiederholt, bis das Programm stoppt (zB wenn du den Stecker aus der Platine ziehst).",
-  catSocialRobot: "sozialer Roboter",
-
   delay_help: "Warte einige Millisekunden (1 Sekunde = 1000 Millisekunden)",
-
   delay: "Warte",
-
   clearLCD: "Klare LCD-Anzeige",
-
   dwenguinoLCD: "LCD-Anzeige %1 %2 %3 Schreibe Text: %4 in Zeile %5 von Spalte %6",
-
   pin: "Stift",
-
   toneOnPin: "Spiele den Ton an ",
-
   frequency: "mit der Frequenz",
-
   noToneOnPin: "Hör auf den Ton zu spielen an",
-
   toneOnPinTooltip: "Spielen Sie einen Ton mit einer bestimmten Frequenz an einem Stift",
-
   noToneOnPinTooltip: "Hör auf den Ton zu spielen an einem bestimmten Stift",
-
   trig: "trig Stift Nummer",
-
   echo: "echo Stift Nummer",
-
   sonarTooltip: "Dieser Block liest die Entfernung eines Sonarsensors",
-
   miliseconds: "ms",
-
   digitalRead: "Lese den digitalen Wert", 
-
   digitalWriteToPin: "Schreibe an",
-
   digitalWriteValue: "der digitale Wert",
-
   digitalWriteTooltip: "Schreibe hoch oder niedrig an eine Stecknadel des Dwenguino",
-
   digitalReadTooltip: "Lese einen digitalen Wert von einem Stift des Dwenguino",
-
   high: "HOCH",
-
   low: "NIEDRIG",
-
   highLowTooltip: "Entspricht einem hohen (1) oder niedrigen (0) Wert an eine Stecknadel",
-
   tutsIntroduction: "Einführung",
-
   tutsTheremin: "Theremin",
-
   tutsRobot: "Roboter",
-
   tutsBasicTest: "Grundtest",
-
   tutsHelloDwenguino: "Hallo Dwenguino!",
-
   tutsBlinkLED: "blinkende Lichter",
-
   tutsHelloRobot: "fahrender Roboter",
-
   tutsLedOnButtonPress: "LED wenn eine Taste gedrückt wird",
-
   tutsBitPatternOnLeds: "Bitmuster auf LEDs",
-
   tutsAllButtons: "Alle Tasten",
-
   tutsDriveForward: "vorwärts fahren",
-
   tutsRideInSquare: "in einem Rechteck fahren",
-
   tutsRideToWall: "an eine Wand fahren",
-
   tutsAvoidWall: "eine Mauer meiden",
-
   tutsNameOnLcdBasic: "Deine Name auf dem LCD-Bildschirm",
-
   tutsNameOnLcdWeGoSTEM: "Name auf dem LCD-Bildschirm",
-
   tutsIntroduceYourselfWeGoSTEM: "Sich vorstellen",
-
   tutsShowNameAndDisappearWeGoSTEM: "Lass deinen Namen verschwinden",
-
   tutsLampOnOffWeGoSTEM: "blinkende Lichter",
-
   tutsPoem1: "Gedicht 1",
-
   tutsPoem2: "Gedicht 2",
-
   simulator: "Simulator",
-
   setLedState: "Setz %1 %2",
-
   setLedStateTooltip: "Schalte einen DwenguinoDCMotorBlock auf der Platine ein oder aus.",
-
   ledPinsTooltip: "Wähle eine LED, die du ein- oder ausschalten möchtest",
-
   dwenguinoOn: "AN",
-
   dwenguinoOff: 'AUS',
   dwenguinoLedBlock: "LED",
   dwenguinoOnOffTooltip: "Wähle AN oder AUS",
@@ -178,27 +98,16 @@ var MSG = {
   dwenguinoAnalogWrite: "Schreibe an %1 der analoge Wert %2",
   dwenguinoAnalogWriteTooltip: "Schreibe einen analogen Wert zwischen 0 und 255 an einem bestimmten Stift",
   dwenguinoAnalogRead: "Lese den analogen Wert %1",
-
   dwenguinoAnalogWriteTooltip: "Lese einen analogen Wert zwischen 0 und 255 vom angegebenen Stift",
-
   digitalReadSwitch: "Lese den Wert der Taste %1",
-
   waitForSwitch: "Warte bis Taste %1 gedrückt wird",
-
   digitalReadSwitchTooltip: "Lese den Wert einer der Dwenguino Tasten",
-
   north: "NORD", 
-
   east:"SUED",
-
   south: "OST",
-
   west: "WEST",
-
   center: "ZENTRUM",
-
   ledsReg: "LEDs",
-
   toneOnPinTooltip: "Spiele einen Ton mit einer bestimmten Frequenz an einem Stift",
   noToneOnPinTooltip: "Hör auf den Ton zu spielen an einem bestimmten Stift",
   trig: "trig Stift Nummer",
@@ -526,6 +435,83 @@ var MSG = {
     audio: "Audio",
     display: "Visuell"
   };  
+
+  MSG.logging = {	
+    setup: "Testkonfiguration",	
+    login: "Login",	
+    logout: "Log out",	
+    firstname: "First name",	
+    newuser: "Neuer Benutzer",	
+    username: "Benutzername",	
+    email: "Email address",	
+    forgotPassword: "I forgot my password",	
+    userDoesNotExist: "This user does not exist. Try a different email address.",	
+    resetPassword: "Reset your password",	
+    back: "Back",	
+    enterFirstname: "Enter your first name",	
+    password: "Password",	
+    repeatedPassword: "Repeat password",	
+    enterPassword: "Enter password",	
+    enterRepeatedPassword: "Repeat your password",	
+    enterEmail: "Enter email address",	
+    chooseUsername: "Wähle einen Benutzernamen",	
+    choosePassword: "Wähle 4 persönliche Symbole (Zeichen) als Passwort. Merke sie dir in der richtigen Reihenfolge.",	
+    currentlySelected: "Ausgewählt: ",	
+    language: "Language",	
+    role: "Role",	
+    verification: "Verify your email address",	
+    verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",	
+    birth: "Geburtsdatum",	
+    school: "Schule",	
+    selectSchool: "Suche nach Schulnamen...",	
+    agegroup: "Altersgruppe:",	
+    primary1: "Primärstufe 1",	
+    primary2: "Primärstufe 2",	
+    primary3: "Primärstufe 3",	
+    primary4: "Primärstufe 4",	
+    primary5: "Sekundärstufe 1",	
+    primary6: "Sekundärstufe 2",	
+    secondary1: "Sekundärstufe 3",	
+    secondary2: "Sekundärstufe 4",	
+    secondary3: "Sekundärstufe 5",	
+    secondary4: "Sekundärstufe 6",	
+    secondary5: "Sekundärstufe 7",	
+    secondary6: "Sekundärstufe 8",	
+    gender: "Geschlecht: ",	
+    gender1: "F",	
+    gender2: "M",	
+    gender3: "X",	
+    gender4: "Das möchte ich nicht sagen",	
+    activity: "Aktivität: ",	
+    name: "Name ",	
+    date: "Datum ",	
+    ok: "Ok",	
+    reset: "Reset (Zurücksetzen)",	
+    person: "Person",	
+    dog: "Hund",	
+    car: "Katze",	
+    camera: "Kamera",	
+    heart: "Herz",	
+    plane: "Flugzeug",	
+    house: "Haus",	
+    umbrella: "Regenschirm",	
+    star: "Stern",	
+    money: "Geld",	
+    gift: "Geschenk",	
+    keys: "Schlüssel",	
+    music: "Musik",	
+    snowflake: "Schneeflocke",	
+    fire: "Feuer",	
+    envelope: "Umschlag"	
+  };
+  
+  MSG.validator = {
+    errSchool: "Wähle eine Schule.",
+    errId: "Du hast nicht genug Symbole ausgewählt.",
+    errAgeGroup: "Wähle deine Altersgruppe.",
+    errGender: "Wähle dein Geschlecht.",
+    errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein."
+  };
 
   MSG.tutorials = {
     introduction: {},
@@ -976,80 +962,3 @@ MSG.tutorials.socialrobot['hello'].answers = [
   "Antwort A",
   "Antwort B"
 ];
-
-MSG.logging = {
-  setup: "Testkonfiguration",
-  login: "Login",
-  logout: "Log out",
-  firstname: "First name",
-  newuser: "Neuer Benutzer",
-  username: "Benutzername",
-  email: "Email address",
-  forgotPassword: "I forgot my password",
-  userDoesNotExist: "This user does not exist. Try a different email address.",
-  resetPassword: "Reset your password",
-  back: "Back",
-  enterFirstname: "Enter your first name",
-  password: "Password",
-  repeatedPassword: "Repeat password",
-  enterPassword: "Enter password",
-  enterRepeatedPassword: "Repeat your password",
-  enterEmail: "Enter email address",
-  chooseUsername: "Wähle einen Benutzernamen",
-  choosePassword: "Wähle 4 persönliche Symbole (Zeichen) als Passwort. Merke sie dir in der richtigen Reihenfolge.",
-  currentlySelected: "Ausgewählt: ",
-  language: "Language",
-  role: "Role",
-  verification: "Verify your email address",
-  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
-  birth: "Geburtsdatum",
-  school: "Schule",
-  selectSchool: "Suche nach Schulnamen...",
-  agegroup: "Altersgruppe:",
-  primary1: "Primärstufe 1",
-  primary2: "Primärstufe 2",
-  primary3: "Primärstufe 3",
-  primary4: "Primärstufe 4",
-  primary5: "Primärstufe 5",
-  primary6: "Primärstufe 6",
-  secondary1: "Sekundärstufe 1",
-  secondary2: "Sekundärstufe 2",
-  secondary3: "Sekundärstufe 3",
-  secondary4: "Sekundärstufe 4",
-  secondary5: "Sekundärstufe 5",
-  secondary6: "Sekundärstufe 6",
-  gender: "Geschlecht: ",
-  gender1: "F",
-  gender2: "M",
-  gender3: "X",
-  gender4: "Das möchte ich nicht sagen",
-  activity: "Aktivität: ",
-  name: "Name ",
-  date: "Datum ",
-  ok: "Ok",
-  reset: "Reset (Zurücksetzen)",
-  person: "Person",
-  dog: "Hund",
-  car: "Auto",
-  camera: "Kamera",
-  heart: "Herz",
-  plane: "Flugzeug",
-  house: "Haus",
-  umbrella: "Regenschirm",
-  star: "Stern",
-  money: "Geld",
-  gift: "Geschenk",
-  keys: "Schlüssel",
-  music: "Musik",
-  snowflake: "Schneeflocke",
-  fire: "Feuer",
-  envelope: "Umschlag"
-};
-
-MSG.validator = {
-  errSchool: "Wähle eine Schule.",
-  errId: "Du hast nicht genug Symbole ausgewählt.",
-  errAgeGroup: "Wähle deine Altersgruppe.",
-  errGender: "Wähle dein Geschlecht.",
-  errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein."
-};
