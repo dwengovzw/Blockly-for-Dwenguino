@@ -41,7 +41,7 @@ class SocialRobotLed extends RobotComponent{
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + MSG.simulator[this.getType()] + " " + this.getId() + "</div></div>");
+        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
@@ -49,7 +49,7 @@ class SocialRobotLed extends RobotComponent{
         let simLed = document.getElementById('sim_'+this.getType() + this.getId());
 
         simLed.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.ledOptions);
+            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['ledOptions']));
             this.showDialog();
         });
     }

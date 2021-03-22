@@ -16,7 +16,7 @@ class SoundSensor extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['sonarDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['sonarDescription']);
     }
 
     static getInputPins(){

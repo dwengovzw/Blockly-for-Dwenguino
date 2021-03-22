@@ -16,7 +16,7 @@ class Led extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['ledDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['ledDescription']);
     }
 
     static getInputPins(){

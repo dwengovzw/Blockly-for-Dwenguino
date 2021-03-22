@@ -203,15 +203,16 @@ class TutorialMenu {
         let sensorsArray = [Sonar, LightSensor, SoundSensor, Pir, TouchSensor];
 
         for (let i = 0; i < sensorsArray.length; i++) {
-            $('#tutorialModal_sensors_menu').append('<li id="tutorial_sensors_item_'+ sensorsArray[i].getType() +'" class="components_overview_cards_item"></li>');
-            $('#tutorial_sensors_item_'+ sensorsArray[i].getType()).append('<div id="tutorial_sensors_card_'+ sensorsArray[i].getType() +'" class="components_overview_card bg-c-4"></div>');
-            $('#tutorial_sensors_card_' + sensorsArray[i].getType()).append('<div id="tutorial_sensors_'+ sensorsArray[i].getType() +'" class="components_overview_card_content"></div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div class="components_overview_card_title">' + MSG.simulator[sensorsArray[i].getType()] + '</div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div class="components_overview_card_text">'+sensorsArray[i].getDescription()+'</div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="input_pins' + sensorsArray[i].getType() + '" class="components_overview_card_label">in: </div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="output_pins' + sensorsArray[i].getType() + '" class="components_overview_card_label">out: </div>');
-            $('#tutorial_sensors_'+sensorsArray[i].getType()).append('<div id="circuit_pins' + sensorsArray[i].getType() + '" class="components_overview_card_label">circuit: </div>');
+            let sensorType = sensorsArray[i].getType();
+            $('#tutorialModal_sensors_menu').append('<li id="tutorial_sensors_item_'+ sensorType +'" class="components_overview_cards_item"></li>');
+            $('#tutorial_sensors_item_'+ sensorType).append('<div id="tutorial_sensors_card_'+ sensorType +'" class="components_overview_card bg-c-4"></div>');
+            $('#tutorial_sensors_card_' + sensorType).append('<div id="tutorial_sensors_'+ sensorType +'" class="components_overview_card_content"></div>');
+            $('#tutorial_sensors_'+sensorType).append('<div class="components_overview_card_title">' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[sensorType]) + '</div>');
+            $('#tutorial_sensors_'+sensorType).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_sensors_'+sensorType).append('<div class="components_overview_card_text">'+sensorsArray[i].getDescription()+'</div>');
+            $('#tutorial_sensors_'+sensorType).append('<div id="input_pins' + sensorType + '" class="components_overview_card_label">in: </div>');
+            $('#tutorial_sensors_'+sensorType).append('<div id="output_pins' + sensorType + '" class="components_overview_card_label">out: </div>');
+            $('#tutorial_sensors_'+sensorType).append('<div id="circuit_pins' + sensorType + '" class="components_overview_card_label">circuit: </div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row2" class="row"></div>');
@@ -224,15 +225,16 @@ class TutorialMenu {
         let movementArray = [Servo, DCMotor];
 
         for (let i = 0; i < movementArray.length; i++) {
-            $('#tutorialModal_movement_menu').append('<li id="tutorial_movement_item_'+ movementArray[i].getType() +'" class="components_overview_cards_item"></li>');
-            $('#tutorial_movement_item_'+ movementArray[i].getType()).append('<div id="tutorial_movement_card_'+ movementArray[i].getType() +'" class="components_overview_card bg-c-11"></div>');
-            $('#tutorial_movement_card_' + movementArray[i].getType()).append('<div id="tutorial_movement_'+ movementArray[i].getType() +'" class="components_overview_card_content"></div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('<div class="components_overview_card_title">' + MSG.simulator[sensorsArray[i].getType()] + '</div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('<div class="components_overview_card_text">'+movementArray[i].getDescription()+'</div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="input_pins' + movementArray[i].getType() + '" class="components_overview_card_label">in: </div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="output_pins' + movementArray[i].getType() + '" class="components_overview_card_label">out: </div>');
-            $('#tutorial_movement_'+movementArray[i].getType()).append('<div id="circuit_pins' + movementArray[i].getType() + '" class="components_overview_card_label">circuit: </div>');
+            let movementType = movementArray[i].getType();
+            $('#tutorialModal_movement_menu').append('<li id="tutorial_movement_item_'+ movementType +'" class="components_overview_cards_item"></li>');
+            $('#tutorial_movement_item_'+ movementType).append('<div id="tutorial_movement_card_'+ movementType +'" class="components_overview_card bg-c-11"></div>');
+            $('#tutorial_movement_card_' + movementType).append('<div id="tutorial_movement_'+ movementType +'" class="components_overview_card_content"></div>');
+            $('#tutorial_movement_'+movementType).append('<div class="components_overview_card_title">' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[movementType]) + '</div>');
+            $('#tutorial_movement_'+movementType).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_movement_'+movementType).append('<div class="components_overview_card_text">'+movementArray[i].getDescription()+'</div>');
+            $('#tutorial_movement_'+movementType).append('<div id="input_pins' + movementType + '" class="components_overview_card_label">in: </div>');
+            $('#tutorial_movement_'+movementType).append('<div id="output_pins' + movementType + '" class="components_overview_card_label">out: </div>');
+            $('#tutorial_movement_'+movementType).append('<div id="circuit_pins' + movementType + '" class="components_overview_card_label">circuit: </div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row4" class="row"></div>');
@@ -242,15 +244,16 @@ class TutorialMenu {
         let displayArray = [Lcd, Led, RgbLed];
 
         for (let i = 0; i < displayArray.length; i++) {
-            $('#tutorialModal_display_menu').append('<li id="tutorial_display_item_'+ displayArray[i].getType() +'" class="components_overview_cards_item"></li>');
-            $('#tutorial_display_item_'+ displayArray[i].getType()).append('<div id="tutorial_display_card_'+ displayArray[i].getType() +'" class="components_overview_card bg-c-6"></div>');
-            $('#tutorial_display_card_' + displayArray[i].getType()).append('<div id="tutorial_display_'+ displayArray[i].getType() +'" class="components_overview_card_content"></div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('<div class="components_overview_card_title">' + MSG.simulator[displayArray[i].getType()] + '</div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('<div class="components_overview_card_text">'+displayArray[i].getDescription()+'</div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="input_pins' + displayArray[i].getType() + '" class="components_overview_card_label">in: </div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="output_pins' + displayArray[i].getType() + '" class="components_overview_card_label">out: </div>');
-            $('#tutorial_display_'+displayArray[i].getType()).append('<div id="circuit_pins' + displayArray[i].getType() + '" class="components_overview_card_label">circuit: </div>');
+            let displayType = displayArray[i].getType();
+            $('#tutorialModal_display_menu').append('<li id="tutorial_display_item_'+ displayType +'" class="components_overview_cards_item"></li>');
+            $('#tutorial_display_item_'+ displayType).append('<div id="tutorial_display_card_'+ displayType +'" class="components_overview_card bg-c-6"></div>');
+            $('#tutorial_display_card_' + displayType).append('<div id="tutorial_display_'+ displayType +'" class="components_overview_card_content"></div>');
+            $('#tutorial_display_'+displayType).append('<div class="components_overview_card_title">' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[displayType]) + '</div>');
+            $('#tutorial_display_'+displayType).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_display_'+displayType).append('<div class="components_overview_card_text">'+displayArray[i].getDescription()+'</div>');
+            $('#tutorial_display_'+displayType).append('<div id="input_pins' + displayType + '" class="components_overview_card_label">in: </div>');
+            $('#tutorial_display_'+displayType).append('<div id="output_pins' + displayType + '" class="components_overview_card_label">out: </div>');
+            $('#tutorial_display_'+displayType).append('<div id="circuit_pins' + displayType + '" class="components_overview_card_label">circuit: </div>');
         }
 
         $("#tutorialModal .modal-body .message .container").append('<div id="row5" class="row"></div>');
@@ -260,15 +263,16 @@ class TutorialMenu {
         let audioArray = [Buzzer];
 
         for (let i = 0; i < audioArray.length; i++) {
-            $('#tutorialModal_audio_menu').append('<li id="tutorial_audio_item_'+ audioArray[i].getType() +'" class="components_overview_cards_item"></li>');
-            $('#tutorial_audio_item_'+ audioArray[i].getType()).append('<div id="tutorial_audio_card_'+ audioArray[i].getType() +'" class="components_overview_card bg-c-3"></div>');
-            $('#tutorial_audio_card_' + audioArray[i].getType()).append('<div id="tutorial_audio_'+ audioArray[i].getType() +'" class="components_overview_card_content"></div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('<div class="components_overview_card_title">' + MSG.simulator[audioArray[i].getType()] + '</div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('<div class="components_overview_card_text">'+audioArray[i].getDescription()+'</div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="input_pins' + audioArray[i].getType() + '" class="components_overview_card_label">in: </div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="output_pins' + audioArray[i].getType() + '" class="components_overview_card_label">out: </div>');
-            $('#tutorial_audio_'+audioArray[i].getType()).append('<div id="circuit_pins' + audioArray[i].getType() + '" class="components_overview_card_label">circuit: </div>');
+            let audioType = audioArray[i].getType();
+            $('#tutorialModal_audio_menu').append('<li id="tutorial_audio_item_'+ audioType +'" class="components_overview_cards_item"></li>');
+            $('#tutorial_audio_item_'+ audioType).append('<div id="tutorial_audio_card_'+ audioType +'" class="components_overview_card bg-c-3"></div>');
+            $('#tutorial_audio_card_' + audioType).append('<div id="tutorial_audio_'+ audioType +'" class="components_overview_card_content"></div>');
+            $('#tutorial_audio_'+audioType).append('<div class="components_overview_card_title">' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[audioType]) + '</div>');
+            $('#tutorial_audio_'+audioType).append('<div id="tutorial_categories_dwenguino_components_img"></div>');
+            $('#tutorial_audio_'+audioType).append('<div class="components_overview_card_text">'+audioArray[i].getDescription()+'</div>');
+            $('#tutorial_audio_'+audioType).append('<div id="input_pins' + audioType + '" class="components_overview_card_label">in: </div>');
+            $('#tutorial_audio_'+audioType).append('<div id="output_pins' + audioType + '" class="components_overview_card_label">out: </div>');
+            $('#tutorial_audio_'+audioType).append('<div id="circuit_pins' + audioType + '" class="components_overview_card_label">circuit: </div>');
         }
 
         let allComponents = sensorsArray.concat(movementArray).concat(displayArray).concat(audioArray);

@@ -16,7 +16,7 @@ class TouchSensor extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['touchDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['touchDescription']);
     }
 
     static getInputPins(){

@@ -35,12 +35,12 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + MSG.simulator[this.getType()] + " " + this.getId() + "</div></div>");
+        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let label = MSG.soundButtonLabel + " " + this.getId();
+        let label = DwenguinoBlocklyLanguageSettings.translate(['soundButtonLabel']) + " " + this.getId();
         let id = '' + this.getType() + this.getId();
         
         this._button = new Button(id, 'sensor_options', label);
@@ -65,7 +65,7 @@ class SocialRobotSoundSensor extends RobotComponent{
         let simSoundSensor = document.getElementById('sim_'+this.getType() + this.getId());
 
         simSoundSensor.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.soundOptions);
+            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['soundOptions']));
             this.showDialog();
         });
     }

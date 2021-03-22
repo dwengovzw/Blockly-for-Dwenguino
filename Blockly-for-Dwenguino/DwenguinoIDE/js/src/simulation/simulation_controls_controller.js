@@ -181,11 +181,11 @@ class SimulationControlsController {
 
     translateSimulatorInterface() {
         // translation
-        document.getElementById('sim_start').innerHTML = "<span class='fas fa-play' alt='" + MSG.simulator['start'] + "'></span>";
-        document.getElementById('sim_stop').innerHTML = "<span class='fas fa-stop' alt='" + MSG.simulator['stop'] + "'></span>";
-        document.getElementById('sim_pause').innerHTML = "<span class='fas fa-pause' alt='" + MSG.simulator['pause'] + "'></span>";
-        document.getElementById('sim_step').innerHTML = "<span class='fas fa-step-forward' alt='" + MSG.simulator['step'] + "'></span>";
-        document.getElementById('sim_scenarioTag').textContent = MSG.simulator['scenario'] + ":";
+        document.getElementById('sim_start').innerHTML = "<span class='fas fa-play' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['start']) + "'></span>";
+        document.getElementById('sim_stop').innerHTML = "<span class='fas fa-stop' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['stop']) + "'></span>";
+        document.getElementById('sim_pause').innerHTML = "<span class='fas fa-pause' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['pause']) + "'></span>";
+        document.getElementById('sim_step').innerHTML = "<span class='fas fa-step-forward' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['step']) + "'></span>";
+        document.getElementById('sim_scenarioTag').textContent = DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['scenario']) + ":";
 
     }
 
@@ -293,7 +293,7 @@ class SimulationControlsController {
         if (document.getElementsByClassName("alertDebug").length !== 0) {
             document.getElementsByClassName("alertDebug")[0].remove();
         }
-        var alertMessage = '<div class ="alertDebug">' + MSG.simulator['alertDebug'] + '</div>';
+        var alertMessage = '<div class ="alertDebug">' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['alertDebug']) + '</div>';
         $('#db_body').append(alertMessage);
         document.getElementsByClassName('alertDebug')[0].style.width = document.getElementById("blocklyDiv").style.width;
 

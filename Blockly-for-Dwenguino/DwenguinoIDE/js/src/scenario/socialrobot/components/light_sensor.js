@@ -34,12 +34,12 @@ class SocialRobotLightSensor extends RobotComponent{
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + MSG.simulator[this.getType()] + " " + this.getId() + "</div></div>");
+        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-        let label = MSG.lightSensorSliderLabel + " " + this.getId();
+        let label = DwenguinoBlocklyLanguageSettings.translate(['lightSensorSliderLabel']) + " " + this.getId();
         let id = '' + this.getType() + this.getId();
         this._slider = new Slider(id, 'sensor_options', 0, 4095, 0, label, '' , '', 'light_sensor_slider');
 
@@ -54,7 +54,7 @@ class SocialRobotLightSensor extends RobotComponent{
         let simLightSensor = document.getElementById('sim_'+this.getType() + this.getId());
 
         simLightSensor.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(MSG.lightOptions);
+            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['lightOptions']));
             this.showDialog();
         });
     }

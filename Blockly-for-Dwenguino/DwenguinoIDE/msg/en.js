@@ -285,6 +285,7 @@ MSG.simulator = {
   servo: "Servo",
   servoDescription: "A servo motor is an actuator that can <b>rotate an object over a certain angle</b>. In the simulator servo motors can be rotated over an angle of 0 to 180 degrees. Servo motors can easily be decorated and are thus ideal to make periodically moving components. With plain servo motor blocks the rotation angle needs to be specified. If you use other predefined blocks such as \"wave hands\" or \"turn eyes\" you don't have to specify the angle because it is preprogrammed.",
   motor: "Motor",
+  dcmotor: "DC Motor",
   DCMotorDescription: "A DC motor rotates completely. You can use it for instance to make your robot drive around on wheels. You have to specify the rotation speed of the motor and the direction of rotation in your program by using numbers between -255 and 255.",
   scope: "Variables",
   alertDebug: "The simulation stops when you resume programming.",

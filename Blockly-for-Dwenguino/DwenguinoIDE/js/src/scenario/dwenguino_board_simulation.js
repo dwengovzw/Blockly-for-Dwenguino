@@ -72,7 +72,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
 
         let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
-        let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + MSG.simulator['distance'] + ":");
+        let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['distance']) + ":");
         let setButton = $('<button id="set_sonar_value"></button>').text("OK");
 
         $('#sim_components').append(sonar);
