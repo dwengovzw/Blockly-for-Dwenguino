@@ -7,7 +7,7 @@ import User from './user.js'
  * It is used by the DwenguinoEventLogger to gather data about the user.
  * 
  */
-class LoggingMenu{
+class LoginMenu{
     currentlySelectedIcons= ['0','0','0','0'];
     SIZE = 4;
     icons = [
@@ -294,7 +294,10 @@ class LoggingMenu{
         $.ajax({
             type: "POST",
             url: ServerConfig.getServerUrl() + "/getPasswordResetCode",
-            data: serverSubmission
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(serverSubmission)
         }).done(function(data){
             self.showResetPasswordScreen();
         }).fail(function(response, status)  { 
@@ -352,9 +355,10 @@ class LoggingMenu{
 
             errors.push(self.validator.validateEmail(email));
             errors.push(self.validator.validateSecretCode(secretCode));
+            errors.push(self.validator.validatePasswords(password, password_repeated));
             errors.push(self.validator.validatePassword(password));
             errors.push(self.validator.validatePassword(password_repeated));
-            errors.push(self.validator.validatePasswords(password, password_repeated));
+            
         
             if(self.validator.hasErrors(errors)){
                 self.showErrors(errors);
@@ -375,13 +379,16 @@ class LoggingMenu{
         let serverSubmission = {
             "email": email,
             "secretCode": secretCode,
-            "password": JSON.stringify(password),
-            "password_repeated": JSON.stringify(password_repeated)
+            "password": password,
+            "password_repeated": password_repeated
         };
         $.ajax({
             type: "POST",
             url: ServerConfig.getServerUrl() + "/resetPassword",
-            data: serverSubmission,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(serverSubmission)
         }).done(function(data){
             self.removeDialog();
         }).fail(function(response, status)  {
@@ -398,12 +405,15 @@ class LoggingMenu{
 
         let serverSubmission = {
             "email": email,
-            "password": JSON.stringify(password),
+            "password": password,
         };
         $.ajax({
             type: "POST",
             url: ServerConfig.getServerUrl() + "/login",
-            data: serverSubmission,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(serverSubmission),
         }).done(function(data){
             self.resetSelectedIcons();
             self.removeDialog();
@@ -428,86 +438,139 @@ class LoggingMenu{
     createUserMenu(){
         var self = this;
         this.createLoggingModalDialog(MSG.logging['newuser']);
-    
+
         $('#loggingModalBody').append('<form id="registerUser"></form>');
-        $('#registerUser').append('<div id="inputFirstname" class="ui-widget row mb-4">');
-        $('#inputFirstname').append('<label for="firstnameTag" class="col-md-3">'+ MSG.logging['firstname']+'</label>');
-        $('#inputFirstname').append('<input id="firstnameTag" name="firstnameTag" class="col-md-8" placeholder="'+ MSG.logging['enterFirstname']+'">');
 
-        $('#registerUser').append('<div id="inputEmail" class="ui-widget row mb-4">');
-        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
-        $('#inputEmail').append('<input id="emailTag" name="emailTag" autocomplete="username" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+        $('#registerUser').append('<div id="registerUserConditions"></div>')
+        $('#registerUserConditions').append('<h3>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['conditions']) + '</h3>');
+        $('#registerUserConditions').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['conditions1']) + '</p>');
+        $('#registerUserConditions').append('<ul>' 
+            + '<li><a href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['generalConditions']) + '</a></li>' 
+            + '<li><a href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['privacyStatement']) + '</a></li>' 
+            + '</ul>');
+        $('#registerUserConditions').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['conditions2']) + '</p>');
+        $('#registerUserConditions').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['conditions3']) + '</p>');
+        $('#registerUserConditions').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['conditions4']) + '</p>');
 
-        $('#registerUser').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
-        $('#inputPassword1').append('<label for="passwordTag1" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#registerUserConditions').append('<div id="acceptConditions" class="ui-widget row mb-4"></div>');
+        $('#acceptConditions').append('<input type="checkbox" name="acceptConditionsCheckbox" id="acceptConditionsCheckbox" class="col-md-1">');
+        $('#acceptConditions').append('<label id="acceptConditionsLabel" for="acceptConditionsCheckbox" class="col-md-11">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['acceptConditions'])+'</label>');
 
-        $('#registerUser').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
-        $('#inputPassword2').append('<label for="passwordTag2" class="col-md-3">'+ MSG.logging['repeatedPassword']+'</label>');
-        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterRepeatedPassword']+'">');
-        //this.createIconModule();
+        $('#registerUserConditions').append('<div id="acceptResearch" class="ui-widget row mb-4"></div>');
+        $('#acceptResearch').append('<input type="checkbox" name="acceptResearchCheckbox" id="acceptResearchCheckbox" class="col-md-1">');
+        $('#acceptResearch').append('<label id="acceptResearchLabel" for="acceptResearchCheckbox" class="col-md-11">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['acceptResearch'])+'</label>');
 
-        let languageOptions = {
-            en: 'English'
-        };
+        $('#loggingModalFooter').append('<button id="continue_logging_modal" type="button" class="btn btn-default">'+MSG.logging['continue']+'</button>');
 
-        $('#registerUser').append('<div id="inputLanguage" class="ui-widget row mb-4">');
-        $('#inputLanguage').append('<label for="languageTag" class="col-md-3">'+MSG.logging['language']+'</label>');
-        $('#inputLanguage').append('<select id="languageTag" name="languageTag" class="col-md-8"></select>');
-        
-        $.each(languageOptions, function(val, text) {
-            $('#languageTag').append(
-                $('<option></option>').val(val).html(text)
-            );
-        });
-
-        let roleOptions = {
-            student: 'Student',
-            teacher: 'Teacher'
-        };
-
-        $('#registerUser').append('<div id="inputRole" class="ui-widget row mb-4">');
-        $('#inputRole').append('<label for="roleTag" class="col-md-3">'+MSG.logging['role']+'</label>');
-        $('#inputRole').append('<select id="roleTag" name="roleTag" class="col-md-8"></select>');
-        
-        $.each(roleOptions, function(val, text) {
-            $('#roleTag').append(
-                $('<option></option>').val(val).html(text)
-            );
-        });
-
-        //$('#registerUser').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
-        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
-        
         this.showDialog();
-    
-        //this.makeIconsResponsive();
-    
-        // Reset the graphical password.
-        // $("#reset_modal_dialog_button").click(function(){
-        //     self.resetSelectedIcons();
-        // });
-    
-        // Register the new user.
-        $("#submit_modal_dialog_button").click(function(){
+
+        $('#continue_logging_modal').click(function(){
             let errors = [];
-            let firstname = $("input[name=firstnameTag]").val();
-            let email = $( "input[name=emailTag]").val();
-            let password = $( "input[name=passwordTag1]").val();
-            let password_repeated = $( "input[name=passwordTag2]").val();
-
-            errors.push(self.validator.validateFirstname(firstname));
-            errors.push(self.validator.validateEmail(email));
-            errors.push(self.validator.validatePassword(password));
-            errors.push(self.validator.validatePassword(password_repeated));
-            errors.push(self.validator.validatePasswords(password, password_repeated));
-
+            let acceptConditions = $("input[name=acceptConditionsCheckbox]");
+            let acceptResearch = $("input[name=acceptResearchCheckbox]");
+            errors.push(self.validator.validateAcceptConditions(acceptConditions));
+            errors.push(self.validator.validateResearchConditions(acceptResearch));
             if(self.validator.hasErrors(errors)){
                 self.showErrors(errors);
             } else {
-                self.registerUser();
+                self.showErrors([]);
+                $('#registerUserConditions').hide();
+                $('#continue_logging_modal').remove();
+                self.showRegistrationForm();
             }
         });
+    }
+
+    showRegistrationForm(){
+        let self = this;
+
+         // FIRST NAME
+         $('#registerUser').append('<div id="inputFirstname" class="ui-widget row mb-4"></div>');
+         $('#inputFirstname').append('<label for="firstnameTag" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['firstname'])+'</label>');
+         $('#inputFirstname').append('<input id="firstnameTag" name="firstnameTag" class="col-md-7" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterFirstname'])+'">');
+ 
+         // EMAIL
+         $('#registerUser').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
+         $('#inputEmail').append('<label for="emailTag" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['email'])+'</label>');
+         $('#inputEmail').append('<input id="emailTag" name="emailTag" autocomplete="username" class="col-md-7" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterEmail'])+'">');
+ 
+         // PASSWORDS
+         $('#registerUser').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
+         $('#inputPassword1').append('<label for="passwordTag1" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['password'])+'</label>');
+         $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-7" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterPassword'])+'">');
+ 
+         $('#registerUser').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
+         $('#inputPassword2').append('<label for="passwordTag2" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['repeatedPassword'])+'</label>');
+         $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-7" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterRepeatedPassword'])+'">');
+         //this.createIconModule();
+ 
+         // LANGUAGE PREFERENCE
+         let languageOptions = {
+             en: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['english']), 
+             nl: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['dutch'])
+         };
+ 
+         $('#registerUser').append('<div id="inputLanguage" class="ui-widget row mb-4">');
+         $('#inputLanguage').append('<label for="languageTag" class="col-md-4">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['language'])+'</label>');
+         $('#inputLanguage').append('<select id="languageTag" name="languageTag" class="col-md-7"></select>');
+         
+         $.each(languageOptions, function(val, text) {
+             $('#languageTag').append(
+                 $('<option></option>').val(val).html(text)
+             );
+         });
+ 
+         // USER ROLE
+         let roleOptions = {
+             student: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['student']),
+             teacher: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['teacher'])
+         };
+ 
+         $('#registerUser').append('<div id="inputRole" class="ui-widget row mb-4">');
+         $('#inputRole').append('<label for="roleTag" class="col-md-4">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['role'])+'</label>');
+         $('#inputRole').append('<select id="roleTag" name="roleTag" class="col-md-7"></select>');
+         
+         $.each(roleOptions, function(val, text) {
+             $('#roleTag').append(
+                 $('<option></option>').val(val).html(text)
+             );
+         });
+ 
+         //$('#registerUser').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
+         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+     
+         //this.makeIconsResponsive();
+     
+         // Reset the graphical password.
+         // $("#reset_modal_dialog_button").click(function(){
+         //     self.resetSelectedIcons();
+         // });
+     
+         // Register the new user.
+         $("#submit_modal_dialog_button").click(function(){
+             let errors = [];
+             let acceptConditions = $("input[name=acceptConditionsCheckbox]");
+             let acceptResearch = $("input[name=acceptResearchCheckbox]");
+             let firstname = $("input[name=firstnameTag]").val();
+             let email = $( "input[name=emailTag]").val();
+             let password = $( "input[name=passwordTag1]").val();
+             let password_repeated = $( "input[name=passwordTag2]").val();
+ 
+             errors.push(self.validator.validateAcceptConditions(acceptConditions));
+             errors.push(self.validator.validateResearchConditions(acceptResearch));
+             errors.push(self.validator.validateFirstname(firstname));
+             errors.push(self.validator.validateEmail(email));
+             errors.push(self.validator.validatePasswords(password, password_repeated));
+             errors.push(self.validator.validatePassword(password));
+             errors.push(self.validator.validatePassword(password_repeated));
+             
+             if(self.validator.hasErrors(errors)){
+                 self.showErrors(errors);
+             } else {
+                 self.showErrors([]);
+                 self.registerUser();
+             }
+         });
     }
 
     /**
@@ -516,6 +579,8 @@ class LoggingMenu{
     registerUser(){
         var self = this;
         
+        let acceptConditions = $("input[name=acceptConditionsCheckbox]")[0].checked;
+        let acceptResearch = $("input[name=acceptResearchCheckbox]")[0].checked;
         let firstname = $("input[name=firstnameTag]").val();
         let email = $( "input[name=emailTag]").val();
         let password = $( "input[name=passwordTag1]").val();
@@ -526,15 +591,20 @@ class LoggingMenu{
         let serverSubmission = {
             "firstname": firstname,
             "email": email,
-            "password": JSON.stringify(password),
-            "password_repeated": JSON.stringify(password_repeated),
+            "password": password,
+            "password_repeated": password_repeated,
             "language": language,
-            "role": role
+            "role": role,
+            "accept_conditions": acceptConditions,
+            "accept_research": acceptResearch,
         };
         $.ajax({
             type: "POST",
             url: ServerConfig.getServerUrl() + "/register",
-            data: serverSubmission,
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(serverSubmission),
         }).done(function(data){
             //self.resetSelectedIcons();
             self.removeDialog();
@@ -638,7 +708,10 @@ class LoggingMenu{
                     $.ajax({
                         type: "POST",
                         url: ServerConfig.getServerUrl() + "/user/update",
-                        data: serverSubmission,
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify(serverSubmission),
                     }).done(function(data){
                         self.removeDialog();
                     }).fail(function(response, status)  {
@@ -788,4 +861,4 @@ class LoggingMenu{
     }
 }
 
-export default LoggingMenu;
+export default LoginMenu;

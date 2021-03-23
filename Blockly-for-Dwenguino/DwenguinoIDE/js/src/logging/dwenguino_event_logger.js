@@ -1,4 +1,4 @@
-import LoggingMenu from './logging_menu.js'
+import LoginMenu from '../user/login_menu.js'
 import ServerConfig from '../server_config.js'
 
 /**
@@ -12,13 +12,13 @@ class DwenguinoEventLogger {
     computerId = "-1";
     workshopId = "-1";
 
-    loggingModal = null;
+    loginModal = null;
 
     /**
      * @constructs
      */
     constructor(){
-        this.loggingModal = new LoggingMenu(this);
+        this.loginModal = new LoginMenu(this);
     }
 
     init(){
@@ -29,7 +29,7 @@ class DwenguinoEventLogger {
         $(document).keydown((e) => {
             keys[e.which] = true;
             if (keys[69] && keys[83] && keys[84]){
-                this.loggingModal.createInitialMenu();
+                this.loginModal.createInitialMenu();
             }
         });
 

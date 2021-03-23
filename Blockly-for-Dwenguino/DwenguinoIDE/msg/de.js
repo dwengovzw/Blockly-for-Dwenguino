@@ -458,7 +458,11 @@ var MSG = {
     choosePassword: "Wähle 4 persönliche Symbole (Zeichen) als Passwort. Merke sie dir in der richtigen Reihenfolge.",	
     currentlySelected: "Ausgewählt: ",	
     language: "Language",	
+    english: "English",
+    dutch: "Dutch",
     role: "Role",	
+    student: "Student",
+    teacher: "Teacher",
     verification: "Verify your email address",	
     verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",	
     birth: "Geburtsdatum",	
@@ -486,6 +490,7 @@ var MSG = {
     name: "Name ",	
     date: "Datum ",	
     ok: "Ok",	
+    continue: "Continue",
     reset: "Reset (Zurücksetzen)",	
     person: "Person",	
     dog: "Hund",	
@@ -502,7 +507,17 @@ var MSG = {
     music: "Musik",	
     snowflake: "Schneeflocke",	
     fire: "Feuer",	
-    envelope: "Umschlag"	
+    envelope: "Umschlag",
+    conditions: "Voorwaarden",
+    conditions1: "Om de app te gebruiken, moet je akkoord gaan met de <b>gebruiksvoorwaarden</b> en het <b>privacybeleid</b>.",
+    generalConditions: "de gebruiksvoorwaarden",
+    privacyStatement: "het privacybeleid",
+    conditions2: "Daar staat onder andere in dat je moet inloggen om te beschikken over functionaliteit zoals het bewaren van je programma's of het bijhouden van je voortgang, dat je data anoniem wordt gelogd en verwerkt, en dat je ons mag mailen met vragen over privacy.",
+    conditions3: "Ben je <b>13 jaar of ouder?</b> Dan mag je hieronder <b>zelf bevestigen</b> dat je de info hebt gelezen en akkoord gaat.",
+    conditions4: "Ben je <b>12 jaar of jonger?</b> Dan moet een van je ouders of voogden toestemming geven.",
+    acceptConditions: "Ik ga akkoord met de gebruiksvoorwaarden en het privacybeleid van de Dwengo-simulator",
+    acceptResearch: "Ik geef toestemming aan Dwengo vzw om de gegevens die de simulator verzamelt, voor <b>wetenschappelijk onderzoek</b> te gebruiken, geanonimiseerd en volgens het privacybeleid.",
+    anonymized: "* <b>\'Geanonimiseerd\'</b> wil zeggen dat er geen link is tussen je persoonsgegevens en je data. Niemand weet dus wat je deed in de simulator."	
   };
   
   MSG.validator = {
@@ -510,7 +525,16 @@ var MSG = {
     errId: "Du hast nicht genug Symbole ausgewählt.",
     errAgeGroup: "Wähle deine Altersgruppe.",
     errGender: "Wähle dein Geschlecht.",
-    errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein."
+    errFirstname: "Je voornaam is niet ingevuld.",
+    errLastname: "Je achternaam is niet ingevuld.",
+    errPassword: "Je paswoord voldoet niet aan de voorwaarden.",
+    errPasswordNotIdentical: "Je paswoorden zijn niet identiek.",
+    errEmail: "Je email is niet geldig",
+    errActivityId: "Deine Aktivität muss einen Namen haben. Der Titel darf nicht leer sein.",
+    errAcceptConditions: "Je hebt de gebruiksvoorwaarden en het privacybeleid nog niet geaccepteerd.",
+    errAcceptResearch: "Je hebt nog geen toestemming gegeven om de gegevens voor wetenschappelijk onderzoek te laten gebruiken.",
+    errRequiredFields: "Je hebt niet alle velden ingevuld.",
+    errRoleInvalid: "De opgegeven rol is niet geldig."
   };
 
   MSG.tutorials = {

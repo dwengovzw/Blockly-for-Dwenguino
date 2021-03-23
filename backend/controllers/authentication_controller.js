@@ -18,22 +18,35 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4c
  * @param {*} res 
  */
 exports.register = function(req, res){
+
   const { 
     firstname,
     email,
     password,
     role,
-    language 
+    language,
+    accept_conditions,
+    accept_research 
   } = req.body;
 
   let errors = [];
 
-  if (!firstname || !email || !password || !role || !language) {
-    errors.push({msg: "required-fields-error"});
+  if (!firstname || !email || !password || !role || !language || !accept_conditions || !accept_research) {
+    errors.push({msg: "errRequiredFields"});
   }
+
   if( role !== 'student' && role !== 'teacher'){
-    errors.push({msg: "role-not-valid-error"});
+    errors.push({msg: "errRoleInvalid"});
   }
+
+  if( accept_conditions !== true){
+    errors.push({msg: "errAcceptconditions"});
+  }
+
+  if( accept_research !== true){
+    errors.push({msg: "errResearchConditions"});
+  }
+
   if (errors.length > 0) {
     res.status(401).send(errors);
   } else {
@@ -54,6 +67,8 @@ exports.register = function(req, res){
               user.password = hashPassword;
               user.role = role;
               user.language = language;
+              user.acceptGeneralConditions = accept_conditions;
+              user.acceptResearchConditions = accept_research;
               user.save()
               .then(item => {
                 const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
@@ -191,7 +206,7 @@ exports.login = function(req, res){
   let errors = [];
 
   if (!email || !password) {
-    errors.push({msg: "required-fields-error"});
+    errors.push({msg: "errRequiredFields"});
   }
 
   if (errors.length > 0) {
@@ -312,7 +327,7 @@ exports.getPasswordResetCode = function (req, res){
   console.log(email);
 
   if(!email){
-    errors.push({msg: "required-fields-error"});
+    errors.push({msg: "errRequiredFields"});
     res.status(401).send(errors);
   } else {
     db.collection('users').findOne({email: email})
@@ -356,7 +371,7 @@ exports.resetPassword = function (req, res){
   let errors = [];
 
   if (!email || !password || !secretCode) {
-    errors.push({ msg: "required-fields-error" });
+    errors.push({ msg: "errRequiredFields" });
   }
 
   if (errors.length > 0) {

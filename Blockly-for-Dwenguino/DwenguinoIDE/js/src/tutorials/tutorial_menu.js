@@ -12,7 +12,7 @@ import { TouchSensor } from "./components/touch_sensor.js";
 import { RgbLed } from "./components/rgb_led.js";
 import { DCMotor } from "./components/dc_motor.js";
 import { tutorials } from "../../../tutorials/tutorials.js";
-import { User } from "../logging/user.js";
+import { User } from "../user/user.js";
 
 /**
  * TutorialMenu builds a tutorial menu overlay and handles all interactions within 
