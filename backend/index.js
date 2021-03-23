@@ -1,5 +1,5 @@
 import express from 'express';
-import bodyParser from 'body-parser';
+//import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
@@ -35,11 +35,14 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(cookieParser());
 
-// Configure bodyparser to handle post requests
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
-app.use(bodyParser.json({ type: 'application/*+json' }));
+app.use(express.json()); //Used to parse JSON bodies
+app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
+
+// // Configure bodyparser to handle post requests
+// app.use(bodyParser.urlencoded({
+//     extended: true
+// }));
+// app.use(bodyParser.json({ type: 'application/*+json' }));
 
 // connect to Mongoose and set connection variable
 // Depricate: mongoose.connect();
