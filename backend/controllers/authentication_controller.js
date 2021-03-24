@@ -105,6 +105,7 @@ exports.register = function(req, res){
 
                 if(process.env.NODE_ENV === 'production'){
                   sgMail.setApiKey(process.env.EMAIL_PASSWORD);
+                  console.log(process.env.EMAIL_PASSWORD);
                   sgMail
                     .send(message)
                     .then(() => {}, error => {
@@ -370,6 +371,7 @@ exports.getPasswordResetCode = function (req, res){
 
         if(process.env.NODE_ENV === 'production'){
           sgMail.setApiKey(process.env.EMAIL_PASSWORD);
+          console.log(process.env.EMAIL_PASSWORD);
           sgMail
             .send(message)
             .then(() => {}, error => {
