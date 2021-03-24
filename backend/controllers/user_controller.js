@@ -44,7 +44,7 @@ exports.updateUserInfo = function(req, res) {
     );
 }
 
-exports.deleteAccount = function(req, res) {
+exports.deleteMyAccount = function(req, res) {
     let db = mongoose.connection;
     let id = mongoose.Types.ObjectId(req.user._id)
     let conditions = {_id: id };
@@ -55,6 +55,46 @@ exports.deleteAccount = function(req, res) {
         } else {
             res.sendStatus(200);
         }
+    });
+}
+
+exports.deleteAccountOfOtherUser = function(req, res){
+    let db = mongoose.connection;
+    let email = mongoose.Types.ObjectId(req.email)
+    let conditions = {email: email};
+    db.collection('users').deleteOne(conditions, function(error, numAffected){
+        if (error){
+            console.log(error);
+            res.sendStatus(400);
+        } else {
+            res.sendStatues(200);
+        }
+    });
+}
+
+exports.getLoggingDataOfOtherUser = function(req, res) {
+    let db = mongoose.connection;
+
+    let email = mongoose.Types.ObjectId(req.email);
+    db.collection('users').findOne({email: email})
+    .then(function(user){
+        let conditions = { user_id: user._id};
+        db.collection('loggings').find(conditions, function(err, loggings){
+            if(err){
+                console.log(err);
+                res.status(400).send(user);
+            } else {
+                let tutorialConditions = { user_id: user._id};
+                db.collection('tutorials').find(tutorialConditions, function(errTutorials, tutorials){
+                    if(errTutorials){
+                        console.log(errTutorials);
+                        res.status(400).send({ "user": user, "loggings": loggings });
+                    } else {
+                        res.status(200).send({ "user": user, "loggings": loggings, "tutorials": tutorials });
+                    }
+                });
+            }
+        });
     });
 }
 
