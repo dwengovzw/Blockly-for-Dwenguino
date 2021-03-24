@@ -96,7 +96,13 @@ router.route('/user/update')
     .post(authenticationcontroller.authenticate, usercontroller.updateUserInfo);
 
 router.route('/user/delete')
-    .post(authenticationcontroller.authenticate, usercontroller.deleteAccount);
+    .post(authenticationcontroller.authenticate, usercontroller.deleteMyAccount);
+
+router.route('/user/admin/getLoggingData')
+    .post(authenticationcontroller.authenticateAdmin, usercontroller.getLoggingDataOfOtherUser);
+
+router.route('/user/admin/delete')
+    .post(authenticationcontroller.authenticateAdmin, usercontroller.deleteAccountOfOtherUser);    
 
 // Export API routes
 export default router;
