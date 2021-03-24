@@ -1,15 +1,11 @@
 import express from 'express';
-<<<<<<< HEAD
 import fs from 'fs';
 import http from 'http';
 import https from 'https';
 
 //let express = require('express');
 // Import body parser
-import bodyParser from 'body-parser';
-=======
-//import bodyParser from 'body-parser';
->>>>>>> dwenguinoblockly-standalone
+// import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
