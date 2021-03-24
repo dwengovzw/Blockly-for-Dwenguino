@@ -2,6 +2,7 @@ import DwenguinoEventLogger from './logging/dwenguino_event_logger.js'
 import DwenguinoSimulation from './simulation/dwenguino_simulation.js'
 import TutorialMenu from './tutorials/tutorial_menu.js'
 import CookiesInformation from './user/cookies_information.js'
+import LoginMenu from './user/login_menu.js'
 import FileIOController from './file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
 import SeverConfig from "./server_config.js"
@@ -28,8 +29,9 @@ let DwenguinoBlockly = {
 
     simulationEnvironment: null,
 
-    tutorialMenu: null,
     cookiesInformation: null,
+    loginMenu: null,
+    tutorialMenu: null,
 
     fileIOController: null,
 
@@ -45,12 +47,14 @@ let DwenguinoBlockly = {
         this.logger.init();
         var self = this;
 
+        this.cookiesInformation = new CookiesInformation();
         DwenguinoBlockly.displayCookieConsent();
+
+        this.loginMenu = new LoginMenu(this.logger);
 
         // Create an instance of the tutorial menu (persists until the application stops).
         // Uses the event logger to capture tutorial actions.
         this.tutorialMenu = new TutorialMenu(this.logger);
-        this.cookiesInformation = new CookiesInformation();
 
         // Create new simulationenvironment
         this.simulationEnvironment = new DwenguinoSimulation(this.logger, this.workspace);  // This is weird, workspace should be created in a different place..
@@ -58,6 +62,10 @@ let DwenguinoBlockly = {
         //Restore recording after language change
         DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "";
         delete window.sessionStorage.loadOnceRecording;
+
+        $("#db_menu_item_dwengo_robot_teacher_image").click(function() {
+          self.loginMenu.createInitialMenu();
+        });
 
         //init slider control
         $( "#db_menu_item_difficulty_slider" ).slider({
@@ -864,6 +872,11 @@ let DwenguinoBlockly = {
                           + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+MSG.cookieConsent['close']+'</button></div>';
 
       $('#cookie-consent').html(cookieConsent);
+
+      let self = this;
+      $("#cookie-info").click(() => {
+        self.cookiesInformation.initCookiesInformation();
+      });
 
       $('#allow-cookies').click(function () {
         $('#cookie-consent').remove();
