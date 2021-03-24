@@ -16,7 +16,7 @@ class DCMotor extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['DCMotorDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['DCMotorDescription']);
     }
 
     static getInputPins(){

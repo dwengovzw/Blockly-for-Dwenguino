@@ -1,6 +1,7 @@
 import Useritem from '../models/user_model.js';
 import RefreshTokenItem from '../models/refreshtoken_model.js';
 import ConfirmationCodeItem from '../models/confirmation_code_model.js';
+import sgMail from '@sendgrid/mail';
 import emailService from '../utils/email.js';
 import cryptoRandomString from 'crypto-random-string';
 import bcrypt from 'bcrypt';
@@ -12,28 +13,45 @@ let exports = {};
 const ACCESS_TOKEN_SECRET = process.env.ACCESS_TOKEN_SECRET || 'ThF0yV1sY42aunmy1dUEVwn1ueZn3W67aIfCu9ieRJ9n7KkKWCyfj7MmaiRzawlNSUeSFbfyiUpal7cN4mpaSm8DsI4FFUWmqeP8h1INRtcUMwLokuw7SIvX0LfMGGuzqEnj9cQzABGlXg3Lk0vc5y';
 const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4cXauNhb2PxeHzcLEPlX1EzIemMFcN54bNeQHkGcWfQhbmLvWJL4BalUxa7KoTIqMf8NVXpC5a5ivAsAXENYWFFyMfJLiJylHqLBEAsSpgQ3C3SvtIwUrqDH896La8DJtJpIIiVwJv';
 
+if(process.env.NODE_ENV === 'production') {
+  sgMail.setApiKey(process.env.EMAIL_PASSWORD);
+}
+
 /**
  * Register a new user and send an email for email verification.
  * @param {*} req | Has to contain the user's email address, password, role and language preference.
  * @param {*} res 
  */
 exports.register = function(req, res){
+
   const { 
     firstname,
     email,
     password,
     role,
-    language 
+    language,
+    accept_conditions,
+    accept_research 
   } = req.body;
 
   let errors = [];
 
-  if (!firstname || !email || !password || !role || !language) {
-    errors.push({msg: "required-fields-error"});
+  if (!firstname || !email || !password || !role || !language || !accept_conditions || !accept_research) {
+    errors.push({msg: "errRequiredFields"});
   }
+
   if( role !== 'student' && role !== 'teacher'){
-    errors.push({msg: "role-not-valid-error"});
+    errors.push({msg: "errRoleInvalid"});
   }
+
+  if( accept_conditions !== true){
+    errors.push({msg: "errAcceptconditions"});
+  }
+
+  if( accept_research !== true){
+    errors.push({msg: "errResearchConditions"});
+  }
+
   if (errors.length > 0) {
     res.status(401).send(errors);
   } else {
@@ -54,6 +72,8 @@ exports.register = function(req, res){
               user.password = hashPassword;
               user.role = role;
               user.language = language;
+              user.acceptGeneralConditions = accept_conditions;
+              user.acceptResearchConditions = accept_research;
               user.save()
               .then(item => {
                 const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
@@ -76,15 +96,30 @@ exports.register = function(req, res){
                 });
                 confirmationCode.save();
 
-                const data = {
-                  from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+                const subject = "Your account confirmation link";
+                const text = `Please use the following link within the next 10 minutes to activate your account: ${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
+                const html = `<p>Please use the following link within the next 10 minutes to activate your account: <strong><a href="${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}" target="_blank">Confirm email</a></strong></p>`;
+                let message = {
                   to: user.email,
-                  subject: "Your account confirmation link",
-                  text: `Please use the following link within the next 10 minutes to activate your account: ${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`,
-                  html: `<p>Please use the following link within the next 10 minutes to activate your account: <strong><a href="${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}" target="_blank">Confirm email</a></strong></p>`,
+                  from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+                  subject: subject,
+                  text: text,
+                  html: html
                 };
-                
-                emailService.sendMail(data);
+
+                if(process.env.NODE_ENV === 'production'){
+                  sgMail
+                    .send(message)
+                    .then(() => {}, error => {
+                      console.error(error);
+                  
+                      if (error.response) {
+                        console.error(error.response.body)
+                      }
+                    });
+                } else {
+                  emailService.sendMail(message);
+                }
 
                 db.collection('tokens').findOne({refreshToken: refreshToken})
                 .then(function(doc) {
@@ -191,7 +226,7 @@ exports.login = function(req, res){
   let errors = [];
 
   if (!email || !password) {
-    errors.push({msg: "required-fields-error"});
+    errors.push({msg: "errRequiredFields"});
   }
 
   if (errors.length > 0) {
@@ -312,7 +347,7 @@ exports.getPasswordResetCode = function (req, res){
   console.log(email);
 
   if(!email){
-    errors.push({msg: "required-fields-error"});
+    errors.push({msg: "errRequiredFields"});
     res.status(401).send(errors);
   } else {
     db.collection('users').findOne({email: email})
@@ -325,15 +360,31 @@ exports.getPasswordResetCode = function (req, res){
         });
         confirmationCode.save();
 
-        const data = {
-          from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+        const subject = "Your password reset code";
+        const text = `Please use the following code within the next 10 minutes to reset the password of your account: ${secretCode}`;
+        const html = `<p>Please use the following code within the next 10 minutes to reset the password of your account: <strong>${secretCode}</strong></p>`;
+        let message = {
           to: user.email,
-          subject: "Your password reset code",
-          text: `Please use the following code within the next 10 minutes to reset the password of your account: ${secretCode}`,
-          html: `<p>Please use the following code within the next 10 minutes to reset the password of your account: <strong>${secretCode}</strong></p>`,
+          from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+          subject: subject,
+          text: text,
+          html: html
         };
-        
-        emailService.sendMail(data);
+
+        if(process.env.NODE_ENV === 'production'){
+          sgMail
+            .send(message)
+            .then(() => {}, error => {
+              console.error(error);
+          
+              if (error.response) {
+                console.error(error.response.body)
+              }
+            });
+        } else {
+          emailService.sendMail(message);
+        }
+
         res.sendStatus(200);
       } else {
         console.log("user not found");
@@ -356,7 +407,7 @@ exports.resetPassword = function (req, res){
   let errors = [];
 
   if (!email || !password || !secretCode) {
-    errors.push({ msg: "required-fields-error" });
+    errors.push({ msg: "errRequiredFields" });
   }
 
   if (errors.length > 0) {
@@ -581,6 +632,37 @@ exports.authenticateForLogging = function(req, res, next) {
   } else {
     req.user._id = '';
     next();
+  }
+}
+
+/**
+ * Authenticate the user using the accessToken in the Dwengo cookie. 
+ * @param {*} req | contains the Dwengo cookie if the user is logged in.
+ *                  Additionally it will contain the corresponding user id if the user is authenticate before
+ *                  handling the next request.
+ * @param {*} res 
+ * @param {*} next 
+ */
+ exports.authenticateAdmin = function(req, res, next) {
+  const dwengoCookie = req.cookies.dwengo;
+  if(dwengoCookie) {
+    const accessToken = dwengoCookie.accessToken.split(' ')[1];
+
+    jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, response) => {
+      if(err) {
+        console.debug(err);
+        return res.sendStatus(403);
+      }
+      req.user = response;
+
+      if(req.user.role == "admin"){
+        next();
+      } else {
+        res.sendStatus(401);
+      }
+    });
+  } else {
+    res.sendStatus(401);
   }
 }
 

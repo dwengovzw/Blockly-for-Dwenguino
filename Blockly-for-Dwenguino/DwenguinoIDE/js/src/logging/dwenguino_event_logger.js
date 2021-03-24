@@ -1,4 +1,4 @@
-import LoggingMenu from './logging_menu.js'
+// import LoginMenu from '../user/login_menu.js'
 import ServerConfig from '../server_config.js'
 
 /**
@@ -12,31 +12,13 @@ class DwenguinoEventLogger {
     computerId = "-1";
     workshopId = "-1";
 
-    loggingModal = null;
-
     /**
      * @constructs
      */
     constructor(){
-        this.loggingModal = new LoggingMenu(this);
     }
 
     init(){
-        // This should not happen here. The modal dialog should be created in an other class which references the eventLogger.
-        // TODO: separate display code from logic
-        //set keypress event listerner to show test environment window
-        var keys = {};
-        $(document).keydown((e) => {
-            keys[e.which] = true;
-            if (keys[69] && keys[83] && keys[84]){
-                this.loggingModal.createInitialMenu();
-            }
-        });
-
-        $(document).keyup(function (e) {
-            delete keys[e.which];
-        });
-
         this.sessionId = window.sessionStorage.loadOnceSessionId;
         delete window.sessionStorage.loadOnceSessionId;
 

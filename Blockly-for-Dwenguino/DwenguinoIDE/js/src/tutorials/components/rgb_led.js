@@ -16,7 +16,7 @@ class RgbLed extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['rgbledDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['rgbledDescription']);
     }
 
     static getInputPins(){
