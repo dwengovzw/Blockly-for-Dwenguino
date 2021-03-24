@@ -10,7 +10,7 @@ rm -Rf node_modules
 npm install
 
 # Copy the new files to the deployment directory
-sudo cp -r * /home/ubuntu/blockly-build/
+sudo cp -r /var/lib/jenkins/workspace/blockly-build/ /home/ubuntu/blockly-build/
 
 cd /home/ubuntu/blockly-build/
 
