@@ -16,7 +16,7 @@ class Servo extends DwenguinoComponent{
     }
 
     static getDescription(){
-        return MSG.simulator['servoDescription'];
+        return DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['servoDescription']);
     }
 
     static getInputPins(){

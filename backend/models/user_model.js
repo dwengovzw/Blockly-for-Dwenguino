@@ -29,7 +29,16 @@ var userSchema = mongoose.Schema({
     language: {
         type: String,
         default: "en"
+    },
+    acceptGeneralConditions: {
+        type: Boolean,
+        required: true
+    }, 
+    acceptResearchConditions: {
+        type: Boolean,
+        required: true
     }
+    
     // username: String,
     // id: String,
     // password: String,
