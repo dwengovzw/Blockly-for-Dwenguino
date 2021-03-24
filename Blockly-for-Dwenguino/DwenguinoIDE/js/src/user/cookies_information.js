@@ -4,18 +4,15 @@
 class CookiesInformation {
 
     constructor(){
-        this.initCookiesInformation();
     }
 
     /**
      * Initialize
      */
     initCookiesInformation(){
-        $("#cookie-info").click(() => {
-            this.loadCookiesInformationDialog();
-            this.addCookiesInformationDialogEventHandlers();
-            this.showCookiesInformationDialog();
-        });
+        this.loadCookiesInformationDialog();
+        this.addCookiesInformationDialogEventHandlers();
+        this.showCookiesInformationDialog();
     }
 
     /**
