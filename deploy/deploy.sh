@@ -12,9 +12,9 @@ npm install
 # Copy the new files to the deployment directory
 sudo cp -r /var/lib/jenkins/workspace/blockly-build/ /home/ubuntu/
 
-cd /home/ubuntu/blockly-build/
+cd /home/ubuntu/blockly-build/backend
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-forever restart backend/index.js -r dotenv/config || forever start backend/index.js -r dotenv/config
+forever restart index.js -r dotenv/config || forever start index.js -r dotenv/config
 exit
 
