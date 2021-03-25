@@ -26,10 +26,10 @@ var userSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    language: {
-        type: String,
-        default: "en"
-    },
+    // language: {
+    //     type: String,
+    //     default: "en"
+    // },
     acceptGeneralConditions: {
         type: Boolean,
         required: true
@@ -38,16 +38,6 @@ var userSchema = mongoose.Schema({
         type: Boolean,
         required: true
     }
-    
-    // username: String,
-    // id: String,
-    // password: String,
-    // email: String,
-    // date_of_birth: Date,
-    // gender: String,
-    // school: String,
-    // language: String,
-
 });
 
 var Useritem = mongoose.model('users', userSchema);

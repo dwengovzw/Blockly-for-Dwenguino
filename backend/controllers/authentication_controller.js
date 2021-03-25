@@ -15,7 +15,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4c
 
 /**
  * Register a new user and send an email for email verification.
- * @param {*} req | Has to contain the user's email address, password, role and language preference.
+ * @param {*} req | Has to contain the user's email address, password and role.
  * @param {*} res 
  */
 exports.register = function(req, res){
@@ -25,14 +25,13 @@ exports.register = function(req, res){
     email,
     password,
     role,
-    language,
     accept_conditions,
     accept_research 
   } = req.body;
 
   let errors = [];
 
-  if (!firstname || !email || !password || !role || !language || !accept_conditions || !accept_research) {
+  if (!firstname || !email || !password || !role || !accept_conditions || !accept_research) {
     errors.push({msg: "errRequiredFields"});
   }
 
@@ -67,7 +66,6 @@ exports.register = function(req, res){
               user.email = email;
               user.password = hashPassword;
               user.role = role;
-              user.language = language;
               user.acceptGeneralConditions = accept_conditions;
               user.acceptResearchConditions = accept_research;
               user.save()
@@ -92,9 +90,16 @@ exports.register = function(req, res){
                 });
                 confirmationCode.save();
 
-                const subject = "Your account confirmation link";
-                const text = `Please use the following link within the next 10 minutes to activate your account: ${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
-                const html = `<p>Please use the following link within the next 10 minutes to activate your account: <strong><a href="${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}" target="_blank">Confirm email</a></strong></p>`;
+                const subject = req.i18n.__("email.confirmationEmailAddress.subject");
+                const confirmationUrl = `${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
+                let text = req.i18n.__("email.confirmationEmailAddress.text") + confirmationUrl;
+                const html = '<p>' 
+                  + req.i18n.__("email.confirmationEmailAddress.htmlText") 
+                  + '<strong><a href="' 
+                  + confirmationUrl 
+                  + '" target="_blank">' 
+                  + req.i18n.__('email.confirmationEmailAddress.confirmEmail') 
+                  + '</a></strong></p>';
                 let message = {
                   to: user.email,
                   from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
@@ -357,9 +362,13 @@ exports.getPasswordResetCode = function (req, res){
         });
         confirmationCode.save();
 
-        const subject = "Your password reset code";
-        const text = `Please use the following code within the next 10 minutes to reset the password of your account: ${secretCode}`;
-        const html = `<p>Please use the following code within the next 10 minutes to reset the password of your account: <strong>${secretCode}</strong></p>`;
+        const subject = req.i18n.__("email.forgetPassword.subject");
+        const text = req.i18n.__("email.forgetPassword.text") + `${secretCode}`;
+        const html = '<p>' 
+          + req.i18n.__("email.confirmationEmailAddress.htmlText") 
+          + '<strong>' 
+          + `${secretCode}` 
+          + '</strong></p>';
         let message = {
           to: user.email,
           from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,

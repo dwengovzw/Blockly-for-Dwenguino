@@ -29,6 +29,9 @@ import authenticationcontroller from '../controllers/authentication_controller.j
 import tutorialcontroller from '../controllers/tutorial_controller.js';
 import usercontroller from '../controllers/user_controller.js';
 
+router.route('/lang')
+    .post(utilscontroller.setLanguage);
+    
 /* Data collection */
 
 router.route('/logging/newSessionId')

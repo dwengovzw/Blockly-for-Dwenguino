@@ -12,7 +12,12 @@ exports.getUserInfo = function(req, res) {
     db.collection('users').findOne({_id: id})
     .then(function(user){
         if(user){
-            res.send(user);
+            let userInfo = {
+                firstname: user.firstname,
+                email: user.email,
+                role: user.role,
+            };
+            res.send(userInfo);
         } else {
             res.sendStatus(404);
         }

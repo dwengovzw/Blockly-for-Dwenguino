@@ -691,7 +691,7 @@ let DwenguinoBlockly = {
         }
 
         var languageMenu = document.getElementById('db_menu_item_language_selection');
-        var newLang = encodeURIComponent(languageMenu.options[languageMenu.selectedIndex].value);
+        let newLang = encodeURIComponent(languageMenu.options[languageMenu.selectedIndex].value);
         var search = window.location.search;
         if (search.length <= 1) {
             search = '?lang=' + newLang;
@@ -700,6 +700,21 @@ let DwenguinoBlockly = {
         } else {
             search = search.replace(/\?/, '?lang=' + newLang + '&');
         }
+
+        let data = { lang: newLang };
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            url: ServerConfig.getServerUrl() + "/lang",
+            data: JSON.stringify(data)}
+        ).done(function(data){
+            console.log(data);
+        }).fail(function(response, status)  {
+            console.log(status, response);
+        }); 
 
         window.location = window.location.protocol + '//' +
         window.location.host + window.location.pathname + search;
