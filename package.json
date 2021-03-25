@@ -41,6 +41,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "helmet": "^3.22.0",
+    "i18n-x": "^0.1.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.12",
     "nodemailer": "^6.4.18",

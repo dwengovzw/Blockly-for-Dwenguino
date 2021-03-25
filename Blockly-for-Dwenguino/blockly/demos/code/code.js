@@ -176,7 +176,7 @@ Code.changeLanguage = function() {
   }
 
   window.location = window.location.protocol + '//' +
-      window.location.host + window.location.pathname + search;
+  window.location.host + window.location.pathname + search;   
 };
 
 /**
