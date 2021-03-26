@@ -40,7 +40,6 @@ app.use(i18n({
     directory: 'msg',
     jointDir: 'msg',
     defaultLocale: 'en',
-    // fallbacks: {'*': 'en'},
     queryParameter: 'lang',
     cookieName: 'lang',
     order: ['cookie', 'query', 'headers']

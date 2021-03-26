@@ -739,6 +739,22 @@ let DwenguinoBlockly = {
       document.dir = rtl ? 'rtl' : 'ltr';
       document.head.parentElement.setAttribute('lang', DwenguinoBlockly.LANG);
 
+      // Set the language for the backend.
+      let data = { lang: DwenguinoBlockly.LANG };
+      console.log(data);
+      $.ajax({
+          type: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          url: ServerConfig.getServerUrl() + "/lang",
+          data: JSON.stringify(data)}
+      ).done(function(data){
+          console.log(data);
+      }).fail(function(response, status)  {
+          console.log(status, response);
+      }); 
+      
       // Sort languages alphabetically.
       var languages = [];
       for (var lang in DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME) {
