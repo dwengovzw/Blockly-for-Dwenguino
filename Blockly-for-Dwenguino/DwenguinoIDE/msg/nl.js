@@ -878,7 +878,7 @@ MSG.logging = {
   student: "Leerling",
   teacher: "Leerkracht",
   verification: "Verifieer je e-mailadres",
-  verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
+  verificationSentTo: "Een e-mail met een activatielink werd verzonden naar je e-mailadres. Klik op de link in je email om je account te activeren en log nadien in.",
   birth: "Geboortedatum",
   school: "School",
   selectSchool: "Zoek op naam van de school...",
