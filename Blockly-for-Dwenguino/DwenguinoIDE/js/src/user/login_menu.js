@@ -105,6 +105,13 @@ class LoginMenu{
             url: ServerConfig.getServerUrl() + "/user"}
         ).done(function(data){
             // The user is still logged in
+            $("#" + authenticationMenu).append('<div id="authentication_settings" class="tutorial_categories_item card"></div>');
+            $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
+            $("#authentication_settings").append('<div id="authentication_settings_img"></div>');
+            $("#authentication_settings").click(function(){
+                self.showUserSettings();
+            });
+
             $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
             $("#authentication_logout").append('<div class="category_tag">'+ MSG.logging['logout'] +'</div>');
             $("#authentication_logout").append('<div id="logout_img"></div>');
@@ -125,6 +132,13 @@ class LoginMenu{
                         url: ServerConfig.getServerUrl() + "/user"}
                     ).done(function(data){
                         // The user is still logged in
+                        $("#" + authenticationMenu).append('<div id="authentication_settings" class="tutorial_categories_item card"></div>');
+                        $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
+                        $("#authentication_settings").append('<div id="authentication_settings_img"></div>');
+                        $("#authentication_settings").click(function(){
+                            self.showUserSettings();
+                        });
+                        
                         $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
                         $("#authentication_logout").append('<div class="category_tag">'+ MSG.logging['logout'] +'</div>');
                         $("#authentication_logout").append('<div id="logout_img"></div>');
@@ -415,11 +429,36 @@ class LoginMenu{
             },
             data: JSON.stringify(serverSubmission),
         }).done(function(data){
+            console.log(data);
             self.resetSelectedIcons();
             self.removeDialog();
         }).fail(function(response, status)  {
             console.warn('Failed to log in:', status);
             self.resetSelectedIcons();
+            var errors = [];
+
+            errors = response.responseJSON.error.map(function (error) {
+                return { message: '<a id="resendLink" href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', [error]) + '</a>'};
+            });
+            self.showErrors(errors);
+
+            $('#resendLink').click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/resendActivationLink",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(serverSubmission),
+                }).done(function(data){
+                    let confirmation = [{ message: 'The activation link has been sent.' }];
+
+                    self.showErrors(confirmation);
+                }).fail(function(response, status)  {
+                    console.log(response);
+                });
+            });
+            // TODO
         });
     }
 
@@ -433,6 +472,46 @@ class LoginMenu{
         }).fail(function(response, status) {
             self.removeDialog();
         })
+    }
+
+    showUserSettings(){
+        var self = this;
+        $.ajax({
+            type: "GET",
+            url: ServerConfig.getServerUrl() + "/user"}
+        ).done(function(data){
+            self.createLoggingModalDialog(MSG.logging['settings']);
+
+            $('#loggingModalBody').append('<form id="loginUser"></form>');
+
+            $('#loggingModalBody').append('<div id="nameRow" class="ui-widget row mb-4"></div>');
+            $('#nameRow').append('<div class="col-md-3"><p>'+ MSG.logging['firstname'] +'</p></div>');
+            $('#nameRow').append('<div class="col-md-8"><p>'+ data.firstname +'</p></div>');
+
+            $('#loggingModalBody').append('<div id="emailRow" class="ui-widget row mb-4"></div>');
+            $('#emailRow').append('<div class="col-md-3"><p>'+ MSG.logging['email'] +'</p></div>');
+            $('#emailRow').append('<div class="col-md-8"><p>'+ data.email +'</p></div>');
+
+            $('#loggingModalBody').append('<div id="roleRow" class="ui-widget row mb-4"></div>');
+            $('#roleRow').append('<div class="col-md-3"><p>'+ MSG.logging['role'] +'</p></div>');
+            $('#roleRow').append('<div class="col-md-8"><p>'+ data.role +'</p></div>');
+
+            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
+            $("#back_modal_dialog_button").click(function(){
+                self.createInitialMenu();
+            })
+            self.showDialog();
+        }).fail(function(response, status)  {
+            self.createLoggingModalDialog(MSG.logging['settings']);
+            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
+            $("#back_modal_dialog_button").click(function(){
+                self.createInitialMenu();
+            })
+            self.showDialog();
+        });
+        
+        
+        
     }
 
     createUserMenu(){
@@ -505,20 +584,20 @@ class LoginMenu{
          //this.createIconModule();
  
          // LANGUAGE PREFERENCE
-         let languageOptions = {
-             en: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['english']), 
-             nl: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['dutch'])
-         };
+        //  let languageOptions = {
+        //      en: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['english']), 
+        //      nl: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['dutch'])
+        //  };
  
-         $('#registerUser').append('<div id="inputLanguage" class="ui-widget row mb-4">');
-         $('#inputLanguage').append('<label for="languageTag" class="col-md-4">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['language'])+'</label>');
-         $('#inputLanguage').append('<select id="languageTag" name="languageTag" class="col-md-7"></select>');
+        //  $('#registerUser').append('<div id="inputLanguage" class="ui-widget row mb-4">');
+        //  $('#inputLanguage').append('<label for="languageTag" class="col-md-4">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['language'])+'</label>');
+        //  $('#inputLanguage').append('<select id="languageTag" name="languageTag" class="col-md-7"></select>');
          
-         $.each(languageOptions, function(val, text) {
-             $('#languageTag').append(
-                 $('<option></option>').val(val).html(text)
-             );
-         });
+        //  $.each(languageOptions, function(val, text) {
+        //      $('#languageTag').append(
+        //          $('<option></option>').val(val).html(text)
+        //      );
+        //  });
  
          // USER ROLE
          let roleOptions = {
@@ -585,7 +664,7 @@ class LoginMenu{
         let email = $( "input[name=emailTag]").val();
         let password = $( "input[name=passwordTag1]").val();
         let password_repeated = $( "input[name=passwordTag2]").val();
-        let language = $("select[name=languageTag]").val();
+        // let language = $("select[name=languageTag]").val();
         let role = $("select[name=roleTag]").val();
 
         let serverSubmission = {
@@ -593,7 +672,7 @@ class LoginMenu{
             "email": email,
             "password": password,
             "password_repeated": password_repeated,
-            "language": language,
+            //"language": language,
             "role": role,
             "accept_conditions": acceptConditions,
             "accept_research": acceptResearch,
@@ -612,8 +691,9 @@ class LoginMenu{
             //self.showSettingsMenu();
         }).fail(function(response, status)  {
             console.log('Failed to register:', status);
-            console.log(response);
-            //self.resetSelectedIcons();
+            if(response.status == 401 && response.responseJSON.error == 'userAlreadyExists'){
+                self.showErrors([{message: DwenguinoBlocklyLanguageSettings.translateFrom('logging',['userAlreadyExists'])}]);
+            }
         });
     }
 
@@ -716,6 +796,7 @@ class LoginMenu{
                         self.removeDialog();
                     }).fail(function(response, status)  {
                         console.warn('Failed to log in:', status);
+
                     });
                 }
             });

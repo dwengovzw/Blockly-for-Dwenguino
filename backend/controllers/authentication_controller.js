@@ -15,7 +15,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4c
 
 /**
  * Register a new user and send an email for email verification.
- * @param {*} req | Has to contain the user's email address, password, role and language preference.
+ * @param {*} req | Has to contain the user's email address, password and role.
  * @param {*} res 
  */
 exports.register = function(req, res){
@@ -25,14 +25,13 @@ exports.register = function(req, res){
     email,
     password,
     role,
-    language,
     accept_conditions,
     accept_research 
   } = req.body;
 
   let errors = [];
 
-  if (!firstname || !email || !password || !role || !language || !accept_conditions || !accept_research) {
+  if (!firstname || !email || !password || !role || !accept_conditions || !accept_research) {
     errors.push({msg: "errRequiredFields"});
   }
 
@@ -67,24 +66,10 @@ exports.register = function(req, res){
               user.email = email;
               user.password = hashPassword;
               user.role = role;
-              user.language = language;
               user.acceptGeneralConditions = accept_conditions;
               user.acceptResearchConditions = accept_research;
               user.save()
               .then(item => {
-                const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
-                const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET, {expiresIn:'180m'});
-                
-                const cookieConfig = {
-                  httpOnly: true,
-                  secure: process.env.NODE_ENV === 'production'? true: false,
-                  expires: new Date(Date.now() + 3 * 3600000)
-                };
-                const tokens = {
-                  accessToken: 'Bearer ' + accessToken, 
-                  refreshToken: refreshToken
-                };
-
                 const secretCode = cryptoRandomString({length: 10, type: 'url-safe'});
                 const confirmationCode = new ConfirmationCodeItem({
                   email: user.email,
@@ -92,9 +77,16 @@ exports.register = function(req, res){
                 });
                 confirmationCode.save();
 
-                const subject = "Your account confirmation link";
-                const text = `Please use the following link within the next 10 minutes to activate your account: ${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
-                const html = `<p>Please use the following link within the next 10 minutes to activate your account: <strong><a href="${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}" target="_blank">Confirm email</a></strong></p>`;
+                const subject = req.i18n.__("email.confirmationEmailAddress.subject");
+                const confirmationUrl = `${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
+                let text = req.i18n.__("email.confirmationEmailAddress.text") + confirmationUrl;
+                const html = '<p>' 
+                  + req.i18n.__("email.confirmationEmailAddress.htmlText") 
+                  + '<strong><a href="' 
+                  + confirmationUrl 
+                  + '" target="_blank">' 
+                  + req.i18n.__('email.confirmationEmailAddress.confirmEmail') 
+                  + '</a></strong></p>';
                 let message = {
                   to: user.email,
                   from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
@@ -118,32 +110,7 @@ exports.register = function(req, res){
                   emailService.sendMail(message);
                 }
 
-                db.collection('tokens').findOne({refreshToken: refreshToken})
-                .then(function(doc) {
-                  if(!doc){
-                    let refreshTokenItem = new RefreshTokenItem();
-                    refreshTokenItem.token = refreshToken;
-                    refreshTokenItem.username = user.username;
-                    refreshTokenItem.save()
-                    .then(item => {
-                      res.cookie('dwengo', tokens, cookieConfig);
-                      // TODO check which info the frontend needs
-                      res.send({ 
-                        email: user.email,
-                        id: user._id, 
-                      });
-                    })
-                    .catch(err => {
-                      console.debug(err);
-                    });
-                  } else {
-                    res.cookie('dwengo', tokens, cookieConfig);
-                    res.send({ 
-                      email: user.email,
-                      id: user._id, 
-                    });
-                  }
-                });
+                res.sendStatus(200);
               })
               .catch(err => {
                 console.debug(err);
@@ -153,7 +120,10 @@ exports.register = function(req, res){
           });
         });
       } else {
-        res.status(401).send("The user does already exist.");
+        let data = {
+          "error": "userAlreadyExists"
+        }
+        res.status(401).send(data);
       }
     });
   }
@@ -237,41 +207,129 @@ exports.login = function(req, res){
             res.status(401).send("The password was not correct or this user does not exist.");
           } else {
             if(result){
-              const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
-              const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET);
-              db.collection('tokens').findOne({refreshToken: refreshToken})
-              .then(function(token) {
+              let errors = [];
+              if( user.status !== 'active'){
+                errors.push("userNotActive");
+                let data = {
+                  "error": errors
+                }
+                console.log(data);
+                res.status(401).send(data);
+              } else {
+                const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
+                const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET);
+                db.collection('tokens').findOne({refreshToken: refreshToken})
+                .then(function(token) {
 
-                const cookieConfig = {
-                  httpOnly: true,
-                  secure: process.env.NODE_ENV === 'production'? true: false,
-                  expires: new Date(Date.now() + 3 * 3600000)
-                };
-                const tokens = {
-                  accessToken: 'Bearer ' + accessToken, 
-                  refreshToken: refreshToken
-                };
+                  const cookieConfig = {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production'? true: false,
+                    expires: new Date(Date.now() + 3 * 3600000)
+                  };
+                  const tokens = {
+                    accessToken: 'Bearer ' + accessToken, 
+                    refreshToken: refreshToken
+                  };
 
-                if(!token){
-                  let refreshTokenItem = new RefreshTokenItem();
-                  refreshTokenItem.token = refreshToken;
-                  refreshTokenItem.email = email;
-                  refreshTokenItem.save()
-                  .then(item => {
+                  if(!token){
+                    let refreshTokenItem = new RefreshTokenItem();
+                    refreshTokenItem.token = refreshToken;
+                    refreshTokenItem.email = email;
+                    refreshTokenItem.save()
+                    .then(item => {
+                      res.cookie('dwengo', tokens, cookieConfig);
+                      res.sendStatus(200);
+                    })
+                    .catch(err => {
+                      console.debug(err);
+                    });
+                  } else {
                     res.cookie('dwengo', tokens, cookieConfig);
                     res.sendStatus(200);
-                  })
-                  .catch(err => {
-                    console.debug(err);
-                  });
-                } else {
-                  res.cookie('dwengo', tokens, cookieConfig);
-                  res.sendStatus(200);
-                }
-              });
+                  }
+                });
+              }
             } else {
               res.status(401).send("Email or password incorrect.");
             } 
+          }
+        });
+      } else {
+        res.status(401).send('Email or password incorrect.');
+      }
+    });
+  }
+}
+
+exports.resendActivationLink = function(req, res){
+  let db = mongoose.connection;
+  const { 
+    email,
+    password,
+  } = req.body;
+  let errors = [];
+
+  if (!email || !password) {
+    errors.push({msg: "errRequiredFields"});
+  }
+
+  if (errors.length > 0) {
+    res.status(401).send(errors);
+  } else {
+    db.collection('users').findOne({email: email})
+    .then(function(user){
+      if(user){
+        bcrypt.compare(password, user.password, (err, result) => {
+          if (err) {
+            res.status(401).send("The password was not correct or this user does not exist.");
+          } else {
+            let errors = [];
+            if( user.status !== 'active'){
+              const secretCode = cryptoRandomString({length: 10, type: 'url-safe'});
+              const confirmationCode = new ConfirmationCodeItem({
+                email: user.email,
+                code: secretCode
+              });
+              confirmationCode.save();
+
+              const subject = req.i18n.__("email.confirmationEmailAddress.subject");
+              const confirmationUrl = `${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
+              let text = req.i18n.__("email.confirmationEmailAddress.text") + confirmationUrl;
+              const html = '<p>' 
+                + req.i18n.__("email.confirmationEmailAddress.htmlText") 
+                + '<strong><a href="' 
+                + confirmationUrl 
+                + '" target="_blank">' 
+                + req.i18n.__('email.confirmationEmailAddress.confirmEmail') 
+                + '</a></strong></p>';
+              let message = {
+                to: user.email,
+                from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+                subject: subject,
+                text: text,
+                html: html
+              };
+
+              if(process.env.NODE_ENV === 'production'){
+                sgMail.setApiKey(process.env.EMAIL_PASSWORD);
+                sgMail
+                  .send(message)
+                  .then(() => {}, error => {
+                    console.error(error);
+                  });
+              } else {
+                emailService.sendMail(message);
+              }
+                
+              res.sendStatus(200);
+            } else {
+              errors.push("userAlreadyActive");
+              let data = {
+                "error": errors
+              }
+              console.log(data);
+              res.status(401).send(data);
+            }
           }
         });
       } else {
@@ -357,9 +415,13 @@ exports.getPasswordResetCode = function (req, res){
         });
         confirmationCode.save();
 
-        const subject = "Your password reset code";
-        const text = `Please use the following code within the next 10 minutes to reset the password of your account: ${secretCode}`;
-        const html = `<p>Please use the following code within the next 10 minutes to reset the password of your account: <strong>${secretCode}</strong></p>`;
+        const subject = req.i18n.__("email.forgetPassword.subject");
+        const text = req.i18n.__("email.forgetPassword.text") + `${secretCode}`;
+        const html = '<p>' 
+          + req.i18n.__("email.confirmationEmailAddress.htmlText") 
+          + '<strong>' 
+          + `${secretCode}` 
+          + '</strong></p>';
         let message = {
           to: user.email,
           from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,

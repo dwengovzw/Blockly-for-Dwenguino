@@ -1,0 +1,15 @@
+{
+	"email": {
+		"confirmationEmailAddress": {
+			"subject": "Bevestig jouw account",
+			"text": "Gebruik de volgende link binnen de 10 minuten om je e-mailadres te bevestigen: ",
+            "htmlText": "Gebruik de volgende link binnen de 10 minuten om je e-mailadres te bevestigen: ",
+			"confirmEmail": "Bevestig je e-mailadres"
+		},
+		"forgetPassword": {
+			"subject": "Reset je wachtwoord",
+			"text": "Gebruik de volgende code binnen de 10 minuten om je wachtwoord aan te passen: ",
+			"htmlText": "Gebruik de volgende code binnen de 10 minuten om je wachtwoord aan te passen: "
+		}
+	}
+}

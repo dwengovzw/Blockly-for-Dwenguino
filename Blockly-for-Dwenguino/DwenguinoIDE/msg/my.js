@@ -496,7 +496,6 @@ MSG.logging = {
   enterRepeatedPassword: "Repeat your password",
   choosePassword: "Select 4 personal icons as your password. You need to be able to remember these in the right order.",
   currentlySelected: "Currently selected: ",
-  language: "Language",
   role: "Role",
   verification: "Verify your email address",
   verificationSentTo: "A verification message has been sent to your email address. Click the link in the email to verify your account.",
