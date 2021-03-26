@@ -932,7 +932,9 @@ MSG.logging = {
   conditions4: "Ben je <b>12 jaar of jonger?</b> Dan moet een van je ouders of voogden toestemming geven.",
   acceptConditions: "Ik ga akkoord met de gebruiksvoorwaarden en het privacybeleid van de Dwengo-simulator",
   acceptResearch: "Ik geef toestemming aan Dwengo vzw om de gegevens die de simulator verzamelt, voor <b>wetenschappelijk onderzoek</b> te gebruiken, geanonimiseerd en volgens het privacybeleid.",
-  anonymized: "* <b>\'Geanonimiseerd\'</b> wil zeggen dat er geen link is tussen je persoonsgegevens en je data. Niemand weet dus wat je deed in de simulator."
+  anonymized: "* <b>\'Geanonimiseerd\'</b> wil zeggen dat er geen link is tussen je persoonsgegevens en je data. Niemand weet dus wat je deed in de simulator.",
+  userNotActive: "Je hebt je account nog niet geactiveerd. Stuur de activatielink opnieuw.",
+  userAlreadyExists: "Deze gebruiker bestaat al. Gebruik een ander e-mailadres."
 };
 
 MSG.validator = {
