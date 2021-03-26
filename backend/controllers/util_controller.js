@@ -5,7 +5,8 @@
 import childProcess from 'child_process';
 const exec = childProcess.exec;
 import fs from 'fs';
-import path from 'path'
+import path from 'path';
+import i18n from 'i18n-x';
 
 let exports = {};
 
@@ -148,6 +149,26 @@ exports.run = function (req, res) {
 
     })
     
+};
+
+exports.setLanguage = function (req, res) {
+    const { 
+        lang
+    } = req.body;
+
+    let errors = [];
+
+    if (!lang) {
+        errors.push({msg: "no-lang-included"});
+    }
+
+    if (errors.length > 0) {
+        res.status(401).send(errors);
+    } else {
+        res.cookie('lang', lang, { maxAge: 900000, httpOnly: true });
+        res.status(200).send(lang);    
+    }
+    res.status(200);
 };
 
 export default exports;

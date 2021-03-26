@@ -12,6 +12,7 @@ import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 //mongoose.set('debug', true);
 import path from 'path';
+import i18n from 'i18n-x';
 
 import ChromeLauncher from 'chrome-launcher';
 
@@ -52,6 +53,15 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 app.use(cookieParser());
+app.use(i18n({
+    locales: ['en', 'nl'], 
+    directory: 'msg',
+    jointDir: 'msg',
+    defaultLocale: 'en',
+    queryParameter: 'lang',
+    cookieName: 'lang',
+    order: ['cookie', 'query', 'headers']
+}));
 
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies

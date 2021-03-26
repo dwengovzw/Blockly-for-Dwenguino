@@ -1,0 +1,15 @@
+{
+    "email": {
+        "confirmationEmailAddress": {
+            "subject": "Your account confirmation link",
+            "text": "Please use the following link within the next 10 minutes to activate your account: ",
+            "confirmEmail": "Confirm your email",
+            "htmlText": "Please use the following link within the next 10 minutes to activate your account: "
+        },
+        "forgetPassword": {
+            "subject": "Your password reset code",
+            "text": "Please use the following code within the next 10 minutes to reset the password of your account: ",
+            "htmlText": "Please use the following code within the next 10 minutes to reset the password of your account: "
+        }
+    }
+}
