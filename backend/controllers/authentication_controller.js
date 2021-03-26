@@ -70,19 +70,6 @@ exports.register = function(req, res){
               user.acceptResearchConditions = accept_research;
               user.save()
               .then(item => {
-                const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
-                const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET, {expiresIn:'180m'});
-                
-                const cookieConfig = {
-                  httpOnly: true,
-                  secure: process.env.NODE_ENV === 'production'? true: false,
-                  expires: new Date(Date.now() + 3 * 3600000)
-                };
-                const tokens = {
-                  accessToken: 'Bearer ' + accessToken, 
-                  refreshToken: refreshToken
-                };
-
                 const secretCode = cryptoRandomString({length: 10, type: 'url-safe'});
                 const confirmationCode = new ConfirmationCodeItem({
                   email: user.email,
@@ -123,32 +110,7 @@ exports.register = function(req, res){
                   emailService.sendMail(message);
                 }
 
-                db.collection('tokens').findOne({refreshToken: refreshToken})
-                .then(function(doc) {
-                  if(!doc){
-                    let refreshTokenItem = new RefreshTokenItem();
-                    refreshTokenItem.token = refreshToken;
-                    refreshTokenItem.username = user.username;
-                    refreshTokenItem.save()
-                    .then(item => {
-                      res.cookie('dwengo', tokens, cookieConfig);
-                      // TODO check which info the frontend needs
-                      res.send({ 
-                        email: user.email,
-                        id: user._id, 
-                      });
-                    })
-                    .catch(err => {
-                      console.debug(err);
-                    });
-                  } else {
-                    res.cookie('dwengo', tokens, cookieConfig);
-                    res.send({ 
-                      email: user.email,
-                      id: user._id, 
-                    });
-                  }
-                });
+                res.sendStatus(200);
               })
               .catch(err => {
                 console.debug(err);
@@ -158,7 +120,10 @@ exports.register = function(req, res){
           });
         });
       } else {
-        res.status(401).send("The user does already exist.");
+        let data = {
+          "error": "userAlreadyExists"
+        }
+        res.status(401).send(data);
       }
     });
   }
@@ -242,41 +207,129 @@ exports.login = function(req, res){
             res.status(401).send("The password was not correct or this user does not exist.");
           } else {
             if(result){
-              const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
-              const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET);
-              db.collection('tokens').findOne({refreshToken: refreshToken})
-              .then(function(token) {
+              let errors = [];
+              if( user.status !== 'active'){
+                errors.push("userNotActive");
+                let data = {
+                  "error": errors
+                }
+                console.log(data);
+                res.status(401).send(data);
+              } else {
+                const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
+                const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET);
+                db.collection('tokens').findOne({refreshToken: refreshToken})
+                .then(function(token) {
 
-                const cookieConfig = {
-                  httpOnly: true,
-                  secure: process.env.NODE_ENV === 'production'? true: false,
-                  expires: new Date(Date.now() + 3 * 3600000)
-                };
-                const tokens = {
-                  accessToken: 'Bearer ' + accessToken, 
-                  refreshToken: refreshToken
-                };
+                  const cookieConfig = {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production'? true: false,
+                    expires: new Date(Date.now() + 3 * 3600000)
+                  };
+                  const tokens = {
+                    accessToken: 'Bearer ' + accessToken, 
+                    refreshToken: refreshToken
+                  };
 
-                if(!token){
-                  let refreshTokenItem = new RefreshTokenItem();
-                  refreshTokenItem.token = refreshToken;
-                  refreshTokenItem.email = email;
-                  refreshTokenItem.save()
-                  .then(item => {
+                  if(!token){
+                    let refreshTokenItem = new RefreshTokenItem();
+                    refreshTokenItem.token = refreshToken;
+                    refreshTokenItem.email = email;
+                    refreshTokenItem.save()
+                    .then(item => {
+                      res.cookie('dwengo', tokens, cookieConfig);
+                      res.sendStatus(200);
+                    })
+                    .catch(err => {
+                      console.debug(err);
+                    });
+                  } else {
                     res.cookie('dwengo', tokens, cookieConfig);
                     res.sendStatus(200);
-                  })
-                  .catch(err => {
-                    console.debug(err);
-                  });
-                } else {
-                  res.cookie('dwengo', tokens, cookieConfig);
-                  res.sendStatus(200);
-                }
-              });
+                  }
+                });
+              }
             } else {
               res.status(401).send("Email or password incorrect.");
             } 
+          }
+        });
+      } else {
+        res.status(401).send('Email or password incorrect.');
+      }
+    });
+  }
+}
+
+exports.resendActivationLink = function(req, res){
+  let db = mongoose.connection;
+  const { 
+    email,
+    password,
+  } = req.body;
+  let errors = [];
+
+  if (!email || !password) {
+    errors.push({msg: "errRequiredFields"});
+  }
+
+  if (errors.length > 0) {
+    res.status(401).send(errors);
+  } else {
+    db.collection('users').findOne({email: email})
+    .then(function(user){
+      if(user){
+        bcrypt.compare(password, user.password, (err, result) => {
+          if (err) {
+            res.status(401).send("The password was not correct or this user does not exist.");
+          } else {
+            let errors = [];
+            if( user.status !== 'active'){
+              const secretCode = cryptoRandomString({length: 10, type: 'url-safe'});
+              const confirmationCode = new ConfirmationCodeItem({
+                email: user.email,
+                code: secretCode
+              });
+              confirmationCode.save();
+
+              const subject = req.i18n.__("email.confirmationEmailAddress.subject");
+              const confirmationUrl = `${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
+              let text = req.i18n.__("email.confirmationEmailAddress.text") + confirmationUrl;
+              const html = '<p>' 
+                + req.i18n.__("email.confirmationEmailAddress.htmlText") 
+                + '<strong><a href="' 
+                + confirmationUrl 
+                + '" target="_blank">' 
+                + req.i18n.__('email.confirmationEmailAddress.confirmEmail') 
+                + '</a></strong></p>';
+              let message = {
+                to: user.email,
+                from: `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM_ADDRESS}>`,
+                subject: subject,
+                text: text,
+                html: html
+              };
+
+              if(process.env.NODE_ENV === 'production'){
+                sgMail.setApiKey(process.env.EMAIL_PASSWORD);
+                sgMail
+                  .send(message)
+                  .then(() => {}, error => {
+                    console.error(error);
+                  });
+              } else {
+                emailService.sendMail(message);
+              }
+                
+              res.sendStatus(200);
+            } else {
+              errors.push("userAlreadyActive");
+              let data = {
+                "error": errors
+              }
+              console.log(data);
+              res.status(401).send(data);
+            }
           }
         });
       } else {

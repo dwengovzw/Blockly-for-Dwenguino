@@ -429,11 +429,36 @@ class LoginMenu{
             },
             data: JSON.stringify(serverSubmission),
         }).done(function(data){
+            console.log(data);
             self.resetSelectedIcons();
             self.removeDialog();
         }).fail(function(response, status)  {
             console.warn('Failed to log in:', status);
             self.resetSelectedIcons();
+            var errors = [];
+
+            errors = response.responseJSON.error.map(function (error) {
+                return { message: '<a id="resendLink" href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', [error]) + '</a>'};
+            });
+            self.showErrors(errors);
+
+            $('#resendLink').click(function(){
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/resendActivationLink",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    data: JSON.stringify(serverSubmission),
+                }).done(function(data){
+                    let confirmation = [{ message: 'The activation link has been sent.' }];
+
+                    self.showErrors(confirmation);
+                }).fail(function(response, status)  {
+                    console.log(response);
+                });
+            });
+            // TODO
         });
     }
 
@@ -666,8 +691,9 @@ class LoginMenu{
             //self.showSettingsMenu();
         }).fail(function(response, status)  {
             console.log('Failed to register:', status);
-            console.log(response);
-            //self.resetSelectedIcons();
+            if(response.status == 401 && response.responseJSON.error == 'userAlreadyExists'){
+                self.showErrors([{message: DwenguinoBlocklyLanguageSettings.translateFrom('logging',['userAlreadyExists'])}]);
+            }
         });
     }
 
@@ -770,6 +796,7 @@ class LoginMenu{
                         self.removeDialog();
                     }).fail(function(response, status)  {
                         console.warn('Failed to log in:', status);
+
                     });
                 }
             });

@@ -31,7 +31,7 @@ import usercontroller from '../controllers/user_controller.js';
 
 router.route('/lang')
     .post(utilscontroller.setLanguage);
-    
+
 /* Data collection */
 
 router.route('/logging/newSessionId')
@@ -66,6 +66,9 @@ router.route('/register')
 
 router.route('/login')
     .post(authenticationcontroller.login);
+
+router.route('/resendActivationLink')
+    .post(authenticationcontroller.resendActivationLink);
 
 router.route('/auth/verify-account/:userId/:secretCode')
     .get(authenticationcontroller.verifyAccount);

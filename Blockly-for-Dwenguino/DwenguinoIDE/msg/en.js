@@ -597,7 +597,9 @@ MSG.logging = {
   conditions4: "Are you <b>12 years or below?</b> Then one of your parents has to give permission.",
   acceptConditions: "I agree with the general conditions and privacy policy of the Dwengo simulator",
   acceptResearch: "I give permission to Dwengo vzw to use the data the simulator collects for <b>scientific research purposes</b>, anonymized and following the privacy policy.",
-  anonymized: "* <b>\'Anonymized'</b> means there is no link between your personal information and your data. No one knows what you are doing in the simulator."
+  anonymized: "* <b>\'Anonymized'</b> means there is no link between your personal information and your data. No one knows what you are doing in the simulator.",
+  userNotActive: "You haven't activated your account yet. Send the activation link again.",
+  userAlreadyExists: "This user already exists. Use a different email address."
 };
 
 MSG_FALLBACK.validator = {
