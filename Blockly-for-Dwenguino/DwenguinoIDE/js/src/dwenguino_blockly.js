@@ -50,7 +50,7 @@ let DwenguinoBlockly = {
         this.cookiesInformation = new CookiesInformation();
         DwenguinoBlockly.displayCookieConsent();
 
-        this.loginMenu = new LoginMenu(this.logger);
+        this.loginMenu = new LoginMenu();
 
         // Create an instance of the tutorial menu (persists until the application stops).
         // Uses the event logger to capture tutorial actions.
