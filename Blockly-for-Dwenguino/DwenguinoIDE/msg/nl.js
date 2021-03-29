@@ -934,7 +934,8 @@ MSG.logging = {
   acceptResearch: "Ik geef toestemming aan Dwengo vzw om de gegevens die de simulator verzamelt, voor <b>wetenschappelijk onderzoek</b> te gebruiken, geanonimiseerd en volgens het privacybeleid.",
   anonymized: "* <b>\'Geanonimiseerd\'</b> wil zeggen dat er geen link is tussen je persoonsgegevens en je data. Niemand weet dus wat je deed in de simulator.",
   userNotActive: "Je hebt je account nog niet geactiveerd. Stuur de activatielink opnieuw.",
-  userAlreadyExists: "Deze gebruiker bestaat al. Gebruik een ander e-mailadres."
+  userAlreadyExists: "Deze gebruiker bestaat al. Gebruik een ander e-mailadres.",
+  hello: "Hallo "
 };
 
 MSG.validator = {
@@ -946,6 +947,7 @@ MSG.validator = {
   errLastname: "Je achternaam is niet ingevuld.",
   errPassword: "Je paswoord voldoet niet aan de voorwaarden.",
   errPasswordNotIdentical: "Je paswoorden zijn niet identiek.",
+  errPasswordRequirements: "Je wachtwoord moet uit minimum 8 karakters bestaan. Het moet een hoofdletter, kleine letters, een cijfer en een symbool ($@$!%*#?&) bevatten. Het wachtwoord mag ook niet je e-mailadres bevatten. Kies een veiliger wachtwoord.",
   errEmail: "Je email is niet geldig",
   errActivityId: "De naam van de activiteit mag niet leeg zijn.",
   errAcceptConditions: "Je hebt de gebruiksvoorwaarden en het privacybeleid nog niet geaccepteerd.",

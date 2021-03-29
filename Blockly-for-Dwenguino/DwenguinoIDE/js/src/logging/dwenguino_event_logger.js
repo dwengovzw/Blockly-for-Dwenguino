@@ -1,4 +1,3 @@
-// import LoginMenu from '../user/login_menu.js'
 import ServerConfig from '../server_config.js'
 
 /**

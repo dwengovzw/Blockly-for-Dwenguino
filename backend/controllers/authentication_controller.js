@@ -1,6 +1,7 @@
 import Useritem from '../models/user_model.js';
 import RefreshTokenItem from '../models/refreshtoken_model.js';
 import ConfirmationCodeItem from '../models/confirmation_code_model.js';
+import Validator from '../utils/validator.js';
 import sgMail from '@sendgrid/mail';
 import emailService from '../utils/email.js';
 import cryptoRandomString from 'crypto-random-string';
@@ -24,29 +25,15 @@ exports.register = function(req, res){
     firstname,
     email,
     password,
+    repeated_password,
     role,
     accept_conditions,
     accept_research 
   } = req.body;
 
-  let errors = [];
-
-  if (!firstname || !email || !password || !role || !accept_conditions || !accept_research) {
-    errors.push({msg: "errRequiredFields"});
-  }
-
-  if( role !== 'student' && role !== 'teacher'){
-    errors.push({msg: "errRoleInvalid"});
-  }
-
-  if( accept_conditions !== true){
-    errors.push({msg: "errAcceptconditions"});
-  }
-
-  if( accept_research !== true){
-    errors.push({msg: "errResearchConditions"});
-  }
-
+  let errors = Validator.validateUserFields(firstname, email, password, repeated_password, role, accept_conditions, accept_research);
+ 
+  console.log(errors);
   if (errors.length > 0) {
     res.status(401).send(errors);
   } else {
@@ -461,12 +448,12 @@ exports.getPasswordResetCode = function (req, res){
  * @param {*} res 
  */
 exports.resetPassword = function (req, res){
-  const { email, password, secretCode } = req.body;
+  const { email, password, repeated_password, secretCode } = req.body;
   let db = mongoose.connection;
 
   let errors = [];
 
-  if (!email || !password || !secretCode) {
+  if (!email || !password || !repeated_password || !secretCode) {
     errors.push({ msg: "errRequiredFields" });
   }
 
