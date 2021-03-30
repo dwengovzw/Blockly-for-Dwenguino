@@ -18,7 +18,7 @@ body{
 
 .db_logo{
     box-sizing: border-box;
-    max-width: 10%;
+    width: 100px;
     display: inline-block;
     position: absolute;
     height: 100%;
@@ -32,10 +32,7 @@ body{
 
 .db_menu{
     box-sizing: border-box;
-    width: 85%;
-    left: 15%;
-    display: inline-block;
-    position: absolute;
+    margin-right: 0;
     height: 100%;
 }
 
