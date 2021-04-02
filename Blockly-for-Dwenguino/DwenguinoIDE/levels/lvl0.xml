@@ -55,10 +55,6 @@
 </category>
 <category id="catVariables" colour="90" name='Math' custom="DWB_VARIABLES">    
 </category>
-<category id="catArduino" colour="90" name="Arduino">
-    <block type="setup_loop_structure_arduino"></block>
-    </block>
-</category>
 <category id="catDwenguino" colour="315" name='Dwenguino'>
     <block type="setup_loop_structure"></block>
     <block type="dwenguino_delay">

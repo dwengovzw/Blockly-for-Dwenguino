@@ -20,7 +20,7 @@ body{
     box-sizing: border-box;
     width: 100px;
     display: inline-block;
-    position: absolute;
+    /*position: absolute;*/
     height: 100%;
 }
 
@@ -43,16 +43,19 @@ body{
 
 #switch_code_view{
     display: inline-block;
-    position: absolute;
+    /*position: absolute;
     width:150px;
     margin-top:15px;
-    font-weight: 300;
+    font-weight: 300;*/
 }
 
 #switch_hardware_view{
-    margin: 1em;
-    font-size: 1rem;
-    font-weight: 300;
+    display: inline-block;
+    /*position: absolute;
+    width: 150px;
+    margin-top: 15px;
+    font-weight: 300;*/
+
 }
 
 #copy-arduino-code{
