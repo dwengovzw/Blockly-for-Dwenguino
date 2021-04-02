@@ -454,7 +454,12 @@ let DwenguinoBlockly = {
         let xmlText = Blockly.Xml.domToText(xml);
         if (xmlText != DwenguinoBlockly.prevWorkspaceXml){
           // Get javascript for current code
-          let js = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+          let js = "";
+          try {
+            js = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+          } catch (error){
+            js = "invalid code";
+          }
           let workspaceState = {
             blocksXml: xmlText,
             blocksJsCode: js,
@@ -843,7 +848,6 @@ let DwenguinoBlockly = {
       }
   },
 
-  //TODO: remove following function: not used anywhere
     setWorkspaceBlockFromXml: function(xml){
         DwenguinoBlockly.workspace.clear();
         try {
@@ -888,9 +892,45 @@ let DwenguinoBlockly = {
 
         // If the user selects to render the code for Arduino or Dwenguino hardware, render the code in the right format again
         let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
-        hardwareViewCheckbox.addEventListener('change', function () {
-          DwenguinoBlockly.renderCode();
+        hardwareViewCheckbox.addEventListener('change', function (e) {
+          DwenguinoBlockly.interfaceStateArduino = !DwenguinoBlockly.interfaceStateArduino;
+          DwenguinoBlockly.setInterfaceToArduino(DwenguinoBlockly.interfaceStateArduino);
         });
+    },
+
+    // Strange hack because hardware_checkbox value does not change when slider changes
+    interfaceStateArduino: false, 
+    setInterfaceToArduino: function(setArduino){
+      console.log("changing to arduino: " + setArduino)
+      if (setArduino){
+        // Update interfact to only show blocks compatible with arduino, change setup loop block, disable simulator view, and show warnig for limited support
+        DwenguinoBlockly.setDifficultyLevel("_arduino");
+        DwenguinoBlockly.setWorkspaceBlockFromXml('<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure_arduino" id="j_9ZX1dGtt+%FAB!Hw%T" x="209" y="108"/></xml>')
+        if (DwenguinoBlockly.simulatorState != "off"){
+          DwenguinoBlockly.toggleSimulator();
+          $("#db_menu_item_clear").css("pointer-events", "none"); // Enable click events
+          $("#db_menu_item_run").css("pointer-events", "none"); // Enable click events
+          $("#db_menu_item_simulator").css("pointer-events", "none"); // Diable click events
+          $("#db_tutorials").css("pointer-events", "none"); // Diable click events
+          
+        }
+        $('#arduinoWarningModal .modal-header').empty();
+        $('#arduinoWarningModal .modal-header').append('<h4 class="modal-title">'+ DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarningTitle']) +'</h4>');
+        $('#arduinoWarningModal .modal-body .message').empty();
+        $('#arduinoWarningModal .modal-body .message').html('<p>' + DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarning']) + '</p>');
+        $("#arduinoWarningModal").modal('show');
+      }else{
+        // Change back to arduino blocks
+        DwenguinoBlockly.setDifficultyLevel("0");
+        DwenguinoBlockly.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>')
+        if (DwenguinoBlockly.simulatorState != "on"){
+          DwenguinoBlockly.toggleSimulator();
+        }
+        $("#db_menu_item_clear").css("pointer-events", "auto"); // Enable click events
+        $("#db_menu_item_run").css("pointer-events", "auto"); // Enable click events
+        $("#db_menu_item_simulator").css("pointer-events", "auto"); // Enable click events
+        $("#db_tutorials").css("pointer-events", "auto"); // Diable click events
+      }
     },
     
     tearDownEnvironment: function(){

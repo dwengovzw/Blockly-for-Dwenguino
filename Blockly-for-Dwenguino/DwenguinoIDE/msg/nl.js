@@ -1,6 +1,8 @@
 /* dutch translation file */
 
 var MSG = {
+  ArduinoWarningTitle: "Opgelet!",
+  ArduinoWarning: "De Arduino editeermodus heeft een beperkte functionaliteit. Je kan enkel een kleine subset van programmeerblokken gebruiken. Ook de simulator gebruiken en je code uploaden naar de hardware kan niet in deze modus. Deze modus heeft enkel als doel om het mogelijk te maken eenvoudige grafische programma's te schrijven voor de Arduino.",
   arduinoCodeCopied: "Arduino-code werd gekopieerd naar het klembord",
   title: "DwenguinoBlockly",
   blocks: "Blokken",

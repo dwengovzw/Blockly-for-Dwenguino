@@ -1,0 +1,75 @@
+<category id="catLogic" colour="0" name='Logic'>
+    <block type="controls_if"></block>
+    <block type="controls_if"><mutation else="1"/></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+</category>
+<category id="catLoops" colour="120" name="Loops">
+  <block type="controls_for">
+    <value name="FROM">
+      <block type="char_type">
+        <field name="BITMASK">0</field>
+      </block>
+    </value>
+      <value name="TO">
+      <block type="char_type">
+        <field name="BITMASK">10</field>
+      </block>
+    </value>
+    <value name="BY">
+      <block type="char_type">
+        <field name="BITMASK">1</field>
+      </block>
+    </value>
+  </block>
+  <block type="controls_whileUntil"></block>
+</category>
+<category id="catFunctions" colour="270" custom="PROCEDURE">
+    <block type="procedures_defnoreturn"></block>
+    <block type="procedures_defreturn"></block>
+    <block type="procedures_callreturn"></block>
+</category>
+<category id="catMath" colour="45" name='Math'>
+    <block type="char_type">
+        <field name="BITMASK">100</field>
+    </block>
+    <block type="char_type"></block>
+    <block type="math_arithmetic">
+        <field name="OP">ADD</field>
+    </block>
+    <block type="math_arithmetic">
+        <field name="OP">MINUS</field>
+    </block>
+    <block type="math_arithmetic">
+        <field name="OP">MULTIPLY</field>
+    </block>
+    <block type="math_arithmetic">
+        <field name="OP">DIVIDE</field>
+    </block>
+</category>
+<category id="catText" colour="225" name="Text">
+    <block type="text"></block>
+    <block type="text_join"></block>
+</category>
+<category id="catVariables" colour="90" name='Math' custom="DWB_VARIABLES">    
+</category>
+<category id="catArduino" colour="90" name="Arduino">
+    <block type="setup_loop_structure_arduino"></block>
+    <block type="dwenguino_delay">
+        <value name="DELAY_TIME">
+            <block type="char_type">
+                <field name="BITMASK">100</field>
+            </block>
+        </value>
+    </block>
+    <block type='inout_digital_read'></block>
+    <block type='inout_digital_write'></block>
+    <block type="dwenguino_highlow"></block>
+</category>
+<sep></sep>
+<category id="catComments" colour="200" name='Comments'>
+    <block type="line_comment">
+    </block>
+</category>
