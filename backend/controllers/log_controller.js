@@ -89,4 +89,63 @@ function processEvent(data){
   })
 }
 
+exports.getTotalNumberOfLogItems = function(req, res) {
+  let db = mongoose.connection;
+
+  db.collection('loggings').countDocuments({})
+  .then(function(count){
+      res.status(200).send({ "totalLogItems": count });
+  });
+}
+
+exports.getTotoalNumberOfRecentLogItems = function(req, res) {
+  let db = mongoose.connection;
+
+  let query = {
+    timestamp: { // 5 minutes ago (from now)
+        $gt: new Date(Date.now() - 1000 * 60 * 5)
+    }
+  }
+
+  db.collection('loggings').countDocuments(query)
+  .then(function(count){
+    res.status(200).send({ "totalLogItems": count });
+  });
+}
+
+exports.getRecentLogItems = function(req, res) {
+  let db = mongoose.connection;
+ 
+  let query = {
+    timestamp: { // 5 minutes ago (from now)
+        $gt: new Date(Date.now() - 1000 * 60 * 5)
+    }
+  }
+
+  db.collection('loggings').find(query).toArray()
+  .then(function(logItems){
+    res.status(200).send(logItems);
+  });
+}
+
+exports.getRecent100LogItems = function(req, res) {
+  let db = mongoose.connection;
+
+  db.collection('loggings').find({}, {sort: [['timestamp', -1]], limit: 100}).toArray()
+  .then(function(logItems){
+
+    res.status(200).send(logItems);
+  });
+}
+
+exports.exportLogItems = function(req, res) {
+  let db = mongoose.connection;
+
+  db.collection('loggings').find({}, {}).toArray()
+  .then(function(logItems){
+
+    res.status(200).send(logItems);
+  });
+}
+
 export default exports;

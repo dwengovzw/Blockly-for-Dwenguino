@@ -1,46 +1,25 @@
-import Validator from './validator.js'
+import { Validator } from './validator.js'
 import ServerConfig from '../server_config.js'
-import User from './user.js'
+import { User } from './user.js'
+import { LoggingModal } from './logging_modal.js'
+import { UserSettingsModal } from './user_settings_modal.js'
 
 /**
  * This class builds and displays the logging menu on the screen.
  * It is used by the DwenguinoEventLogger to gather data about the user.
  * 
  */
-class LoginMenu{
-    currentlySelectedIcons= ['0','0','0','0'];
-    SIZE = 4;
-    icons = [
-        {id: 1, name: MSG.logging['person'], html: '<span class="glyphicon icon-user"></span>'},
-        {id: 2, name: MSG.logging['dog'], html: '<span class="glyphicon icon-dog"></span>'},
-        {id: 3, name: MSG.logging['car'], html: '<span class="glyphicon icon-car"></span>'},
-        {id: 4, name: MSG.logging['camera'], html: '<span class="glyphicon icon-camera"></span>'},
-        {id: 5, name: MSG.logging['heart'], html: '<span class="glyphicon icon-heart"></span>'},
-        {id: 6, name: MSG.logging['plane'], html: '<span class="glyphicon icon-plane"></span>'},
-        {id: 7, name: MSG.logging['house'], html: '<span class="glyphicon icon-house"></span>'},
-        {id: 8, name: MSG.logging['umbrella'], html: '<span class="glyphicon icon-umbrella"></span>'},
-        {id: 9, name: MSG.logging['star'], html: '<span class="glyphicon icon-star"></span>'},
-        {id: 10, name: MSG.logging['money'], html: '<span class="glyphicon icon-money"></span>'},
-        {id: 11, name: MSG.logging['gift'], html: '<span class="glyphicon icon-gift"></span>'},
-        {id: 12, name: MSG.logging['keys'], html: '<span class="glyphicon icon-keys"></span>'},
-        {id: 13, name: MSG.logging['music'], html: '<span class="glyphicon icon-music"></span>'},
-        {id: 14, name: MSG.logging['snowflake'], html: '<span class="glyphicon icon-snowflake"></span>'},
-        {id: 15, name: MSG.logging['fire'], html: '<span class="glyphicon icon-fire"></span>'},
-        {id: 16, name: MSG.logging['envelope'], html: '<span class="glyphicon icon-envelope"></span>'}
-    ];
-    schools = null;
-    validator = null;
-    eventLogger = null;
-    constructor(eventLogger){
-        this.validator = new Validator(); 
-        this.eventLogger = eventLogger;
+class LoginMenu {
+
+    constructor(){
+        this._userSettingsModal = new UserSettingsModal(this);
     }
 
     /**
      * Show the general user menu on the screen
      */
     createInitialMenu(){
-        this.createLoggingModalDialogWithoutFooter(MSG.logging['login']);
+        LoggingModal.createLoggingModalDialogWithoutFooter(MSG.logging['login']);
 
         let userInfo = 'user_info';
         let authenticationMenu = 'authentication_menu';
@@ -51,7 +30,7 @@ class LoginMenu{
         this.addUserInfoPanel(userInfo);
         this.addAuthenticationPanel(authenticationMenu);
 
-        this.showDialog();
+        LoggingModal.showDialog();
     }
 
     /**
@@ -66,7 +45,7 @@ class LoginMenu{
         ).done(function(data){
             // The user is still logged in
             let firstname = data.firstname;
-            $('#' + userInfo).append('<p>Hello ' + firstname + '</p>');
+            $('#' + userInfo).append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['hello']) + firstname + '</p>');
 
         }).fail(function(response, status)  {
             if(response.status == 403){
@@ -82,7 +61,7 @@ class LoginMenu{
                     ).done(function(data){
                         // The user is still logged in
                         let firstname = data.firstname;
-                        $('#' + userInfo).append('<p>Hello ' + firstname + '</p>');
+                        $('#' + userInfo).append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['hello']) + firstname + '</p>');
             
                     }).fail(function(response, status)  {
                         console.log(status, response);
@@ -109,7 +88,7 @@ class LoginMenu{
             $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
             $("#authentication_settings").append('<div id="authentication_settings_img"></div>');
             $("#authentication_settings").click(function(){
-                self.showUserSettings();
+                self._userSettingsModal.showUserSettings();
             });
 
             $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
@@ -136,7 +115,7 @@ class LoginMenu{
                         $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
                         $("#authentication_settings").append('<div id="authentication_settings_img"></div>');
                         $("#authentication_settings").click(function(){
-                            self.showUserSettings();
+                            self._userSettingsModal.showUserSettings();
                         });
                         
                         $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
@@ -209,7 +188,7 @@ class LoginMenu{
      */
     createLoginMenu(){
         var self = this;
-        this.createLoggingModalDialog(MSG.logging['login']);
+        LoggingModal.createLoggingModalDialog(MSG.logging['login']);
 
         $('#loggingModalBody').append('<form id="loginUser"></form>');
 
@@ -219,7 +198,7 @@ class LoginMenu{
 
         $('#loginUser').append('<div id="inputPassword" class="ui-widget row mb-4"></div>');
         $('#inputPassword').append('<label for="passwordTag" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword').append('<input id="passwordTag" name="passwordTag" type="password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#inputPassword').append('<input id="passwordTag" name="passwordTag" type="password" class="col-md-8" maxLength="64" placeholder="'+ MSG.logging['enterPassword']+'">');
 
         $('#loggingModalBody').append('<button id="forgot_password_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['forgotPassword']+'</button>');
         //this.createIconModule();
@@ -228,7 +207,7 @@ class LoginMenu{
         $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
 
-        this.showDialog();
+        LoggingModal.showDialog();
 
         // this.makeIconsResponsive();
 
@@ -251,12 +230,12 @@ class LoginMenu{
             let email = $( "input[name=emailTag]").val();
             let password = $( "input[name=passwordTag]").val();
 
-            errors.push(self.validator.validateEmail(email));
-            errors.push(self.validator.validatePassword(password));
+            errors.push(Validator.validateEmail(email));
+            errors.push(Validator.validatePassword(password));
             //errors.push(this.validator.validateId(this.currentlySelectedIcons));
         
-            if(self.validator.hasErrors(errors)){
-                self.showErrors(errors);
+            if(Validator.hasErrors(errors)){
+                LoggingModal.showErrors(errors);
             } else {
                 self.login();
             }
@@ -265,7 +244,7 @@ class LoginMenu{
 
     forgotPassword(){
         var self = this;
-        this.createLoggingModalDialog(MSG.logging['forgotPassword']);
+        LoggingModal.createLoggingModalDialog(MSG.logging['forgotPassword']);
 
         $('#loggingModalBody').append('<form id="forgotPassword"></form>');
 
@@ -276,7 +255,7 @@ class LoginMenu{
         $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
 
-        this.showDialog();
+        LoggingModal.showDialog();
 
         $("#back_modal_dialog_button").click(function(){
             self.createLoginMenu();
@@ -286,10 +265,10 @@ class LoginMenu{
             let errors = [];
             let email = $( "input[name=emailTag]").val();
     
-            errors.push(self.validator.validateEmail(email));
+            errors.push(Validator.validateEmail(email));
 
-            if(self.validator.hasErrors(errors)){
-                self.showErrors(errors);
+            if(Validator.hasErrors(errors)){
+                LoggingModal.showErrors(errors);
             } else {
                 self.sendPasswordResetCode();
             }
@@ -328,14 +307,14 @@ class LoginMenu{
             })
     
             $("#submit_modal_dialog_button").click(function(){
-                self.removeDialog();
+                LoggingModal.removeDialog();
             });
         });
     }
 
     showResetPasswordScreen(){
         var self = this;
-        this.createLoggingModalDialog(MSG.logging['resetPassword']);
+        LoggingModal.createLoggingModalDialog(MSG.logging['resetPassword']);
         $('#loggingModalBody').append('<form id="resetPassword"></form>');
 
         $('#resetPassword').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
@@ -348,17 +327,16 @@ class LoginMenu{
 
         $('#resetPassword').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
         $('#inputPassword1').append('<label for="passwordTag1" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" maxLength="64" placeholder="'+ MSG.logging['enterPassword']+'">');
 
         $('#resetPassword').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
         $('#inputPassword2').append('<label for="passwordTag2" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" maxLength="64" placeholder="'+ MSG.logging['enterPassword']+'">');
  
         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
 
-        this.showDialog();
+        LoggingModal.showDialog();
 
-        // Log in.
         $("#submit_modal_dialog_button").click(function(){
             let errors = [];
 
@@ -367,15 +345,15 @@ class LoginMenu{
             let password = $( "input[name=passwordTag1]").val();
             let password_repeated = $( "input[name=passwordTag2]").val();
 
-            errors.push(self.validator.validateEmail(email));
-            errors.push(self.validator.validateSecretCode(secretCode));
-            errors.push(self.validator.validatePasswords(password, password_repeated));
-            errors.push(self.validator.validatePassword(password));
-            errors.push(self.validator.validatePassword(password_repeated));
+            errors.push(Validator.validateEmail(email));
+            errors.push(Validator.validateSecretCode(secretCode));
+            errors.push(Validator.validatePasswords(password, password_repeated));
+            errors.push(Validator.validatePassword(password, email));
+            errors.push(Validator.validatePassword(password_repeated, email));
             
         
-            if(self.validator.hasErrors(errors)){
-                self.showErrors(errors);
+            if(Validator.hasErrors(errors)){
+                LoggingModal.showErrors(errors);
             } else {
                 self.resetPassword();
             }
@@ -383,8 +361,6 @@ class LoginMenu{
     }
 
     resetPassword(){
-        var self = this;
-       
         let email = $( "input[name=emailTag]").val();
         let secretCode = $( "input[name=secretCodeTag]").val()
         let password = $( "input[name=passwordTag1]").val();
@@ -394,7 +370,7 @@ class LoginMenu{
             "email": email,
             "secretCode": secretCode,
             "password": password,
-            "password_repeated": password_repeated
+            "repeated_password": password_repeated
         };
         $.ajax({
             type: "POST",
@@ -404,7 +380,7 @@ class LoginMenu{
             },
             data: JSON.stringify(serverSubmission)
         }).done(function(data){
-            self.removeDialog();
+            LoggingModal.removeDialog();
         }).fail(function(response, status)  {
             console.log('Failed to register:', status);
             console.log(response);
@@ -412,8 +388,6 @@ class LoginMenu{
     }
 
     login(){
-        var self = this;
-        
         let email = $( "input[name=emailTag]").val();
         let password = $( "input[name=passwordTag]").val();
 
@@ -430,17 +404,17 @@ class LoginMenu{
             data: JSON.stringify(serverSubmission),
         }).done(function(data){
             console.log(data);
-            self.resetSelectedIcons();
-            self.removeDialog();
+            //self.resetSelectedIcons();
+            LoggingModal.removeDialog();
         }).fail(function(response, status)  {
             console.warn('Failed to log in:', status);
-            self.resetSelectedIcons();
+            //self.resetSelectedIcons();
             var errors = [];
 
             errors = response.responseJSON.error.map(function (error) {
                 return { message: '<a id="resendLink" href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', [error]) + '</a>'};
             });
-            self.showErrors(errors);
+            LoggingModal.showErrors(errors);
 
             $('#resendLink').click(function(){
                 $.ajax({
@@ -451,72 +425,30 @@ class LoginMenu{
                     },
                     data: JSON.stringify(serverSubmission),
                 }).done(function(data){
-                    let confirmation = [{ message: 'The activation link has been sent.' }];
+                    let confirmation = [{ message: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['verificationSentTo']) }];
 
-                    self.showErrors(confirmation);
+                    LoggingModal.showErrors(confirmation);
                 }).fail(function(response, status)  {
                     console.log(response);
                 });
             });
-            // TODO
         });
     }
 
     logout(){
-        var self = this;
         $.ajax({
             type: "POST",
             url: ServerConfig.getServerUrl() + "/logout"
         }).done(function(data){
-            self.removeDialog();
+            LoggingModal.removeDialog();
         }).fail(function(response, status) {
-            self.removeDialog();
+            LoggingModal.removeDialog();
         })
-    }
-
-    showUserSettings(){
-        var self = this;
-        $.ajax({
-            type: "GET",
-            url: ServerConfig.getServerUrl() + "/user"}
-        ).done(function(data){
-            self.createLoggingModalDialog(MSG.logging['settings']);
-
-            $('#loggingModalBody').append('<form id="loginUser"></form>');
-
-            $('#loggingModalBody').append('<div id="nameRow" class="ui-widget row mb-4"></div>');
-            $('#nameRow').append('<div class="col-md-3"><p>'+ MSG.logging['firstname'] +'</p></div>');
-            $('#nameRow').append('<div class="col-md-8"><p>'+ data.firstname +'</p></div>');
-
-            $('#loggingModalBody').append('<div id="emailRow" class="ui-widget row mb-4"></div>');
-            $('#emailRow').append('<div class="col-md-3"><p>'+ MSG.logging['email'] +'</p></div>');
-            $('#emailRow').append('<div class="col-md-8"><p>'+ data.email +'</p></div>');
-
-            $('#loggingModalBody').append('<div id="roleRow" class="ui-widget row mb-4"></div>');
-            $('#roleRow').append('<div class="col-md-3"><p>'+ MSG.logging['role'] +'</p></div>');
-            $('#roleRow').append('<div class="col-md-8"><p>'+ data.role +'</p></div>');
-
-            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
-            $("#back_modal_dialog_button").click(function(){
-                self.createInitialMenu();
-            })
-            self.showDialog();
-        }).fail(function(response, status)  {
-            self.createLoggingModalDialog(MSG.logging['settings']);
-            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
-            $("#back_modal_dialog_button").click(function(){
-                self.createInitialMenu();
-            })
-            self.showDialog();
-        });
-        
-        
-        
     }
 
     createUserMenu(){
         var self = this;
-        this.createLoggingModalDialog(MSG.logging['newuser']);
+        LoggingModal.createLoggingModalDialog(MSG.logging['newuser']);
 
         $('#loggingModalBody').append('<form id="registerUser"></form>');
 
@@ -541,18 +473,18 @@ class LoginMenu{
 
         $('#loggingModalFooter').append('<button id="continue_logging_modal" type="button" class="btn btn-default">'+MSG.logging['continue']+'</button>');
 
-        this.showDialog();
+        LoggingModal.showDialog();
 
         $('#continue_logging_modal').click(function(){
             let errors = [];
             let acceptConditions = $("input[name=acceptConditionsCheckbox]");
             let acceptResearch = $("input[name=acceptResearchCheckbox]");
-            errors.push(self.validator.validateAcceptConditions(acceptConditions));
-            errors.push(self.validator.validateResearchConditions(acceptResearch));
-            if(self.validator.hasErrors(errors)){
-                self.showErrors(errors);
+            errors.push(Validator.validateAcceptConditions(acceptConditions));
+            errors.push(Validator.validateResearchConditions(acceptResearch));
+            if(Validator.hasErrors(errors)){
+                LoggingModal.showErrors(errors);
             } else {
-                self.showErrors([]);
+                LoggingModal.showErrors([]);
                 $('#registerUserConditions').hide();
                 $('#continue_logging_modal').remove();
                 self.showRegistrationForm();
@@ -576,11 +508,11 @@ class LoginMenu{
          // PASSWORDS
          $('#registerUser').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
          $('#inputPassword1').append('<label for="passwordTag1" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['password'])+'</label>');
-         $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-7" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterPassword'])+'">');
+         $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-7" maxLength="64" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterPassword'])+'">');
  
          $('#registerUser').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
          $('#inputPassword2').append('<label for="passwordTag2" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['repeatedPassword'])+'</label>');
-         $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-7" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterRepeatedPassword'])+'">');
+         $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-7" maxLength="64" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterRepeatedPassword'])+'">');
          //this.createIconModule();
  
          // LANGUAGE PREFERENCE
@@ -635,18 +567,18 @@ class LoginMenu{
              let password = $( "input[name=passwordTag1]").val();
              let password_repeated = $( "input[name=passwordTag2]").val();
  
-             errors.push(self.validator.validateAcceptConditions(acceptConditions));
-             errors.push(self.validator.validateResearchConditions(acceptResearch));
-             errors.push(self.validator.validateFirstname(firstname));
-             errors.push(self.validator.validateEmail(email));
-             errors.push(self.validator.validatePasswords(password, password_repeated));
-             errors.push(self.validator.validatePassword(password));
-             errors.push(self.validator.validatePassword(password_repeated));
+             errors.push(Validator.validateAcceptConditions(acceptConditions));
+             errors.push(Validator.validateResearchConditions(acceptResearch));
+             errors.push(Validator.validateFirstname(firstname));
+             errors.push(Validator.validateEmail(email));
+             errors.push(Validator.validatePasswords(password, password_repeated));
+             errors.push(Validator.validatePassword(password, email));
+             errors.push(Validator.validatePassword(password_repeated, email));
              
-             if(self.validator.hasErrors(errors)){
-                 self.showErrors(errors);
+             if(Validator.hasErrors(errors)){
+                 LoggingModal.showErrors(errors);
              } else {
-                 self.showErrors([]);
+                 LoggingModal.showErrors([]);
                  self.registerUser();
              }
          });
@@ -671,7 +603,7 @@ class LoginMenu{
             "firstname": firstname,
             "email": email,
             "password": password,
-            "password_repeated": password_repeated,
+            "repeated_password": password_repeated,
             //"language": language,
             "role": role,
             "accept_conditions": acceptConditions,
@@ -686,260 +618,207 @@ class LoginMenu{
             data: JSON.stringify(serverSubmission),
         }).done(function(data){
             //self.resetSelectedIcons();
-            self.removeDialog();
+            LoggingModal.removeDialog();
             self.showVerificationScreen();
             //self.showSettingsMenu();
         }).fail(function(response, status)  {
             console.log('Failed to register:', status);
             if(response.status == 401 && response.responseJSON.error == 'userAlreadyExists'){
-                self.showErrors([{message: DwenguinoBlocklyLanguageSettings.translateFrom('logging',['userAlreadyExists'])}]);
+                LoggingModal.showErrors([{message: DwenguinoBlocklyLanguageSettings.translateFrom('logging',['userAlreadyExists'])}]);
             }
         });
     }
 
     showVerificationScreen(){
-        this.createLoggingModalDialogWithoutFooter(MSG.logging['verification']);
+        LoggingModal.createLoggingModalDialogWithoutFooter(MSG.logging['verification']);
 
         $('#loggingModalBody').append('<p id="loggingModalBody1"></p>')
         $('#loggingModalBody1').text(MSG.logging['verificationSentTo']);
 
-        this.showDialog();
+        LoggingModal.showDialog();
     }
 
 
     /**
      * Show the menu on the screen
      */
-    showSettingsMenu(){
-        var self = this;
-        $.ajax({
-            type: "GET",
-            url: ServerConfig.getServerUrl() + "/schools/"}
-        ).done(function(data){
-            self.schools = data;
-            self.createLoggingModalDialog(MSG.logging['setup']);
+    // showSettingsMenu(){
+    //     var self = this;
+    //     $.ajax({
+    //         type: "GET",
+    //         url: ServerConfig.getServerUrl() + "/schools/"}
+    //     ).done(function(data){
+    //         self.schools = data;
+    //         self.createLoggingModalDialog(MSG.logging['setup']);
 
-            $('#loggingModalBody').append('<div id="inputSchool" class="ui-widget row mb-4">');
-            $('#inputSchool').append('<label for="myschooltags" class="col-md-2">'+MSG.logging['school']+'</label>');
-            $('#inputSchool').append('<input id="myschooltags" name="myschooltags" class="form-control col-md-8" placeholder="'+MSG.logging['selectSchool']+'">');
+    //         $('#loggingModalBody').append('<div id="inputSchool" class="ui-widget row mb-4">');
+    //         $('#inputSchool').append('<label for="myschooltags" class="col-md-2">'+MSG.logging['school']+'</label>');
+    //         $('#inputSchool').append('<input id="myschooltags" name="myschooltags" class="form-control col-md-8" placeholder="'+MSG.logging['selectSchool']+'">');
 
-            $('#loggingModalBody').append('<div id="inputAge" class="ui-widget row mb-4"></div>');
-            $('#inputAge').append('<label for="birth" class="col-md-3">'+MSG.logging['birth']+'</label>');
-            $('#inputAge').append('<input type="date" class="form-control col-md-7" id="birth">');
+    //         $('#loggingModalBody').append('<div id="inputAge" class="ui-widget row mb-4"></div>');
+    //         $('#inputAge').append('<label for="birth" class="col-md-3">'+MSG.logging['birth']+'</label>');
+    //         $('#inputAge').append('<input type="date" class="form-control col-md-7" id="birth">');
 
-            $('#loggingModalBody').append('<div id="inputGender" class="ui-widget row mb-4"></div>');
-            $('#inputGender').append('<label for="birth" class="col-md-3">'+MSG.logging['gender']+'</label>');
-            $('#inputGender').append('<div id="genderOptions" class="col-md-7">');
+    //         $('#loggingModalBody').append('<div id="inputGender" class="ui-widget row mb-4"></div>');
+    //         $('#inputGender').append('<label for="birth" class="col-md-3">'+MSG.logging['gender']+'</label>');
+    //         $('#inputGender').append('<div id="genderOptions" class="col-md-7">');
 
-            $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="f">'+MSG.logging['gender1']+'</label>');
-            $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="m">'+MSG.logging['gender2']+'</label>');
-            $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="x">'+MSG.logging['gender3']+'</label>');
-            $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="na">'+MSG.logging['gender4']+'</label>');
+    //         $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="f">'+MSG.logging['gender1']+'</label>');
+    //         $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="m">'+MSG.logging['gender2']+'</label>');
+    //         $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="x">'+MSG.logging['gender3']+'</label>');
+    //         $('#genderOptions').append('<label class="radio-inline"><input type="radio" name="genderRadio" value="na">'+MSG.logging['gender4']+'</label>');
 
-            // Set date to today
-            var db_now = new Date();
-            var db_day = ("0" + db_now.getDate()).slice(-2);
-            var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
-            var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
-            $('#birth').val(db_today);
+    //         // Set date to today
+    //         var db_now = new Date();
+    //         var db_day = ("0" + db_now.getDate()).slice(-2);
+    //         var db_month = ("0" + (db_now.getMonth() + 1)).slice(-2);
+    //         var db_today = db_now.getFullYear()+"-"+(db_month)+"-"+(db_day) ;
+    //         $('#birth').val(db_today);
 
-            $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+    //         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
 
-            $("#loggingModal").modal('show');
+    //         $("#loggingModal").modal('show');
 
-            // Schools autocomplete
-            self.schoolsAutocomplete = new autoComplete({
-                selector: 'input[name="myschooltags"]',
-                minChars: 2,
-                source: function(term, suggest){
-                    term = term.toLowerCase();
-                    var choices = data;
-                    var matches = [];
-                    for (let i=0; i<choices.length; i++)
-                        if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
-                    suggest(matches);
-                }
-            });
+    //         // Schools autocomplete
+    //         self.schoolsAutocomplete = new autoComplete({
+    //             selector: 'input[name="myschooltags"]',
+    //             minChars: 2,
+    //             source: function(term, suggest){
+    //                 term = term.toLowerCase();
+    //                 var choices = data;
+    //                 var matches = [];
+    //                 for (let i=0; i<choices.length; i++)
+    //                     if (~choices[i]['naam'].toLowerCase().indexOf(term)) matches.push(choices[i]['naam']+ ", " + choices[i]['gemeente']);
+    //                 suggest(matches);
+    //             }
+    //         });
 
-            $("#submit_modal_dialog_button").click(function(){
+    //         $("#submit_modal_dialog_button").click(function(){
 
-                let errors = [];
-                let school = $( "input[name=myschooltags]" ).val();
-                let dateOfBirth = $("#birth").val();
-                let gender = $("input[name=genderRadio]:checked").val();
+    //             let errors = [];
+    //             let school = $( "input[name=myschooltags]" ).val();
+    //             let dateOfBirth = $("#birth").val();
+    //             let gender = $("input[name=genderRadio]:checked").val();
 
-                // TODO validate settings on server side
-                errors.push(self.validator.validateSchool(school));
-                //errors.push(self.validator.validateAgeGroup(ageGroup));
-                errors.push(self.validator.validateGender(gender));
+    //             // TODO validate settings on server side
+    //             errors.push(Validator.validateSchool(school));
+    //             //errors.push(Validator.validateAgeGroup(ageGroup));
+    //             errors.push(Validator.validateGender(gender));
                 
-                if(self.validator.hasErrors(errors)){
-                    self.showErrors(errors);
-                } else {
-                    self.eventLogger.setSchool(school);
-                    self.eventLogger.setDateOfBirth(dateOfBirth);
-                    self.eventLogger.setGender(gender);
+    //             if(Validator.hasErrors(errors)){
+    //                 LoggingModal.showErrors(errors);
+    //             } else {
+    //                 self.eventLogger.setSchool(school);
+    //                 self.eventLogger.setDateOfBirth(dateOfBirth);
+    //                 self.eventLogger.setGender(gender);
 
-                    let serverSubmission = {
-                        "school": school,
-                        "dateOfBirth": dateOfBirth,
-                        "gender": gender
-                    };
-                    $.ajax({
-                        type: "POST",
-                        url: ServerConfig.getServerUrl() + "/user/update",
-                        headers: {
-                            "Content-Type": "application/json"
-                        },
-                        data: JSON.stringify(serverSubmission),
-                    }).done(function(data){
-                        self.removeDialog();
-                    }).fail(function(response, status)  {
-                        console.warn('Failed to log in:', status);
+    //                 let serverSubmission = {
+    //                     "school": school,
+    //                     "dateOfBirth": dateOfBirth,
+    //                     "gender": gender
+    //                 };
+    //                 $.ajax({
+    //                     type: "POST",
+    //                     url: ServerConfig.getServerUrl() + "/user/update",
+    //                     headers: {
+    //                         "Content-Type": "application/json"
+    //                     },
+    //                     data: JSON.stringify(serverSubmission),
+    //                 }).done(function(data){
+    //                     self.removeDialog();
+    //                 }).fail(function(response, status)  {
+    //                     console.warn('Failed to log in:', status);
 
-                    });
-                }
-            });
+    //                 });
+    //             }
+    //         });
 
-        }).fail(function(response, status)  {
-            console.warn('Failed to fetch schools:', status);
-        });
-    }
+    //     }).fail(function(response, status)  {
+    //         console.warn('Failed to fetch schools:', status);
+    //     });
+    // }
 
-    showDialog(){
-        $("#loggingModal").modal('show');
-    }
-    
-    removeDialog(){
-        $('div').remove('#loggingModal');
-        $('.modal-backdrop').remove();
-    }
+    // /**
+    //  * Graphical password grid
+    //  */
 
-    createLoggingModalDialog(headerTitle){
-        // Make sure there is no duplicate logging menu
-        this.removeDialog();
-    
-        $('#db_body').append('<div id="loggingModal" class="modal fade" role="dialog"></div>');
-        $('#loggingModal').append('<div id="loggingModalDialog" class="modal-dialog"></div>');
-    
-        $('#loggingModalDialog').append('<div id="loggingModalContent" class="modal-content"></div>');
-    
-        $('#loggingModalContent').append('<div id="loggingModalHeader" class="modal-header"></div>');
-        $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
-        $('#loggingModalContent').append('<div id="loggingModalFooter" class="modal-footer"></div>');
-    
-        $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-    }
+    // /**
+    //  * Create the module and add the graphical password grid
+    //  */
+    // createIconModule(){
+    //     $('#loggingModalBody').append('<div class="row"><div class="col-md-12 mt-4"><b>'+MSG.logging['choosePassword']+'</b></div></div>');
+    //     $('#loggingModalBody').append('<div class="row"><div class="col-md-3 mt-4 mb-4">'+MSG.logging['currentlySelected']+'</div><div class="col-md-8 mt-4 mb-4"><div id="currentlySelected" class="row"></div></div>');
 
-    createLoggingModalDialogWithoutFooter(headerTitle){
-        // Make sure there is no duplicate logging menu
-        this.removeDialog();
-    
-        $('#db_body').append('<div id="loggingModal" class="modal fade" role="dialog"></div>');
-        $('#loggingModal').append('<div id="loggingModalDialog" class="modal-dialog"></div>');
-    
-        $('#loggingModalDialog').append('<div id="loggingModalContent" class="modal-content"></div>');
-    
-        $('#loggingModalContent').append('<div id="loggingModalHeader" class="modal-header"></div>');
-        $('#loggingModalContent').append('<div id="loggingModalBody" class="modal-body"></div>');
-    
-        $('#loggingModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
-        $('#loggingModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-    }
+    //     $('#currentlySelected').append('<div id="currentlySelected0" class="col-2"></div>');
+    //     $('#currentlySelected').append('<div id="currentlySelected1" class="col-2"></div>');
+    //     $('#currentlySelected').append('<div id="currentlySelected2" class="col-2"></div>');
+    //     $('#currentlySelected').append('<div id="currentlySelected3" class="col-2"></div>');
 
-    showErrors(errors){
-        $('div').remove('#loggingModalErrors');
-        $('#loggingModalBody').append('<div id="loggingModalErrors" class="mt-4"></div>');
-        var arrayLength = errors.length;
-        for (var i = 0; i < arrayLength; i++) {
-            if(errors[i] != null){
-                $('#loggingModalErrors').append('<p>' + errors[i].message + '</p>');
-            }
-        }
-    }
+    //     this.createIconGrid();
+    // }
 
-    /**
-     * Graphical password grid
-     */
+    // /**
+    //  * Make the icons of the graphical password grid responsive to the click event
+    //  */
+    // makeIconsResponsive(){
+    //     var self = this;
+    //     for(let i=1; i<5; i++){
+    //         for(let j=1; j<5; j++){
+    //             $("#r" + i +"c" + j).click(function(){
+    //                 self.addIconToId(i,j);
+    //             });    
+    //         }
+    //     }
+    // }
 
-    /**
-     * Create the module and add the graphical password grid
-     */
-    createIconModule(){
-        $('#loggingModalBody').append('<div class="row"><div class="col-md-12 mt-4"><b>'+MSG.logging['choosePassword']+'</b></div></div>');
-        $('#loggingModalBody').append('<div class="row"><div class="col-md-3 mt-4 mb-4">'+MSG.logging['currentlySelected']+'</div><div class="col-md-8 mt-4 mb-4"><div id="currentlySelected" class="row"></div></div>');
+    // /**
+    //  * Create the graphical password grid within the modal dialog body.
+    //  * The grid is a 4x4 matrix.
+    //  */
+    // createIconGrid(){
+    //     $('#loggingModalBody').append('<div id="inputIcons"></div>');
 
-        $('#currentlySelected').append('<div id="currentlySelected0" class="col-2"></div>');
-        $('#currentlySelected').append('<div id="currentlySelected1" class="col-2"></div>');
-        $('#currentlySelected').append('<div id="currentlySelected2" class="col-2"></div>');
-        $('#currentlySelected').append('<div id="currentlySelected3" class="col-2"></div>');
+    //     $('#inputIcons').append('<div id="row1" class="ui-widget row ml-1"></div>');
+    //     $('#inputIcons').append('<div id="row2" class="ui-widget row ml-1"></div>');
+    //     $('#inputIcons').append('<div id="row3" class="ui-widget row ml-1"></div>');
+    //     $('#inputIcons').append('<div id="row4" class="ui-widget row ml-1"></div>');
 
-        this.createIconGrid();
-    }
+    //     for (let i = 1; i < 5; i++) {
+    //         for(let j = 1; j < 5; j++){
+    //             $("#row"+i).append('<div id="r'+i+'c'+j+'" class="col-md-2 authentication_item mr-1 mb-1"></div>');
+    //             var n = ((i-1)*4)+j;
+    //             var icon = this.icons[n-1];
+    //             $("#r"+i+"c"+j).append('<div class="category_tag">'+ icon.name + '</div>');
+    //             $("#r"+i+"c"+j).append('<div id="school_user_img">' + icon.html + '</div>');
+    //         }
+    //     }
+    // }
 
-    /**
-     * Make the icons of the graphical password grid responsive to the click event
-     */
-    makeIconsResponsive(){
-        var self = this;
-        for(let i=1; i<5; i++){
-            for(let j=1; j<5; j++){
-                $("#r" + i +"c" + j).click(function(){
-                    self.addIconToId(i,j);
-                });    
-            }
-        }
-    }
-
-    /**
-     * Create the graphical password grid within the modal dialog body.
-     * The grid is a 4x4 matrix.
-     */
-    createIconGrid(){
-        $('#loggingModalBody').append('<div id="inputIcons"></div>');
-
-        $('#inputIcons').append('<div id="row1" class="ui-widget row ml-1"></div>');
-        $('#inputIcons').append('<div id="row2" class="ui-widget row ml-1"></div>');
-        $('#inputIcons').append('<div id="row3" class="ui-widget row ml-1"></div>');
-        $('#inputIcons').append('<div id="row4" class="ui-widget row ml-1"></div>');
-
-        for (let i = 1; i < 5; i++) {
-            for(let j = 1; j < 5; j++){
-                $("#row"+i).append('<div id="r'+i+'c'+j+'" class="col-md-2 authentication_item mr-1 mb-1"></div>');
-                var n = ((i-1)*4)+j;
-                var icon = this.icons[n-1];
-                $("#r"+i+"c"+j).append('<div class="category_tag">'+ icon.name + '</div>');
-                $("#r"+i+"c"+j).append('<div id="school_user_img">' + icon.html + '</div>');
-            }
-        }
-    }
-
-    /**
-     * Reset the icons that were selected by the user.
-     */
-    resetSelectedIcons(){
-        for(let k = 0; k < 4; k++){
-            this.currentlySelectedIcons[k] = '0';
-            $('#currentlySelected'+k).html("");
-        }
-    }
+    // /**
+    //  * Reset the icons that were selected by the user.
+    //  */
+    // resetSelectedIcons(){
+    //     for(let k = 0; k < 4; k++){
+    //         this.currentlySelectedIcons[k] = '0';
+    //         $('#currentlySelected'+k).html("");
+    //     }
+    // }
 
 
-    /**
-     * Add an icon at position i j to the graphical password grid.
-     */
-    addIconToId(i,j){
-        for(let k = 0; k < 4; k++){
-            if(this.currentlySelectedIcons[k] == '0'){
-                let n = ((i-1)*4)+j;
-                let icon = this.icons[n-1];
-                this.currentlySelectedIcons[k] = JSON.stringify(icon.id);
-                $('#currentlySelected'+k).html(icon.name + '<p>' + icon.html + '</p>');
-                break;
-            }
-        }
-    }
+    // /**
+    //  * Add an icon at position i j to the graphical password grid.
+    //  */
+    // addIconToId(i,j){
+    //     for(let k = 0; k < 4; k++){
+    //         if(this.currentlySelectedIcons[k] == '0'){
+    //             let n = ((i-1)*4)+j;
+    //             let icon = this.icons[n-1];
+    //             this.currentlySelectedIcons[k] = JSON.stringify(icon.id);
+    //             $('#currentlySelected'+k).html(icon.name + '<p>' + icon.html + '</p>');
+    //             break;
+    //         }
+    //     }
+    // }
 }
 
 export default LoginMenu;

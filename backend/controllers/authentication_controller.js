@@ -1,6 +1,7 @@
 import Useritem from '../models/user_model.js';
 import RefreshTokenItem from '../models/refreshtoken_model.js';
 import ConfirmationCodeItem from '../models/confirmation_code_model.js';
+import Validator from '../utils/validator.js';
 import sgMail from '@sendgrid/mail';
 import emailService from '../utils/email.js';
 import cryptoRandomString from 'crypto-random-string';
@@ -24,29 +25,15 @@ exports.register = function(req, res){
     firstname,
     email,
     password,
+    repeated_password,
     role,
     accept_conditions,
     accept_research 
   } = req.body;
 
-  let errors = [];
-
-  if (!firstname || !email || !password || !role || !accept_conditions || !accept_research) {
-    errors.push({msg: "errRequiredFields"});
-  }
-
-  if( role !== 'student' && role !== 'teacher'){
-    errors.push({msg: "errRoleInvalid"});
-  }
-
-  if( accept_conditions !== true){
-    errors.push({msg: "errAcceptconditions"});
-  }
-
-  if( accept_research !== true){
-    errors.push({msg: "errResearchConditions"});
-  }
-
+  let errors = Validator.validateUserFields(firstname, email, password, repeated_password, role, accept_conditions, accept_research);
+ 
+  console.log(errors);
   if (errors.length > 0) {
     res.status(401).send(errors);
   } else {
@@ -463,12 +450,12 @@ exports.getPasswordResetCode = function (req, res){
  * @param {*} res 
  */
 exports.resetPassword = function (req, res){
-  const { email, password, secretCode } = req.body;
+  const { email, password, repeated_password, secretCode } = req.body;
   let db = mongoose.connection;
 
   let errors = [];
 
-  if (!email || !password || !secretCode) {
+  if (!email || !password || !repeated_password || !secretCode) {
     errors.push({ msg: "errRequiredFields" });
   }
 
@@ -680,7 +667,7 @@ exports.authenticateForLogging = function(req, res, next) {
           }); 
         } 
       } else {
-        let userId = mongoose.Types.ObjectId(response._d);
+        let userId = mongoose.Types.ObjectId(response._id);
         db.collection('users').findOne({_id: userId})
         .then(function(doc) {
           req.user._id = '';
@@ -706,6 +693,8 @@ exports.authenticateForLogging = function(req, res, next) {
  * @param {*} next 
  */
  exports.authenticateAdmin = function(req, res, next) {
+  let db = mongoose.connection;
+
   const dwengoCookie = req.cookies.dwengo;
   if(dwengoCookie) {
     const accessToken = dwengoCookie.accessToken.split(' ')[1];
@@ -714,14 +703,22 @@ exports.authenticateForLogging = function(req, res, next) {
       if(err) {
         console.debug(err);
         return res.sendStatus(403);
-      }
-      req.user = response;
+      } 
 
-      if(req.user.role == "admin"){
-        next();
-      } else {
-        res.sendStatus(401);
-      }
+      let id = mongoose.Types.ObjectId(response._id);
+
+      db.collection('users').findOne({_id: id})
+      .then(function(user){
+          if(user){
+            if(user.role == "admin"){
+              next();
+            } else {
+              res.sendStatus(401);
+            }
+          } else {
+              res.sendStatus(401);
+          }
+      });
     });
   } else {
     res.sendStatus(401);
