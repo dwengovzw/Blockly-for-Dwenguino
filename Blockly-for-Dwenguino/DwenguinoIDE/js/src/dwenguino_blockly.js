@@ -5,7 +5,6 @@ import CookiesInformation from './user/cookies_information.js'
 import LoginMenu from './user/login_menu.js'
 import FileIOController from './file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
-import SeverConfig from "./server_config.js"
 import ServerConfig from './server_config.js'
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */

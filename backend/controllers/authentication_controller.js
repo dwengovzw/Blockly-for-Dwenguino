@@ -691,6 +691,8 @@ exports.authenticateForLogging = function(req, res, next) {
  * @param {*} next 
  */
  exports.authenticateAdmin = function(req, res, next) {
+  let db = mongoose.connection;
+
   const dwengoCookie = req.cookies.dwengo;
   if(dwengoCookie) {
     const accessToken = dwengoCookie.accessToken.split(' ')[1];
@@ -699,14 +701,22 @@ exports.authenticateForLogging = function(req, res, next) {
       if(err) {
         console.debug(err);
         return res.sendStatus(403);
-      }
-      req.user = response;
+      } 
 
-      if(req.user.role == "admin"){
-        next();
-      } else {
-        res.sendStatus(401);
-      }
+      let id = mongoose.Types.ObjectId(response._id);
+
+      db.collection('users').findOne({_id: id})
+      .then(function(user){
+          if(user){
+            if(user.role == "admin"){
+              next();
+            } else {
+              res.sendStatus(401);
+            }
+          } else {
+              res.sendStatus(401);
+          }
+      });
     });
   } else {
     res.sendStatus(401);
