@@ -665,7 +665,7 @@ exports.authenticateForLogging = function(req, res, next) {
           }); 
         } 
       } else {
-        let userId = mongoose.Types.ObjectId(response._d);
+        let userId = mongoose.Types.ObjectId(response._id);
         db.collection('users').findOne({_id: userId})
         .then(function(doc) {
           req.user._id = '';
