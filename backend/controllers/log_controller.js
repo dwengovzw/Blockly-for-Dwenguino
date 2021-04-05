@@ -115,7 +115,7 @@ exports.getTotoalNumberOfRecentLogItems = function(req, res) {
 
 exports.getRecentLogItems = function(req, res) {
   let db = mongoose.connection;
-
+ 
   let query = {
     timestamp: { // 5 minutes ago (from now)
         $gt: new Date(Date.now() - 1000 * 60 * 5)
@@ -136,7 +136,16 @@ exports.getRecent100LogItems = function(req, res) {
 
     res.status(200).send(logItems);
   });
+}
 
+exports.exportLogItems = function(req, res) {
+  let db = mongoose.connection;
+
+  db.collection('loggings').find({}, {}).toArray()
+  .then(function(logItems){
+
+    res.status(200).send(logItems);
+  });
 }
 
 export default exports;
