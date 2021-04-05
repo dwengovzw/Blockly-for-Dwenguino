@@ -1,4 +1,6 @@
 var MSG = {
+  ArduinoWarningTitle: "Warning",
+  ArduinoWarning: "In arduino editing mode the features of the editor are limited to basic graphical programming. The simulation environments as well as the option to upload to physical hardware are not supported!",
   arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
   blocks: "Blocks",
@@ -599,7 +601,8 @@ MSG.logging = {
   acceptResearch: "I give permission to Dwengo vzw to use the data the simulator collects for <b>scientific research purposes</b>, anonymized and following the privacy policy.",
   anonymized: "* <b>\'Anonymized'</b> means there is no link between your personal information and your data. No one knows what you are doing in the simulator.",
   userNotActive: "You haven't activated your account yet. Send the activation link again.",
-  userAlreadyExists: "This user already exists. Use a different email address."
+  userAlreadyExists: "This user already exists. Use a different email address.",
+  hello: "Hello "
 };
 
 MSG_FALLBACK.validator = {
@@ -611,6 +614,7 @@ MSG_FALLBACK.validator = {
   errLastname: "Your last name cannot be empty.",
   errPassword: "Je paswoord voldoet niet aan de voorwaarden.",
   errPasswordNotIdentical: "Your passwords are not identical.",
+  errPasswordRequirements: "Your password should be minimum 8 characters long and contain uppercase and lowercase letters, a number and a symbol ($@$!%*#?&). The password must not contain your email address. Please choose a more ssecure password.",
   errEmail: "Your email is not valid.",
   errActivityId: "Your activity title cannot be empty.",
   errAcceptConditions: "You did not accept the general conditions and the privacy policy.",

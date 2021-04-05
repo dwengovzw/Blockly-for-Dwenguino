@@ -103,4 +103,22 @@ exports.getLoggingDataOfOtherUser = function(req, res) {
     });
 }
 
+exports.getTotalNumberOfUsers = function(req, res) {
+    let db = mongoose.connection;
+
+    db.collection('users').countDocuments({})
+    .then(function(count){
+        res.status(200).send({ "totalUsers": count });
+    });
+}
+
+exports.getTotalNumberOfVerifiedUsers = function(req, res) {
+    let db = mongoose.connection;
+    
+    db.collection('users').countDocuments({status: "active"})
+    .then(function(count){
+        res.status(200).send({"totalVerifiedUsers": count});
+    });
+}
+
 export default exports

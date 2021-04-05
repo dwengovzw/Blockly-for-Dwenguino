@@ -20,19 +20,32 @@
 </head>
 <body id="db_body">
     <div class="db_header">
-        <div class="db_logo">
+        <span class="db_logo">
             <!-- <img id="db_wegostem_logo_top_left" src="./DwenguinoIDE/img/wegostem.png" alt="The WeGoSTEM logo" /> -->
             <img id="db_dwengo_logo_top_left" src="./DwenguinoIDE/img/dwengo_logo.png" alt="The dwengo logo" />
-            <div id="switch_code_view">
+        </span>
+        |
+        <span class="environment_settings">
+            <span id="switch_code_view">
                 <span id="switch_to_blockly">Blockly</span>
                 <label class="code-switch">
                     <input id="code_checkbox" type="checkbox">
                     <span class="code-slider round"></span>
                 </label>
                 <span id="switch_to_code">Code</span>
-            </div>
-        </div>
-        <div class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
+            </span>
+            |
+            <span id="switch_hardware_view">
+                <span id="switch_to_dwenguino">Dwenguino</span>
+                <label class="code-switch">
+                    <input id="hardware_checkbox" type="checkbox">
+                    <span class="code-slider round"></span>
+                </label>
+                <span id="switch_to_arduino">Arduino</span>
+            </span>
+            
+        </span>
+        <span class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
             <span id="db_menu_item_dwengo_robot_teacher" alt="DwengoRobotteacher"><img id="db_menu_item_dwengo_robot_teacher_image" src="./DwenguinoIDE/img/dwengo_robot_plain.svg" alt="The dwengo logo" /></span>
             <span id="db_menu_item_simulator" class="db_menu_item fas fa-tachometer-alt" alt="Open or close simulator"></span>
             <span id="db_menu_item_download" class="db_menu_item fas fa-download" alt="Download blocks to file" /></span>
@@ -44,7 +57,7 @@
                 <select name="language" id="db_menu_item_language_selection">
                 </select>
             </span>
-        </div>
+        </span>
     </div>
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
@@ -55,14 +68,14 @@
                             <span id="copy-code" class="sim_item fas fa-copy"></span>
                             <span id="notification-copy"></span>
                         </div>
-                        <div id="switch_hardware_view" class="col-4">
+                        <!--<div id="switch_hardware_view" class="col-4">
                             <span id="switch_to_dwenguino">Dwenguino</span>
                             <label class="code-switch">
                                 <input id="hardware_checkbox" type="checkbox">
                                 <span class="code-slider round"></span>
                             </label>
                             <span id="switch_to_arduino">Arduino</span>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
                 <div id="db_code_pane_code">
@@ -491,6 +504,20 @@
         </div>
     </div>
 
+    <div id="arduinoWarningModal" class="modal fade" role="dialog">
+        <div class="modal-dialog"><!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <div class="message"></div>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- import jquery -->
 
 
@@ -535,7 +562,8 @@
     <script src="./blockly/generators/arduino/socialrobot.js"></script>
     <script src="./blockly/generators/arduino/arduino.js"></script>
     <script src="./blockly/generators/arduino/comments.js"></script>
-    <!-- <script src="../../generators/arduino/base.js"></script> -->
+    <script src="./blockly/generators/arduino/base.js"></script> 
+    <script src="./blockly/generators/arduino/arduino.js"></script> 
 
     <!-- Blockly ranslators to javascript code -->
     <script src="./blockly/generators/javascript.js"></script>

@@ -1,10 +1,12 @@
+export { Validator } 
+
 class Validator{
 
     constructor(){
 
     }
 
-    validateSchool(school){
+    static validateSchool(school){
         if(school !== ""){
             return null;
         } else {
@@ -12,7 +14,7 @@ class Validator{
         }
     }
     
-    validateId(id){
+    static validateId(id){
         for(let k = 0; k < 4; k++){
             if(id[k] == null){
                 return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errId']));
@@ -22,37 +24,69 @@ class Validator{
         return null;
     }
 
-    validateFirstname(firstname){
+    static validateFirstname(firstname){
         if(firstname == ""){
             return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errFirstname']));
         }
     }
 
-    validateSecretCode(secretCode){
+    static validateSecretCode(secretCode){
         if(secretCode == ""){
             return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errSecretCode']));
         }
     }
 
-    validatePassword(password){
+    static validatePassword(password, email){
         if(password == ""){
             return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errPassword']));
         }
     }
 
-    validatePasswords(password, repeated_password){
+    static validatePassword(password, email){
+        if(password == ""){
+            return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errPasswordRequirements']));
+        }
+
+        if (password.includes(email)) {
+            return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errPasswordRequirements']));
+        }
+
+        if (password.length < 8){
+            return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errPasswordRequirements']));
+        }
+
+        var matchedCase = new Array();
+        matchedCase.push("[$@$!%*#?&]"); // Special Charector
+        matchedCase.push("[A-Z]"); // Uppercase Alpabates
+        matchedCase.push("[0-9]"); // Numbers
+        matchedCase.push("[a-z]"); // Lowercase Alphabates
+      
+        // Check the conditions
+        var conditionsValidated = 0;
+        for (var i = 0; i < matchedCase.length; i++) {
+          if (new RegExp(matchedCase[i]).test(password)) {
+            conditionsValidated++;
+          }
+        }
+
+        if(!(conditionsValidated == 4)){
+            return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errPasswordRequirements']));
+        }
+    }
+
+    static validatePasswords(password, repeated_password){
         if(password != repeated_password){
             return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errPasswordNotIdentical']));
         }
     }
 
-    validateEmail(email){
+    static validateEmail(email){
         if(email == ""){
             return new Error(DwenguinoBlocklyLanguageSettings.translateFrom('validator', ['errEmail']))
         }
     }
     
-    validateAgeGroup(ageGroup){
+    static validateAgeGroup(ageGroup){
         if(typeof ageGroup !== 'undefined'){
             return null;
         } else {
@@ -61,7 +95,7 @@ class Validator{
     };
     
     
-    validateGender(gender){
+    static validateGender(gender){
         if(typeof gender !== 'undefined'){
             return null;
         } else {
@@ -69,7 +103,7 @@ class Validator{
         }
     }
     
-    validateActivityId(activityId){
+    static validateActivityId(activityId){
         if(activityId !== ""){
             return null;
         } else {
@@ -77,7 +111,7 @@ class Validator{
         }
     };
 
-    validateAcceptConditions(acceptConditions) {
+    static validateAcceptConditions(acceptConditions) {
         if(acceptConditions[0].checked){
             return;
         } else {
@@ -85,7 +119,7 @@ class Validator{
         }
     }
 
-    validateResearchConditions(researchConditions) {
+    static validateResearchConditions(researchConditions) {
         if(researchConditions[0].checked){
             return;
         } else {
@@ -93,7 +127,7 @@ class Validator{
         }
     }
     
-    hasErrors(errors){
+    static hasErrors(errors){
         var arrayLength = errors.length;
         for (var i = 0; i < arrayLength; i++) {
             if(errors[i] != null){

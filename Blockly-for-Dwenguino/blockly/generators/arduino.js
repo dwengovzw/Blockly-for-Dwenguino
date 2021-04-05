@@ -172,7 +172,7 @@ Blockly.Arduino.finish = function(code) {
   code = 'void loop() \n{\n' + code + '\n}';
 
   // The hardware setting that the user selected
-  let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
+ // let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
 
   // Convert the definitions dictionary into a list.
   var imports = [];
@@ -182,13 +182,13 @@ Blockly.Arduino.finish = function(code) {
 
     if (def.match(/^#include/)) {
 
-      if (!hardwareViewCheckbox.checked) {
+      //if (!hardwareViewCheckbox.checked) {
         imports.push(def);
-      } else {
+      /*} else {
         if(name != 'define_dwenguino_h'){
           imports.push(def);
         }
-      }
+      }*/
       
     } else {
       definitions.push(def);
@@ -199,11 +199,11 @@ Blockly.Arduino.finish = function(code) {
   var setups = [];
 
   // Ensure that initDwenguino() is always on the first command in setup() if Dwenguino (and not Arduino) is checked
-  if (!hardwareViewCheckbox.checked) {
+  //if (!hardwareViewCheckbox.checked) {
     if('userSetupCode' in Blockly.Arduino.setups_){
       setups.push(Blockly.Arduino.setups_['userSetupCode']);
     }
-  }
+  //}
 
   for (var name in Blockly.Arduino.setups_) {
     if(name != 'userSetupCode')
