@@ -33,7 +33,7 @@ var logSchema = mongoose.Schema({
     }
 });
 
-var Logitem = mongoose.model('logging', logSchema);
+var Logitem = mongoose.model('loggings', logSchema);
 let get = function (callback, limit) {
     Logitem.find(callback).limit(limit);
 }

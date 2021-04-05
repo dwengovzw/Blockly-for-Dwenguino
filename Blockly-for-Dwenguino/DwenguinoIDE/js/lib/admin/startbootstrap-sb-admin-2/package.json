@@ -1,0 +1,85 @@
+{
+  "_from": "startbootstrap-sb-admin-2@^4.1.3",
+  "_id": "startbootstrap-sb-admin-2@4.1.3",
+  "_inBundle": false,
+  "_integrity": "sha512-UIzNBijnjYbdQK6N8TzzcEMptT6ZnJSXf2WpAf7QHytEcgAOoWsHZZQxBnaauNVF/o+EFOraVns0+kwNwF8ecQ==",
+  "_location": "/startbootstrap-sb-admin-2",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "startbootstrap-sb-admin-2@^4.1.3",
+    "name": "startbootstrap-sb-admin-2",
+    "escapedName": "startbootstrap-sb-admin-2",
+    "rawSpec": "^4.1.3",
+    "saveSpec": null,
+    "fetchSpec": "^4.1.3"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/startbootstrap-sb-admin-2/-/startbootstrap-sb-admin-2-4.1.3.tgz",
+  "_shasum": "2e70ada486d89b72bd2b58c7251bd20ccf6b10c7",
+  "_spec": "startbootstrap-sb-admin-2@^4.1.3",
+  "_where": "/home/zvdstaey/projects/ugent/sbadmin_test",
+  "author": {
+    "name": "Start Bootstrap"
+  },
+  "bugs": {
+    "url": "https://github.com/StartBootstrap/startbootstrap-sb-admin-2/issues",
+    "email": "feedback@startbootstrap.com"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "David Miller",
+      "url": "https://davidmiller.io/"
+    }
+  ],
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "5.15.1",
+    "bootstrap": "4.5.3",
+    "chart.js": "2.9.4",
+    "datatables.net-bs4": "1.10.22",
+    "jquery": "3.5.1",
+    "jquery.easing": "^1.4.1"
+  },
+  "deprecated": false,
+  "description": "An open source Bootstrap 4 admin theme.",
+  "devDependencies": {
+    "browser-sync": "2.26.13",
+    "del": "6.0.0",
+    "gulp": "4.0.2",
+    "gulp-autoprefixer": "7.0.1",
+    "gulp-clean-css": "4.3.0",
+    "gulp-header": "2.0.9",
+    "gulp-plumber": "^1.2.1",
+    "gulp-rename": "2.0.0",
+    "gulp-sass": "4.1.0",
+    "gulp-uglify": "3.0.2",
+    "merge-stream": "2.0.0"
+  },
+  "homepage": "https://startbootstrap.com/theme/sb-admin-2",
+  "keywords": [
+    "css",
+    "sass",
+    "html",
+    "responsive",
+    "theme",
+    "template",
+    "admin",
+    "app"
+  ],
+  "license": "MIT",
+  "name": "startbootstrap-sb-admin-2",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/StartBootstrap/startbootstrap-sb-admin-2.git"
+  },
+  "scripts": {
+    "start": "gulp watch"
+  },
+  "title": "SB Admin 2",
+  "version": "4.1.3"
+}

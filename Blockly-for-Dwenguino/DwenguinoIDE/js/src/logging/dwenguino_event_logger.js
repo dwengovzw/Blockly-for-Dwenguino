@@ -54,7 +54,7 @@ class DwenguinoEventLogger {
      */
     createEvent(eventName, data, difficultyLevel = 0, simulatorState = -1){
         var event = {
-        "timestamp": $.now(),
+        "timestamp": Date.now(),
         "name": eventName,
         "simulatorState": simulatorState,
         "selectedDifficulty": difficultyLevel,

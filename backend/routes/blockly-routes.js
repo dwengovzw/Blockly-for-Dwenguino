@@ -104,11 +104,31 @@ router.route('/user/update')
 router.route('/user/delete')
     .post(authenticationcontroller.authenticate, usercontroller.deleteMyAccount);
 
+/* Admin */
+
 router.route('/user/admin/getLoggingData')
-    .post(authenticationcontroller.authenticateAdmin, usercontroller.getLoggingDataOfOtherUser);
+    .get(authenticationcontroller.authenticateAdmin, usercontroller.getLoggingDataOfOtherUser);
 
 router.route('/user/admin/delete')
     .post(authenticationcontroller.authenticateAdmin, usercontroller.deleteAccountOfOtherUser);    
+
+router.route('/user/admin/totalUsers')
+    .get(authenticationcontroller.authenticateAdmin, usercontroller.getTotalNumberOfUsers);
+
+router.route('/user/admin/totalVerifiedUsers')
+    .get(authenticationcontroller.authenticateAdmin, usercontroller.getTotalNumberOfVerifiedUsers);
+
+router.route('/user/admin/totalLogItems')
+    .get(authenticationcontroller.authenticateAdmin, logcontroller.getTotalNumberOfLogItems);    
+
+router.route('/user/admin/totalRecentLogItems')
+    .get(authenticationcontroller.authenticateAdmin, logcontroller.getTotoalNumberOfRecentLogItems); 
+
+router.route('/user/admin/getRecentLogItems')
+    .get(authenticationcontroller.authenticateAdmin, logcontroller.getRecentLogItems); 
+
+router.route('/user/admin/getRecent100LogItems')
+    .get(authenticationcontroller.authenticateAdmin, logcontroller.getRecent100LogItems); 
 
 // Export API routes
 export default router;
