@@ -58,3 +58,30 @@ Blockly.Blocks['setup_loop_structure_arduino'] = {
         this.jsonInit(setup_loop_arduino_json);
     }
 };
+
+Blockly.Blocks['inout_digital_read'] = {
+  helpUrl: 'http://arduino.cc/en/Reference/DigitalRead',
+  init: function() {
+    this.setColour(230);
+    this.appendDummyInput()
+	      .appendField("DigitalRead PIN#")
+	      .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN");
+    this.setOutput(true, 'Number');
+    this.setTooltip('');
+  }
+};
+
+Blockly.Blocks['inout_digital_write'] = {
+  helpUrl: 'http://arduino.cc/en/Reference/DigitalWrite',
+  init: function() {
+    this.setColour(230);
+    this.appendDummyInput()
+	      .appendField("DigitalWrite PIN#")
+	      .appendField(new Blockly.FieldDropdown(profile.default.digital), "PIN")
+      	.appendField("Stat")
+      	.appendField(new Blockly.FieldDropdown([["HIGH", "HIGH"], ["LOW", "LOW"]]), "STAT");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setTooltip('Write digital value to a specific Port');
+  }
+};

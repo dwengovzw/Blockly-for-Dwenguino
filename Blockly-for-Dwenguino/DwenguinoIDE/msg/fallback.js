@@ -1,4 +1,6 @@
 var MSG_FALLBACK = {
+  ArduinoWarningTitle: "Warning",
+  ArduinoWarning: "In arduino editing mode the features of the editor are limited to basic graphical programming. The simulation environments as well as the option to upload to physical hardware are not supported!",
   arduinoCodeCopied: "Arduino code copied to clipboard",
   title: "DwenguinoBlockly",
   blocks: "Blocks",
