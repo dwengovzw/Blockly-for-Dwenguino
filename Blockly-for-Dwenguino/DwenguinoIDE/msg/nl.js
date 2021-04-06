@@ -866,6 +866,8 @@ MSG.logging = {
   email: "E-mailadres",
   enterEmail: "Voer een e-mailadres in",
   forgotPassword: "Ik ben mijn wachtwoord vergeten",
+  secretCode: "Geheime code",
+  enterSecretCode: "Voer je geheime code in die per email ontving",
   userDoesNotExist: "This user does not exist. Try a different email address.",
   resetPassword: "Stel je wachtwoord opnieuw in",
   back: "Terug",

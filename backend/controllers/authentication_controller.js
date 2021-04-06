@@ -2,7 +2,6 @@ import Useritem from '../models/user_model.js';
 import RefreshTokenItem from '../models/refreshtoken_model.js';
 import ConfirmationCodeItem from '../models/confirmation_code_model.js';
 import Validator from '../utils/validator.js';
-import sgMail from '@sendgrid/mail';
 import emailService from '../utils/email.js';
 import cryptoRandomString from 'crypto-random-string';
 import bcrypt from 'bcrypt';
@@ -82,21 +81,7 @@ exports.register = function(req, res){
                   html: html
                 };
 
-                if(process.env.NODE_ENV === 'production'){
-                  sgMail.setApiKey(process.env.EMAIL_PASSWORD);
-                  console.log(process.env.EMAIL_PASSWORD);
-                  sgMail
-                    .send(message)
-                    .then(() => {}, error => {
-                      console.error(error);
-                  
-                      if (error.response) {
-                        console.error(error.response.body)
-                      }
-                    });
-                } else {
-                  emailService.sendMail(message);
-                }
+                emailService.sendMail(message);
 
                 res.sendStatus(200);
               })
@@ -298,16 +283,7 @@ exports.resendActivationLink = function(req, res){
                 html: html
               };
 
-              if(process.env.NODE_ENV === 'production'){
-                sgMail.setApiKey(process.env.EMAIL_PASSWORD);
-                sgMail
-                  .send(message)
-                  .then(() => {}, error => {
-                    console.error(error);
-                  });
-              } else {
-                emailService.sendMail(message);
-              }
+              emailService.sendMail(message);
                 
               res.sendStatus(200);
             } else {
@@ -418,21 +394,7 @@ exports.getPasswordResetCode = function (req, res){
           html: html
         };
 
-        if(process.env.NODE_ENV === 'production'){
-          sgMail.setApiKey(process.env.EMAIL_PASSWORD);
-          console.log(process.env.EMAIL_PASSWORD);
-          sgMail
-            .send(message)
-            .then(() => {}, error => {
-              console.error(error);
-          
-              if (error.response) {
-                console.error(error.response.body)
-              }
-            });
-        } else {
-          emailService.sendMail(message);
-        }
+        emailService.sendMail(message);
 
         res.sendStatus(200);
       } else {
