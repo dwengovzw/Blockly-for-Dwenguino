@@ -445,6 +445,8 @@ var MSG = {
     username: "Benutzername",	
     email: "Email address",	
     forgotPassword: "I forgot my password",	
+    secretCode: "Secret code",
+    enterSecretCode: "Enter your secret code sent to you by email",
     userDoesNotExist: "This user does not exist. Try a different email address.",	
     resetPassword: "Reset your password",	
     back: "Back",	
