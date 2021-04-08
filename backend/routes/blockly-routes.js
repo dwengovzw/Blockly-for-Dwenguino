@@ -28,6 +28,7 @@ import schoolscontroller from '../controllers/school_controller.js';
 import authenticationcontroller from '../controllers/authentication_controller.js';
 import tutorialcontroller from '../controllers/tutorial_controller.js';
 import usercontroller from '../controllers/user_controller.js';
+import programcontroller from '../controllers/program_controller.js';
 
 router.route('/lang')
     .post(utilscontroller.setLanguage);
@@ -103,6 +104,15 @@ router.route('/user/update')
 
 router.route('/user/delete')
     .post(authenticationcontroller.authenticate, usercontroller.deleteMyAccount);
+
+router.route('/user/programs')
+    .get(authenticationcontroller.authenticate, programcontroller.getUserPrograms);
+
+router.route('/user/saveProgram')
+    .post(authenticationcontroller.authenticate, programcontroller.saveUserProgram);
+
+router.route('/user/deleteProgram')
+    .post(authenticationcontroller.authenticate, programcontroller.deleteUserProgram);
 
 /* Admin */
 
