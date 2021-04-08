@@ -72,7 +72,7 @@ exports.deleteAccountOfOtherUser = function(req, res){
             console.log(error);
             res.sendStatus(400);
         } else {
-            res.sendStatues(200);
+            res.sendStatus(200);
         }
     });
 }

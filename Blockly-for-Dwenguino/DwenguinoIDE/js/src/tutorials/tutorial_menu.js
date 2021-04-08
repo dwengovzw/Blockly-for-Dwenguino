@@ -178,7 +178,7 @@ class TutorialMenu {
                 this.retryLimit--;
                 $.ajax({
                     type: "POST",
-                    url: ServerConfig.getServerUrl() + "/renewToken"
+                    url: ServerConfig.getServerUrl() + "/auth/renew"
                 }).done(function(data){
                     $.ajax(ajaxSettings).done(onDone).fail(onFail);
                 }).fail(function(response, status)  {

@@ -168,6 +168,9 @@ var MSG = {
   compileError: "The code could not be compiled.\nYou should check your code, did you forget a block somewhere?",
   clear: "Clear",
   save: "Save",
+  delete: "Delete",
+  restore: "Restore",
+  open: "Open",
 
   // TODO: Translate:
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
@@ -604,7 +607,10 @@ MSG.logging = {
   anonymized: "* <b>\'Anonymized'</b> means there is no link between your personal information and your data. No one knows what you are doing in the simulator.",
   userNotActive: "You haven't activated your account yet. Send the activation link again.",
   userAlreadyExists: "This user already exists. Use a different email address.",
-  hello: "Hello "
+  hello: "Hello ",
+  myPrograms: "My programs",
+  saveCurrentProgram: "Save your current program",
+  programName: "Program name",
 };
 
 MSG_FALLBACK.validator = {

@@ -17,8 +17,6 @@ class UserSettingsModal {
         ).done(function(data){
             LoggingModal.createLoggingModalDialog(MSG.logging['settings']);
 
-            $('#loggingModalBody').append('<form id="loginUser"></form>');
-
             $('#loggingModalBody').append('<div id="nameRow" class="ui-widget row mb-4"></div>');
             $('#nameRow').append('<div class="col-md-3"><p>'+ MSG.logging['firstname'] +'</p></div>');
             $('#nameRow').append('<div class="col-md-8"><p>'+ data.firstname +'</p></div>');

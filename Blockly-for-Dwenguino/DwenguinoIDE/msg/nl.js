@@ -203,6 +203,9 @@ var MSG = {
   stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen.",
   clear: "Wissen",
   save: "Opslaan",
+  delete: "Verwijder",
+  restore: "Herstellen",
+  open: "Open",
 };
 
 MSG.cookieConsent = {
@@ -939,7 +942,10 @@ MSG.logging = {
   anonymized: "* <b>\'Geanonimiseerd\'</b> wil zeggen dat er geen link is tussen je persoonsgegevens en je data. Niemand weet dus wat je deed in de simulator.",
   userNotActive: "Je hebt je account nog niet geactiveerd. Stuur de activatielink opnieuw.",
   userAlreadyExists: "Deze gebruiker bestaat al. Gebruik een ander e-mailadres.",
-  hello: "Hallo "
+  hello: "Hallo ",
+  myPrograms: "Mijn programma's",
+  saveCurrentProgram: "Bewaar je huidige programma",
+  programName: "Naam programma",
 };
 
 MSG.validator = {
