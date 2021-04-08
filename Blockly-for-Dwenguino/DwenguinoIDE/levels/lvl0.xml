@@ -495,6 +495,101 @@
     </block>
 </category>
 
+<category id="catConveyor" colour="180" name='Conveyor'>
+    
+
+    <block type="conveyor_belt">
+        <value name="speed">
+            <block type="math_number" id="conv_speed">
+                <field name="NUM">100</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="conveyor_ledstrip">
+        <value name="clockPin">
+            <block type="dwenguino_pins">
+                <field name="PIN">10</field>
+            </block>
+        </value>
+        <value name="dataPin">
+            <block type="dwenguino_pins">
+                <field name="PIN">11</field>
+            </block>
+        </value>
+        <value name="color1">
+            <block type="conveyor_rgb_color" id="col1">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+        <value name="color2">
+            <block type="conveyor_rgb_off" id="col2">
+            </block>
+        </value>
+        <value name="color3">
+            <block type="conveyor_rgb_color" id="col3">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+        <value name="color4">
+            <block type="conveyor_rgb_color" id="col4">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+        <value name="color5">
+            <block type="conveyor_rgb_off" id="col5">
+            </block>
+        </value>
+    </block>
+
+    <block type="conveyor_rgb_color_with_numbers">
+        <value name="RED">
+            <block type="math_number" id="red_val">
+                <field name="NUM">10</field>
+            </block>
+        </value>
+        <value name="GREEN">
+            <block type="math_number" id="green_val">
+                <field name="NUM">255</field>
+            </block>
+        </value>
+        <value name="BLUE">
+            <block type="math_number" id="blue_val">
+                <field name="NUM">255</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="conveyor_rgb_off"> 
+    </block>
+
+    <block type="conveyor_color_sensor">
+        <value name="pin">
+            <block type="dwenguino_pins">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="conveyor_button">
+        <value name="pin">
+            <block type="dwenguino_pins">
+                <field name="PIN">5</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="logic_compare_color">
+    </block>
+    
+</category>
+
 <sep></sep>
 <category id="catComments" colour="200" name='Comments'>
     <block type="line_comment">

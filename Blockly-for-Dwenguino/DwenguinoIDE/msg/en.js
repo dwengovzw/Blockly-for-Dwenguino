@@ -20,6 +20,7 @@ var MSG = {
   catFunctions: "Functions",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Social robot",
+  catConveyor: "Conveyor",
   catComments: "Comments",
   catBoardIO: "IO",
   createVar: "Create variable",
@@ -557,3 +558,32 @@ MSG.validator = {
   errGender: "Select your gender.",
   errActivityId: "Your activity title cannot be empty."
 };
+
+MSG.conveyor = {
+  chooseImage: "Choose an image",
+  importImage: "Import an image",
+  clear: "Clear",
+  ready: "Ready",
+  cancel: "Cancel",
+  preview: "Preview",
+  saveImage: "Save image",
+  imageDownloadName: "MyDwenguinoConveyor",
+  ledStripBlock: "RGB-LED strip",
+  red: "red",
+  green: "green",
+  blue: "blue",
+  rgbLedOff: "off",
+  pin: "pin",
+  dataPin: "data pin",
+  clockPin: "clock pin",
+  colorBlock: "color LED",
+  rgbSensorBlock: "RGB color sensor",
+  rgbSensorPin: "output pin",
+  buttonBlock: "switch",
+  conveyorBlock: "conveyor belt",
+  conveyorSpeed: "speed",
+  color: "color",
+  pinDistribution: "Pin distribution",
+  sensors: "RGB color sensors",
+  buttons: "Buttons"
+}

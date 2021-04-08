@@ -1,4 +1,5 @@
 import ButtonMap from "./button_map.js";
+import DwenguinoSimulationScenarioConveyor from "../scenario/conveyor/dwenguino_simulation_scenario_conveyor.js";
 import PlotterConstants from "../scenario/plotter/plotter_constants.js"
 import { DisplayDataTypesEnum, SocialRobotLedMatrix } from "../scenario/socialrobot/components/ledmatrix.js"
 
@@ -406,6 +407,71 @@ class SimulationSandbox {
     this.boardState.setIoPinState(this.colorPin, color);
 
   };
+
+
+  /**
+   * Set's the colors for the 5 leds on the ledstrip. This is only possible in the conveyor scenario.
+   * If the color-values for a led are all 0 or if any color-value is less than 0, the led is turned off.
+   * @param {Array} colors - A 2D array with the colors for the 5 leds on the led strip
+   * [
+      [r, g, b], 
+      [r, g, b], 
+      [r, g, b], 
+      [r, g, b], 
+      [r, g, b]
+    ]
+   */
+  ledStrip(colors) {
+    
+    if (this.currentScenario instanceof DwenguinoSimulationScenarioConveyor) {  //DwenguinoSimulationScenarioConveyor
+      for (let i = 0; i < colors.length; i++) { 
+        // If any color-value is < 0 or if every color-value is = 0, then the i-th led is off.
+        if(colors[i][0] >= 0 && colors[i][1] >= 0 && colors[i][2] >= 0 &&
+          (colors[i][0] >  0 || colors[i][1] >  0 || colors[i][2] >  0 )) {
+          this.currentScenario.state.leds[i].on = true;
+          this.currentScenario.state.leds[i].r = colors[i][0];
+          this.currentScenario.state.leds[i].g = colors[i][1];
+          this.currentScenario.state.leds[i].b = colors[i][2];
+        } else {
+          this.currentScenario.state.leds[i].on = false;   
+        }     
+      }
+    }
+  };
+
+  /**
+   * Get the color of the RGB color sensor on the given pin. This is only possible in the conveyor scenario.
+   * @param {Integer} pin 
+   */
+  rgbColorSensor(pin) {
+    if (this.currentScenario instanceof DwenguinoSimulationScenarioConveyor) { 
+      return this.currentScenario.getColorSensorOnPin(pin);
+    }
+    return [-1, -1, -1];
+  };
+
+
+  /**
+   * Reads the pin state for the button on the given pin.
+   * @param {Integer} pin 
+   */
+  readButtonValue(pin) {
+    return this.boardState.getIoPinState(pin);
+  };
+
+  /**
+   * Compares 2 colors and returns the logical value of the comparison.
+   * @param {Array} colorA - The left hand side color ([r, g, b])
+   * @param {String} op - The operator ("EQ" or "NEQ");
+   * @param {Array} colorB - The right hand side color ([r, g, b])
+   */
+  compareColors(colorA, op, colorB){
+    let eq = colorA[0] == colorB[0] && colorA[1] == colorB[1] && colorA[2] == colorB[2];
+    return op == "EQ" ? eq : !eq;
+  }
+
 }
+
+
 
 export default SimulationSandbox;
