@@ -25,6 +25,7 @@ var MSG = {
   catArduino: "Arduino",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Sociale robot",
+  catConveyor: "Transportband",
   catComments: "Commentaar",
   catBoardIO: "IO",
   createVar: "Maak nieuwe variabele",
@@ -108,7 +109,7 @@ var MSG = {
   waitForSwitch: "wacht tot knop %1 wordt ingedrukt",
   digitalReadSwitchTooltip: "lees de waarde van een van de dwenguino knoppen",
   north: "NOORD",
-  east:"OOST",
+  east: "OOST",
   south: "ZUID",
   west: "WEST",
   center: "MIDDEN",
@@ -181,28 +182,31 @@ var MSG = {
   compileError: "Het is niet gelukt om de code te compileren.\nControleer of er een fout zit in je programma, is er ergens een blok tekort?",
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
   dwenguinoStepperMotorBlockTooltip: "TODO",
-  drawingrobotMove:"verplaats de stift onder een van hoek %1 graden met %2 stappen",
-  drawingrobotMoveXY:"verplaats de stift %1 naar rechts en %2 naar links",
-  drawingrobotLine:"teken een lijn naar x: %1 y: %2",
-  drawingrobotCircle:"teken een cirkel met straal: %1",
-  drawingrobotRectangle:"teken een rechthoek met breedte: %1 en hoogte: %2",
+  drawingrobotMove: "verplaats de stift onder een van hoek %1 graden met %2 stappen",
+  drawingrobotMoveXY: "verplaats de stift %1 naar rechts en %2 naar links",
+  drawingrobotLine: "teken een lijn naar x: %1 y: %2",
+  drawingrobotCircle: "teken een cirkel met straal: %1",
+  drawingrobotRectangle: "teken een rechthoek met breedte: %1 en hoogte: %2",
   drawingrobotLiftStylus: "stift opheffen",
   drawingrobotLowerStylus: "stift neerzetten",
   drawingrobotChangeColor: "kleur %1",
-  up:"omhoog",
-  down:"omlaag",
-  left:"links",
-  right:"rechts",
-  bounds:"Opgelet\nJe probeert buiten het papier te tekenen",
+  up: "omhoog",
+  down: "omlaag",
+  left: "links",
+  right: "rechts",
+  bounds: "Opgelet\nJe probeert buiten het papier te tekenen",
   drawingrobotgrid: "raster",
-  colorpicker:"Kleur",
-  drawingrobotSaveImage:"Tekening opslaan",
-  drawingrobotDrawing:"Tekening",
-  stepperMotorOne: "STAPPENMOTOR1", 
+  colorpicker: "Kleur",
+  drawingrobotSaveImage: "Tekening opslaan",
+  drawingrobotDrawing: "Tekening",
+  stepperMotorOne: "STAPPENMOTOR1",
   stepperMotorTwo: "STAPPENMOTOR2",
   stepperMotorTooltip: "Kies welke van de twee motoren van de tekenrobot dat je wil aansturen.",
   clear: "Wissen",
   save: "Opslaan",
+  delete: "Verwijder",
+  restore: "Herstellen",
+  open: "Open",
 };
 
 MSG.cookieConsent = {
@@ -239,7 +243,7 @@ MSG.dropzone = {
 };
 
 MSG.ledmatrix = {
-  restPosition: 'Ruststand', 
+  restPosition: 'Ruststand',
   blink1: 'Knipper 1',
   blink2: 'Knipper 2',
   blink3: 'Knipper 3',
@@ -357,7 +361,7 @@ MSG.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Leren programmeren<br>met DwenguinoBlockly",
   catDwenguinoComponents: "Handig overzicht met<br>alle Dwenguino-componenten",
-  catDwenguinoConnector: "Pin mapping &<br>expansion connector",  catRidingRobot: "Rijdende robot",
+  catDwenguinoConnector: "Pin mapping &<br>expansion connector", catRidingRobot: "Rijdende robot",
   catSocialRobot: "Sociale robot",
   catWeGoStem: "WeGoSTEM",
   chooseCategory: "Kies een categorie",
@@ -376,14 +380,14 @@ MSG.tutorialMenu = {
 };
 
 MSG.tutorials = {
-    introduction: {},
-    theremin: {},
-    robot: {},
-    basic_test: {},
-    hello_dwenguino: {},
-    blink: {},
-    hello_robot: {},
-    socialrobot: {},
+  introduction: {},
+  theremin: {},
+  robot: {},
+  basic_test: {},
+  hello_dwenguino: {},
+  blink: {},
+  hello_robot: {},
+  socialrobot: {},
 };
 
 
@@ -792,29 +796,29 @@ MSG.tutorials.socialrobot['socialrobots'].stepTitles = [
 ];
 MSG.tutorials.socialrobot['socialrobots'].stepContents = [
   "Sociale robots zijn robots die, net zoals mensen onder elkaar, met ons kunnen communiceren. "
-    + "Ze worden ontworpen om mensen te begrijpen en ons welzijn te vergroten. ",
+  + "Ze worden ontworpen om mensen te begrijpen en ons welzijn te vergroten. ",
   "Wat sociale robots precies doen en in welke omgeving, varieert van robot tot robot. "
-    + "Sommige robots worden ontworpen om bij je thuis te zijn. Andere zullen enkel op het werk of "
-    + "in de publieke ruimte functioneren. <br><br>Je ben misschien al een sociale robot tegengekomen "
-    + "op de luchthaven? Die helpt je met je vliegtuigtickets of het vinden van de juiste gate. "
-    + "Ook in woonzorgcentra vind je tegenwoordig knuffelrobots die de bewoners gezelschap houden.",
+  + "Sommige robots worden ontworpen om bij je thuis te zijn. Andere zullen enkel op het werk of "
+  + "in de publieke ruimte functioneren. <br><br>Je ben misschien al een sociale robot tegengekomen "
+  + "op de luchthaven? Die helpt je met je vliegtuigtickets of het vinden van de juiste gate. "
+  + "Ook in woonzorgcentra vind je tegenwoordig knuffelrobots die de bewoners gezelschap houden.",
   "Om te kunnen interageren met de buitenwereld, gebruiken robots <b>sensoren</b> en <b>actuoren</b>."
-    + "<br><br><b>Sensoren</b> zijn zintuiglijke ingangen waarmee een robot zijn omgeving kan 'meten'. "
-    + "Die meetgegevens kunnen nadien verwerkt worden tot informatie. Er bestaan allerlei sensoren, "
-    + "bijvoorbeeld temperatuur-, licht-, infrarood-, druk- of bewegingssensoren."
-    + "<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/sonar.png' width='120px'></div>"
-    + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>"
-    + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passief infrarood sensor</i></div></div><br><br>"
-    + "<b>Actuoren</b> vormen de uitgangen waarmee een robot kan 'handelen'. "
-    + "Denk bijvoorbeeld aan een servomotor die de arm van een robot aanstuurt, zodat de robot naar je zwaait wanneer hij je ziet.<br><br>"
-    + "<div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/servo.png'  width='100px'></div>"
-    + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/dc.png'  width='100px'></div></div>"
-    + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
+  + "<br><br><b>Sensoren</b> zijn zintuiglijke ingangen waarmee een robot zijn omgeving kan 'meten'. "
+  + "Die meetgegevens kunnen nadien verwerkt worden tot informatie. Er bestaan allerlei sensoren, "
+  + "bijvoorbeeld temperatuur-, licht-, infrarood-, druk- of bewegingssensoren."
+  + "<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/sonar.png' width='120px'></div>"
+  + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>"
+  + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passief infrarood sensor</i></div></div><br><br>"
+  + "<b>Actuoren</b> vormen de uitgangen waarmee een robot kan 'handelen'. "
+  + "Denk bijvoorbeeld aan een servomotor die de arm van een robot aanstuurt, zodat de robot naar je zwaait wanneer hij je ziet.<br><br>"
+  + "<div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/servo.png'  width='100px'></div>"
+  + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/dc.png'  width='100px'></div></div>"
+  + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
   "Een robot hoort zelf <b>beslissingen</b> te nemen. Dit kan hij doen op basis van de gegevens "
-    + "die de sensoren meten. Beslissingen worden doorgaans genomen in een <b>processor</b> (bij een computer)"
-    + " of een <b>microcontroller</b> (bij de simulator)."
-    + "<br><br>De microcontroller van onze simulator ziet er zo uit:"
-    + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/dwenguino.png'></div>"
+  + "die de sensoren meten. Beslissingen worden doorgaans genomen in een <b>processor</b> (bij een computer)"
+  + " of een <b>microcontroller</b> (bij de simulator)."
+  + "<br><br>De microcontroller van onze simulator ziet er zo uit:"
+  + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/dwenguino.png'></div>"
 ];
 
 MSG.tutorials.socialrobot['hello'] = {};
@@ -836,14 +840,14 @@ MSG.tutorials.socialrobot['hello'].stepContents = [
   "Kies voor de sociale robot.  ",
   "<b>Scroll</b> door het menu met bouwblokken tot je het <b>LCD-scherm</b> tegenkomt.   ",
   "Klik op de <b>+ knop</b> om het LCD-scherm aan je robot toe te voegen. "
-    + "Sleep nadien het scherm naar de plek op de robot waar je het wil hebben.  ",
+  + "Sleep nadien het scherm naar de plek op de robot waar je het wil hebben.  ",
   "Tijd om iets op het scherm te laten verschijnen. Klik het <b>Dwenguino</b> menu open "
-    + "en sleep het <b>LCD-scherm</b> uit de toolbox. Klik het scherm vast in het 'zet klaar' blok. "
-    + " Vul een boodschap in die op het scherm moet komen.<br>"
-    + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>"
-    + "<p class='tutorial center-block'><i>Het programma zal de tekst \'Hallo!\' tonen op het LCD-scherm.</i></p></div>",
+  + "en sleep het <b>LCD-scherm</b> uit de toolbox. Klik het scherm vast in het 'zet klaar' blok. "
+  + " Vul een boodschap in die op het scherm moet komen.<br>"
+  + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>"
+  + "<p class='tutorial center-block'><i>Het programma zal de tekst \'Hallo!\' tonen op het LCD-scherm.</i></p></div>",
   "Druk nu op de <b>afspeelknop</b> om je programma uit te voeren. "
-    + "<br><br>Zie je de tekst op het LCD-scherm van je robot verschijnen?",
+  + "<br><br>Zie je de tekst op het LCD-scherm van je robot verschijnen?",
   "Druk nu op de <b>stopknop</b> om je simulatie te laten stoppen.",
   "Placeholder"
 ];
@@ -939,7 +943,10 @@ MSG.logging = {
   anonymized: "* <b>\'Geanonimiseerd\'</b> wil zeggen dat er geen link is tussen je persoonsgegevens en je data. Niemand weet dus wat je deed in de simulator.",
   userNotActive: "Je hebt je account nog niet geactiveerd. Stuur de activatielink opnieuw.",
   userAlreadyExists: "Deze gebruiker bestaat al. Gebruik een ander e-mailadres.",
-  hello: "Hallo "
+  hello: "Hallo ",
+  myPrograms: "Mijn programma's",
+  saveCurrentProgram: "Bewaar je huidige programma",
+  programName: "Naam programma",
 };
 
 MSG.validator = {
@@ -959,3 +966,32 @@ MSG.validator = {
   errRequiredFields: "Je hebt niet alle velden ingevuld.",
   errRoleInvalid: "De opgegeven rol is niet geldig."
 };
+
+MSG.conveyor = {
+  chooseImage: "Kies een afbeelding",
+  importImage: "Importeer een afbeelding",
+  clear: "Wis tekening",
+  ready: "Klaar",
+  cancel: "Annuleer",
+  preview: "Voorbeeld",
+  saveImage: "Sla afbeelding op",
+  imageDownloadName: "MijnDwenguinoBand",
+  ledStripBlock: "RGB-led strip",
+  red: "rood",
+  green: "groen",
+  blue: "blauw",
+  rgbLedOff: "uit",
+  pin: "pin",
+  dataPin: "data-pin",
+  clockPin: "klok-pin",
+  colorBlock: "kleur led",
+  rgbSensorBlock: "RGB kleurensensor",
+  rgbSensorPin: "uitvoer pin",
+  buttonBlock: "knop",
+  conveyorBlock: "transportband",
+  conveyorSpeed: "snelheid",
+  color: "kleur",
+  pinDistribution: "Pinverdeling",
+  sensors: "RGB kleurensensors",
+  buttons: "Knoppen"
+}
