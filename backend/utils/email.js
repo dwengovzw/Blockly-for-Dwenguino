@@ -1,7 +1,7 @@
 import nodemailer from 'nodemailer';
 
 // when working local we use a mock smtp server from Ethereal
-const emailService = nodemailer.createTransport({
+let options = {
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
     auth: {
@@ -10,6 +10,8 @@ const emailService = nodemailer.createTransport({
     },
     debug: true,
     logger: true
-});
+}
+console.log(options);
+const emailService = nodemailer.createTransport(options);
 
 export default emailService;
