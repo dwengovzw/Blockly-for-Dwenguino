@@ -3,6 +3,7 @@ import ServerConfig from '../server_config.js'
 import { User } from './user.js'
 import { LoggingModal } from './logging_modal.js'
 import { UserSettingsModal } from './user_settings_modal.js'
+import { UserProgramsModal } from './user_programs_modal.js'
 
 /**
  * This class builds and displays the logging menu on the screen.
@@ -13,6 +14,7 @@ class LoginMenu {
 
     constructor(){
         this._userSettingsModal = new UserSettingsModal(this);
+        this._userProgramsModal = new UserProgramsModal(this);
     }
 
     /**
@@ -84,18 +86,24 @@ class LoginMenu {
             url: ServerConfig.getServerUrl() + "/user"}
         ).done(function(data){
             // The user is still logged in
+            $("#" + authenticationMenu).append('<div id="authentication_programs" class="tutorial_categories_item card"></div>');
+            $("#authentication_programs").append('<div class="category_tag">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['myPrograms']) + '</div>');
+            $("#authentication_programs").append('<div id="authentication_programs_img"></div>');
+            $("#authentication_programs").on('click',function(){
+                self._userProgramsModal.showUserPrograms();
+            });
+
             $("#" + authenticationMenu).append('<div id="authentication_settings" class="tutorial_categories_item card"></div>');
-            $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
+            $("#authentication_settings").append('<div class="category_tag">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['settings']) + '</div>');
             $("#authentication_settings").append('<div id="authentication_settings_img"></div>');
-            $("#authentication_settings").click(function(){
+            $("#authentication_settings").on('click',function(){
                 self._userSettingsModal.showUserSettings();
             });
 
             $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
-            $("#authentication_logout").append('<div class="category_tag">'+ MSG.logging['logout'] +'</div>');
+            $("#authentication_logout").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['logout']) +'</div>');
             $("#authentication_logout").append('<div id="logout_img"></div>');
-
-            $("#authentication_logout").click(function(){
+            $("#authentication_logout").on('click', function(){
                 self.logout();
             });
         }).fail(function(response, status)  {
@@ -111,6 +119,13 @@ class LoginMenu {
                         url: ServerConfig.getServerUrl() + "/user"}
                     ).done(function(data){
                         // The user is still logged in
+                        $("#" + authenticationMenu).append('<div id="authentication_programs" class="tutorial_categories_item card"></div>');
+                        $("#authentication_programs").append('<div class="category_tag">' + MSG.logging['myPrograms'] + '</div>');
+                        $("#authentication_programs").append('<div id="authentication_programs_img"></div>');
+                        $("#authentication_programs").click(function(){
+                            self._userProgramsModal.showUserPrograms();
+                        });
+
                         $("#" + authenticationMenu).append('<div id="authentication_settings" class="tutorial_categories_item card"></div>');
                         $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
                         $("#authentication_settings").append('<div id="authentication_settings_img"></div>');

@@ -13,6 +13,7 @@ import mongoose from 'mongoose';
 //mongoose.set('debug', true);
 import path from 'path';
 import i18n from 'i18n-x';
+import nodemailer from 'nodemailer';
 
 import ChromeLauncher from 'chrome-launcher';
 
@@ -65,6 +66,21 @@ app.use(i18n({
 
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
+
+let emailOptions = { 
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASSWORD
+    },
+    debug: true,
+    logger: true
+}
+const emailService = nodemailer.createTransport(emailOptions);
+console.log(emailService);
+
+export default emailService;
 
 // // Configure bodyparser to handle post requests
 // app.use(bodyParser.urlencoded({

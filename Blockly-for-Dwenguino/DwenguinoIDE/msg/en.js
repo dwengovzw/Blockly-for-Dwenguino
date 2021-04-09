@@ -23,6 +23,7 @@ var MSG = {
   catFunctions: "Functions",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Social robot",
+  catConveyor: "Conveyor",
   catComments: "Comments",
   catBoardIO: "IO",
   createVar: "Create variable",
@@ -168,6 +169,9 @@ var MSG = {
   compileError: "The code could not be compiled.\nYou should check your code, did you forget a block somewhere?",
   clear: "Clear",
   save: "Save",
+  delete: "Delete",
+  restore: "Restore",
+  open: "Open",
 
   // TODO: Translate:
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
@@ -604,10 +608,13 @@ MSG.logging = {
   anonymized: "* <b>\'Anonymized'</b> means there is no link between your personal information and your data. No one knows what you are doing in the simulator.",
   userNotActive: "You haven't activated your account yet. Send the activation link again.",
   userAlreadyExists: "This user already exists. Use a different email address.",
-  hello: "Hello "
+  hello: "Hello ",
+  myPrograms: "My programs",
+  saveCurrentProgram: "Save your current program",
+  programName: "Program name",
 };
 
-MSG_FALLBACK.validator = {
+MSG.validator = {
   errSchool: "Select a school.",
   errId: "You didn't select enough icons.",
   errAgeGroup: "Select your age group.",
@@ -624,3 +631,32 @@ MSG_FALLBACK.validator = {
   errRequiredFields: "You did not fill in all required fields.",
   errRoleInvalid: "Your selected role is invalid."
 };
+
+MSG.conveyor = {
+  chooseImage: "Choose an image",
+  importImage: "Import an image",
+  clear: "Clear",
+  ready: "Ready",
+  cancel: "Cancel",
+  preview: "Preview",
+  saveImage: "Save image",
+  imageDownloadName: "MyDwenguinoConveyor",
+  ledStripBlock: "RGB-LED strip",
+  red: "red",
+  green: "green",
+  blue: "blue",
+  rgbLedOff: "off",
+  pin: "pin",
+  dataPin: "data pin",
+  clockPin: "clock pin",
+  colorBlock: "color LED",
+  rgbSensorBlock: "RGB color sensor",
+  rgbSensorPin: "output pin",
+  buttonBlock: "switch",
+  conveyorBlock: "conveyor belt",
+  conveyorSpeed: "speed",
+  color: "color",
+  pinDistribution: "Pin distribution",
+  sensors: "RGB color sensors",
+  buttons: "Buttons"
+}
