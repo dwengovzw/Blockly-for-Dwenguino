@@ -394,6 +394,7 @@ exports.getPasswordResetCode = function (req, res){
           html: html
         };
 
+        console.log(message);
         emailService.sendMail(message);
 
         res.sendStatus(200);
