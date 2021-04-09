@@ -210,21 +210,58 @@ Blockly.Blocks['conveyor_ledstrip'] = {
   }
 };
 
-var conveyor_rgb_off_json = {
-  "id": "conveyor_rgb_off",
-  "message0": MSG.conveyor.rgbLedOff,
-  "type": "rgb_color",
-  "inputsInline": true,
+let colors = [
+  [MSG.conveyor.noColor, "noColor"],
+  [MSG.conveyor.black, "black"],
+  [MSG.conveyor.white, "white"],
+  [MSG.conveyor.gray, "gray"],
+  [MSG.conveyor.red, "red"],
+  [MSG.conveyor.orange, "orange"],
+  [MSG.conveyor.yellow, "yellow"],
+  [MSG.conveyor.greenyellow, "greenyellow"],
+  [MSG.conveyor.green, "green"],
+  [MSG.conveyor.cyan, "cyan"],
+  [MSG.conveyor.blue, "blue"],
+  [MSG.conveyor.purple, "purple"],
+  [MSG.conveyor.pink, "pink"],
+  [MSG.conveyor.magenta, "magenta"]
+]
+var conveyor_color_json = {
+  "id": "conveyor_color",
+  "message0": MSG.conveyor.color + "%1",
+  "args0": [
+    {
+      "type": "field_dropdown",
+      "name": "COLOR_DROPDOWN",
+      "options": colors
+    }
+  ],
   "output": "Color",
   "colour": Blockly.Blocks.conveyor.HUE,
-  "tooltip": "",
   "helpUrl": "http://www.dwengo.org/tutorials"
 };
-Blockly.Blocks['conveyor_rgb_off'] = {
-    init: function() {
-      this.jsonInit(conveyor_rgb_off_json);
-    }
+
+Blockly.Blocks['conveyor_color'] = {
+  init: function() {
+    this.jsonInit(conveyor_color_json);
+  }
 };
+
+// var conveyor_rgb_off_json = {
+//   "id": "conveyor_rgb_off",
+//   "message0": MSG.conveyor.rgbLedOff,
+//   "type": "rgb_color",
+//   "inputsInline": true,
+//   "output": "Color",
+//   "colour": Blockly.Blocks.conveyor.HUE,
+//   "tooltip": "",
+//   "helpUrl": "http://www.dwengo.org/tutorials"
+// };
+// Blockly.Blocks['conveyor_rgb_off'] = {
+//     init: function() {
+//       this.jsonInit(conveyor_rgb_off_json);
+//     }
+// };
 
 
 var conveyor_rgb_color_json = {
@@ -314,37 +351,37 @@ Blockly.Blocks['conveyor_rgb_color_with_numbers'] = {
   }
 };
 
-var logic_compare_color_json = {
-    "id": "logic_compare_color",
-    "message0": MSG.conveyor.color + " 1 %1 %2" + MSG.conveyor.color + " 2 %3",
-    "args0": [
-        {
-            "type": "input_value",
-            "name": "colorA",
-            "check": "Color"
-        },
-        {
-            "type": "field_dropdown",
-            "name": "OP",
-            "options": [
-                ["=", "EQ"],
-                ["\u2260", "NEQ"]
-            ]
-        },
-        {
-            "type": "input_value",
-            "name": "colorB",
-            "check": "Color"
-        },
-    ],
-    "inputsInline": true,
-    "output": "Boolean",
-    "colour": Blockly.Blocks.conveyor.HUE,
-    "helpUrl": "http://www.dwengo.org/tutorials"
-};
+// var logic_compare_color_json = {
+//     "id": "logic_compare_color",
+//     "message0": MSG.conveyor.color + " 1 %1 %2" + MSG.conveyor.color + " 2 %3",
+//     "args0": [
+//         {
+//             "type": "input_value",
+//             "name": "colorA",
+//             "check": "Color"
+//         },
+//         {
+//             "type": "field_dropdown",
+//             "name": "OP",
+//             "options": [
+//                 ["=", "EQ"],
+//                 ["\u2260", "NEQ"]
+//             ]
+//         },
+//         {
+//             "type": "input_value",
+//             "name": "colorB",
+//             "check": "Color"
+//         },
+//     ],
+//     "inputsInline": true,
+//     "output": "Boolean",
+//     "colour": Blockly.Blocks.conveyor.HUE,
+//     "helpUrl": "http://www.dwengo.org/tutorials"
+// };
 
-Blockly.Blocks['logic_compare_color'] = {
-    init: function() {
-      this.jsonInit(logic_compare_color_json);
-    }
-  };
+// Blockly.Blocks['logic_compare_color'] = {
+//     init: function() {
+//       this.jsonInit(logic_compare_color_json);
+//     }
+//   };

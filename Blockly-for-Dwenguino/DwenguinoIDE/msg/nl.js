@@ -920,5 +920,19 @@ MSG.conveyor = {
   color: "kleur",
   pinDistribution: "Pinverdeling",
   sensors: "RGB kleurensensors",
-  buttons: "Knoppen"
+  buttons: "Knoppen",
+  black: "Zwart",
+  white: "Wit",
+  gray: "Grijs",
+  red: "Rood",
+  orange: "Oranje",
+  yellow: "Geel",
+  greenyellow: "Lichtgroen",
+  green: "Groen",
+  cyan: "Cyaan",
+  blue: "Blauw",
+  purple: "Paars",
+  pink: "Roze",
+  magenta: "Magenta",
+  noColor: "Geen kleur"
 }
