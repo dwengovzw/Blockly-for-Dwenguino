@@ -796,7 +796,7 @@ let DwenguinoBlockly = {
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
-            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catArduino', 'catComments'];
+            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catArduino', 'catComments', 'catConveyor'];
         for (var i = 0, cat; cat = categories[i]; i++) {
             var element = document.getElementById(cat);
             if (element) {
