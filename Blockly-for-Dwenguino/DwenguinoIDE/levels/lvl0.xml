@@ -587,6 +587,11 @@
             </block>
         </value>
     </block>
+
+    <block type="similar_color">
+       <field name="diff">20</field>
+    </block>
+    
     
 </category>
 

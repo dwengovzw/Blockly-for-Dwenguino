@@ -29,12 +29,6 @@ Blockly.JavaScript['conveyor_ledstrip'] = function (block) {
     return code;
 };
 
-// Blockly.JavaScript['conveyor_rgb_off'] = function (block) {
-//     var code = '[-1, -1, -1]';
-//     return [code, Blockly.JavaScript.ORDER_ATOMIC];
-// };
-
-
 Blockly.JavaScript['conveyor_rgb_color'] = function (block) {
     var r = parseInt(block.getFieldValue('RED'));
     var g = parseInt(block.getFieldValue('GREEN'));
@@ -76,35 +70,33 @@ Blockly.JavaScript['conveyor_color'] = function (block) {
 };
 
 Blockly.JavaScript['conveyor_color_sensor'] = function (block) {
-    var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
+    var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE) || '0';
     var code = machine + 'rgbColorSensor(' + pin + ')';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 
 Blockly.JavaScript['conveyor_belt'] = function (block) {
-    var speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_NONE);
+    var speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_NONE) || '0';
     var code = machine + 'startDcMotor(1, ' + speed + ');\n';
     return code;
 };
 
 Blockly.JavaScript['conveyor_button'] = function (block) {
-    var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
+    var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE) || '0';
     var code = machine + 'readButtonValue(' + pin + ')';
     return [code, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
 
-// Blockly.JavaScript['logic_compare_color'] = function(block) {
-//     var operator = block.getFieldValue('OP');
-//     var order = (operator == 'EQ' || operator == 'NEQ') ?
-//         Blockly.JavaScript.ORDER_EQUALITY : Blockly.JavaScript.ORDER_RELATIONAL;
-//     var colA = Blockly.JavaScript.valueToCode(block, 'colorA', order) || '[0,0,0]';
-//     var colB = Blockly.JavaScript.valueToCode(block, 'colorB', order) || '[0,0,0]';
-//     var code = machine + 'compareColors(' + colA + ', "' + operator + '", ' + colB + ')';
-//     return [code, order];
-// };
+Blockly.JavaScript['similar_color'] = function (block) {
+    var colA = Blockly.JavaScript.valueToCode(block, 'colorA', Blockly.JavaScript.ORDER_NONE) || '0';
+    var colB = Blockly.JavaScript.valueToCode(block, 'colorB', Blockly.JavaScript.ORDER_NONE) || '0';
+    var diff = block.getFieldValue("diff");
+    var code = machine + 'areColorsSimilar(' + colA + ', ' + colB + ', ' + diff + ')';
+    return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
 
-  
+
 
 

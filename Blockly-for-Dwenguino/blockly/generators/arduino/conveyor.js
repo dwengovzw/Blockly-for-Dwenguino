@@ -16,8 +16,8 @@ Blockly.Arduino['initdwenguino'] = function (block) {
 };
 
 Blockly.Arduino['conveyor_ledstrip'] = function (block) {
-    var clockpin = Blockly.Arduino.valueToCode(block, 'clockPin', Blockly.Arduino.ORDER_NONE);
-    var datapin = Blockly.Arduino.valueToCode(block, 'dataPin', Blockly.Arduino.ORDER_NONE);
+    var clockpin = Blockly.Arduino.valueToCode(block, 'clockPin', Blockly.Arduino.ORDER_NONE) || '10';
+    var datapin = Blockly.Arduino.valueToCode(block, 'dataPin', Blockly.Arduino.ORDER_NONE) || '11';
 
     var code = "";
     for (let i = 1; i < 6; i++){
@@ -61,12 +61,6 @@ ledStrip.show();
 };
 
 
-// Blockly.Arduino['conveyor_rgb_off'] = function (block) {
-//     var code = '{-1,-1,-1}';
-//     return [code, Blockly.Arduino.ORDER_ATOMIC];
-// };
-
-
 Blockly.Arduino['conveyor_rgb_color'] = function (block) {
     var r = parseInt(block.getFieldValue('RED'));
     var g = parseInt(block.getFieldValue('GREEN'));
@@ -107,7 +101,7 @@ Blockly.Arduino['conveyor_color'] = function (block) {
 };
 
 Blockly.Arduino['conveyor_color_sensor'] = function (block) {
-    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
+    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '0';
     // Because there are only 14 digital pins, 4 analog pins are used as digital pins.
     Blockly.Arduino.definitions_['define_S0'] = "const int S0 = A0;";  // Frequency scaling
     Blockly.Arduino.definitions_['define_S1'] = "const int S1 = A1;";  // Frequency scaling
@@ -155,7 +149,7 @@ int sensorVal(int outPin) {
 };
 
 Blockly.Arduino['conveyor_belt'] = function (block) {
-    var value_speed = Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_ATOMIC);
+    var value_speed = Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_ATOMIC) || '0';
     //import dwenguino motors
     Blockly.Arduino.definitions_['define_dwenguinomotor_h'] = "#include <DwenguinoMotor.h>\n";
     // declare motor on chosen channel
@@ -168,31 +162,30 @@ Blockly.Arduino['conveyor_belt'] = function (block) {
 
 
 Blockly.Arduino['conveyor_button'] = function (block) {
-    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
+    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '5';
     Blockly.Arduino.definitions_['define_buttonpin_' + pin] = "#define BUTTON_PIN_" + pin + " " + pin +"\n";
     Blockly.Arduino.setups_['setup_buttonpin_' + pin] = "pinMode(BUTTON_PIN_" + pin + ", INPUT);";
     var code = 'digitalRead(BUTTON_PIN_' + pin + ')';
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
-// Blockly.Arduino['logic_compare_color'] = function(block) {
-//     var operator = block.getFieldValue('OP');
-//     var order = (operator == 'EQ' || operator == 'NEQ') ?
-//         Blockly.Arduino.ORDER_EQUALITY : Blockly.Arduino.ORDER_RELATIONAL;
-//     var colA = Blockly.Arduino.valueToCode(block, 'colorA', order).replace(/(^{)|(}$)/g, "") || '0, 0, 0';
-//     var colB = Blockly.Arduino.valueToCode(block, 'colorB', order).replace(/(^{)|(}$)/g, "") || '0, 0, 0';
+Blockly.Arduino['similar_color'] = function (block) {
+    var colA = Blockly.Arduino.valueToCode(block, 'colorA', Blockly.Arduino.ORDER_NONE) || '0';
+    var colB = Blockly.Arduino.valueToCode(block, 'colorB', Blockly.Arduino.ORDER_NONE) || '0';
+    var diff = parseInt(block.getFieldValue("diff"));
+    Blockly.Arduino.definitions_['function_compareColors'] = `
+int areColorsSimilar(int colA, int colB, int diff) {
+    int bA = colA / 65536;
+    int gA = (colA - bA * 65536)/256;
+    int rA = colA - bA * 65536 - gA * 256;
 
-//     Blockly.Arduino.definitions_['function_compareColors'] = `
-// int compareColors(char op, int r1, int g1, int b1, int r2, int g2, int b2) {
-//     if(op == 'E'){
-//         return r1 == r2 && g1 == g2 && b1 == b2;
-//     } else if(op == 'N'){
-//         return !(r1 == r2 && g1 == g2 && b1 == b2);
-//     } else {
-//         return 0;
-//     }
-// }
-//     `;
-//     var code = "compareColors('" + operator.charAt(0) + "', " + colA + ", " + colB + ")";
-//     return [code, order];
-//   };
+    int bB = colB / 65536;
+    int gB = (colB - bB * 65536)/256;
+    int rB = colB - bB * 65536 - gB * 256;
+
+    return abs(bA - bB) <= diff && abs(gA - gB) <= diff && abs(rA - rB) <= diff;
+}
+    `;
+    var code = 'areColorsSimilar(' + colA + ', ' + colB + ', ' + diff + ')';
+    return [code, Blockly.Arduino.ORDER_ATOMIC];
+};
