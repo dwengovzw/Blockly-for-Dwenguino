@@ -895,9 +895,9 @@ MSG.validator = {
 };
 
 MSG.conveyor = {
-  chooseImage: "Kies een afbeelding",
-  importImage: "Importeer een afbeelding",
-  clear: "Wis tekening",
+  chooseImage: "Kies afbeelding",
+  importImage: "Importeer afbeelding",
+  clear: "Wis",
   ready: "Klaar",
   cancel: "Annuleer",
   preview: "Voorbeeld",

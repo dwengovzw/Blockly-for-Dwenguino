@@ -560,8 +560,8 @@ MSG.validator = {
 };
 
 MSG.conveyor = {
-  chooseImage: "Choose an image",
-  importImage: "Import an image",
+  chooseImage: "Choose image",
+  importImage: "Import image",
   clear: "Clear",
   ready: "Ready",
   cancel: "Cancel",
