@@ -934,5 +934,7 @@ MSG.conveyor = {
   purple: "Paars",
   pink: "Roze",
   magenta: "Magenta",
-  noColor: "Geen kleur"
+  noColor: "Geen kleur",
+  isSimilar: "lijkt op",
+  withDifference: "met een speling van %3"
 }

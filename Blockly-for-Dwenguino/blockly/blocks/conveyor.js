@@ -16,7 +16,7 @@
 
 /**
  * @fileoverview Dwenguino conveyor blocks for Blockly
- * @author jari.degraeve@ugent.be
+ * @author jari.degraeve@ugent.be   (Jari De Graeve)
  */
 'use strict';
 
@@ -247,23 +247,6 @@ Blockly.Blocks['conveyor_color'] = {
   }
 };
 
-// var conveyor_rgb_off_json = {
-//   "id": "conveyor_rgb_off",
-//   "message0": MSG.conveyor.rgbLedOff,
-//   "type": "rgb_color",
-//   "inputsInline": true,
-//   "output": "Color",
-//   "colour": Blockly.Blocks.conveyor.HUE,
-//   "tooltip": "",
-//   "helpUrl": "http://www.dwengo.org/tutorials"
-// };
-// Blockly.Blocks['conveyor_rgb_off'] = {
-//     init: function() {
-//       this.jsonInit(conveyor_rgb_off_json);
-//     }
-// };
-
-
 var conveyor_rgb_color_json = {
     "id": "conveyor_rgb_color",
     "message0": MSG.conveyor.red + "%1 " + MSG.conveyor.green + "%2 " + MSG.conveyor.blue + "%3 " ,
@@ -351,37 +334,37 @@ Blockly.Blocks['conveyor_rgb_color_with_numbers'] = {
   }
 };
 
-// var logic_compare_color_json = {
-//     "id": "logic_compare_color",
-//     "message0": MSG.conveyor.color + " 1 %1 %2" + MSG.conveyor.color + " 2 %3",
-//     "args0": [
-//         {
-//             "type": "input_value",
-//             "name": "colorA",
-//             "check": "Color"
-//         },
-//         {
-//             "type": "field_dropdown",
-//             "name": "OP",
-//             "options": [
-//                 ["=", "EQ"],
-//                 ["\u2260", "NEQ"]
-//             ]
-//         },
-//         {
-//             "type": "input_value",
-//             "name": "colorB",
-//             "check": "Color"
-//         },
-//     ],
-//     "inputsInline": true,
-//     "output": "Boolean",
-//     "colour": Blockly.Blocks.conveyor.HUE,
-//     "helpUrl": "http://www.dwengo.org/tutorials"
-// };
+var similar_color_json = {
+    "id": "similar_color",
+    "message0": MSG.conveyor.color + " %1 " + MSG.conveyor.isSimilar + " " + MSG.conveyor.color + " %2 " + MSG.conveyor.withDifference,
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "colorA",
+        "check": "Color"
+      },
+      {
+        "type": "input_value",
+        "name": "colorB",
+        "check": "Color"
+      },
+      {
+        "type": "field_number",
+        "name": "diff",
+        "value": 20,
+        "min": 0,
+        "max": 100,
+        "precision": 0
+      }
+    ],
+    "inputsInline": true,
+    "output": "Boolean",
+    "colour": Blockly.Blocks.conveyor.HUE,
+    "helpUrl": "http://www.dwengo.org/tutorials"
+};
 
-// Blockly.Blocks['logic_compare_color'] = {
-//     init: function() {
-//       this.jsonInit(logic_compare_color_json);
-//     }
-//   };
+Blockly.Blocks['similar_color'] = {
+    init: function() {
+      this.jsonInit(similar_color_json);
+    }
+  };

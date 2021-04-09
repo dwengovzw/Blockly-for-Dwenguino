@@ -599,5 +599,7 @@ MSG.conveyor = {
   purple: "Purple",
   pink: "Pink",
   magenta: "Magenta",
-  noColor: "No color"
+  noColor: "No color",
+  isSimilar: "is similar to",
+  withDifference: "with a range of %3"
 }
