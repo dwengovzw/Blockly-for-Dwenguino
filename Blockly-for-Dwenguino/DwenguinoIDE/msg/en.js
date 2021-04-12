@@ -633,8 +633,8 @@ MSG.validator = {
 };
 
 MSG.conveyor = {
-  chooseImage: "Choose an image",
-  importImage: "Import an image",
+  chooseImage: "Choose image",
+  importImage: "Import image",
   clear: "Clear",
   ready: "Ready",
   cancel: "Cancel",
@@ -658,5 +658,21 @@ MSG.conveyor = {
   color: "color",
   pinDistribution: "Pin distribution",
   sensors: "RGB color sensors",
-  buttons: "Buttons"
+  buttons: "Buttons",
+  black: "Black",
+  white: "White",
+  gray: "Gray",
+  red: "Red",
+  orange: "Orange",
+  yellow: "Yellow",
+  greenyellow: "Light green",
+  green: "Green",
+  cyan: "Cyan",
+  blue: "Blue",
+  purple: "Purple",
+  pink: "Pink",
+  magenta: "Magenta",
+  noColor: "No color",
+  isSimilar: "is similar to",
+  withDifference: "with a range of %3"
 }
