@@ -410,27 +410,21 @@ class SimulationSandbox {
 
   /**
    * Set's the colors for the 5 leds on the ledstrip. This is only possible in the conveyor scenario.
-   * If the color-values for a led are all 0 or if any color-value is less than 0, the led is turned off.
-   * @param {Array} colors - A 2D array with the colors for the 5 leds on the led strip
-   * [
-      [r, g, b], 
-      [r, g, b], 
-      [r, g, b], 
-      [r, g, b], 
-      [r, g, b]
-    ]
+   * If the color-value for a led is 0 or less than 0, the led is turned off.
+   * @param {Array} colors - An array with the color-values for all 5 leds.
    */
   ledStrip(colors) {
     
     if (this.currentScenario instanceof DwenguinoSimulationScenarioConveyor) {  //DwenguinoSimulationScenarioConveyor
       for (let i = 0; i < colors.length; i++) { 
-        // If any color-value is < 0 or if every color-value is = 0, then the i-th led is off.
-        if(colors[i][0] >= 0 && colors[i][1] >= 0 && colors[i][2] >= 0 &&
-          (colors[i][0] >  0 || colors[i][1] >  0 || colors[i][2] >  0 )) {
+        if(colors[i] > 0) {
+          var b = Math.trunc(colors[i] / 65536);
+          var g = Math.trunc((colors[i] - b * 65536)/256);
+          var r = Math.trunc((colors[i] - b * 65536 - g * 256));
           this.currentScenario.state.leds[i].on = true;
-          this.currentScenario.state.leds[i].r = colors[i][0];
-          this.currentScenario.state.leds[i].g = colors[i][1];
-          this.currentScenario.state.leds[i].b = colors[i][2];
+          this.currentScenario.state.leds[i].r = r;
+          this.currentScenario.state.leds[i].g = g;
+          this.currentScenario.state.leds[i].b = b;
         } else {
           this.currentScenario.state.leds[i].on = false;   
         }     
@@ -444,9 +438,10 @@ class SimulationSandbox {
    */
   rgbColorSensor(pin) {
     if (this.currentScenario instanceof DwenguinoSimulationScenarioConveyor) { 
-      return this.currentScenario.getColorSensorOnPin(pin);
+      var col = this.currentScenario.getColorSensorOnPin(pin);
+      return col[0] + 256* col[1] + 65536 * col[2];
     }
-    return [-1, -1, -1];
+    return 0;
   };
 
 
@@ -458,15 +453,25 @@ class SimulationSandbox {
     return this.boardState.getIoPinState(pin);
   };
 
+
   /**
-   * Compares 2 colors and returns the logical value of the comparison.
-   * @param {Array} colorA - The left hand side color ([r, g, b])
-   * @param {String} op - The operator ("EQ" or "NEQ");
-   * @param {Array} colorB - The right hand side color ([r, g, b])
+   * Returns true if both colors are similar. For the colors to be similar, 
+   * all 3 RGB-values need to be around the same value (within a range defined by diff);
+   * @param {Integer} colA - The first color-value
+   * @param {Integer} colB - The second color-value
+   * @param {Integer} diff - The max difference between the RGB-values for both colors.
+   * @returns 
    */
-  compareColors(colorA, op, colorB){
-    let eq = colorA[0] == colorB[0] && colorA[1] == colorB[1] && colorA[2] == colorB[2];
-    return op == "EQ" ? eq : !eq;
+  areColorsSimilar(colA, colB, diff){
+    var bA = Math.trunc(colA / 65536);
+    var gA = Math.trunc((colA - bA * 65536)/256);
+    var rA = Math.trunc(colA - bA * 65536 - gA * 256);
+
+    var bB = Math.trunc(colB / 65536);
+    var gB = Math.trunc((colB - bB * 65536)/256);
+    var rB = Math.trunc(colB - bB * 65536 - gB * 256);
+
+    return Math.abs(bA - bB) <= diff && Math.abs(gA - gB) <= diff && Math.abs(rA - rB) <= diff
   }
 
 }
