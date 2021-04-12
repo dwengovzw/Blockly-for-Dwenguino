@@ -439,6 +439,30 @@ class ConveyorDisplayHelper {
             colorPalette.append(colDiv);
         });
 
+        let color_hover = $("<div>").attr("id", "hover_color_value").css({
+            "margin-left": "10px",
+            "margin-top": "5px",
+            "float": "left",
+            "font-family": "'Courier New', monospace"
+        }).html("rgb(\xa0\xa00, \xa0\xa00, \xa0\xa00)");
+
+        canvas.mousemove(function(e) {
+            let pos = { x: 0, y: 0 };
+            var offset = canvas.offset();
+            pos.x = e.clientX - offset.left;
+            pos.y = e.clientY - offset.top;
+            
+            var c = this.getContext('2d');
+            var p = c.getImageData(pos.x, pos.y, 1, 1).data; 
+            var r = p[0].toString();
+            while (r.length < 3) r = "\xa0" + r;
+            var g = p[1].toString();
+            while (g.length < 3) g = "\xa0" + g;
+            var b = p[2].toString();
+            while (b.length < 3) b = "\xa0" + b;
+            color_hover.html(`rgb(${r}, ${g}, ${b})`);
+        });
+
         // Create the button to load/import an image
         let importImageButton = $("<button>").attr("value", "Import image")
             .html(MSG.conveyor.importImage)
@@ -588,9 +612,9 @@ class ConveyorDisplayHelper {
         saveImageContainer.append(dimensions);
         parent.append(top);
         parent.append(colorPalette);
+        parent.append(color_hover);
         parent.append(importImageButton);
         parent.append(saveImageContainer);
-        // parent.append(dimensions);
         parent.append(clearButton);
         parent.append(readyButton);
         parent.append(cancelButton);
