@@ -968,9 +968,9 @@ MSG.validator = {
 };
 
 MSG.conveyor = {
-  chooseImage: "Kies een afbeelding",
-  importImage: "Importeer een afbeelding",
-  clear: "Wis tekening",
+  chooseImage: "Kies afbeelding",
+  importImage: "Importeer afbeelding",
+  clear: "Wis",
   ready: "Klaar",
   cancel: "Annuleer",
   preview: "Voorbeeld",
@@ -993,5 +993,21 @@ MSG.conveyor = {
   color: "kleur",
   pinDistribution: "Pinverdeling",
   sensors: "RGB kleurensensors",
-  buttons: "Knoppen"
+  buttons: "Knoppen",
+  black: "Zwart",
+  white: "Wit",
+  gray: "Grijs",
+  red: "Rood",
+  orange: "Oranje",
+  yellow: "Geel",
+  greenyellow: "Lichtgroen",
+  green: "Groen",
+  cyan: "Cyaan",
+  blue: "Blauw",
+  purple: "Paars",
+  pink: "Roze",
+  magenta: "Magenta",
+  noColor: "Geen kleur",
+  isSimilar: "lijkt op",
+  withDifference: "met een speling van %3"
 }
