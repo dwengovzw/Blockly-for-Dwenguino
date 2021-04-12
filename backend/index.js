@@ -92,8 +92,8 @@ if (process.env.NODE_ENV === 'production') {
 } else {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-    //app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+    //app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+    app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 }
 
 // Use blockly routes for the app
