@@ -52,4 +52,30 @@ exports.deleteUserProgram = function(req, res) {
     });
 }
 
+exports.updateProgramName = function(req, res) {
+  let db = mongoose.connection;
+  let user_id = req.user._id;
+  let program_id = mongoose.Types.ObjectId(req.body._id);
+
+  let conditions = { _id: program_id };
+  let update = { 
+      $set :
+      {
+          program_name: req.body.program_name
+      }
+  };
+  let options = { multi: false};
+
+  db.collection('programs').updateOne(conditions, update, options,
+      function(error, numAffected) {
+          if(error){
+              console.log(error);
+              res.sendStatus(400);
+          } else {
+              res.sendStatus(200);
+          }
+      } 
+  );
+}
+
 export default exports
