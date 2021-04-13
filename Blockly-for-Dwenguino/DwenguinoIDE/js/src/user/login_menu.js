@@ -416,7 +416,7 @@ class LoginMenu {
             headers: {
                 "Content-Type": "application/json"
             },
-            data: JSON.stringify(serverSubmission),
+            data: JSON.stringify(serverSubmission)
         }).done(function(data){
             console.log(data);
             //self.resetSelectedIcons();

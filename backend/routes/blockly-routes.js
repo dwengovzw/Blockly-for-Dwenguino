@@ -114,6 +114,9 @@ router.route('/user/saveProgram')
 router.route('/user/deleteProgram')
     .post(authenticationcontroller.authenticate, programcontroller.deleteUserProgram);
 
+router.route('/user/updateProgramName')
+    .post(authenticationcontroller.authenticate, programcontroller.updateProgramName);
+
 /* Admin */
 
 router.route('/user/admin/getLoggingData')

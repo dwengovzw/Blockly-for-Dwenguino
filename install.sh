@@ -22,7 +22,7 @@ check_for_root () {
     fi
 }
 
-# Check if mongodb is installed_
+# Check if mongodb is installed
 check_mongodb_install() {
     if [[ $(mongod --version) == "db version v"* ]]
     then
@@ -48,6 +48,10 @@ check_mongodb_install() {
     sudo mkdir /data/
     sudo mkdir /data/db
     sudo chmod -R go+w /data/db
+
+    # Start up db and add an admin user to the dwenguinoblockly database for access to the local admin panel
+    mongod --fork --syslog
+    mongo --eval 'db.users.insertOne({"firstname": "admin", "email": "noreply@dwengo.org", "password": "$2b$10$DmwowRzdlDitCmxpP.g.5.pZOq3VM6LpF.cKPFA8KUCBAg0CePAhO", "role": "admin", "status": "active", "acceptGeneralConditions": true, "acceptResearchConditions": true});' dwenguinoblockly
 }
 
 # Check if python3 is installed

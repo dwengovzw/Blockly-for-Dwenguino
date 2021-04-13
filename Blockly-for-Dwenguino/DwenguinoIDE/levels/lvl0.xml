@@ -523,25 +523,27 @@
             </block>
         </value>
         <value name="color2">
-            <block type="conveyor_rgb_off" id="col2">
+            <block type="conveyor_color" id="col2">
+                <field name="COLOR_DROPDOWN">noColor</field>
+
             </block>
         </value>
         <value name="color3">
-            <block type="conveyor_rgb_color" id="col3">
-                <field name="RED">133</field>
-                <field name="GREEN">196</field>
-                <field name="BLUE">65</field>
+            <block type="conveyor_color" id="col3">
+                <field name="COLOR_DROPDOWN">red</field>
+
             </block>
         </value>
         <value name="color4">
             <block type="conveyor_rgb_color" id="col4">
-                <field name="RED">133</field>
-                <field name="GREEN">196</field>
-                <field name="BLUE">65</field>
+                <field name="RED">0</field>
+                <field name="GREEN">255</field>
+                <field name="BLUE">255</field>
             </block>
         </value>
         <value name="color5">
-            <block type="conveyor_rgb_off" id="col5">
+            <block type="conveyor_color" id="col5">
+                <field name="COLOR_DROPDOWN">noColor</field>
             </block>
         </value>
     </block>
@@ -564,7 +566,8 @@
         </value>
     </block>
 
-    <block type="conveyor_rgb_off"> 
+    <block type="conveyor_color"> 
+        <field name="COLOR_DROPDOWN">cyan</field>
     </block>
 
     <block type="conveyor_color_sensor">
@@ -583,8 +586,10 @@
         </value>
     </block>
 
-    <block type="logic_compare_color">
+    <block type="similar_color">
+       <field name="diff">20</field>
     </block>
+    
     
 </category>
 
