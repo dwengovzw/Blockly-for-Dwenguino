@@ -175,7 +175,7 @@ class TutorialMenu {
 
         function onFail(response, status) {
             if(ajaxSettings.retryLimit > 0){
-                this.retryLimit--;
+                ajaxSettings.retryLimit--;
                 $.ajax({
                     type: "POST",
                     url: ServerConfig.getServerUrl() + "/auth/renew"
@@ -392,7 +392,7 @@ class TutorialMenu {
         
         function onFail(response, status) {
             if(ajaxSettings.retryLimit > 0){
-                this.retryLimit--;
+                ajaxSettings.retryLimit--;
                 $.ajax({
                     type: "POST",
                     url: ServerConfig.getServerUrl() + "/renewToken"

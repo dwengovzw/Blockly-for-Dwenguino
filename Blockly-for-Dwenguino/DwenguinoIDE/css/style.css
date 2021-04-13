@@ -362,6 +362,26 @@ pre.content {
     border-radius: 4px;
 }
 
+.row-striped:nth-of-type(odd){
+    background-color: #F7F7F9;
+  }
+  
+.row-striped:nth-of-type(even){
+background-color: #ffffff;
+}
+
+.row-header{
+    background-color:#8bab42;
+    color: #fff;
+}
+
+.button{
+    cursor: pointer;
+}
+
+.nameProgram{
+    display: inline-block;
+}
 
 #sim_menu {
     width: 100%;

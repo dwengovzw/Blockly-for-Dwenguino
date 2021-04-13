@@ -13,12 +13,14 @@ class UserProgramsModal {
     showUserPrograms(){
         let self = this;
 
-        LoggingModal.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translate(['myPrograms']));
+        LoggingModal.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['myPrograms']));
 
-        $('#loggingModalBody').append('<form id="saveProgram"></form>');
+        $('#loggingModalBody').append('<div id="saveProgramsGrid" class="container"></div>');
+
+        $('#saveProgramsGrid').append('<form id="saveProgram"></form>');
 
         $('#saveProgram').append('<div id="saveProgramHeader" class="ui-widget row mb-4"></div>');
-        $('#saveProgramHeader').append('<div class="col-11">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['saveCurrentProgram'])+'</div>');
+        $('#saveProgramHeader').append('<div class="col-auto">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['saveCurrentProgram'])+'</div>');
 
         $('#saveProgram').append('<div id="nameInput" class="ui-widget row mb-4"></div>');
         $('#nameInput').append('<label for="nameTag" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['programName'])+'</label>');
@@ -29,6 +31,8 @@ class UserProgramsModal {
             self.saveCurrentProgram();
         });
 
+        $('#loggingModalBody').append('<div id="programsGrid" class="container"></div>');
+
         let ajaxSettings = {
             type: "GET",
             url: ServerConfig.getServerUrl() + "/user/programs",
@@ -38,17 +42,20 @@ class UserProgramsModal {
         $.ajax(ajaxSettings).done(onDone).fail(onFail);
         
         function onDone(userPrograms) {
-            $('#loggingModalBody').append('<div id="programsRow" class="ui-widget row mb-4"></div>');
-            $('#programsRow').append('<div class="col-md-4"><p>'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['programName']) +'</p></div>');
+            
+            $('#programsGrid').append('<div id="programsRow" class="ui-widget row row-header pt-2 mt-2 mb-2"></div>');
+            $('#programsRow').append('<div class="col-md-5"><p>'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['programName']) +'</p></div>');
             $('#programsRow').append('<div class="col-md-3"><p>'+ DwenguinoBlocklyLanguageSettings.translate(['delete']) +'</p></div>');
             $('#programsRow').append('<div class="col-md-3"><p>'+ DwenguinoBlocklyLanguageSettings.translate(['restore']) +'</p></div>');
+            $('#programsRow').append('<div class="col-md-1"><i class="fa fa-download"></i></div>');
             self._userPrograms = userPrograms;
 
             $.each(userPrograms, function(i, program){
-                $('#loggingModalBody').append('<div id="programsRow'+i+'" class="ui-widget row"></div>');
-                $('#programsRow'+i).append('<div class="col-md-4"><p>'+ program.program_name +'</p></div>');
+                $('#programsGrid').append('<div id="programsRow'+i+'" class="ui-widget row row-striped pt-2"></div>');
+                $('#programsRow'+i).append('<div class="col-md-5"><i class="fa fa-edit pr-1"></i><div id="nameProgram'+i+'" contenteditable="true" class="nameProgram">'+ program.program_name +'</div>');
                 $('#programsRow'+i).append('<div class="col-md-3"><button id="deleteProgram'+i+'">'+DwenguinoBlocklyLanguageSettings.translate(['delete'])+'</button></div>');
-                $('#programsRow'+i).append('<div class="col-md-3"><button id="restoreProgram'+i+'">'+DwenguinoBlocklyLanguageSettings.translate(['open'])+'</button></div>');
+                $('#programsRow'+i).append('<div class="col-md-3"><button id="restoreProgram'+i+'">'+DwenguinoBlocklyLanguageSettings.translate(['open'])+'</button></div>');                
+                $('#programsRow'+i).append('<div class="col-md-1"><i id="downloadProgram'+i+'" class="fa fa-download button"></i></div>');
 
                 $("#restoreProgram"+i).on('click', function(event) {
                     let id = event.target.id;
@@ -61,6 +68,38 @@ class UserProgramsModal {
                     let index = id.replace(/\D/g,'');
                     self.deleteProgram(index);
                 });
+
+                $("#editProgram"+i).on('click', function(event) {
+                    let id = event.target.id;
+                    let index = id.replace(/\D/g,'');
+                    self.editProgram(index);
+                });
+
+                $("#downloadProgram"+i).on('click', function(event){
+                    let id = event.target.id;
+                    let index = id.replace(/\D/g,'');
+                    self.downloadProgram(index);
+                });
+
+                $("#nameProgram"+i).on('keydown', function(event) {  
+                    if(event.keyCode == 13)
+                    {
+                        let id = event.target.id
+                        let index = id.replace(/\D/g,'');
+                        let newName = $("#"+id).html();
+                        self.updateProgramName(index, newName);
+                        e.preventDefault();
+                    }
+                });
+
+                $("#nameProgram"+i).on('blur', function(event) {  
+                    let id = event.target.id
+                    let index = id.replace(/\D/g,'');
+                    let newName = $("#"+id).html();
+                    self.updateProgramName(index, newName);
+                    e.preventDefault();
+                });
+
             });
 
             $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['back'])+'</button>');
@@ -72,7 +111,7 @@ class UserProgramsModal {
 
         function onFail(response, status) {
             if(ajaxSettings.retryLimit > 0){
-                this.retryLimit--;
+                ajaxSettings.retryLimit--;
                 $.ajax({
                     type: "POST",
                     url: ServerConfig.getServerUrl() + "/auth/renew"
@@ -87,6 +126,94 @@ class UserProgramsModal {
                         self._loginMenu.createInitialMenu();
                     })
                     LoggingModal.showDialog();
+                });
+            } 
+        };  
+    }
+
+    updateUserPrograms(){
+        let self = this;
+        let ajaxSettings = {
+            type: "GET",
+            url: ServerConfig.getServerUrl() + "/user/programs",
+            retryLimit: 1
+        };
+
+        $.ajax(ajaxSettings).done(onDone).fail(onFail);
+        
+        function onDone(userPrograms) {
+            $('#programsGrid').empty();
+            $('#programsGrid').append('<div id="programsRow" class="ui-widget row row-header pt-2 mt-2 mb-2"></div>');
+            $('#programsRow').append('<div class="col-md-5"><p>'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['programName']) +'</p></div>');
+            $('#programsRow').append('<div class="col-md-3"><p>'+ DwenguinoBlocklyLanguageSettings.translate(['delete']) +'</p></div>');
+            $('#programsRow').append('<div class="col-md-3"><p>'+ DwenguinoBlocklyLanguageSettings.translate(['restore']) +'</p></div>');
+            $('#programsRow').append('<div class="col-md-1"><i class="fa fa-download"></i></div>');
+            self._userPrograms = userPrograms;
+
+            $.each(userPrograms, function(i, program){
+                $('#programsGrid').append('<div id="programsRow'+i+'" class="ui-widget row row-striped pt-2"></div>');
+                $('#programsRow'+i).append('<div class="col-md-5"><i class="fa fa-edit pr-1"></i><div id="nameProgram'+i+'" contenteditable="true" class="nameProgram">'+ program.program_name +'</div>');
+                $('#programsRow'+i).append('<div class="col-md-3"><button id="deleteProgram'+i+'">'+DwenguinoBlocklyLanguageSettings.translate(['delete'])+'</button></div>');
+                $('#programsRow'+i).append('<div class="col-md-3"><button id="restoreProgram'+i+'">'+DwenguinoBlocklyLanguageSettings.translate(['open'])+'</button></div>');                
+                $('#programsRow'+i).append('<div class="col-md-1"><i id="downloadProgram'+i+'" class="fa fa-download button"></i></div>');
+
+                $("#restoreProgram"+i).on('click', function(event) {
+                    let id = event.target.id;
+                    let index = id.replace(/\D/g,'');
+                    self.restoreProgram(index);
+                });
+
+                $("#deleteProgram"+i).on('click', function(event){
+                    let id = event.target.id;
+                    let index = id.replace(/\D/g,'');
+                    self.deleteProgram(index);
+                });
+
+                $("#editProgram"+i).on('click', function(event) {
+                    let id = event.target.id;
+                    let index = id.replace(/\D/g,'');
+                    self.editProgram(index);
+                });
+
+                $("#downloadProgram"+i).on('click', function(event){
+                    let id = event.target.id;
+                    let index = id.replace(/\D/g,'');
+                    self.downloadProgram(index);
+                });
+
+                $("#nameProgram"+i).on('keydown', function(event) {  
+                    if(event.keyCode == 13)
+                    {
+                        let id = event.target.id
+                        let index = id.replace(/\D/g,'');
+                        let newName = $("#"+id).html();
+                        self.updateProgramName(index, newName);
+                        e.preventDefault();
+                    }
+                });
+
+                $("#nameProgram"+i).on('blur', function(event) {  
+                    let id = event.target.id
+                    let index = id.replace(/\D/g,'');
+                    let newName = $("#"+id).html();
+                    self.updateProgramName(index, newName);
+                    e.preventDefault();
+                });
+
+            });
+        };
+
+        function onFail(response, status) {
+            if(ajaxSettings.retryLimit > 0){
+                ajaxSettings.retryLimit--;
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/auth/renew"
+                }).done(function(data){
+                    $.ajax(ajaxSettings).done(onDone).fail(onFail);
+                }).fail(function(response, status)  {
+                    console.log(status);
+                    console.warn('Failed to log in:', response);
                 });
             } 
         };  
@@ -122,7 +249,7 @@ class UserProgramsModal {
 
         function onFail(response, status) {
             if(ajaxSettings.retryLimit > 0){
-                this.retryLimit--;
+                ajaxSettings.retryLimit--;
                 $.ajax({
                     type: "POST",
                     url: ServerConfig.getServerUrl() + "/auth/renew"
@@ -164,7 +291,7 @@ class UserProgramsModal {
 
         function onFail(response, status) {
             if(ajaxSettings.retryLimit > 0){
-                this.retryLimit--;
+                ajaxSettings.retryLimit--;
                 $.ajax({
                     type: "POST",
                     url: ServerConfig.getServerUrl() + "/auth/renew"
@@ -178,5 +305,57 @@ class UserProgramsModal {
                 });
             } 
         };  
+    }
+
+    updateProgramName(index, name){
+        let self = this;
+        this._userPrograms[index].program_name = name;
+
+        let ajaxSettings = {
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/user/updateProgramName",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(this._userPrograms[index]),
+            retryLimit: 1
+        };
+
+        $.ajax(ajaxSettings).done(onDone).fail(onFail);
+        
+        function onDone(response) {
+            self.updateUserPrograms();
+        };
+
+        function onFail(response, status) {
+            if(ajaxSettings.retryLimit > 0){
+                ajaxSettings.retryLimit--;
+                $.ajax({
+                    type: "POST",
+                    url: ServerConfig.getServerUrl() + "/auth/renew"
+                }).done(function(data){
+                    $.ajax(ajaxSettings).done(onDone).fail(onFail);
+                }).fail(function(response, status)  {
+                    console.log(status);
+                    console.warn('Failed to save program:', response);
+
+                    self.updateUserPrograms();
+                });
+            } 
+        };  
+    }
+
+    editProgram(index){
+
+    }
+
+    downloadProgram(index){
+        let xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+        let data = Blockly.Xml.domToText(xml);
+          
+        localStorage.workspaceXml = data;
+        let program_name = this._userPrograms[index].program_name;
+        let filename = program_name.replace(/[/\\?%*:|"<> ]/g, '_');  
+        DwenguinoBlockly.download(filename + ".xml", data);
     }
 }
