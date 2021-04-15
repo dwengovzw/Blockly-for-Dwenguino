@@ -20,6 +20,7 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4c
  */
 exports.register = function(req, res){
 
+  console.log(req.body);
   const { 
     firstname,
     email,

@@ -144,7 +144,7 @@ router.route('/user/admin/getRecent100LogItems')
     .get(authenticationcontroller.authenticateAdmin, logcontroller.getRecent100LogItems); 
 
 router.route('/user/admin/exportLogItems')
-    .get(authenticationcontroller.authenticateAdmin, logcontroller.exportLogItems); 
+    .post(authenticationcontroller.authenticateAdmin, logcontroller.exportLogItems); 
 
 // Export API routes
 export default router;

@@ -53,7 +53,11 @@ class DwenguinoSimulationDraggable {
                     Math.pow(event.pageY - event.y0, 2) | 0))
             .toFixed(2) + 'px')
         self._eventBus.dispatchEvent(EventsEnum.SAVE);
-        self.socialRobotScenario.logger.recordEvent(self.socialRobotScenario.logger.createEvent(EVENT_NAMES.moveRobotComponent, event.target.id));
+        var data = {
+          "id": event.target.id
+        }
+        data = JSON.stringify(data);
+        self.socialRobotScenario.logger.recordEvent(self.socialRobotScenario.logger.createEvent(EVENT_NAMES.moveRobotComponent, data));
       }
     })
   }

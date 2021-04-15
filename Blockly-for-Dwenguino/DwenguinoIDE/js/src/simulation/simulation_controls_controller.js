@@ -1,6 +1,7 @@
 import SimulationRunner from "./simulation_runner.js"
 import DwenguinoSimulationRobotComponentsMenu from "./dwenguino_simulation.js"
 import { EVENT_NAMES } from "../logging/event_names.js"
+import DwenguinoBlockly from "../dwenguino_blockly.js"
 
 class SimulationControlsController {
     simulationRunner = null;
@@ -79,20 +80,45 @@ class SimulationControlsController {
 
             self.handleSimulationStop();
             self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
-            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, this.scenarioView));
+            let data = { 
+                "scenario": self.scenarioView
+            }
+            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, data));
         });
 
         // start/stop/pause
         $("#sim_start").click(() => {
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var xmlCode = Blockly.Xml.domToText(xml);
+
+            // Get javascript and python for current code
+            let javascriptCode = "";
+            let pythonCode = "";
+            try {
+                javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                javascriptCode = "invalid code";
+            }
+            try {
+                pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                pythonCode = "invalid code";
+            }
+            let data = {
+                xmlCode: xmlCode,
+                javascriptCode: javascriptCode,
+                pythonCode: pythonCode
+            }
+
             this.setButtonsStart();
             // start
             if (!this.simulationRunner.isSimulationRunning && !this.simulationRunner.isSimulationPaused) {
                 this.simulationRunner.setIsSimulationRunning(true);
                 this.startSimulation();
-                this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStart, ""));
+                this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStart, data));
                 // resume
             } else if (!this.simulationRunner.isSimulationRunning) {
-                this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simResume, ""));
+                this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simResume, data));
                 this.simulationRunner.setIsSimulationPaused(false);
                 this.simulationRunner.setIsSimulationRunning(true);
                 this.resumeSimulation();
@@ -100,20 +126,86 @@ class SimulationControlsController {
         });
 
         $("#sim_pause").click(() => {
-            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simPause, ""));
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var xmlCode = Blockly.Xml.domToText(xml);
+
+            // Get javascript and python for current code
+            let javascriptCode = "";
+            let pythonCode = "";
+            try {
+                javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                javascriptCode = "invalid code";
+            }
+            try {
+                pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                pythonCode = "invalid code";
+            }
+            let data = {
+                xmlCode: xmlCode,
+                javascriptCode: javascriptCode,
+                pythonCode: pythonCode
+            }
+
+            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simPause, data));
             this.simulationRunner.setIsSimulationRunning(false);
             this.simulationRunner.setIsSimulationPaused(true);
             this.setButtonsPause();
         });
 
         $("#sim_stop").click(() => {
-            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStopButtonClicked, ""));
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var xmlCode = Blockly.Xml.domToText(xml);
+
+            // Get javascript and python for current code
+            let javascriptCode = "";
+            let pythonCode = "";
+            try {
+                javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                javascriptCode = "invalid code";
+            }
+            try {
+                pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                pythonCode = "invalid code";
+            }
+            let data = {
+                xmlCode: xmlCode,
+                javascriptCode: javascriptCode,
+                pythonCode: pythonCode
+            }
+
+            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStopButtonClicked, data));
             this.handleSimulationStop();
         });
 
         $("#sim_step").click(() => {
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var xmlCode = Blockly.Xml.domToText(xml);
+
+            // Get javascript and python for current code
+            let javascriptCode = "";
+            let pythonCode = "";
+            try {
+                javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                javascriptCode = "invalid code";
+            }
+            try {
+                pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                pythonCode = "invalid code";
+            }
+            let data = {
+                xmlCode: xmlCode,
+                javascriptCode: javascriptCode,
+                pythonCode: pythonCode
+            }
+
             this.setButtonsStep();
-            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStep, ""));
+            this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStep, data));
             
             // step 1
             if (!this.simulationRunner.isSimulationPaused && !this.simulationRunner.isSimulationRunning) {
@@ -228,7 +320,29 @@ class SimulationControlsController {
     }
 
     handleSimulationStop() {
-        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStop, ""));
+        var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+        var xmlCode = Blockly.Xml.domToText(xml);
+
+        // Get javascript and python for current code
+        let javascriptCode = "";
+        let pythonCode = "";
+        try {
+            javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+        } catch (error){
+            javascriptCode = "invalid code";
+        }
+        try {
+            pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+        } catch (error){
+            pythonCode = "invalid code";
+        }
+        let data = {
+            xmlCode: xmlCode,
+            javascriptCode: javascriptCode,
+            pythonCode: pythonCode
+        }
+
+        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.simStop, data));
         this.simulationRunner.setIsSimulationRunning(false);
         this.simulationRunner.setIsSimulationPaused(false);
         this.setButtonsStop();
@@ -339,7 +453,7 @@ class SimulationControlsController {
         var e = document.getElementById("sim_speed");
         var option = e.options[e.selectedIndex].value;
 
-        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.setSpeed, option));
+        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.setSpeed, "", "", "", option));
 
         switch (option) {
             case "veryslow":

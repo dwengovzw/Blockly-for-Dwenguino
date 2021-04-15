@@ -30,9 +30,17 @@ var userSchema = mongoose.Schema({
         type: Boolean,
         required: true
     }, 
+    acceptGeneralconditionsTimestamp: {
+        type: Date,
+        default: Date.now()
+    },
     acceptResearchConditions: {
         type: Boolean,
         required: true
+    },
+    acceptResearchConditionsTimestamp: {
+        type: Date,
+        default: Date.now()
     }
 });
 
