@@ -459,9 +459,17 @@ let DwenguinoBlockly = {
           } catch (error){
             js = "invalid code";
           }
+          let python = "";
+          try{
+            python = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+          } catch (error){
+            python = "invalid code";
+          }
+          //console.log("%c" + python, "color:blue");
           let workspaceState = {
             blocksXml: xmlText,
             blocksJsCode: js,
+            //blocksPythoncode: python,
           }
           let workspaceStateText = JSON.stringify(workspaceState);
           DwenguinoBlockly.prevWorkspaceXml = xmlText;
