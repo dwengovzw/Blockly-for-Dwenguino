@@ -5,32 +5,46 @@ var logSchema = mongoose.Schema({
         type: Date,
         required: true
     },
-    user_id: {
+    userId: {
         type: String,
         required: false
     },
-    session_id: {
+    sessionId: {
         type: String,
         required: false
     },
-    activity_id: {
+    activityId: { // TODO rename or reimplement
         type: Number,
         required: false
     },
-    event: {
-        name: {
-            type: String,
-            required: true
-        }, 
-        data: {
-            type: String,
-            required: false
-        },
-        functional_vector: {
-            type: Array,
-            required: false
-        }
+    eventName: {
+        type: String,
+        required: true
+    },
+    data: { 
+        type: String,
+        required: false
+    },
+    functionalVector: {
+        type: Array,
+        required: false
     }
+    
+
+    // event: {
+    //     name: {
+    //         type: String,
+    //         required: true
+    //     }, 
+    //     data: {
+    //         type: String,
+    //         required: false
+    //     },
+    //     functional_vector: {
+    //         type: Array,
+    //         required: false
+    //     }
+    // }
 });
 
 var Logitem = mongoose.model('loggings', logSchema);

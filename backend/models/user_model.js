@@ -26,17 +26,21 @@ var userSchema = mongoose.Schema({
         type: Date,
         default: Date.now()
     },
-    // language: {
-    //     type: String,
-    //     default: "en"
-    // },
     acceptGeneralConditions: {
         type: Boolean,
         required: true
     }, 
+    acceptGeneralconditionsTimestamp: {
+        type: Date,
+        default: Date.now()
+    },
     acceptResearchConditions: {
         type: Boolean,
         required: true
+    },
+    acceptResearchConditionsTimestamp: {
+        type: Date,
+        default: Date.now()
     }
 });
 

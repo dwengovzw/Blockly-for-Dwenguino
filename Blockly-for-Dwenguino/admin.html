@@ -17,9 +17,11 @@
         href="https://fonts.googleapis.com/css?family=Roboto:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
+    <link href="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.min.css" rel="stylesheet">
     <!-- Custom styles for this template-->
     <link href="./DwenguinoIDE/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="./DwenguinoIDE/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link href="./DwenguinoIDE/css/admin-styles.css" rel="stylesheet">
 
 </head>
 
@@ -108,8 +110,6 @@
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a id="export-logging-entries" href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i
-                            class="fas fa-download fa-sm text-white-50"></i> Export logging entries</a>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
@@ -123,7 +123,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                            <div class="font-weight-bold text-primary text-uppercase mb-1">
                                                 Users</div>
                                             <div id="totalUsers" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
@@ -141,7 +141,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                            <div class="font-weight-bold text-warning text-uppercase mb-1">
                                                 Verified users</div>
                                             <div id="totalVerifiedUsers" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
@@ -159,7 +159,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            <div class="font-weight-bold text-success text-uppercase mb-1">
                                                 Logging entries </div>
                                             <div id="totalLogEntries" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
@@ -176,7 +176,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                            <div class="font-weight-bold text-success text-uppercase mb-1">
                                                 Logging entries (past 5 min.) </div>
                                             <div id="totalLogEntriesRecently" class="h5 mb-0 font-weight-bold text-gray-800"></div>
                                         </div>
@@ -194,7 +194,7 @@
                                 <div class="card-body">
                                     <div class="row no-gutters align-items-center">
                                         <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Completed tutorials
+                                            <div class="font-weight-bold text-info text-uppercase mb-1">Completed tutorials
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
@@ -222,13 +222,29 @@
 
                     <!-- Content Row -->
                     <div class="row">
+                        <div class="col-xl-12 col-md-12 mb-4">
+                            <p>
+                                <a id="export-logging-entries" href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm">
+                                    <i class="fas fa-download fa-sm text-white-50"></i> Export logging entries
+                                </a>
+                                from <input type="text" id="datepicker-from"> until <input type="text" id="datepicker-until"> (exclusive)
+                            </p>  
+                        </div>
+                    </div>
+                    <!-- End of Content Row -->
+
+                    <!-- Content Row -->
+                    <div class="row">
 
                         <!-- DataTales Example -->
                         <div class="col-xl-12 col-md-12 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 
                                 <div class="card-body">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Recent log entries (past 5 minutes)
+                                    <div class="font-weight-bold text-success text-uppercase mb-1">Recent log entries (past 5 minutes)
+                                    </div>
+                                    <div id="recentLogEntriesVisibility">
+                                        Toggle column: <a class="toggle-vis" data-column="0">Timestamp</a> - <a class="toggle-vis" data-column="1">Name</a> - <a class="toggle-vis" data-column="2">User id</a> - <a class="toggle-vis" data-column="3">Session id</a> - <a class="toggle-vis" data-column="4">Data</a>
                                     </div>
                                     <div class="table-responsive">
                                         <table id="recentLogEntries" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -263,7 +279,10 @@
                             <div class="card border-left-success shadow h-100 py-2">
                                 
                                 <div class="card-body">
-                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Most recent 100 log entries
+                                    <div class="font-weight-bold text-success text-uppercase mb-1">Most recent 100 log entries
+                                    </div>
+                                    <div id="recent100LogEntriesVisibility">
+                                        Toggle column: <a class="toggle-vis" data-column="0">Timestamp</a> - <a class="toggle-vis" data-column="1">Name</a> - <a class="toggle-vis" data-column="2">User id</a> - <a class="toggle-vis" data-column="3">Session id</a> - <a class="toggle-vis" data-column="4">Data</a>
                                     </div>
                                     <div class="table-responsive">
                                         <table id="recent100LogEntries" class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -352,6 +371,7 @@
 <!--     <script src="vendor/chart.js/Chart.min.js"></script> -->
     <script src="./DwenguinoIDE/js/lib/admin/datatables/jquery.dataTables.min.js"></script>
     <script src="./DwenguinoIDE/js/lib/admin/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="./DwenguinoIDE/js/lib/jquery-ui/jquery-ui.min.js"></script>
 
     <!-- Page level custom scripts -->
 <!--     <script src="js/demo/chart-area-demo.js"></script>

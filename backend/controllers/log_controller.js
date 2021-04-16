@@ -6,6 +6,7 @@ import { EVENT_NAMES } from '../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/log
 import path from 'path';
 import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
+import Validator from '../utils/validator.js';
 
 import { Worker, isMainThread, parentPort } from 'worker_threads';
 
@@ -20,51 +21,59 @@ exports.newSessionId = function(req, res) {
 exports.event = function(req, res) {  
   let logitem = new Logitem();
 
-  logitem.user_id = req.user._id;
-  logitem.session_id = req.body.sessionId;
-  logitem.activity_id = req.body.activityId;
-  logitem.timestamp = req.body.timestamp;
-  logitem.event.name = req.body.event.name;
-  logitem.event.data = req.body.event.data;
+  const { 
+    timestamp,
+    sessionId,
+    activityId,
+    eventName,
+    data
+  } = req.body;
 
-  if (!req.body.event.name){
-    res.send("incorrect logging format");
-    return
-  }
+  let errors = Validator.validateLoggingFields(timestamp, eventName);
+  if (errors.length > 0) {
+    res.status(401).send(errors);
+  } else {
+    logitem.userId = req.user._id;
+    logitem.sessionId = sessionId;
+    logitem.activityId = activityId;
+    logitem.timestamp = timestamp;
+    logitem.eventName = eventName;
+    logitem.data = data;
 
-  // Save the logitem to the database
-  // If the event was a workspace change: 
-  // Spawn a thread after saving the item to generate the functional vector
-  // Disabled saving for testing purposes
-  logitem.save()
-  .then(item => {
+    // Save the logitem to the database
+    // If the event was a workspace change: 
+    // Spawn a thread after saving the item to generate the functional vector
+    // Disabled saving for testing purposes
+    logitem.save()
+    .then(item => {
 
-    // If the event is a changedworkspace event, generate functional vector otherwise just save the event
-    if (req.body.event.name == EVENT_NAMES.changedWorkspace){
-      let id = item.id;
-      // let promise = processEvent({data: req.body.event.data});
-      // promise.then((resp) => {
-      //   console.log("promise fulfilled");
-      //   console.log(resp);
-      //   Logitem.findOneAndUpdate({"_id": id }, 
-      //     {$set: { "event.functional_vector": resp.value }}, 
-      //     { useFindAndModify: false, runValidators: false }, 
-      //     (err, numAffected) => {
-      //         console.log("updated entry");
-      //     }
-      //   );
-      // }).catch((err) => {
-      //   console.error(err);  
-      // }); 
+      // If the event is a changedworkspace event, generate functional vector otherwise just save the event
+      if (req.body.eventName == EVENT_NAMES.changedWorkspace){
+        let id = item._id;
+        // let promise = processEvent({data: req.body.data});
+        // promise.then((resp) => {
+        //   console.log("promise fulfilled");
+        //   console.log(resp);
+        //   Logitem.findOneAndUpdate({"_id": id }, 
+        //     {$set: { "event.functional_vector": resp.value }}, 
+        //     { useFindAndModify: false, runValidators: false }, 
+        //     (err, numAffected) => {
+        //         console.log("updated entry");
+        //     }
+        //   );
+        // }).catch((err) => {
+        //   console.error(err);  
+        // }); 
+        res.sendStatus(500);
+      } else {
+        res.sendStatus(200);
+      }
+    })
+    .catch(err => {
+      console.debug(err);
       res.sendStatus(500);
-    } else {
-      res.sendStatus(200);
-    }
-  })
-  .catch(err => {
-    console.debug(err);
-    res.sendStatus(500);
-  });
+    });
+  }
 };
 
 function processEvent(data){
@@ -141,7 +150,31 @@ exports.getRecent100LogItems = function(req, res) {
 exports.exportLogItems = function(req, res) {
   let db = mongoose.connection;
 
-  db.collection('loggings').find({}, {}).toArray()
+  const { dateFrom, dateUntil } = req.body;
+
+  let query = {};
+  if((dateFrom != null) && (dateUntil != null)) {
+    query = {
+      timestamp: { 
+          $gt: new Date(dateFrom),
+          $lt: new Date(dateUntil)
+      }
+    }
+  } else if(dateFrom != null){
+    query = {
+      timestamp: { 
+          $gt: new Date(dateFrom),
+      }
+    }
+  } else if(dateUntil != null){
+    query = {
+      timestamp: { 
+          $lt: new Date(dateUntil)
+      }
+    }
+  }
+  
+  db.collection('loggings').find(query, {}).toArray()
   .then(function(logItems){
 
     res.status(200).send(logItems);

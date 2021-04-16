@@ -1,6 +1,9 @@
 /**
  * @license
- * Copyright 2012 Google LLC
+ * Visual Blocks Language
+ *
+ * Copyright 2012 Google Inc.
+ * https://developers.google.com/blockly/
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,25 +22,37 @@
  * @fileoverview Generating Python for variable blocks.
  * @author q.neutron@gmail.com (Quynh Neutron)
  */
-'use strict';
+ 'use strict';
 
-goog.provide('Blockly.Python.variables');
-
-goog.require('Blockly.Python');
-
-
-Blockly.Python['variables_get'] = function(block) {
-  // Variable getter.
-  var code = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
-  return [code, Blockly.Python.ORDER_ATOMIC];
-};
-
-Blockly.Python['variables_set'] = function(block) {
-  // Variable setter.
-  var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
-      Blockly.Python.ORDER_NONE) || '0';
-  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
-      Blockly.Variables.NAME_TYPE);
-  return varName + ' = ' + argument0 + '\n';
-};
+ goog.provide('Blockly.Python.variables');
+ 
+ goog.require('Blockly.Python');
+ 
+ 
+ Blockly.Python['variables_get'] = function(block) {
+   // Variable getter.
+   var code = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+       Blockly.Variables.NAME_TYPE);
+   return [code, Blockly.Python.ORDER_ATOMIC];
+ };
+ 
+ Blockly.Python['variables_set'] = function(block) {
+   // Variable setter.
+   var argument0 = Blockly.Python.valueToCode(block, 'VALUE',
+       Blockly.Python.ORDER_NONE) || '0';
+   var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+       Blockly.Variables.NAME_TYPE);
+   return varName + ' = ' + argument0 + '\n';
+ };
+ 
+ 
+ Blockly.Python.variables_declare_set = function() {
+   // Variable setter.
+   var varValue = Blockly.Python.valueToCode(this, 'VALUE',
+       Blockly.Python.ORDER_ASSIGNMENT) || '0';
+   var varName = Blockly.Python.variableDB_.getName(this.getFieldValue('VAR'),
+       Blockly.Variables.NAME_TYPE);
+   //Blockly.JavaScript.definitions_[varName] = 'var ' + varName + ';\n';
+ 
+   return varName + ' = ' + varValue + '\n';
+ };
