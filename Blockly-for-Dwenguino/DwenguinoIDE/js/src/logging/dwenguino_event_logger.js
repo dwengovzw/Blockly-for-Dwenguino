@@ -54,14 +54,15 @@ class DwenguinoEventLogger {
      */
     createEvent(eventName, data, difficultyLevel = 0, simulatorState = -1){
         var event = {
-        "timestamp": Date.now(),
-        "name": eventName,
-        "simulatorState": simulatorState,
-        "selectedDifficulty": difficultyLevel,
-        "activeTutorial": this.tutorialIdSetting,
-        "computerId": this.computerId,
-        "workshopId": this.workshopId,
-        "data": data
+            "timestamp": Date.now(),
+            "eventName": eventName,
+            "sessionId": this.sessionId,
+            "simulatorState": simulatorState,
+            "selectedDifficulty": difficultyLevel,
+            "activeTutorial": this.tutorialIdSetting,
+            "computerId": this.computerId,
+            "workshopId": this.workshopId,
+            "data": JSON.stringify(data)
         };
         return event;
     }
@@ -72,17 +73,15 @@ class DwenguinoEventLogger {
      * @param {event} eventToRecord | The event that will be saved by the server into the database.
      */
     recordEvent(eventToRecord){
-        var serverSubmission = {
-        "timestamp": $.now(),
-        "sessionId": this.sessionId,
-        "event": eventToRecord
-        };
-        console.debug('Record event ' + eventToRecord.name + ' with data ', serverSubmission);
+        console.debug('Record event ' + eventToRecord.eventName + ' with data ' + eventToRecord.data);
         if (this.sessionId !== undefined){
             $.ajax({
                 type: "POST",
                 url: ServerConfig.getServerUrl() + "/logging/event",
-                data: serverSubmission,
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                data: JSON.stringify(eventToRecord)
             }).done(function(data){
                 console.debug('Recording submitted', data);
             }).fail(function(response, status)  {

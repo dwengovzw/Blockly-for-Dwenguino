@@ -9,6 +9,9 @@ let AdminPanel = {
         $("#export-logging-entries").on("click", function(){
             AdminPanel.exportLoggingEntries();
         })
+
+        $( "#datepicker-from" ).datepicker();
+        $( "#datepicker-until" ).datepicker();
     },
 
     showUserInfo: function(){
@@ -224,7 +227,7 @@ let AdminPanel = {
             table.destroy();
         }
 
-        $('#recentLogEntries').DataTable( {
+        var table = $('#recentLogEntries').DataTable( {
             ajax: {
                 url: ServerConfig.getServerUrl() + '/user/admin/getRecentLogItems',
                 dataSrc: '',
@@ -243,12 +246,26 @@ let AdminPanel = {
                 }
             },
             columns: [ 
-                { data: 'timestamp' },
-                { data: 'event.name' },
-                { data: 'user_id'},
-                { data: 'session_id'},
-                { data: 'event.data'}
+                {   data: 'timestamp' },
+                {   data: 'eventName' },
+                {   data: 'userId'},
+                {   data: 'sessionId'},
+                {   data: 'data',
+                    render: function(data, type, row){
+                        return '<textarea>' + data + '</textarea>';
+                    } 
+                }
              ]
+        } );
+
+        $('#recentLogEntriesVisibility a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+     
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+     
+            // Toggle the visibility
+            column.visible( ! column.visible() );
         } );
     },
 
@@ -260,11 +277,11 @@ let AdminPanel = {
             table.destroy();
         }
 
-        $('#recent100LogEntries').DataTable( {
+        var table = $('#recent100LogEntries').DataTable( {
             ajax: {
                 url: ServerConfig.getServerUrl() + '/user/admin/getRecent100LogItems',
                 dataSrc: '',
-                deferRender: true,
+                // deferRender: true,
                 error: function (response, error, code)
                 {
                     console.log(code);
@@ -279,12 +296,26 @@ let AdminPanel = {
                 }
             },
             columns: [ 
-                { data: 'timestamp' },
-                { data: 'event.name' },
-                { data: 'user_id'},
-                { data: 'session_id'},
-                { data: 'event.data'}
+                {   data: 'timestamp' },
+                {   data: 'eventName' },
+                {   data: 'userId'},
+                {   data: 'sessionId'},
+                {   data: 'data',
+                    render: function(data, type, row){
+                    return '<textarea>' + data + '</textarea>';
+                } 
+            }
              ]
+        } );
+
+        $('#recent100LogEntriesVisibility a.toggle-vis').on( 'click', function (e) {
+            e.preventDefault();
+     
+            // Get the column API object
+            var column = table.column( $(this).attr('data-column') );
+     
+            // Toggle the visibility
+            column.visible( ! column.visible() );
         } );
     },
 
@@ -295,10 +326,22 @@ let AdminPanel = {
             
         let fileName = 'dwengo_logging_entries_' + date + '.json';
 
+        let dateFrom = $("#datepicker-from").datepicker('getDate');
+        let dateUntil = $("#datepicker-until").datepicker('getDate');
+
+        let data = { 
+            "dateFrom": dateFrom,
+            "dateUntil": dateUntil
+        }
+
         $.ajax({
-            type: "GET",
-            url: ServerConfig.getServerUrl() + "/user/admin/exportLogItems"}
-        ).done(function(data){
+            type: "POST",
+            url: ServerConfig.getServerUrl() + "/user/admin/exportLogItems",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(data)
+        }).done(function(data){
             // The user is still logged in
             let text = JSON.stringify(data, null, 2);     
             AdminPanel.download(fileName, text);
@@ -313,9 +356,13 @@ let AdminPanel = {
                 ).done(function(data){
                     // The user has successfully renewed the access token
                     $.ajax({
-                        type: "GET",
-                        url: ServerConfig.getServerUrl() + "/user/admin/exportLogItems"}
-                    ).done(function(data){
+                        type: "POST",
+                        url: ServerConfig.getServerUrl() + "/user/admin/exportLogItems",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        data: JSON.stringify(data)
+                    }).done(function(data){
                         // The user is still logged in
                         let text = JSON.stringify(data, null, 2);
                        AdminPanel.download(fileName, text);
