@@ -50,7 +50,7 @@ Blockly.JavaScript['conveyor_rgb_color_with_numbers'] = function (block) {
 
 Blockly.JavaScript['conveyor_color'] = function (block) {
     let conv_colors = {
-        noColor: "-1",
+        noColor: "0",
         black: "855309",
         white: "16777215",
         gray: "8421504",
