@@ -1,10 +1,12 @@
-import Useritem from '../models/user_model.js';
-import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
 
 let exports  = {};
 
+/**
+ * Returns the first name, email address and role of the authenticated user.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getUserInfo = function(req, res) {
     let db = mongoose.connection;
 
@@ -24,6 +26,11 @@ exports.getUserInfo = function(req, res) {
     });
 }
 
+/**
+ * 
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.updateUserInfo = function(req, res) {
     let db = mongoose.connection;
 
@@ -49,6 +56,11 @@ exports.updateUserInfo = function(req, res) {
     );
 }
 
+/**
+ * Deletes the account of the authenticated user.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.deleteMyAccount = function(req, res) {
     let db = mongoose.connection;
     let id = mongoose.Types.ObjectId(req.user._id)
@@ -63,6 +75,12 @@ exports.deleteMyAccount = function(req, res) {
     });
 }
 
+/**
+ * Deletes the account of the user with the provided email address. 
+ * Only accessible to admins.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.deleteAccountOfOtherUser = function(req, res){
     let db = mongoose.connection;
     let email = mongoose.Types.ObjectId(req.email)
@@ -77,6 +95,12 @@ exports.deleteAccountOfOtherUser = function(req, res){
     });
 }
 
+/**
+ * Returns the saved logged events from the user with the provided email address.
+ * Only accessible to admins.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getLoggingDataOfOtherUser = function(req, res) {
     let db = mongoose.connection;
 
@@ -103,6 +127,12 @@ exports.getLoggingDataOfOtherUser = function(req, res) {
     });
 }
 
+/**
+ * Returns the total number of existing users (pending and active).
+ * Only accessible to admins.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getTotalNumberOfUsers = function(req, res) {
     let db = mongoose.connection;
 
@@ -112,6 +142,12 @@ exports.getTotalNumberOfUsers = function(req, res) {
     });
 }
 
+/**
+ * Returns the total number of existing active users. 
+ * Only accessible to admins.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getTotalNumberOfVerifiedUsers = function(req, res) {
     let db = mongoose.connection;
     

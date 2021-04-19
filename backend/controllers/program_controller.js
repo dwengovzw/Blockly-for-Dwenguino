@@ -1,11 +1,13 @@
-import Useritem from '../models/user_model.js';
 import ProgramItem from '../models/program_model.js';
-import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
 
 let exports  = {};
 
+/**
+ * Returns all saved programs from the authenticated user.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getUserPrograms = function(req, res) {
   let db = mongoose.connection;
 
@@ -16,6 +18,13 @@ exports.getUserPrograms = function(req, res) {
   });
 }
 
+/**
+ * Saves a program from the authenticated user into the database.
+ * A user id, program name and program code should be provided. We also 
+ * record the timestamp of when the program was saved.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.saveUserProgram = function(req, res) {
     let db = mongoose.connection;
   
@@ -36,6 +45,11 @@ exports.saveUserProgram = function(req, res) {
       });
 }
 
+/**
+ * Delete the program from the authenticated user with the specified program id.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.deleteUserProgram = function(req, res) {
     let db = mongoose.connection;
     let user_id = req.user._id;
@@ -52,12 +66,18 @@ exports.deleteUserProgram = function(req, res) {
     });
 }
 
+/**
+ * Update the program name of the program previously saved by the authenticated user and 
+ * identified by the specified program_id.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.updateProgramName = function(req, res) {
   let db = mongoose.connection;
   let user_id = req.user._id;
   let program_id = mongoose.Types.ObjectId(req.body._id);
 
-  let conditions = { _id: program_id };
+  let conditions = { _id: program_id, user_id: user_id };
   let update = { 
       $set :
       {

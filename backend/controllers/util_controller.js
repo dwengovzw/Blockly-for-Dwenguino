@@ -151,6 +151,13 @@ exports.run = function (req, res) {
     
 };
 
+/**
+ * Sets the preferred language of the user as a language cookie, used for email communication.
+ * The language should be included as a two-letter country code. This request should be made every
+ * time the user changes the language in the frontend application.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.setLanguage = function (req, res) {
     const { 
         lang
