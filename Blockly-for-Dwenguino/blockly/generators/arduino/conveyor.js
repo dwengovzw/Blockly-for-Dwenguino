@@ -163,9 +163,8 @@ Blockly.Arduino['conveyor_belt'] = function (block) {
 
 Blockly.Arduino['conveyor_button'] = function (block) {
     var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE) || '5';
-    Blockly.Arduino.definitions_['define_buttonpin_' + pin] = "#define BUTTON_PIN_" + pin + " " + pin +"\n";
-    Blockly.Arduino.setups_['setup_buttonpin_' + pin] = "pinMode(BUTTON_PIN_" + pin + ", INPUT);";
-    var code = 'digitalRead(BUTTON_PIN_' + pin + ')';
+    Blockly.Arduino.setups_['setup_buttonpin_' + pin] = "pinMode(" + pin + ", INPUT);";
+    var code = 'digitalRead(' + pin + ')';
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 
