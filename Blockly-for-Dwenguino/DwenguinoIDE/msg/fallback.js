@@ -610,6 +610,8 @@ MSG_FALLBACK.logging = {
   myPrograms: "My programs",
   saveCurrentProgram: "Save your current program",
   programName: "Program name",
+  deleteAccount: "Delete my account",
+  emailOrPasswordIncorrect: "Your email or password was incorrect. Try again."
 };
 
 MSG_FALLBACK.validator = {

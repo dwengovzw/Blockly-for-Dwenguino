@@ -947,6 +947,8 @@ MSG.logging = {
   myPrograms: "Mijn programma's",
   saveCurrentProgram: "Bewaar je huidige programma",
   programName: "Naam programma",
+  deleteAccount: "Verwijder mijn account",
+  emailOrPasswordIncorrect: "Je email of password was incorrect. Probeer opnieuw."
 };
 
 MSG.validator = {
