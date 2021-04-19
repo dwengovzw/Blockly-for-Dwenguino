@@ -21,7 +21,7 @@ class LoginMenu {
      * Show the general user menu on the screen
      */
     createInitialMenu(){
-        LoggingModal.createLoggingModalDialogWithoutFooter(MSG.logging['login']);
+        LoggingModal.createLoggingModalDialogWithoutFooter(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['login']));
 
         let userInfo = 'user_info';
         let authenticationMenu = 'authentication_menu';
@@ -120,21 +120,21 @@ class LoginMenu {
                     ).done(function(data){
                         // The user is still logged in
                         $("#" + authenticationMenu).append('<div id="authentication_programs" class="tutorial_categories_item card"></div>');
-                        $("#authentication_programs").append('<div class="category_tag">' + MSG.logging['myPrograms'] + '</div>');
+                        $("#authentication_programs").append('<div class="category_tag">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging',['myPrograms']) + '</div>');
                         $("#authentication_programs").append('<div id="authentication_programs_img"></div>');
                         $("#authentication_programs").click(function(){
                             self._userProgramsModal.showUserPrograms();
                         });
 
                         $("#" + authenticationMenu).append('<div id="authentication_settings" class="tutorial_categories_item card"></div>');
-                        $("#authentication_settings").append('<div class="category_tag">' + MSG.logging['settings'] + '</div>');
+                        $("#authentication_settings").append('<div class="category_tag">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging',['settings']) + '</div>');
                         $("#authentication_settings").append('<div id="authentication_settings_img"></div>');
                         $("#authentication_settings").click(function(){
                             self._userSettingsModal.showUserSettings();
                         });
                         
                         $("#" + authenticationMenu).append('<div id="authentication_logout" class="tutorial_categories_item card"></div>');
-                        $("#authentication_logout").append('<div class="category_tag">'+ MSG.logging['logout'] +'</div>');
+                        $("#authentication_logout").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['logout']) +'</div>');
                         $("#authentication_logout").append('<div id="logout_img"></div>');
             
                         $("#authentication_logout").click(function(){
@@ -143,11 +143,11 @@ class LoginMenu {
                     }).fail(function(response, status)  {
                         // New access token invalid so the user is not logged in
                         $("#" + authenticationMenu).append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
-                        $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
+                        $("#authentication_new_user").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['newuser']) +'</div>');
                         $("#authentication_new_user").append('<div id="new_user_img"></div>');
                 
                         $("#" + authenticationMenu).append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
-                        $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+                        $("#authentication_existing_user").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['login']) +'</div>');
                         $("#authentication_existing_user").append('<div id="school_user_img"></div>');
                 
                         $("#authentication_new_user").click(function(){
@@ -161,11 +161,11 @@ class LoginMenu {
                 }).fail(function(response, status)  {
                     // Refresh token invalid so the user is not logged in again
                     $("#" + authenticationMenu).append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
-                    $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
+                    $("#authentication_new_user").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['newuser']) +'</div>');
                     $("#authentication_new_user").append('<div id="new_user_img"></div>');
             
                     $("#" + authenticationMenu).append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
-                    $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+                    $("#authentication_existing_user").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['login']) +'</div>');
                     $("#authentication_existing_user").append('<div id="school_user_img"></div>');
             
                     $("#authentication_new_user").click(function(){
@@ -179,11 +179,11 @@ class LoginMenu {
             } else {
                 // The user was never logged in so there is no user info.
                 $("#" + authenticationMenu).append('<div id="authentication_new_user" class="tutorial_categories_item card"></div>');
-                $("#authentication_new_user").append('<div class="category_tag">'+ MSG.logging['newuser'] +'</div>');
+                $("#authentication_new_user").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['newuser']) +'</div>');
                 $("#authentication_new_user").append('<div id="new_user_img"></div>');
         
                 $("#" + authenticationMenu).append('<div id="authentication_existing_user" class="tutorial_categories_item card"></div>');
-                $("#authentication_existing_user").append('<div class="category_tag">'+ MSG.logging['login'] +'</div>');
+                $("#authentication_existing_user").append('<div class="category_tag">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['login']) +'</div>');
                 $("#authentication_existing_user").append('<div id="school_user_img"></div>');
         
                 $("#authentication_new_user").click(function(){
@@ -203,33 +203,24 @@ class LoginMenu {
      */
     createLoginMenu(){
         var self = this;
-        LoggingModal.createLoggingModalDialog(MSG.logging['login']);
+        LoggingModal.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['login']));
 
         $('#loggingModalBody').append('<form id="loginUser"></form>');
 
         $('#loginUser').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
-        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
-        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['email'])+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterEmail'])+'">');
 
         $('#loginUser').append('<div id="inputPassword" class="ui-widget row mb-4"></div>');
-        $('#inputPassword').append('<label for="passwordTag" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword').append('<input id="passwordTag" name="passwordTag" type="password" class="col-md-8" maxLength="64" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#inputPassword').append('<label for="passwordTag" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['password'])+'</label>');
+        $('#inputPassword').append('<input id="passwordTag" name="passwordTag" type="password" autocomplete="current-password" class="col-md-8" maxLength="64" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterPassword'])+'">');
 
-        $('#loggingModalBody').append('<button id="forgot_password_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['forgotPassword']+'</button>');
-        //this.createIconModule();
+        $('#loggingModalBody').append('<button id="forgot_password_modal_dialog_button" type="button" class="btn btn-default mt-4">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['forgotPassword'])+'</button>');
 
-        //$('#loggingModalBody').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
-        $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
-        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+        $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['back'])+'</button>');
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['ok'])+'</button>');
 
         LoggingModal.showDialog();
-
-        // this.makeIconsResponsive();
-
-        // Reset the graphical password.
-        // $("#reset_modal_dialog_button").click(function(){
-        //     self.resetSelectedIcons();
-        // });
 
         $("#forgot_password_modal_dialog_button").click(function(){
             self.forgotPassword();
@@ -259,16 +250,16 @@ class LoginMenu {
 
     forgotPassword(){
         var self = this;
-        LoggingModal.createLoggingModalDialog(MSG.logging['forgotPassword']);
+        LoggingModal.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['forgotPassword']));
 
         $('#loggingModalBody').append('<form id="forgotPassword"></form>');
 
         $('#forgotPassword').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
-        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
-        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['email'])+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" class="col-md-8" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterEmail'])+'">');
 
-        $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
-        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+        $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['back'])+'</button>');
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['ok'])+'</button>');
 
         LoggingModal.showDialog();
 
@@ -309,11 +300,11 @@ class LoginMenu {
         }).done(function(data){
             self.showResetPasswordScreen();
         }).fail(function(response, status)  { 
-            self.createLoggingModalDialog(MSG.logging['forgotPassword']);
-            $('#loggingModalBody').append('<p>'+ MSG.logging['userDoesNotExist'] +'</p>');
+            self.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['forgotPassword']));
+            $('#loggingModalBody').append('<p>'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['userDoesNotExist']) +'</p>');
 
-            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['back']+'</button>');
-            $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+            $('#loggingModalFooter').append('<button id="back_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['back'])+'</button>');
+            $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['ok'])+'</button>');
     
             $("#loggingModal").modal('show');
 
@@ -329,26 +320,26 @@ class LoginMenu {
 
     showResetPasswordScreen(){
         var self = this;
-        LoggingModal.createLoggingModalDialog(MSG.logging['resetPassword']);
+        LoggingModal.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['resetPassword']));
         $('#loggingModalBody').append('<form id="resetPassword"></form>');
 
         $('#resetPassword').append('<div id="inputEmail" class="ui-widget row mb-4"></div>');
-        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ MSG.logging['email']+'</label>');
-        $('#inputEmail').append('<input id="emailTag" name="emailTag" autocomplete="username" class="col-md-8" placeholder="'+ MSG.logging['enterEmail']+'">');
+        $('#inputEmail').append('<label for="emailTag" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['email'])+'</label>');
+        $('#inputEmail').append('<input id="emailTag" name="emailTag" autocomplete="username" class="col-md-8" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterEmail'])+'">');
 
         $('#resetPassword').append('<div id="inputSecretCode" class="ui-widget row mb-4"></div>');
-        $('#inputSecretCode').append('<label for="secretCodeTag" class="col-md-3">'+ MSG.logging['secretCode']+'</label>');
-        $('#inputSecretCode').append('<input id="secretCodeTag" name="secretCodeTag" class="col-md-8" placeholder="'+ MSG.logging['enterSecretCode']+'">');
+        $('#inputSecretCode').append('<label for="secretCodeTag" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['secretCode'])+'</label>');
+        $('#inputSecretCode').append('<input id="secretCodeTag" name="secretCodeTag" class="col-md-8" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterSecretCode'])+'">');
 
         $('#resetPassword').append('<div id="inputPassword1" class="ui-widget row mb-4"></div>');
-        $('#inputPassword1').append('<label for="passwordTag1" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" maxLength="64" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#inputPassword1').append('<label for="passwordTag1" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['password'])+'</label>');
+        $('#inputPassword1').append('<input id="passwordTag1" name="passwordTag1" type="password" autocomplete="new-password" class="col-md-8" maxLength="64" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterPassword'])+'">');
 
         $('#resetPassword').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
-        $('#inputPassword2').append('<label for="passwordTag2" class="col-md-3">'+ MSG.logging['password']+'</label>');
-        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" maxLength="64" placeholder="'+ MSG.logging['enterPassword']+'">');
+        $('#inputPassword2').append('<label for="passwordTag2" class="col-md-3">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['password'])+'</label>');
+        $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-8" maxLength="64" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging',['enterPassword'])+'">');
  
-        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
+        $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['ok'])+'</button>');
 
         LoggingModal.showDialog();
 
@@ -366,7 +357,6 @@ class LoginMenu {
             errors.push(Validator.validatePassword(password, email));
             errors.push(Validator.validatePassword(password_repeated, email));
             
-        
             if(Validator.hasErrors(errors)){
                 LoggingModal.showErrors(errors);
             } else {
@@ -403,6 +393,7 @@ class LoginMenu {
     }
 
     login(){
+        let self = this;
         let email = $( "input[name=emailTag]").val();
         let password = $( "input[name=passwordTag]").val();
 
@@ -418,16 +409,17 @@ class LoginMenu {
             },
             data: JSON.stringify(serverSubmission)
         }).done(function(data){
-            console.log(data);
-            //self.resetSelectedIcons();
-            LoggingModal.removeDialog();
+            // LoggingModal.removeDialog();
+            self.createInitialMenu();
         }).fail(function(response, status)  {
             console.warn('Failed to log in:', status);
-            //self.resetSelectedIcons();
             var errors = [];
-
             errors = response.responseJSON.error.map(function (error) {
-                return { message: '<a id="resendLink" href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', [error]) + '</a>'};
+                if(error == "userNotActive"){
+                    return { message: '<a id="resendLink" href="#">' + DwenguinoBlocklyLanguageSettings.translateFrom('logging', [error]) + '</a>'};
+                } else {
+                    return { message: '<p>'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', [error])+'</p>'}
+                }
             });
             LoggingModal.showErrors(errors);
 
@@ -463,7 +455,7 @@ class LoginMenu {
 
     createUserMenu(){
         var self = this;
-        LoggingModal.createLoggingModalDialog(MSG.logging['newuser']);
+        LoggingModal.createLoggingModalDialog(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['newuser']));
 
         $('#loggingModalBody').append('<form id="registerUser"></form>');
 
@@ -486,7 +478,7 @@ class LoginMenu {
         $('#acceptResearch').append('<input type="checkbox" name="acceptResearchCheckbox" id="acceptResearchCheckbox" class="col-md-1">');
         $('#acceptResearch').append('<label id="acceptResearchLabel" for="acceptResearchCheckbox" class="col-md-11">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['acceptResearch'])+'</label>');
 
-        $('#loggingModalFooter').append('<button id="continue_logging_modal" type="button" class="btn btn-default">'+MSG.logging['continue']+'</button>');
+        $('#loggingModalFooter').append('<button id="continue_logging_modal" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['continue'])+'</button>');
 
         LoggingModal.showDialog();
 
@@ -528,23 +520,6 @@ class LoginMenu {
          $('#registerUser').append('<div id="inputPassword2" class="ui-widget row mb-4"></div>');
          $('#inputPassword2').append('<label for="passwordTag2" class="col-md-4">'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['repeatedPassword'])+'</label>');
          $('#inputPassword2').append('<input id="passwordTag2" name="passwordTag2" type="password" autocomplete="new-password" class="col-md-7" maxLength="64" placeholder="'+ DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['enterRepeatedPassword'])+'">');
-         //this.createIconModule();
- 
-         // LANGUAGE PREFERENCE
-        //  let languageOptions = {
-        //      en: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['english']), 
-        //      nl: DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['dutch'])
-        //  };
- 
-        //  $('#registerUser').append('<div id="inputLanguage" class="ui-widget row mb-4">');
-        //  $('#inputLanguage').append('<label for="languageTag" class="col-md-4">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging', ['language'])+'</label>');
-        //  $('#inputLanguage').append('<select id="languageTag" name="languageTag" class="col-md-7"></select>');
-         
-        //  $.each(languageOptions, function(val, text) {
-        //      $('#languageTag').append(
-        //          $('<option></option>').val(val).html(text)
-        //      );
-        //  });
  
          // USER ROLE
          let roleOptions = {
@@ -562,15 +537,7 @@ class LoginMenu {
              );
          });
  
-         //$('#registerUser').append('<button id="reset_modal_dialog_button" type="button" class="btn btn-default mt-4">'+MSG.logging['reset']+'</button>');   
-         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+MSG.logging['ok']+'</button>');
-     
-         //this.makeIconsResponsive();
-     
-         // Reset the graphical password.
-         // $("#reset_modal_dialog_button").click(function(){
-         //     self.resetSelectedIcons();
-         // });
+         $('#loggingModalFooter').append('<button id="submit_modal_dialog_button" type="button" class="btn btn-default">'+DwenguinoBlocklyLanguageSettings.translateFrom('logging',['ok'])+'</button>');
      
          // Register the new user.
          $("#submit_modal_dialog_button").click(function(){
@@ -611,7 +578,6 @@ class LoginMenu {
         let email = $( "input[name=emailTag]").val();
         let password = $( "input[name=passwordTag1]").val();
         let password_repeated = $( "input[name=passwordTag2]").val();
-        // let language = $("select[name=languageTag]").val();
         let role = $("select[name=roleTag]").val();
 
         let serverSubmission = {
@@ -619,7 +585,6 @@ class LoginMenu {
             "email": email,
             "password": password,
             "repeated_password": password_repeated,
-            //"language": language,
             "role": role,
             "accept_conditions": acceptConditions,
             "accept_research": acceptResearch,
@@ -632,10 +597,8 @@ class LoginMenu {
             },
             data: JSON.stringify(serverSubmission),
         }).done(function(data){
-            //self.resetSelectedIcons();
             LoggingModal.removeDialog();
             self.showVerificationScreen();
-            //self.showSettingsMenu();
         }).fail(function(response, status)  {
             console.log('Failed to register:', status);
             if(response.status == 401 && response.responseJSON.error == 'userAlreadyExists'){
@@ -645,10 +608,10 @@ class LoginMenu {
     }
 
     showVerificationScreen(){
-        LoggingModal.createLoggingModalDialogWithoutFooter(MSG.logging['verification']);
+        LoggingModal.createLoggingModalDialogWithoutFooter(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['verification']));
 
         $('#loggingModalBody').append('<p id="loggingModalBody1"></p>')
-        $('#loggingModalBody1').text(MSG.logging['verificationSentTo']);
+        $('#loggingModalBody1').text(DwenguinoBlocklyLanguageSettings.translateFrom('logging',['verificationSentTo']));
 
         LoggingModal.showDialog();
     }
@@ -751,88 +714,6 @@ class LoginMenu {
     //     }).fail(function(response, status)  {
     //         console.warn('Failed to fetch schools:', status);
     //     });
-    // }
-
-    // /**
-    //  * Graphical password grid
-    //  */
-
-    // /**
-    //  * Create the module and add the graphical password grid
-    //  */
-    // createIconModule(){
-    //     $('#loggingModalBody').append('<div class="row"><div class="col-md-12 mt-4"><b>'+MSG.logging['choosePassword']+'</b></div></div>');
-    //     $('#loggingModalBody').append('<div class="row"><div class="col-md-3 mt-4 mb-4">'+MSG.logging['currentlySelected']+'</div><div class="col-md-8 mt-4 mb-4"><div id="currentlySelected" class="row"></div></div>');
-
-    //     $('#currentlySelected').append('<div id="currentlySelected0" class="col-2"></div>');
-    //     $('#currentlySelected').append('<div id="currentlySelected1" class="col-2"></div>');
-    //     $('#currentlySelected').append('<div id="currentlySelected2" class="col-2"></div>');
-    //     $('#currentlySelected').append('<div id="currentlySelected3" class="col-2"></div>');
-
-    //     this.createIconGrid();
-    // }
-
-    // /**
-    //  * Make the icons of the graphical password grid responsive to the click event
-    //  */
-    // makeIconsResponsive(){
-    //     var self = this;
-    //     for(let i=1; i<5; i++){
-    //         for(let j=1; j<5; j++){
-    //             $("#r" + i +"c" + j).click(function(){
-    //                 self.addIconToId(i,j);
-    //             });    
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * Create the graphical password grid within the modal dialog body.
-    //  * The grid is a 4x4 matrix.
-    //  */
-    // createIconGrid(){
-    //     $('#loggingModalBody').append('<div id="inputIcons"></div>');
-
-    //     $('#inputIcons').append('<div id="row1" class="ui-widget row ml-1"></div>');
-    //     $('#inputIcons').append('<div id="row2" class="ui-widget row ml-1"></div>');
-    //     $('#inputIcons').append('<div id="row3" class="ui-widget row ml-1"></div>');
-    //     $('#inputIcons').append('<div id="row4" class="ui-widget row ml-1"></div>');
-
-    //     for (let i = 1; i < 5; i++) {
-    //         for(let j = 1; j < 5; j++){
-    //             $("#row"+i).append('<div id="r'+i+'c'+j+'" class="col-md-2 authentication_item mr-1 mb-1"></div>');
-    //             var n = ((i-1)*4)+j;
-    //             var icon = this.icons[n-1];
-    //             $("#r"+i+"c"+j).append('<div class="category_tag">'+ icon.name + '</div>');
-    //             $("#r"+i+"c"+j).append('<div id="school_user_img">' + icon.html + '</div>');
-    //         }
-    //     }
-    // }
-
-    // /**
-    //  * Reset the icons that were selected by the user.
-    //  */
-    // resetSelectedIcons(){
-    //     for(let k = 0; k < 4; k++){
-    //         this.currentlySelectedIcons[k] = '0';
-    //         $('#currentlySelected'+k).html("");
-    //     }
-    // }
-
-
-    // /**
-    //  * Add an icon at position i j to the graphical password grid.
-    //  */
-    // addIconToId(i,j){
-    //     for(let k = 0; k < 4; k++){
-    //         if(this.currentlySelectedIcons[k] == '0'){
-    //             let n = ((i-1)*4)+j;
-    //             let icon = this.icons[n-1];
-    //             this.currentlySelectedIcons[k] = JSON.stringify(icon.id);
-    //             $('#currentlySelected'+k).html(icon.name + '<p>' + icon.html + '</p>');
-    //             break;
-    //         }
-    //     }
     // }
 }
 

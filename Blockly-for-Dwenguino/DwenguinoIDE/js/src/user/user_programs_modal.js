@@ -4,12 +4,27 @@ import { LoginMenu } from './login_menu.js'
 export { UserProgramsModal } 
 import DwenguinoBlockly from "../dwenguino_blockly.js"
 
+/**
+ * The UserProgramsModal class provides a modal to load and save Dwenguinoblockly programs of the
+ * authenticated user into the database.
+ */
 class UserProgramsModal {
 
+    /**
+     * Construct the UserProgramsModal instance with a reference to the LoginMenu instance.
+     * _userPrograms will be used to keep a local copy of the authenticated user's programs from the database.
+     * @param {LoginMenu} loginMenu 
+     */
     constructor(loginMenu) {
         this._loginMenu = loginMenu;
+        this._userPrograms = new Array();
     }
 
+    /**
+     * Displays the UserProgramsModal with its associated functionalities: 
+     * (1) Save the current program of the authenticated user. The user needs to specify the name of the program. 
+     * (2) Display an overview of previously saved programs of the authenticated user. The user can rename, reload, download or remove these programs.
+     */
     showUserPrograms(){
         let self = this;
 
@@ -131,6 +146,9 @@ class UserProgramsModal {
         };  
     }
 
+    /**
+     * Reload the previously saved programs from the authenticated user into the UserProgramsModal.
+     */
     updateUserPrograms(){
         let self = this;
         let ajaxSettings = {
@@ -219,6 +237,10 @@ class UserProgramsModal {
         };  
     }
 
+    /**
+     * Saves the current DwenguinoBlockly program of the authenticated user into the database.
+     * The user needs to specify a name for the program to be saved.
+     */
     saveCurrentProgram(){
         let self = this;
 
@@ -265,11 +287,19 @@ class UserProgramsModal {
         };  
     }
 
+    /**
+     * Restore the program with the specified index into the DwenguinoBlockly coding field.
+     * @param {int} index | the index of the program to be restored from _userPrograms
+     */
     restoreProgram(index){
         let xml = Blockly.Xml.textToDom(this._userPrograms[index].program);
         Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
     }
 
+    /**
+     * Deletes the program with the specified index from the database.
+     * @param {int} index | the index of the program to be deleted from _userPrograms
+     */
     deleteProgram(index){
         let self = this;
 
@@ -307,6 +337,11 @@ class UserProgramsModal {
         };  
     }
 
+    /**
+     * Update the name of the program with the specified index from _userPrograms.
+     * @param {int} index 
+     * @param {String} name 
+     */
     updateProgramName(index, name){
         let self = this;
         this._userPrograms[index].program_name = name;
@@ -349,6 +384,10 @@ class UserProgramsModal {
 
     }
 
+    /**
+     * Downloads the program with the specified index.
+     * @param {int} index | the index of the program to be downloaded from _userPrograms
+     */
     downloadProgram(index){
         let xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         let data = Blockly.Xml.domToText(xml);

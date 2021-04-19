@@ -103,7 +103,7 @@ router.route('/user/update')
     .post(authenticationcontroller.authenticate, usercontroller.updateUserInfo);
 
 router.route('/user/delete')
-    .post(authenticationcontroller.authenticate, usercontroller.deleteMyAccount);
+    .get(authenticationcontroller.authenticate, usercontroller.deleteMyAccount);
 
 router.route('/user/programs')
     .get(authenticationcontroller.authenticate, programcontroller.getUserPrograms);
