@@ -181,7 +181,6 @@ exports.login = function(req, res){
             res.status(401).send("The password was not correct or this user does not exist.");
           } else {
             if(result){
-              let errors = [];
               if( user.status !== 'active'){
                 errors.push("userNotActive");
                 let data = {
@@ -224,12 +223,20 @@ exports.login = function(req, res){
                 });
               }
             } else {
-              res.status(401).send("Email or password incorrect.");
+              errors.push("emailOrPasswordIncorrect");
+              let data = {
+                "error": errors
+              }
+              res.status(401).send(data);
             } 
           }
         });
       } else {
-        res.status(401).send('Email or password incorrect.');
+        errors.push("emailOrPasswordIncorrect");
+        let data = {
+          "error": errors
+        }
+        res.status(401).send(data);
       }
     });
   }

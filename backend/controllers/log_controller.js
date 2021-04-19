@@ -98,6 +98,11 @@ function processEvent(data){
   })
 }
 
+/**
+ * Counts the number of logged events.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getTotalNumberOfLogItems = function(req, res) {
   let db = mongoose.connection;
 
@@ -107,11 +112,16 @@ exports.getTotalNumberOfLogItems = function(req, res) {
   });
 }
 
+/**
+ * Counts the number of logged events from the past 5 minutes.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getTotoalNumberOfRecentLogItems = function(req, res) {
   let db = mongoose.connection;
 
   let query = {
-    timestamp: { // 5 minutes ago (from now)
+    timestamp: {
         $gt: new Date(Date.now() - 1000 * 60 * 5)
     }
   }
@@ -122,11 +132,16 @@ exports.getTotoalNumberOfRecentLogItems = function(req, res) {
   });
 }
 
+/**
+ * Returns the collection of logged events from the past 5 minutes.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getRecentLogItems = function(req, res) {
   let db = mongoose.connection;
  
   let query = {
-    timestamp: { // 5 minutes ago (from now)
+    timestamp: { 
         $gt: new Date(Date.now() - 1000 * 60 * 5)
     }
   }
@@ -137,6 +152,11 @@ exports.getRecentLogItems = function(req, res) {
   });
 }
 
+/**
+ * Returns the collection of the 100 most recent logged events.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.getRecent100LogItems = function(req, res) {
   let db = mongoose.connection;
 
@@ -147,6 +167,13 @@ exports.getRecent100LogItems = function(req, res) {
   });
 }
 
+/**
+ * Returns a collection of logged events. A Date range (dateFrom en dateUntil) can be specified 
+ * to restrict the collection of events to a specific period. 
+ * If no range is provided, then it returns the collection of all logged events.
+ * @param {*} req 
+ * @param {*} res 
+ */
 exports.exportLogItems = function(req, res) {
   let db = mongoose.connection;
 
