@@ -151,7 +151,7 @@ class TutorialMenu {
     
         let self = this;
         let ajaxSettings = {
-            type: "GET",
+            type: "POST",
             url: ServerConfig.getServerUrl() + "/tutorials/completedTutorials",
             data: serverSubmission,
             retryLimit: 1
