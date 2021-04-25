@@ -315,7 +315,7 @@ class DwenguinoSimulationScenarioConveyor extends DwenguinoSimulationScenario {
             this.state.sensors[i].g = sensorData[i].g;
             this.state.sensors[i].b = sensorData[i].b;
     
-            boardState.setIoPinState(this.buttonPins[i], this.state.buttons[i].pressed);
+            boardState.setIoPinState(this.buttonPins[i], !this.state.buttons[i].pressed);
         }
 
         // the pin-distribution could have changed, so the displayhelper should know
