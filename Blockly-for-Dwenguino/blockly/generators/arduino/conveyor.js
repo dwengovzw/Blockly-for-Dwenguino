@@ -23,11 +23,11 @@ Blockly.Arduino['conveyor_ledstrip'] = function (block) {
     for (let i = 1; i < 6; i++){
         var col = parseInt(Blockly.Arduino.valueToCode(block, 'color' + i, Blockly.Arduino.ORDER_NONE) || '0');
         if (isNaN(col)) {
-            code += 'int col_value_' + i + ' = '+ Blockly.Arduino.valueToCode(block, 'color' + i, Blockly.Arduino.ORDER_NONE) + ';\n';
+            code += 'long col_value_' + i + ' = '+ Blockly.Arduino.valueToCode(block, 'color' + i, Blockly.Arduino.ORDER_NONE) + ';\n';
         }
     }
 
-    code += "int colors[][3] = {";
+    code += "long colors[][3] = {";
     for (let i = 1; i < 6; i++) {
         var col = parseInt(Blockly.Arduino.valueToCode(block, 'color' + i, Blockly.Arduino.ORDER_NONE) || '0');
         if(!isNaN(col)){
@@ -51,9 +51,11 @@ Blockly.Arduino['conveyor_ledstrip'] = function (block) {
     Blockly.Arduino.setups_['setup_ledstrip_begin'] = "ledStrip.begin();";
     Blockly.Arduino.setups_['setup_ledstrip_show'] = "ledStrip.show();\n";
 
+    // The first colorvalue for the function setPixelColor needs to be the green value, because the led strip that is used expects 
+    // the values in the order Green - Red - Blue instead of the normal Red - Green - Blue.
     code += `int strip_index;
 for(strip_index = 0; strip_index < 5; strip_index++){
-    ledStrip.setPixelColor(leds[strip_index], colors[strip_index][0] > 0 ? colors[strip_index][0] : 0 , colors[strip_index][1] > 0 ? colors[strip_index][1] : 0, colors[strip_index][2] > 0 ? colors[strip_index][2] : 0);
+    ledStrip.setPixelColor(leds[strip_index], colors[strip_index][1] > 0 ? colors[strip_index][1] : 0 , colors[strip_index][0] > 0 ? colors[strip_index][0] : 0, colors[strip_index][2] > 0 ? colors[strip_index][2] : 0);
 }
 ledStrip.show();
     `;
@@ -118,8 +120,9 @@ Blockly.Arduino['conveyor_color_sensor'] = function (block) {
     Blockly.Arduino.setups_['setup_S1_freq_scaling'] = "digitalWrite(S1, LOW);\n";
 
     Blockly.Arduino.definitions_['function_sensorVal'] = `
-int sensorVal(int outPin) {
-    int value = 0, frequency = 0;
+long sensorVal(int outPin) {
+    long value = 0;
+    int frequency = 0;
     
     digitalWrite(S2,LOW);
     digitalWrite(S3,LOW);
@@ -173,7 +176,7 @@ Blockly.Arduino['similar_color'] = function (block) {
     var colB = Blockly.Arduino.valueToCode(block, 'colorB', Blockly.Arduino.ORDER_NONE) || '0';
     var diff = parseInt(block.getFieldValue("diff"));
     Blockly.Arduino.definitions_['function_compareColors'] = `
-int areColorsSimilar(int colA, int colB, int diff) {
+int areColorsSimilar(long colA, long colB, int diff) {
     int bA = colA / 65536;
     int gA = (colA - bA * 65536)/256;
     int rA = colA - bA * 65536 - gA * 256;
