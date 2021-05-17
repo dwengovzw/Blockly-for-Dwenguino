@@ -200,13 +200,13 @@ Blockly.Arduino.finish = function(code) {
 
   // Ensure that initDwenguino() is always on the first command in setup() if Dwenguino (and not Arduino) is checked
   //if (!hardwareViewCheckbox.checked) {
-    if('userSetupCode' in Blockly.Arduino.setups_){
-      setups.push(Blockly.Arduino.setups_['userSetupCode']);
+    if('initDwenguino' in Blockly.Arduino.setups_){
+      setups.push(Blockly.Arduino.setups_['initDwenguino']);
     }
   //}
 
   for (var name in Blockly.Arduino.setups_) {
-    if(name != 'userSetupCode')
+    if(name != 'initDwenguino')
       setups.push(Blockly.Arduino.setups_[name]);
   }
 

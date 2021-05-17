@@ -49,7 +49,7 @@ Blockly.Arduino['conveyor_ledstrip'] = function (block) {
 
 
     Blockly.Arduino.setups_['setup_ledstrip_begin'] = "ledStrip.begin();";
-    Blockly.Arduino.setups_['setup_ledstrip_show'] = "ledStrip.show();\n";
+    Blockly.Arduino.setups_['setup_ledstrip_show'] = "ledStrip.show();";
 
     code += `int strip_index;
 for(strip_index = 0; strip_index < 5; strip_index++){
@@ -115,7 +115,7 @@ Blockly.Arduino['conveyor_color_sensor'] = function (block) {
     Blockly.Arduino.setups_['setup_outPin_' + pin] = "pinMode(" + pin + ", INPUT);";
     // Setting frequency scaling to 20%, common for Arduion (or Dwenguino)
     Blockly.Arduino.setups_['setup_S0_freq_scaling'] = "digitalWrite(S0, HIGH);";
-    Blockly.Arduino.setups_['setup_S1_freq_scaling'] = "digitalWrite(S1, LOW);\n";
+    Blockly.Arduino.setups_['setup_S1_freq_scaling'] = "digitalWrite(S1, LOW);";
 
     Blockly.Arduino.definitions_['function_sensorVal'] = `
 int sensorVal(int outPin) {

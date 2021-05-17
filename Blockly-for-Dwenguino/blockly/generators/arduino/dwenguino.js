@@ -29,21 +29,17 @@ Blockly.Arduino['setup_loop_structure'] = function (block) {
     var statements_setup = Blockly.Arduino.statementToCode(block, 'SETUP');
     var statements_loop = Blockly.Arduino.statementToCode(block, 'LOOP');
     // Assemble Arduino into code variable.
-    Blockly.Arduino.setups_['userSetupCode'] = 'initDwenguino();\n' + statements_setup + "\n";
+    Blockly.Arduino.setups_['initDwenguino'] = 'initDwenguino();\n';
+    Blockly.Arduino.setups_['userSetupCode'] = statements_setup.trim();
 
     return statements_loop;
-
-
 };
-
 
 Blockly.Arduino['set_leds'] = function (block) {
     var value_register_value = Blockly.Arduino.valueToCode(block, 'register value', Blockly.Arduino.ORDER_ATOMIC);
     var code = 'LEDS = ' + value_register_value + ';\n';
     return code;
 };
-
-
 
 Blockly.Arduino['dc_motor'] = function (block) {
     var value_channel = Blockly.Arduino.valueToCode(block, 'channel', Blockly.Arduino.ORDER_ATOMIC);
