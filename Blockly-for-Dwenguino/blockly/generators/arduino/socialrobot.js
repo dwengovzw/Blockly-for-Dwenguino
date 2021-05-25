@@ -30,12 +30,12 @@ var eyePatterns = [
   [ 0, 120, 132, 178, 177, 129, 126, 0],  // 18 - 'Angry L 2'
   [ 0, 112, 136, 164, 178, 129, 126, 0],  // 19 - 'Angry L 3'
   [ 0, 96, 144, 168, 180, 130, 127, 0],  // 20 - 'Angry L 4'
-  [  ], // 21
+  [ ], // 21
   [ 0, 126, 129, 177, 177, 130, 124, 0],  // 22 - 'Angry R 1'
   [ 0, 126, 129, 177, 178, 132, 120, 0],  // 23 - 'Angry R 2'
   [ 0, 126, 129, 178, 164, 136, 112, 0],  // 24 - 'Angry R 3'
-  [ 0, 127, 130, 180, 168, 144, 96, 0],  // 25 - 'Angry R 4'
-  [ ] // 26
+  [ 0, 127, 130, 180, 168, 144, 96, 0], // 25 - 'Angry R 4'
+  [ ], // 26
   [ 0, 62, 65, 153, 153, 130, 124, 0],  // 27 - 'Sad L 1'
   [ 0, 30, 33, 89, 154, 132, 120, 0],  // 28 - 'Sad L 2'
   [ 0, 14, 17, 41, 90, 132, 120, 0],  // 29 - 'Sad L 3'
@@ -246,7 +246,7 @@ Blockly.Arduino['socialrobot_show_ledmatrix_eye_pattern'] = function(block) {
 
   let segment = block.getFieldValue('NUMBERDISPLAY');
   let eyePatternIndex = block.getFieldValue('EYEPATTERN');
-  let eyePattern = eyePatterns[eyePatternIndex];
+  let eyePattern = eyePatterns[parseInt(eyePatternIndex)];
 
   let columns  = ['', '', '', '', '', '', '', ''];
   let rows = ['B', 'B', 'B', 'B', 'B', 'B', 'B', 'B'];
