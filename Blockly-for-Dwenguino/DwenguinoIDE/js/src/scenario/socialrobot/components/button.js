@@ -36,31 +36,26 @@ class SocialRobotButton extends RobotComponent{
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<div id='" + this.getCanvasId() + "' class='button_canvas_unpushed " + this.getHtmlClasses() + "'></div>");
-    
-        // let label = DwenguinoBlocklyLanguageSettings.translate(['pirButtonLabel']) + " " + this.getId();
-        // let id = '' + this.getType() + this.getId();
-        // this._button = new Button(id, 'sensor_options', label);
         
         console.log(this.getState());
         var self = this;
         this._button = document.getElementById(this.getCanvasId());
-        this._button.onmousedown = function (){
-            self.set
-            self._button.className = 'button_canvas_pushed ' + self.getHtmlClasses();
-            self.setState(1);
-            self._stateUpdated = true;
-            console.log(self.getState(), 'mousedown');
-            self._eventBus.dispatchEvent(EventsEnum.SAVE);
-        };
-
-        this._button.onmouseup = function (){
-            self.set
-            self._button.className = 'button_canvas_unpushed ' + self.getHtmlClasses();
-            self.setState(0);
-            self._stateUpdated = true;
-            console.log(self.getState(), 'mouseup');
-            self._eventBus.dispatchEvent(EventsEnum.SAVE);
-        };      
+        this._button.onclick = function(){
+            console.log(self._button.className);
+            if(self._button.className === 'button_canvas_unpushed sim_canvas button_canvas'){
+                self._button.className = 'button_canvas_pushed ' + self.getHtmlClasses();
+                self.setState(1);
+                self._stateUpdated = true;
+                console.log(self.getState(), 'mousedown');
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            } else {
+                self._button.className = 'button_canvas_unpushed ' + self.getHtmlClasses();
+                self.setState(0);
+                self._stateUpdated = true;
+                console.log(self.getState(), 'mouseup');
+                self._eventBus.dispatchEvent(EventsEnum.SAVE);
+            }
+        }; 
 
         let simButton = document.getElementById('sim_'+this.getType() + this.getId());
 
