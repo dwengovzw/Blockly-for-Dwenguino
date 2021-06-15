@@ -65,14 +65,18 @@ exports.deleteMyAccount = function(req, res) {
     let db = mongoose.connection;
     let id = mongoose.Types.ObjectId(req.user._id)
     let conditions = {_id: id };
-    db.collection('users').deleteOne(conditions, function(error, numAffected) {
-        if (error){
-            console.log(error);
-            res.sendStatus(400);
-        } else {
-            res.sendStatus(200);
-        }
+    let conditionsPrograms = {user_id: id};
+    db.collection('programs').deleteMany(conditionsPrograms, function(err){ 
+        db.collection('users').deleteOne(conditions, function(error, numAffected) {
+            if (error){
+                console.log(error);
+                res.sendStatus(400);
+            } else {
+                res.sendStatus(200);
+            }
+        });
     });
+    
 }
 
 /**

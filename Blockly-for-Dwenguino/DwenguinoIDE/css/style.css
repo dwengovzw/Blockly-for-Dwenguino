@@ -1041,6 +1041,7 @@ background-color: #ffffff;
     padding: 8%;
     font-size: 1.2vh;
     font-family: lcd-matrix-font;
+    text-transform: none;
     letter-spacing: 2px;
     word-spacing: 4px;
     position: absolute;

@@ -89,7 +89,7 @@ router.route('/logout')
 /* Tutorials */
 
 router.route('/tutorials/completedTutorials')
-    .get(authenticationcontroller.authenticate, tutorialcontroller.getCompletedTutorials);
+    .post(authenticationcontroller.authenticate, tutorialcontroller.getCompletedTutorials);
 
 router.route('/tutorials/completeTutorial')
     .post(authenticationcontroller.authenticate, tutorialcontroller.completeTutorial);
