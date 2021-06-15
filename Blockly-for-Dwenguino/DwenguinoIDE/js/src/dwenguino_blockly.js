@@ -6,6 +6,7 @@ import LoginMenu from './user/login_menu.js'
 import FileIOController from './file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
 import ServerConfig from './server_config.js'
+import DeviceManager from './device_manager.js'
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
@@ -33,6 +34,7 @@ let DwenguinoBlockly = {
     tutorialMenu: null,
 
     fileIOController: null,
+    deviceManager: null,
 
     initDwenguinoBlockly: function(workspace){
         this.workspace = workspace;
@@ -40,6 +42,9 @@ let DwenguinoBlockly = {
 
         // Create file io controller responisble for saving and uploading files
         this.fileIOController = new FileIOController();
+        //Create device manager responsible for managing the connection to de Dwenguino board
+        this.deviceManager = new DeviceManager();
+
         // Create DwenguinoEventLogger instance
         // This instance should be passed to all classes which want to log events.
         this.logger = new DwenguinoEventLogger();
@@ -104,6 +109,7 @@ let DwenguinoBlockly = {
         //save/upload buttons
         $("#db_menu_item_run").click(function(){
           // TODO reset setup
+          // Following lines are disabled for testing webusb, PUT THEM BACK!
           Blockly.Arduino.emptySetup();
           var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
           DwenguinoBlockly.runEventHandler(code);
@@ -192,6 +198,16 @@ let DwenguinoBlockly = {
             alert('The File APIs are not fully supported in this browser.');
           }
           
+        });
+
+        // This code adds usb enumeration functionallity to the click event of the dwengo logo
+        let button = document.getElementById('db_dwengo_logo_top_left');
+        button.addEventListener('click', async () => {
+          this.deviceManager.connectToDwenguino((mngr) => {
+            console.log("Device connected!");
+          }, (mngr) => {
+            console.error("failed to connect.");
+          });
         });
 
         // This code handles the download of the workspace to a local file.
@@ -1038,7 +1054,9 @@ let DwenguinoBlockly = {
 };
 
 
+
 $(document).ready(function() {
+  
   DwenguinoBlockly.setupEnvironment();
 });
 
