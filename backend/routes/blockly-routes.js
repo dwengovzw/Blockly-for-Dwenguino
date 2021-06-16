@@ -55,6 +55,9 @@ router.route('/utilities/upload')
 router.route('/utilities/run', cors(corsOptions))
     .post(utilscontroller.run);
 
+router.route('/utilities/getDwenguinoBinary')
+    .get(utilscontroller.getDwenguinoBinary)
+
 /* Helper routes */
 
 router.route('/schools/')
