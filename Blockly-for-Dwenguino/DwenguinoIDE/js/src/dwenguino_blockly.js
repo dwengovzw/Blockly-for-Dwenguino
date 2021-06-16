@@ -6,7 +6,6 @@ import LoginMenu from './user/login_menu.js'
 import FileIOController from './file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
 import ServerConfig from './server_config.js'
-import DeviceManager from './device_manager.js'
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
 
@@ -34,7 +33,6 @@ let DwenguinoBlockly = {
     tutorialMenu: null,
 
     fileIOController: null,
-    deviceManager: null,
 
     initDwenguinoBlockly: function(workspace){
         this.workspace = workspace;
@@ -43,7 +41,6 @@ let DwenguinoBlockly = {
         // Create file io controller responisble for saving and uploading files
         this.fileIOController = new FileIOController();
         //Create device manager responsible for managing the connection to de Dwenguino board
-        this.deviceManager = new DeviceManager();
 
         // Create DwenguinoEventLogger instance
         // This instance should be passed to all classes which want to log events.
@@ -112,7 +109,8 @@ let DwenguinoBlockly = {
           // Following lines are disabled for testing webusb, PUT THEM BACK!
           Blockly.Arduino.emptySetup();
           var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-          DwenguinoBlockly.runEventHandler(code);
+          DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
+          //DwenguinoBlockly.runEventHandler(code);
         });
 
         //The following code handles the upload of a saved file.
@@ -200,15 +198,6 @@ let DwenguinoBlockly = {
           
         });
 
-        // This code adds usb enumeration functionallity to the click event of the dwengo logo
-        let button = document.getElementById('db_dwengo_logo_top_left');
-        button.addEventListener('click', async () => {
-          this.deviceManager.connectToDwenguino((mngr) => {
-            console.log("Device connected!");
-          }, (mngr) => {
-            console.error("failed to connect.");
-          });
-        });
 
         // This code handles the download of the workspace to a local file.
         // If this is run in the arduino ide, a filechooser is shown. (depricated and removed)
@@ -414,6 +403,36 @@ let DwenguinoBlockly = {
       Blockly.svgResize(DwenguinoBlockly.workspace);
     },
 
+    downloadDwenguinoBinaryHandler: function(code){
+      let url = ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary?code=" + encodeURIComponent(code);
+      let res = "success";
+      try{
+        res = window.open(url, '_blank');
+      } catch (e) {
+        console.log(res);
+      }
+    //   $.ajax({
+    //     url: ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary",
+    //     dataType: 'json',
+    //     type: 'get',
+    //     contentType: 'application/x-www-form-urlencoded',
+    //     data: {"code": code},
+    //     success: function( data, textStatus, jQxhr ){
+    //         console.log('succes');
+    //         console.log(data);
+
+    //         if (data.status === "error"){
+    //           DwenguinoBlockly.showModalErrorDialog(data);
+    //         }
+    //         DwenguinoBlockly.resetRunButton();
+    //     },
+    //     error: function( jqXhr, textStatus, errorThrown ){
+    //         console.log( errorThrown );
+    //         DwenguinoBlockly.resetRunButton();
+    //     }
+    // });
+    },
+
     runEventHandler: function(code){
       
       DwenguinoBlockly.disableRunButton();
@@ -467,6 +486,10 @@ let DwenguinoBlockly = {
       let eventToRecord = DwenguinoBlockly.logger.createEvent(EVENT_NAMES.runClicked, data);
       DwenguinoBlockly.logger.recordEvent(eventToRecord);
     },
+
+
+
+
     showModalErrorDialog: function(error){
       $('#errorModal .modal-header').html(MSG.runError);
       if (error.info === "Upload failed"){
@@ -505,7 +528,8 @@ let DwenguinoBlockly = {
           $("#db_menu_item_run").click(function(){
             Blockly.Arduino.emptySetup();
             var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-            DwenguinoBlockly.runEventHandler(code);
+            DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
+            //DwenguinoBlockly.runEventHandler(code);
           });
 
           $("#db_menu_item_clear").click(function(){
