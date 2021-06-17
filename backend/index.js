@@ -1,7 +1,14 @@
 import express from 'express';
-//import bodyParser from 'body-parser';
+import fs from 'fs';
+import http from 'http';
+import https from 'https';
+
+//let express = require('express');
+// Import body parser
+// import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
 //mongoose.set('debug', true);
 import path from 'path';
@@ -26,6 +33,17 @@ dotenv.config();
 
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
+
+// For SSL certificates
+let key = fs.readFileSync('/home/ubuntu/certs/private.key');
+let cert = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
+let ca = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
+
+let options = {
+        key: key,
+        cert: cert,
+        ca: ca
+};
 
 // Initialize the app
 let app = express();
@@ -87,8 +105,15 @@ if (!db) {
     console.log("db connection succesfull");
 }
 
+app.use((req, res, next) => {
+        if(req.protocol ==='http') {
+                res.redirect(301, `https://${req.headers.host}${req.url}`);
+        }
+        next();
+});
+
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+    app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 } else {
     // Setup static file serving
     // Changed for debugging, use first line when debugging
@@ -104,11 +129,18 @@ app.get("/", (req, res) => res.send('Welcome to blockly'));
 // Setup server port
 var port = process.env.PORT || 12032;
 console.log("Port: " + port);
+
+const httpServer = http.createServer(app);
+const httpsServer = https.createServer(options, app);
+
 // Launch app to listen to specified port
-let server = app.listen(port, function () {
-    console.log("Running RestHub on port " + port);
+httpServer.listen(port, function () {
+    console.log("Running HTTP server on port " + port);
 });
 
+httpsServer.listen(443, function () {
+   console.log("Running HTTPS server on port 443");
+});
 
 //This is depricated, now the electron browser is which is started using a bash script
 /*if (process.env.NODE_ENV === 'production') {
@@ -127,10 +159,3 @@ let server = app.listen(port, function () {
         });
     });
 }*/
-
-
-
-
-
-
-
