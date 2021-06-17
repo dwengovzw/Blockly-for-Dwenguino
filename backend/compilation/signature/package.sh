@@ -28,11 +28,11 @@ else
     exit 0
 fi
 
-avr-objcopy -O binary "$2" output.bin
+avr-objcopy -O binary "$2" /tmp/output.bin
 
 # First extract information from the binary file.
 sectorsizebytes=512
-filesizebytes=$(stat -c%s output.bin)
+filesizebytes=$(stat -c%s /tmp/output.bin)
 numsectors=$((filesizebytes/$sectorsizebytes+1))
 echo "Size of $2 in bytes: $filesizebytes which is $numsectors sectors."
 
@@ -42,4 +42,4 @@ printf "0: %.2x" $numsectors | xxd -r -p >> "$1" #sig.bin	# Number of sectors in
 dd < /dev/zero bs=507 count=1 >> "$1" #sig.bin	# Zero padding to full sector size 512 sector size - 4 signature bytes - 1 filesize byte
 
 # Prepend the signature to the binary file
-cat "$1" output.bin > "$3"
+cat "$1" /tmp/output.bin > "$3"
