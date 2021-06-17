@@ -162,7 +162,6 @@ let cleanupCompile = function(objid){
 }
 
 let sendErrorMessage = function(res, status, info, error, stderr){
-    res.setHeader()
     res.render('error', {
         status: status,
         info: info,

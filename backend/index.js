@@ -52,6 +52,7 @@ let app = express();
 
 // Set view engine
 app.set('view engine', 'pug');
+app.set('views', './views');
 
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
