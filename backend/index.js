@@ -31,6 +31,8 @@ import profiler from 'v8-profiler-node8'
 // Load environment variables
 dotenv.config();
 
+
+
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
@@ -47,6 +49,9 @@ let options = {
 
 // Initialize the app
 let app = express();
+
+// Set view engine
+app.set('view engine', 'pug');
 
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());

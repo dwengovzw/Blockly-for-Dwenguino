@@ -162,12 +162,19 @@ let cleanupCompile = function(objid){
 }
 
 let sendErrorMessage = function(res, status, info, error, stderr){
-    res.json({
+    res.setHeader()
+    res.render('error', {
         status: status,
         info: info,
         message: error,
         trace: stderr,
     });
+    // res.json({
+    //     status: status,
+    //     info: info,
+    //     message: error,
+    //     trace: stderr,
+    // });
 }
 
 let sendSuccessMessage = function(res, status, info, trace, data){
