@@ -11,7 +11,7 @@ import url from 'url';
 import mkdirp from 'mkdirp';
 
 let exports = {};
-let prefix = "./backend"; // This is only required for debugging default should be .
+let prefix = "."; // This is only required for debugging default should be .
 
 let handleExternalCommandOld = function(command, res, err_msg, succes_msg){
     let cmd = exec(command, {timeout: 10000}, 
