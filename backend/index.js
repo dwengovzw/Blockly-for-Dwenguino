@@ -42,7 +42,8 @@ var port = process.env.PORT || 12032;
 console.log("Port: " + port);
 
 
-let sslPort = 0;
+let sslPort = process.env.SSLPORT || 443;;
+console.log("SSL port: " + sslPort);
 
 
 /** There are three environment settings
@@ -57,19 +58,17 @@ if (process.env.NODE_ENV === 'production') {
     options['key'] = fs.readFileSync('/home/ubuntu/certs/private.key');
     options['cert'] = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
     options['ca'] = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
-    sslPort = process.env.SSLPORT || 443;
+    
     
 }else if (process.env.NODE_ENV === 'standalone'){
     options['key'] = fs.readFileSync('./security/cert.key');
     options['cert'] = fs.readFileSync('./security/cert.pem');
-    sslPort = 12033;
 }else{
     options['key'] = fs.readFileSync('./backend/security/cert.key');
     options['cert'] = fs.readFileSync('./backend/security/cert.pem');
-    sslPort = 12033;
 }
 
-console.log("SSL port: " + sslPort);
+
 
 // Initialize the app
 let app = express();
