@@ -322,7 +322,7 @@ Blockly.Arduino['socialrobot_clear_ledmatrix'] = function(block) {
   
   let code = '';
 
-  code += 'led_matrix.clearDisplay();\n';
+  code += 'led_matrix.clearMatrix();\n';
 
   return code;
 }
