@@ -10,7 +10,7 @@ rm -Rf node_modules
 npm install
 
 # Run webpack to compile frontend javascript into bundle
-npm run build
+# npm run build # -> This chrashes on the server, not enough memory.
 
 # Copy the new files to the deployment directory
 sudo cp -r /var/lib/jenkins/workspace/blockly-build/ /home/ubuntu/
