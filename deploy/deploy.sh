@@ -9,6 +9,9 @@ sudo rm -rf /home/ubuntu/blockly-build/*
 rm -Rf node_modules
 npm install
 
+# Run webpack to compile frontend javascript into bundle
+npm run build
+
 # Copy the new files to the deployment directory
 sudo cp -r /var/lib/jenkins/workspace/blockly-build/ /home/ubuntu/
 
