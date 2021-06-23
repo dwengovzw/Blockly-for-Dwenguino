@@ -155,6 +155,7 @@ then
     echo "NODE_ENV=standalone" > $work_dir/backend/.env
     echo "ACCESS_TOKEN_SECRET=ThF0yV1sY42aunmy1dUEVwn1ueZn3W67aIfCu9ieRJ9n7KkKWCyfj7MmaiRzawlNSUeSFbfyiUpal7cN4mpaSm8DsI4FFUWmqeP8h1INRtcUMwLokuw7SIvX0LfMGGuzqEnj9cQzABGlXg3Lk0vc5y" >> $work_dir/backend/.env
     echo "REFRESH_TOKEN_SECRET=7cLkYItoMJHW4cXauNhb2PxeHzcLEPlX1EzIemMFcN54bNeQHkGcWfQhbmLvWJL4BalUxa7KoTIqMf8NVXpC5a5ivAsAXENYWFFyMfJLiJylHqLBEAsSpgQ3C3SvtIwUrqDH896La8DJtJpIIiVwJv" >> $work_dir/backend/.env
+    echo "SSLPORT=12033" >> $work_dir/backend/.env
     echo "EMAIL_HOST=smtp.ethereal.email" >> $work_dir/backend/.env
     echo "EMAIL_PORT=587" >> $work_dir/backend/.env
     echo "EMAIL_USER=lyda.grady61@ethereal.email" >> $work_dir/backend/.env
