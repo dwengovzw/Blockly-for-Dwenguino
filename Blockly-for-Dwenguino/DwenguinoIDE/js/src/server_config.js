@@ -14,7 +14,8 @@ class ServerConfig{
      * @returns {string} The server URL on which you can access the Dwenguino simulator app.
      */
     static getServerUrl(){
-        return 'https://blockly-backend.dwengo.org';
+        let serverport = (window.location.port != "" ? ":" + window.location.port : "");
+        return window.location.protocol + "//" + window.location.hostname + serverport;
     }
 }
 

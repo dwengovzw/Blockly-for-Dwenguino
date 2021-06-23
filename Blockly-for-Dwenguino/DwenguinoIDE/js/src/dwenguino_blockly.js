@@ -33,8 +33,29 @@ let DwenguinoBlockly = {
     tutorialMenu: null,
 
     fileIOController: null,
+    compilationPath: "",
 
     initDwenguinoBlockly: function(workspace){
+
+          /**
+           * If local installation is running, generate binary locally. 
+           * Otherwise generate binary on the server.
+           */
+          $.ajax({
+            url: "https://localhost:12033/utilities/getEnvironment",
+            dataType: 'text',
+            type: 'get',
+            success: function( data, textStatus, jQxhr ){
+                console.log('succes');
+                DwenguinoBlockly.compilationPath = "https://localhost:12033/utilities/getDwenguinoBinary";
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                DwenguinoBlockly.compilationPath = ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary"
+                console.log( errorThrown );
+            }
+        });
+
+
         this.workspace = workspace;
         this.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
 
@@ -404,33 +425,14 @@ let DwenguinoBlockly = {
     },
 
     downloadDwenguinoBinaryHandler: function(code){
-      let url = ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary?code=" + encodeURIComponent(code);
+      let url = DwenguinoBlockly.compilationPath + "?code=" + encodeURIComponent(code);
       let res = "success";
       try{
         res = window.open(url, '_blank');
+        console.log(res);
       } catch (e) {
         console.log(res);
       }
-    //   $.ajax({
-    //     url: ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary",
-    //     dataType: 'json',
-    //     type: 'get',
-    //     contentType: 'application/x-www-form-urlencoded',
-    //     data: {"code": code},
-    //     success: function( data, textStatus, jQxhr ){
-    //         console.log('succes');
-    //         console.log(data);
-
-    //         if (data.status === "error"){
-    //           DwenguinoBlockly.showModalErrorDialog(data);
-    //         }
-    //         DwenguinoBlockly.resetRunButton();
-    //     },
-    //     error: function( jqXhr, textStatus, errorThrown ){
-    //         console.log( errorThrown );
-    //         DwenguinoBlockly.resetRunButton();
-    //     }
-    // });
     },
 
     runEventHandler: function(code){

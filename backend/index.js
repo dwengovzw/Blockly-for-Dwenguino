@@ -31,21 +31,45 @@ import profiler from 'v8-profiler-node8'
 // Load environment variables
 dotenv.config();
 
-
-
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
-// For SSL certificates
-let key = fs.readFileSync('/home/ubuntu/certs/private.key');
-let cert = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
-let ca = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
+let key, cert, ca = 0;
+let options = {}
 
-let options = {
-        key: key,
-        cert: cert,
-        ca: ca
-};
+// Setup server port
+var port = process.env.PORT || 12032;
+console.log("Port: " + port);
+
+
+let sslPort = 0;
+
+
+/** There are three environment settings
+ *  1) production: set in the .env file on the server.
+ *  2) standalone: set by the local server in the install.sh script.
+ *  3) development: Not explicitly set in the environment (assumed when no environment is set)
+ *  */ 
+
+// Use server sertificate in production and local self signed certificate in standalone and debug mode.
+if (process.env.NODE_ENV === 'production') {
+    // For SSL certificates
+    options['key'] = fs.readFileSync('/home/ubuntu/certs/private.key');
+    options['cert'] = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
+    options['ca'] = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
+    process.env.SSLPORT || 443;
+    
+}else if (process.env.NODE_ENV === 'standalone'){
+    options['key'] = fs.readFileSync('./security/cert.key');
+    options['cert'] = fs.readFileSync('./security/cert.pem');
+    sslPort = 12033;
+}else{
+    options['key'] = fs.readFileSync('./backend/security/cert.key');
+    options['cert'] = fs.readFileSync('./backend/security/cert.pem');
+    sslPort = 12033;
+}
+
+console.log("SSL port: " + sslPort);
 
 // Initialize the app
 let app = express();
@@ -54,6 +78,7 @@ let app = express();
 app.set('view engine', 'pug');
 app.set('views', './views');
 
+// Optimizations for production
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
     app.use(helmet());
@@ -111,20 +136,24 @@ if (!db) {
     console.log("db connection succesfull");
 }
 
+// Redirect http requests to https
 app.use((req, res, next) => {
+    let redirectport = (sslPort != 443 ? `:${sslPort}` : "")
         if(req.protocol ==='http') {
-                res.redirect(301, `https://${req.headers.host}${req.url}`);
+                res.redirect(301, `https://${req.hostname}${redirectport}${req.url}`);
         }
         next();
 });
 
+
+    // Setup static file serving
 if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
-} else {
-    // Setup static file serving
-    // Changed for debugging, use first line when debugging
-    //app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+} else if (process.env.NODE_ENV === 'standalone') {
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+} else {
+    // Debug setup
+    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 }
 
 // Use blockly routes for the app
@@ -132,30 +161,27 @@ app.use('/', blocklyRoutes);
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));
 
-// Setup server port
-var port = process.env.PORT || 12032;
-console.log("Port: " + port);
+
 
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer(options, app);
-
 // Launch app to listen to specified port
 httpServer.listen(port, function () {
     console.log("Running HTTP server on port " + port);
 });
 
-httpsServer.listen(443, function () {
-   console.log("Running HTTPS server on port 443");
+const httpsServer = https.createServer(options, app);
+httpsServer.listen(sslPort, function () {
+    console.log("Running HTTPS server on port " + sslPort);
 });
 
+
+
+
 //This is depricated, now the electron browser is which is started using a bash script
-/*if (process.env.NODE_ENV === 'production') {
-    module.export = app;
-} else {
-    // Launch a browser window
-    
+if (!(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'standalone')) {
+    // Launch a browser window for debugging
     ChromeLauncher.launch({
-        startingUrl: 'http://localhost:12032/dwenguinoblockly',
+        startingUrl: 'https://localhost:' + sslPort + '/dwenguinoblockly',
         chromeFlags: ['--star-fullscreen', '--start-maximized'],
     }).then(chrome => {
         chrome.process.on('close', (code) => {
@@ -164,4 +190,4 @@ httpsServer.listen(443, function () {
             process.exit();
         });
     });
-}*/
+}

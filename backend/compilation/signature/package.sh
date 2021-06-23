@@ -12,11 +12,12 @@ has_param() {
     return 1
 }
 
-if [[ "$1" == '-h' || "$1" == '--help' || "$#" != 3 ]]; then
-    echo "Script needs two parameters:"
+if [[ "$1" == '-h' || "$1" == '--help' || "$#" != 4 ]]; then
+    echo "Script needs four parameters:"
     echo "1: signature file location (will be created)"
     echo "2: input hex file in intel format (.elf) (should exist)."
-    echo  "3: name of the output file. (will be created)"
+    echo "3: name of the output file. (will be created)"
+    echo "4: Name of the intermediate file"
     exit 0
 fi
 
@@ -28,11 +29,11 @@ else
     exit 0
 fi
 
-avr-objcopy -O binary "$2" /tmp/output.bin
+avr-objcopy -O binary "$2" "$4"
 
 # First extract information from the binary file.
 sectorsizebytes=512
-filesizebytes=$(stat -c%s /tmp/output.bin)
+filesizebytes=$(stat -c%s $4)
 numsectors=$((filesizebytes/$sectorsizebytes+1))
 echo "Size of $2 in bytes: $filesizebytes which is $numsectors sectors."
 
@@ -42,4 +43,4 @@ printf "0: %.2x" $numsectors | xxd -r -p >> "$1" #sig.bin	# Number of sectors in
 dd < /dev/zero bs=507 count=1 >> "$1" #sig.bin	# Zero padding to full sector size 512 sector size - 4 signature bytes - 1 filesize byte
 
 # Prepend the signature to the binary file
-cat "$1" /tmp/output.bin > "$3"
+cat "$1" "$4" > "$3"
