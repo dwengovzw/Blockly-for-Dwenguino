@@ -114,6 +114,7 @@ let generateBinary = function(res, objid){
     let file_to_sign = path.resolve(prefix + "/compilation/sketch-" + objid + "/" + objdir + "/sketch-" + objid + ".elf");
     let signature_file = path.resolve(prefix + "/compilation/signature/sig.bin");
     let binary_file = path.resolve(prefix + "/compilation/sketch-" + objid + "/" + objdir + "/sketch-" + objid + ".bin");
+    let tmp_file = path.resolve(prefix + "/compilation/sketch-" + objid + "/" + objdir + "/output-" + objid + ".bin");
     // Copy hardware folder to sketch folder (create first) to enable compilation using makefile
     handleExternalCommand("cp -R " + command_location + "/hardware " + command_location +  "/sketch-" + objid + "/ && cp " + command_location + "/Makefile " + command_location +  "/sketch-" + objid + "/", (error, stderr)=>{
         sendErrorMessage(res, "error", "An error occured during hardware folder copy", error, stderr);
@@ -134,7 +135,7 @@ let generateBinary = function(res, objid){
                 cleanupCompile(objid)
             }, (stdout => {
                 // Compile successful -> add signature
-                handleExternalCommand(sign_command + " " + signature_file + " " + file_to_sign + " " + binary_file, 
+                handleExternalCommand(sign_command + " " + signature_file + " " + file_to_sign + " " + binary_file + " " + tmp_file, 
                 (error, stderr) => {
                     // If sign fails, send error message to client.
                     sendErrorMessage(res, "error", "An error occured during signing", error, stderr);
@@ -307,6 +308,14 @@ let saveFileAndRunNext = function(code, res, objid, next){
 // Handle both compile and upload 
 exports.run = function (req, res) {
     saveFileAndRunNext(req.body.code, res, "", handleRun);
+};
+
+exports.getEnvironment = function(req, res){
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, HEAD');
+    let environment = process.env.NODE_ENV;
+    console.log(environment);
+    res.send(environment);
 };
 
 /**

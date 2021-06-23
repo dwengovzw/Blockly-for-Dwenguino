@@ -152,7 +152,7 @@ then
     # Configure local environment variables for nodejs application
     touch $work_dir/backend/.env
     > $work_dir/backend/.env
-    echo "NODE_ENV=development" > $work_dir/backend/.env
+    echo "NODE_ENV=standalone" > $work_dir/backend/.env
     echo "ACCESS_TOKEN_SECRET=ThF0yV1sY42aunmy1dUEVwn1ueZn3W67aIfCu9ieRJ9n7KkKWCyfj7MmaiRzawlNSUeSFbfyiUpal7cN4mpaSm8DsI4FFUWmqeP8h1INRtcUMwLokuw7SIvX0LfMGGuzqEnj9cQzABGlXg3Lk0vc5y" >> $work_dir/backend/.env
     echo "REFRESH_TOKEN_SECRET=7cLkYItoMJHW4cXauNhb2PxeHzcLEPlX1EzIemMFcN54bNeQHkGcWfQhbmLvWJL4BalUxa7KoTIqMf8NVXpC5a5ivAsAXENYWFFyMfJLiJylHqLBEAsSpgQ3C3SvtIwUrqDH896La8DJtJpIIiVwJv" >> $work_dir/backend/.env
     echo "EMAIL_HOST=smtp.ethereal.email" >> $work_dir/backend/.env
@@ -167,7 +167,7 @@ then
     # Configure start file
     echo "#!/bin/bash" > $work_dir/start.sh
     echo "mongod --fork --syslog" > $work_dir/start.sh
-    echo "$work_dir/node_modules/electron/dist/electron $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> $work_dir/start.sh # Start electron
+    echo "$work_dir/node_modules/electron/dist/electron --ignore-certificate-errors $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> $work_dir/start.sh # Start electron
     echo 'electronPid=$!' >> $work_dir/start.sh # get process id for the latest command
     echo "cd $work_dir/backend/" >> $work_dir/start.sh # for some weird reason we have to be inside the folder, before calling node to run the js file
     echo "node -r dotenv/config --experimental-modules index.js &" >> $work_dir/start.sh # start the backend

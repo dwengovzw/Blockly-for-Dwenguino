@@ -58,6 +58,9 @@ router.route('/utilities/run', cors(corsOptions))
 router.route('/utilities/getDwenguinoBinary')
     .get(utilscontroller.getDwenguinoBinary)
 
+router.route('/utilities/getEnvironment')
+    .get(utilscontroller.getEnvironment)
+
 /* Helper routes */
 
 router.route('/schools/')
