@@ -57,7 +57,7 @@ if (process.env.NODE_ENV === 'production') {
     options['key'] = fs.readFileSync('/home/ubuntu/certs/private.key');
     options['cert'] = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
     options['ca'] = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
-    process.env.SSLPORT || 443;
+    sslPort = process.env.SSLPORT || 443;
     
 }else if (process.env.NODE_ENV === 'standalone'){
     options['key'] = fs.readFileSync('./security/cert.key');
