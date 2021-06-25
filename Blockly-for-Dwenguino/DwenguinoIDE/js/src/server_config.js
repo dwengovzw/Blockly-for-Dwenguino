@@ -15,7 +15,18 @@ class ServerConfig{
      */
     static getServerUrl(){
         let serverport = (window.location.port != "" ? ":" + window.location.port : "");
-        return window.location.protocol + "//" + window.location.hostname + serverport;
+        let url = window.location.protocol + "//" + window.location.hostname + serverport;
+        console.log("serverurl1:")
+        console.log(url);
+
+        // Stupid hack to make it work in electron
+        if (url == 'file://'){
+            url = "http://localhost:12032";
+        }
+        console.log("serverurl2:")
+        console.log(url);
+        
+        return url
     }
 }
 

@@ -168,7 +168,7 @@ then
     # Configure start file
     echo "#!/bin/bash" > $work_dir/start.sh
     echo "mongod --fork --syslog" > $work_dir/start.sh
-    echo "$work_dir/node_modules/electron/dist/electron --ignore-certificate-errors $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> $work_dir/start.sh # Start electron
+    echo "$work_dir/node_modules/electron/dist/electron  --ignore-certificate-errors $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> $work_dir/start.sh # Start electron
     echo 'electronPid=$!' >> $work_dir/start.sh # get process id for the latest command
     echo "cd $work_dir/backend/" >> $work_dir/start.sh # for some weird reason we have to be inside the folder, before calling node to run the js file
     echo "node -r dotenv/config --experimental-modules index.js &" >> $work_dir/start.sh # start the backend
@@ -237,7 +237,7 @@ then
 
     # Configure start file
     echo "#!/bin/bash" > dwenguinoblockly.command
-    echo "$work_dir/node_modules/electron/dist/electron $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> dwenguinoblockly.command # Start electron
+    echo "$work_dir/node_modules/electron/dist/electron --ignore-certificate-errors $work_dir/Blockly-for-Dwenguino/index.html --no-sandbox &" >> dwenguinoblockly.command # Start electron
     echo 'electronPid=$!' >> dwenguinoblockly.command # get process id for the latest command
     echo "cd $work_dir/backend/" >> dwenguinoblockly.command # for some weird reason we have to be inside the folder, before calling node to run the js file
     echo "node --experimental-modules index.js &" >> dwenguinoblockly.command # start the backend

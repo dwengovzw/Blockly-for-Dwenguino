@@ -28,6 +28,10 @@ import helmet from 'helmet';
 // For profiling the application in development
 import profiler from 'v8-profiler-node8'
 
+
+// For cross origin requests in standalone and debug mode
+import cors from 'cors'
+
 // Load environment variables
 dotenv.config();
 
@@ -81,6 +85,10 @@ app.set('views', './views');
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
     app.use(helmet());
+}else{
+    app.use(cors({
+        origin: '*'
+      }));
 }
 
 app.use(cookieParser());
@@ -135,14 +143,17 @@ if (!db) {
     console.log("db connection succesfull");
 }
 
-// Redirect http requests to https
-app.use((req, res, next) => {
-    let redirectport = (sslPort != 443 ? `:${sslPort}` : "")
-        if(req.protocol ==='http') {
-                res.redirect(301, `https://${req.hostname}${redirectport}${req.url}`);
-        }
-        next();
-});
+if (process.env.NODE_ENV === 'production') {
+    // Redirect http requests to https
+    app.use((req, res, next) => {
+        let redirectport = (sslPort != 443 ? `:${sslPort}` : "")
+            if(req.protocol ==='http') {
+                    res.redirect(301, `https://${req.hostname}${redirectport}${req.url}`);
+            }
+            next();
+    });
+}
+
 
 
     // Setup static file serving
