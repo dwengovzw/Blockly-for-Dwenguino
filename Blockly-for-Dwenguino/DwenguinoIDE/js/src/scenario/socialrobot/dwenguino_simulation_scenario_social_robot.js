@@ -14,7 +14,7 @@ import { CostumesEnum } from "./components/servo.js"
  * It provides a step function which uses and updates the state of the dwenguino board.
  * @extends DwenguinoSimulationScenario
  */
-class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
+export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
 
@@ -450,5 +450,3 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     }
   }
 }
-
-export default DwenguinoSimulationScenarioSocialRobot;
