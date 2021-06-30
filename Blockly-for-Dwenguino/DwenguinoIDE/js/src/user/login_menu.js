@@ -10,7 +10,7 @@ import { UserProgramsModal } from './user_programs_modal.js'
  * It is used by the DwenguinoEventLogger to gather data about the user.
  * 
  */
-class LoginMenu {
+export default class LoginMenu {
 
     constructor(){
         this._userSettingsModal = new UserSettingsModal(this);
@@ -716,5 +716,3 @@ class LoginMenu {
     //     });
     // }
 }
-
-export default LoginMenu;
