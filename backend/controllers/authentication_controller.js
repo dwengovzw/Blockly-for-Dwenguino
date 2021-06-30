@@ -2,7 +2,7 @@ import Useritem from '../models/user_model.js';
 import RefreshTokenItem from '../models/refreshtoken_model.js';
 import ConfirmationCodeItem from '../models/confirmation_code_model.js';
 import Validator from '../utils/validator.js';
-import emailService from '../index.js';
+import emailService from '../server.js';
 import cryptoRandomString from 'crypto-random-string';
 import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
