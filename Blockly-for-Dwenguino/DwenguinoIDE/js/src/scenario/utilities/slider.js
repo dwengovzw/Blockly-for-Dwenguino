@@ -1,4 +1,6 @@
 export { Slider as Slider }
+import jQuery from "jquery";
+window.$ = window.jQuery = jQuery;
 
 /**
  * Example usage:
@@ -52,11 +54,15 @@ class Slider {
     }
 
     toString(){
-        return 'sonar';
+        return 'Slider ' + this._id;
     }
 
     insert(){
         if (!document.getElementById(this.getSliderRangeId())) {
+            if(!document.getElementById(this.getParentId())){
+                console.debug("The parent of slider " + this.getSliderId() + " does not exist");
+                return;
+            }
 
             if(this.getLabel() != ''){
                this.insertLabel();
@@ -67,7 +73,7 @@ class Slider {
             $('#' + this.getSliderId()).append('<input id="' + this.getSliderRangeId() + '" type="range" min="'+this.getMinValue()+'" max="'+this.getMaxValue()+'" value="'+this.getInitialValue()+'" class="slider"></input>');
         
         } else {
-            console.log('already exists');
+            console.debug('already exists');
         }
     }
 
@@ -75,12 +81,12 @@ class Slider {
         let labelDiv = '' +
             '<div id="' + 
             this.getSliderLabelId() + '" class="slider_label">' + this.getLabel() + 
-            '</div>'
+            '</div>';
         $('#' + this.getParentId()).append(labelDiv);
     }
 
     updateValueLabel(value) {
-        document.getElementById(this.getSliderValueId()).innerHTML = this.getValuePrefix() + value + this.getValueSuffix();;
+        document.getElementById(this.getSliderValueId()).innerHTML = this.getValuePrefix() + value + this.getValueSuffix();
     }
 
     remove(){
@@ -145,3 +151,5 @@ class Slider {
         return this._classes;
     }
 }
+
+export default Slider;
