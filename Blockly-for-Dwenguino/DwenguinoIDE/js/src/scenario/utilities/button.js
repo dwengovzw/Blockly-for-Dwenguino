@@ -1,4 +1,6 @@
 export { Button }
+import jQuery from "jquery";
+window.$ = window.jQuery = jQuery;
 
 /**
  * Example usage:
@@ -47,18 +49,31 @@ class Button {
     }
 
     toString(){
-        return 'sonar';
+        return 'Button ' + this._id;
     }
 
     insert(){
         if(!document.getElementById(this.getButtonId())) {
+            if(!document.getElementById(this.getParentId())){
+                console.debug("The parent of button " + this.getSliderId() + " does not exist");
+                return;
+            }
+
             if(this.getLabel() != ''){
-                $('#' + this.getParentId()).append('<div id="' + this.getButtonLabelId() + '" class="' + this.getLabelClasses() + '">' + this.getLabel() + '</div>');
+                this.insertLabel();
             }
             $('#' + this.getParentId()).append('<div id="' + this.getButtonId() + '" class="' + this.getInactiveClasses() + '"></div>');
         } else {
-            console.log('A button with id ', this.getButtonId(), ' already exists.');
+            console.debug('A button with id ', this.getButtonId(), ' already exists.');
         }
+    }
+
+    insertLabel(){
+        let labelDiv = '' +
+            '<div id="' + 
+            this.getButtonLabelId() + '" class="' + this.getLabelClasses() + '">' + this.getLabel() + 
+            '</div>';
+        $('#' + this.getParentId()).append(labelDiv);
     }
 
     update() {
@@ -116,5 +131,6 @@ class Button {
     isActive(){
         return this.getButtonElement().className === this.getActiveClasses();
     }
-
 }
+
+export default Button;
