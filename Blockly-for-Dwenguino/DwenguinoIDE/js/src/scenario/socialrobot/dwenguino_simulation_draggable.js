@@ -1,5 +1,6 @@
 import { EVENT_NAMES } from "../../logging/event_names.js"
 import { EventsEnum } from "./scenario_event.js";
+import interact from 'interactjs';
 
 /**
  * This class is responsible to make the social robot components in the scenario draggable 
@@ -33,8 +34,9 @@ class DwenguinoSimulationDraggable {
       inertia: true,
       // keep the element within the area of it's parent
       modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: 'parent',
+        interact.modifiers.restrict({
+          restriction: 'parent', 
+          elementRect: { left: 0, right: 0, top: 0, bottom: 0 },
           endOnly: true
         })
       ],

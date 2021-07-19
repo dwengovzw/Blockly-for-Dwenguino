@@ -824,3 +824,5 @@ class RobotComponentsFactory {
   }
 
 }
+
+export default RobotComponentsFactory;

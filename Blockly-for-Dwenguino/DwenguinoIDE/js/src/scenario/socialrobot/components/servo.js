@@ -1,6 +1,9 @@
 import { RobotComponent } from './robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js'
 import { EventsEnum } from '../scenario_event.js'
+import jQuery from "jquery";
+import 'jquery-ui-bundle';
+window.$ = window.jQuery = jQuery;
 
 export { SocialRobotServo, CostumesEnum}
 

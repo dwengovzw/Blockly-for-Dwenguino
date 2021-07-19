@@ -7,6 +7,7 @@ import {DwenguinoScenarioUtils} from "./dwenguino_scenario_utils.js"
 import { EventsEnum } from "./scenario_event.js"
 import {EventBus} from "./event_bus.js"
 import { CostumesEnum } from "./components/servo.js"
+export { DwenguinoSimulationScenarioSocialRobot }
 
 /**
  * This class is the abstraction of the social robot simulator scenario.
@@ -14,7 +15,7 @@ import { CostumesEnum } from "./components/servo.js"
  * It provides a step function which uses and updates the state of the dwenguino board.
  * @extends DwenguinoSimulationScenario
  */
-export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
+class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
 
@@ -450,3 +451,5 @@ export default class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSim
     }
   }
 }
+
+export default DwenguinoSimulationScenarioSocialRobot;

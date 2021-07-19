@@ -8,6 +8,7 @@ import { EVENT_NAMES } from './logging/event_names.js'
 import ServerConfig from './server_config.js'
 import jQuery from "jquery";
 import 'jquery-ui-bundle';
+import 'bootstrap';
 window.$ = window.jQuery = jQuery;
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
