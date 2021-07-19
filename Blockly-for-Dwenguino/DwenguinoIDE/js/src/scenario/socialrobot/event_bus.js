@@ -38,3 +38,5 @@ class EventBus {
         this.events[eventName].registerCallback(callback);
     };
 }
+
+export default EventBus;

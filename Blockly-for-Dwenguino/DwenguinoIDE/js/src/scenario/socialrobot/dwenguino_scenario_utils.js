@@ -65,3 +65,4 @@ class DwenguinoScenarioUtils{
     }
 }
 
+export default DwenguinoScenarioUtils;
