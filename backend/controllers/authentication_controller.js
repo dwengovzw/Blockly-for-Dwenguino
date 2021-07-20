@@ -20,7 +20,6 @@ const REFRESH_TOKEN_SECRET = process.env.REFRESH_TOKEN_SECRET || '7cLkYItoMJHW4c
  */
 exports.register = function(req, res){
 
-  console.log(req.body);
   const { 
     firstname,
     email,
@@ -112,7 +111,7 @@ exports.register = function(req, res){
 exports.verifyAccount = function (req, res) {
   let db = mongoose.connection;
   let userId = mongoose.Types.ObjectId(req.params.userId);
-
+  console.debug('Verify account ' + userId);
   db.collection('users').findOne({_id: userId})
   .then(function(user){
     if(user){
@@ -132,8 +131,9 @@ exports.verifyAccount = function (req, res) {
 
           db.collection('users').updateOne(conditions, update, options,
             function(error, numAffected) {
+              console.debug('Updated ' + numAffected + ' users');
               if(error){
-                console.log(error);
+                console.debug(error);
                 res.redirect(process.env.STATIC_SERVING_URL);
               } else {
                 db.collection('confirmation_codes').deleteMany({ email: user.email });
@@ -142,12 +142,12 @@ exports.verifyAccount = function (req, res) {
             } 
           );
         } else {
-          console.log('no confirmation code found');
+          console.debug('no confirmation code found');
           res.redirect(process.env.STATIC_SERVING_URL);
         }
       });
     } else {
-      console.log('no user found');
+      console.debug('no user found');
       res.redirect(process.env.STATIC_SERVING_URL);
     }
   })
