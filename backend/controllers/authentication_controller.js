@@ -32,10 +32,11 @@ exports.register = function(req, res){
 
   let errors = Validator.validateUserFields(firstname, email, password, repeated_password, role, accept_conditions, accept_research);
  
-  console.log(errors);
   if (errors.length > 0) {
+    console.debug("Registering user has validation errors --- ", errors);
     res.status(401).send(errors);
   } else {
+    console.debug("Registering new user.");
     let db = mongoose.connection;
     db.collection('users').findOne({email: email})
     .then(function(doc) {
@@ -44,7 +45,7 @@ exports.register = function(req, res){
         bcrypt.genSalt(10,(err,salt) => {
           bcrypt.hash(req.body.password, salt, (err, hashPassword) => {
             if (err) {
-              console.debug(err);
+              console.debug("Unable to hash password --- ", err);
               res.status(401).send("Hashing has error.");
             } else {
               let user = new Useritem();
@@ -55,13 +56,16 @@ exports.register = function(req, res){
               user.acceptGeneralConditions = accept_conditions;
               user.acceptResearchConditions = accept_research;
               user.save()
-              .then(item => {
+              .then(savedUser => {
                 const secretCode = cryptoRandomString({length: 10, type: 'url-safe'});
-                const confirmationCode = new ConfirmationCodeItem({
-                  email: user.email,
-                  code: secretCode
+                const confirmationCode = new ConfirmationCodeItem();
+                confirmationCode.email = user.email;
+                confirmationCode.code =  secretCode;
+                confirmationCode.save().then(savedConfirmationCode => {
+                  console.debug("Confirmation code saved ---- ", savedConfirmationCode); 
+                }).catch(err => {
+                  console.debug("Unable to save confirmation code --- ", err);
                 });
-                confirmationCode.save();
 
                 const subject = req.i18n.__("email.confirmationEmailAddress.subject");
                 const confirmationUrl = `${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
@@ -81,12 +85,11 @@ exports.register = function(req, res){
                   html: html
                 };
 
-                  emailService.sendMail(message);
-
+                emailService.sendMail(message);
                 res.sendStatus(200);
               })
               .catch(err => {
-                console.debug(err);
+                console.debug("Unable to save the user into the database --- ", err);
                 res.status(400).send("Unable to register the new user into the database.");
               });
             }
@@ -130,10 +133,10 @@ exports.verifyAccount = function (req, res) {
           let options = { multi: false};
 
           db.collection('users').updateOne(conditions, update, options,
-            function(error, numAffected) {
-              console.debug('Updated ' + numAffected + ' users');
+            function(error, result) {
+              console.debug('Updated ', result.result.nModified, ' users when verifying account ', user.email);
               if(error){
-                console.debug(error);
+                console.debug("Verifying account ", user.email, " gave error --- ", error);
                 res.redirect(process.env.STATIC_SERVING_URL);
               } else {
                 db.collection('confirmation_codes').deleteMany({ email: user.email });
@@ -142,12 +145,12 @@ exports.verifyAccount = function (req, res) {
             } 
           );
         } else {
-          console.debug('no confirmation code found');
+          console.debug("Verifying account ", user.email, " --- No confirmation code found");
           res.redirect(process.env.STATIC_SERVING_URL);
         }
       });
     } else {
-      console.debug('no user found');
+      console.debug("Verifying account ", user.email, " --- No user was found");
       res.redirect(process.env.STATIC_SERVING_URL);
     }
   })
@@ -186,12 +189,12 @@ exports.login = function(req, res){
                 let data = {
                   "error": errors
                 }
-                console.log(data);
+                console.debug("Log in error --- ", data);
                 res.status(401).send(data);
               } else {
                 const accessToken = jwt.sign({_id: user._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
                 const refreshToken = jwt.sign({_id: user._id}, REFRESH_TOKEN_SECRET);
-                db.collection('tokens').findOne({refreshToken: refreshToken})
+                db.collection('tokens').findOne({token: refreshToken})
                 .then(function(token) {
 
                   const cookieConfig = {
@@ -214,7 +217,7 @@ exports.login = function(req, res){
                       res.sendStatus(200);
                     })
                     .catch(err => {
-                      console.debug(err);
+                      console.debug("Log in error; Saving of refresh token unsuccessful --- ", err);
                     });
                   } else {
                     res.cookie('dwengo', tokens, cookieConfig);
@@ -299,7 +302,7 @@ exports.resendActivationLink = function(req, res){
               let data = {
                 "error": errors
               }
-              console.log(data);
+              console.debug("Resend activation link unssuccessful --- ", data);
               res.status(401).send(data);
             }
           }
@@ -333,7 +336,7 @@ exports.refreshToken = function(req, res){
       } else {
         jwt.verify(token, REFRESH_TOKEN_SECRET, (err, decoded) => {
           if (err){
-            console.debug(err);
+            console.debug("Verification of refresh token unsuccessful ---- ", err);
             res.sendStatus(403);
           } else {
             const accessToken = jwt.sign({_id: decoded._id}, ACCESS_TOKEN_SECRET, {expiresIn: '5m'});
@@ -371,7 +374,7 @@ exports.getPasswordResetCode = function (req, res){
 
   let errors = [];
 
-  console.log(email);
+  console.debug("Get password reset code for account ", email);
 
   if(!email){
     errors.push({msg: "errRequiredFields"});
@@ -402,12 +405,12 @@ exports.getPasswordResetCode = function (req, res){
           html: html
         };
 
-        console.log(message);
+        console.debug("Send password reset code email --- ", message);
         emailService.sendMail(message);
 
         res.sendStatus(200);
       } else {
-        console.log("user not found");
+        console.debug("Send password reset code unsuccessful --- ", "User not found");
         res.sendStatus(200);
       }
     });
@@ -441,7 +444,7 @@ exports.resetPassword = function (req, res){
         bcrypt.genSalt(10,(err,salt) => {
           bcrypt.hash(req.body.password, salt, (err, hashPassword) => {
             if (err) {
-              console.debug(err);
+              console.debug("Hashing of password failed --- ", err);
               res.status(401).send("Hashing has error.");
             } else {
               let conditions = { email: email };
@@ -456,7 +459,7 @@ exports.resetPassword = function (req, res){
               db.collection('users').updateOne(conditions, update, options,
                 function(error, numAffected) {
                   if(error){
-                    console.log(error);
+                    console.debug("Updating the user's password in the database failed --- ", error);
                     res.sendStatus(400);
                   } else {
                     db.collection('confirmation_codes').deleteMany({ email: email });
@@ -468,7 +471,7 @@ exports.resetPassword = function (req, res){
           });
         });
       } else {
-        console.log('no confirmation code found');
+        console.debug("No sectret code was found to reset the user's password");
       }
     });
   }
@@ -513,9 +516,10 @@ exports.logout = function(req, res){
                 db.collection('tokens').deleteMany(query, function(err, obj){
                   if (err) {
                     res.clearCookie("dwengo");
-                    console.debug(err);
+                    console.debug("Logging out", "; Deleting tokens has failed --- ", err);
                   } else {
                     res.clearCookie("dwengo");
+                    console.debug("User has successfully logged out.");
                     res.sendStatus(200);
                   }
                 });
@@ -527,9 +531,10 @@ exports.logout = function(req, res){
                 db.collection('tokens').deleteMany(query, function(err, obj){
                   if (err) {
                     res.clearCookie("dwengo");
-                    console.debug(err);
+                    console.debug("Logging out user ", user.email, "; Deleting tokens has failed --- ", err);
                   } else {
                     res.clearCookie("dwengo");
+                    console.debug("User ", user.email, "has successfully logged out.");
                     res.sendStatus(200);
                   } 
                 });
