@@ -8,9 +8,9 @@
   },
   "jest": {
     "testMatch": [
-      "<rootDir>/unit_tests/**/*.test.js",
-      "<rootDir>/integration_tests/**/*.test.js",
-      "<rootDir>/end_to_end_tests/**/*.test.js"
+      "<rootDir>/tests/unit_tests/**/*.test.js",
+      "<rootDir>/tests/integration_tests/**/*.test.js",
+      "<rootDir>/tests/end_to_end_tests/**/*.test.js"
     ],
     "preset": "@shelf/jest-mongodb",
     "transform": {},
@@ -81,6 +81,7 @@
     "babel-core": "^6.26.3",
     "babel-loader": "^8.1.0",
     "babel-preset-env": "^1.7.0",
+    "bent": "^7.3.12",
     "electron": "^9.0.2",
     "jest": "^27.0.5",
     "jsdoc": "~3.6.6",

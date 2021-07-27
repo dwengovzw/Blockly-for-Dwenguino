@@ -326,7 +326,7 @@ class RobotComponentsFactory {
         var pin = parseInt(data.getAttribute('Pin'));
         var costume = data.getAttribute('Costume');
         var htmlClasses = data.getAttribute('Classes');
-        this.addServo(pin, costume, angle, true, 0, 0, width, height, offsetLeft, offsetTop, htmlClasses);
+        this.addServo(pin, costume, angle, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.LED:
         var radius = parseFloat(data.getAttribute('Radius'));
@@ -450,7 +450,7 @@ class RobotComponentsFactory {
     * @param {int} offsetTop 
     * @param {string} htmlClasses 
     */
-  addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, x=0, y=0, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
+  addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
@@ -462,7 +462,7 @@ class RobotComponentsFactory {
       pin = 41;
     } 
 
-    let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses);
+    let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);
 
     this.renderer.initializeCanvas(this._robot, servo); 

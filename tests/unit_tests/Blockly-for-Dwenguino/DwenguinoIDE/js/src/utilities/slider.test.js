@@ -4,7 +4,7 @@
 
 import { expect } from "@jest/globals";
 import {jest} from '@jest/globals'
-import Slider from "../../../../../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/utilities/slider";
+import Slider from "../../../../../../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/utilities/slider";
 
 
 test("Constructor", () => {

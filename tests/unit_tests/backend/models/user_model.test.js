@@ -1,5 +1,5 @@
-import { connect, clearDatabase, closeDatabase } from '../../db_handler';
-import Useritem from '../../../backend/models/user_model';
+import { connect, clearDatabase, closeDatabase } from '../../../db_handler';
+import Useritem from '../../../../backend/models/user_model';
 
 describe('Adding users', () => {
 

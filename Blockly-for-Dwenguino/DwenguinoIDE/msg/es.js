@@ -309,7 +309,7 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "LED matriz",
   ledmatrixDescription: "",
-  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegment: "LED matrix",
   ledmatrixsegmentDescription: "",
   touch: "Touch sensor",
   touchDescription: "Use the touch sensor to detect if the robot is being touched. In the simulator you will find a button to simulate touching the robot. When the robot is being touched, the touch sensor will output the value '1', otherwise the value '0'.",
