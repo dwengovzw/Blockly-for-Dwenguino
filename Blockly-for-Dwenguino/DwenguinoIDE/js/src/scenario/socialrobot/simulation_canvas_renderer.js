@@ -387,6 +387,9 @@ class SimulationCanvasRenderer {
                     case 'plain':
                         self.drawServoBackground(ctx, servo);
                         break;
+                    case 'plainrotate90':
+                        self.drawServoBackground(ctx, servo, 90);
+                        break;
                     case 'eye':
                         break;
                     case 'righthand':
@@ -402,6 +405,9 @@ class SimulationCanvasRenderer {
                 switch(servo.getCostume()){
                     case 'plain':
                         self.drawRotatedServohead(ctx, servo);
+                        break;
+                    case 'plainrotate90':
+                        self.drawRotatedServoheadRotated(ctx, servo, 90);
                         break;
                     case 'eye':
                         self.drawEye(ctx,servo, canvas);
@@ -421,8 +427,12 @@ class SimulationCanvasRenderer {
             ctx.fillStyle = servo.getBackgroundColor();
             switch(servo.getCostume()){
                 case 'plain':
-                    self.drawServoBackground(ctx, servo)
+                    self.drawServoBackground(ctx, servo);
                     self.drawRotatedServohead(ctx, servo);
+                    break;
+                case 'plainrotate90':
+                    self.drawServoBackground(ctx, servo, 90);
+                    self.drawRotatedServoheadRotated(ctx, servo, 90);
                     break;
                 case 'eye':
                     self.drawEye(ctx,servo, canvas);
@@ -552,19 +562,25 @@ class SimulationCanvasRenderer {
      * 
      * @param {RenderingContext} ctx 
      * @param {SocialRobotServo} servo 
+     * @param {int} angle
      */
-    drawServoBackground(ctx, servo){
-        ctx.translate(0,servo.getY());
-        ctx.drawImage(servo.getServoBackground(),0,0,servo.getWidth(),servo.getHeight());
-        ctx.translate(0, -servo.getY()); 
+    drawServoBackground(ctx, servo, angle=0){
+        let background = servo.getServoBackground();
+        if(angle != 0){
+            background = servo.getServoBackgroundRotated();
+        }
+        ctx.translate(servo.getX(),servo.getY());
+        ctx.drawImage(background,0,0,servo.getWidth(),servo.getHeight());
+        ctx.translate(-servo.getX(), -servo.getY()); 
     }
 
     /**
      * Draws a plain servohead of the given servo at the correct angle on the given context
      * @param {RenderingContext} ctx 
      * @param {SocialRobotServo} servo 
+     * @param {int} degrees
      */
-    drawRotatedServohead(ctx, servo){
+    drawRotatedServohead(ctx, servo, degrees=0){
         // make the servo rotate stepwise
         var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
 
@@ -574,27 +590,76 @@ class SimulationCanvasRenderer {
                 let prevAngle = servo.getPrevAngle() + (5 * direction);
                 servo.setPrevAngle(prevAngle);
                 ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(degrees * Math.PI / 180);
                 ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
                 ctx.drawImage(servo.getImage(0),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
                 ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+                ctx.rotate(-degrees * Math.PI / 180);
                 ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             } else {
                 let prevAngle = servo.getPrevAngle() + (difference);
                 servo.setPrevAngle(prevAngle);
                 ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(degrees * Math.PI / 180);
                 ctx.rotate(servo.getAngle() * Math.PI / 180);
                 ctx.drawImage(servo.getImage(0),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
                 ctx.rotate(-servo.getAngle() * Math.PI / 180);
+                ctx.rotate(-degrees * Math.PI / 180);
                 ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             }
         } else {
             ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(degrees * Math.PI / 180);
             ctx.rotate(servo.getAngle() * Math.PI / 180);
             ctx.drawImage(servo.getImage(0),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
             ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.rotate(-degrees * Math.PI / 180);
             ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
         }
     }
+
+    /**
+     * Draws a plain servohead of the given servo at the correct angle on the given context
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
+     */
+    drawRotatedServoheadRotated(ctx, servo, degrees){
+    // make the servo rotate stepwise
+    var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
+
+    let difference = servo.getAngle()-servo.getPrevAngle();
+    if(difference != 0){
+        if ((difference > 5) || (difference < -5)) {
+            let prevAngle = servo.getPrevAngle() + (5 * direction);
+            servo.setPrevAngle(prevAngle);
+            ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(degrees * Math.PI / 180);
+            ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(0),-servo.getHeight()/2,-servo.getWidth()/2,servo.getHeight(),servo.getWidth());
+            ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+            ctx.rotate(-degrees * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
+        } else {
+            let prevAngle = servo.getPrevAngle() + (difference);
+            servo.setPrevAngle(prevAngle);
+            ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(degrees * Math.PI / 180);
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage(0),-servo.getHeight()/2,-servo.getWidth()/2,servo.getHeight(),servo.getWidth());
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.rotate(-degrees * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
+        }
+    } else {
+        ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+        ctx.rotate(degrees * Math.PI / 180);
+        ctx.rotate(servo.getAngle() * Math.PI / 180);
+        ctx.drawImage(servo.getImage(0),-servo.getHeight()/2,-servo.getWidth()/2,servo.getHeight(),servo.getWidth());
+        ctx.rotate(-servo.getAngle() * Math.PI / 180);
+        ctx.rotate(-degrees * Math.PI / 180);
+        ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
+    }
+}
 
     /**
      * 

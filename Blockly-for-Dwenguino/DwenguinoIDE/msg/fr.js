@@ -319,7 +319,7 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "Matrice à LED",
   ledmatrixDescription: "",
-  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegment: "LED matrix",
   ledmatrixsegmentDescription: "",
   touch: "Capteur touche",
   touchDescription: "Utilisez ce capteur pour détecter si le robot est touché. Le simulateur dispose d'un bouton pour simuler le toucher en appuyant sur le bouton. Lorsqu'il est touché, le capteur renvoie un 1, sinon un 0.",

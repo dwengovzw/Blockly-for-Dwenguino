@@ -1128,6 +1128,25 @@ background-color: #ffffff;
     height: 90px;
 }
 
+.costumeButton:active,
+.costumeButton.active {
+  -webkit-box-shadow: none!important;
+  box-shadow: none!important;
+  outline: 5px auto #88bd28!important;
+}
+
+.costumeButton:focus,
+.costumeButton.focus {
+    -webkit-box-shadow: none!important;
+    box-shadow: none!important;
+    outline: 5px auto #88bd28!important;
+    outline-offset: -2px!important;
+}
+
+.costumeButton{
+    padding:2px;
+}
+
 #db_simulator_mute{
     position: absolute;
     width: 50px;

@@ -253,7 +253,7 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "LED matrix",
   ledmatrixDescription: "",
-  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegment: "LED matrix",
   ledmatrixsegmentDescription: "",
   touch: "Touch sensor",
   touchDescription: "",

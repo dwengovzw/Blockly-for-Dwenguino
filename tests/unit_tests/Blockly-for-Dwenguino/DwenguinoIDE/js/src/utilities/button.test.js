@@ -4,7 +4,7 @@
 
  import { expect } from "@jest/globals";
  import {jest} from '@jest/globals'
- import Button from "../../../../../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/utilities/button";
+ import Button from "../../../../../../../Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/utilities/button";
  
  
 test("Constructor", () => {

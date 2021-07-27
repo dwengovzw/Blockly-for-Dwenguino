@@ -390,7 +390,7 @@ var MSG = {
     rgbledDescription: "",
     ledmatrix: "LED-Matrix",
     ledmatrixDescription: "",
-    ledmatrixsegment: "LED matrix segment",
+    ledmatrixsegment: "LED matrix",
     ledmatrixsegmentDescription: "",
     touch: "Touch sensor",
     touchDescription: "",

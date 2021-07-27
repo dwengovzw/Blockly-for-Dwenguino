@@ -169,10 +169,10 @@
 </category>
 
 <category id="catSocialRobot" colour="25" name='SocialRobot'>
-    <block type="pir_sensor">
-        <value name="trig">
-            <block type="char_type" id="pir_sensor_pin"> 
-            <field name="BITMASK">13</field>
+    <block type="sound_sensor">
+        <value name="pin">
+            <block type="math_number" id="sound_sensor_pin"> 
+            <field name="NUM">15</field>
             </block>
         </value>
     </block>
@@ -310,27 +310,6 @@
     </block>
     <block type="socialrobot_clear_ledmatrix">
     </block>
-    <block type="sound_sensor">
-        <value name="pin">
-            <block type="math_number" id="sound_sensor_pin"> 
-            <field name="NUM">15</field>
-            </block>
-        </value>
-    </block>
-    <block type="touch_sensor">
-        <value name="pin">
-            <block type="math_number" id="touch_sensor_pin"> 
-            <field name="NUM">14</field>
-            </block>
-        </value>
-    </block>
-    <block type="button">
-        <value name="pin">
-            <block type="math_number" id="button_pin"> 
-            <field name="NUM">18</field>
-            </block>
-        </value>
-    </block>
     <block type="socialrobot_servo">
         <value name="pin">
             <block type="math_number" id="212">
@@ -400,6 +379,27 @@
         <value name="servo_left_eye1">
             <block type="math_number" id="209">
                 <field name="NUM">41</field>
+            </block>
+        </value>
+    </block>
+    <block type="touch_sensor">
+        <value name="pin">
+            <block type="math_number" id="touch_sensor_pin"> 
+            <field name="NUM">14</field>
+            </block>
+        </value>
+    </block>
+    <block type="pir_sensor">
+        <value name="trig">
+            <block type="char_type" id="pir_sensor_pin"> 
+            <field name="BITMASK">13</field>
+            </block>
+        </value>
+    </block>
+    <block type="button">
+        <value name="pin">
+            <block type="math_number" id="button_pin"> 
+            <field name="NUM">18</field>
             </block>
         </value>
     </block>

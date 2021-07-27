@@ -298,7 +298,7 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "matrice led",
   ledmatrixDescription: "",
-  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegment: "LED matrix",
   ledmatrixsegmentDescription: "",
   touch: "Sensor tattile",
   touchDescription: "Utilizza questo sensore per rilevare se il robot viene toccato. È previsto un pulsante nel simulatore per simulare contatti che premendolo vengono attivati. Se il robot viene toccato, il sensore dà un 1, se no un 0.",

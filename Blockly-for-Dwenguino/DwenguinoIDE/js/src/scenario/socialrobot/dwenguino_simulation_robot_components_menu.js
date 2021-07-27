@@ -26,7 +26,7 @@ class DwenguinoSimulationRobotComponentsMenu {
     this._components = [
       {
         type: TypesEnum.SERVO,
-        maximumAmount: 5
+        maximumAmount: 6
       }, {
         type: TypesEnum.LED,
         maximumAmount: 3
@@ -50,19 +50,16 @@ class DwenguinoSimulationRobotComponentsMenu {
         maximumAmount: 2
       }, {
         type: TypesEnum.SONAR,
-        maximumAmount: 1
+        maximumAmount: 4
       }, {
         type: TypesEnum.LCD,
         maximumAmount: 1
       }, {
         type: TypesEnum.SOUND,
-        maximumAmount: 2
+        maximumAmount: 4
       }, {
         type: TypesEnum.LIGHT,
         maximumAmount: 2
-      }, {
-        type: TypesEnum.DECORATION,
-        maximumAmount: 10
       }
     ]
   }
@@ -74,7 +71,7 @@ class DwenguinoSimulationRobotComponentsMenu {
    */
   setupEnvironment(socialRobotScenario) {
     this.socialRobotScenario = socialRobotScenario;
-    console.log('setupEnvironment');
+    console.debug('setupEnvironment');
     /**
      * TODO: implement: if local storage contains robot components adjust the menu to 
      * display the current number of robot components of each type. 
@@ -91,46 +88,7 @@ class DwenguinoSimulationRobotComponentsMenu {
   initMenu() {
     $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag text-center"></div>');
-    $('#rc_servo').append('<div id="rc_servo_img" class="rc_img"></div>');
-    $('#rc_servo').append('<div id="rc_servo_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_led').append('<div id="rc_led_tag" class="rc_tag text-center"></div>');
-    $('#rc_led').append('<div id="rc_led_img" class="rc_img"></div>');
-    $('#rc_led').append('<div id="rc_led_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_rgbled" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag text-center"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_img" class="rc_img"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_ledmatrix" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_tag" class="rc_tag text-center"></div>');
-    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_img" class="rc_img"></div>');
-    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_ledmatrixsegment" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_tag" class="rc_tag text-center"></div>');
-    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_img" class="rc_img"></div>');
-    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_touch" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag text-center"></div>');
-    $('#rc_touch').append('<div id="rc_touch_img" class="rc_img"></div>');
-    $('#rc_touch').append('<div id="rc_touch_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_button" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_button').append('<div id="rc_button_tag" class="rc_tag text-center"></div>');
-    $('#rc_button').append('<div id="rc_button_img" class="rc_img"></div>');
-    $('#rc_button').append('<div id="rc_button_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag text-center"></div>');
-    $('#rc_pir').append('<div id="rc_pir_img" class="rc_img"></div>');
-    $('#rc_pir').append('<div id="rc_pir_value"></div>');
-    $('#rc_pir').append('<div id="rc_pir_options" class="rc_options"></div>');
+    // INPUT 
 
     $('#robot_components_menu').append('<div id="rc_sonar" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_tag" class="rc_tag text-center"></div>');
@@ -138,25 +96,65 @@ class DwenguinoSimulationRobotComponentsMenu {
     $('#rc_sonar').append('<div id="rc_sonar_value"></div>');
     $('#rc_sonar').append('<div id="rc_sonar_options" class="rc_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag text-center"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_img" class="rc_img"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_options" class="rc_options"></div>');
-
     $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag text-center"></div>');
     $('#rc_sound').append('<div id="rc_sound_img" class="rc_img"></div>');
     $('#rc_sound').append('<div id="rc_sound_options" class="rc_options"></div>');
 
+    // OUTPUT
+
+    $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag text-center"></div>');
+    $('#rc_servo').append('<div id="rc_servo_img" class="rc_img"></div>');
+    $('#rc_servo').append('<div id="rc_servo_options" class="rc_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag text-center"></div>');
+    $('#rc_lcd').append('<div id="rc_lcd_img" class="rc_img"></div>');
+    $('#rc_lcd').append('<div id="rc_lcd_options" class="rc_options"></div>');
+  
+    $('#robot_components_menu').append('<div id="rc_ledmatrixsegment" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_tag" class="rc_tag text-center"></div>');
+    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_img" class="rc_img"></div>');
+    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_options" class="rc_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_rgbled" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag text-center"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_img" class="rc_img"></div>');
+    $('#rc_rgbled').append('<div id="rc_rgbled_options" class="rc_options"></div>');
+
+    // EXTRA
+
+    $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag text-center"></div>');
+    $('#rc_pir').append('<div id="rc_pir_img" class="rc_img"></div>');
+    $('#rc_pir').append('<div id="rc_pir_value"></div>');
+    $('#rc_pir').append('<div id="rc_pir_options" class="rc_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_touch" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag text-center"></div>');
+    $('#rc_touch').append('<div id="rc_touch_img" class="rc_img"></div>');
+    $('#rc_touch').append('<div id="rc_touch_options" class="rc_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_led').append('<div id="rc_led_tag" class="rc_tag text-center"></div>');
+    $('#rc_led').append('<div id="rc_led_img" class="rc_img"></div>');
+    $('#rc_led').append('<div id="rc_led_options" class="rc_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_ledmatrix" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_tag" class="rc_tag text-center"></div>');
+    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_img" class="rc_img"></div>');
+    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_options" class="rc_options"></div>');
+
+    $('#robot_components_menu').append('<div id="rc_button" class="robot_components_item bg-c-4 card"></div>');
+    $('#rc_button').append('<div id="rc_button_tag" class="rc_tag text-center"></div>');
+    $('#rc_button').append('<div id="rc_button_img" class="rc_img"></div>');
+    $('#rc_button').append('<div id="rc_button_options" class="rc_options"></div>');
+
     $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_light').append('<div id="rc_light_tag" class="rc_tag text-center"></div>');
     $('#rc_light').append('<div id="rc_light_img" class="rc_img"></div>');
     $('#rc_light').append('<div id="rc_light_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_decoration" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_decoration').append('<div id="rc_decoration_tag" class="rc_tag text-center"></div>');
-    $('#rc_decoration').append('<div id="rc_decoration_img" class="rc_img"></div>');
-    $('#rc_decoration').append('<div id="rc_decoration_options" class="rc_options"></div>');
 
     this.initButtons();
   }
@@ -168,44 +166,11 @@ class DwenguinoSimulationRobotComponentsMenu {
    */
   initButtons() {
   
-    let servoOptions = this.generateButtonTemplate(TypesEnum.SERVO);
-    $('#rc_servo_options').append(servoOptions);
-
-    let ledOptions = this.generateButtonTemplate(TypesEnum.LED);
-    $('#rc_led_options').append(ledOptions);
-
-    let rgbLedOptions = this.generateButtonTemplate(TypesEnum.RGBLED);
-    $('#rc_rgbled_options').append(rgbLedOptions);
-
-    let ledmatrixOptions = this.generateButtonTemplate(TypesEnum.LEDMATRIX);
-    $('#rc_ledmatrix_options').append(ledmatrixOptions);
-
-    let ledmatrixSegmentOptions = this.generateButtonTemplate(TypesEnum.LEDMATRIXSEGMENT);
-    $('#rc_ledmatrixsegment_options').append(ledmatrixSegmentOptions);
-
-    let touchOptions = this.generateButtonTemplate(TypesEnum.TOUCH);
-    $('#rc_touch_options').append(touchOptions);
-
-    let buttonOptions = this.generateButtonTemplate(TypesEnum.BUTTON);
-    $('#rc_button_options').append(buttonOptions);
-
-    let pirOptions = this.generateButtonTemplate(TypesEnum.PIR);
-    $('#rc_pir_options').append(pirOptions);
-
-    let sonarOptions = this.generateButtonTemplate(TypesEnum.SONAR);
-    $('#rc_sonar_options').append(sonarOptions);
-
-    let lcdOptions = this.generateButtonTemplate(TypesEnum.LCD);
-    $('#rc_lcd_options').append(lcdOptions);
-
-    let soundOptions = this.generateButtonTemplate(TypesEnum.SOUND);
-    $('#rc_sound_options').append(soundOptions);
-
-    let lightOptions = this.generateButtonTemplate(TypesEnum.LIGHT);
-    $('#rc_light_options').append(lightOptions);
-
-    // let decorationOptions = this.generateButtonTemplate(RobotComponentTypesEnum.DECORATION);
-    // $('$rc_decoration_options').append(decorationOptions);
+    let options = null;
+    for (const [key_type, value_type] of Object.entries(TypesEnum)) {
+      options = this.generateButtonTemplate(value_type);
+      $('#rc_'+value_type+'_options').append(options);  
+    }
   
     let self = this;
     // Event handlers
@@ -305,7 +270,11 @@ class DwenguinoSimulationRobotComponentsMenu {
    */
   translateRobotComponents() {
     for (const [type, t] of Object.entries(TypesEnum)) {
-      document.getElementById('rc_' + t + '_tag').textContent = DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[t]);
+      if(document.getElementById('rc_' + t + '_tag') != null){
+        document.getElementById('rc_' + t + '_tag').textContent = DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[t]);
+      } else {
+        console.debug('Translation error --- No component of type ', t);
+      }
     }
   }
 
@@ -340,52 +309,26 @@ class DwenguinoSimulationRobotComponentsMenu {
    * @param {string} id 
    */
   addRobotComponent(id) {
-    switch (id) {
-      case "rc_servo_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.SERVO);
-        break;
-      case "rc_led_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.LED);
-        break;
-      case "rc_rgbled_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.RGBLED);
-        break;
-      case "rc_ledmatrix_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.LEDMATRIX);
-        break;
-      case "rc_ledmatrixsegment_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.LEDMATRIXSEGMENT);
-        break;
-      case "rc_touch_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.TOUCH);
-        break;
-      case "rc_button_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.BUTTON);
-        break;
-      case "rc_pir_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.PIR);
-        break;
-      case "rc_sonar_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.SONAR);
-        break;
-      case "rc_decoration_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.DECORATION);
-        break;
-      case "rc_lcd_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.LCD);
-        break;
-      case "rc_sound_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.SOUND);
-        break;
-      case "rc_light_plus_button":
-        this.socialRobotScenario.addRobotComponent(TypesEnum.LIGHT);
-        break;
-      case "default":
-        break;
-    }
+    let type = this.extractType(id);
+    this.socialRobotScenario.addRobotComponent(type);
 
     // Save robot components when a component is added
     this._eventBus.dispatchEvent(EventsEnum.SAVE);
+  }
+
+  /**
+   * 
+   * @param {String} id | id of a components's add or remove button in the form 'rc_type_plus_button' or 'rc_type_minus_button'.
+   * @returns {TypesEnum} The component's type as a lowercase string .
+   */
+  extractType(id){
+    let id_array = id.split('_');
+    if(id_array.length >= 2){
+      return id_array[1];
+    } else {
+      console.debug("No component type could be extracted from id ", id);
+      return '';
+    }
   }
 
   /**
@@ -394,49 +337,8 @@ class DwenguinoSimulationRobotComponentsMenu {
    * @param {string} id 
    */
   removeRobotComponent(id) {
-    switch (id) {
-      case "rc_servo_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.SERVO);
-        break;
-      case "rc_led_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.LED);
-        break;
-      case "rc_rgbled_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.RGBLED);
-        break;
-      case "rc_ledmatrix_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.LEDMATRIX);
-        break;
-      case "rc_ledmatrixsegment_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.LEDMATRIXSEGMENT);
-        break;
-      case "rc_touch_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.TOUCH);
-        break;
-      case "rc_button_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.BUTTON);
-        break;
-      case "rc_pir_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.PIR);
-        break;
-      case "rc_sonar_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.SONAR);
-        break;
-      case "rc_decoration_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.DECORATION);
-        break;
-      case "rc_lcd_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.LCD);
-        break;
-      case "rc_sound_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.SOUND);
-        break;
-      case "rc_light_minus_button":
-        this.socialRobotScenario.removeRobotComponent(TypesEnum.LIGHT);
-        break;
-      case "default":
-        break;
-    }
+    let type = this.extractType(id);
+    this.socialRobotScenario.removeRobotComponent(type);
 
     // Save robot components when a component is deleted
     this._eventBus.dispatchEvent(EventsEnum.SAVE);

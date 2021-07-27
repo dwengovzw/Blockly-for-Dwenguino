@@ -329,7 +329,7 @@ MSG.simulator = {
   rgbledDescription: "",
   ledmatrix: "LED matrix",
   ledmatrixDescription: "",
-  ledmatrixsegment: "LED matrix segment",
+  ledmatrixsegment: "LED matrix",
   ledmatrixsegmentDescription: "",
   touch: "Czujnik dotyku",
   touchDescription: "Użyj tego czujnika do wykrycia, czy robot jest dotykany. W symulatorze znajduje się przycisk umożliwiający symulację dotyku poprzez jego naciśnięcie. Po dotknięciu czujnik zwraca 1, w przeciwnym razie 0",

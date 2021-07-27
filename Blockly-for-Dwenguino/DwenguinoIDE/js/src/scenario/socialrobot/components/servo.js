@@ -9,8 +9,9 @@ export { SocialRobotServo, CostumesEnum}
 
 const CostumesEnum = {
     PLAIN: 'plain', 
+    PLAIN_ROTATE_90: 'plainrotate90',
     EYE: 'eye', 
-    MOUTH: 'mouth',
+    //MOUTH: 'mouth',
     RIGHTHAND: 'righthand',
     LEFTHAND: 'lefthand'
   };
@@ -20,15 +21,15 @@ Object.freeze(CostumesEnum);
  * @extends RobotComponent
  */
 class SocialRobotServo extends RobotComponent{
-    constructor(eventBus, id, pin, costume, angle, visible, x, y, width, height, offsetLeft, offsetTop, htmlClasses){
+    constructor(eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 
         this._id = id;
         this._type = TypesEnum.SERVO;
         this._width = width;
         this._height = height;
-        this._x = x;
-        this._y = y;
+        this._x = 0;
+        this._y = 30;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._angle = angle;
         this._prevAngle = 0;
@@ -36,11 +37,16 @@ class SocialRobotServo extends RobotComponent{
         this._backgroundImage = new Image();
         this._backgroundImageRotated = new Image();
         this._backgroundImage.src = './DwenguinoIDE/img/socialrobot/servo_background.png';
-        this._backgroundImageRotated.src = './DwenguinoIDE/img/socialrobot/servo_background_rotated.png';
+        this._backgroundImageRotated.src = './DwenguinoIDE/img/socialrobot/servo_background_rotated_90.png';
 
         switch (costume) {
             case CostumesEnum.PLAIN:
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_head.png';
+                break;
+            case CostumesEnum.PLAIN_ROTATE_90:
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_head.png';
+                this._x = 30;
+                this._y = 0;
                 break;
             case CostumesEnum.EYE:
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/eye1_background.svg';
@@ -52,7 +58,7 @@ class SocialRobotServo extends RobotComponent{
             case CostumesEnum.LEFTHAND:
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/lefthand.png';              
                 break;
-          }
+        }
         
         this._backgroundColor = '#206499';
         this._pin = pin;
@@ -135,8 +141,8 @@ class SocialRobotServo extends RobotComponent{
     }
 
     reset(){
-        this.setX(0);
-        this.setY(30);
+        // this.setX(0);
+        // this.setY(30);
         this.setAngle(0);
         this.setPrevAngle(0);
     }
@@ -225,19 +231,27 @@ class SocialRobotServo extends RobotComponent{
 
         let costumeIcons = { 
             'plain' : './DwenguinoIDE/img/socialrobot/servo.png',
+            'plainrotate90' : './DwenguinoIDE/img/socialrobot/servo_rotated_90.png',
             'eye' : './DwenguinoIDE/img/socialrobot/eye.png',
-            'mouth' : './DwenguinoIDE/img/socialrobot/mouth.png',
+            //'mouth' : './DwenguinoIDE/img/socialrobot/mouth.png',
             'righthand' : './DwenguinoIDE/img/socialrobot/righthand_icon.png',
             'lefthand' : './DwenguinoIDE/img/socialrobot/lefthand_icon.png'
-    }
+        }
+
+        $('#costume').append('<div id="costume_inner" class="row"></div>');
         for (const [type, t] of Object.entries(CostumesEnum)) {
-            console.log(t);
-            $('#costume').append('<div id="costume_inner" class="row"></div>');
             $('#costume_inner').append('<div id=costume'+t+' name='+t+' class="col-lg-3 col-md-2 col-sm-3 col-xs-4 ml-2 mb-2 costumeButton"></div>');
+            if(this.getCostume() == t){
+                $('#costume'+t).addClass('active');
+            }
+
             $('#costume'+t).append('<img src="' + costumeIcons[t] +'" class="img-fluid">');
 
             let costumeButton = document.getElementById('costume'+t);
             costumeButton.addEventListener('click', () => {
+                $('#costume'+t).addClass('active');
+                let previousCostume = this.getCostume();
+                $('#costume'+previousCostume).removeClass('active');
 
                 this._eventBus.dispatchEvent(EventsEnum.CLEARCANVAS, this.getCanvasId());
                 let newCostume = costumeButton.getAttribute("name");
@@ -247,24 +261,40 @@ class SocialRobotServo extends RobotComponent{
                         this.setCostume(newCostume);
                         this.setWidth(100);
                         this.setHeight(50);
+                        this.setX(0);
+                        this.setY(30);
+                        break;
+                    case CostumesEnum.PLAIN_ROTATE_90:
+                        this.setHtmlClasses('sim_canvas servo_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(50);
+                        this.setHeight(100);
+                        this.setX(30);
+                        this.setY(0);
                         break;
                     case CostumesEnum.EYE:
                         this.setHtmlClasses('servo_canvas');
                         this.setCostume(newCostume);
                         this.setWidth(35);
                         this.setHeight(35);
+                        this.setX(0);
+                        this.setY(30);
                         break;
                     case CostumesEnum.RIGHTHAND:
                         this.setHtmlClasses('servo_canvas hand_canvas');
                         this.setCostume(newCostume);
                         this.setWidth(64);
                         this.setHeight(149);
+                        this.setX(0);
+                        this.setY(30);
                         break;
                     case CostumesEnum.LEFTHAND:
                         this.setHtmlClasses('servo_canvas hand_canvas');
                         this.setCostume(newCostume);
                         this.setWidth(64);
                         this.setHeight(149);
+                        this.setX(0);
+                        this.setY(30);
                         break;
                     }
 
@@ -370,6 +400,9 @@ class SocialRobotServo extends RobotComponent{
 
         switch (costume) {
             case CostumesEnum.PLAIN:
+                this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_head.png';
+                break;
+            case CostumesEnum.PLAIN_ROTATE_90:
                 this._image[0].src = './DwenguinoIDE/img/socialrobot/servo_head.png';
                 break;
             case CostumesEnum.EYE:
