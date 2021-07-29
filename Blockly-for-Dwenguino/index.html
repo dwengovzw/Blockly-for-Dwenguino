@@ -255,183 +255,7 @@
           <block type="dwenguino_led_pins"></block>
           <block type="dwenguino_on_off"></block>
       </category>
-      <category id="catSocialRobot" colour="25" name='SocialRobot'>
-        <block type="pir_sensor">
-            <value name="trig">
-                <block type="char_type" id="pir_sensor_pin"> 
-                  <field name="BITMASK">13</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_rgbled">
-            <value name="pin_red">
-                <block type="dwenguino_pins">
-                    <field name="PIN">A0</field>
-                </block>
-            </value>
-            <value name="pin_green">
-                <block type="dwenguino_pins">
-                    <field name="PIN">A1</field>
-                </block>
-            </value>
-            <value name="pin_blue">
-                <block type="dwenguino_pins">
-                    <field name="PIN">A2</field>
-                </block>
-            </value>
-            <value name="color">
-                <block type="socialrobot_rgb_color" id="219">
-                    <field name="RED">133</field>
-                    <field name="GREEN">196</field>
-                    <field name="BLUE">65</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_rgb_color_with_numbers">
-            <value name="RED">
-                <block type="math_number" id="220">
-                    <field name="NUM">133</field>
-                </block>
-            </value>
-            <value name="GREEN">
-                <block type="math_number" id="221">
-                    <field name="NUM">196</field>
-                </block>
-            </value>
-            <value name="BLUE">
-                <block type="math_number" id="222">
-                    <field name="NUM">65</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_rgbled_off">
-            <value name="pin_red">
-                <block type="dwenguino_pins">
-                    <field name="PIN">A0</field>
-                </block>
-            </value>
-            <value name="pin_green">
-                <block type="dwenguino_pins">
-                    <field name="PIN">A1</field>
-                </block>
-            </value>
-            <value name="pin_blue">
-                <block type="dwenguino_pins">
-                    <field name="PIN">A2</field>
-                </block>
-            </value>
-        </block>
-        <block type="sound_sensor">
-            <value name="pin">
-                <block type="math_number" id="sound_sensor_pin"> 
-                <field name="NUM">15</field>
-                </block>
-            </value>
-        </block>
-        <block type="touch_sensor">
-            <value name="pin">
-                <block type="math_number" id="touch_sensor_pin"> 
-                <field name="NUM">14</field>
-                </block>
-            </value>
-        </block>
-        <block type="button">
-            <value name="pin">
-                <block type="math_number" id="button_pin"> 
-                <field name="NUM">18</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_servo">
-            <value name="pin">
-                <block type="math_number" id="212">
-                    <field name="NUM">37</field>
-                </block>
-            </value>
-            <value name="angle">
-                <block type="math_number" id="213">
-                    <field name="NUM">45</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_arms_down">
-            <value name="servo_right_hand1">
-                <block type="math_number" id="202">
-                    <field name="NUM">36</field>
-                </block>
-            </value>
-            <value name="servo_left_hand1">
-                <block type="math_number" id="203">
-                    <field name="NUM">37</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_arms_up">
-            <value name="servo_right_hand2">
-                <block type="math_number" id="204">
-                    <field name="NUM">36</field>
-                </block>
-            </value>
-            <value name="servo_left_hand2">
-                <block type="math_number" id="205">
-                    <field name="NUM">37</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_wave_arms">
-            <value name="servo_right_hand">
-                <block type="math_number" id="200">
-                    <field name="NUM">36</field>
-                </block>
-            </value>
-            <value name="servo_left_hand">
-                <block type="math_number" id="201">
-                    <field name="NUM">37</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_eyes_left">
-            <value name="servo_right_eye">
-                <block type="math_number" id="206">
-                    <field name="NUM">36</field>
-                </block>
-            </value>
-            <value name="servo_left_eye">
-                <block type="math_number" id="207">
-                    <field name="NUM">37</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_eyes_right">
-            <value name="servo_right_eye1">
-                <block type="math_number" id="208">
-                    <field name="NUM">36</field>
-                </block>
-            </value>
-            <value name="servo_left_eye1">
-                <block type="math_number" id="209">
-                    <field name="NUM">37</field>
-                </block>
-            </value>
-        </block>
-        <block type="socialrobot_set_pin">
-            <value name="PIN">
-                <block type="dwenguino_pins" id="214">
-                    <field name="PIN">0</field>
-                </block>
-            </value>
-            <value name="PIN_STATE" id="215">
-                <block type="dwenguino_highlow"></block>
-            </value>
-        </block>
-        <block type="socialrobot_read_pin">
-            <value name="PIN">
-                <block type="dwenguino_pins" id="215">
-                    <field name="PIN">0</field>
-                </block>
-            </value>
-        </block>
-    </category>
+
     <sep></sep>
     <category id="catComments" colour="200" name='Comments'>
         <block type="line_comment">
@@ -546,6 +370,8 @@
     <script src="./blockly/blocks/procedures.js"></script>
     <script src="./blockly/blocks/dwenguino_new.js"></script>
     <script src="./blockly/blocks/socialrobot.js"></script>
+    <script src="./blockly/blocks/input.js"></script>
+    <script src="./blockly/blocks/output.js"></script>
     <script src="./blockly/blocks/arduino.js"></script>
     <script src="./blockly/blocks/comments.js"></script>
     <script src="./blockly/blocks/drawingrobot.js"></script>
@@ -562,6 +388,8 @@
     <script src="./blockly/generators/arduino/procedures.js"></script>
     <script src="./blockly/generators/arduino/dwenguino.js"></script>
     <script src="./blockly/generators/arduino/socialrobot.js"></script>
+    <script src="./blockly/generators/arduino/input.js"></script>
+    <script src="./blockly/generators/arduino/output.js"></script>
     <script src="./blockly/generators/arduino/arduino.js"></script>
     <script src="./blockly/generators/arduino/comments.js"></script>
     <script src="./blockly/generators/arduino/base.js"></script> 
@@ -578,6 +406,8 @@
     <script src="./blockly/generators/javascript/procedures.js"></script>
     <script src="./blockly/generators/javascript/dwenguino.js"></script>
     <script src="./blockly/generators/javascript/socialrobot.js"></script>
+    <script src="./blockly/generators/javascript/input.js"></script>
+    <script src="./blockly/generators/javascript/output.js"></script>
     <script src="./blockly/generators/javascript/comments.js"></script>
     <script src="./blockly/generators/javascript/drawingrobot.js"></script>
     <script src="./blockly/generators/javascript/conveyor.js"></script>

@@ -23,7 +23,7 @@ let DwenguinoBlockly = {
     workspace: null,
     recording: "",
 
-    difficultyLevel: 1,
+    //difficultyLevel: 1,
     simulatorState: "off",
     xmlLoadedFromFile: "",
     xmlFromScenario: "",
@@ -93,22 +93,22 @@ let DwenguinoBlockly = {
           self.loginMenu.createInitialMenu();
         });
 
-        //init slider control
-        $( "#db_menu_item_difficulty_slider" ).slider({
-            value:0,
-            min: 0,
-            max: 2,
-            step: 1,
-            slide: function( event, ui ) {
-                DwenguinoBlockly.setDifficultyLevel(ui.value);
-                let data = { 
-                  "difficultyLevel":ui.value,
-                }
-                let eventToRecord = self.logger.createEvent(EVENT_NAMES.difficultyLevel, data);
-                self.logger.recordEvent(eventToRecord);
-            }
-        });
-        $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
+        // //init slider control
+        // $( "#db_menu_item_difficulty_slider" ).slider({
+        //     value:0,
+        //     min: 0,
+        //     max: 2,
+        //     step: 1,
+        //     slide: function( event, ui ) {
+        //         DwenguinoBlockly.setDifficultyLevel(ui.value);
+        //         let data = { 
+        //           "difficultyLevel":ui.value,
+        //         }
+        //         let eventToRecord = self.logger.createEvent(EVENT_NAMES.difficultyLevel, data);
+        //         self.logger.recordEvent(eventToRecord);
+        //     }
+        // });
+        // $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
 
         //init resizable panels
         $( "#db_blockly" ).resizable({
@@ -655,13 +655,13 @@ let DwenguinoBlockly = {
       return resultStringArray
     }, 
 
-    setDifficultyLevel: function(level){
-        DwenguinoBlockly.difficultyLevel = level;
-        $("#toolbox").load("./DwenguinoIDE/levels/lvl" + level + ".xml", function(){
-            DwenguinoBlockly.doTranslation();
-            DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
-        });
-    },
+    // setDifficultyLevel: function(level){
+    //     DwenguinoBlockly.difficultyLevel = level;
+    //     $("#toolbox").load("./DwenguinoIDE/levels/lvl" + level + ".xml", function(){
+    //         DwenguinoBlockly.doTranslation();
+    //         DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
+    //     });
+    // },
 
     fallbackCopyCodeToClipboard: function(text) {
       var textArea = document.createElement("dummy-text-area");
@@ -922,7 +922,7 @@ let DwenguinoBlockly = {
         document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
-            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catArduino', 'catComments', 'catConveyor'];
+            'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catInput', 'catOutput', 'catArduino', 'catComments', 'catConveyor'];
         for (var i = 0, cat; cat = categories[i]; i++) {
             var element = document.getElementById(cat);
             if (element) {
@@ -991,7 +991,7 @@ let DwenguinoBlockly = {
         //DwenguinoBlockly.loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
         DwenguinoBlockly.initDwenguinoBlockly(workspace);
         DwenguinoBlockly.doTranslation();
-        DwenguinoBlockly.setDifficultyLevel(0);
+        //DwenguinoBlockly.setDifficultyLevel(0);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
@@ -1015,48 +1015,48 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.copyCodeToClipboard();
         });
 
-        // If the user selects to render the code for Arduino or Dwenguino hardware, render the code in the right format again
-        let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
-        hardwareViewCheckbox.addEventListener('change', function (e) {
-          DwenguinoBlockly.interfaceStateArduino = !DwenguinoBlockly.interfaceStateArduino;
-          DwenguinoBlockly.setInterfaceToArduino(DwenguinoBlockly.interfaceStateArduino);
-        });
+        // // If the user selects to render the code for Arduino or Dwenguino hardware, render the code in the right format again
+        // let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
+        // hardwareViewCheckbox.addEventListener('change', function (e) {
+        //   DwenguinoBlockly.interfaceStateArduino = !DwenguinoBlockly.interfaceStateArduino;
+        //   DwenguinoBlockly.setInterfaceToArduino(DwenguinoBlockly.interfaceStateArduino);
+        // });
     },
 
-    // Strange hack because hardware_checkbox value does not change when slider changes
-    interfaceStateArduino: false, 
-    setInterfaceToArduino: function(setArduino){
-      console.log("changing to arduino: " + setArduino)
-      if (setArduino){
-        // Update interfact to only show blocks compatible with arduino, change setup loop block, disable simulator view, and show warnig for limited support
-        DwenguinoBlockly.setDifficultyLevel("_arduino");
-        DwenguinoBlockly.setWorkspaceBlockFromXml('<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure_arduino" id="j_9ZX1dGtt+%FAB!Hw%T" x="209" y="108"/></xml>')
-        if (DwenguinoBlockly.simulatorState != "off"){
-          DwenguinoBlockly.toggleSimulator();
-          $("#db_menu_item_clear").css("pointer-events", "none"); // Enable click events
-          $("#db_menu_item_run").css("pointer-events", "none"); // Enable click events
-          $("#db_menu_item_simulator").css("pointer-events", "none"); // Diable click events
-          $("#db_tutorials").css("pointer-events", "none"); // Diable click events
+    // // Strange hack because hardware_checkbox value does not change when slider changes
+    // interfaceStateArduino: false, 
+    // setInterfaceToArduino: function(setArduino){
+    //   console.log("changing to arduino: " + setArduino)
+    //   if (setArduino){
+    //     // Update interfact to only show blocks compatible with arduino, change setup loop block, disable simulator view, and show warnig for limited support
+    //     DwenguinoBlockly.setDifficultyLevel("_arduino");
+    //     DwenguinoBlockly.setWorkspaceBlockFromXml('<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure_arduino" id="j_9ZX1dGtt+%FAB!Hw%T" x="209" y="108"/></xml>')
+    //     if (DwenguinoBlockly.simulatorState != "off"){
+    //       DwenguinoBlockly.toggleSimulator();
+    //       $("#db_menu_item_clear").css("pointer-events", "none"); // Enable click events
+    //       $("#db_menu_item_run").css("pointer-events", "none"); // Enable click events
+    //       $("#db_menu_item_simulator").css("pointer-events", "none"); // Diable click events
+    //       $("#db_tutorials").css("pointer-events", "none"); // Diable click events
           
-        }
-        $('#arduinoWarningModal .modal-header').empty();
-        $('#arduinoWarningModal .modal-header').append('<h4 class="modal-title">'+ DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarningTitle']) +'</h4>');
-        $('#arduinoWarningModal .modal-body .message').empty();
-        $('#arduinoWarningModal .modal-body .message').html('<p>' + DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarning']) + '</p>');
-        $("#arduinoWarningModal").modal('show');
-      }else{
-        // Change back to arduino blocks
-        DwenguinoBlockly.setDifficultyLevel("0");
-        DwenguinoBlockly.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>')
-        if (DwenguinoBlockly.simulatorState != "on"){
-          DwenguinoBlockly.toggleSimulator();
-        }
-        $("#db_menu_item_clear").css("pointer-events", "auto"); // Enable click events
-        $("#db_menu_item_run").css("pointer-events", "auto"); // Enable click events
-        $("#db_menu_item_simulator").css("pointer-events", "auto"); // Enable click events
-        $("#db_tutorials").css("pointer-events", "auto"); // Diable click events
-      }
-    },
+    //     }
+    //     $('#arduinoWarningModal .modal-header').empty();
+    //     $('#arduinoWarningModal .modal-header').append('<h4 class="modal-title">'+ DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarningTitle']) +'</h4>');
+    //     $('#arduinoWarningModal .modal-body .message').empty();
+    //     $('#arduinoWarningModal .modal-body .message').html('<p>' + DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarning']) + '</p>');
+    //     $("#arduinoWarningModal").modal('show');
+    //   }else{
+    //     // Change back to arduino blocks
+    //     DwenguinoBlockly.setDifficultyLevel("0");
+    //     DwenguinoBlockly.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>')
+    //     if (DwenguinoBlockly.simulatorState != "on"){
+    //       DwenguinoBlockly.toggleSimulator();
+    //     }
+    //     $("#db_menu_item_clear").css("pointer-events", "auto"); // Enable click events
+    //     $("#db_menu_item_run").css("pointer-events", "auto"); // Enable click events
+    //     $("#db_menu_item_simulator").css("pointer-events", "auto"); // Enable click events
+    //     $("#db_tutorials").css("pointer-events", "auto"); // Diable click events
+    //   }
+    // },
     
     tearDownEnvironment: function(){
       // Called from the aruino IDE on close. For now do nothing.

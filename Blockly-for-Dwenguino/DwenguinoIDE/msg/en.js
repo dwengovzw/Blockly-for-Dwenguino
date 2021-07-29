@@ -23,6 +23,8 @@ var MSG = {
   catFunctions: "Functions",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Social robot",
+  catInput: "Input",
+  catOutput: "Output",
   catConveyor: "Conveyor",
   catComments: "Comments",
   catBoardIO: "IO",

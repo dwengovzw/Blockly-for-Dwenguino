@@ -23,6 +23,8 @@ var MSG_FALLBACK = {
   catFunctions: "Functions",
   catDwenguino: "Dwenguino",
   catSocialRobot: "Social robot",
+  catInput: "Input",
+  catOutput: "Output",
   catComments: "Comments",
   catBoardIO: "IO",
   createVar: "Create variable",
