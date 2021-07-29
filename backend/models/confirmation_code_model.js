@@ -12,7 +12,7 @@ var confirmationCodeSchema = mongoose.Schema({
     dateCreated: {
         type: Date,
         default: Date.now(), 
-        expires: 600 
+        expires: 12 * 3600000 // 12 hours
     }
 });
 

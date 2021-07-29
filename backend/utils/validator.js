@@ -48,6 +48,16 @@ class Validator{
         return errors;
     }
 
+    static validateUserFields(email, password){
+        let errors = [];
+
+        if (!email || !password ) {
+            errors.push({msg: "errRequiredFields"});
+        }
+
+        return errors;
+    }
+
 
     static validateFirstname(firstname){
         if(firstname == ""){
