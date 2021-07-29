@@ -251,15 +251,16 @@ exports.resendActivationLink = function(req, res){
     email,
     password,
   } = req.body;
-  let errors = [];
-
-  if (!email || !password) {
-    errors.push({msg: "errRequiredFields"});
-  }
-
+  
+  let errors = Validator.validateUserFields(email, password);
+ 
   if (errors.length > 0) {
+    console.debug("Resending activation link, user has validation errors --- ", errors);
     res.status(401).send(errors);
   } else {
+    console.debug("Resending activation link for user ", email);
+
+    let db = mongoose.connection;
     db.collection('users').findOne({email: email})
     .then(function(user){
       if(user){
@@ -270,11 +271,14 @@ exports.resendActivationLink = function(req, res){
             let errors = [];
             if( user.status !== 'active'){
               const secretCode = cryptoRandomString({length: 10, type: 'url-safe'});
-              const confirmationCode = new ConfirmationCodeItem({
-                email: user.email,
-                code: secretCode
+              const confirmationCode = new ConfirmationCodeItem();
+              confirmationCode.email = user.email;
+              confirmationCode.code = secretCode;
+              confirmationCode.save().then(savedConfirmationCode => {
+                console.debug("Confirmation code saved ---- ", savedConfirmationCode); 
+              }).catch(err => {
+                console.debug("Unable to save confirmation code --- ", err);
               });
-              confirmationCode.save();
 
               const subject = req.i18n.__("email.confirmationEmailAddress.subject");
               const confirmationUrl = `${process.env.SERVER_URL}auth/verify-account/${user._id}/${secretCode}`;
