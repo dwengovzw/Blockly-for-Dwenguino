@@ -8,6 +8,8 @@ sudo rm -rf /home/ubuntu/blockly-build/*
 # clean the node_modules directory and reinstall to be sure you have latest version 
 rm -Rf node_modules
 npm install
+npm install node-pre-gyp
+npm install bcrypt
 
 # Run webpack to compile frontend javascript into bundle
 # npm run build # -> This chrashes on the server, not enough memory.
