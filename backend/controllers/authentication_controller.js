@@ -139,13 +139,17 @@ exports.verifyAccount = function (req, res) {
                 console.debug("Verifying account ", user.email, " gave error --- ", error);
                 res.redirect(process.env.STATIC_SERVING_URL);
               } else {
-                db.collection('confirmation_codes').deleteMany({ email: user.email });
+                db.collection('confirmation_codes').deleteOne({ email: user.email, code: req.params.secretCode }).then(result => {
+                  console.debug("Confirmation codes deleted ---- ", user.email); 
+                }).catch(err => {
+                  console.debug("Unable to delete confirmation codes --- ", err);
+                });
                 res.redirect(process.env.STATIC_SERVING_URL);
               }
             } 
           );
         } else {
-          console.debug("Verifying account ", user.email, " --- No confirmation code found");
+          console.debug("Verifying account ", user.email, " --- No confirmation code ", req.params.secretCode, " found");
           res.redirect(process.env.STATIC_SERVING_URL);
         }
       });
@@ -466,7 +470,7 @@ exports.resetPassword = function (req, res){
                     console.debug("Updating the user's password in the database failed --- ", error);
                     res.sendStatus(400);
                   } else {
-                    db.collection('confirmation_codes').deleteMany({ email: email });
+                    db.collection('confirmation_codes').deleteOne({ email: user.email, code: secretCode });
                     res.sendStatus(200);
                   }
                 } 
