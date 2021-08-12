@@ -83,7 +83,24 @@
 <sep></sep>
 
 <category id="catInput" colour="25" name='Input'>
-    <block type="sound_sensor">
+    <block type="input_sonar_sensor_select"></block>
+
+    <block type="input_sonar_sensor">
+        <value name="trig">
+            <block type="char_type" id="72">
+                <field name="BITMASK">11</field>
+            </block>
+        </value>
+        <value name="echo">
+            <block type="char_type" id="77">
+                <field name="BITMASK">12</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="input_sound_sensor_select"></block>
+
+    <block type="input_sound_sensor">
         <value name="pin">
             <block type="math_number" id="sound_sensor_pin"> 
             <field name="NUM">15</field>
@@ -91,39 +108,37 @@
         </value>
     </block>
 
-    <block type="touch_sensor">
+    <!--<block type="input_touch_sensor">
         <value name="pin">
             <block type="math_number" id="touch_sensor_pin"> 
             <field name="NUM">14</field>
             </block>
         </value>
-    </block>
+    </block>-->
 
-    <block type="pir_sensor">
+    <!-- <block type="input_pir_sensor">
         <value name="trig">
             <block type="char_type" id="pir_sensor_pin"> 
             <field name="BITMASK">13</field>
             </block>
         </value>
-    </block>
+    </block> -->
 
-    <block type="button">
+   <!-- <block type="input_button">
         <value name="pin">
             <block type="math_number" id="button_pin"> 
             <field name="NUM">18</field>
             </block>
         </value>
-    </block>
+    </block> 
 
-    <block type="dwenguino_digital_read_switch"></block>
-
-    <block type="socialrobot_read_pin">
+    <block type="input_read_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">0</field>
             </block>
         </value>
-    </block>
+    </block> -->
 </category>
 
 <category id="catOutput" colour="180" name='Output'>

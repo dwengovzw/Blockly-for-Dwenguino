@@ -8,14 +8,85 @@
  
  goog.require('Blockly.Arduino');
 
+ Blockly.Arduino.input.pinMappings = {
+    "SONAR1": 
+        {
+           "trig": 25,
+           "echo": 24
+        },
+    "SONAR2": {
+            "trig": 27,
+            "echo": 26
+        },
+    "SOUND1": {
+            "analog": 29,
+            "digital": 28
+        }
+};
  
  // This is now integrated in the setup loop structure so children don't have to know about the initialisation step and can just start coding
  Blockly.Arduino['initdwenguino'] = function (block) {
     return code;
  };
 
+ Blockly.Arduino['input_sonar_sensor_select'] = function () {
+    var number = this.getFieldValue('number');
+    var value_trig = Blockly.Arduino.input.pinMappings[number]["trig"];
+    var value_echo = Blockly.Arduino.input.pinMappings[number]["echo"]; 
+
+    //define sonar settings
+    Blockly.Arduino.definitions_['define_newping_h'] = "#include <NewPing.h>\n";
+    Blockly.Arduino.definitions_['define_sonar_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
+    Blockly.Arduino.definitions_['define_sonar_echo_ ' + value_echo] = "#define ECHO_PIN_" + value_echo + " " + value_echo + "\n";
+    Blockly.Arduino.definitions_['define_sonar_max_distance'] = "#define MAX_DISTANCE 200 \n";
+    //define sonar sensor
+    Blockly.Arduino.definitions_['define_sonar_sensor_' + value_trig + value_echo] = "NewPing sonar"
+            + value_trig + value_echo + "(TRIGGER_PIN_" + value_trig + ", ECHO_PIN_" + value_echo + ", MAX_DISTANCE);\n";
+    //  Assemble Arduino into code variable.
+    var code = "sonar" + value_trig + value_echo + '.ping_cm()';
+
+    return [code, Blockly.Arduino.ORDER_NONE];
+};
+
+Blockly.Arduino['input_sonar_sensor'] = function (block) {
+    var value_trig = Blockly.Arduino.valueToCode(block, 'trig', Blockly.Arduino.ORDER_NONE);
+    var value_echo = Blockly.Arduino.valueToCode(block, 'echo', Blockly.Arduino.ORDER_NONE);
+    //define sonar settings
+    Blockly.Arduino.definitions_['define_newping_h'] = "#include <NewPing.h>\n";
+    Blockly.Arduino.definitions_['define_sonar_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
+    Blockly.Arduino.definitions_['define_sonar_echo_ ' + value_echo] = "#define ECHO_PIN_" + value_echo + " " + value_echo + "\n";
+    Blockly.Arduino.definitions_['define_sonar_max_distance'] = "#define MAX_DISTANCE 200 \n";
+    //define sonar sensor
+    Blockly.Arduino.definitions_['define_sonar_sensor_' + value_trig + value_echo] = "NewPing sonar"
+            + value_trig + value_echo + "(TRIGGER_PIN_" + value_trig + ", ECHO_PIN_" + value_echo + ", MAX_DISTANCE);\n";
+    //  Assemble Arduino into code variable.
+    var code = "sonar" + value_trig + value_echo + '.ping_cm()';
+
+    return [code, Blockly.Arduino.ORDER_NONE];
+};
+
+Blockly.Arduino['input_sound_sensor_select'] = function (block) {
+    var number = this.getFieldValue('number');
+    var pin = Blockly.Arduino.input.pinMappings[number]["digital"];
+   Blockly.Arduino.definitions_['define_sound_sensor_' + pin] = "#define SOUND_SENSOR_PIN_" + pin + " " + pin + "\n";
  
- Blockly.Arduino['pir_sensor'] = function (block) {
+   Blockly.Arduino.setups_['define_dwenguino_sound_sensor_' + pin] = "pinMode(SOUND_SENSOR_PIN_" + pin + ", INPUT);";
+   var code = "digitalRead(SOUND_SENSOR_PIN_" + pin + ")";
+ 
+   return [code, Blockly.Arduino.ORDER_NONE];
+};
+
+ Blockly.Arduino['input_sound_sensor'] = function (block) {
+   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
+   Blockly.Arduino.definitions_['define_sound_sensor_' + pin] = "#define SOUND_SENSOR_PIN_" + pin + " " + pin + "\n";
+ 
+   Blockly.Arduino.setups_['define_dwenguino_sound_sensor_' + pin] = "pinMode(SOUND_SENSOR_PIN_" + pin + ", INPUT);";
+   var code = "digitalRead(SOUND_SENSOR_PIN_" + pin + ")";
+ 
+   return [code, Blockly.Arduino.ORDER_NONE];
+ };
+ 
+ Blockly.Arduino['input_pir_sensor'] = function (block) {
    var value_trig = Blockly.Arduino.valueToCode(block, 'trig', Blockly.Arduino.ORDER_NONE);
    //define pir settings
    Blockly.Arduino.definitions_['define_pir_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
@@ -27,17 +98,9 @@
    return [code, Blockly.Arduino.ORDER_NONE];
  };
  
- Blockly.Arduino['sound_sensor'] = function (block) {
-   var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
-   Blockly.Arduino.definitions_['define_sound_sensor_' + pin] = "#define SOUND_SENSOR_PIN_" + pin + " " + pin + "\n";
  
-   Blockly.Arduino.setups_['define_dwenguino_sound_sensor_' + pin] = "pinMode(SOUND_SENSOR_PIN_" + pin + ", INPUT);";
-   var code = "digitalRead(SOUND_SENSOR_PIN_" + pin + ")";
  
-   return [code, Blockly.Arduino.ORDER_NONE];
- };
- 
- Blockly.Arduino['touch_sensor'] = function (block) {
+ Blockly.Arduino['input_touch_sensor'] = function (block) {
    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
    Blockly.Arduino.definitions_['define_touch_sensor_' + pin] = "#define TOUCH_SENSOR_PIN_" + pin + " " + pin + "\n";
  
@@ -47,7 +110,7 @@
    return [code, Blockly.Arduino.ORDER_NONE];
  };
  
- Blockly.Arduino['button'] = function (block) {
+ Blockly.Arduino['input_button'] = function (block) {
    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
    Blockly.Arduino.definitions_['define_button_' + pin] = "#define BUTTON_PIN_" + pin + " " + pin + "\n";
  
@@ -57,7 +120,7 @@
    return [code, Blockly.Arduino.ORDER_NONE];
  };
  
- Blockly.Arduino['socialrobot_read_pin'] = function(block){
+ Blockly.Arduino['input_read_pin'] = function(block){
      var pin_number = Blockly.Arduino.valueToCode(block, "PIN", Blockly.Arduino.ORDER_ATOMIC);
      Blockly.Arduino.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);\n';
  
