@@ -22,17 +22,138 @@
 
  goog.provide('Blockly.Blocks.input');
  
- goog.require('Blockly.Blocks');
- goog.require('Blockly.Arduino');
- 
+ goog.require('Blockly.Blocks'); 
  
  var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
  
  Blockly.Blocks.input.HUE = 25;
- 
- var sound_sensor_json = {
-    "id": "sound_sensor",
-    "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotSoundSensorBlock']),
+
+  // Sonar sensor
+
+  let sonar_select_options = [
+        [MSG.inputSonarDropdownBlock + " 1", "SONAR1"],
+        [MSG.inputSonarDropdownBlock + " 2", "SONAR2"]
+  ];
+
+  var input_sonar_sensor_select_json = {
+    "id": "input_sonar_sensor_select",
+    "message0": MSG.inputSonarSensorSelectBlock,
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_image",
+        "src": "DwenguinoIDE/img/sonar.png",
+        "width": 150,
+        "height": 87,
+        "alt": "*"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_dropdown",
+        "name": "number",
+        "options": sonar_select_options
+      }
+    ],
+    "output": "Number",
+    "colour": Blockly.Blocks.input.HUE,
+    "tooltip": MSG.sonarTooltip,
+    "helpUrl": DwenguinoHelpUrl
+  };
+  
+  Blockly.Blocks['input_sonar_sensor_select'] = {
+    init: function() {
+      this.jsonInit(input_sonar_sensor_select_json);
+    }
+  };
+
+  var input_sonar_sensor_json = {
+    "id": "input_sonar_sensor",
+    "message0": MSG.dwenguinoSonarBlock,
+    "args0": [
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "field_image",
+        "src": "DwenguinoIDE/img/sonar.png",
+        "width": 150,
+        "height": 87,
+        "alt": "*"
+      },
+      {
+        "type": "input_dummy"
+      },
+      {
+        "type": "input_value",
+        "name": "trig",
+        "check": "Number"
+      },
+      {
+        "type": "input_value",
+        "name": "echo",
+        "check": "Number"
+      }
+    ],
+    "output": "Number",
+    "colour": Blockly.Blocks.input.HUE,
+    "tooltip": MSG.sonarTooltip,
+    "helpUrl": DwenguinoHelpUrl
+  };
+  
+  Blockly.Blocks['input_sonar_sensor'] = {
+    init: function() {
+      this.jsonInit(input_sonar_sensor_json);
+    }
+  };
+  
+  // Sound sensor
+  let sound_select_options = [
+    [MSG.inputSoundDropdownBlock + " 1", "SOUND1"]
+  ];
+
+  var input_sound_sensor_select_json = {
+  "id": "input_sound_sensor_select",
+  "message0": MSG.inputSoundSensorSelectBlock,
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": "DwenguinoIDE/img/socialrobot/sound_sensor.png",
+      "width": 80,
+      "height": 34,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_dropdown",
+      "name": "number",
+      "options": sound_select_options
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.input.HUE,
+  "tooltip": MSG.socialRobotSoundSensorBlockTooltip,
+  "helpUrl": DwenguinoHelpUrl
+  };
+
+  Blockly.Blocks['input_sound_sensor_select'] = {
+    init: function() {
+      this.jsonInit(input_sound_sensor_select_json);
+    }
+  };
+
+
+ var input_sound_sensor_json = {
+    "id": "input_sound_sensor",
+    "message0": MSG.inputSoundSensorBlock,
     "args0": [
       {
         "type": "input_dummy"
@@ -59,13 +180,13 @@
     "helpUrl": DwenguinoHelpUrl
   };
   
-  Blockly.Blocks['sound_sensor'] = {
+  Blockly.Blocks['input_sound_sensor'] = {
     init: function() {
-      this.jsonInit(sound_sensor_json);
+      this.jsonInit(input_sound_sensor_json);
     }
   };
 
- var pir_sensor_json = {
+ var input_pir_sensor_json = {
    "id": "pir_sensor",
    "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotPirBlock']),
    "args0": [
@@ -94,13 +215,13 @@
    "helpUrl": DwenguinoHelpUrl
  };
  
- Blockly.Blocks['pir_sensor'] = {
+ Blockly.Blocks['input_pir_sensor'] = {
    init: function() {
-     this.jsonInit(pir_sensor_json);
+     this.jsonInit(input_pir_sensor_json);
    }
  };
  
- var touch_sensor_json = {
+ var input_touch_sensor_json = {
    "id": "touch_sensor",
    "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotTouchSensorBlock']),
    "args0": [
@@ -129,13 +250,13 @@
    "helpUrl": DwenguinoHelpUrl
  };
  
- Blockly.Blocks['touch_sensor'] = {
+ Blockly.Blocks['input_touch_sensor'] = {
    init: function() {
-     this.jsonInit(touch_sensor_json);
+     this.jsonInit(input_touch_sensor_json);
    }
  };
  
- var button_json = {
+ var input_button_json = {
    "id": "button_on",
    "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotButtonBlock']),
    "args0": [
@@ -164,13 +285,13 @@
    "helpUrl": DwenguinoHelpUrl
  };
  
- Blockly.Blocks['button'] = {
+ Blockly.Blocks['input_button'] = {
    init: function() {
-     this.jsonInit(button_json);
+     this.jsonInit(input_button_json);
    }
  };
  
-   var socialrobot_read_pin_json = {
+   var input_read_pin_json = {
      "id": "socialrobot_read_pin",
      "message0": DwenguinoBlocklyLanguageSettings.translate(['socialrobotReadPinBlock']),
      "args0": [
@@ -189,9 +310,9 @@
      "helpUrl": "http://www.dwengo.org/tutorials"
  };
  
- Blockly.Blocks['socialrobot_read_pin'] = {
+ Blockly.Blocks['input_read_pin'] = {
      init: function(){
-         this.jsonInit(socialrobot_read_pin_json);
+         this.jsonInit(input_read_pin_json);
      }
  };
  
