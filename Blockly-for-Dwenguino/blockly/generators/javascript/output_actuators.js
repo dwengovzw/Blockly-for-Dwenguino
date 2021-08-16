@@ -10,6 +10,39 @@
  
  goog.require('Blockly.JavaScript');
  
+ Blockly.JavaScript.output.pinMappings = {
+  "RGBLED1": 
+      {
+         "red": 11,
+         "green": 14,
+         "blue": 15
+      },
+  "SERVO1":
+      {
+        "pin": 40
+      },
+  "SERVO2":
+      {
+        "pin": 41
+      },
+  "SERVO3":
+      {
+        "pin": 19
+      },
+  "SERVO4":
+      {
+        "pin": 18
+      },
+  "SERVO5":
+      {
+        "pin": 17
+      },
+  "SERVO6":
+      {
+        "pin": 16
+      }
+};
+
  var eyePatterns = [
    [ 0, 126, 129, 177, 177, 129, 126, 0],  // 0 - 'Rest Position'
    [ 0, 124, 130, 178, 178, 130, 124, 0],  // 1 - 'Blink 1'
@@ -79,13 +112,12 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
   var value_text = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ATOMIC);
   var value_line_number = Blockly.JavaScript.valueToCode(block, 'line_number', Blockly.JavaScript.ORDER_ATOMIC);
   var value_character_number = Blockly.JavaScript.valueToCode(block, 'character_number', Blockly.JavaScript.ORDER_ATOMIC);
-  // Assemble JavaScript into code variable.
+  
   var code = machine + 'writeLcd(' + value_text + ', '+ value_line_number + ', '+ value_character_number + ');\n';
   return code;
 };
 
 Blockly.JavaScript['output_clear_lcd'] = function (block) {
-  //  Assemble JavaScript into code variable.
   var code = machine + 'clearLcd();\n';
   return code;
 };
@@ -153,8 +185,18 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
   let code = machine + 'clearLedmatrixDisplay();\n';
   return code;
 }
+
+Blockly.JavaScript['output_rgbled_select'] = function(block) {
+  var number = this.getFieldValue('number');
+  var pin_red = Blockly.JavaScript.output.pinMappings[number]["red"];
+  var pin_green = Blockly.JavaScript.output.pinMappings[number]["green"]; 
+  var pin_blue = Blockly.JavaScript.output.pinMappings[number]["blue"]; 
+  var color = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
+   var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + color + ');\n';
+   return code;
+}
  
- Blockly.JavaScript['socialrobot_rgbled'] = function(block){
+ Blockly.JavaScript['output_rgbled'] = function(block){
    var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
    var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
    var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
@@ -162,17 +204,25 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + color + ');\n';
    return code;
  };
+
+ Blockly.JavaScript['output_rgbled_select_off'] = function(block) {
+  var number = this.getFieldValue('number');
+  var pin_red = Blockly.JavaScript.output.pinMappings[number]["red"];
+  var pin_green = Blockly.JavaScript.output.pinMappings[number]["green"]; 
+  var pin_blue = Blockly.JavaScript.output.pinMappings[number]["blue"]; 
+  var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + '[0,0,0]);\n';
+  return code;
+}
  
- Blockly.JavaScript['socialrobot_rgbled_off'] = function(block) {
+ Blockly.JavaScript['output_rgbled_off'] = function(block) {
    var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
    var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
    var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
    var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + '[0,0,0]);\n';
-   console.log(code);
    return code;
  };
  
- Blockly.JavaScript['socialrobot_rgb_color'] = function(block){
+ Blockly.JavaScript['output_rgb_color'] = function(block){
    var redComponent = block.getFieldValue('RED');
    var greenComponent = block.getFieldValue('GREEN');
    var blueComponent = block.getFieldValue('BLUE');
@@ -181,7 +231,7 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    return [code, Blockly.JavaScript.ORDER_ATOMIC];
  };
  
- Blockly.JavaScript['socialrobot_rgb_color_with_numbers'] = function(block){
+ Blockly.JavaScript['output_rgb_color_with_numbers'] = function(block){
    var redComponent = Blockly.JavaScript.valueToCode(block, 'RED', Blockly.JavaScript.ORDER_NONE);
    var greenComponent = Blockly.JavaScript.valueToCode(block, 'GREEN', Blockly.JavaScript.ORDER_NONE);
    var blueComponent = Blockly.JavaScript.valueToCode(block, 'BLUE', Blockly.JavaScript.ORDER_NONE);
@@ -189,16 +239,32 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    var code = '[' + redComponent + ',' + greenComponent + ',' + blueComponent + ']';
    return code;
  };
+
+ Blockly.JavaScript['output_servo_with_dropdown'] = function (block) {
+  let value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.Arduino.ORDER_ATOMIC);
+  let value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.Arduino.ORDER_ATOMIC);
+
+  var code = machine + 'servoWithPin(' + value_pin + ', ' + value_angle + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['output_servo_dropdown'] = function(block){
+  var servo = this.getFieldValue('SERVO_DROPDOWN');
+  var pin_servo = Blockly.JavaScript.output.pinMappings[servo]["pin"];
+
+  var code = pin_servo;
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+}
  
- Blockly.JavaScript['socialrobot_servo'] = function (block) {
+ Blockly.JavaScript['output_servo'] = function (block) {
    var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
    var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
-   // Assemble JavaScript into code variable.
+
    var code = machine + 'servoWithPin(' + value_pin + ', ' + value_angle + ');\n';
    return code;
  };
  
- Blockly.JavaScript['socialrobot_arms_down'] = function(block) {
+ Blockly.JavaScript['output_arms_down'] = function(block) {
    var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand1', Blockly.JavaScript.ORDER_ATOMIC);
    var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand1', Blockly.JavaScript.ORDER_ATOMIC);
    
@@ -209,7 +275,7 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
  };
  
  
- Blockly.JavaScript['socialrobot_arms_up'] = function(block) {
+ Blockly.JavaScript['output_arms_up'] = function(block) {
    var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand2', Blockly.JavaScript.ORDER_ATOMIC);
    var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand2', Blockly.JavaScript.ORDER_ATOMIC);
    
@@ -219,7 +285,7 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    return code;
  };
  
- Blockly.JavaScript['socialrobot_wave_arms'] = function(block) {
+ Blockly.JavaScript['output_wave_arms'] = function(block) {
    var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand', Blockly.JavaScript.ORDER_ATOMIC);
    var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand', Blockly.JavaScript.ORDER_ATOMIC);
    
@@ -233,7 +299,7 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    return code;
  };
  
- Blockly.JavaScript['socialrobot_eyes_left'] = function(block) {
+ Blockly.JavaScript['output_eyes_left'] = function(block) {
    var value_servo_right_eye = Blockly.JavaScript.valueToCode(block, 'servo_right_eye', Blockly.JavaScript.ORDER_ATOMIC);
    var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye', Blockly.JavaScript.ORDER_ATOMIC);
    
@@ -244,7 +310,7 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    return code;
  };
  
- Blockly.JavaScript['socialrobot_eyes_right'] = function(block) {
+ Blockly.JavaScript['output_eyes_right'] = function(block) {
    var value_servo_right_eye = Blockly.JavaScript.valueToCode(block, 'servo_right_eye1', Blockly.JavaScript.ORDER_ATOMIC);
    var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye1', Blockly.JavaScript.ORDER_ATOMIC);
    
@@ -254,8 +320,23 @@ Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
    console.log(code);
    return code;
  };
+
+ Blockly.JavaScript.dwenguino_tone_on_pin = function() {
+  var value_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
+  var value_num = Blockly.JavaScript.valueToCode(this, "NUM", Blockly.JavaScript.ORDER_ATOMIC);
+
+  var code = machine + "tone(\"" + value_pin + "\", " + value_num + ");\n";
+  return code;
+};
+
+Blockly.JavaScript.dwenguino_no_tone_on_pin = function() {
+  var dropdown_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
+
+  var code = machine + "noTone(\"" + dropdown_pin + "\");\n";
+  return code;
+};
  
- Blockly.JavaScript['socialrobot_set_pin'] = function(block){
+ Blockly.JavaScript['output_set_pin'] = function(block){
    var pin_number = Blockly.JavaScript.valueToCode(block, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
    var pin_state = Blockly.JavaScript.valueToCode(block, "PIN_STATE", Blockly.JavaScript.ORDER_ATOMIC);
  
