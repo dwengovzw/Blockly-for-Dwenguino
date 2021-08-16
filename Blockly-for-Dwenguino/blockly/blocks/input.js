@@ -140,7 +140,7 @@
   ],
   "output": "Number",
   "colour": Blockly.Blocks.input.HUE,
-  "tooltip": MSG.socialRobotSoundSensorBlockTooltip,
+  "tooltip": MSG.inputSoundSensorBlockTooltip,
   "helpUrl": DwenguinoHelpUrl
   };
 
@@ -176,7 +176,7 @@
     ],
     "output": "Number",
     "colour": Blockly.Blocks.input.HUE,
-    "tooltip": "",
+    "tooltip": MSG.inputSoundSensorBlockTooltip,
     "helpUrl": DwenguinoHelpUrl
   };
   
@@ -187,8 +187,8 @@
   };
 
  var input_pir_sensor_json = {
-   "id": "pir_sensor",
-   "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotPirBlock']),
+   "id": "input_pir_sensor",
+   "message0": MSG.inputPirBlock,
    "args0": [
      {
        "type": "input_dummy"
@@ -211,7 +211,7 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['sonarTooltip']),
+   "tooltip": MSG.inputPirBlockTooltip,
    "helpUrl": DwenguinoHelpUrl
  };
  
@@ -222,8 +222,8 @@
  };
  
  var input_touch_sensor_json = {
-   "id": "touch_sensor",
-   "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotTouchSensorBlock']),
+   "id": "input_touch_sensor",
+   "message0": MSG.inputTouchSensorBlock,
    "args0": [
      {
        "type": "input_dummy"
@@ -246,7 +246,7 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": "",
+   "tooltip": MSG.inputTouchSensorBlockTooltip,
    "helpUrl": DwenguinoHelpUrl
  };
  
@@ -257,8 +257,8 @@
  };
  
  var input_button_json = {
-   "id": "button_on",
-   "message0": DwenguinoBlocklyLanguageSettings.translate(['socialRobotButtonBlock']),
+   "id": "input_button",
+   "message0": MSG.inputButtonBlock,
    "args0": [
      {
        "type": "input_dummy"
@@ -281,7 +281,7 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": "",
+   "tooltip": MSG.inputButtonBlockTooltip,
    "helpUrl": DwenguinoHelpUrl
  };
  
@@ -292,8 +292,8 @@
  };
  
    var input_read_pin_json = {
-     "id": "socialrobot_read_pin",
-     "message0": DwenguinoBlocklyLanguageSettings.translate(['socialrobotReadPinBlock']),
+     "id": "input_read_pin",
+     "message0": MSG.inputReadPinBlock,
      "args0": [
          {
          "type": "input_dummy"
