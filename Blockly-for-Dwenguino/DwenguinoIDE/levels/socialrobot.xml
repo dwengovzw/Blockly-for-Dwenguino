@@ -108,23 +108,23 @@
         </value>
     </block>
 
-    <!--<block type="input_touch_sensor">
+    <block type="input_touch_sensor">
         <value name="pin">
             <block type="math_number" id="touch_sensor_pin"> 
             <field name="NUM">14</field>
             </block>
         </value>
-    </block>-->
+    </block>
 
-    <!-- <block type="input_pir_sensor">
+    <block type="input_pir_sensor">
         <value name="trig">
             <block type="char_type" id="pir_sensor_pin"> 
             <field name="BITMASK">13</field>
             </block>
         </value>
-    </block> -->
+    </block>
 
-   <!-- <block type="input_button">
+   <block type="input_button">
         <value name="pin">
             <block type="math_number" id="button_pin"> 
             <field name="NUM">18</field>
@@ -138,12 +138,12 @@
                 <field name="PIN">0</field>
             </block>
         </value>
-    </block> -->
+    </block>
 </category>
 
 <category id="catOutput" colour="180" name='Output'>
 
-    <block type="dwenguino_lcd">
+    <block type="output_lcd">
         <value name="text">
             <block type="text" id="48">
                 <field name="TEXT">Hallo Dwenguino</field>
@@ -161,9 +161,9 @@
         </value>
     </block>
 
-    <block type="clear_lcd"></block>
+    <block type="output_clear_lcd"></block>
 
-    <block type="socialrobot_show_ledmatrix_image">
+    <block type="output_show_ledmatrix_image">
         <field name="NUMBERDISPLAY">0</field>
         <field name="LED00">FALSE</field>
         <field name="LED10">FALSE</field>
@@ -231,43 +231,50 @@
         <field name="LED77">FALSE</field>
     </block>
 
-    <block type="socialrobot_show_ledmatrix_eye_pattern">
+    <block type="output_show_ledmatrix_eye_pattern">
         <field name="NUMBERDISPLAY">0</field>
         <field name="EYEPATTERN">0</field>
     </block>
 
-    <block type="socialrobot_clear_ledmatrix_segment">
+    <block type="output_clear_ledmatrix_segment">
         <field name="NUMBERDISPLAY">0</field>
     </block>
 
-    <block type="socialrobot_clear_ledmatrix">
+    <block type="output_clear_ledmatrix">
     </block>
 
-    <block type="dwenguino_set_led">
-        <value name="LED">
-            <block type="dwenguino_led_pins">
-                <field name="LED_NUMBER">13</field>
-            </block>
-        </value>
-        <value name="LED_STATE">
-            <block type="dwenguino_on_off">
-                <field name="LED_ON_OFF">ON</field>
-            </block>
-        </value>
-    </block>
-    <block type="dwenguino_leds_reg">
+    <block type="output_leds_reg">
         <value name="MASK">
             <block type="char_type">
                 <field name="BITMASK">0b01010101</field>
             </block>
         </value>
     </block>
-    <block type="dwenguino_led_pins"></block>
-    <block type="dwenguino_on_off"></block>
+    <block type="output_led_pins"></block>
+    <block type="output_on_off"></block>
 
-    <block type="dwenguino_wait_for_switch"></block>
+    <block type="output_wait_for_switch"></block>
     
-    <block type="socialrobot_rgbled">
+    <block type="output_rgbled_select">
+        <value name="color">
+            <block type="output_rgb_color" id="219">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="output_rgbled_select_off">
+    </block>
+
+    <block type="output_rgb_color">
+        <field name="RED">133</field>
+        <field name="GREEN">196</field>
+        <field name="BLUE">65</field>
+    </block>
+
+    <block type="output_rgbled">
         <value name="pin_red">
             <block type="dwenguino_pins">
                 <field name="PIN">3</field>
@@ -284,14 +291,14 @@
             </block>
         </value>
         <value name="color">
-            <block type="socialrobot_rgb_color" id="219">
+            <block type="output_rgb_color" id="219">
                 <field name="RED">133</field>
                 <field name="GREEN">196</field>
                 <field name="BLUE">65</field>
             </block>
         </value>
     </block>
-    <block type="socialrobot_rgb_color_with_numbers">
+    <!-- <block type="output_rgb_color_with_numbers">
         <value name="RED">
             <block type="math_number" id="220">
                 <field name="NUM">133</field>
@@ -307,8 +314,8 @@
                 <field name="NUM">65</field>
             </block>
         </value>
-    </block>
-    <block type="socialrobot_rgbled_off">
+    </block> -->
+    <block type="output_rgbled_off">
         <value name="pin_red">
             <block type="dwenguino_pins">
                 <field name="PIN">3</field>
@@ -326,10 +333,10 @@
         </value>
     </block>
 
-    <block type="dwenguino_servo">
+    <block type="output_servo_with_dropdown">
         <value name="pin">
-            <block type="dwenguino_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO1</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
             </block>
         </value>
         <value name="angle">
@@ -338,9 +345,11 @@
             </block>
         </value>
     </block>
-    <block type="dwenguino_servo_dropdown"></block>
+    <block type="output_servo_dropdown">
+        <field name="SERVO_DROPDOWN">SERVO3</field>
+    </block>
     
-    <block type="socialrobot_servo">
+    <!-- <block type="output_servo">
         <value name="pin">
             <block type="math_number" id="212">
                 <field name="NUM">40</field>
@@ -351,69 +360,69 @@
                 <field name="NUM">45</field>
             </block>
         </value>
-    </block>
-    <block type="socialrobot_arms_down">
+    </block> -->
+    <block type="output_arms_down">
             <value name="servo_right_hand1">
-                <block type="math_number" id="202">
-                    <field name="NUM">40</field>
+                <block type="output_servo_dropdown">
+                    <field name="SERVO_DROPDOWN">SERVO3</field>
                 </block>
             </value>
             <value name="servo_left_hand1">
-                <block type="math_number" id="203">
-                    <field name="NUM">41</field>
+                <block type="output_servo_dropdown">
+                    <field name="SERVO_DROPDOWN">SERVO4</field>
                 </block>
             </value>
     </block>
-    <block type="socialrobot_arms_up">
+    <block type="output_arms_up">
         <value name="servo_right_hand2">
-            <block type="math_number" id="204">
-                <field name="NUM">40</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
             </block>
         </value>
         <value name="servo_left_hand2">
-            <block type="math_number" id="205">
-                <field name="NUM">41</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
             </block>
         </value>
     </block>
-    <block type="socialrobot_wave_arms">
+    <block type="output_wave_arms">
         <value name="servo_right_hand">
-            <block type="math_number" id="200">
-                <field name="NUM">40</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
             </block>
         </value>
         <value name="servo_left_hand">
-            <block type="math_number" id="201">
-                <field name="NUM">41</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
             </block>
         </value>
     </block>
-            <block type="socialrobot_eyes_left">
+    <block type="output_eyes_left">
         <value name="servo_right_eye">
-            <block type="math_number" id="206">
-                <field name="NUM">40</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
             </block>
         </value>
         <value name="servo_left_eye">
-            <block type="math_number" id="207">
-                <field name="NUM">41</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
             </block>
         </value>
     </block>
-    <block type="socialrobot_eyes_right">
+    <block type="output_eyes_right">
         <value name="servo_right_eye1">
-            <block type="math_number" id="208">
-                <field name="NUM">40</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
             </block>
         </value>
         <value name="servo_left_eye1">
-            <block type="math_number" id="209">
-                <field name="NUM">41</field>
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
             </block>
         </value>
     </block>
 
-    <block type="dwenguino_tone_on_pin">
+    <block type="output_tone_on_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">BUZZER</field>
@@ -425,7 +434,7 @@
             </block>
         </value>
     </block>
-    <block type="dwenguino_no_tone_on_pin">
+    <block type="output_no_tone_on_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">BUZZER</field>
@@ -433,7 +442,7 @@
         </value>
     </block>
 
-    <block type="socialrobot_set_pin">
+    <block type="output_set_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">0</field>

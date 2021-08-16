@@ -1,5 +1,3 @@
-/* global Blockly, goog */
-
 /**
  * @fileoverview Generating Dwenguino blocks.
  * @author tom.neutens@UGent.be     (Tom Neutens)
@@ -72,10 +70,89 @@
    [ 0, 48, 72, 120, 120, 72, 48, 0],  // 56 - 'Peering 3'
    [ 0, 32, 80, 112, 112, 80, 32, 0],  // 57 - 'Peering 4'
  ];
- 
- Blockly.JavaScript['initdwenguino'] = function (block) {
-     return "";
- };
+
+Blockly.JavaScript['initdwenguino'] = function (block) {
+  return "";
+};
+
+ Blockly.JavaScript['output_lcd'] = function (block) {
+  var value_text = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_line_number = Blockly.JavaScript.valueToCode(block, 'line_number', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_character_number = Blockly.JavaScript.valueToCode(block, 'character_number', Blockly.JavaScript.ORDER_ATOMIC);
+  // Assemble JavaScript into code variable.
+  var code = machine + 'writeLcd(' + value_text + ', '+ value_line_number + ', '+ value_character_number + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['output_clear_lcd'] = function (block) {
+  //  Assemble JavaScript into code variable.
+  var code = machine + 'clearLcd();\n';
+  return code;
+};
+
+Blockly.JavaScript['output_show_ledmatrix_image'] = function(block) {
+  let segment = block.getFieldValue('NUMBERDISPLAY');
+  let matrix = '[';
+  for (var row = 0; row < 8; row++) {
+      matrix += '['
+      for (var column = 0; column < 8; column++) {
+          if (block.getFieldValue('LED' + row + column) === 'TRUE') {
+              matrix += '1';
+          } else {
+              matrix += '0';
+          }
+          if(!(row == 7 && column == 7)) {
+            matrix +=',';
+          }
+      }
+      matrix += ']';
+      if(!(row == 7)){
+        matrix += ',';
+      }
+  }
+  matrix += ']';
+  var code = machine + 'ledmatrixDisplaySegment(' + '[' + segment + ',' + matrix + ']' + ');\n';
+  return code;
+};
+
+Blockly.JavaScript['output_show_ledmatrix_eye_pattern'] = function(block) {
+  let segment = block.getFieldValue('NUMBERDISPLAY');
+  let eyePatternIndex = block.getFieldValue('EYEPATTERN');
+  let eyePattern = eyePatterns[eyePatternIndex];
+
+  let matrix = '[';
+  for (var column = 0; column < 8; column++) {
+      matrix += '['
+      let columnBinary = eyePattern[column].toString(2);
+      columnBinary = columnBinary.padStart(8, "0");
+      columnBinary = columnBinary.split("").reverse().join("");
+      columnBinary = columnBinary.replace(/(.{1})/g,"$1,");
+      columnBinary = columnBinary.substring(0,columnBinary.length-1);
+
+      matrix += columnBinary;
+
+      matrix += ']';
+      if(!(column == 7)){
+        matrix += ',';
+      }
+  }
+  matrix += ']';
+
+  var code = machine + 'ledmatrixDisplaySegment(' + '[' + segment + ',' + matrix + ']' + ');\n';
+  return code;
+}
+
+Blockly.JavaScript['output_clear_ledmatrix_segment'] = function(block) {
+  let segment = block.getFieldValue('NUMBERDISPLAY');
+
+  let code = machine + 'clearLedmatrixDisplaySegment(' + segment + ');\n';
+  return code;
+}
+
+Blockly.JavaScript['output_clear_ledmatrix'] = function(block) {
+  let code = machine + 'clearLedmatrixDisplay();\n';
+  return code;
+}
  
  Blockly.JavaScript['socialrobot_rgbled'] = function(block){
    var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
@@ -112,70 +189,6 @@
    var code = '[' + redComponent + ',' + greenComponent + ',' + blueComponent + ']';
    return code;
  };
- 
- Blockly.JavaScript['socialrobot_show_ledmatrix_image'] = function(block) {
-   let segment = block.getFieldValue('NUMBERDISPLAY');
-   let matrix = '[';
-   for (var row = 0; row < 8; row++) {
-       matrix += '['
-       for (var column = 0; column < 8; column++) {
-           if (block.getFieldValue('LED' + row + column) === 'TRUE') {
-               matrix += '1';
-           } else {
-               matrix += '0';
-           }
-           if(!(row == 7 && column == 7)) {
-             matrix +=',';
-           }
-       }
-       matrix += ']';
-       if(!(row == 7)){
-         matrix += ',';
-       }
-   }
-   matrix += ']';
-   var code = machine + 'ledmatrixDisplaySegment(' + '[' + segment + ',' + matrix + ']' + ');\n';
-   return code;
- };
- 
- Blockly.JavaScript['socialrobot_show_ledmatrix_eye_pattern'] = function(block) {
-   let segment = block.getFieldValue('NUMBERDISPLAY');
-   let eyePatternIndex = block.getFieldValue('EYEPATTERN');
-   let eyePattern = eyePatterns[eyePatternIndex];
- 
-   let matrix = '[';
-   for (var column = 0; column < 8; column++) {
-       matrix += '['
-       let columnBinary = eyePattern[column].toString(2);
-       columnBinary = columnBinary.padStart(8, "0");
-       columnBinary = columnBinary.split("").reverse().join("");
-       columnBinary = columnBinary.replace(/(.{1})/g,"$1,");
-       columnBinary = columnBinary.substring(0,columnBinary.length-1);
- 
-       matrix += columnBinary;
- 
-       matrix += ']';
-       if(!(column == 7)){
-         matrix += ',';
-       }
-   }
-   matrix += ']';
- 
-   var code = machine + 'ledmatrixDisplaySegment(' + '[' + segment + ',' + matrix + ']' + ');\n';
-   return code;
- }
- 
- Blockly.JavaScript['socialrobot_clear_ledmatrix_segment'] = function(block) {
-   let segment = block.getFieldValue('NUMBERDISPLAY');
- 
-   let code = machine + 'clearLedmatrixDisplaySegment(' + segment + ');\n';
-   return code;
- }
- 
- Blockly.JavaScript['socialrobot_clear_ledmatrix'] = function(block) {
-   let code = machine + 'clearLedmatrixDisplay();\n';
-   return code;
- }
  
  Blockly.JavaScript['socialrobot_servo'] = function (block) {
    var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
