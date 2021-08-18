@@ -15,16 +15,16 @@
  Blockly.JavaScript.input.pinMappings = {
   "SONAR1": 
       {
-         "trig": 25,
-         "echo": 24
+         "trig": "A1",
+         "echo": "A0"
       },
   "SONAR2": {
-          "trig": 27,
-          "echo": 26
+          "trig": "A3",
+          "echo": "A2"
       }, 
   "SOUND1": {
-        "analog": 29,
-        "digital": 28
+        "analog": "A5",
+        "digital": "A4"
   }
 };
  
@@ -34,12 +34,12 @@
  
  Blockly.JavaScript['input_sonar_sensor_select'] = function (block) {
     var number = this.getFieldValue('number');
-    var value_trig = Blockly.JavaScript.input.pinMappings[number]["trig"];
-    var value_echo = Blockly.JavaScript.input.pinMappings[number]["echo"]; 
+    var value_trig = "\"" + Blockly.JavaScript.input.pinMappings[number]["trig"] + "\"";
+    var value_echo = "\"" + Blockly.JavaScript.input.pinMappings[number]["echo"] + "\""; 
 
     //  Assemble JavaScript into code variable.
     var code = machine + "sonar(" + value_trig +', ' + value_echo + ')';
-  
+    console.log(code);
     return [code, Blockly.JavaScript.ORDER_NONE];
 };
 
@@ -56,7 +56,7 @@ Blockly.JavaScript['input_sonar_sensor'] = function (block) {
 
 Blockly.JavaScript['input_sound_sensor_select'] = function (block) {
   var number = this.getFieldValue('number');
-  var pin = Blockly.JavaScript.input.pinMappings[number]["digital"]; 
+  var pin = "\"" + Blockly.JavaScript.input.pinMappings[number]["digital"] + "\""; 
 
   var code = machine + "soundSensor(" + pin + ')';
   return [code, Blockly.JavaScript.ORDER_ATOMIC];

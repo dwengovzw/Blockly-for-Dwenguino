@@ -11,16 +11,16 @@
  Blockly.Arduino.input.pinMappings = {
     "SONAR1": 
         {
-           "trig": 25,
-           "echo": 24
+           "trig": "A1",
+           "echo": "A0"
         },
     "SONAR2": {
-            "trig": 27,
-            "echo": 26
+            "trig": "A3",
+            "echo": "A2"
         },
     "SOUND1": {
-            "analog": 29,
-            "digital": 28
+            "analog": "A5",
+            "digital": "A4"
         }
 };
  
