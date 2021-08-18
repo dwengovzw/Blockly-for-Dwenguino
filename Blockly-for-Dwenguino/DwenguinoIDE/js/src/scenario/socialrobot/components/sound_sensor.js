@@ -12,7 +12,6 @@ export { SocialRobotSoundSensor }
 class SocialRobotSoundSensor extends RobotComponent{
     constructor(eventBus, id, digitalPin, analogPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
-
         this._id = id;
         this._type = TypesEnum.SOUND;
         this._width = width;
@@ -106,7 +105,8 @@ class SocialRobotSoundSensor extends RobotComponent{
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }
 
-        data = data.concat(" Pin='", this.getDigitalPin(), "'");
+        data = data.concat(" DigitalPin='", this.getDigitalPin(), "'");
+        data = data.concat(" AnalogPin='", this.getAnalogPin(), "'");
         data = data.concat(" State='", this.getState(), "'");
         data = data.concat(" Classes='", this.getHtmlClasses(), "'");
 
@@ -116,6 +116,7 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     reset(){
+        this._button.reset();
         this.setState(0);
         this._stateUpdated = false;
     }
@@ -173,7 +174,7 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"];
     }
 
     getId(){
@@ -222,6 +223,14 @@ class SocialRobotSoundSensor extends RobotComponent{
 
     getDigitalPin(){
         return this._digitalPin;
+    }
+
+    setAnalogPin(analogPin){
+        this._analogPin = analogPin;
+    }
+
+    getAnalogPin(){
+        return this._analogPin;
     }
 
     setState(state){

@@ -85,6 +85,8 @@
 <category id="catInput" colour="25" name='Input'>
     <block type="input_sonar_sensor_select"></block>
 
+    <block type="input_sound_sensor_select"></block>
+
     <block type="input_sonar_sensor">
         <value name="trig">
             <block type="char_type" id="72">
@@ -97,9 +99,7 @@
             </block>
         </value>
     </block>
-
-    <block type="input_sound_sensor_select"></block>
-
+    
     <block type="input_sound_sensor">
         <value name="pin">
             <block type="math_number" id="sound_sensor_pin"> 
@@ -274,65 +274,6 @@
         <field name="BLUE">65</field>
     </block>
 
-    <block type="output_rgbled">
-        <value name="pin_red">
-            <block type="dwenguino_pins">
-                <field name="PIN">3</field>
-            </block>
-        </value>
-        <value name="pin_green">
-            <block type="dwenguino_pins">
-                <field name="PIN">5</field>
-            </block>
-        </value>
-        <value name="pin_blue">
-            <block type="dwenguino_pins">
-                <field name="PIN">6</field>
-            </block>
-        </value>
-        <value name="color">
-            <block type="output_rgb_color" id="219">
-                <field name="RED">133</field>
-                <field name="GREEN">196</field>
-                <field name="BLUE">65</field>
-            </block>
-        </value>
-    </block>
-    <!-- <block type="output_rgb_color_with_numbers">
-        <value name="RED">
-            <block type="math_number" id="220">
-                <field name="NUM">133</field>
-            </block>
-        </value>
-        <value name="GREEN">
-            <block type="math_number" id="221">
-                <field name="NUM">196</field>
-            </block>
-        </value>
-        <value name="BLUE">
-            <block type="math_number" id="222">
-                <field name="NUM">65</field>
-            </block>
-        </value>
-    </block> -->
-    <block type="output_rgbled_off">
-        <value name="pin_red">
-            <block type="dwenguino_pins">
-                <field name="PIN">3</field>
-            </block>
-        </value>
-        <value name="pin_green">
-            <block type="dwenguino_pins">
-                <field name="PIN">5</field>
-            </block>
-        </value>
-        <value name="pin_blue">
-            <block type="dwenguino_pins">
-                <field name="PIN">6</field>
-            </block>
-        </value>
-    </block>
-
     <block type="output_servo_with_dropdown">
         <value name="pin">
             <block type="output_servo_dropdown">
@@ -348,19 +289,7 @@
     <block type="output_servo_dropdown">
         <field name="SERVO_DROPDOWN">SERVO3</field>
     </block>
-    
-    <!-- <block type="output_servo">
-        <value name="pin">
-            <block type="math_number" id="212">
-                <field name="NUM">40</field>
-            </block>
-        </value>
-        <value name="angle">
-            <block type="math_number" id="213">
-                <field name="NUM">45</field>
-            </block>
-        </value>
-    </block> -->
+
     <block type="output_arms_down">
             <value name="servo_right_hand1">
                 <block type="output_servo_dropdown">
@@ -441,6 +370,78 @@
             </block>
         </value>
     </block>
+
+    <block type="output_rgbled">
+        <value name="pin_red">
+            <block type="dwenguino_pins">
+                <field name="PIN">3</field>
+            </block>
+        </value>
+        <value name="pin_green">
+            <block type="dwenguino_pins">
+                <field name="PIN">5</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="dwenguino_pins">
+                <field name="PIN">6</field>
+            </block>
+        </value>
+        <value name="color">
+            <block type="output_rgb_color" id="219">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+    </block>
+    <!-- <block type="output_rgb_color_with_numbers">
+        <value name="RED">
+            <block type="math_number" id="220">
+                <field name="NUM">133</field>
+            </block>
+        </value>
+        <value name="GREEN">
+            <block type="math_number" id="221">
+                <field name="NUM">196</field>
+            </block>
+        </value>
+        <value name="BLUE">
+            <block type="math_number" id="222">
+                <field name="NUM">65</field>
+            </block>
+        </value>
+    </block> -->
+    <block type="output_rgbled_off">
+        <value name="pin_red">
+            <block type="dwenguino_pins">
+                <field name="PIN">3</field>
+            </block>
+        </value>
+        <value name="pin_green">
+            <block type="dwenguino_pins">
+                <field name="PIN">5</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="dwenguino_pins">
+                <field name="PIN">6</field>
+            </block>
+        </value>
+    </block>
+
+    <!-- <block type="output_servo">
+        <value name="pin">
+            <block type="math_number" id="212">
+                <field name="NUM">40</field>
+            </block>
+        </value>
+        <value name="angle">
+            <block type="math_number" id="213">
+                <field name="NUM">45</field>
+            </block>
+        </value>
+    </block> -->
 
     <block type="output_set_pin">
         <value name="PIN">
