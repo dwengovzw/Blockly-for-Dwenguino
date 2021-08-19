@@ -553,7 +553,7 @@ class RobotComponentsFactory {
    * @param {string} borderColor 
    * @param {string} htmlClasses 
    */
-  addRgbLed(redPin='11', greenPin='14', bluePin='15', state=[0,0,0], visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas rgbled_canvas') {
+  addRgbLed(redPin='3', greenPin='5', bluePin='6', state=[0,0,0], visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas rgbled_canvas') {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.RGBLED));
     this.incrementNumberOf(TypesEnum.RGBLED);
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
