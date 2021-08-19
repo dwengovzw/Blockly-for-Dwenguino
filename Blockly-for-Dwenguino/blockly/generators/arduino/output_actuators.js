@@ -10,9 +10,9 @@
  Blockly.Arduino.output.pinMappings = {
   "RGBLED1": 
       {
-         "red": 11,
-         "green": 14,
-         "blue": 15
+         "red": 3,
+         "green": 5,
+         "blue": 6
       },
   "SERVO1":
       {
@@ -143,16 +143,16 @@ Blockly.Arduino['output_show_ledmatrix_image'] = function(block) {
     
       let segment = block.getFieldValue('NUMBERDISPLAY');
       let matrix = '{';
-      for (var row = 7; row >= 0; row--) {
+      for (var row = 0; row <= 7; row++) {
           matrix += 'B'
-          for (var column = 7; column >= 0; column--) {
+          for (var column = 0; column <= 7; column++) {
               if (block.getFieldValue('LED' + column + row) === 'TRUE') {
                   matrix += '1';
               } else {
                   matrix += '0';
               }
           }
-          if(!(row == 0)){
+          if(!(row == 7)){
             matrix += ',';
           }
       }
