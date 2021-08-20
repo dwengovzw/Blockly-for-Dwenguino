@@ -432,7 +432,7 @@ var dwenguino_servo_dropdown = {
       "type": "field_dropdown",
       "name": "SERVO_DROPDOWN",
       "check": "Number",
-      "options": [[MSG.dwenguinoServoOne, 'SERVO1'], [MSG.dwenguinoServoTwo, 'SERVO2']]
+      "options": [['1', 'SERVO1'], ['2', 'SERVO2']]
     }
   ],
   "output": "Number",

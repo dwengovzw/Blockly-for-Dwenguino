@@ -48,6 +48,26 @@ class RobotComponentsFactory {
     buttons: [1, 1, 1, 1, 1],
     sonarDistance: -1
   }
+  pinMappings = {
+    'rgbled': [
+        {
+          "red": 11,
+          "green": 14,
+          "blue": 15
+        }
+    ],
+
+    'sonar': [
+      { "trig": 25, 
+        "echo": 24 },
+      { "trig": 27,
+        "echo": 26 }
+    ],
+    'sound': [
+      { "analog": 29,
+        "digital": 28 }
+    ]
+  };
 
   /**
    * 
@@ -106,7 +126,7 @@ class RobotComponentsFactory {
       let pin = 0;
       let state = 0;
       switch (type) {
-        case TypesEnum.SERVO:;
+        case TypesEnum.SERVO:
           pin = this._robot[i].getPin();
           if(this._robot[i].getAngle() != dwenguinoState.getIoPinState(pin)){
             this._robot[i].setPrevAngle(this._robot[i].getAngle());
@@ -144,7 +164,6 @@ class RobotComponentsFactory {
         case TypesEnum.BUTTON:
           pin = this._robot[i].getPin();
           if(this._robot[i].isStateUpdated()){
-            console.log(this._robot[i].getState(), 'updateScenarioState');
             dwenguinoState.setIoPinState(pin, this._robot[i].getState());
             this._robot[i]._stateUpdated = false;
           }
@@ -169,7 +188,7 @@ class RobotComponentsFactory {
           this._robot[i].setState(dwenguinoState.getLcdContent(0), dwenguinoState.getLcdContent(1));
           break;
         case TypesEnum.SOUND:
-          pin = this._robot[i].getPin();
+          pin = this._robot[i].getDigitalPin();
           if(this._robot[i].isStateUpdated()){
             dwenguinoState.setIoPinState(pin, this._robot[i].getState());
             this._robot[i]._stateUpdated = false;
@@ -418,10 +437,11 @@ class RobotComponentsFactory {
         var height = parseFloat(data.getAttribute('Height'));
         var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
         var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
-        var pin = parseInt(data.getAttribute('Pin'));
+        var digitalPin = parseInt(data.getAttribute('DigitalPin'));
+        var analogPin = parseInt(data.getAttribute('AnalogPin'));
         var state = parseInt(data.getAttribute('State'));
         var htmlClasses = data.getAttribute('Classes');
-        this.addSoundSensor(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        this.addSoundSensor(digitalPin, analogPin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.LIGHT:
         var width = parseFloat(data.getAttribute('Width'));
@@ -454,13 +474,17 @@ class RobotComponentsFactory {
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
-    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
 
-    if(id == 1){
-      pin = 40;
-    } else if (id == 2){
-      pin = 41;
-    } 
+    if(id == 3){
+      pin = 19;
+    } else if (id == 4){
+      pin = 18;
+    } else if (id == 5){
+      pin = 17;
+    } else if (id == 6){
+      pin = 16;
+    }
 
     let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);
@@ -474,7 +498,7 @@ class RobotComponentsFactory {
   removeServo(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
 
-    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
     this.removeRobotComponentWithTypeAndId(TypesEnum.SERVO, id);
   }
 
@@ -597,7 +621,7 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addTouchSensor(pin=14, state=0, visible=true, width=60, height=60, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas touch_canvas'){
+  addTouchSensor(pin=12, state=0, visible=true, width=60, height=60, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas touch_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.TOUCH));
     this.incrementNumberOf(TypesEnum.TOUCH);
     let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
@@ -629,7 +653,7 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addButton(pin=18, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas', state=0){
+  addButton(pin=12, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas', state=0){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTOn));
     this.incrementNumberOf(TypesEnum.BUTTON);
     let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
@@ -659,7 +683,7 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addPir(pin=13, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
+  addPir(pin=12, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
@@ -693,16 +717,24 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addSonar(echoPin=12, triggerPin=11, state=0, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
+  addSonar(echoPin=12, triggerPin=1, state=0, visible=true, width=100, height=58, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sonar_canvas'){
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SONAR));
     this.incrementNumberOf(TypesEnum.SONAR);
     let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
 
+    if(id == 1){
+      triggerPin = "A1";
+      echoPin = "A0";
+    } else if (id == 2){
+      triggerPin = "A3";
+      echoPin = "A2";
+    }
+
     let sonar = new SocialRobotSonar(this._eventBus, id, echoPin, triggerPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(sonar);
 
-    this.renderer.initializeCanvas(this._robot, sonar); // TODO
+    this.renderer.initializeCanvas(this._robot, sonar);
   }
   
   /**
@@ -754,12 +786,15 @@ class RobotComponentsFactory {
     * @param {int} offsetTop 
     * @param {string} htmlClasses 
     */
-  addSoundSensor(pin=15, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
+  addSoundSensor(digitalPin=12, analogPin=1, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
     this.incrementNumberOf(TypesEnum.SOUND);
     let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
-
-    let soundSensor = new SocialRobotSoundSensor(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    if(id == 1){
+      digitalPin = "A4";
+      analogPin = "A5";
+    }
+    let soundSensor = new SocialRobotSoundSensor(this._eventBus, id, digitalPin, analogPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(soundSensor);
 
     this.renderer.initializeCanvas(this._robot, soundSensor); 

@@ -1,0 +1,464 @@
+<category id="catLogic" colour="0" name='Logic'>
+    <block type="controls_if"></block>
+    <block type="controls_if"><mutation else="1"/></block>
+    <block type="logic_compare"></block>
+    <block type="logic_operation"></block>
+    <block type="logic_negate"></block>
+    <block type="logic_boolean"></block>
+</category>
+
+<category id="catLoops" colour="120" name="Loops">
+  <block type="controls_for">
+    <value name="FROM">
+      <block type="char_type">
+        <field name="BITMASK">0</field>
+      </block>
+    </value>
+      <value name="TO">
+      <block type="char_type">
+        <field name="BITMASK">10</field>
+      </block>
+    </value>
+    <value name="BY">
+      <block type="char_type">
+        <field name="BITMASK">1</field>
+      </block>
+    </value>
+  </block>
+  <block type="controls_whileUntil"></block>
+</category>
+
+<category id="catFunctions" colour="270" custom="PROCEDURE">
+    <block type="procedures_defnoreturn"></block>
+    <block type="procedures_defreturn"></block>
+    <block type="procedures_callreturn"></block>
+</category>
+
+<category id="catMath" colour="45" name='Math'>
+    <block type="char_type">
+        <field name="BITMASK">100</field>
+    </block>
+    <block type="char_type"></block>
+    <block type="math_arithmetic">
+        <field name="OP">ADD</field>
+    </block>
+    <block type="math_arithmetic">
+        <field name="OP">MINUS</field>
+    </block>
+    <block type="math_arithmetic">
+        <field name="OP">MULTIPLY</field>
+    </block>
+    <block type="math_arithmetic">
+        <field name="OP">DIVIDE</field>
+    </block>
+</category>
+
+<category id="catText" colour="225" name="Text">
+    <block type="text"></block>
+    <block type="text_join"></block>
+</category>
+
+<category id="catVariables" colour="90" name='Math' custom="DWB_VARIABLES">    
+</category>
+
+<category id="catDwenguino" colour="315" name='Dwenguino'>
+<block type="setup_loop_structure"></block>
+    <block type="dwenguino_delay">
+        <value name="DELAY_TIME">
+            <block type="char_type">
+                <field name="BITMASK">100</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="dwenguino_pins">
+        <field name="PIN">0</field>
+    </block>
+
+    <block type="dwenguino_pressed"></block>
+    <block type="dwenguino_highlow"></block>
+
+</category>
+
+<sep></sep>
+
+<category id="catInput" colour="25" name='Input'>
+    <block type="input_sonar_sensor_select"></block>
+
+    <block type="input_sound_sensor_select"></block>
+
+    <block type="input_sonar_sensor">
+        <value name="trig">
+            <block type="char_type" id="72">
+                <field name="BITMASK">11</field>
+            </block>
+        </value>
+        <value name="echo">
+            <block type="char_type" id="77">
+                <field name="BITMASK">12</field>
+            </block>
+        </value>
+    </block>
+    
+    <block type="input_sound_sensor">
+        <value name="pin">
+            <block type="math_number" id="sound_sensor_pin"> 
+            <field name="NUM">15</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="input_touch_sensor">
+        <value name="pin">
+            <block type="math_number" id="touch_sensor_pin"> 
+            <field name="NUM">14</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="input_pir_sensor">
+        <value name="trig">
+            <block type="char_type" id="pir_sensor_pin"> 
+            <field name="BITMASK">13</field>
+            </block>
+        </value>
+    </block>
+
+   <block type="input_button">
+        <value name="pin">
+            <block type="math_number" id="button_pin"> 
+            <field name="NUM">18</field>
+            </block>
+        </value>
+    </block> 
+
+    <block type="input_read_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+    </block>
+</category>
+
+<category id="catOutput" colour="180" name='Output'>
+
+    <block type="output_lcd">
+        <value name="text">
+            <block type="text" id="48">
+                <field name="TEXT">Hallo Dwenguino</field>
+            </block>
+        </value>
+        <value name="line_number">
+            <block type="char_type" id="53">
+                <field name="BITMASK">0</field>
+            </block>
+        </value>
+        <value name="character_number">
+            <block type="char_type" id="58">
+                <field name="BITMASK">0</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="output_clear_lcd"></block>
+
+    <block type="output_show_ledmatrix_image">
+        <field name="NUMBERDISPLAY">0</field>
+        <field name="LED00">FALSE</field>
+        <field name="LED10">FALSE</field>
+        <field name="LED20">FALSE</field>
+        <field name="LED30">FALSE</field>
+        <field name="LED40">FALSE</field>
+        <field name="LED50">FALSE</field>
+        <field name="LED60">FALSE</field>
+        <field name="LED70">FALSE</field>
+        <field name="LED01">FALSE</field>
+        <field name="LED11">TRUE</field>
+        <field name="LED21">TRUE</field>
+        <field name="LED31">FALSE</field>
+        <field name="LED41">FALSE</field>
+        <field name="LED51">TRUE</field>
+        <field name="LED61">TRUE</field>
+        <field name="LED71">FALSE</field>
+        <field name="LED02">TRUE</field>
+        <field name="LED12">TRUE</field>
+        <field name="LED22">TRUE</field>
+        <field name="LED32">TRUE</field>
+        <field name="LED42">TRUE</field>
+        <field name="LED52">TRUE</field>
+        <field name="LED62">TRUE</field>
+        <field name="LED72">TRUE</field>
+        <field name="LED03">TRUE</field>
+        <field name="LED13">TRUE</field>
+        <field name="LED23">TRUE</field>
+        <field name="LED33">TRUE</field>
+        <field name="LED43">TRUE</field>
+        <field name="LED53">TRUE</field>
+        <field name="LED63">TRUE</field>
+        <field name="LED73">TRUE</field>
+        <field name="LED04">FALSE</field>
+        <field name="LED14">TRUE</field>
+        <field name="LED24">TRUE</field>
+        <field name="LED34">TRUE</field>
+        <field name="LED44">TRUE</field>
+        <field name="LED54">TRUE</field>
+        <field name="LED64">TRUE</field>
+        <field name="LED74">FALSE</field>
+        <field name="LED05">FALSE</field>
+        <field name="LED15">FALSE</field>
+        <field name="LED25">TRUE</field>
+        <field name="LED35">TRUE</field>
+        <field name="LED45">TRUE</field>
+        <field name="LED55">TRUE</field>
+        <field name="LED65">FALSE</field>
+        <field name="LED75">FALSE</field>
+        <field name="LED06">FALSE</field>
+        <field name="LED16">FALSE</field>
+        <field name="LED26">FALSE</field>
+        <field name="LED36">TRUE</field>
+        <field name="LED46">TRUE</field>
+        <field name="LED56">FALSE</field>
+        <field name="LED66">FALSE</field>
+        <field name="LED76">FALSE</field>
+        <field name="LED07">FALSE</field>
+        <field name="LED17">FALSE</field>
+        <field name="LED27">FALSE</field>
+        <field name="LED37">FALSE</field>
+        <field name="LED47">FALSE</field>
+        <field name="LED57">FALSE</field>
+        <field name="LED67">FALSE</field>
+        <field name="LED77">FALSE</field>
+    </block>
+
+    <block type="output_show_ledmatrix_eye_pattern">
+        <field name="NUMBERDISPLAY">0</field>
+        <field name="EYEPATTERN">0</field>
+    </block>
+
+    <block type="output_clear_ledmatrix_segment">
+        <field name="NUMBERDISPLAY">0</field>
+    </block>
+
+    <block type="output_clear_ledmatrix">
+    </block>
+
+    <block type="output_leds_reg">
+        <value name="MASK">
+            <block type="char_type">
+                <field name="BITMASK">0b01010101</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_led_pins"></block>
+    <block type="output_on_off"></block>
+
+    <block type="output_wait_for_switch"></block>
+    
+    <block type="output_rgbled_select">
+        <value name="color">
+            <block type="output_rgb_color" id="219">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="output_rgbled_select_off">
+    </block>
+
+    <block type="output_rgb_color">
+        <field name="RED">133</field>
+        <field name="GREEN">196</field>
+        <field name="BLUE">65</field>
+    </block>
+
+    <block type="output_servo_with_dropdown">
+        <value name="pin">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
+            </block>
+        </value>
+        <value name="angle">
+            <block type="math_number" id="116">
+                <field name="NUM">45</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_servo_dropdown">
+        <field name="SERVO_DROPDOWN">SERVO3</field>
+    </block>
+
+    <block type="output_arms_down">
+            <value name="servo_right_hand1">
+                <block type="output_servo_dropdown">
+                    <field name="SERVO_DROPDOWN">SERVO3</field>
+                </block>
+            </value>
+            <value name="servo_left_hand1">
+                <block type="output_servo_dropdown">
+                    <field name="SERVO_DROPDOWN">SERVO4</field>
+                </block>
+            </value>
+    </block>
+    <block type="output_arms_up">
+        <value name="servo_right_hand2">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
+            </block>
+        </value>
+        <value name="servo_left_hand2">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_wave_arms">
+        <value name="servo_right_hand">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
+            </block>
+        </value>
+        <value name="servo_left_hand">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_eyes_left">
+        <value name="servo_right_eye">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
+            </block>
+        </value>
+        <value name="servo_left_eye">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_eyes_right">
+        <value name="servo_right_eye1">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO3</field>
+            </block>
+        </value>
+        <value name="servo_left_eye1">
+            <block type="output_servo_dropdown">
+                <field name="SERVO_DROPDOWN">SERVO4</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="output_tone_on_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">BUZZER</field>
+            </block>
+        </value>
+        <value name="NUM">
+            <block type="char_type">
+                <field name="BITMASK">440</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_no_tone_on_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">BUZZER</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="output_rgbled">
+        <value name="pin_red">
+            <block type="dwenguino_pins">
+                <field name="PIN">3</field>
+            </block>
+        </value>
+        <value name="pin_green">
+            <block type="dwenguino_pins">
+                <field name="PIN">5</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="dwenguino_pins">
+                <field name="PIN">6</field>
+            </block>
+        </value>
+        <value name="color">
+            <block type="output_rgb_color" id="219">
+                <field name="RED">133</field>
+                <field name="GREEN">196</field>
+                <field name="BLUE">65</field>
+            </block>
+        </value>
+    </block>
+    <!-- <block type="output_rgb_color_with_numbers">
+        <value name="RED">
+            <block type="math_number" id="220">
+                <field name="NUM">133</field>
+            </block>
+        </value>
+        <value name="GREEN">
+            <block type="math_number" id="221">
+                <field name="NUM">196</field>
+            </block>
+        </value>
+        <value name="BLUE">
+            <block type="math_number" id="222">
+                <field name="NUM">65</field>
+            </block>
+        </value>
+    </block> -->
+    <block type="output_rgbled_off">
+        <value name="pin_red">
+            <block type="dwenguino_pins">
+                <field name="PIN">3</field>
+            </block>
+        </value>
+        <value name="pin_green">
+            <block type="dwenguino_pins">
+                <field name="PIN">5</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="dwenguino_pins">
+                <field name="PIN">6</field>
+            </block>
+        </value>
+    </block>
+
+    <!-- <block type="output_servo">
+        <value name="pin">
+            <block type="math_number" id="212">
+                <field name="NUM">40</field>
+            </block>
+        </value>
+        <value name="angle">
+            <block type="math_number" id="213">
+                <field name="NUM">45</field>
+            </block>
+        </value>
+    </block> -->
+
+    <block type="output_set_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+        <value name="PIN_STATE">
+            <block type="dwenguino_highlow"></block>
+        </value>
+    </block>
+
+</category>
+
+<sep></sep>
+
+<category id="catComments" colour="200" name='Comments'>
+    <block type="line_comment">
+    </block>
+</category>
