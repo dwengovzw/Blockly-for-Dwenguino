@@ -10,9 +10,8 @@ export { SocialRobotSoundSensor }
  * @extends RobotComponent
  */
 class SocialRobotSoundSensor extends RobotComponent{
-    constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+    constructor(eventBus, id, digitalPin, analogPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
-
         this._id = id;
         this._type = TypesEnum.SOUND;
         this._width = width;
@@ -20,7 +19,8 @@ class SocialRobotSoundSensor extends RobotComponent{
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
         this._image.src = './DwenguinoIDE/img/socialrobot/sound_sensor.png';
-        this._pin = pin;
+        this._digitalPin = digitalPin;
+        this._analogPin = analogPin;
         this._state = state;
         this._stateUpdated = false;
         this._canvasId = 'sim_sound_canvas' + this._id;
@@ -105,7 +105,8 @@ class SocialRobotSoundSensor extends RobotComponent{
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }
 
-        data = data.concat(" Pin='", this.getPin(), "'");
+        data = data.concat(" DigitalPin='", this.getDigitalPin(), "'");
+        data = data.concat(" AnalogPin='", this.getAnalogPin(), "'");
         data = data.concat(" State='", this.getState(), "'");
         data = data.concat(" Classes='", this.getHtmlClasses(), "'");
 
@@ -115,6 +116,7 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     reset(){
+        this._button.reset();
         this.setState(0);
         this._stateUpdated = false;
     }
@@ -155,7 +157,7 @@ class SocialRobotSoundSensor extends RobotComponent{
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin < pins.length; pin++){
             $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
-            if(this.getPin() == pins[pin]){
+            if(this.getDigitalPin() == pins[pin]){
                 $('#pin' + pins[pin]).addClass('option_button_selected');
             }
 
@@ -163,7 +165,7 @@ class SocialRobotSoundSensor extends RobotComponent{
 
             pinButton.addEventListener('click', () => { 
                 let newPin = pinButton.name;
-                this.setPin(newPin);
+                this.setDigitalPin(newPin);
                 $('.pinButton').removeClass('option_button_selected');
                 pinButton.classList.add('option_button_selected');
                 this._eventBus.dispatchEvent(EventsEnum.SAVE);
@@ -172,7 +174,7 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"];
     }
 
     getId(){
@@ -215,12 +217,20 @@ class SocialRobotSoundSensor extends RobotComponent{
         return this._image;
     }
     
-    setPin(pin){
-        this._pin = pin;
+    setDigitalPin(digitalPin){
+        this._digitalPin = digitalPin;
     }
 
-    getPin(){
-        return this._pin;
+    getDigitalPin(){
+        return this._digitalPin;
+    }
+
+    setAnalogPin(analogPin){
+        this._analogPin = analogPin;
+    }
+
+    getAnalogPin(){
+        return this._analogPin;
     }
 
     setState(state){

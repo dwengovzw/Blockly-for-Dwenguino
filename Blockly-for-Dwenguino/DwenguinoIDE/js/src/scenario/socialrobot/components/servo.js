@@ -199,18 +199,30 @@ class SocialRobotServo extends RobotComponent{
             });
         }
 
-        if(this.getId() == 1){
+        if(this.getId() == 3){
             $('.pinButton').prop('disabled', true);
             $('.pinButton').addClass('option_button_disabled');
-            $('#pin40.pinButton').prop('disabled', false);
-            $('#pin40.pinButton').removeClass('option_button_disabled');
-            $('#pin40.pinButton').addClass('option_button_selected');
+            $('#pin19.pinButton').prop('disabled', false);
+            $('#pin19.pinButton').removeClass('option_button_disabled');
+            $('#pin19.pinButton').addClass('option_button_selected');
+        } else if(this.getId() == 4){
+            $('.pinButton').prop('disabled', true);
+            $('.pinButton').addClass('option_button_disabled');
+            $('#pin18.pinButton').prop('disabled', false);
+            $('#pin18.pinButton').removeClass('option_button_disabled');
+            $('#pin18.pinButton').addClass('option_button_selected');
         } else if(this.getId() == 2){
             $('.pinButton').prop('disabled', true);
             $('.pinButton').addClass('option_button_disabled');
-            $('#pin41.pinButton').prop('disabled', false);
-            $('#pin41.pinButton').removeClass('option_button_disabled');
-            $('#pin41.pinButton').addClass('option_button_selected');
+            $('#pin17.pinButton').prop('disabled', false);
+            $('#pin17.pinButton').removeClass('option_button_disabled');
+            $('#pin17.pinButton').addClass('option_button_selected');
+        } else if(this.getId() == 1){
+            $('.pinButton').prop('disabled', true);
+            $('.pinButton').addClass('option_button_disabled');
+            $('#pin16.pinButton').prop('disabled', false);
+            $('#pin16.pinButton').removeClass('option_button_disabled');
+            $('#pin16.pinButton').addClass('option_button_selected');
         } else {
             $('.pinButton').removeClass('option_button_disabled');
             $('#pin40.pinButton').prop('disabled', true);

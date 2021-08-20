@@ -64,6 +64,7 @@ class SimulationControlsController {
             }
         });
 
+        this.updateProgrammingBlocks();
         this.translateSimulatorInterface();
 
         // change speed of simulation
@@ -83,6 +84,7 @@ class SimulationControlsController {
             let data = { 
                 "scenario": self.scenarioView
             }
+            self.updateProgrammingBlocks();
             self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, data));
         });
 
@@ -268,6 +270,17 @@ class SimulationControlsController {
 
 
 
+    }
+
+    /**
+     * Update the programming blocks displayed in the simulator based on the actual selected scenario. 
+     * The blocks configuration is loaded from a .xml file.
+     */
+    updateProgrammingBlocks() {
+        $("#toolbox").load("./DwenguinoIDE/levels/" + this.scenarioView + ".xml", function(){
+            DwenguinoBlockly.doTranslation();
+            DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
+        });
     }
 
 

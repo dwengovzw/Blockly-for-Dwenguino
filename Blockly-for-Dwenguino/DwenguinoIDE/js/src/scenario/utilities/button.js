@@ -76,6 +76,10 @@ class Button {
         $('#' + this.getParentId()).append(labelDiv);
     }
 
+    reset() {
+        this.getButtonElement().className = this.getInactiveClasses();
+    }
+
     update() {
         if (this.isInactive()) {
             this.getButtonElement().className = this.getActiveClasses();
