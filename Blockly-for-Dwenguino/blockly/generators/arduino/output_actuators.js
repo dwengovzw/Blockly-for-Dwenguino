@@ -45,24 +45,6 @@
     return code;
  };
 
- Blockly.Arduino['output_lcd'] = function (block) {
-    var value_text = Blockly.Arduino.valueToCode(block, 'text', Blockly.Arduino.ORDER_ATOMIC);
-    var value_line_number = Blockly.Arduino.valueToCode(block, 'line_number', Blockly.Arduino.ORDER_ATOMIC);
-    var value_character_number = Blockly.Arduino.valueToCode(block, 'character_number', Blockly.Arduino.ORDER_ATOMIC);
-    // Assemble JavaScript into code variable.
-    //import dwenguino lcd
-    Blockly.Arduino.definitions_['define_lcd_h'] = "#include <LiquidCrystal.h>\n";
-    var code = 'dwenguinoLCD.setCursor(' + value_character_number + ',' + value_line_number + ');\n';
-    code = code + 'dwenguinoLCD.print(' + value_text + ');\n'
-    return code;
-};
-
-Blockly.Arduino['output_clear_lcd'] = function (block) {
-    //  Assemble JavaScript into code variable.
-    var code = 'dwenguinoLCD.clear();\n';
-    return code;
-};
-
 var eyePatterns = [
   [ 0, 126, 129, 177, 177, 129, 126, 0],  // 0 - 'Rest Position'
   [ 0, 124, 130, 178, 178, 130, 124, 0],  // 1 - 'Blink 1'
@@ -266,33 +248,6 @@ Blockly.Arduino['output_clear_ledmatrix'] = function(block) {
       code += 'led_matrix.clearMatrix();\n';
     
       return code;
-};
-
-Blockly.Arduino.output_leds_reg = function(){
-    var bitmask = Blockly.Arduino.valueToCode(this, "MASK", Blockly.Arduino.ORDER_ATOMIC);
-    var code = 'LEDS = ' + bitmask + ';\n';
-
-    return code;
-};
-
-Blockly.Arduino.output_led_pins = function() {
-    var dropdown_value = this.getFieldValue('LED_NUMBER');
-    if (dropdown_value != '13'){
-        dropdown_value = parseInt(dropdown_value) + 32;
-    }
-    return [dropdown_value, Blockly.Arduino.ORDER_ATOMIC];
-};
-
-Blockly.Arduino.output_on_off = function() {
-    var code = (this.getFieldValue('LED_ON_OFF') == 'ON') ? 'HIGH' : 'LOW';
-    return [code, Blockly.Arduino.ORDER_ATOMIC];
-};
-
-Blockly.Arduino.output_wait_for_switch = function(){
-    var switch_number = this.getFieldValue('SWITCH');
-    var code = 'while(digitalRead(' + switch_number + ')){}';
-
-    return code;
 };
 
 Blockly.Arduino['output_rgbled_select'] = function(block) {
@@ -544,21 +499,6 @@ Blockly.Arduino['output_eyes_right'] = function(block) {
   Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_eye] = 'servoOnPin' + value_servo_left_eye + '.attach(servoPin' + value_servo_left_eye + ');';
   code += 'servoOnPin' + value_servo_left_eye + '.write(120);\n';
 
-  return code;
-};
-
-Blockly.Arduino.output_tone_on_pin = function() {
-  var value_pin = Blockly.Arduino.valueToCode(this, "PIN", Blockly.Arduino.ORDER_ATOMIC);
-  var value_num = Blockly.Arduino.valueToCode(this, "NUM", Blockly.Arduino.ORDER_ATOMIC);
-  Blockly.Arduino.setups_['setup_output_'+value_pin] = 'pinMode('+value_pin+', OUTPUT);';
-  var code = "tone(" + value_pin + ", " + value_num + ");\n";
-  return code;
-};
-
-Blockly.Arduino.output_no_tone_on_pin = function() {
-  var dropdown_pin = Blockly.Arduino.valueToCode(this, "PIN", Blockly.Arduino.ORDER_ATOMIC);
-  Blockly.Arduino.setups_['setup_output_'+dropdown_pin] = 'pinMode('+dropdown_pin+', OUTPUT);';
-  var code = "noTone(" + dropdown_pin + ");\n";
   return code;
 };
 

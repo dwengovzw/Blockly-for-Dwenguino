@@ -391,7 +391,7 @@
 	"PROCEDURES_CALLRETURN_TOOLTIP": "Voer de door de gebruiker gedefinieerde functie \"%1\" uit en gebruik de uitvoer.",
 	"PROCEDURES_MUTATORCONTAINER_TITLE": "ingangen",
 	"PROCEDURES_MUTATORCONTAINER_TOOLTIP": "Invoer van deze functie toevoegen, verwijderen of herordenen.",
-	"PROCEDURES_MUTATORARG_TITLE": "invoernaam:",
+	"PROCEDURES_MUTATORARG_TITLE": "argument:",
 	"PROCEDURES_MUTATORARG_TOOLTIP": "Een invoer aan de functie toevoegen.",
 	"PROCEDURES_HIGHLIGHT_DEF": "Accentueer functiedefinitie",
 	"PROCEDURES_CREATE_DO": "Maak \"%1\"",

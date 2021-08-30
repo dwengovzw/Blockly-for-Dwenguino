@@ -48,22 +48,6 @@
     return [code, Blockly.Arduino.ORDER_NONE];
 };
 
-Blockly.Arduino['input_sonar_sensor'] = function (block) {
-    var value_trig = Blockly.Arduino.valueToCode(block, 'trig', Blockly.Arduino.ORDER_NONE);
-    var value_echo = Blockly.Arduino.valueToCode(block, 'echo', Blockly.Arduino.ORDER_NONE);
-    //define sonar settings
-    Blockly.Arduino.definitions_['define_newping_h'] = "#include <NewPing.h>\n";
-    Blockly.Arduino.definitions_['define_sonar_trig_' + value_trig] = "#define TRIGGER_PIN_" + value_trig + " " + value_trig + "\n";
-    Blockly.Arduino.definitions_['define_sonar_echo_ ' + value_echo] = "#define ECHO_PIN_" + value_echo + " " + value_echo + "\n";
-    Blockly.Arduino.definitions_['define_sonar_max_distance'] = "#define MAX_DISTANCE 200 \n";
-    //define sonar sensor
-    Blockly.Arduino.definitions_['define_sonar_sensor_' + value_trig + value_echo] = "NewPing sonar"
-            + value_trig + value_echo + "(TRIGGER_PIN_" + value_trig + ", ECHO_PIN_" + value_echo + ", MAX_DISTANCE);\n";
-    //  Assemble Arduino into code variable.
-    var code = "sonar" + value_trig + value_echo + '.ping_cm()';
-
-    return [code, Blockly.Arduino.ORDER_NONE];
-};
 
 Blockly.Arduino['input_sound_sensor_select'] = function (block) {
     var number = this.getFieldValue('number');
