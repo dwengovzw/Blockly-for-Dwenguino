@@ -75,19 +75,54 @@
         <field name="PIN">0</field>
     </block>
 
-    <block type="dwenguino_pressed"></block>
-    <block type="dwenguino_highlow"></block>
-
 </category>
 
 <sep></sep>
 
-<category id="catInput" colour="25" name='Input'>
+<category id="catInput" colour="315" name='Input'>
     <block type="input_sonar_sensor_select"></block>
 
     <block type="input_sound_sensor_select"></block>
 
-    <block type="input_sonar_sensor">
+    <block type="input_read_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins">
+                <field name="PIN">0</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="dwenguino_wait_for_switch"></block>
+
+    <block type="dwenguino_digital_read_switch"></block>
+    <block type="dwenguino_pressed"></block>
+    <block type="dwenguino_highlow"></block>
+
+     <block type="input_pir_sensor">
+        <value name="trig">
+            <block type="char_type" id="pir_sensor_pin"> 
+            <field name="BITMASK">13</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="input_touch_sensor">
+        <value name="pin">
+            <block type="math_number" id="touch_sensor_pin"> 
+            <field name="NUM">14</field>
+            </block>
+        </value>
+    </block>
+
+   <block type="input_button">
+        <value name="pin">
+            <block type="math_number" id="button_pin"> 
+            <field name="NUM">18</field>
+            </block>
+        </value>
+    </block> 
+
+    <block type="sonar_sensor">
         <value name="trig">
             <block type="char_type" id="72">
                 <field name="BITMASK">11</field>
@@ -107,43 +142,11 @@
             </block>
         </value>
     </block>
-
-    <block type="input_touch_sensor">
-        <value name="pin">
-            <block type="math_number" id="touch_sensor_pin"> 
-            <field name="NUM">14</field>
-            </block>
-        </value>
-    </block>
-
-    <block type="input_pir_sensor">
-        <value name="trig">
-            <block type="char_type" id="pir_sensor_pin"> 
-            <field name="BITMASK">13</field>
-            </block>
-        </value>
-    </block>
-
-   <block type="input_button">
-        <value name="pin">
-            <block type="math_number" id="button_pin"> 
-            <field name="NUM">18</field>
-            </block>
-        </value>
-    </block> 
-
-    <block type="input_read_pin">
-        <value name="PIN">
-            <block type="dwenguino_pins">
-                <field name="PIN">0</field>
-            </block>
-        </value>
-    </block>
 </category>
 
-<category id="catOutput" colour="180" name='Output'>
+<category id="catOutput" colour="315" name='Output'>
 
-    <block type="output_lcd">
+    <block type="dwenguino_lcd">
         <value name="text">
             <block type="text" id="48">
                 <field name="TEXT">Hallo Dwenguino</field>
@@ -161,7 +164,7 @@
         </value>
     </block>
 
-    <block type="output_clear_lcd"></block>
+    <block type="clear_lcd"></block>
 
     <block type="output_show_ledmatrix_image">
         <field name="NUMBERDISPLAY">0</field>
@@ -243,17 +246,15 @@
     <block type="output_clear_ledmatrix">
     </block>
 
-    <block type="output_leds_reg">
+    <block type="dwenguino_leds_reg">
         <value name="MASK">
             <block type="char_type">
                 <field name="BITMASK">0b01010101</field>
             </block>
         </value>
     </block>
-    <block type="output_led_pins"></block>
-    <block type="output_on_off"></block>
-
-    <block type="output_wait_for_switch"></block>
+    <block type="dwenguino_led_pins"></block>
+    <block type="dwenguino_on_off"></block>
     
     <block type="output_rgbled_select">
         <value name="color">
@@ -351,7 +352,7 @@
         </value>
     </block>
 
-    <block type="output_tone_on_pin">
+    <block type="dwenguino_tone_on_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">BUZZER</field>
@@ -363,7 +364,7 @@
             </block>
         </value>
     </block>
-    <block type="output_no_tone_on_pin">
+    <block type="dwenguino_no_tone_on_pin">
         <value name="PIN">
             <block type="dwenguino_pins">
                 <field name="PIN">BUZZER</field>
