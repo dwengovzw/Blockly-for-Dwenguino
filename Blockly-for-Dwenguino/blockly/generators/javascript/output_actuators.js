@@ -108,20 +108,6 @@ Blockly.JavaScript['initdwenguino'] = function (block) {
   return "";
 };
 
- Blockly.JavaScript['output_lcd'] = function (block) {
-  var value_text = Blockly.JavaScript.valueToCode(block, 'text', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_line_number = Blockly.JavaScript.valueToCode(block, 'line_number', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_character_number = Blockly.JavaScript.valueToCode(block, 'character_number', Blockly.JavaScript.ORDER_ATOMIC);
-  
-  var code = machine + 'writeLcd(' + value_text + ', '+ value_line_number + ', '+ value_character_number + ');\n';
-  return code;
-};
-
-Blockly.JavaScript['output_clear_lcd'] = function (block) {
-  var code = machine + 'clearLcd();\n';
-  return code;
-};
-
 Blockly.JavaScript['output_show_ledmatrix_image'] = function(block) {
   let segment = block.getFieldValue('NUMBERDISPLAY');
   let matrix = '[';
@@ -321,21 +307,6 @@ Blockly.JavaScript['output_servo_dropdown'] = function(block){
    return code;
  };
 
- Blockly.JavaScript.dwenguino_tone_on_pin = function() {
-  var value_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
-  var value_num = Blockly.JavaScript.valueToCode(this, "NUM", Blockly.JavaScript.ORDER_ATOMIC);
-
-  var code = machine + "tone(\"" + value_pin + "\", " + value_num + ");\n";
-  return code;
-};
-
-Blockly.JavaScript.dwenguino_no_tone_on_pin = function() {
-  var dropdown_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
-
-  var code = machine + "noTone(\"" + dropdown_pin + "\");\n";
-  return code;
-};
- 
  Blockly.JavaScript['output_set_pin'] = function(block){
    var pin_number = Blockly.JavaScript.valueToCode(block, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
    var pin_state = Blockly.JavaScript.valueToCode(block, "PIN_STATE", Blockly.JavaScript.ORDER_ATOMIC);

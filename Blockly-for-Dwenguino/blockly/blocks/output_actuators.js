@@ -26,7 +26,7 @@
  
  var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
  
- Blockly.Blocks.output.HUE = 180;
+ Blockly.Blocks.output.HUE = 315;
  
  var ledmatrixDropdown = [
    ["1", "0"],
@@ -87,69 +87,6 @@
    [DwenguinoBlocklyLanguageSettings.translateFrom('ledmatrix',['peering3']),'56'],
    [DwenguinoBlocklyLanguageSettings.translateFrom('ledmatrix',['peering4']),'57']
  ];
-
- var output_clear_lcd_json = {
-  "id": "clear_lcd",
-  "message0": MSG.clearLCD,
-  "args0": [],
-  "previousStatement": null,
-  "nextStatement": null,
-  "colour": Blockly.Blocks.output.HUE,
-  "tooltip": "",
-  "helpUrl": DwenguinoHelpUrl
-};
-
-Blockly.Blocks['output_clear_lcd'] = {
-  init: function() {
-    this.jsonInit(output_clear_lcd_json);
-  }
-};
-
-var output_lcd_json = {
-  "id": "output_lcd",
-  "message0": MSG.dwenguinoLCD,
-  "args0": [
-    {
-      "type": "input_dummy"
-    },
-    {
-      "type": "field_image",
-      "src": "DwenguinoIDE/img/dwenguino light.jpg",
-      "width": 150,
-      "height": 63,
-      "alt": "*"
-    },
-    {
-      "type": "input_dummy"
-    },
-    {
-      "type": "input_value",
-      "name": "text",
-      "check": "String"
-    },
-    {
-      "type": "input_value",
-      "name": "line_number",
-      "check": "Number"
-    },
-    {
-      "type": "input_value",
-      "name": "character_number",
-      "check": "Number"
-    }
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-  "colour": Blockly.Blocks.output.HUE,
-  "tooltip": "",
-  "helpUrl": DwenguinoHelpUrl
-};
-
-Blockly.Blocks['output_lcd'] = {
-  init: function() {
-    this.jsonInit(output_lcd_json);
-  }
-};
  
 
 Blockly.Blocks['output_show_ledmatrix_image'] = {
@@ -228,99 +165,6 @@ Blockly.Blocks['output_clear_ledmatrix'] = {
 //     this.setTooltip(DwenguinoBlocklyLanguageSettings.translate(['socialRobotLedmatrixClearDisplayBlockTooltip);
 //   }
 // };
-
-var output_leds_reg = {
-  "id": "output_leds_reg",
-  "message0": MSG.ledsReg + " %1",
-  "args0":[
-      {
-          "type": "input_value",
-          "name": "MASK",
-          "check": "Number"
-      }
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-  "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.dwenguinoLedsRegTooltip,
-  "helpUrl": "http://www.dwengo.org/tutorials"
-};
-
-Blockly.Blocks['output_leds_reg'] = {
-  init: function(){
-      this.jsonInit(output_leds_reg);
-  }
-};
-
-var output_led_pins = {
-  "id": "output_led_pins",
-  "message0": MSG.dwenguinoLedBlock + " %1 ",
-  "args0": [
-    {
-      "type": "field_dropdown",
-      "name": "LED_NUMBER",
-      "options": profile.dwenguino.leds
-    }
-  ],
-  "output": "Number",
-  "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.ledPinsTooltip,
-  "helpUrl": "http://www.dwengo.org/tutorials"
-};
-
-Blockly.Blocks['output_led_pins'] = {
-  init: function(){
-      this.jsonInit(output_led_pins);
-  }
-};
-
-var output_on_off = {
-  "id": "output_on_off",
-  "message0": "%1",
-  "args0": [
-    {
-      "type": "field_dropdown",
-      "name": "LED_ON_OFF",
-      "check": "Number",
-      "options": [[MSG.dwenguinoOn, 'ON'], [MSG.dwenguinoOff, 'OFF']]
-    }
-  ],
-  "output": "Number",
-  "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.dwenguinoOnOffTooltip,
-  "helpUrl": "http://www.dwengo.org/tutorials"
-};
-
-Blockly.Blocks['output_on_off'] = {
-  init: function(){
-      this.jsonInit(output_on_off);
-  }
-};
-
-var output_wait_for_switch = {
-  "id": "output_wait_for_switch",
-  "message0": MSG.waitForSwitch,
-  "args0": [
-      {
-          "type": "field_dropdown",
-          "name": "SWITCH",
-          "check": "Number",
-          "options": [[MSG.north, "SW_N"], [MSG.east, "SW_E"], [MSG.south, "SW_S"], [MSG.west, "SW_W"], [MSG.center, "SW_C"]]
-
-      }
-  ],
-  "previousStatement": null,
-  "nextStatement": null,
-  "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.digitalReadSwitchTooltip,
-  "helpUrl": "http://www.dwengo.org/tutorials"
-};
-
-Blockly.Blocks['output_wait_for_switch'] = {
-  init: function(){
-      this.jsonInit(output_wait_for_switch);
-  }
-};
 
 let rgbled_select_options = [
   [MSG.outputRgbLedDropdownBlock + " 1", "RGBLED1"],
@@ -939,36 +783,7 @@ Blockly.Blocks['output_servo_dropdown'] = {
        this.jsonInit(output_eyes_right_json);
      }
    };
- 
-   Blockly.Blocks['output_tone_on_pin'] = {
-    helpUrl: 'DwenguinoHelpUrl',
-    init: function() {
-      this.setColour(Blockly.Blocks.output.HUE);
-      this.appendValueInput("PIN", "Pin")
-          .appendField(MSG.toneOnPin)
-          .setCheck("Number");
-      this.appendValueInput("NUM", "Number")
-          .appendField(MSG.frequency)
-          .setCheck("Number");
-      this.setInputsInline(true);
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setTooltip(MSG.toneOnPinTooltip);
-    }
-  };
-  
-  Blockly.Blocks['output_no_tone_on_pin'] = {
-    init: function() {
-      this.setColour(Blockly.Blocks.output.HUE);
-      this.appendValueInput("PIN", "Pin")
-          .appendField(MSG.noToneOnPin)
-          .setCheck("Number");
-      this.setInputsInline(true);
-      this.setPreviousStatement(true, null);
-      this.setNextStatement(true, null);
-      this.setTooltip(MSG.noToneOnPinTooltip);
-    }
-  };
+
 
    var output_set_pin = {
      "id": "output_set_pin",
