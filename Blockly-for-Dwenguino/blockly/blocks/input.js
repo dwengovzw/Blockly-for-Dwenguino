@@ -26,7 +26,7 @@
  
  var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
  
- Blockly.Blocks.input.HUE = 25;
+ Blockly.Blocks.input.HUE = 315;
 
   // Sonar sensor
 
@@ -67,46 +67,6 @@
   Blockly.Blocks['input_sonar_sensor_select'] = {
     init: function() {
       this.jsonInit(input_sonar_sensor_select_json);
-    }
-  };
-
-  var input_sonar_sensor_json = {
-    "id": "input_sonar_sensor",
-    "message0": MSG.dwenguinoSonarBlock,
-    "args0": [
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "field_image",
-        "src": "DwenguinoIDE/img/sonar.png",
-        "width": 150,
-        "height": 87,
-        "alt": "*"
-      },
-      {
-        "type": "input_dummy"
-      },
-      {
-        "type": "input_value",
-        "name": "trig",
-        "check": "Number"
-      },
-      {
-        "type": "input_value",
-        "name": "echo",
-        "check": "Number"
-      }
-    ],
-    "output": "Number",
-    "colour": Blockly.Blocks.input.HUE,
-    "tooltip": MSG.sonarTooltip,
-    "helpUrl": DwenguinoHelpUrl
-  };
-  
-  Blockly.Blocks['input_sonar_sensor'] = {
-    init: function() {
-      this.jsonInit(input_sonar_sensor_json);
     }
   };
   
