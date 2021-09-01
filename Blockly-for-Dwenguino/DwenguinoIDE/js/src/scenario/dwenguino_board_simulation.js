@@ -230,33 +230,20 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         }
     
         // Play audio on the buzzer
-        
-        if (this.audiocontext){
-            // Check if freq has changed
-            if (this.prevFreq != board.getTonePlaying() && this.prevFreq != 0 && board.getTonePlaying != 0){
-                this.prevFreq = board.getTonePlaying();
-                // stop the current tone
-                this.osc.stop(this.audiocontext.currentTime);
+        if(this.audiocontext){
+            // If the buzzer is playing and the frequency has changed then stop the buzzer
+            if(this.prevFreq !== 0 && this.prevFreq !== board.getTonePlaying()){
+                this.osc.stop();
                 this.osc.disconnect(this.audiocontext.destination);
                 this.osc = null;
-                this.audioStarted = false;
             }
-            if (board.getTonePlaying() === 0 || this.muted) {
-                if (this.audioStarted){
-                    this.audioStarted = false;
-                    this.osc.stop(this.audiocontext.currentTime);
-                    this.osc.disconnect(this.audiocontext.destination);
-                    this.osc = null;
-                }
-            } else if (board.getTonePlaying() !== 0 && !this.muted) {
-                if ( !this.audioStarted ){
-                    // Create a new oscillator to play a specific tone and set the type to sin
-                    this.osc = this.audiocontext.createOscillator(); // instantiate an oscillator
-                    this.osc.frequency.value = board.getTonePlaying(); // Hz
-                    this.osc.start(this.audiocontext.currentTime);
-                    this.osc.connect(this.audiocontext.destination); // connect it to the destination
-                    this.audioStarted = true;
-                }
+            // If a new frequency needs to start playing
+            if(board.getTonePlaying() !== this.prevFreq && !this.muted){
+                this.osc = this.audiocontext.createOscillator();
+                this.osc.frequency.value = board.getTonePlaying();
+                this.osc.start(this.audiocontext.currentTime);
+                this.osc.connect(this.audiocontext.destination);
+                this.prevFreq = board.getTonePlaying();
             }
         }
     
