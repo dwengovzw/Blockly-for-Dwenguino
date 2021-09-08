@@ -157,7 +157,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         controlscontainer.append(colorpicker);
 
         //Create clear button
-        let clearbutton = $("<button>").attr("value", "Clear").html(MSG.clear).css({"width": "90%", "margin-top": "5px"});
+        let clearbutton = $("<button>").attr("value", "Clear").html(DwenguinoBlocklyLanguageSettings.translate(['clear'])).css({"width": "90%", "margin-top": "5px"});
         clearbutton.on("click", (evt) => {
             // Clear drawing canvas
             this.contexts[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].clearRect(
@@ -170,7 +170,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         controlscontainer.append(clearbutton);
 
         //Create save button
-        let saveButton = $("<button>").attr("value", "Save").html(MSG.save).css({"width": "90%", "margin-top": "5px"});
+        let saveButton = $("<button>").attr("value", "Save").html(DwenguinoBlocklyLanguageSettings.translate(['save'])).css({"width": "90%", "margin-top": "5px"});
         saveButton.on("click", (evt) => {
             // Clear drawing canvas
             var img = this.canvases[this.canvasNames.SPYROGRAPH_DRAWING_CANVAS].toDataURL('image/png');

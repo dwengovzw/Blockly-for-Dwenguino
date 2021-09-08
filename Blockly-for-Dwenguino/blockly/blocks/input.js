@@ -31,13 +31,13 @@
   // Sonar sensor
 
   let sonar_select_options = [
-        [MSG.inputSonarDropdownBlock + " 1", "SONAR1"],
-        [MSG.inputSonarDropdownBlock + " 2", "SONAR2"]
+        [DwenguinoBlocklyLanguageSettings.translate(['inputSonarDropdownBlock']) + " 1", "SONAR1"],
+        [DwenguinoBlocklyLanguageSettings.translate(['inputSonarDropdownBlock']) + " 2", "SONAR2"]
   ];
 
   var input_sonar_sensor_select_json = {
     "id": "input_sonar_sensor_select",
-    "message0": MSG.inputSonarSensorSelectBlock,
+    "message0": DwenguinoBlocklyLanguageSettings.translate(['inputSonarSensorSelectBlock']),
     "args0": [
       {
         "type": "input_dummy"
@@ -60,7 +60,7 @@
     ],
     "output": "Number",
     "colour": Blockly.Blocks.input.HUE,
-    "tooltip": MSG.sonarTooltip,
+    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['sonarTooltip']),
     "helpUrl": DwenguinoHelpUrl
   };
   
@@ -72,12 +72,12 @@
   
   // Sound sensor
   let sound_select_options = [
-    [MSG.inputSoundDropdownBlock + " 1", "SOUND1"]
+    [DwenguinoBlocklyLanguageSettings.translate(['inputSoundDropdownBlock']) + " 1", "SOUND1"]
   ];
 
   var input_sound_sensor_select_json = {
   "id": "input_sound_sensor_select",
-  "message0": MSG.inputSoundSensorSelectBlock,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorSelectBlock']),
   "args0": [
     {
       "type": "input_dummy"
@@ -100,7 +100,7 @@
   ],
   "output": "Number",
   "colour": Blockly.Blocks.input.HUE,
-  "tooltip": MSG.inputSoundSensorBlockTooltip,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlockTooltip']),
   "helpUrl": DwenguinoHelpUrl
   };
 
@@ -113,7 +113,7 @@
 
  var input_sound_sensor_json = {
     "id": "input_sound_sensor",
-    "message0": MSG.inputSoundSensorBlock,
+    "message0": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlock']),
     "args0": [
       {
         "type": "input_dummy"
@@ -136,7 +136,7 @@
     ],
     "output": "Number",
     "colour": Blockly.Blocks.input.HUE,
-    "tooltip": MSG.inputSoundSensorBlockTooltip,
+    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlockTooltip']),
     "helpUrl": DwenguinoHelpUrl
   };
   
@@ -148,7 +148,7 @@
 
  var input_pir_sensor_json = {
    "id": "input_pir_sensor",
-   "message0": MSG.inputPirBlock,
+   "message0": DwenguinoBlocklyLanguageSettings.translate(['inputPirBlock']),
    "args0": [
      {
        "type": "input_dummy"
@@ -171,7 +171,7 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": MSG.inputPirBlockTooltip,
+   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputPirBlockTooltip']),
    "helpUrl": DwenguinoHelpUrl
  };
  
@@ -183,7 +183,7 @@
  
  var input_touch_sensor_json = {
    "id": "input_touch_sensor",
-   "message0": MSG.inputTouchSensorBlock,
+   "message0": DwenguinoBlocklyLanguageSettings.translate(['inputTouchSensorBlock']),
    "args0": [
      {
        "type": "input_dummy"
@@ -206,7 +206,7 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": MSG.inputTouchSensorBlockTooltip,
+   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputTouchSensorBlockTooltip']),
    "helpUrl": DwenguinoHelpUrl
  };
  
@@ -218,7 +218,7 @@
  
  var input_button_json = {
    "id": "input_button",
-   "message0": MSG.inputButtonBlock,
+   "message0": DwenguinoBlocklyLanguageSettings.translate(['inputButtonBlock']),
    "args0": [
      {
        "type": "input_dummy"
@@ -241,7 +241,7 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": MSG.inputButtonBlockTooltip,
+   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputButtonBlockTooltip']),
    "helpUrl": DwenguinoHelpUrl
  };
  
@@ -253,7 +253,7 @@
  
    var input_read_pin_json = {
      "id": "input_read_pin",
-     "message0": MSG.inputReadPinBlock,
+     "message0": DwenguinoBlocklyLanguageSettings.translate(['inputReadPinBlock']),
      "args0": [
          {
          "type": "input_dummy"

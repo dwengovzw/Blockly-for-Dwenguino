@@ -151,12 +151,12 @@ let DwenguinoBlockly = {
 
             // reset form
             $('#dropzoneModal .modal-header').empty();
-            $('#dropzoneModal .modal-header').append('<h4 class="modal-title">'+ MSG.dropzone['dictUploadBlocks'] +'</h4>');
+            $('#dropzoneModal .modal-header').append('<h4 class="modal-title">'+ DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictUploadBlocks']) +'</h4>');
             $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
             $('#dropzoneModal .modal-body .message').empty();
-            $('#dropzoneModal .modal-body .message').append('<p>' + MSG.dropzone['dictSelectFile'] + '</p>');
-            $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">' + MSG.dropzone['dictChooseFile'] + '</label><input type="file" id="fileInput" class="form-control">');
-            $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + MSG.dropzone['dictDefaultMessage'] + '</div>');
+            $('#dropzoneModal .modal-body .message').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictSelectFile']) + '</p>');
+            $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictChooseFile']) + '</label><input type="file" id="fileInput" class="form-control">');
+            $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictDefaultMessage']) + '</div>');
             $('#dropzoneModal .modal-body .message').append('<pre id="fileDisplayArea"></pre>');
             $('#dropzoneModal .modal-footer').empty();
             $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>');
@@ -176,7 +176,7 @@ let DwenguinoBlockly = {
     
                 reader.readAsText(file);
               } else {
-                fileDisplayArea.innerText = MSG.dropzone['dictFileNotSupported'];
+                fileDisplayArea.innerText = DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictFileNotSupported']);
               }
             }
     
@@ -497,15 +497,15 @@ let DwenguinoBlockly = {
 
 
     showModalErrorDialog: function(error){
-      $('#errorModal .modal-header').html(MSG.runError);
+      $('#errorModal .modal-header').html(DwenguinoBlocklyLanguageSettings.translate(['runError']));
       if (error.info === "Upload failed"){
-        $('#errorModal .modal-body .message').html(MSG.uploadError);
+        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['uploadError']));
       } else if (error.info === "Compilation failed"){
-        $('#errorModal .modal-body .message').html(MSG.compileError);
+        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['compileError']));
       } else if (error.info === "Clean failed"){
-        $('#errorModal .modal-body .message').html(MSG.cleanError);
+        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['cleanError']));
       } else {
-        $('#errorModal .modal-body .message').html(MSG.uploadError);
+        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['uploadError']));
       }
 
       $('#errorModal .modal-body .console').hide();
@@ -679,7 +679,7 @@ let DwenguinoBlockly = {
       try {
         document.execCommand('copy');
         $('#notification-copy').show();
-        $('#notification-copy').text(MSG.arduinoCodeCopied);
+        $('#notification-copy').text(DwenguinoBlocklyLanguageSettings.translate(['arduinoCodeCopied']));
         setTimeout(function() {
           $("#notification-copy").hide('blind', {}, 500)
         }, 3000);
@@ -698,7 +698,7 @@ let DwenguinoBlockly = {
       }
       navigator.clipboard.writeText(code).then(function() {
         $('#notification-copy').show();
-        $('#notification-copy').text(MSG.arduinoCodeCopied);
+        $('#notification-copy').text(DwenguinoBlocklyLanguageSettings.translate(['arduinoCodeCopied']));
         setTimeout(function() {
           $("#notification-copy").hide('blind', {}, 500)
         }, 3000);
@@ -926,7 +926,7 @@ let DwenguinoBlockly = {
         for (var i = 0, cat; cat = categories[i]; i++) {
             var element = document.getElementById(cat);
             if (element) {
-                element.setAttribute('name', MSG[cat]);
+                element.setAttribute('name', DwenguinoBlocklyLanguageSettings.translate([cat]));
             }
 
         }
@@ -1063,9 +1063,9 @@ let DwenguinoBlockly = {
     },
 
     displayCookieConsent: function(){
-      let cookieConsent = MSG.cookieConsent['cookieConsent']
-                          + '<a id="cookie-info" href="#" class="ml-1">' + MSG.cookieConsent['cookieInfo'] + '</a>'
-                          + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+MSG.cookieConsent['close']+'</button></div>';
+      let cookieConsent = DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['cookieConsent'])
+                          + '<a id="cookie-info" href="#" class="ml-1">' + DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['cookieInfo']) + '</a>'
+                          + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['close'])+'</button></div>';
 
       $('#cookie-consent').html(cookieConsent);
 

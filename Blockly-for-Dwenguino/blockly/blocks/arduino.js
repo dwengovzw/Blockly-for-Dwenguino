@@ -30,7 +30,7 @@ Blockly.Blocks.arduino.HUE = 100;
 
 var setup_loop_arduino_json = {
   "type": "setup_loop_structure_arduino",
-  "message0":  MSG.setup + " %1 %2 " + MSG.loop +  "%3 %4",
+  "message0":  DwenguinoBlocklyLanguageSettings.translate(['setup']) + " %1 %2 " + DwenguinoBlocklyLanguageSettings.translate(['loop']) +  "%3 %4",
   "args0": [
     {
       "type": "input_dummy"
@@ -48,7 +48,7 @@ var setup_loop_arduino_json = {
     }
   ],
   "colour": Blockly.Blocks.arduino.HUE,
-  "tooltip": MSG.dwenguino_main_program_structure,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['dwenguino_main_program_structure']),
   "helpUrl": ArduinoHelpUrl,
   "data": "testdatastring"
 };

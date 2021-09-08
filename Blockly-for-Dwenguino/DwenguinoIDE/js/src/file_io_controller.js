@@ -33,9 +33,9 @@ class FileIOController {
                 $('#dropzoneModal .modal-header').append('<h4 class="modal-title">Upload</h4>');
                 $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 $('#dropzoneModal .modal-body .message').empty();
-                $('#dropzoneModal .modal-body .message').append('<p>' + MSG.dropzone['dictSelectFile'] + '</p>');
+                $('#dropzoneModal .modal-body .message').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictSelectFile']) + '</p>');
                 $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">Choose file </label><input type="file" id="fileInput" class="form-control">');
-                $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + MSG.dropzone['dictDefaultMessage'] + '</div>');
+                $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictDefaultMessage']) + '</div>');
                 $('#dropzoneModal .modal-body .message').append('<pre id="fileDisplayArea"></pre>');
                 $('#dropzoneModal .modal-footer').empty();
                 $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>');
@@ -55,7 +55,7 @@ class FileIOController {
 
                         reader.readAsText(file);
                     } else {
-                        fileDisplayArea.innerText = MSG.dropzone['dictFileNotSupported'];
+                        fileDisplayArea.innerText = DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictFileNotSupported']);
                     }
                 }
 
