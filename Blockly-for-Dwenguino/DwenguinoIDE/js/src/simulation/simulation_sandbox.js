@@ -349,7 +349,7 @@ class SimulationSandbox {
     var sc = DwenguinoSimulation.currentScenario;
     if (position[0] < sc.paper.position.x || position[0] > sc.paper.position.x + sc.paper.width || position[1] < sc.paper.position.y || position[1] > sc.paper.position.y + sc.paper.height) {
       if (!window.stepMotorError) {
-        alert(MSG.bounds);
+        alert(DwenguinoBlocklyLanguageSettings.translate(['bounds']));
         DwenguinoSimulation.handleSimulationStop();
         window.stepMotorError = true;
       }

@@ -3,12 +3,14 @@ var DwenguinoBlocklyLanguageSettings = {};
 DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'en': 'English',
       'nl': 'Nederlands',
-      'it': 'Italiano',
+      'es': 'Español',
       'fr': 'français',
+      'it': 'Italiano',   
       'de': 'Deutsch',
       'my': 'Malay',
+      'pl': 'Polski',
       'el': 'Ελληνικά',
-      'ar': 'عربى'  
+      'ar': 'عربى'
   };
 
 //Set default language setting

@@ -167,12 +167,12 @@ Blockly.Blocks['output_clear_ledmatrix'] = {
 // };
 
 let rgbled_select_options = [
-  [MSG.outputRgbLedDropdownBlock + " 1", "RGBLED1"],
+  [ DwenguinoBlocklyLanguageSettings.translate(['outputRgbLedDropdownBlock']) + " 1", "RGBLED1"],
 ];
 
 var output_rgbled_select_json = {
   "id": "output_rgbled_select",
-  "message0": MSG.outputRgbLedSelectBlock,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['outputRgbLedSelectBlock']),
   "args0": [
     {
       "type": "input_dummy"
@@ -201,7 +201,7 @@ var output_rgbled_select_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.outputRgbLedSelectBlockTooltip,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['outputRgbLedSelectBlockTooltip']),
   "helpUrl": DwenguinoHelpUrl
   };
 
@@ -265,7 +265,7 @@ var output_rgbled_select_json = {
 
  var output_rgbled_select_off_json = {
   "id": "output_rgbled_select_off",
-  "message0": MSG.outputRgbLedSelectOffBlock,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['outputRgbLedSelectOffBlock']),
   "args0": [
     {
       "type": "input_dummy"
@@ -289,7 +289,7 @@ var output_rgbled_select_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.outputRgbLedSelectOffBlockTooltip,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['outputRgbLedSelectOffBlockTooltip']),
   "helpUrl": DwenguinoHelpUrl
   };
 
@@ -422,7 +422,7 @@ var output_rgbled_select_json = {
 
  var output_servo_with_dropdown_json = {
   "id": "output_servo_with_dropdown",
-  "message0": MSG.dwenguinoServoBlock,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoServoBlock']),
   "args0": [
     {
       "type": "input_dummy"
@@ -451,7 +451,7 @@ var output_rgbled_select_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.dwenguinoServoBlockTooltip,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoServoBlockTooltip']),
   "helpUrl": "http://www.dwengo.org/tutorials"
 };
 
@@ -464,7 +464,7 @@ Blockly.Blocks['output_servo_with_dropdown'] = {
 
 var output_servo_dropdown = {
   "id": "output_servo_dropdown",
-  "message0": MSG.dwenguinoServoDropdownBlock,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoServoDropdownBlock']),
   "args0": [
     {
       "type": "field_dropdown",
@@ -475,7 +475,7 @@ var output_servo_dropdown = {
   ],
   "output": "Number",
   "colour": Blockly.Blocks.output.HUE,
-  "tooltip": MSG.dwenguinoServoDropdownTooltip,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoServoDropdownTooltip']),
   "helpUrl": "http://www.dwengo.org/tutorials"
 };
 

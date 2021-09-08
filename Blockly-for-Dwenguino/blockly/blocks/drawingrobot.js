@@ -32,7 +32,7 @@ Blockly.Blocks.drawingrobot.HUE = 330;
 
 var drawingrobot_stepper_motor_json = {
   "id": "drawingrobot_stepper_motor",
-  "message0": MSG.dwenguinoStepperMotorBlock,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoStepperMotorBlock']),
   "args0": [
     {
       "type": "input_dummy"
@@ -73,16 +73,16 @@ Blockly.Blocks['drawingrobot_stepper_motor'] = {
 
 var drawingrobot_move_json = {
   "id": "drawingrobot_move",
-  "message0": MSG.drawingrobotMove,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotMove']),
   "args0": [
     {
       "type": "field_dropdown",
       "name": "direction",
       "options": [
-        [MSG.up, "0"], 
-        [MSG.down, "1"], 
-        [MSG.left, "2"], 
-        [MSG.right, "3"]
+        [DwenguinoBlocklyLanguageSettings.translate(['up']), "0"], 
+        [DwenguinoBlocklyLanguageSettings.translate(['down']), "1"], 
+        [DwenguinoBlocklyLanguageSettings.translate(['left']), "2"], 
+        [DwenguinoBlocklyLanguageSettings.translate(['right']), "3"]
       ]
 
   },
@@ -108,7 +108,7 @@ Blockly.Blocks['drawingrobot_move'] = {
 
 var drawingrobot_move_direction_json = {
   "id": "drawingrobot_move_direction",
-  "message0": MSG.drawingrobotMove,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotMove']),
   "args0": [
     {
       "type": "input_value",
@@ -136,7 +136,7 @@ Blockly.Blocks['drawingrobot_move_direction'] = {
 
 var drawingrobot_move_direction_x_y_json = {
   "id": "drawingrobot_move_direction_x_y",
-  "message0": MSG.drawingrobotMoveXY,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotMoveXY']),
   "args0": [
     {
       "type": "input_value",
@@ -165,7 +165,7 @@ Blockly.Blocks['drawingrobot_move_direction_x_y'] = {
 
 var drawingrobot_line_json = {
   "id": "drawingrobot_line",
-  "message0": MSG.drawingrobotLine,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotLine']),
   "args0": [
     {
       "type": "input_value",
@@ -194,7 +194,7 @@ Blockly.Blocks['drawingrobot_line'] = {
 
 var drawingrobot_circle_json = {
   "id": "drawingrobot_circle",
-  "message0": MSG.drawingrobotCircle,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotCircle']),
   "args0": [
     {
       "type": "input_value",
@@ -218,7 +218,7 @@ Blockly.Blocks['drawingrobot_circle'] = {
 
 var drawingrobot_rectangle_json = {
   "id": "drawingrobot_rectangle",
-  "message0": MSG.drawingrobotRectangle,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotRectangle']),
   "args0": [
     {
       "type": "input_value",
@@ -247,7 +247,7 @@ Blockly.Blocks['drawingrobot_rectangle'] = {
 
 var drawingrobot_lift_stylus_json = {
   "id": "drawingrobot_lift_stylus",
-  "message0": MSG.drawingrobotLiftStylus,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotLiftStylus']),
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
@@ -263,7 +263,7 @@ Blockly.Blocks['drawingrobot_lift_stylus'] = {
 
 var drawingrobot_lower_stylus_json = {
   "id": "drawingrobot_lower_stylus",
-  "message0": MSG.drawingrobotLowerStylus,
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotLowerStylus']),
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
@@ -280,7 +280,7 @@ Blockly.Blocks['drawingrobot_lower_stylus'] = {
 
 var drawingrobot_color_json = {
     "id": "drawingrobot_color",
-    "message0": MSG.drawingrobotChangeColor,
+    "message0": DwenguinoBlocklyLanguageSettings.translate(['drawingrobotChangeColor']),
     "args0": [
       {
         "type": "field_colour",
@@ -306,8 +306,8 @@ Blockly.Blocks['drawingrobot_motor_number'] = {
     this.setHelpUrl(DwenguinoHelpUrl);
     this.setColour(Blockly.Msg.DRAWINGROBOT_HUE);
     this.appendDummyInput()
-        .appendField(new Blockly.FieldDropdown([[MSG.stepperMotorOne, "33"], [MSG.stepperMotorTwo, "34"]]), 'NUMBER')
+        .appendField(new Blockly.FieldDropdown([[DwenguinoBlocklyLanguageSettings.translate(['stepperMotorOne']), "33"], [DwenguinoBlocklyLanguageSettings.translate(['stepperMotorTwo']), "34"]]), 'NUMBER')
     this.setOutput(true, 'Number');
-    this.setTooltip(MSG.stepperMotorTooltip);
+    this.setTooltip(DwenguinoBlocklyLanguageSettings.translate(['stepperMotorTooltip']));
   }
 };
