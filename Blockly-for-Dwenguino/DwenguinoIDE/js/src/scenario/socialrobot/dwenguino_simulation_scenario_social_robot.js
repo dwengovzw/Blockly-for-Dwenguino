@@ -212,18 +212,18 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     // Play audio on the buzzer
     if(this.audiocontext){
       // If the buzzer is playing and the frequency has changed then stop the buzzer
-      if(this.prevFreq !== 0 && this.prevFreq !== board.getTonePlaying()){
+      if(this.prevFreq !== 0 && this.prevFreq !== boardState.getTonePlaying()){
           this.osc.stop();
           this.osc.disconnect(this.audiocontext.destination);
           this.osc = null;
       }
       // If a new frequency needs to start playing
-      if(board.getTonePlaying() !== this.prevFreq){
+      if(boardState.getTonePlaying() !== this.prevFreq){
           this.osc = this.audiocontext.createOscillator();
-          this.osc.frequency.value = board.getTonePlaying();
+          this.osc.frequency.value = boardState.getTonePlaying();
           this.osc.start(this.audiocontext.currentTime);
           this.osc.connect(this.audiocontext.destination);
-          this.prevFreq = board.getTonePlaying();
+          this.prevFreq = boardState.getTonePlaying();
       }
     }
   }
