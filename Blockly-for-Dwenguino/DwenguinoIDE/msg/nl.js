@@ -48,6 +48,7 @@ var MSG = {
   clearLCD: "maak lcd-scherm leeg",
   dwenguinoLCD: "lcd-scherm %1 %2 %3 schrijf tekst: %4 op rij %5 vanaf kolom %6",
   pin: "pin",
+  digitalPin: "Digitale pin",
   toneOnPin: "speel toon af op ",
   frequency: "met frequentie",
   noToneOnPin: "stop toon op",

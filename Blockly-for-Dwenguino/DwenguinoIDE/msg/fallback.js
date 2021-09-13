@@ -44,6 +44,7 @@ var MSG_FALLBACK = {
   clearLCD: "Clear LCD",
   dwenguinoLCD: "Dwenguino LCD %1 %2 %3 Write text: %4 On row: %5 Starting from column: %6",
   pin: "pin",
+  digitalPin: "Digital pin",
   toneOnPin: "Play tone on ",
   frequency: "with frequency",
   noToneOnPin: "Stop tone on",
