@@ -1,5 +1,4 @@
 var DwenguinoBlocklyLanguageSettings = {};
-//only use english and dutch for now
 DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'en': 'English',
       'nl': 'Nederlands',

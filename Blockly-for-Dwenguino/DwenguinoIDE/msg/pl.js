@@ -31,7 +31,6 @@ var MSG = {
   hashError: "Przepraszamy, \"%1\" nie odpowiada żadnemu zapisanemu programowi.",
   xmlError: "Nie można załadować zapisanego pliku. Być może został utworzony za pomocą innej wersji Blockly?",
   badXml: "Błąd parsowania XML : \n%1\n\nZaznacz \"OK\" aby odrzucić twoje zmiany lub \"Cancel\", żeby w przyszłości edytować XML.",
-  pressed: WCIŚNIĘTY,
   setup: "konfiguracja",
   loop: "powtórz",
   dwenguino_main_program_structure: "Pierwszy fragment kodu jest wykonywany tylko jeden raz przy starcie programu. Kod w powtórzenie będzie powtarzany w kółko aż do zatrzymania programu (np. po odłączeniu wtyczki).",

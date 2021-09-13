@@ -151,7 +151,7 @@ class SocialRobotSoundSensor extends RobotComponent{
 
     createPinOptionsInModalDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
-        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
+        $('#componentOptionsPin').append('<div class="col-md-2">'+DwenguinoBlocklyLanguageSettings.translate(['digitalPin'])+'</div>');
         $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
 
         let pins = this.getAllPossiblePins();
