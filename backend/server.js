@@ -56,14 +56,9 @@ console.log("SSL port: " + sslPort);
 
 // Use server sertificate in production and local self signed certificate in standalone and debug mode.
 if (process.env.NODE_ENV === 'production') {
-    // For SSL certificates
+    // For SSL certificates with Certbot from Let's Encrypt
     options['key'] = fs.readFileSync('/home/ubuntu/certs/privkey.pem');
     options['cert'] = fs.readFileSync('/home/ubuntu/certs/cert.pem');
-    //options['key'] = fs.readFileSync('/home/ubuntu/certs/private.key');
-    //options['cert'] = fs.readFileSync('/home/ubuntu/certs/certificate.crt');
-    //options['ca'] = fs.readFileSync('/home/ubuntu/certs/ca_bundle.crt');
-    
-    
 }else if (process.env.NODE_ENV === 'standalone'){
     options['key'] = fs.readFileSync('./security/cert.key');
     options['cert'] = fs.readFileSync('./security/cert.pem');
