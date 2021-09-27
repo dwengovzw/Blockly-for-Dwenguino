@@ -38,7 +38,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 //This is depricated, now the electron browser is which is started using a bash script
-if (!(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'standalone')) {
+/*if (!(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'standalone')) {
     // Launch a browser window for debugging
     ChromeLauncher.launch({
         startingUrl: 'https://localhost:' + sslPort + '/dwenguinoblockly',
@@ -50,4 +50,4 @@ if (!(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'standal
             process.exit();
         });
     });
-}
+}*/
