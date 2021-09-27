@@ -46,12 +46,12 @@ let DwenguinoBlockly = {
            * Otherwise generate binary on the server.
            */
           $.ajax({
-            url: "https://localhost:12033/utilities/getEnvironment",
+            url: "http://localhost:12032/utilities/getEnvironment",
             dataType: 'text',
             type: 'get',
             success: function( data, textStatus, jQxhr ){
                 console.log('succes');
-                DwenguinoBlockly.compilationPath = "https://localhost:12033/utilities/getDwenguinoBinary";
+                DwenguinoBlockly.compilationPath = "http://localhost:12032/utilities/getDwenguinoBinary";
             },
             error: function( jqXhr, textStatus, errorThrown ){
                 DwenguinoBlockly.compilationPath = ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary"
@@ -429,11 +429,74 @@ let DwenguinoBlockly = {
     },
 
     downloadDwenguinoBinaryHandler: function(code){
-      let url = DwenguinoBlockly.compilationPath + "?code=" + encodeURIComponent(code);
+      DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
+      // Old code now perform async
+      /*let url = DwenguinoBlockly.compilationPath + "?code=" + encodeURIComponent(code);
       let res = "success";
       try{
         res = window.open(url, '_blank');
         console.log(res);
+      } catch (e) {
+        console.log(res);
+      }*/
+    },
+
+    downloadDwenguinoBinaryHandlerAjax: function(code){
+      DwenguinoBlockly.disableRunButton();
+      let url = DwenguinoBlockly.compilationPath + "?code=" + encodeURIComponent(code);
+      let res = "success";
+      try{
+        $.ajax({
+          type: "GET",
+          url: url,
+          xhrFields: {
+            responseType: "blob" 
+          },
+          success: function(blob, status, xhr){
+            // check for a filename
+            var filename = "";
+            var disposition = xhr.getResponseHeader('Content-Disposition');
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                var matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
+            }
+
+            if (typeof window.navigator.msSaveBlob !== 'undefined') {
+                // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+                window.navigator.msSaveBlob(blob, filename);
+            } else {
+                var URL = window.URL || window.webkitURL;
+                var downloadUrl = URL.createObjectURL(blob);
+
+                if (filename) {
+                    // use HTML5 a[download] attribute to specify filename
+                    var a = document.createElement("a");
+                    // safari doesn't support this yet
+                    if (typeof a.download === 'undefined') {
+                        window.location.href = downloadUrl;
+                    } else {
+                        a.href = downloadUrl;
+                        a.download = filename;
+                        document.body.appendChild(a);
+                        a.click();
+                    }
+                } else {
+                    window.location.href = downloadUrl;
+                }
+
+                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
+                
+            }
+            DwenguinoBlockly.resetRunButton();
+          },
+          error: function(err){
+            console.log(`Compilation failed with error: ${err}`)
+            DwenguinoBlockly.resetRunButton();
+
+          }
+        })
+        
       } catch (e) {
         console.log(res);
       }
