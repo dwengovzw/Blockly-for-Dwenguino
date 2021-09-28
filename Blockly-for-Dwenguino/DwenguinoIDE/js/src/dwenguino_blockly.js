@@ -260,7 +260,7 @@ let DwenguinoBlockly = {
         $("#db_menu_item_clear").click(function(){
           DwenguinoBlockly.simulationEnvironment.stop();
           var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
-          DwenguinoBlockly.runEventHandler(code);
+          DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
         });
 
          $("#blocklyDiv").click(function(){
@@ -603,7 +603,7 @@ let DwenguinoBlockly = {
 
           $("#db_menu_item_clear").click(function(){
             var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
-            DwenguinoBlockly.runEventHandler(code);
+            DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
           });
 
           $("#db_menu_item_run").css({color: "black"});
@@ -1077,49 +1077,8 @@ let DwenguinoBlockly = {
         $('#copy-code').click(function () {
           DwenguinoBlockly.copyCodeToClipboard();
         });
-
-        // // If the user selects to render the code for Arduino or Dwenguino hardware, render the code in the right format again
-        // let hardwareViewCheckbox = document.querySelector('input[id="hardware_checkbox"]');
-        // hardwareViewCheckbox.addEventListener('change', function (e) {
-        //   DwenguinoBlockly.interfaceStateArduino = !DwenguinoBlockly.interfaceStateArduino;
-        //   DwenguinoBlockly.setInterfaceToArduino(DwenguinoBlockly.interfaceStateArduino);
-        // });
     },
 
-    // // Strange hack because hardware_checkbox value does not change when slider changes
-    // interfaceStateArduino: false, 
-    // setInterfaceToArduino: function(setArduino){
-    //   console.log("changing to arduino: " + setArduino)
-    //   if (setArduino){
-    //     // Update interfact to only show blocks compatible with arduino, change setup loop block, disable simulator view, and show warnig for limited support
-    //     DwenguinoBlockly.setDifficultyLevel("_arduino");
-    //     DwenguinoBlockly.setWorkspaceBlockFromXml('<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure_arduino" id="j_9ZX1dGtt+%FAB!Hw%T" x="209" y="108"/></xml>')
-    //     if (DwenguinoBlockly.simulatorState != "off"){
-    //       DwenguinoBlockly.toggleSimulator();
-    //       $("#db_menu_item_clear").css("pointer-events", "none"); // Enable click events
-    //       $("#db_menu_item_run").css("pointer-events", "none"); // Enable click events
-    //       $("#db_menu_item_simulator").css("pointer-events", "none"); // Diable click events
-    //       $("#db_tutorials").css("pointer-events", "none"); // Diable click events
-          
-    //     }
-    //     $('#arduinoWarningModal .modal-header').empty();
-    //     $('#arduinoWarningModal .modal-header').append('<h4 class="modal-title">'+ DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarningTitle']) +'</h4>');
-    //     $('#arduinoWarningModal .modal-body .message').empty();
-    //     $('#arduinoWarningModal .modal-body .message').html('<p>' + DwenguinoBlocklyLanguageSettings.translate(['ArduinoWarning']) + '</p>');
-    //     $("#arduinoWarningModal").modal('show');
-    //   }else{
-    //     // Change back to arduino blocks
-    //     DwenguinoBlockly.setDifficultyLevel("0");
-    //     DwenguinoBlockly.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>')
-    //     if (DwenguinoBlockly.simulatorState != "on"){
-    //       DwenguinoBlockly.toggleSimulator();
-    //     }
-    //     $("#db_menu_item_clear").css("pointer-events", "auto"); // Enable click events
-    //     $("#db_menu_item_run").css("pointer-events", "auto"); // Enable click events
-    //     $("#db_menu_item_simulator").css("pointer-events", "auto"); // Enable click events
-    //     $("#db_tutorials").css("pointer-events", "auto"); // Diable click events
-    //   }
-    // },
     
     tearDownEnvironment: function(){
       // Called from the aruino IDE on close. For now do nothing.
