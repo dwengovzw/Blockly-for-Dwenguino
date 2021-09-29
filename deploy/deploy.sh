@@ -17,12 +17,12 @@ npm install bcrypt
 # Copy the new files to the deployment directory
 sudo cp -r /var/lib/jenkins/workspace/blockly-build/ /home/ubuntu/
 
-cd /home/ubuntu/blockly-build/backend
+cd /home/ubuntu/blockly-build
 
 # Give jenkins user write access to the compilation folder to be able to create the required files for compilation
 sudo chown -R jenkins:jenkins /home/ubuntu/blockly-build/backend/compilation
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-forever restart index.js -r dotenv/config || forever start index.js -r dotenv/config
+forever restart backend/index.js -r dotenv/config || forever start backend/index.js -r dotenv/config
 exit
 
