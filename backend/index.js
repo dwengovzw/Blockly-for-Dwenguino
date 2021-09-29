@@ -5,7 +5,7 @@ import mongoose from 'mongoose';
 
 
 const httpServer = http.createServer(app);
-const httpsServer = https.createServer(options, app);
+//const httpsServer = https.createServer(options, app);
 
 
 
@@ -31,11 +31,11 @@ httpServer.listen(port, function () {
     console.log("Running HTTP server on port " + port);
 });
 
-if (process.env.NODE_ENV === 'production') {
+/*if (process.env.NODE_ENV === 'production') {
     httpsServer.listen(sslPort, function () {
         console.log("Running HTTPS server on port " + sslPort);
     })
-}
+}*/
 
 //This is depricated, now the electron browser is which is started using a bash script
 /*if (!(process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'standalone')) {
