@@ -117,7 +117,7 @@ console.log(emailService);
 export default emailService;
 
 
-if (process.env.NODE_ENV === 'production') {
+/*if (process.env.NODE_ENV === 'production') {
     // Redirect http requests to https
     app.use((req, res, next) => {
         let redirectport = (sslPort != 443 ? `:${sslPort}` : "")
@@ -126,11 +126,12 @@ if (process.env.NODE_ENV === 'production') {
             }
             next();
     });
-}
+}*/
 
     // Setup static file serving
 if (process.env.NODE_ENV === 'production') {
-    app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+    //app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
+    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 } else if (process.env.NODE_ENV === 'standalone') {
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
 } else {
