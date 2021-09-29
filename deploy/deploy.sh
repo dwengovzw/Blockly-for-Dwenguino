@@ -23,7 +23,7 @@ cd /home/ubuntu/blockly-build
 sudo chown -R jenkins:jenkins /home/ubuntu/blockly-build/backend/compilation
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-pm2 restart blockly
+pm2 restart blockly || pm2 -n "blockly" start 'sudo npm run start'
 #forever restart backend/index.js -r dotenv/config || forever start backend/index.js -r dotenv/config
 exit
 
