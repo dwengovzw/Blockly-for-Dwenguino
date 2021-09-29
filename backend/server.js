@@ -40,7 +40,7 @@ let key, cert, ca = 0;
 let options = {}
 
 // Setup server port
-var port = process.env.PORT || 12032;
+var port = 12032;
 console.log("Port: " + port);
 
 
