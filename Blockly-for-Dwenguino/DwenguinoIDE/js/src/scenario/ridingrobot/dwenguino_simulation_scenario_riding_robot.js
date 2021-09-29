@@ -131,7 +131,7 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
             .css("maring-left", "-25px")
             .css("maring-right", "-20px")
             .css("position", "absolute")
-            .css("background-image", "url('DwenguinoIDE/img/board/robot.png')")
+            .css("background-image", `url('${settings.basepath}DwenguinoIDE/img/board/robot.png')`)
             .css("background-size", "100%")
             .css('top', this.robot.position.y + 'px')
             .css('left', this.robot.position.x + 'px');  

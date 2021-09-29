@@ -73,8 +73,9 @@ if (process.env.NODE_ENV === 'production') {
 let app = express();
 
 // Set view engine
-app.set('view engine', 'pug');
-app.set('views', './views');
+app.set('view engine', 'ejs');
+app.set('views', './Blockly-for-Dwenguino');   // For debug
+//app.set('views', '../Blockly-for-Dwenguino');
 
 // Optimizations for production
 if (process.env.NODE_ENV === 'production') {
@@ -136,6 +137,8 @@ if (process.env.NODE_ENV === 'production') {
     // Debug setup
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 }
+
+
 
 // Use blockly routes for the app
 app.use('/', blocklyRoutes);

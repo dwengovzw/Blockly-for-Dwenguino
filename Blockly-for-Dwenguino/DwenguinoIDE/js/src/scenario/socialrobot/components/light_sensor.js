@@ -18,7 +18,7 @@ class SocialRobotLightSensor extends RobotComponent{
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/socialrobot/light_sensor.png';
+        this._image.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/light_sensor.png`;
         this._pin = pin;
         this._state = state;
         this._stateUpdated = false;

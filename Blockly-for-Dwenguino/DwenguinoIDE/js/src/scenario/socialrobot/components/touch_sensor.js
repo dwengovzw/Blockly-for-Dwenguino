@@ -18,7 +18,7 @@ class SocialRobotTouchSensor extends RobotComponent{
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/socialrobot/touch_sensor.svg';
+        this._image.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor.svg`;
         this._pin = pin;
         this._state = state;
         this._stateUpdated = false;
@@ -48,12 +48,12 @@ class SocialRobotTouchSensor extends RobotComponent{
             self._button.update();
 
             if (self._button.isActive()) {
-                self.setImage('./DwenguinoIDE/img/socialrobot/touch_sensor_on.svg');
+                self.setImage(`${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor_on.svg`);
                 self.setState(1);
                 self._stateUpdated = true;
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);
             } else {
-                self.setImage('./DwenguinoIDE/img/socialrobot/touch_sensor.svg');
+                self.setImage(`${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor.svg`);
                 self.setState(0);
                 self._stateUpdated = true; 
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);

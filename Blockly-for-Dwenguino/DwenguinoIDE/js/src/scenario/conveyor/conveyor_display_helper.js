@@ -163,7 +163,7 @@ class ConveyorDisplayHelper {
             "height": this.dimensions.conveyor.length / 2 + "px",
             "margin": "5px auto",
             "display": "block",
-            "background-image": "url('DwenguinoIDE/img/conveyor/conveyor_belt.png')",
+            "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/conveyor_belt.png')`,
             "background-size": "100% 100%",
             "background-repeat": "no-repeat"
         });
@@ -370,7 +370,7 @@ class ConveyorDisplayHelper {
                 "width": this.dimensions.sensor.width + "px",
                 "height": this.dimensions.sensor.height + "px",
                 "position": "absolute",
-                "background-image": "url('DwenguinoIDE/img/conveyor/rgb_sensor_rotated.png')",
+                "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/rgb_sensor_rotated.png')`,
                 "background-size": "100%",
                 "background-repeat": "no-repeat",
                 "top": (this.dimensions.sensor.height + this.dimensions.sensor.spacing) * i + "px",
@@ -733,7 +733,7 @@ class ConveyorDisplayHelper {
             "top": 0,
             "left": 0,
             "position": "absolute",
-            "background-image": "url('DwenguinoIDE/img/conveyor/conveyor_border_left.png')",
+            "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/conveyor_border_left.png')`,
             "background-size": "100% 100%",
             "background-repeat": "no-repeat"
         });
@@ -744,7 +744,7 @@ class ConveyorDisplayHelper {
             "top": 0,
             "left": this.dimensions.conveyor.border,
             "position": "absolute",
-            "background-image": "url('DwenguinoIDE/img/conveyor/conveyor_belt.png')",
+            "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/conveyor_belt.png')`,
             "background-size": "100% 100%",
             "background-repeat": "no-repeat"
         });
@@ -755,7 +755,7 @@ class ConveyorDisplayHelper {
             "top": 0,
             "right": 0,
             "position": "absolute",
-            "background-image": "url('DwenguinoIDE/img/conveyor/conveyor_border_right.png')",
+            "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/conveyor_border_right.png')`,
             "background-size": "100% 100%",
             "background-repeat": "no-repeat"
         });
@@ -781,7 +781,7 @@ class ConveyorDisplayHelper {
                 "width": this.dimensions.button.width + "px",
                 "height": this.dimensions.button.height + "px",
                 "position": "absolute",
-                "background-image": "url('DwenguinoIDE/img/conveyor/button.png')",
+                "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/button.png')`,
                 "background-size": "100%",
                 "background-repeat": "no-repeat",
                 'top': buttons[i].pos.y + 'px',
@@ -792,7 +792,7 @@ class ConveyorDisplayHelper {
                 "width": this.dimensions.sensor.width + "px",
                 "height": this.dimensions.sensor.height + "px",
                 "position": "absolute",
-                "background-image": "url('DwenguinoIDE/img/conveyor/rgb_sensor.png')",
+                "background-image": `url('${settings.basepath}DwenguinoIDE/img/conveyor/rgb_sensor.png')`,
                 "background-size": "100%",
                 "background-repeat": "no-repeat",
                 'top': sensors[i].pos.y + 'px',

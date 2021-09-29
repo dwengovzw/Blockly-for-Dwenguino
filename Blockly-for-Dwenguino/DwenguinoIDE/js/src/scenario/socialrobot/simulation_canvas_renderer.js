@@ -691,7 +691,7 @@ class SimulationCanvasRenderer {
      */
     renderIris(ctx, servo, canvas){
         let image = servo.getImage(1);
-        image.src = './DwenguinoIDE/img/socialrobot/eye1_forground.svg';
+        image.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_forground.svg`;
 
         var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
 

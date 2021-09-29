@@ -39,7 +39,7 @@ var drawingrobot_stepper_motor_json = {
     },
     {
       "type": "field_image",
-      "src": "DwenguinoIDE/img/dc.png",
+      "src": settings.basepath + "DwenguinoIDE/img/dc.png",
       "width": 150,
       "height": 90,
       "alt": "Image Dc motor"

@@ -898,11 +898,11 @@ MSG.tutorials.socialrobot['introduction'].stepTitles = [
 ];
 
 MSG.tutorials.socialrobot['introduction'].stepContents = [
-  "In diesem Tutorial machst du sich an die Arbeit, deinen eigenen sozialen Roboter zu entwerfen. Du wirst entdecken, was du mit dem <b>Simulator</b> machen kannst. <br><img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!--Danach kannst du die folgenden Tutorials durchgehen, um Schritt für Schritt zu lernen, wie du deinen eigenen persönlichen Roboter baust.-->",
+  `In diesem Tutorial machst du sich an die Arbeit, deinen eigenen sozialen Roboter zu entwerfen. Du wirst entdecken, was du mit dem <b>Simulator</b> machen kannst. <br><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!--Danach kannst du die folgenden Tutorials durchgehen, um Schritt für Schritt zu lernen, wie du deinen eigenen persönlichen Roboter baust.-->`,
   "Der Bau des Roboters wird im Simulator durchgeführt. Du öffnest und verbirgst es, indem du auf diese Taste klickst.",
   "Man kann im Simulator nicht nur soziale Roboter bauen, sondern auch Fahrroboter simulieren. Es gibt also verschiedene Szenarien. <b>Klicke jetzt auf das soziale Roboterszenario.</b>Du siehst dann weitere Blöcke.",
   "Hier siehst du alle Blöcke aus dem Simulator, die du für die Konstruktion deines Roboters verwenden kannst. <br><br>Klicke auf eine <b>+ Taste</b>, um einen Block zu deinem Roboter hinzuzufügen</b>. Siehst du, dass es unten in der Simulation erscheint?",
-  "Nachdem du einen Block hinzugefügt hast, kannst du ihn hier an eine andere Stelle ziehen. Auf diese Weise kannst du entscheiden, wie dein Roboter aussieht. <br><br>Fahre mit der Maus über den neuen Block und ziehe den Roboter mit der <img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.",
+  `Nachdem du einen Block hinzugefügt hast, kannst du ihn hier an eine andere Stelle ziehen. Auf diese Weise kannst du entscheiden, wie dein Roboter aussieht. <br><br>Fahre mit der Maus über den neuen Block und ziehe den Roboter mit der <img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.`,
   "Wenn du einen Block zu viel hinzugefügt hast, kannst du mit der <b>Taste</b> den zuletzt erstellten Block wieder löschen. <br><br>Entferne alle Blöcke aus deinem Roboter. Ist das gelungen?",
   "Du weißt jetzt, wie du einen Roboter bauen kannst, aber dein Roboter kann sich noch nicht bewegen. Deshalb müssen wir den Roboter noch mit einem selbst geschriebenen Programm steuern. Dies kann mit den <b>Programmierblöcken</b> aus der <b>Toolbox</b> erfolgen.",
   "Wenn du Blöcke aus dem Toolbox ziehst, landen sie im <b>Codebereich</b>. Hier wird das Programm sein, das du schreiben wirst.",
@@ -930,19 +930,19 @@ MSG.tutorials.socialrobot['socialrobots'].stepContents = [
     + "<br><br><b>Sensoren</b>sind sensorische Eingänge, die es einem Roboter ermöglichen, seine Umgebung zu 'vermessen'. "
     + "Diese Messdaten können dann zu Informationen verarbeitet werden. Es gibt alle Arten von Sensoren, "
     + "zum Beispiel Temperatur-, Licht-, Infrarot-, Druck- oder Bewegungssensoren."
-    + "<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/sonar.png' width='120px'></div>"
-    + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>"
+    + `<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/sonar.png' width='120px'></div>`
+    + `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>`
     + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passiv-Infrarotsensor</i></div></div><br><br>"
     + "<b>Aktoren</b> sind die Ausgänge, die es einem Roboter ermöglichen, zu 'handeln'."
     + "Denke zum Beispiel an einen Servomotor, der den Arm eines Roboters so steuert, dass der Roboter dir zuwinkt, wenn er dich sieht.<br><br>"
-    + "<div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/servo.png'  width='100px'></div>"
-    + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/dc.png'  width='100px'></div></div>"
+    + `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo.png'  width='100px'></div>`
+    + `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/dc.png'  width='100px'></div></div>`
     + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
   "Ein Roboter soll <b>Entscheidungen</b> selbständig treffen. Er kann dies auf der Grundlage der Daten tun"
     + "die die Sensoren messen. Entscheidungen werden normalerweise in einem <b>Prozessor</b> (in einem Computer) getroffen"
     + "oder einem <b>Mikrocontroller</b> (in der Simulation)."
     + "<br><br>Der Mikrocontroller unseres Simulators sieht wie folgt aus:"
-    + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/dwenguino.png'></div>"
+    + `<div class='row'><img class='tutorial center-block' src='${settings.basepath}DwenguinoIDE/img/tutorials/dwenguino.png'></div>`
 ];
 
 MSG.tutorials.socialrobot['hello'] = {};
@@ -969,7 +969,7 @@ MSG.tutorials.socialrobot['hello'].stepContents = [
   "Zeit, um etwas auf dem Bildschirm erscheinen zu lassen. Klicke auf das Menü <b>Dwenguino</b>",
     + "und ziehe den <b>LCD-Bildschirm</b> aus dem Toolbox. Klicke den Bildschirm in den \"Set\"-Block.",
     + " Gib eine Nachricht ein, die auf dem Bildschirm angezeigt werden soll.<br>",
-    + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>"
+    + `<div class='row'><img class='tutorial center-block' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>`
     + "<p class='tutorial center-block'><i>Das Programm wird den Text \'Hallo!\' auf dem LCD-Display anzeigen.</i></p></div>",
   "Drücke nun die Taste <b>Play</b>, um dein Programm zu starten.",
     + "<br><br>Siehst du den Text, der auf dem LCD-Bildschirm deines Roboters erscheint?",

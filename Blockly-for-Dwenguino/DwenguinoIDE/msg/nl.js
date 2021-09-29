@@ -786,11 +786,11 @@ MSG.tutorials.socialrobot['introduction'].stepTitles = [
   "Einde"
 ];
 MSG.tutorials.socialrobot['introduction'].stepContents = [
-  "Tijdens deze tutorial ga je aan de slag om zelf een sociale robot te ontwerpen. Je ontdekt wat je met de <b>simulator</b> kan doen. <br><img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!--Daarna kan je de volgende tutorials doorlopen om stap voor stap jouw persoonlijke robot te leren bouwen.-->",
+  `Tijdens deze tutorial ga je aan de slag om zelf een sociale robot te ontwerpen. Je ontdekt wat je met de <b>simulator</b> kan doen. <br><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!--Daarna kan je de volgende tutorials doorlopen om stap voor stap jouw persoonlijke robot te leren bouwen.-->`,
   "Het bouwen van de robot gebeurt in de simulator. Je opent en verbergt hem door op deze knop te klikken.",
   "Je kan in de simulator niet alleen sociale robots bouwen, maar ook rijdende robots simuleren. Er zijn dus verschillende scenario's. <b>Klik nu het scenario van de sociale robot aan.</b> Je krijgt dan andere bouwblokken te zien.",
   "Hier zie je alle bouwblokken uit de simulator die je kan gebruiken om je robot te ontwerpen. <br><br> Klik eens op een <b>+ knop</b> om een bouwblok aan je robot <b>toe te voegen</b>. Zie je het onderaan in de simulatie verschijnen?",
-  "Nadat je een bouwblok hebt toegevoegd, kan je ze hier verslepen naar een andere plaats. Zo kan je zelf bepalen hoe jouw robot eruitziet. <br><br>Beweeg met de muis over het nieuwe bouwblok en versleep op de robot met het <img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.",
+  `Nadat je een bouwblok hebt toegevoegd, kan je ze hier verslepen naar een andere plaats. Zo kan je zelf bepalen hoe jouw robot eruitziet. <br><br>Beweeg met de muis over het nieuwe bouwblok en versleep op de robot met het <img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.`,
   "Als je een blok te veel toegevoegd hebt, kan je het laatst aangemaakte blok weer <b>verwijderen</b> met de <b>- knop</b>. <br><br>Haal alle blokken van je robot weer weg. Is het gelukt?",
   "Je weet nu hoe je een robot kan bouwen, maar je robot kan nog niet bewegen. Daarom moeten we de robot nog aansturen met een zelfgeschreven programma. Dit kan met de <b>programmeerblokken</b> uit de <b>toolbox</b>. ",
   "Wanneer je blokken uit de toolbox sleept, komen ze in het <b>codegebied</b> terecht. Hier komt het programma dat je gaat schrijven.",
@@ -817,19 +817,19 @@ MSG.tutorials.socialrobot['socialrobots'].stepContents = [
   + "<br><br><b>Sensoren</b> zijn zintuiglijke ingangen waarmee een robot zijn omgeving kan 'meten'. "
   + "Die meetgegevens kunnen nadien verwerkt worden tot informatie. Er bestaan allerlei sensoren, "
   + "bijvoorbeeld temperatuur-, licht-, infrarood-, druk- of bewegingssensoren."
-  + "<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/sonar.png' width='120px'></div>"
-  + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>"
+  + `<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/sonar.png' width='120px'></div>`
+  + `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>`
   + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passief infrarood sensor</i></div></div><br><br>"
   + "<b>Actuoren</b> vormen de uitgangen waarmee een robot kan 'handelen'. "
   + "Denk bijvoorbeeld aan een servomotor die de arm van een robot aanstuurt, zodat de robot naar je zwaait wanneer hij je ziet.<br><br>"
-  + "<div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/servo.png'  width='100px'></div>"
-  + "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/dc.png'  width='100px'></div></div>"
+  + `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo.png'  width='100px'></div>`
+  + `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/dc.png'  width='100px'></div></div>`
   + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
   "Een robot hoort zelf <b>beslissingen</b> te nemen. Dit kan hij doen op basis van de gegevens "
   + "die de sensoren meten. Beslissingen worden doorgaans genomen in een <b>processor</b> (bij een computer)"
   + " of een <b>microcontroller</b> (bij de simulator)."
   + "<br><br>De microcontroller van onze simulator ziet er zo uit:"
-  + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/dwenguino.png'></div>"
+  + `<div class='row'><img class='tutorial center-block' src='${settings.basepath}DwenguinoIDE/img/tutorials/dwenguino.png'></div>`
 ];
 
 MSG.tutorials.socialrobot['hello'] = {};
@@ -855,7 +855,7 @@ MSG.tutorials.socialrobot['hello'].stepContents = [
   "Tijd om iets op het scherm te laten verschijnen. Klik het <b>Dwenguino</b> menu open "
   + "en sleep het <b>LCD-scherm</b> uit de toolbox. Klik het scherm vast in het 'zet klaar' blok. "
   + " Vul een boodschap in die op het scherm moet komen.<br>"
-  + "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>"
+  + `<div class='row'><img class='tutorial center-block' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>`
   + "<p class='tutorial center-block'><i>Het programma zal de tekst \'Hallo!\' tonen op het LCD-scherm.</i></p></div>",
   "Druk nu op de <b>afspeelknop</b> om je programma uit te voeren. "
   + "<br><br>Zie je de tekst op het LCD-scherm van je robot verschijnen?",

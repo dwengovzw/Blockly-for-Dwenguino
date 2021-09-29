@@ -2,6 +2,9 @@
 // Initialize express router
 import express from 'express';
 let router = express.Router();
+
+//xml parser
+import parser from "fast-xml-parser"
 //let router = require('express').Router();
 
 //Configure cors middleware for the run route to allow all requests
@@ -20,6 +23,32 @@ router.get('/', function (req, res) {
         message: 'To the moon and back.'
     });
 });
+
+let processStratBlocks = (startblock_xml, res) => {
+    let blocks_xml = startblock_xml;
+    if (!blocks_xml){
+        blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
+    }
+
+    blocks_xml = blocks_xml.trim()  // remove whitespace
+    let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
+    let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
+    res.render('index.ejs', {blocks_xml: blocks_xml_stripped});
+}
+
+// load the application
+router.get("/simulator", function(req, res) {
+    let blocks_xml = req.query.xml;
+    processStratBlocks(blocks_xml, res);
+})
+
+// load the application with a program from xml
+router.post("/simulator", function(req, res) {
+    let blocks_xml = req.body.xml;
+    processStratBlocks(blocks_xml, res);
+})
+
+
 
 // Import contact controller
 import logcontroller from '../controllers/log_controller.js';

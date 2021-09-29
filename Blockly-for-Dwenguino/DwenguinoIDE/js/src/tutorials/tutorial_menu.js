@@ -313,10 +313,10 @@ class TutorialMenu {
         $('#tutorialModal .modal-body .message .container').append('<div id="row3" class="row"></div>');
 
         $("#row2").append('<div id="pin_mapping" class="col-lg-12 col-md-12 col-sm-12 col-xs-12"></div>');
-        $('#pin_mapping').append('<img src="DwenguinoIDE/img/tutorials/pin_mapping.svg" class="img-fluid">');
+        $('#pin_mapping').append(`<img src="${settings.basepath}DwenguinoIDE/img/tutorials/pin_mapping.svg" class="img-fluid">`);
 
         $("#row3").append('<div id="connector_overview" class="col-lg-10 col-md-10 col-sm-10 col-xs-10"></div>');
-        $('#connector_overview').append('<img src="DwenguinoIDE/img/tutorials/expansion_connector.svg" class="img-fluid">');
+        $('#connector_overview').append(`<img src="${settings.basepath}DwenguinoIDE/img/tutorials/expansion_connector.svg" class="img-fluid">`);
 
         $("#tutorialModal .modal-footer").empty();
         $("#tutorialModal .modal-footer").append('<button id="previous_tutorial_dialog" type="button" class="btn btn-default">'+ MSG.tutorialMenu.previous +'</button>');
