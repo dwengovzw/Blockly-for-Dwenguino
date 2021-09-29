@@ -18,7 +18,7 @@ class SocialRobotSoundSensor extends RobotComponent{
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/socialrobot/sound_sensor.png';
+        this._image.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/sound_sensor.png`;
         this._digitalPin = digitalPin;
         this._analogPin = analogPin;
         this._state = state;
@@ -50,12 +50,12 @@ class SocialRobotSoundSensor extends RobotComponent{
             self._button.update();
 
             if (self._button.isActive()) {
-                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+                self.setImage(`${settings.basepath}DwenguinoIDE/img/socialrobot/sound_sensor.png`);
                 self.setState(1);
                 self._stateUpdated = true;
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);
             } else {
-                self.setImage('./DwenguinoIDE/img/socialrobot/sound_sensor.png');
+                self.setImage(`${settings.basepath}DwenguinoIDE/img/socialrobot/sound_sensor.png`);
                 self.setState(0);
                 self._stateUpdated = true; 
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);

@@ -1,0 +1,3 @@
+let settings = {
+    basepath: "/dwenguinoblockly/"
+}

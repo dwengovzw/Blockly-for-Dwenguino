@@ -52,7 +52,7 @@ class SimulationControlsController {
                 'class="sim_scenario_radio" '+
                 'value="'+ value +'" ' +
                 'autocomplete="off">' +
-                '<img src="DwenguinoIDE/img/scenarios/scenario_' + value + '.png" class="scenario_image">';
+                `<img src="${settings.basepath}DwenguinoIDE/img/scenarios/scenario_` + value + '.png" class="scenario_image">';
             
             
             $('#sim_scenarios').append(scenarioItem);
@@ -277,7 +277,7 @@ class SimulationControlsController {
      * The blocks configuration is loaded from a .xml file.
      */
     updateProgrammingBlocks() {
-        $("#toolbox").load("./DwenguinoIDE/levels/" + this.scenarioView + ".xml", function(){
+        $("#toolbox").load(DwenguinoBlockly.basepath + "/DwenguinoIDE/levels/" + this.scenarioView + ".xml", function(){
             DwenguinoBlockly.doTranslation();
             DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
         });

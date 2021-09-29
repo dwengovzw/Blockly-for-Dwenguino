@@ -34,7 +34,7 @@ class SocialRobotLedMatrixSegment extends RobotComponent{
         this._state = SocialRobotLedMatrixSegment.getEmptyLedMatrix();
         this._canvasId = 'sim_ledmatrixsegment_canvas' + this._id; 
         this._ledSvg = new Image();
-        this._ledSvg.src = './DwenguinoIDE/img/socialrobot/led_matrix_on.svg';
+        this._ledSvg.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/led_matrix_on.svg`;
         this._ledOffsets = { 
             'left' : 15,
             'led_x' : 1.14, 
@@ -43,7 +43,7 @@ class SocialRobotLedMatrixSegment extends RobotComponent{
             'led_between_y' : 8.53,
             'led_radius' : 6.35 };  
         this._ledmatrixBackground = new Image();
-        this._ledmatrixBackground.src = './DwenguinoIDE/img/socialrobot/led_matrix_1x1.svg';
+        this._ledmatrixBackground.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/led_matrix_1x1.svg`;
 
         this.insertHtml();
         this.toggleVisibility(visible);

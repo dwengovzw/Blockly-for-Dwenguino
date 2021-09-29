@@ -23,9 +23,9 @@ class SocialRobotRgbLed extends RobotComponent{
         this._state = state;
         this._canvasId = 'sim_rgbled_canvas' + this._id; 
         this._ledSvg = new Image();
-        this._ledSvg.src = './DwenguinoIDE/img/socialrobot/rgb_led_top.svg';
+        this._ledSvg.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/rgb_led_top.svg`;
         this._ledBackground = new Image();
-        this._ledBackground.src = './DwenguinoIDE/img/socialrobot/rgb_led_background.svg';
+        this._ledBackground.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/rgb_led_background.svg`;
         this.insertHtml();
         this.toggleVisibility(visible);
     }

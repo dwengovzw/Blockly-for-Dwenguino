@@ -697,11 +697,11 @@ MSG.tutorials.socialrobot['introduction'].stepTitles = [
   "Koniec"
 ];
 MSG.tutorials.socialrobot['introduction'].stepContents = [
-  "Podczas tego samouczka zajmiesz się projektowaniem twojego własnego robota społecznego. Odkryjesz, co możesz zrobić z <b>symulatorem</b>. <br><img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!Po tym, możesz przejść przez następujące samouczki, aby dowiedzieć się, jak zbudować osobistego robota krok po kroku.-->",
+  `Podczas tego samouczka zajmiesz się projektowaniem twojego własnego robota społecznego. Odkryjesz, co możesz zrobić z <b>symulatorem</b>. <br><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/socialrobot.png'><br><!Po tym, możesz przejść przez następujące samouczki, aby dowiedzieć się, jak zbudować osobistego robota krok po kroku.-->`,
   "Budowanie robota odbywa się w symulatorze. Otwierasz i ukrywasz go klikając ten przycisk.",
   "W symulatorze można nie tylko budować roboty społeczne, ale także symulować roboty jeżdżące. Istnieją więc różne scenariusze. <b>Kliknij teraz scenariusz robota społecznego.</b> Zobaczysz wtedy inne bloki.",
   "Tutaj zobaczysz wszystkie bloki z symulatora, które możesz wykorzystać do zaprojektowania twojego robota. <br><br> Kliknij na przycisk <b>+</b>, aby dodać blok do twojego robota <b>. Czy widzisz, że pojawia się na dole symulacji?",
-  "Po dodaniu bloku konstrukcyjnego możesz przeciągnąć go tutaj w inne miejsce. W ten sposób możesz zdecydować, jak będzie wyglądał twój robot. <br><br>Przesuń mysz nad nowy blok konstrukcyjny i przeciągnij go na robota za pomocą <img class='tutorial' src='./DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.",
+] `Po dodaniu bloku konstrukcyjnego możesz przeciągnąć go tutaj w inne miejsce. W ten sposób możesz zdecydować, jak będzie wyglądał twój robot. <br><br>Przesuń mysz nad nowy blok konstrukcyjny i przeciągnij go na robota za pomocą <img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/drag.jpg' width='20px'>.`,
   "Jeśli dodałeś o jeden blok za dużo, możesz <b>usunąć</b> ostatnio utworzony blok ponownie za pomocą <b>przycisku</b>. <br><br>Usuń wszystkie bloki ze twojego robota. Czy się udało?",
   "Wiesz już, jak zbudować robota, ale twój robot nie może się jeszcze poruszać. Dlatego nadal musimy sterować robotem za pomocą samodzielnie napisanego programu. Można to zrobić za pomocą <b>bloków programistycznych</b> z <b>toolboxa</b>.",
   "Kiedy przeciągasz bloki z toolboxa, lądują one w <b>obszarze kodu</b>. To tutaj będzie program, który napiszesz.",
@@ -728,19 +728,19 @@ MSG.tutorials.socialrobot['socialrobots'].stepContents = [
   "<br><br><b>Czujniki</b> to wejścia sensoryczne, które pozwalają robotowi \"mierzyć\" swoje otoczenie.",
   "Te dane pomiarowe mogą być następnie przetwarzane na informacje. Istnieją wszelkiego rodzaju czujniki,",
   "na przykład czujniki temperatury, światła, podczerwieni, ciśnienia lub ruchu.",
-  "<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/sonar.png' width='120px'></div>",
-  "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>",
+  `<br><br><div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/sonar.png' width='120px'></div>`,
+  `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/socialrobot/pir.png' width='70px'></div></div>`,
   "<div class='row'><div class='col-md-4 tutorial'><i>Czujnik ultradźwiękowy</i></div><div class='col-md-4 tutorial'><i>Pasywny czujnik podczerwieni</i>.</div><br><br>",
   "<b>Aktuatory</b> są wyjściami, które pozwalają robotowi 'działać'.",
   "Na przykład, pomyśl o silniku serwo, który kontroluje ramię robota tak, że robot macha do ciebie, gdy cię widzi.<br><br>",
-  "<div class='row'><div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/servo.png' width='100px'></div>",
-  "<div class='col-md-4'><img class='tutorial' src='./DwenguinoIDE/img/dc.png' width='100px'></div></div>",
+  `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo.png' width='100px'></div>`,
+  `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/dc.png' width='100px'></div></div>`,
   "<div class='row'><div class='col-md-4 tutorial'><i>Silnik serwo</i></div><div class='col-md-4 tutorial'><i>Silnik prądu stałego</i></div></div>",
   "Robot musi podejmować własne <b>decyzje</b>. Może to zrobić w oparciu o dane",
   "które mierzą czujniki. Decyzje podejmowane są zazwyczaj w <b>procesorze</b> (w komputerze)",
   "lub <b>mikrokontroler</b> (przy symulatorze).",
   "<br><br>Mikrokontroler naszego symulatora wygląda tak:",
-  "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/dwenguino.png'></div>"
+  `<div class='row'><img class='tutorial center-block' src='${settings.basepath}DwenguinoIDE/img/tutorials/dwenguino.png'></div>`
 ];
 MSG.tutorials.socialrobot['hello'] = {};
 MSG.tutorials.socialrobot['hello'].label = "3. Powiedz cześć";
@@ -765,7 +765,7 @@ MSG.tutorials.socialrobot['hello'].stepContents = [
   "Czas sprawić, by coś pojawiło się na ekranie. Kliknij na menu <b>Dwenguino</b>.",
   "i przeciągnij <b>ekran LCD</b> z toolboxa. Zatrzasnąć ekran w bloku \"set\".",
   " Wprowadź wiadomość, która ma być wyświetlana na ekranie.<br>",
-  "<div class='row'><img class='tutorial center-block' src='./DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>",
+  `<div class='row'><img class='tutorial center-block' src='${settings.basepath}DwenguinoIDE/img/tutorials/socialrobot/lcd1.png'>`,
   "<p class='tutorial center-block'><i>Program wyświetli tekst \'Cześć!\' na ekranie LCD.</i></p></div>",
   "Teraz naciśnij przycisk <b>play</b>, aby uruchomić twój program.",
     + "<br><br>Czy widzisz tekst pojawiający się na ekranie LCD robota?",

@@ -18,7 +18,7 @@ class SocialRobotSonar extends RobotComponent{
         this._height = height;
         this._offset = { 'left': offsetLeft, 'top': offsetTop };
         this._image = new Image();
-        this._image.src = './DwenguinoIDE/img/board/sonar.png';
+        this._image.src = `${settings.basepath}DwenguinoIDE/img/board/sonar.png`;
         this._echoPin = echoPin;
         this._triggerPin = triggerPin;
         this._state = state;
