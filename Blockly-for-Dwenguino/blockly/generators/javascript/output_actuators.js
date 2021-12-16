@@ -13,9 +13,9 @@
  Blockly.JavaScript.output.pinMappings = {
   "RGBLED1": 
       {
-         "red": 3,
-         "green": 5,
-         "blue": 6
+         "red": 11,
+         "green": 14,
+         "blue": 15
       },
   "SERVO1":
       {
