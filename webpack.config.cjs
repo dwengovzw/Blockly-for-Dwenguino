@@ -1,11 +1,16 @@
 const path = require("path");
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = [
     {
         name: "simulator",
         mode: "production",
         entry: {
-            app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
+            app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js',
+        },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', ''] 
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
@@ -32,8 +37,21 @@ module.exports = [
                                     '@babel/plugin-transform-runtime']
                         }
                     }
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                },
+                {
+                    test: /\.ttf$/,
+                    use: ['file-loader']
                 }
             ]
+        },
+        plugins: [new MonacoWebpackPlugin()],
+        optimization: {
+            minimize: true,
+            minimizer: [new TerserPlugin()]
         }
     },
     {

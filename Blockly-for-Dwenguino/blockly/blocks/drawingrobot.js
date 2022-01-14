@@ -23,7 +23,7 @@
 goog.provide('Blockly.Blocks.drawingrobot');
 
 goog.require('Blockly.Blocks');
-goog.require('Blockly.Arduino');
+//goog.require('Blockly.Arduino');
 
 
 var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";

@@ -62,6 +62,21 @@ import programcontroller from '../controllers/program_controller.js';
 router.route('/lang')
     .post(utilscontroller.setLanguage);
 
+// lti routes
+// Get and post are sent to the same controller action.
+router.route("/initiate_login").get((req, res) => {
+    req["data"] = req.query
+    ltiController.initiate_login(req, res);
+});
+router.route("/initiate_login").post((req, res) => {
+    req["data"] = req.body
+    ltiController.initiate_login(req, res);
+});
+
+router.route("/authorize").post((req, res) => {
+    ltiController.authorize(req, res)
+})
+
 /* Data collection */
 
 router.route('/logging/newSessionId')
