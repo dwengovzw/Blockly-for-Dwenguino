@@ -259,7 +259,19 @@ body{
 #db_code_pane{
     height: 100%;
     overflow-y: scroll;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
 }
+
+#db_code_pane_utils{
+    flex-basis: auto;
+}
+
+#db_code_pane_code{
+    flex-grow: 2;
+}
+
 
 #db_robot_pane{
     align-items: center;

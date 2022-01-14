@@ -9,6 +9,7 @@ import ServerConfig from './server_config.js'
 import jQuery from "jquery";
 import 'jquery-ui-bundle';
 import 'bootstrap';
+import TextualEditor from './textual_editor/textual_editor.js'
 window.$ = window.jQuery = jQuery;
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
@@ -39,6 +40,8 @@ let DwenguinoBlockly = {
 
     fileIOController: null,
     compilationPath: "",
+    textualEditor: new TextualEditor("db_code_pane_code"),
+    currentProgrammingContext: "blocks", // The current coding context can be blocks or text. 
 
     initDwenguinoBlockly: function(workspace){
 
@@ -134,7 +137,7 @@ let DwenguinoBlockly = {
           // TODO reset setup
           // Following lines are disabled for testing webusb, PUT THEM BACK!
           Blockly.Arduino.emptySetup();
-          var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+          var code = DwenguinoBlockly.getCodeForCurrentContext();
           DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
           //DwenguinoBlockly.runEventHandler(code);
         });
@@ -394,6 +397,16 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.logger.recordEvent(eventToRecord);
     },
 
+    getCodeForCurrentContext: function(){
+      if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+        return Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+      } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+        return DwenguinoBlockly.textualEditor.getCurrentCode();
+      } else {
+        return "";
+      }
+    },
+
     download: function(filename, text) {
       var element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -597,7 +610,7 @@ let DwenguinoBlockly = {
     resetRunButton: function(){
           $("#db_menu_item_run").click(function(){
             Blockly.Arduino.emptySetup();
-            var code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+            var code = DwenguinoBlockly.getCodeForCurrentContext();
             DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
             //DwenguinoBlockly.runEventHandler(code);
           });
@@ -683,7 +696,9 @@ let DwenguinoBlockly = {
         Blockly.Arduino.emptySetup();
         let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
 
-        // display code
+        DwenguinoBlockly.textualEditor.renderEditor(code);
+
+        /* // display code
         if (DwenguinoBlockly.previouslyRenderedCode === null){
             document.getElementById('db_arduino_code').innerHTML =
                 prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
@@ -698,7 +713,7 @@ let DwenguinoBlockly = {
           document.getElementById('db_arduino_code').innerHTML =
               prettyPrintOne(resultStringArray.join(''), 'cpp', false);
           DwenguinoBlockly.previouslyRenderedCode = code;  
-        }
+        } */
     },
 
     highlightModifiedCode(code){
@@ -755,7 +770,7 @@ let DwenguinoBlockly = {
     },
 
     copyCodeToClipboard: function(){
-      let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+      let code = DwenguinoBlockly.textualEditor.getCurrentCode();
       if (!navigator.clipboard) {
         fallbackCopyCodeToClipboard(code);
         return;
@@ -1064,14 +1079,36 @@ let DwenguinoBlockly = {
 
         let codeViewCheckbox = document.querySelector('input[id="code_checkbox"]');
 
-        codeViewCheckbox.addEventListener('change', function () {
+        codeViewCheckbox.addEventListener('change', function (event) {
           if (codeViewCheckbox.checked) {
-            document.getElementById("blocklyDiv").style.visibility = 'hidden';
-            document.getElementById('db_code_pane').style.visibility = 'visible';
-            DwenguinoBlockly.renderCode();
+            if (confirm("Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.")){
+              // Turn off simulator
+              if (DwenguinoBlockly.simulatorState !== "off"){
+                DwenguinoBlockly.toggleSimulator();
+                $("#db_menu_item_simulator").css("pointer-events","none");
+              }
+              DwenguinoBlockly.currentProgrammingContext = "text";
+              document.getElementById("blocklyDiv").style.visibility = 'hidden';
+              document.getElementById('db_code_pane').style.visibility = 'visible';
+              DwenguinoBlockly.renderCode();
+            } else {
+              event.target.checked = false;
+              return false;
+            }
           } else {
-            document.getElementById("blocklyDiv").style.visibility = 'visible';
-            document.getElementById('db_code_pane').style.visibility = 'hidden';
+            if (confirm("Opgepast! Wanneer je terugkeert naar blokken code dan ben je je aanpassingen aan de tekstuele code kwijt. Ben je zeker dat je wil verdergaan?")){
+              DwenguinoBlockly.currentProgrammingContext = "blocks";
+              document.getElementById("blocklyDiv").style.visibility = 'visible';
+              document.getElementById('db_code_pane').style.visibility = 'hidden';
+              // Turn simulator on
+              if (DwenguinoBlockly.simulatorState === "off"){
+                DwenguinoBlockly.toggleSimulator();
+                $("#db_menu_item_simulator").css("pointer-events","auto");
+              }
+            } else {
+              event.target.checked = true;
+              return false; // Cancel onchange handler
+            }
           }
         });
 

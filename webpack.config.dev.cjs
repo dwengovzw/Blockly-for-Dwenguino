@@ -1,4 +1,5 @@
 const path = require("path");
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = [
     {
@@ -6,6 +7,9 @@ module.exports = [
         mode: "development",
         entry: {
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
+        },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', ''] 
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
@@ -32,9 +36,18 @@ module.exports = [
                                     '@babel/plugin-transform-runtime']
                         }
                     }
+                },
+                {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                },
+                {
+                    test: /\.ttf$/,
+                    use: ['file-loader']
                 }
             ]
-        }
+        },
+        plugins: [new MonacoWebpackPlugin()]
     },
     {
         name: "admin-panel",

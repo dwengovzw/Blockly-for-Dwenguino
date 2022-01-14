@@ -1,0 +1,10 @@
+{
+    "email": {
+        "confirmationEmailAddress": {
+            "subject": "",
+            "text": "",
+            "htmlText": "",
+            "confirmEmail": ""
+        }
+    }
+}
