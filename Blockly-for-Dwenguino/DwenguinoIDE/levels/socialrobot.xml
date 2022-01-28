@@ -82,7 +82,7 @@
 <category id="catInput" colour="315" name='Input'>
     <block type="input_sonar_sensor_select"></block>
 
-    <block type="input_sound_sensor_select"></block>
+    <!--<block type="input_sound_sensor_select"></block>-->
 
     <block type="input_read_pin">
         <value name="PIN">
