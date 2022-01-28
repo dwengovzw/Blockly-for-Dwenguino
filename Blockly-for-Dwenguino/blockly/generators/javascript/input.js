@@ -24,7 +24,7 @@
       }, 
   "SOUND1": {
         "analog": "A5",
-        "digital": "A4"
+        "digital": "15"
   }
 };
  

@@ -65,7 +65,7 @@ class RobotComponentsFactory {
     ],
     'sound': [
       { "analog": 29,
-        "digital": 28 }
+        "digital": 15 }
     ]
   };
 
@@ -786,12 +786,12 @@ class RobotComponentsFactory {
     * @param {int} offsetTop 
     * @param {string} htmlClasses 
     */
-  addSoundSensor(digitalPin=12, analogPin=1, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
+  addSoundSensor(digitalPin=15, analogPin=1, state=0, visible=true, width=100, height=42, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas sound_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SOUND));
     this.incrementNumberOf(TypesEnum.SOUND);
     let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
     if(id == 1){
-      digitalPin = "A4";
+      digitalPin = "15";
       analogPin = "A5";
     }
     let soundSensor = new SocialRobotSoundSensor(this._eventBus, id, digitalPin, analogPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
