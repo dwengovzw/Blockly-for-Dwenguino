@@ -6,7 +6,7 @@
 sudo rm -rf /home/ubuntu/blockly-build/*
 
 # clean the node_modules directory and reinstall to be sure you have latest version 
-cd /home/ubuntu/blockly_repo
+cd /home/ubuntu/blockly_repo/Blockly-for-Dwenguino
 
 rm -Rf node_modules
 npm install
@@ -17,7 +17,7 @@ npm install bcrypt
 # npm run build # -> This chrashes on the server, not enough memory.
 
 # Copy the new files to the deployment directory
-sudo cp -r /home/ubuntu/blockly_repo/* /home/ubuntu/blockly-build/
+sudo cp -r /home/ubuntu/blockly_repo/Blockly-for-Dwenguino/* /home/ubuntu/blockly-build/
 
 cd /home/ubuntu/blockly-build
 
