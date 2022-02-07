@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Nodejs flags are now configured in ./backend/.env 
 
@@ -6,6 +6,8 @@
 sudo rm -rf /home/ubuntu/blockly-build/*
 
 # clean the node_modules directory and reinstall to be sure you have latest version 
+cd /home/ubuntu/blockly_repo
+
 rm -Rf node_modules
 npm install
 npm install node-pre-gyp
@@ -15,12 +17,12 @@ npm install bcrypt
 # npm run build # -> This chrashes on the server, not enough memory.
 
 # Copy the new files to the deployment directory
-sudo cp -r /var/lib/jenkins/workspace/blockly-build/ /home/ubuntu/
+sudo cp -r /home/ubuntu/blockly_repo/* /home/ubuntu/blockly-build/
 
 cd /home/ubuntu/blockly-build
 
 # Give jenkins user write access to the compilation folder to be able to create the required files for compilation
-sudo chown -R jenkins:jenkins /home/ubuntu/blockly-build/backend/compilation
+sudo chown -R ubuntu:ubuntu /home/ubuntu/blockly-build/backend/compilation
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
 pm2 restart blockly || pm2 -n "blockly" start 'npm run start'
