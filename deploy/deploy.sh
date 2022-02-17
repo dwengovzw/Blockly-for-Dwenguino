@@ -23,6 +23,7 @@ cd /home/ubuntu/blockly-build
 
 # Give jenkins user write access to the compilation folder to be able to create the required files for compilation
 sudo chown -R ubuntu:ubuntu /home/ubuntu/blockly-build/backend/compilation
+sudo chown -R ubuntu:ubuntu /home/ubuntu/blockly-build/compilation
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
 pm2 restart blockly || pm2 -n "blockly" start 'npm run start'
