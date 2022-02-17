@@ -653,6 +653,7 @@ let DwenguinoBlockly = {
           // Get javascript and python for current code
           let javascriptCode = "";
           let pythonCode = "";
+          let cCode = "";
           try {
             javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
           } catch (error){
@@ -663,10 +664,16 @@ let DwenguinoBlockly = {
           } catch (error){
             pythonCode = "invalid code";
           }
+          try {
+            cCode = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+          } catch (error){
+            cCode = "invalid code";
+          }
           let data = {
             xmlCode: xmlCode,
             javascriptCode: javascriptCode,
-            pythonCode: pythonCode
+            pythonCode: pythonCode,
+            cCode: cCode
           }
           DwenguinoBlockly.prevWorkspaceXml = xmlCode;
           let eventToRecord = this.logger.createEvent(EVENT_NAMES.changedWorkspace, data);

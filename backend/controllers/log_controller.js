@@ -72,7 +72,7 @@ exports.event = function(req, res) {
     })
     .catch(err => {
       console.debug(err);
-      res.sendStatus(500);
+      res.status(500).send(`Error when saving files: ${err}`);
     });
   }
 };

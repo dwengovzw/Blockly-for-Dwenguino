@@ -21,7 +21,7 @@ class TextualEditor {
             readOnly: false,
             theme: 'vs-dark'
         });
-        this.editor.getAction('editor.action.format').run()
+        //this.editor.getAction('editor.action.format').run()
 
     }
 
