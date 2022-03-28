@@ -183,7 +183,7 @@ class SocialRobotServo extends RobotComponent{
 
         let pins = this.getAllPossibleServoPins();
         for(let pin = 0; pin < pins.length; pin++){
-            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
             if(this.getPin() == pins[pin]){
                 $('#pin' + pins[pin]).addClass('option_button_selected');
             }
@@ -233,7 +233,7 @@ class SocialRobotServo extends RobotComponent{
     }
 
     getAllPossibleServoPins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 40, 41];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 40, 41, "SERVO_1", "SERVO_2", "SERVO_3", "SERVO_4", "SERVO_5", "SERVO_6"];
     }
 
     createCostumeOptionsDialog(){

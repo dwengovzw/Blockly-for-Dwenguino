@@ -71,7 +71,7 @@
         </value>
     </block>
 
-    <block type="dwenguino_pins">
+    <block type="dwenguino_pins"> 
         <field name="PIN">0</field>
     </block>
 
@@ -86,7 +86,7 @@
 
     <block type="input_read_pin">
         <value name="PIN">
-            <block type="dwenguino_pins">
+            <block type="dwenguino_pins"> 
                 <field name="PIN">0</field>
             </block>
         </value>
@@ -137,9 +137,9 @@
     
     <block type="input_sound_sensor">
         <value name="pin">
-            <block type="math_number" id="sound_sensor_pin"> 
-            <field name="NUM">15</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SOUND_1</field>
+                </block>
         </value>
     </block>
 </category>
@@ -275,10 +275,10 @@
         <field name="BLUE">65</field>
     </block>
 
-    <block type="output_servo_with_dropdown">
+    <block type="dwenguino_servo">
         <value name="pin">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO3</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">SERVO_3</field>
             </block>
         </value>
         <value name="angle">
@@ -287,75 +287,72 @@
             </block>
         </value>
     </block>
-    <block type="output_servo_dropdown">
-        <field name="SERVO_DROPDOWN">SERVO3</field>
-    </block>
 
     <block type="output_arms_down">
             <value name="servo_right_hand1">
-                <block type="output_servo_dropdown">
-                    <field name="SERVO_DROPDOWN">SERVO3</field>
+                <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_3</field>
                 </block>
             </value>
             <value name="servo_left_hand1">
-                <block type="output_servo_dropdown">
-                    <field name="SERVO_DROPDOWN">SERVO4</field>
+                <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_4</field>
                 </block>
             </value>
     </block>
     <block type="output_arms_up">
         <value name="servo_right_hand2">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO3</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_3</field>
+                </block>
         </value>
         <value name="servo_left_hand2">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO4</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_4</field>
+                </block>
         </value>
     </block>
     <block type="output_wave_arms">
         <value name="servo_right_hand">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO3</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_3</field>
+                </block>
         </value>
         <value name="servo_left_hand">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO4</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_4</field>
+                </block>
         </value>
     </block>
     <block type="output_eyes_left">
         <value name="servo_right_eye">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO3</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_3</field>
+                </block>
         </value>
         <value name="servo_left_eye">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO4</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_4</field>
+                </block>
         </value>
     </block>
     <block type="output_eyes_right">
         <value name="servo_right_eye1">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO3</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_3</field>
+                </block>
         </value>
         <value name="servo_left_eye1">
-            <block type="output_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO4</field>
-            </block>
+            <block type="dwenguino_pins"> 
+                    <field name="PIN">SERVO_4</field>
+                </block>
         </value>
     </block>
 
     <block type="dwenguino_tone_on_pin">
         <value name="PIN">
-            <block type="dwenguino_pins">
-                <field name="PIN">BUZZER</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">BUZZER</field>
             </block>
         </value>
         <value name="NUM">
@@ -366,26 +363,26 @@
     </block>
     <block type="dwenguino_no_tone_on_pin">
         <value name="PIN">
-            <block type="dwenguino_pins">
-                <field name="PIN">BUZZER</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">BUZZER</field>
             </block>
         </value>
     </block>
 
     <block type="output_rgbled">
         <value name="pin_red">
-            <block type="dwenguino_pins">
-                <field name="PIN">3</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_R</field>
             </block>
         </value>
         <value name="pin_green">
-            <block type="dwenguino_pins">
-                <field name="PIN">5</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_G</field>
             </block>
         </value>
         <value name="pin_blue">
-            <block type="dwenguino_pins">
-                <field name="PIN">6</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_B</field>
             </block>
         </value>
         <value name="color">
@@ -415,18 +412,18 @@
     </block> -->
     <block type="output_rgbled_off">
         <value name="pin_red">
-            <block type="dwenguino_pins">
-                <field name="PIN">3</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_R</field>
             </block>
         </value>
         <value name="pin_green">
-            <block type="dwenguino_pins">
-                <field name="PIN">5</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_G</field>
             </block>
         </value>
         <value name="pin_blue">
-            <block type="dwenguino_pins">
-                <field name="PIN">6</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_B</field>
             </block>
         </value>
     </block>
@@ -446,8 +443,8 @@
 
     <block type="output_set_pin">
         <value name="PIN">
-            <block type="dwenguino_pins">
-                <field name="PIN">0</field>
+            <block type="dwenguino_pins"> 
+            <field name="PIN">0</field>
             </block>
         </value>
         <value name="PIN_STATE">

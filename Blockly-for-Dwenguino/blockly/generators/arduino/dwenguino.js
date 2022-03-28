@@ -132,9 +132,10 @@ Blockly.Arduino['dwenguino_controls_while'] = function (block) {
 };*/
 
 Blockly.Arduino.dwenguino_pins = function() {
-  var dropdown_value = this.getFieldValue('PIN');
+  var dropdown_value = profile.dwenguino.mapPinAliasToNumber(this.getFieldValue('PIN'));
   return [dropdown_value, Blockly.Arduino.ORDER_ATOMIC];
 };
+
 
 Blockly.Arduino.dwenguino_tone_on_pin = function() {
   var value_pin = Blockly.Arduino.valueToCode(this, "PIN", Blockly.Arduino.ORDER_ATOMIC);

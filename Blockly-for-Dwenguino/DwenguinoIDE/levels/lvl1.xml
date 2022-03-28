@@ -85,8 +85,8 @@
     </block>
     <block type="dwenguino_servo">
         <value name="pin">
-            <block type="dwenguino_servo_dropdown">
-                <field name="SERVO_DROPDOWN">SERVO1</field>
+            <block type="dwenguino_pins"> 
+                <field name="PIN">40</field>
             </block>
         </value>
         <value name="angle">

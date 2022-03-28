@@ -141,12 +141,12 @@ class SocialRobotButton extends RobotComponent{
 
     createPinOptionsInModalDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
-        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
+        $('#componentOptionsPin').append('<div class="col-md-auto">'+'Pin'+'</div>');
         $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
 
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin < pins.length; pin++){
-            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
             if(this.getPin() == pins[pin]){
                 $('#pin' + pins[pin]).addClass('option_button_selected');
             }

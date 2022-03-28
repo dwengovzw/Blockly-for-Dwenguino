@@ -105,7 +105,8 @@ Blockly.JavaScript['dwenguino_controls_while'] = function (block) {
 };*/
 
 Blockly.JavaScript.dwenguino_pins = function() {
-  var dropdown_value = this.getFieldValue('PIN');
+  //var dropdown_value = profile.dwenguino.mapPinAliasToNumber(this.getFieldValue('PIN'));
+  var dropdown_value = '"' + this.getFieldValue('PIN') + '"';
   return [dropdown_value, Blockly.JavaScript.ORDER_ATOMIC];
 };
 
