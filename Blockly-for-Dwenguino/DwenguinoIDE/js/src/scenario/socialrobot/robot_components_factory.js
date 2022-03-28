@@ -791,7 +791,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SOUND);
     let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
     if(id == 1){
-      digitalPin = "15";
+      digitalPin = "SOUND_1";
       analogPin = "A5";
     }
     let soundSensor = new SocialRobotSoundSensor(this._eventBus, id, digitalPin, analogPin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);

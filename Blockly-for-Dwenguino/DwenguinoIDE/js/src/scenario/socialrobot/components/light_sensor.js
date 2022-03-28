@@ -149,7 +149,7 @@ class SocialRobotLightSensor extends RobotComponent{
 
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin < pins.length; pin++){
-            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
             if(this.getPin() == pins[pin]){
                 $('#pin' + pins[pin]).addClass('option_button_selected');
             }

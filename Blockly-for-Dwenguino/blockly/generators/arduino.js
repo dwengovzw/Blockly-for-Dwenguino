@@ -112,12 +112,57 @@ var profile = {
               ["11", "11"], ["12", "12"], ["13", "13"], ["15", "15"], ["16", "16"], ["17", "17"], ["18", "18"], ["19", "19"], ["20", "20"],
               ["21", "21"], ["22", "22"], ["23", "23"],
               ["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"],
-              ["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"], ["BUZZER", "BUZZER"]],
+              ["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"], ["BUZZER", "BUZZER"],
+              ["SOUND_1", "SOUND_1"], ["SONAR_1_TRIG", "SONAR_1_TRIG"], ["SONAR_1_ECHO", "SONAR_1_ECHO"], 
+              ["SONAR_2_TRIG", "SONAR_2_TRIG"], ["SONAR_2_ECHO", "SONAR_2_ECHO"],
+              ["SERVO_1", "SERVO_1"], ["SERVO_2", "SERVO_2"], ["SERVO_3", "SERVO_3"], 
+              ["SERVO_4", "SERVO_4"], ["SERVO_5", "SERVO_5"], ["SERVO_6", "SERVO_6"],
+              ["RGB_1_R", "RGB_1_R"], ["RGB_1_G", "RGB_1_G"], ["RGB_1_B", "RGB_1_B"],
+              ["RGB_2_R", "RGB_2_R"], ["RGB_2_G", "RGB_2_G"], ["RGB_2_B", "RGB_2_B"],
+              ["RGB_3_R", "RGB_3_R"], ["RGB_3_G", "RGB_3_G"], ["RGB_3_B", "RGB_3_B"],
+              ["MATRIX_1_D", "MATRIX_1_D"], ["MATRIX_1_CS", "MATRIX_1_CS"], ["MATRIX_1_CLK", "MATRIX_1_CLK"],
+              ],
     analog: [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"], ["A6", "A6"], ["A7", "A7"]],
     serial: 9600,
     leds: [["0", "0"], ["1", "1"], ["2", "2"], ["3", "3"]
         , ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["13", "13"]],
-    switches: [["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"]]
+    switches: [["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"]],
+    mapPinAliasToNumber: function(pinAlias){
+        let knownPins = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", 
+                      "23", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "BUZZER", "SW_N", "SW_E", "SW_S", "SW_W", "SW_C"];
+        let pinMapping = {
+          "SOUND_1": "A4",
+          "SONAR_1_TRIG": "A1",
+          "SONAR_1_ECHO": "A0",
+          "SONAR_2_TRIG": "A3",
+          "SONAR_2_ECHO": "A2",
+          "SERVO_1": "40",
+          "SERVO_2": "41",
+          "SERVO_3": "19",
+          "SERVO_4": "18",
+          "SERVO_5": "17",
+          "SERVO_6": "16",
+          "RGB_1_R": "11",
+          "RGB_1_G": "14",
+          "RGB_1_B": "15",
+          "RGB_2_R": "30",
+          "RGB_2_G": "29",
+          "RGB_2_B": "28",
+          "RGB_3_R": "27",
+          "RGB_3_G": "26",
+          "RGB_3_B": "25",
+          "MATRIX_1_D": "2", 
+          "MATRIX_1_CS": "10", 
+          "MATRIX_1_CLK": "13", 
+        }
+        if (knownPins.includes(pinAlias)){
+          return pinAlias;
+        }else if (Object.keys(pinMapping).includes(pinAlias)){
+          return pinMapping[pinAlias];
+        }else{
+          return "0";
+        }
+    }
 
   },
   arduino_mega: {

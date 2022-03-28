@@ -151,8 +151,8 @@ class SocialRobotSonar extends RobotComponent{
     
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin < pins.length; pin++){
-            $('#triggerPin').append('<button type="button" id=triggerPin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 triggerPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
-            $('#echoPin').append('<button type="button" id=echoPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 echoPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#triggerPin').append('<button type="button" id=triggerPin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 triggerPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#echoPin').append('<button type="button" id=echoPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 echoPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
         }
 
         for(let p = 0; p < pins.length; p++){
@@ -202,7 +202,7 @@ class SocialRobotSonar extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "SONAR_1_TRIG", "SONAR_1_ECHO", "SONAR_2_TRIG", "SONAR_2_ECHO", "SONAR_3_TRIG", "SONAR_3_ECHO"];
     }
 
     getId(){

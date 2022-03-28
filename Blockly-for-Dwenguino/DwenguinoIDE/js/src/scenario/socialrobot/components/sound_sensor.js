@@ -152,11 +152,11 @@ class SocialRobotSoundSensor extends RobotComponent{
     createPinOptionsInModalDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
         $('#componentOptionsPin').append('<div class="col-md-2">'+DwenguinoBlocklyLanguageSettings.translate(['digitalPin'])+'</div>');
-        $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
+        $('#componentOptionsPin').append('<div id="pin" class="col-md-8"></div>');
 
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin < pins.length; pin++){
-            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
             if(this.getDigitalPin() == pins[pin]){
                 $('#pin' + pins[pin]).addClass('option_button_selected');
             }
@@ -174,7 +174,7 @@ class SocialRobotSoundSensor extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"];
+        return ["SOUND_1", 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"];
     }
 
     getId(){

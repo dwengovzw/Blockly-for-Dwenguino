@@ -184,26 +184,26 @@ class SocialRobotLedMatrixSegment extends RobotComponent{
 
     createPinOptionsInModalDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsDataPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsDataPin').append('<div class="col-md-2">'+'Data pin'+'</div>');
+        $('#componentOptionsDataPin').append('<div class="col-md-auto">'+'Data pin'+'</div>');
         $('#componentOptionsDataPin').append('<div id="dataPin" class="col-md-10"></div>');
         $('#componentOptionsModalBody').append('<div id="componentOptionsCsPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsCsPin').append('<div class="col-md-2">'+'Cs pin'+'</div>');
+        $('#componentOptionsCsPin').append('<div class="col-md-auto">'+'Cs pin'+'</div>');
         $('#componentOptionsCsPin').append('<div id="csPin" class="col-md-10"></div>');
         $('#componentOptionsModalBody').append('<div id="componentOptionsClkPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsClkPin').append('<div class="col-md-2">'+'Clk pin'+'</div>');
+        $('#componentOptionsClkPin').append('<div class="col-md-auto">'+'Clk pin'+'</div>');
         $('#componentOptionsClkPin').append('<div id="clkPin" class="col-md-10"></div>');
     
         let dataPin = this.getPossibleDataPin();
         let csPin = this.getPossibleCsPin();
         let clkPin = this.getPossibleClkPin();
 
-        $('#dataPin').append('<button type="button" id=dataPin'+dataPin+' name='+dataPin+' class="col-md-1 ml-2 mb-2 dataPinButton pinButton option_button_enabled">'+dataPin+'</button>');
+        $('#dataPin').append('<button type="button" id=dataPin'+dataPin+' name='+dataPin+' class="col-md-auto ml-2 mb-2 dataPinButton pinButton option_button_enabled">'+dataPin+'</button>');
         $('#dataPin' + dataPin).addClass('option_button_selected');
 
-        $('#csPin').append('<button type="button" id=csPin'+csPin+ ' name='+csPin+' class="col-md-1 ml-2 mb-2 csPinButton pinButton option_button_enabled">'+csPin+'</button>');
+        $('#csPin').append('<button type="button" id=csPin'+csPin+ ' name='+csPin+' class="col-md-auto ml-2 mb-2 csPinButton pinButton option_button_enabled">'+csPin+'</button>');
         $('#csPin' + csPin).addClass('option_button_selected');
         
-        $('#clkPin').append('<button type="button" id=clkPin'+clkPin+ ' name='+clkPin+ ' class="col-md-1 ml-2 mb-2 clkPinButton pinButton option_button_enabled">'+clkPin+'</button>');
+        $('#clkPin').append('<button type="button" id=clkPin'+clkPin+ ' name='+clkPin+ ' class="col-md-auto ml-2 mb-2 clkPinButton pinButton option_button_enabled">'+clkPin+'</button>');
         $('#clkPin' + clkPin).addClass('option_button_selected');
 
     }

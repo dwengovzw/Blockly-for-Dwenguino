@@ -45,8 +45,9 @@ class SimulationSandbox {
     if (existingText.length < column){
       spaces = column - existingText.length;
     }
-    text = existingText + " ".repeat(spaces) + text.substring(0, 16 - column)
-    this.boardState.getLcdContent(row).substr(text.length + column, 16);
+    let textAfter = this.boardState.getLcdContent(row).substr(text.length + column, 16);  // Get existing text after new text and keep it on the screen.
+    text = existingText + " ".repeat(spaces) + text.substring(0, 16 - column) + textAfter;
+    
     this.boardState.setLcdContent(row, text);
 
   }

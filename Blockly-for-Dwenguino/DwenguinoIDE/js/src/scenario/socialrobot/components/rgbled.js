@@ -125,20 +125,20 @@ class SocialRobotRgbLed extends RobotComponent{
 
     createPinOptionsInModalDialog(){
         $('#componentOptionsModalBody').append('<div id="componentOptionsRedPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsRedPin').append('<div class="col-md-2">'+'Red pin'+'</div>');
+        $('#componentOptionsRedPin').append('<div class="col-md-auto">'+'Red pin'+'</div>');
         $('#componentOptionsRedPin').append('<div id="redPin" class="col-md-10"></div>');
         $('#componentOptionsModalBody').append('<div id="componentOptionsGreenPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsGreenPin').append('<div class="col-md-2">'+'Green pin'+'</div>');
+        $('#componentOptionsGreenPin').append('<div class="col-md-auto">'+'Green pin'+'</div>');
         $('#componentOptionsGreenPin').append('<div id="greenPin" class="col-md-10"></div>');
         $('#componentOptionsModalBody').append('<div id="componentOptionsBluePin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsBluePin').append('<div class="col-md-2">'+'Blue pin'+'</div>');
+        $('#componentOptionsBluePin').append('<div class="col-md-auto">'+'Blue pin'+'</div>');
         $('#componentOptionsBluePin').append('<div id="bluePin" class="col-md-10"></div>');
     
         let pins = this.getAllPossiblePins();
         for(let pin = 0; pin < pins.length; pin++){
-            $('#redPin').append('<button type="button" id=redPin'+pins[pin]+' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 redPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
-            $('#greenPin').append('<button type="button" id=greenPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-1 ml-2 mb-2 greenPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
-            $('#bluePin').append('<button type="button" id=bluePin'+pins[pin]+ ' name='+pins[pin]+ ' class="col-md-1 ml-2 mb-2 bluePinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#redPin').append('<button type="button" id=redPin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 redPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#greenPin').append('<button type="button" id=greenPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 greenPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
+            $('#bluePin').append('<button type="button" id=bluePin'+pins[pin]+ ' name='+pins[pin]+ ' class="col-md-auto ml-2 mb-2 bluePinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
         }
 
         for(let p = 0; p < pins.length; p++){
@@ -227,7 +227,8 @@ class SocialRobotRgbLed extends RobotComponent{
     }
 
     getAllPossiblePins(){
-        return ['3', '5', '6', '11', '14', '15', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5'];
+        return ['3', '5', '6', '11', '14', '15', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 
+        "RGB_1_R", "RGB_1_G", "RGB_1_B", "RGB_2_R", "RGB_2_G", "RGB_2_B", "RGB_3_R", "RGB_3_G", "RGB_3_B"];
     }
 
     getId(){

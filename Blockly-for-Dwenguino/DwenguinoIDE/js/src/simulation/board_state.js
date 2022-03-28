@@ -48,7 +48,30 @@ class BoardState {
         }
 
         this.pinMapping["LED13"] = 13;
-
+        this.pinMapping["SOUND_1"] = 28;
+        this.pinMapping["SONAR_1_TRIG"] = 25;
+        this.pinMapping["SONAR_1_ECHO"] = 24;
+        this.pinMapping["SONAR_2_TRIG"] = 27;
+        this.pinMapping["SONAR_2_ECHO"] = 26;
+        this.pinMapping["SERVO_1"] = 40;
+        this.pinMapping["SERVO_2"] = 41;
+        this.pinMapping["SERVO_3"] = 19;
+        this.pinMapping["SERVO_4"] = 18;
+        this.pinMapping["SERVO_5"] = 17;
+        this.pinMapping["SERVO_6"] = 16;
+        this.pinMapping["RGB_1_R"] = 11;
+        this.pinMapping["RGB_1_G"] = 14;
+        this.pinMapping["RGB_1_B"] = 15;
+        this.pinMapping["RGB_2_R"] = 30;
+        this.pinMapping["RGB_2_G"] = 29;
+        this.pinMapping["RGB_2_B"] = 28;
+        this.pinMapping["RGB_3_R"] = 27;
+        this.pinMapping["RGB_3_G"] = 26;
+        this.pinMapping["RGB_3_B"] = 25;
+        this.pinMapping["MATRIX_1_D"] = 2;
+        this.pinMapping["MATRIX_1_CS"] = 10;
+        this.pinMapping["MATRIX_1_CLK"] = 13;
+    
         this.lcdContent[0] = " ".repeat(16);
         this.lcdContent[1] = " ".repeat(16);
 
