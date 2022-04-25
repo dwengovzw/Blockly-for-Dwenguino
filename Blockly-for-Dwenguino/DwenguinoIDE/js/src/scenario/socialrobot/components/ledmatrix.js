@@ -1,4 +1,4 @@
-import { RobotComponent } from './robot_component.js'
+import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js'
 
@@ -16,9 +16,9 @@ const DisplayDataTypesEnum = {
   Object.freeze(DisplayDataTypesEnum);
 
 /**
- * @extends RobotComponent
+ * @extends AbstractRobotComponent
  */
-class SocialRobotLedMatrix extends RobotComponent{
+class SocialRobotLedMatrix extends AbstractRobotComponent{
     constructor(eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 

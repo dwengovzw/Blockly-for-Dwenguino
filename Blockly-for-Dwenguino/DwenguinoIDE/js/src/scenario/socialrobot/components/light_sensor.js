@@ -1,47 +1,38 @@
-import { RobotComponent } from './robot_component.js'
+import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js';
 import { Slider } from '../../utilities/slider.js';
+import { RobotComponent } from './robot_component.js';
 
 export { SocialRobotLightSensor }
 
 /**
- * @extends RobotComponent
+ * @extends AbstractRobotComponent
  */
 class SocialRobotLightSensor extends RobotComponent{
-    constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
-        super(eventBus, htmlClasses);
-
-        this._id = id;
-        this._type = TypesEnum.LIGHT;
-        this._width = width;
-        this._height = height;
-        this._offset = { 'left': offsetLeft, 'top': offsetTop };
-        this._image = new Image();
-        this._image.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/light_sensor.png`;
-        this._pin = pin;
-        this._state = state;
-        this._stateUpdated = false;
-        this._canvasId = 'sim_light_canvas' + this._id;
-        this._slider = null;
-
-        this.insertHtml();
-        this.toggleVisibility(visible);
+    static pinNames = {
+        digitalPin: "digitalPin"
     }
 
-    toString(){
-        return 'light sensor';
+    constructor(){
+        super();
     }
 
-    insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
-        $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
-    
-        let label = DwenguinoBlocklyLanguageSettings.translate(['lightSensorSliderLabel']) + " " + this.getId();
-        let id = '' + this.getType() + this.getId();
-        this._slider = new Slider(id, 'sensor_options', 0, 4095, 0, label, '' , '', 'light_sensor_slider');
+    initComponent(eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+        let label = DwenguinoBlocklyLanguageSettings.translate(['lightSensorSliderLabel']) + " " + id;
+        this.initSlider(label, id, 0, 4095, 0);
+        super.initComponent(eventBus, htmlClasses, id, TypesEnum.LIGHT, "light sensor", pins, state, visible, width, height, offsetLeft, offsetTop, `${settings.basepath}DwenguinoIDE/img/socialrobot/light_sensor.png`, 'sim_light_canvas' + id);
+    }
+
+    initComponentFromXml(eventBus, id, xml){
+        let label = DwenguinoBlocklyLanguageSettings.translate(['lightSensorSliderLabel']) + " " + id;
+        this.initSlider(label, id, 0, 4095, 0);
+        super.initComponentFromXml(eventBus, `${settings.basepath}DwenguinoIDE/img/socialrobot/light_sensor.png`, id, xml);
+    }
+
+    initSlider(label, id, min, max, start){
+        let sliderId = '' + TypesEnum.LIGHT + id;
+        this._slider = new Slider(sliderId, 'sensor_options', min, max, start, label, '' , '', 'light_sensor_slider');
 
         var self = this;
         let sliderElement = this._slider.getSliderElement();
@@ -50,188 +41,30 @@ class SocialRobotLightSensor extends RobotComponent{
             self.changeLightSensorValue(this.value, id);
             self._slider.updateValueLabel(this.value);
         }
+    }
 
-        let simLightSensor = document.getElementById('sim_'+this.getType() + this.getId());
-
-        simLightSensor.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['lightOptions']));
-            this.showDialog();
-        });
+    insertHtml(){
+        var self = this;
+        let sliderElement = this._slider.getSliderElement();
+        sliderElement.oninput = function() {
+            let id = self.getId();
+            self.changeLightSensorValue(this.value, id);
+            self._slider.updateValueLabel(this.value);
+        }
+        super.insertHtml(DwenguinoBlocklyLanguageSettings.translate(['lightOptions']))
     }
 
     changeLightSensorValue(value) {
         this.setState(value);
-        this._stateUpdated = true;
-        this._eventBus.dispatchEvent(EventsEnum.SAVE);
     }
 
     removeHtml(){
-        $('#sim_light' + this.getId()).remove();
-
+        super.removeHtml();
         this.getSlider().remove();
-    }
-
-    toggleVisibility(visible){
-        if (visible) {
-            $('#sim_light' + this.getId()).css('visibility', 'visible');
-        } else {
-            $('#sim_light' + this.getId()).css('visibility', 'hidden');
-        }
-    }
-
-    toXml(){
-        let data = '';
-        
-        data = data.concat("<Item ");
-        data = data.concat(" Type='", this.getType(), "'");
-        data = data.concat(" Id='", this.getId(), "'");
-        data = data.concat(" Width='", this.getWidth(), "'");
-        data = data.concat(" Height='", this.getHeight(), "'");
-
-        let simId = '#sim_' + this.getType() + this.getId();
-        if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
-        } else {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
-        }
-        if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
-        } else {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
-        }
-
-        data = data.concat(" Pin='", this.getPin(), "'");
-        data = data.concat(" State='", this.getState(), "'");
-        data = data.concat(" Classes='", this.getHtmlClasses(), "'");
-
-        data = data.concat('></Item>');
-
-        return data;
-    }
-
-    reset(){
-        this.setState(0);
-        this._stateUpdated = false;
-    }
-
-    showDialog(){
-        $("#componentOptionsModal").modal('show');
-    }
-    
-    removeDialog(){
-        $('div').remove('#componentOptionsModal');
-        $('.modal-backdrop').remove();
-    }
-
-    createComponentOptionsModalDialog(headerTitle){
-        this.removeDialog();
-    
-        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
-        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
-    
-        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
-    
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
-    
-        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-
-        this.createPinOptionsInModalDialog();
-
-    }
-
-    createPinOptionsInModalDialog(){
-        $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
-        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
-        $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
-
-        let pins = this.getAllPossiblePins();
-        for(let pin = 0; pin < pins.length; pin++){
-            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
-            if(this.getPin() == pins[pin]){
-                $('#pin' + pins[pin]).addClass('option_button_selected');
-            }
-
-            let pinButton = document.getElementById('pin'+pins[pin]);
-
-            pinButton.addEventListener('click', () => { 
-                let newPin = pinButton.name;
-                this.setPin(newPin);
-                $('.pinButton').removeClass('option_button_selected');
-                pinButton.classList.add('option_button_selected');
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
-            });
-        }
     }
 
     getAllPossiblePins(){
         return ['A0', 'A1', 'A2', 'A3', 'A4', 'A5'];
-    }
-
-    getId(){
-        return this._id;
-    }
-
-    getType(){
-        return this._type;
-    }
-
-    setWidth(width){
-        this._width = width;
-    }
-
-    getWidth(){
-        return this._width;
-    }
-
-    setHeight(height){
-        this._height = height;
-    }
-
-    getHeight(){
-        return this._height;
-    }
-
-    setOffset(offset){
-        this._offset = offset;
-    }
-
-    getOffset(){
-        return this._offset;
-    }
-
-    setImage(image){
-        this._image.src = image;
-    }
-
-    getImage(){
-        return this._image;
-    }
-    
-    setPin(pin){
-        this._pin = pin;
-    }
-
-    getPin(){
-        return this._pin;
-    }
-
-    setState(state){
-        this._state = state;
-    }
-
-    getState(){
-        return this._state;
-    }
-
-    isStateUpdated(){
-        return this._stateUpdated;
-    }
-
-    getCanvasId(){
-        return this._canvasId;
     }
 
     getSlider(){

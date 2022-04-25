@@ -184,7 +184,9 @@ var MSG = {
   drawingrobotDrawing:"Dibujo",
   stepperMotorOne: "STEPPER1", 
   stepperMotorTwo: "STEPPER2",
-  stepperMotorTooltip: "Selecciona que motor paso a paso del robot plotter quieres usar."
+  stepperMotorTooltip: "Selecciona que motor paso a paso del robot plotter quieres usar.",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {

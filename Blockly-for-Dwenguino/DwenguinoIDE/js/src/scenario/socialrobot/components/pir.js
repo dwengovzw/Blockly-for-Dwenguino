@@ -1,4 +1,4 @@
-import { RobotComponent } from './robot_component.js'
+import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js';
 import { SoundSensor } from '../../../tutorials/components/SoundSensor.js';
@@ -7,9 +7,9 @@ import { Button } from '../../utilities/button.js';
 export { SocialRobotPir }
 
 /**
- * @extends RobotComponent
+ * @extends AbstractRobotComponent
  */
-class SocialRobotPir extends RobotComponent{
+class SocialRobotPir extends AbstractRobotComponent{
     constructor(eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 

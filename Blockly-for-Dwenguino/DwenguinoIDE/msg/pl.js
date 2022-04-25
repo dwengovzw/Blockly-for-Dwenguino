@@ -199,7 +199,9 @@ var MSG = {
   drawingrobotDrawing: "Rysunek",
   stepperMotorOne: "SILNIK KROKOWY 1", 
   stepperMotorTwo: "SILNIK KROKOWY 2",
-  stepperMotorTooltip: "Wybierz, który z dwóch silników rysującego robota chcesz kontrolować."
+  stepperMotorTooltip: "Wybierz, który z dwóch silników rysującego robota chcesz kontrolować.",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {

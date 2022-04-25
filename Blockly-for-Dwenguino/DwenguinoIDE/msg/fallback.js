@@ -206,8 +206,9 @@ var MSG_FALLBACK = {
   drawingrobotDrawing:"Tekening",
   stepperMotorOne: "STEPPER1", 
   stepperMotorTwo: "STEPPER2",
-  stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use."
-
+  stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG_FALLBACK.cookieConsent = {

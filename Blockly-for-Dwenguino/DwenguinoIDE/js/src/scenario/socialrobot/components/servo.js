@@ -1,4 +1,4 @@
-import { RobotComponent } from './robot_component.js'
+import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js'
 import { EventsEnum } from '../scenario_event.js'
 import jQuery from "jquery";
@@ -18,9 +18,9 @@ const CostumesEnum = {
 Object.freeze(CostumesEnum);
 
 /**
- * @extends RobotComponent
+ * @extends AbstractRobotComponent
  */
-class SocialRobotServo extends RobotComponent{
+class SocialRobotServo extends AbstractRobotComponent{
     constructor(eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
 

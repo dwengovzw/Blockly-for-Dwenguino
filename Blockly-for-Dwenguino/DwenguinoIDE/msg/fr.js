@@ -191,6 +191,8 @@ var MSG = {
   stepperMotorTooltip: "Choisissez lequel des deux moteurs du robot de dessin que vous souhaitez contrôler.",
   clear: "Supprimer",
   save: "Sauvegarder",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {

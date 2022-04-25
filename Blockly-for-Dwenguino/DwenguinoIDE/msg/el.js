@@ -183,6 +183,8 @@ var MSG = {
   stepperMotorTooltip: "Επίλεξε ποιον stepper κινητήρα του robot εκτυπωτή θες να χρησιμοποιήσεις.",
   clear: "Καθαρισμός",
   save: "Αποθήκευση",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {

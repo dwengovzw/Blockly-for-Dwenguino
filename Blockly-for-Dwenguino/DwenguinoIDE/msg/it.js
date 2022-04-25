@@ -175,6 +175,8 @@ var MSG = {
   drawingrobotDrawing:"Disegno",
   clear: "Cancellare",
   save: "Salvare",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {
