@@ -1,12 +1,12 @@
-import { RobotComponent } from './robot_component.js';
+import { AbstractRobotComponent } from './abstract_robot_component.js';
 import { TypesEnum } from '../robot_components_factory.js';
 
 export { SocialRobotLcd }
 
 /**
- * @extends RobotComponent
+ * @extends AbstractRobotComponent
  */
-class SocialRobotLcd extends RobotComponent{
+class SocialRobotLcd extends AbstractRobotComponent{
     constructor(eventBus, id, visible = true, offsetLeft = 5, offsetTop = 5, htmlClasses = ''){
         super(eventBus, htmlClasses);
 

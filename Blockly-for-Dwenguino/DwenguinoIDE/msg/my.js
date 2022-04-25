@@ -185,6 +185,8 @@ var MSG = {
   colorpicker:"Kleur",
   drawingrobotSaveImage:"Tekening opslaan",
   drawingrobotDrawing:"Tekening",
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {

@@ -188,7 +188,8 @@ var MSG = {
   stepperMotorOne: " الخطوة 1 ", 
   stepperMotorTwo:  " الخطوة 2 ",
   stepperMotorTooltip:  " حدد أي محرك متدرج من روبوت الراسمة الذي تريد استخدامه. ",
-
+  triggerPin: "Trigger pin",
+  echoPin: "Echo pin",
 };
 
 MSG.cookieConsent = {
