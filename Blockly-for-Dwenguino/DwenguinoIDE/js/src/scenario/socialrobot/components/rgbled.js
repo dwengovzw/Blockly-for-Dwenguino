@@ -1,111 +1,75 @@
 import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
-import { EventsEnum } from '../scenario_event.js'
+import { RobotComponent } from './robot_component.js';
+import BindMethods from "../../../utils/bindmethods.js"
 
 export { SocialRobotRgbLed }
+
 /**
  * @extends AbstractRobotComponent
  */
-class SocialRobotRgbLed extends AbstractRobotComponent{
-    constructor(eventBus, id, redPin, greenPin, bluePin, state, visible, radius, x, y, offsetLeft, offsetTop, htmlClasses){
-        super(eventBus, htmlClasses);
-
-        this._id = id;
-        this._type = TypesEnum.RGBLED;
-        this._radius = radius;
-        this._x = x;
-        this._y = y;
-        this._offset = { 'left': offsetLeft, 'top': offsetTop };
-        this._offColor = 'gray';
-        this._redPin = redPin;
-        this._greenPin = greenPin;
-        this._bluePin = bluePin;
-        this._state = state;
-        this._canvasId = 'sim_rgbled_canvas' + this._id; 
-        this._ledSvg = new Image();
-        this._ledSvg.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/rgb_led_top.svg`;
-        this._ledBackground = new Image();
-        this._ledBackground.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/rgb_led_background.svg`;
-        this.insertHtml();
-        this.toggleVisibility(visible);
+class SocialRobotRgbLed extends RobotComponent{
+    static pinNames = {
+        redPin: "redPin",
+        greenPin: "greenPin",
+        bluePin: "bluePin"
     }
 
-    toString(){
-        return 'RGB LED';
+    constructor(){
+        super();
+        BindMethods(this);
+
+        this._state = [0, 0, 0];
+        this._foregroundImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/rgb_led_top.svg`;
+        this._backgroundImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/rgb_led_background.svg`
+        this._ledImage = new Image();
+        this._ledImage.src = this._foregroundImageUrl;
+        this._ledBackgroundImage = new Image();
+        this._ledBackgroundImage.src = this._backgroundImageUrl;
+    }
+
+    initComponent(eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses) {
+        super.initComponent(eventBus, htmlClasses, id, TypesEnum.RGBLED, "RGB LED", pins, state, visible, radius, radius, offsetLeft, offsetTop, this._backgroundImageUrl, "sim_rgbled_canvas" + id)
+        this._radius = radius;
+    }
+
+    initComponentFromXml(eventBus, id, xml) {
+        super.initComponentFromXml(eventBus,
+            this._backgroundImageUrl,
+            id,
+            xml);
+            this._radius = Number(xml.getAttribute('Radius'));
+        this.setPin(xml.getAttribute('RedPin'), SocialRobotRgbLed.pinNames.redPin);
+        this.setPin(xml.getAttribute('GreenPin'), SocialRobotRgbLed.pinNames.greenPin);
+        this.setPin(xml.getAttribute('BluePin'), SocialRobotRgbLed.pinNames.bluePin);
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
-        $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
-
-        let simLed = document.getElementById('sim_'+this.getType() + this.getId());
-
-        simLed.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['rgbLedOptions']));
-            this.showDialog();
-        });
+        super.insertHtml("rgbLedOptions");
     }
 
-    removeHtml(){
-        $('#sim_' + this.getType() + this.getId()).remove();
-    }
 
-    toXml(){
-        let data = '';
+
+    toXml() {
+        let additionalAttributes = '';
         
-        data = data.concat("<Item ");
-        data = data.concat(" Type='", this.getType(), "'");
-        data = data.concat(" Id='", this.getId(), "'");
-        data = data.concat(" Radius='", this.getRadius(), "'");
+        additionalAttributes = additionalAttributes.concat(" Radius='", this.getRadius().toString(), "'");
+        additionalAttributes = additionalAttributes.concat(" RedPin='", this.getPin(SocialRobotRgbLed.pinNames.redPin), "'");
+        additionalAttributes = additionalAttributes.concat(" GreenPin='", this.getPin(SocialRobotRgbLed.pinNames.greenPin), "'");
+        additionalAttributes = additionalAttributes.concat(" BluePin='", this.getPin(SocialRobotRgbLed.pinNames.bluePin), "'");
 
-        let simId = '#sim_' + this.getType() + this.getId();
-        if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
-        } else {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
-        }
-        if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
-        } else {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
-        }
-
-        data = data.concat(" RedPin='", this.getRedPin(), "'");
-        data = data.concat(" GreenPin='", this.getGreenPin(), "'");
-        data = data.concat(" BluePin='", this.getBluePin(), "'");
-        data = data.concat(" Classes='", this.getHtmlClasses(), "'");
-
-        data = data.concat('></Item>');
-
-        return data;
+        return super.toXml(additionalAttributes);
     }
 
-    reset(){
-        this.setX(0);
-        this.setY(0);
+    reset() {
         this.setState([0,0,0]);
+        super.reset();
     }
 
-    toggleVisibility(visible){
-        if (visible) {
-            $('#sim_led' + this.getId()).css('visibility', 'visible');
-        } else {
-            $('#sim_led' + this.getId()).css('visibility', 'hidden');
-        }
-    }
 
-    showDialog(){
-        $("#componentOptionsModal").modal('show');
-    }
-    
-    removeDialog(){
-        $('div').remove('#componentOptionsModal');
-        $('.modal-backdrop').remove();
-    }
 
-    createComponentOptionsModalDialog(headerTitle){
+
+    /*createComponentOptionsModalDialog(headerTitle){
         this.removeDialog();
     
         $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
@@ -224,94 +188,41 @@ class SocialRobotRgbLed extends AbstractRobotComponent{
                 $('#greenPin' + newPin).prop('disabled', true);
             });
         }
-    }
+    }*/
 
-    getAllPossiblePins(){
+    getAllPossiblePins() {
         return ['3', '5', '6', '11', '14', '15', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 
         "RGB_1_R", "RGB_1_G", "RGB_1_B", "RGB_2_R", "RGB_2_G", "RGB_2_B", "RGB_3_R", "RGB_3_G", "RGB_3_B"];
     }
 
-    getId(){
-        return this._id;
-    }
-
-    getType(){
-        return this._type;
-    }
-
-    setRadius(radius){
+    setRadius(radius) {
         this._radius = radius;
     }
 
-    getRadius(){
+    getRadius() {
         return this._radius;
     }
-
-    setX(x){
-        this._x = x;
-    }
-
-    getX(){
-        return this._x;
-    }
-
-    setY(y){
-        this._y = y;
-    }
-
-    getY(){
-        return this._y;
-    }
-
-    setOffset(offset){
-        this._offset = offset;
-    }
-
-    getOffset(){
-        return this._offset;
-    }
-
-    setRedPin(redPin){
-        this._redPin = redPin;
-    }
-    
-    getRedPin() {
-        return this._redPin;
-    }
-
-    setGreenPin(greenPin){
-        this._greenPin = greenPin;
-    }
-
-    getGreenPin() {
-        return this._greenPin;
-    }
-
-    setBluePin(bluePin){
-        this._bluePin = bluePin;
-    }
-
-    getBluePin(){
-        return this._bluePin;
-    }
-
-    setState(state){
+  
+    setState(state) {
         this._state = state;
     }
 
-    getState(){
+    getState() {
+        if (this._state === 0){
+            return [0, 0, 0];
+        }
         return this._state;
     }
 
-    getCanvasId(){
+    getCanvasId() {
         return this._canvasId;
     }
 
-    getLedSvg(){
-        return this._ledSvg;
+    getLedBackground() {
+        return this._ledBackgroundImage;
     }
 
-    getLedBackground(){
-        return this._ledBackground;
+    getLedSvg() {
+        return this._ledImage;
     }
 }

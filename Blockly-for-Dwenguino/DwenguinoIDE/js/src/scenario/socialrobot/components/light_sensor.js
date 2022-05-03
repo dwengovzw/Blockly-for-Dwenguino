@@ -3,6 +3,7 @@ import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js';
 import { Slider } from '../../utilities/slider.js';
 import { RobotComponent } from './robot_component.js';
+import BindMethods from "../../../utils/bindmethods.js"
 
 export { SocialRobotLightSensor }
 
@@ -16,6 +17,7 @@ class SocialRobotLightSensor extends RobotComponent{
 
     constructor(){
         super();
+        BindMethods(this);
     }
 
     initComponent(eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){

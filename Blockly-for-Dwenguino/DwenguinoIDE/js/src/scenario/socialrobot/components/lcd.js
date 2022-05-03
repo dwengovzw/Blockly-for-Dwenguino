@@ -1,5 +1,6 @@
 import { AbstractRobotComponent } from './abstract_robot_component.js';
 import { TypesEnum } from '../robot_components_factory.js';
+import BindMethods from "../../../utils/bindmethods.js"
 
 export { SocialRobotLcd }
 
@@ -9,6 +10,7 @@ export { SocialRobotLcd }
 class SocialRobotLcd extends AbstractRobotComponent{
     constructor(eventBus, id, visible = true, offsetLeft = 5, offsetTop = 5, htmlClasses = ''){
         super(eventBus, htmlClasses);
+        BindMethods(this);
 
         this._id = id;
         this._type = TypesEnum.LCD;

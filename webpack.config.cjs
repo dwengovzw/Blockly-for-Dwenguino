@@ -10,7 +10,7 @@ module.exports = [
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js',
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', ''] 
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx', '.ts', ''] 
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
@@ -28,8 +28,7 @@ module.exports = [
                                 ["@babel/preset-env",
                                 {
                                     'targets': {
-                                        'chrome': '76',
-                                        'browsers': ['last 5 version']
+                                        'browsers': ['last 4 version']
                                     }
                                 }]
                             ],

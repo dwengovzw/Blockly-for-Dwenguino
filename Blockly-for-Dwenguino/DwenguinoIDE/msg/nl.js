@@ -174,6 +174,7 @@ var MSG = {
   touchButtonLabel: "Aanraaksensorknop",
   lightSensorSliderLabel: "Lichtsensorknop",
   servoCostume: "Uiterlijk",
+  options: "Opties",
   servoOptions: "Opties van de servomotor",
   sonarOptions: "Opties van de sonarsensor",
   lcdOptions: "Opties van het lcd-scherm",

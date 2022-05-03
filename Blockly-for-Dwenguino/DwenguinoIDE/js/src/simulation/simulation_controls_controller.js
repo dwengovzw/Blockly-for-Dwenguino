@@ -74,9 +74,9 @@ class SimulationControlsController {
 
         // Ugly hack..
         let self = this;
-        $("input[name=scenario_type]:radio").change(function () {
-            console.log($(this).val());
-            self.scenarioView = $(this).val();
+        $("input[name=scenario_type]:radio").on("change", (event) => {
+            console.log($(event.currentTarget).val());
+            self.scenarioView = $(event.currentTarget).val();
             self.translateSimulatorInterface();
 
             self.handleSimulationStop();
@@ -89,7 +89,7 @@ class SimulationControlsController {
         });
 
         // start/stop/pause
-        $("#sim_start").click(() => {
+        $("#sim_start").on("click", () => {
             var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
             var xmlCode = Blockly.Xml.domToText(xml);
 
@@ -239,11 +239,11 @@ class SimulationControlsController {
             e.preventDefault();
         };
 
-        $("a[href$='#db_code_pane']").click(function (e) {
+        $("a[href$='#db_code_pane']").on("click", (e) => {
             toggleSimulatorPaneView(this, [$("a[href$='#db_robot_pane']")], e);
         });
 
-        $("a[href$='#db_robot_pane']").click(function (e) {
+        $("a[href$='#db_robot_pane']").on("click", (e) => {
             toggleSimulatorPaneView(this, [$("a[href$='#db_code_pane']")], e);
         });
 
