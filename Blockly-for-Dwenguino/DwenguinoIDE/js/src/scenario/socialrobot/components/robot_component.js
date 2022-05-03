@@ -1,16 +1,17 @@
 import { AbstractRobotComponent } from "./abstract_robot_component.js";
 import { EventsEnum } from "../scenario_event.js";
+import BindMethods from "../../../utils/bindmethods.js"
 
 
 export { RobotComponent }
-import { Button } from '../../utilities/button.js';
 
 class RobotComponent extends AbstractRobotComponent {
     constructor() {
         super();
+        BindMethods(this);
     }
 
-    initComponent(eventBus, htmlClasses, id, type, name, pins, state, visible, width, height, offsetLeft, offsetTop, imgSource, canvasId){
+    initComponent(eventBus, htmlClasses, id, type, name, pins, state, visible, width, height, offsetLeft, offsetTop, imgSource, canvasId) {
         super.initComponent(eventBus, htmlClasses);
         this._id = id;
         this._type = type;
@@ -19,6 +20,7 @@ class RobotComponent extends AbstractRobotComponent {
         this._state = state;
         this._width = width;
         this._height = height;
+        this._visible = visible;
         this._offset = {
         "left": offsetLeft,
         "top": offsetTop
@@ -31,8 +33,7 @@ class RobotComponent extends AbstractRobotComponent {
         this.toggleVisibility(visible);
     }
 
-    initComponentFromXml(eventBus, imgSource, id, xml){
-        super.initComponentFromXml(eventBus);
+    initComponentFromXml(eventBus, imgSource, id, xml) {
         this._id = id;
         this._type = xml.getAttribute('Type');
         this._name = xml.getAttribute('Name');
@@ -51,6 +52,9 @@ class RobotComponent extends AbstractRobotComponent {
         this._image.src = imgSource;
         this._canvasId = xml.getAttribute('CanvasId');
         this._htmlClasses = xml.getAttribute('Classes');
+
+        super.initComponentFromXml(eventBus);
+
         this.insertHtml();
         this.toggleVisibility(true);
     }
@@ -59,14 +63,30 @@ class RobotComponent extends AbstractRobotComponent {
         return this._name;
     }
     
-    insertHtml(optionsLabel) {
+    insertHtml(optionsLabel = "options") {
         $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
-        $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
+        // First add the element at position 0, 0
+        $('#sim_' + this.getType() + this.getId()).css('top', 0 + 'px');
+        $('#sim_' + this.getType() + this.getId()).css('left', 0 + 'px');
+        // Now move the element according to its offset by using css transform
+        $('#sim_' + this.getType() + this.getId()).css(
+            'transform',
+            "translate(" + this.getOffset()['left'] + "px, " +  this.getOffset()['top'] + "px)"
+            )
+        // add the offset to the data-x and data-y attributes to let the draggable system know where the element is now
+        $('#sim_' + this.getType() + this.getId()).attr("data-x", this.getOffset()['left']);
+        $('#sim_' + this.getType() + this.getId()).attr("data-y", this.getOffset()['top']);
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
     
-
         let simSensor = document.getElementById('sim_'+this.getType() + this.getId());
+
+        simSensor.addEventListener('mouseup', (event) => {
+            let offset = {
+                "left": event.currentTarget.getAttribute("data-x"),
+                "top": event.currentTarget.getAttribute("data-y")
+                };
+            this.setOffset(offset);
+        })
 
         simSensor.addEventListener('dblclick', () => { 
             this.createComponentOptionsModalDialog(optionsLabel);
@@ -74,11 +94,11 @@ class RobotComponent extends AbstractRobotComponent {
         });
     }
 
-    removeHtml(){
+    removeHtml() {
         $('#sim_' + this.getType() + this.getId()).remove();
     }
 
-    toggleVisibility(visible){
+    toggleVisibility(visible) {
         if (visible) {
             $('#sim_' + this.getType() + this.getId()).css('visibility', 'visible');
         } else {
@@ -86,25 +106,26 @@ class RobotComponent extends AbstractRobotComponent {
         }
     }
 
-    toXml(){
+    toXml(additionalAttributes = "") {
         let data = '';
         
         data = data.concat("<Item ");
-        data = data.concat(" Type='", this.getType(), "'");
-        data = data.concat(" Id='", this.getId(), "'");
-        data = data.concat(" Width='", this.getWidth(), "'");
-        data = data.concat(" Height='", this.getHeight(), "'");
+        data = data.concat(" Type='", this.getType().toString(), "'");
+        data = data.concat(" Name='", this.toString(), "'");
+        data = data.concat(" Id='", this.getId().toString(), "'");
+        data = data.concat(" Width='", this.getWidth().toString(), "'");
+        data = data.concat(" Height='", this.getHeight().toString(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
+            data = data.concat(" OffsetLeft='", parseFloat($(simId).attr('data-x')).toString(), "'");
         } else {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
+            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']).toString(), "'");
         }
         if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
+            data = data.concat(" OffsetTop='", parseFloat($(simId).attr('data-y')).toString(), "'");
         } else {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
+            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']).toString(), "'");
         }
 
         data = data.concat(" Pins='", this.pinsToXml(), "'");
@@ -112,29 +133,31 @@ class RobotComponent extends AbstractRobotComponent {
         data = data.concat(" CanvasId='", this.getCanvasId(), "'");
         data = data.concat(" Classes='", this.getHtmlClasses(), "'");
 
+        data = data.concat(additionalAttributes);
+
         data = data.concat('></Item>');
 
         return data;
     }
 
-    pinsToXml(){
+    pinsToXml() {
         return JSON.stringify(this.getPins());
     }
 
-    xmlToPins(xml){
+    xmlToPins(xml) {
         return JSON.parse(xml);
     }
 
-    reset(){
+    reset() {
         this.setState(0);
         this._stateUpdated = false;
     }
 
-    showDialog(){
+    showDialog() {
         $("#componentOptionsModal").modal('show');
     }
 
-    removeDialog(){
+    removeDialog() {
         $('div').remove('#componentOptionsModal');
         $('.modal-backdrop').remove();
     }
@@ -201,39 +224,39 @@ class RobotComponent extends AbstractRobotComponent {
         }
     }
 
-    getAllPossiblePins(){
+    getAllPossiblePins() {
         return [];
     }
 
-    getId(){
+    getId() {
         return this._id;
     }
 
-    getType(){
+    getType() {
         return this._type;
     }
 
-    setWidth(width){
+    setWidth(width) {
         this._width = width;
     }
 
-    getWidth(){
+    getWidth() {
         return this._width;
     }
 
-    setHeight(height){
+    setHeight(height) {
         this._height = height;
     }
 
-    getHeight(){
+    getHeight() {
         return this._height;
     }
 
-    setOffset(offset){
+    setOffset(offset) {
         this._offset = offset;
     }
 
-    getOffset(){
+    getOffset() {
         return this._offset;
     }
 
@@ -241,41 +264,41 @@ class RobotComponent extends AbstractRobotComponent {
         this._image.src = image;
     }
 
-    getImage(){
+    getImage() {
         return this._image;
     }
 
-    setPin(pinConnectedPin, pinName="digitalPin"){
-        this._pins[pinName] = pinConnectedPin;
+    setPin(pinConnectedPin, pinName="digitalPin") {
+        this.getPins()[pinName] = pinConnectedPin;
     }
 
-    getPin(pinName="digitalPin"){
+    getPin(pinName="digitalPin") {
          return this._pins[pinName];
     }
 
-    getPins(){
+    getPins() {
         return this._pins;
     }
 
-    setPins(pins){
+    setPins(pins) {
         this._pins = pins;
     }
 
-    setState(state){
+    setState(state) {
         this._state = state;
         this._stateUpdated = true;
         this._eventBus.dispatchEvent(EventsEnum.SAVE);
     }
 
-    getState(){
+    getState() {
         return this._state;
     }
 
-    isStateUpdated(){
+    isStateUpdated() {
         return this._stateUpdated;
     }
 
-    getCanvasId(){
+    getCanvasId() {
         return this._canvasId;
     }
 }

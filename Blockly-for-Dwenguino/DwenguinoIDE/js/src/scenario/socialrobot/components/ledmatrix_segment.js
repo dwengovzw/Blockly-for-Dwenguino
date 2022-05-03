@@ -1,6 +1,6 @@
 import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
-import { EventsEnum } from '../scenario_event.js'
+import BindMethods from "../../../utils/bindmethods.js"
 
 export { SocialRobotLedMatrixSegment, DisplayDataTypesEnum }
 
@@ -21,6 +21,7 @@ const DisplayDataTypesEnum = {
 class SocialRobotLedMatrixSegment extends AbstractRobotComponent{
     constructor(eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
+        BindMethods(this);
 
         this._id = id;
         this._type = TypesEnum.LEDMATRIXSEGMENT;

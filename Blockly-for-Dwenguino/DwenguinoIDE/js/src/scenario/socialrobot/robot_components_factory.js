@@ -138,9 +138,9 @@ class RobotComponentsFactory {
           this._robot[i].setState(dwenguinoState.getIoPinState(pin));  
           break;
         case TypesEnum.RGBLED:
-          let redPin = this._robot[i].getRedPin();
-          let greenPin = this._robot[i].getGreenPin(); 
-          let bluePin = this._robot[i].getBluePin();
+          let redPin = this._robot[i].getPin(SocialRobotRgbLed.pinNames.redPin);
+          let greenPin = this._robot[i].getPin(SocialRobotRgbLed.pinNames.greenPin); 
+          let bluePin = this._robot[i].getPin(SocialRobotRgbLed.pinNames.bluePin);
           state = [dwenguinoState.getIoPinState(redPin), dwenguinoState.getIoPinState(greenPin), dwenguinoState.getIoPinState(bluePin)];
           this._robot[i].setState(state);
           break;
@@ -348,25 +348,10 @@ class RobotComponentsFactory {
         this.addServo(pin, costume, angle, true, width, height, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.LED:
-        var radius = parseFloat(data.getAttribute('Radius'));
-        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
-        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
-        var onColor = data.getAttribute('OnColor');
-        var offColor = data.getAttribute('OffColor');
-        var borderColor = data.getAttribute('BorderColor');
-        var pin = parseInt(data.getAttribute('Pin'));
-        var htmlClasses = data.getAttribute('Classes');
-        this.addLed(pin, 0, true, radius, 0, 0, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+        this.addLedFromXml(data);
         break;
       case TypesEnum.RGBLED:
-        var radius = parseFloat(data.getAttribute('Radius'));
-        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
-        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
-        var redPin = data.getAttribute('RedPin');
-        var greenPin = data.getAttribute('GreenPin');
-        var bluePin = data.getAttribute('BluePin');
-        var htmlClasses = data.getAttribute('Classes');
-        this.addRgbLed(redPin, greenPin, bluePin, [0, 0, 0], true, radius, 0, 0, offsetLeft, offsetTop, htmlClasses);
+        this.addRgbLedFromXml(data);
         break;
       case TypesEnum.LEDMATRIX:
         var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
@@ -387,20 +372,13 @@ class RobotComponentsFactory {
         this.addLedmatrixSegment(dataPin, csPin, clkPin, true, 0, 0, offsetLeft, offsetTop, htmlClasses);
         break;
       case TypesEnum.TOUCH:
-        addTouchSensorFromXml(data);
+        this.addTouchSensorFromXml(data);
         break;
       case TypesEnum.BUTTON:
         this.addButtonFromXml(data);
         break;
       case TypesEnum.PIR:
-        var width = parseFloat(data.getAttribute('Width'));
-        var height = parseFloat(data.getAttribute('Height'));
-        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
-        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
-        var pin = parseInt(data.getAttribute('Pin'));
-        var state = parseInt(data.getAttribute('State'));
-        var htmlClasses = data.getAttribute('Classes');
-        this.addPir(pin, state, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        this.addPirFromXml(data);
         break;
       case TypesEnum.SONAR:
         this.addSonarFromXml(data);
@@ -487,7 +465,23 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LED);
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
-    let led = new SocialRobotLed(this._eventBus, id, pin, state, visible, radius, x, y, offsetLeft, offsetTop, onColor, offColor, borderColor, htmlClasses);
+    let pins = {};
+    pins[SocialRobotLed.pinNames.digitalPin] = pin + id - 1;
+
+    let led = new SocialRobotLed();
+    led.initComponent(onColor, offColor, this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
+    this._robot.push(led);
+
+    this.renderer.initializeCanvas(this._robot, led); 
+  }
+
+  addLedFromXml(xml){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
+    this.incrementNumberOf(TypesEnum.LED);
+    let id = this._numberOfComponentsOfType[TypesEnum.LED];
+
+    let led = new SocialRobotLed();
+    led.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(led);
 
     this.renderer.initializeCanvas(this._robot, led); 
@@ -522,10 +516,29 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.RGBLED);
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
 
-    let rgbled = new SocialRobotRgbLed(this._eventBus, id, redPin, greenPin, bluePin, state, visible, radius, x, y, offsetLeft, offsetTop, htmlClasses);
+    let pins = {};
+    pins[SocialRobotRgbLed.pinNames.redPin] = redPin;
+    pins[SocialRobotRgbLed.pinNames.greenPin] = greenPin;
+    pins[SocialRobotRgbLed.pinNames.bluePin] = bluePin;
+
+    let rgbled = new SocialRobotRgbLed();
+    rgbled.initComponent(this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
+    
     this._robot.push(rgbled);
 
     this.renderer.initializeCanvas(this._robot, rgbled); 
+  }
+
+  addRgbLedFromXml(xml){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.RGBLED));
+    this.incrementNumberOf(TypesEnum.RGBLED);
+    let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
+
+    let led = new SocialRobotRgbLed();
+    led.initComponentFromXml(this._eventBus, id, xml);
+    this._robot.push(led);
+
+    this.renderer.initializeCanvas(this._robot, led); 
   }
 
   /**
@@ -634,15 +647,18 @@ class RobotComponentsFactory {
    * @param {string} htmlClasses 
    */
   addButton(pin=12, visible=true, width=50, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas button_canvas', state=0){
-    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTOn));
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.BUTTON));
     this.incrementNumberOf(TypesEnum.BUTTON);
     let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
 
-    pins = {};
+    let pins = {};
     pins[SocialRobotButton.pinNames.digitalPin] = pin + id - 1;
 
-    let button = new SocialRobotButton(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let button = new SocialRobotButton();
+    button.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(button);
+
+    this.renderer.initializeCanvas(this._robot, button); 
   }
 
   addButtonFromXml(xml){
@@ -653,6 +669,8 @@ class RobotComponentsFactory {
     let button = new SocialRobotButton();
     button.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(button);
+
+    this.renderer.initializeCanvas(this._robot, button);
   }
 
   /**
@@ -681,10 +699,26 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
 
-    let pir = new SocialRobotPir(this._eventBus, id, pin, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let pins = {};
+    pins[SocialRobotPir.pinNames.digitalPin] = pin + id - 1;
+
+    let pir = new SocialRobotPir();
+    pir.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(pir);
 
     this.renderer.initializeCanvas(this._robot, pir); 
+  }
+
+  addPirFromXml(xml){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
+    this.incrementNumberOf(TypesEnum.PIR);
+    let id = this._numberOfComponentsOfType[TypesEnum.PIR];
+
+    let pir = new SocialRobotPir();
+    pir.initComponentFromXml(this._eventBus, id, xml);
+    this._robot.push(pir);
+
+    this.renderer.initializeCanvas(this._robot, pir);
   }
 
   /**

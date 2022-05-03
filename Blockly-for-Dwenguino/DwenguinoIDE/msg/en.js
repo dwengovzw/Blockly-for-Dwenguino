@@ -151,6 +151,7 @@ var MSG = {
   soundButtonLabel: "Sound button",
   touchButtonLabel: "Touch button",
   lightSensorSliderLabel: "Light sensor slider",
+  options: "Options",
   servoCostume: "Costume",
   servoOptions: "Servo motor options",
   sonarOptions: "Sonar sensor options",

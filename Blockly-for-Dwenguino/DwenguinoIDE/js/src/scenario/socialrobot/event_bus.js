@@ -23,7 +23,7 @@ class EventBus {
      * @param {string} eventName 
      * @param {Object} eventArgs 
      */
-    dispatchEvent(eventName, eventArgs){
+    dispatchEvent(eventName, eventArgs = ""){
         this.events[eventName].callbacks.forEach(callback => {
             callback(eventArgs);
         });

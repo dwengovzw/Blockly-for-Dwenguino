@@ -56,7 +56,7 @@ class DwenguinoSimulationRobotComponentsMenu {
         maximumAmount: 1
       }, {
         type: TypesEnum.SOUND,
-        maximumAmount: 4
+        maximumAmount: 1
       }, {
         type: TypesEnum.LIGHT,
         maximumAmount: 2

@@ -1,3 +1,4 @@
+import BindMethods from "../../../utils/bindmethods.js"
 export { AbstractRobotComponent }
 
 /**
@@ -9,40 +10,13 @@ export { AbstractRobotComponent }
  * 
  * @abstract
  */
+
 class AbstractRobotComponent{
-    constructor(){
-      
-      
-        if (this.toString === undefined) {
-          throw new Error('You have to implement the method toString');
-        }
+    constructor(){};
 
-        if (this.toggleVisibility === undefined) {
-          throw new Error('You have to implement the method toggleVisibility');
-        }
 
-        if (this.reset === undefined) {
-          throw new Error('You have to implement the method reset');
-        }
-     
-        if (this.insertHtml === undefined) {
-          throw new Error('You have to implement the method insertHtml to add the component to the simulation container');
-        }
-
-        if (this.removeHtml === undefined) {
-          throw new Error('You have to implement the method removeHtml to remove the component from the simulation container');
-        }
-
-        if (this.toXml === undefined) {
-          throw new Error('You have to implement the method toXml to save the robot component to an XML file');
-        }
-
-        if (this.initComponentFromXml === undefined) {
-          throw new Error('You have to implement the method toXml to save the robot component to an XML file');
-        }
-    }
-
-    initComponent(eventBus, htmlClasses){
+    initComponent(eventBus, htmlClasses) {
+      BindMethods(this);
       this._eventBus = eventBus;
       this._htmlClasses = htmlClasses;
     }
@@ -55,14 +29,14 @@ class AbstractRobotComponent{
      * Add a string containting a concatination of css classes to the robot component.
      * @param {string} htmlClasses 
      */
-    setHtmlClasses(htmlClasses){
+    setHtmlClasses(htmlClasses) {
       this._htmlClasses = htmlClasses;
     }
     
     /**
      * @returns {string} a concatination of css classes of the robot component devided by spaces.
      */
-    getHtmlClasses(){
+    getHtmlClasses() {
       return this._htmlClasses;
     }
 }

@@ -178,7 +178,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   updateScenario(boardState) {
     super.updateScenario(boardState);
     this.updateScenarioState(boardState);
-    this.updateScenarioDisplay(boardState);
+    //this.updateScenarioDisplay(boardState);
   };
 
   /** 

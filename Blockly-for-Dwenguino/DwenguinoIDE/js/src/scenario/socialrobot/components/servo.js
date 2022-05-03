@@ -1,9 +1,7 @@
 import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js'
 import { EventsEnum } from '../scenario_event.js'
-import jQuery from "jquery";
-import 'jquery-ui-bundle';
-window.$ = window.jQuery = jQuery;
+import BindMethods from "../../../utils/bindmethods.js"
 
 export { SocialRobotServo, CostumesEnum}
 
@@ -23,6 +21,7 @@ Object.freeze(CostumesEnum);
 class SocialRobotServo extends AbstractRobotComponent{
     constructor(eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         super(eventBus, htmlClasses);
+        BindMethods(this);
 
         this._id = id;
         this._type = TypesEnum.SERVO;

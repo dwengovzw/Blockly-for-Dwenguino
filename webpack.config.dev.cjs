@@ -33,9 +33,15 @@ module.exports = [
                             ],
                             plugins: ["@babel/plugin-proposal-class-properties",
                                     "@babel/plugin-transform-classes",
-                                    '@babel/plugin-transform-runtime']
+                                    '@babel/plugin-transform-runtime',
+                                    "autobind-class-methods"]
                         }
                     }
+                },
+                {
+                    test: /\.tsx?$/,
+                    use: 'ts-loader',
+                    exclude: /node_modules/,
                 },
                 {
                     test: /\.css$/,
