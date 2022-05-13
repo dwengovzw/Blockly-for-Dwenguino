@@ -337,15 +337,7 @@ class RobotComponentsFactory {
     let type = data.getAttribute('Type');
     switch (type) {
       case TypesEnum.SERVO:
-        var width = parseFloat(data.getAttribute('Width'));
-        var height = parseFloat(data.getAttribute('Height'));
-        var offsetLeft = parseFloat(data.getAttribute('OffsetLeft'));
-        var offsetTop = parseFloat(data.getAttribute('OffsetTop'));
-        var angle = parseInt(data.getAttribute('Angle'));
-        var pin = parseInt(data.getAttribute('Pin'));
-        var costume = data.getAttribute('Costume');
-        var htmlClasses = data.getAttribute('Classes');
-        this.addServo(pin, costume, angle, true, width, height, offsetLeft, offsetTop, htmlClasses);
+        this.addServoFromXml(data);
         break;
       case TypesEnum.LED:
         this.addLedFromXml(data);
@@ -418,20 +410,28 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SERVO);
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
 
-    if(id == 3){
-      pin = 19;
-    } else if (id == 4){
-      pin = 18;
-    } else if (id == 5){
-      pin = 17;
-    } else if (id == 6){
-      pin = 16;
-    }
 
-    let servo = new SocialRobotServo(this._eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+    let pins = {}
+    pins[SocialRobotServo.pinNames.digitalPin] = 22 - id;
+
+    
+    let servo = new SocialRobotServo();
+    servo.initComponent(this._eventBus, id, pins, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);
 
     this.renderer.initializeCanvas(this._robot, servo); 
+  }
+
+  addServoFromXml(xml){
+    this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
+    this.incrementNumberOf(TypesEnum.SERVO);
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
+
+    let servo = new SocialRobotServo();
+    servo.initComponentFromXml(this._eventBus, id, xml);
+    this._robot.push(servo);
+
+    this.renderer.initializeCanvas(this._robot, servo);
   }
 
   /**

@@ -1,7 +1,7 @@
-import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js'
 import { EventsEnum } from '../scenario_event.js'
 import BindMethods from "../../../utils/bindmethods.js"
+import { RobotComponent } from './robot_component.js'
 
 export { SocialRobotServo, CostumesEnum}
 
@@ -16,219 +16,96 @@ const CostumesEnum = {
 Object.freeze(CostumesEnum);
 
 /**
- * @extends AbstractRobotComponent
+ * @extends RobotComponent
  */
-class SocialRobotServo extends AbstractRobotComponent{
-    constructor(eventBus, id, pin, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses){
-        super(eventBus, htmlClasses);
+class SocialRobotServo extends RobotComponent{
+    static pinNames = {
+        digitalPin: "digitalPin"
+    }
+
+    constructor(){
+        super();
         BindMethods(this);
 
-        this._id = id;
-        this._type = TypesEnum.SERVO;
-        this._width = width;
-        this._height = height;
+        this._images = {
+            foreground: new Image(),
+            background: new Image()
+        }
+        this._costumeImageSources = {
+            foreground: {},
+            background: {}
+        };
+        this._costumeImageSources.foreground[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head_centered.png`;
+        this._costumeImageSources.foreground[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head_centered.png`;
+        this._costumeImageSources.foreground[CostumesEnum.EYE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_forground.svg`;
+        this._costumeImageSources.foreground[CostumesEnum.LEFTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand.png`;
+        this._costumeImageSources.foreground[CostumesEnum.RIGHTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand.png`;
+
+        this._costumeImageSources.background[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_background_centered.png`;
+        this._costumeImageSources.background[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_background_centered.png`;
+        this._costumeImageSources.background[CostumesEnum.EYE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_background.svg`;
+        this._costumeImageSources.background[CostumesEnum.LEFTHAND] = this._costumeImageSources.foreground[CostumesEnum.LEFTHAND];
+        this._costumeImageSources.background[CostumesEnum.RIGHTHAND] = this._costumeImageSources.foreground[CostumesEnum.RIGHTHAND];
+
+        this._backgroundColor = '#206499';
+        this._prevAngle = 0;
+
         this._x = 0;
         this._y = 30;
-        this._offset = { 'left': offsetLeft, 'top': offsetTop };
-        this._angle = angle;
-        this._prevAngle = 0;
-        this._image = [new Image(), new Image()];
-        this._backgroundImage = new Image();
-        this._backgroundImageRotated = new Image();
-        this._backgroundImage.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_background.png`;
-        this._backgroundImageRotated.src = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_background_rotated_90.png`;
+    }
 
-        switch (costume) {
-            case CostumesEnum.PLAIN:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head.png`;
-                break;
-            case CostumesEnum.PLAIN_ROTATE_90:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head.png`;
-                this._x = 30;
-                this._y = 0;
-                break;
-            case CostumesEnum.EYE:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_background.svg`;
-                this._image[1].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_forground.svg`;
-                break;
-            case CostumesEnum.RIGHTHAND:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand.png`;
-                break;
-            case CostumesEnum.LEFTHAND:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand.png`;              
-                break;
-        }
-        
-        this._backgroundColor = '#206499';
-        this._pin = pin;
+    initComponent(eventBus, id, pins, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+        super.initComponent(eventBus, htmlClasses, id, TypesEnum.SERVO, "servo", pins, {}, visible, width, height, offsetLeft, offsetTop, this._costumeImageSources.background[CostumesEnum.PLAIN], 'sim_servo_canvas' + id);
         this._costume = costume;
-        this._canvasId = 'sim_servo_canvas' + this._id; 
-        
-        this.insertHtml();
-        this.toggleVisibility(visible);
+        this._angle = angle;
+        this._prevAngle = angle;
+        this._x = 0;
+        this._y = 30;
+        this._images.background.src = this._costumeImageSources.background[costume];
+        this._images.foreground.src = this._costumeImageSources.foreground[costume];
     }
 
-    toString(){
-        let str = '';
-        str = str.concat(this.getType(), ' ');
-        str = str.concat(this.getId(), ' ');
-        str = str.concat('Angle ', this.getAngle(), ' ');
-        str = str.concat('Costume ', this.getCostume(), ' ');
-        str = str.concat('Pin ', this.getPin(), ' ');
-        str = str.concat('CanvasId ', this.getCanvasId(), ' ');
-        return str;
+    initComponentFromXml(eventBus, id, xml){
+        super.initComponentFromXml(eventBus,
+            this._images.background.src,
+            id,
+            xml);
+        this._angle = Number(xml.getAttribute("Angle"));
+        this._prevAngle = Number(xml.getAttribute("PrevAngle"));
+        this._costume = xml.getAttribute("Costume");
+        this._x = Number(xml.getAttribute("X"));
+        this._y = Number(xml.getAttribute("Y"));
+        this._images.background.src = this._costumeImageSources.background[this.getCostume()];
+        this._images.foreground.src = this._costumeImageSources.foreground[this.getCostume()];
+        
     }
+
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
-        $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
-        $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
-    
-        let simServo = document.getElementById('sim_'+this.getType() + this.getId());
-
-        simServo.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['servoOptions']));
-            this.showDialog();
-        });
-    
-    }
-
-    removeHtml(){
-        $('#sim_' + this.getType() + this.getId()).remove();
-    }
-
-    toggleVisibility(visible){
-        if (visible) {
-            $('#sim_servo' + this.getId()).css('visibility', 'visible');
-        } else {
-            $('#sim_servo' + this.getId()).css('visibility', 'hidden');
-        }
+        super.insertHtml(DwenguinoBlocklyLanguageSettings.translate(["servoOptions"]));
     }
 
     toXml(){
-        let data = '';
-        
-        data = data.concat("<Item ");
-        data = data.concat(" Type='", this.getType(), "'");
-        data = data.concat(" Id='", this.getId(), "'");
-        data = data.concat(" Width='", this.getWidth(), "'");
-        data = data.concat(" Height='", this.getHeight(), "'");
+        let additionalAttributes = "";
+        additionalAttributes = additionalAttributes.concat(" Angle='", this.getAngle(), "'");
+        additionalAttributes = additionalAttributes.concat(" PrevAngle='", this.getPrevAngle(), "'");
+        additionalAttributes = additionalAttributes.concat(" Costume='", this.getCostume(), "'");
+        additionalAttributes = additionalAttributes.concat(" X='", this.getX(), "'");
+        additionalAttributes = additionalAttributes.concat(" Y='", this.getY(), "'");
 
-        let simId = '#sim_' + this.getType() + this.getId();
-        if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
-        } else {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
-        }
-        if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
-        } else {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
-        }
-
-        data = data.concat(" Angle='", this.getAngle(), "'");
-        data = data.concat(" PrevAngle='", this.getPrevAngle(), "'");
-
-        data = data.concat(" Pin='", parseInt(this.getPin()), "'");
-        data = data.concat(" Costume='", this.getCostume(), "'");
-        data = data.concat(" Classes='", this.getHtmlClasses(), "'");
-
-        data = data.concat('></Item>');
-
-        return data;
+        return super.toXml(additionalAttributes);
     }
 
     reset(){
-        // this.setX(0);
-        // this.setY(30);
+        super.reset();
         this.setAngle(0);
         this.setPrevAngle(0);
     }
 
-    showDialog(){
-        $("#componentOptionsModal").modal('show');
-    }
-    
-    removeDialog(){
-        $('div').remove('#componentOptionsModal');
-        $('.modal-backdrop').remove();
-    }
-
     createComponentOptionsModalDialog(headerTitle){
-        this.removeDialog();
-    
-        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
-        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
-    
-        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
-    
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
-    
-        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-
-        this.createPinOptionsInModalDialog();
+        super.createComponentOptionsModalDialog(headerTitle);
         this.createCostumeOptionsDialog();
 
-    }
-
-    createPinOptionsInModalDialog(){
-        $('#componentOptionsModalBody').append('<div id="componentOptionsPin" class="ui-widget row mb-4">');
-        $('#componentOptionsPin').append('<div class="col-md-2">'+'Pin'+'</div>');
-        $('#componentOptionsPin').append('<div id="pin" class="col-md-10"></div>');
-
-        let pins = this.getAllPossibleServoPins();
-        for(let pin = 0; pin < pins.length; pin++){
-            $('#pin').append('<button type="button" id=pin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 pinButton option_button_enabled">'+pins[pin]+'</button>');
-            if(this.getPin() == pins[pin]){
-                $('#pin' + pins[pin]).addClass('option_button_selected');
-            }
-
-            let pinButton = document.getElementById('pin'+pins[pin]);
-
-            pinButton.addEventListener('click', () => { 
-                let newPin = pinButton.name;
-                this.setPin(newPin);
-                $('.pinButton').removeClass('option_button_selected');
-                pinButton.classList.add('option_button_selected');
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
-            });
-        }
-
-        if(this.getId() == 3){
-            $('.pinButton').prop('disabled', true);
-            $('.pinButton').addClass('option_button_disabled');
-            $('#pin19.pinButton').prop('disabled', false);
-            $('#pin19.pinButton').removeClass('option_button_disabled');
-            $('#pin19.pinButton').addClass('option_button_selected');
-        } else if(this.getId() == 4){
-            $('.pinButton').prop('disabled', true);
-            $('.pinButton').addClass('option_button_disabled');
-            $('#pin18.pinButton').prop('disabled', false);
-            $('#pin18.pinButton').removeClass('option_button_disabled');
-            $('#pin18.pinButton').addClass('option_button_selected');
-        } else if(this.getId() == 2){
-            $('.pinButton').prop('disabled', true);
-            $('.pinButton').addClass('option_button_disabled');
-            $('#pin17.pinButton').prop('disabled', false);
-            $('#pin17.pinButton').removeClass('option_button_disabled');
-            $('#pin17.pinButton').addClass('option_button_selected');
-        } else if(this.getId() == 1){
-            $('.pinButton').prop('disabled', true);
-            $('.pinButton').addClass('option_button_disabled');
-            $('#pin16.pinButton').prop('disabled', false);
-            $('#pin16.pinButton').removeClass('option_button_disabled');
-            $('#pin16.pinButton').addClass('option_button_selected');
-        } else {
-            $('.pinButton').removeClass('option_button_disabled');
-            $('#pin40.pinButton').prop('disabled', true);
-            $('#pin41.pinButton').prop('disabled', true);
-            $('#pin40.pinButton').addClass('option_button_disabled');
-            $('#pin41.pinButton').addClass('option_button_disabled');
-        }
     }
 
     getAllPossibleServoPins(){
@@ -273,15 +150,15 @@ class SocialRobotServo extends AbstractRobotComponent{
                         this.setWidth(100);
                         this.setHeight(50);
                         this.setX(0);
-                        this.setY(30);
+                        this.setY(0);
                         break;
                     case CostumesEnum.PLAIN_ROTATE_90:
                         this.setHtmlClasses('sim_canvas servo_canvas');
                         this.setCostume(newCostume);
-                        this.setWidth(50);
-                        this.setHeight(100);
-                        this.setX(30);
-                        this.setY(0);
+                        this.setWidth(100);
+                        this.setHeight(50);
+                        this.setX(0);
+                        this.setY(30);
                         break;
                     case CostumesEnum.EYE:
                         this.setHtmlClasses('servo_canvas');
@@ -289,7 +166,7 @@ class SocialRobotServo extends AbstractRobotComponent{
                         this.setWidth(35);
                         this.setHeight(35);
                         this.setX(0);
-                        this.setY(30);
+                        this.setY(0);
                         break;
                     case CostumesEnum.RIGHTHAND:
                         this.setHtmlClasses('servo_canvas hand_canvas');
@@ -318,29 +195,6 @@ class SocialRobotServo extends AbstractRobotComponent{
         }
     }
 
-    getId(){
-        return this._id;
-    }
-
-    getType(){
-        return this._type;
-    }
-
-    setWidth(width){
-        this._width = width;
-    }
-
-    getWidth(){
-        return this._width;
-    }
-
-    setHeight(height){
-        this._height = height;
-    }
-
-    getHeight(height){
-        return this._height;
-    }
 
     setX(x){
         this._x = x;
@@ -358,13 +212,6 @@ class SocialRobotServo extends AbstractRobotComponent{
         return this._y;
     }
 
-    setOffset(offset){
-        this._offset = offset;
-    }
-
-    getOffset(){
-        return this._offset;
-    }
 
     setAngle(angle){
         this._angle = angle;
@@ -382,12 +229,21 @@ class SocialRobotServo extends AbstractRobotComponent{
         return this._prevAngle;
     }
 
+    /*getType() {
+        return super.getType();
+    }*/
+
+    /**
+     * 
+     * @param {string} index foreground or background
+     * @param {string} image image url
+     */
     setImage(index, image){
-        this._image[index].src = image;
+        this._images[index].src = image;
     }
 
     getImage(index){
-        return this._image[index];
+        return this._images[index];
     }
 
     setBackgroundColor(backgroundColor){
@@ -398,43 +254,19 @@ class SocialRobotServo extends AbstractRobotComponent{
         return this._backgroundColor;
     }
 
-    setPin(pin){
-        this._pin = pin;
-    }
-
-    getPin(){
-        return this._pin;
-    }
 
     setCostume(costume){
         this._costume = costume;
-
-        switch (costume) {
-            case CostumesEnum.PLAIN:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head.png`;
-                break;
-            case CostumesEnum.PLAIN_ROTATE_90:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head.png`;
-                break;
-            case CostumesEnum.EYE:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_background.svg`;
-                this._image[1].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_forground.svg`;
-                break;
-            case CostumesEnum.RIGHTHAND:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand.png`;
-                break;
-            case CostumesEnum.LEFTHAND:
-                this._image[0].src = `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand.png`;           
-                break;
-        }
+        this._images.background.src = this._costumeImageSources.background[costume];
+        this._images.foreground.src = this._costumeImageSources.foreground[costume];
     }
 
     getServoBackground(){
-        return this._backgroundImage;
+        return this._images.background;
     }
 
     getServoBackgroundRotated(){
-        return this._backgroundImageRotated;
+        return this._images.background;
     }
 
     getCostume(){

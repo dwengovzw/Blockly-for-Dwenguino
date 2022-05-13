@@ -638,6 +638,16 @@ MSG.validator = {
   errRoleInvalid: "Your selected role is invalid."
 };
 
+MSG.pinNames = {
+  digitalPin: "digital pin",
+  analogPin: "analog pin",
+  redPin: "red pin",
+  greenPin: "green pin",
+  bluePin: "blue pin",
+  triggerPin: "trigger pin",
+  echoPin: "echo pin",
+}
+
 MSG.conveyor = {
   chooseImage: "Choose image",
   importImage: "Import image",
