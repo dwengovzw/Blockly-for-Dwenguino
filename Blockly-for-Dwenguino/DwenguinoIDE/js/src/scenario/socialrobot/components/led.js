@@ -2,7 +2,6 @@ import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js'
 import { RobotComponent } from './robot_component.js';
-import * as $ from 'jquery';
 import BindMethods from "../../../utils/bindmethods.js"
 
 export { SocialRobotLed, ColorsEnum }
@@ -81,7 +80,7 @@ class SocialRobotLed extends RobotComponent{
 
     createColorOptionsDialog() {
         $('#componentOptionsModalBody').append('<div id="componentOptionsColor" class="ui-widget row mb-4">');
-        $('#componentOptionsColor').append('<div class="col-md-2">'+'Color'+'</div>');
+        $('#componentOptionsColor').append('<div class="col-md-2">'+ DwenguinoBlocklyLanguageSettings.translate(["colorOptions"]) +'</div>');
         $('#componentOptionsColor').append('<div id="color" class="col-md-10"></div>');
 
         for (const [type, t] of Object.entries(ColorsEnum)) {

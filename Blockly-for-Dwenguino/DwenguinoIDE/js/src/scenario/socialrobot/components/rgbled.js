@@ -45,7 +45,7 @@ class SocialRobotRgbLed extends RobotComponent{
     }
 
     insertHtml(){
-        super.insertHtml("rgbLedOptions");
+        super.insertHtml(DwenguinoBlocklyLanguageSettings.translate(["rgbLedOptions"]));
     }
 
 
@@ -65,130 +65,6 @@ class SocialRobotRgbLed extends RobotComponent{
         this.setState([0,0,0]);
         super.reset();
     }
-
-
-
-
-    /*createComponentOptionsModalDialog(headerTitle){
-        this.removeDialog();
-    
-        $('#db_body').append('<div id="componentOptionsModal" class="modal fade" role="dialog"></div>');
-        $('#componentOptionsModal').append('<div id="componentOptionsModalDialog" class="modal-dialog"></div>');
-    
-        $('#componentOptionsModalDialog').append('<div id="componentOptionsModalContent" class="modal-content"></div>');
-    
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalHeader" class="modal-header"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalBody" class="modal-body container"></div>');
-        $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
-    
-        $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
-
-        this.createPinOptionsInModalDialog();
-    }
-
-    createPinOptionsInModalDialog(){
-        $('#componentOptionsModalBody').append('<div id="componentOptionsRedPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsRedPin').append('<div class="col-md-auto">'+'Red pin'+'</div>');
-        $('#componentOptionsRedPin').append('<div id="redPin" class="col-md-10"></div>');
-        $('#componentOptionsModalBody').append('<div id="componentOptionsGreenPin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsGreenPin').append('<div class="col-md-auto">'+'Green pin'+'</div>');
-        $('#componentOptionsGreenPin').append('<div id="greenPin" class="col-md-10"></div>');
-        $('#componentOptionsModalBody').append('<div id="componentOptionsBluePin" class="ui-widget row mb-4"></div>');
-        $('#componentOptionsBluePin').append('<div class="col-md-auto">'+'Blue pin'+'</div>');
-        $('#componentOptionsBluePin').append('<div id="bluePin" class="col-md-10"></div>');
-    
-        let pins = this.getAllPossiblePins();
-        for(let pin = 0; pin < pins.length; pin++){
-            $('#redPin').append('<button type="button" id=redPin'+pins[pin]+' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 redPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
-            $('#greenPin').append('<button type="button" id=greenPin'+pins[pin]+ ' name='+pins[pin]+' class="col-md-auto ml-2 mb-2 greenPinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
-            $('#bluePin').append('<button type="button" id=bluePin'+pins[pin]+ ' name='+pins[pin]+ ' class="col-md-auto ml-2 mb-2 bluePinButton pinButton option_button_enabled">'+pins[pin]+'</button>');
-        }
-
-        for(let p = 0; p < pins.length; p++){
-            if(this.getRedPin() == pins[p]){
-                $('#redPin' + pins[p]).addClass('option_button_selected');
-                $('#greenPin' + pins[p]).addClass('option_button_disabled');
-                $('#greenPin' + pins[p]).prop('disabled', true);
-                $('#bluePin' + pins[p]).addClass('option_button_disabled');
-                $('#bluePin' + pins[p]).prop('disabled', true);
-            }
-
-            if(this.getGreenPin() == pins[p]){
-                $('#greenPin' + pins[p]).addClass('option_button_selected');
-                $('#redPin' + pins[p]).addClass('option_button_disabled');
-                $('#redPin' + pins[p]).prop('disabled', true);
-                $('#bluePin' + pins[p]).addClass('option_button_disabled');
-                $('#bluePin' + pins[p]).prop('disabled', true);
-            }
-
-            if(this.getBluePin() == pins[p]){
-                $('#bluePin' + pins[p]).addClass('option_button_selected');
-                $('#redPin' + pins[p]).addClass('option_button_disabled');
-                $('#redPin' + pins[p]).prop('disabled', true);
-                $('#greenPin' + pins[p]).addClass('option_button_disabled');
-                $('#greenPin' + pins[p]).prop('disabled', true);
-            }
-
-            let redPinButton = document.getElementById('redPin'+pins[p]);
-            let greenPinButton = document.getElementById('greenPin' + pins[p]);
-            let bluePinButton = document.getElementById('bluePin' + pins[p]);
-
-            redPinButton.addEventListener('click', () => { 
-                let newPin = redPinButton.name;
-                this.setRedPin(newPin);
-                $('.redPinButton').removeClass('option_button_selected');
-                redPinButton.classList.add('option_button_selected');
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
-
-                $('.greenPinButton').removeClass('option_button_disabled');
-                $('.greenPinButton').prop('disabled', false);
-                $('#greenPin' + newPin).addClass('option_button_disabled');
-                $('#greenPin' + newPin).prop('disabled', true);
-
-                $('.bluePinButton').removeClass('option_button_disabled');
-                $('.bluePinButton').prop('disabled', false);
-                $('#bluePin' + newPin).addClass('option_button_disabled');
-                $('#bluePin' + newPin).prop('disabled', true);
-            });
-
-            greenPinButton.addEventListener('click', () => { 
-                let newPin = greenPinButton.name;
-                this.setGreenPin(newPin);
-                $('.greenPinButton').removeClass('option_button_selected');
-                greenPinButton.classList.add('option_button_selected');
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
-
-                $('.redPinButton').removeClass('option_button_disabled');
-                $('.redPinButton').prop('disabled', false);
-                $('#redPin' + newPin).addClass('option_button_disabled');
-                $('#redPin' + newPin).prop('disabled', true);
-
-                $('.bluePinButton').removeClass('option_button_disabled');
-                $('.bluePinButton').prop('disabled', false);
-                $('#bluePin' + newPin).addClass('option_button_disabled');
-                $('#bluePin' + newPin).prop('disabled', true);
-            });
-
-            bluePinButton.addEventListener('click', () => { 
-                let newPin = redPinButton.name;
-                this.setBluePin(newPin);
-                $('.bluePinButton').removeClass('option_button_selected');
-                bluePinButton.classList.add('option_button_selected');
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
-
-                $('.redPinButton').removeClass('option_button_disabled');
-                $('.redPinButton').prop('disabled', false);
-                $('#redPin' + newPin).addClass('option_button_disabled');
-                $('#redPin' + newPin).prop('disabled', true);
-
-                $('.greenPinButton').removeClass('option_button_disabled');
-                $('.greenPinButton').prop('disabled', false);
-                $('#greenPin' + newPin).addClass('option_button_disabled');
-                $('#greenPin' + newPin).prop('disabled', true);
-            });
-        }
-    }*/
 
     getAllPossiblePins() {
         return ['3', '5', '6', '11', '14', '15', 'A0', 'A1', 'A2', 'A3', 'A4', 'A5', 

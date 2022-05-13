@@ -645,6 +645,16 @@ MSG_FALLBACK.validator = {
   errRoleInvalid: "Your selected role is invalid."
 };
 
+MSG_FALLBACK.pinNames = {
+  digitalPin: "digital pin",
+  analogPin: "analog pin",
+  redPin: "red pin",
+  greenPin: "green pin",
+  bluePin: "blue pin",
+  triggerPin: "trigger pin",
+  echoPin: "echo pin",
+}
+
 MSG_FALLBACK.conveyor = {
   chooseImage: "Choose an image",
   importImage: "Import an image",

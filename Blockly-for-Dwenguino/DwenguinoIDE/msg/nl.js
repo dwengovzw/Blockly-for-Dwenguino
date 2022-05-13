@@ -981,6 +981,16 @@ MSG.validator = {
   errRoleInvalid: "De opgegeven rol is niet geldig."
 };
 
+MSG.pinNames = {
+  digitalPin: "digitale pin",
+  analogPin: "analoge pin",
+  redPin: "rode pin",
+  greenPin: "groene pin",
+  bluePin: "blauwe pin",
+  triggerPin: "trigger pin",
+  echoPin: "echo pin",
+};
+
 MSG.conveyor = {
   chooseImage: "Kies afbeelding",
   importImage: "Importeer afbeelding",
@@ -1024,4 +1034,4 @@ MSG.conveyor = {
   noColor: "Geen kleur",
   isSimilar: "lijkt op",
   withDifference: "met een speling van %3"
-}
+};

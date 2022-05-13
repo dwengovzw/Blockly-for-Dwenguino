@@ -189,7 +189,7 @@ class RobotComponent extends AbstractRobotComponent {
     createPinOptionsInModalDialog(pinName){
         console.log(this.getPins());
         $('#componentOptionsModalBody').append('<div id="componentOptionsPin' + pinName + '" class="ui-widget row mb-4">');
-        $('#componentOptionsPin' + pinName).append('<div class="col-md-2">'+DwenguinoBlocklyLanguageSettings.translate([pinName])+'</div>');
+        $('#componentOptionsPin' + pinName).append('<div class="col-md-2">' + DwenguinoBlocklyLanguageSettings.translate([ "pinNames", pinName])+'</div>');
         $('#componentOptionsPin' + pinName).append('<div id="pins_' + pinName +'" class="col-md-10"></div>');
 
         let possiblePins = this.getAllPossiblePins();
