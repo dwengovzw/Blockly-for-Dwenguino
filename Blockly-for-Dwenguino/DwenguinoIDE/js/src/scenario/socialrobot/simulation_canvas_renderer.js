@@ -415,12 +415,10 @@ class SimulationCanvasRenderer {
                         self.drawEye(ctx,servo, canvas);
                         break;
                     case 'righthand':
-                        ctx.fillRect(servo.getX()+100, servo.getY()+30, servo.getWidth()-100, servo.getHeight()-60);
-                        self.drawRightHand(ctx,servo);
+                        self.drawHand(ctx,servo);
                         break;
                     case 'lefthand':
-                        ctx.fillRect(servo.getX()+10, servo.getY()+30, servo.getWidth()-28, servo.getHeight()-60);
-                        self.drawLeftHand(ctx,servo);
+                        self.drawHand(ctx,servo);
                         break;
                 }
             }
@@ -440,12 +438,10 @@ class SimulationCanvasRenderer {
                     self.drawEye(ctx,servo, canvas);
                     break;
                 case 'righthand':
-                    ctx.fillRect(servo.getX()+100, servo.getY()+30, servo.getWidth()-100, servo.getHeight()-60);
-                    self.drawRightHand(ctx,servo);
+                    self.drawHand(ctx,servo);
                     break;
                 case 'lefthand':
-                    ctx.fillRect(servo.getX()+10, servo.getY()+30, servo.getWidth()-28, servo.getHeight()-60);
-                    self.drawLeftHand(ctx,servo);
+                    self.drawHand(ctx,servo);
                     break;
             }
         } else {
@@ -634,9 +630,13 @@ class SimulationCanvasRenderer {
      * @param {number} height
      * @param {number} angle the angle to rotate the object
      * @param {HTMLImageElement} image The image to be drawn 
+     * @param {boolean} flipImageHorizontal if the image that gets drawn shoud be mirrored first.
      */
-    drawRotatedImageOnCanvasAroundCenter(ctx, x, y, width, height, angle, image){
+    drawRotatedImageOnCanvasAroundCenter(ctx, x, y, width, height, angle, image, flipImageHorizontal=false){
         ctx.save();
+        if (flipImageHorizontal){
+            ctx.scale(-1, 1);
+        }
         ctx.translate(x + width/2, y + height/2); // move current drawing to origin
         ctx.rotate(angle * Math.PI / 180); // Rotate current image on canvas
         ctx.translate(-1*(x + width/2), -1*(y + height/2)); // move back to original position
@@ -652,18 +652,9 @@ class SimulationCanvasRenderer {
      * @param {int} degrees
      */
     drawRotatedServohead(ctx, myservo, degrees=0){
-        let servo = myservo;
-        // make the servo rotate stepwise
-        let direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
-        let prevAngle = servo.getPrevAngle();
-        let angle = servo.getAngle();
-        let difference = angle-prevAngle;
-
-        if(difference !== 0){ // This is used to make the arm move gradually each update when the difference in angle changes a lot.
-            difference = direction * Math.min(5, Math.abs(difference)); // move a maximum of 5 degrees in each update
-            prevAngle = prevAngle + difference; // Update the previous angle
-            servo.setPrevAngle(prevAngle);
-        } 
+        let servo = myservo; 
+        let prevAngle =  this.calculateServoAngleStepwise(servo.getPrevAngle(), servo.getAngle());
+        servo.setPrevAngle(prevAngle);
         this.drawRotatedImageOnCanvasAroundCenter(ctx, servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight(), degrees+prevAngle, servo.getImage("foreground"));
     }
 
@@ -690,69 +681,73 @@ class SimulationCanvasRenderer {
         ctx.drawImage(image, 0, 0, 100, 100);
     }
 
+
+    calculateServoAngleStepwise(prevAngle, curAngle){
+        let direction = this.getDirection(prevAngle, curAngle);
+        let difference = curAngle - prevAngle;
+        if(difference !== 0){ // This is used to make the arm move gradually each update when the difference in angle changes a lot.
+            difference = direction * Math.min(5, Math.abs(difference)); // move a maximum of 5 degrees in each update
+            prevAngle = prevAngle + difference; // Update the previous angle
+        }
+        return prevAngle 
+    }
+
     /**
      * 
      * @param {RenderingContext} ctx 
      * @param {SocialRobotServo} servo 
      * @param {HTMLCanvasElement} canvas 
      */
-    renderIris(ctx, servo, canvas){
+    renderIris(ctx, servo, canvas, offsetAngle=0){
         let image = servo.getImage("foreground");
 
-        // make the servo rotate stepwise
-        let direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
-        let prevAngle = servo.getPrevAngle();
-        let angle = servo.getAngle();
-        let difference = angle-prevAngle;
-
-        if(difference !== 0){ // This is used to make the arm move gradually each update when the difference in angle changes a lot.
-            difference = direction * Math.min(5, Math.abs(difference)); // move a maximum of 5 degrees in each update
-            prevAngle = prevAngle + difference; // Update the previous angle
-            servo.setPrevAngle(prevAngle);
-        } 
+        let prevAngle = this.calculateServoAngleStepwise(servo.getPrevAngle(), servo.getAngle());
+        servo.setPrevAngle(prevAngle);
 
         ctx.save();
         ctx.translate(50, 50);
-        ctx.rotate(prevAngle);
+        ctx.rotate((offsetAngle + prevAngle) * Math.PI / 180);
         ctx.translate(-50, -50);
-        //ctx.translate(100/2, 100/2);
-        //ctx.translate(servo.getX()/2 - servo.getWidth()/2, servo.getY() + servo.getHeight());
         ctx.drawImage(image, 0, 0, 100, 100);
         ctx.restore();
+    }
 
-        /*var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
+     /**
+     * Draws the servohead of the given servo at the correct angle on the given context. 
+     * The selected servo skin is a left hand.
+     * @param {RenderingContext} ctx 
+     * @param {SocialRobotServo} servo 
+     */
+      drawLeftHand(ctx, servo){
+        // make the servo rotate stepwise
+        var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
 
-        let difference = servo.getAngle()-servo.getPrevAngle();
+        let difference = servo.getAngle() - servo.getPrevAngle();
         if(difference != 0){
-            var horTranslation = (servo.getPrevAngle() / 120 * (canvas.width-60)) + 5;
             if ((difference > 5) || (difference < -5)) {
                 let prevAngle = servo.getPrevAngle() + (5 * direction);
                 servo.setPrevAngle(prevAngle);
-                if((servo.getPrevAngle() >= 0) & (servo.getPrevAngle() <= 120)){
-                    ctx.drawImage(image, horTranslation, canvas.height/2-30, 60, 60);
-                } else if (servo.getPrevAngle() <= 130){
-                    horTranslation = (canvas.width-60) + 5;
-                    ctx.drawImage(image, horTranslation, canvas.height/2-30, 60, 60);
-                }
+                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
+                ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+                ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
+                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             } else {
                 let prevAngle = servo.getPrevAngle() + difference;
                 servo.setPrevAngle(prevAngle);
-                if((servo.getPrevAngle() >= 0) & (servo.getPrevAngle() <= 120)){
-                    ctx.drawImage(image, horTranslation, canvas.height/2-30, 60, 60);
-                } else if (servo.getPrevAngle() <= 130){
-                    horTranslation = (canvas.width-60) + 5;
-                    ctx.drawImage(image, horTranslation, canvas.height/2-30, 60, 60);
-                }
+                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+                ctx.rotate(-servo.getAngle() * Math.PI / 180);
+                ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+                ctx.rotate(servo.getAngle() * Math.PI / 180);
+                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
             }
         } else {
-            var horTranslation = (servo.getAngle() / 120 * (canvas.width-60)) + 5;
-            if((servo.getAngle() >= 0) & (servo.getAngle() <= 120)){
-                ctx.drawImage(image, horTranslation, canvas.height/2-30, 60, 60);
-            } else if (servo.getAngle() <= 130){
-                horTranslation = (canvas.width-60) + 5;
-                ctx.drawImage(image, horTranslation, canvas.height/2-30, 60, 60);
-            }
-        }*/
+            ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
+            ctx.rotate(-servo.getAngle() * Math.PI / 180);
+            ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
+            ctx.rotate(servo.getAngle() * Math.PI / 180);
+            ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
+        }
     }
 
     /**
@@ -761,19 +756,22 @@ class SimulationCanvasRenderer {
      * @param {RenderingContext} ctx 
      * @param {SocialRobotServo} servo 
      */
-    drawRightHand(ctx, servo){
-        var diff = servo.getAngle()-servo.getPrevAngle();
-        if(diff > 0) {
-            this.drawDown(ctx, servo);
-        } else if(diff < 0) {
-            this.drawUp(ctx, servo);
-        } else {
-            ctx.translate(servo.getX()+servo.getWidth()/2+50,servo.getY()+servo.getHeight()/2);
-            ctx.rotate(-servo.getAngle() * Math.PI / 180);
-            ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
-            ctx.rotate(servo.getAngle() * Math.PI / 180);
-            ctx.translate(-servo.getX()-servo.getWidth()/2-50, -servo.getY()-servo.getHeight()/2); 
+    drawHand(ctx, servo){
+        let newAngle = this.calculateServoAngleStepwise(servo.getPrevAngle(), servo.getAngle());
+        let offsetAngle = 0; // rotate hand down by default
+        let offsetLeft = 35;
+        servo.setPrevAngle(newAngle);
+        let armShape = {
+            x: 27,
+            y: 0,
+            width: 32,
+            height: 76
         }
+        ctx.fillRect(offsetLeft + armShape.x, armShape.y, armShape.width, armShape.height); // These numbers were calculated based on the png image offset
+        ctx.beginPath();
+        ctx.arc(offsetLeft + armShape.x + armShape.width/2, armShape.height, armShape.width/2, 0, 2 * Math.PI);
+        ctx.fill();
+        this.drawRotatedImageOnCanvasAroundCenter(ctx, offsetLeft, 0, servo.getWidth(), servo.getHeight(), offsetAngle + newAngle, servo.getImage("background"));
     }
 
     /**
@@ -828,43 +826,7 @@ class SimulationCanvasRenderer {
         }
     }
 
-    /**
-     * Draws the servohead of the given servo at the correct angle on the given context. 
-     * The selected servo skin is a left hand.
-     * @param {RenderingContext} ctx 
-     * @param {SocialRobotServo} servo 
-     */
-    drawLeftHand(ctx, servo){
-        // make the servo rotate stepwise
-        var direction = this.getDirection(servo.getPrevAngle(), servo.getAngle());
-
-        let difference = servo.getAngle() - servo.getPrevAngle();
-        if(difference != 0){
-            if ((difference > 5) || (difference < -5)) {
-                let prevAngle = servo.getPrevAngle() + (5 * direction);
-                servo.setPrevAngle(prevAngle);
-                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
-                ctx.rotate(-servo.getPrevAngle() * Math.PI / 180);
-                ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
-                ctx.rotate(servo.getPrevAngle() * Math.PI / 180);
-                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
-            } else {
-                let prevAngle = servo.getPrevAngle() + difference;
-                servo.setPrevAngle(prevAngle);
-                ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
-                ctx.rotate(-servo.getAngle() * Math.PI / 180);
-                ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
-                ctx.rotate(servo.getAngle() * Math.PI / 180);
-                ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
-            }
-        } else {
-            ctx.translate(servo.getX()+servo.getWidth()/2,servo.getY()+servo.getHeight()/2);
-            ctx.rotate(-servo.getAngle() * Math.PI / 180);
-            ctx.drawImage(servo.getImage("background"),-servo.getWidth()/2,-servo.getHeight()/2,servo.getWidth(),servo.getHeight());
-            ctx.rotate(servo.getAngle() * Math.PI / 180);
-            ctx.translate(-servo.getX()-servo.getWidth()/2, -servo.getY()-servo.getHeight()/2); 
-        }
-    }
+   
 
     /**
      * Draw all sound sensors on sound canvases with the image specified in robot.

@@ -108,7 +108,7 @@ class SocialRobotServo extends RobotComponent{
 
     }
 
-    getAllPossibleServoPins(){
+    getAllPossiblePins(){
         return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 40, 41, "SERVO_1", "SERVO_2", "SERVO_3", "SERVO_4", "SERVO_5", "SERVO_6"];
     }
 
@@ -171,7 +171,7 @@ class SocialRobotServo extends RobotComponent{
                     case CostumesEnum.RIGHTHAND:
                         this.setHtmlClasses('servo_canvas hand_canvas');
                         this.setCostume(newCostume);
-                        this.setWidth(64);
+                        this.setWidth(86);
                         this.setHeight(149);
                         this.setX(0);
                         this.setY(30);
@@ -179,7 +179,7 @@ class SocialRobotServo extends RobotComponent{
                     case CostumesEnum.LEFTHAND:
                         this.setHtmlClasses('servo_canvas hand_canvas');
                         this.setCostume(newCostume);
-                        this.setWidth(64);
+                        this.setWidth(86);
                         this.setHeight(149);
                         this.setX(0);
                         this.setY(30);
