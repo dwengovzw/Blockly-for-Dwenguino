@@ -1130,20 +1130,26 @@ let DwenguinoBlockly = {
     },
 
     displayCookieConsent: function(){
-      let cookieConsent = DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['cookieConsent'])
-                          + '<a id="cookie-info" href="#" class="ml-1">' + DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['cookieInfo']) + '</a>'
-                          + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['close'])+'</button></div>';
+      // If not yet accepted show cookies banner
+      if (localStorage.getItem("cookies") !== "accept"){
+        let cookieConsent = DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['cookieConsent'])
+                            + '<a id="cookie-info" href="#" class="ml-1">' + DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['cookieInfo']) + '</a>'
+                            + '<div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button id="allow-cookies" class="allow-button mr-1">'+DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['close'])+'</button></div>';
 
-      $('#cookie-consent').html(cookieConsent);
+        $('#cookie-consent').html(cookieConsent);
 
-      let self = this;
-      $("#cookie-info").click(() => {
-        self.cookiesInformation.initCookiesInformation();
-      });
+        let self = this;
+        $("#cookie-info").click(() => {
+          self.cookiesInformation.initCookiesInformation();
+        });
 
-      $('#allow-cookies').click(function () {
+        $('#allow-cookies').click(function () {
+          localStorage.setItem("cookies", "accept");
+          $('#cookie-consent').remove();
+        }); 
+      } else {
         $('#cookie-consent').remove();
-      });      
+      }    
       
       // <span>This site uses cookies to enhance user experience. see<a href="#" class="ml-1 text-decoration-none">Privacy policy</a> </span>
       // <div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button class="allow-button mr-1">Allow cookies</button> <button class="allow-button">cancel</button> </div>

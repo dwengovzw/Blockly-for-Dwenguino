@@ -141,11 +141,11 @@ class DwenguinoSimulationRobotComponentsMenu {
     $('#rc_led').append('<div id="rc_led_img" class="rc_img"></div>');
     $('#rc_led').append('<div id="rc_led_options" class="rc_options"></div>');
 
-    $('#robot_components_menu').append('<div id="rc_ledmatrix" class="robot_components_item bg-c-4 card"></div>');
+    /*$('#robot_components_menu').append('<div id="rc_ledmatrix" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_ledmatrix').append('<div id="rc_ledmatrix_tag" class="rc_tag text-center"></div>');
     $('#rc_ledmatrix').append('<div id="rc_ledmatrix_img" class="rc_img"></div>');
     $('#rc_ledmatrix').append('<div id="rc_ledmatrix_options" class="rc_options"></div>');
-
+*/
     $('#robot_components_menu').append('<div id="rc_button" class="robot_components_item bg-c-4 card"></div>');
     $('#rc_button').append('<div id="rc_button_tag" class="rc_tag text-center"></div>');
     $('#rc_button').append('<div id="rc_button_img" class="rc_img"></div>');

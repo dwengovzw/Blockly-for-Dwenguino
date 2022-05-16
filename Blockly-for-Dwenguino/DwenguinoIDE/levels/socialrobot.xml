@@ -80,57 +80,19 @@
 <sep></sep>
 
 <category id="catInput" colour="315" name='Input'>
-    <block type="input_sonar_sensor_select"></block>
+    <!-- <block type="input_sonar_sensor_select"></block> -->
 
     <!--<block type="input_sound_sensor_select"></block>-->
 
-    <block type="input_read_pin">
-        <value name="PIN">
-            <block type="dwenguino_pins"> 
-                <field name="PIN">0</field>
-            </block>
-        </value>
-    </block>
-
-    <block type="dwenguino_wait_for_switch"></block>
-
-    <block type="dwenguino_digital_read_switch"></block>
-    <block type="dwenguino_pressed"></block>
-    <block type="dwenguino_highlow"></block>
-
-     <block type="input_pir_sensor">
-        <value name="trig">
-            <block type="char_type" id="pir_sensor_pin"> 
-            <field name="BITMASK">13</field>
-            </block>
-        </value>
-    </block>
-
-    <block type="input_touch_sensor">
-        <value name="pin">
-            <block type="math_number" id="touch_sensor_pin"> 
-            <field name="NUM">14</field>
-            </block>
-        </value>
-    </block>
-
-   <block type="input_button">
-        <value name="pin">
-            <block type="math_number" id="button_pin"> 
-            <field name="NUM">18</field>
-            </block>
-        </value>
-    </block> 
-
     <block type="sonar_sensor">
         <value name="trig">
-            <block type="char_type" id="72">
-                <field name="BITMASK">11</field>
+            <block type="dwenguino_pins" id="72">
+                <field name="PIN">SONAR_1_TRIG</field>
             </block>
         </value>
         <value name="echo">
-            <block type="char_type" id="77">
-                <field name="BITMASK">12</field>
+            <block type="dwenguino_pins" id="77">
+                <field name="PIN">SONAR_1_ECHO</field>
             </block>
         </value>
     </block>
@@ -142,6 +104,45 @@
                 </block>
         </value>
     </block>
+
+    <block type="input_button">
+        <value name="pin">
+            <block type="dwenguino_pins" id="button_pin"> 
+                <field name="NUM">SW_C</field>
+            </block>
+        </value>
+    </block> 
+
+    <block type="input_read_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins"> 
+                <field name="PIN">0</field>
+            </block>    
+        </value>
+    </block>
+
+    <block type="dwenguino_wait_for_switch"></block>
+
+    <block type="dwenguino_digital_read_switch"></block>
+    <block type="dwenguino_pressed"></block>
+    <block type="dwenguino_highlow"></block>
+
+     <block type="input_pir_sensor">
+        <value name="trig">
+            <block type="dwenguino_pins" id="pir_sensor_pin"> 
+                <field name="BITMASK">13</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="input_touch_sensor">
+        <value name="pin">
+            <block type="dwenguino_pins" id="touch_sensor_pin"> 
+                <field name="NUM">14</field>
+            </block>
+        </value>
+    </block>
+    
 </category>
 
 <category id="catOutput" colour="315" name='Output'>

@@ -290,8 +290,8 @@ Blockly.JavaScript['output_servo_dropdown'] = function(block){
    var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye', Blockly.JavaScript.ORDER_ATOMIC);
    
    var code = machine 
-   + 'servoWithPin(' + value_servo_right_eye + ', ' + '0' + ');\n' 
-   + machine + 'servoWithPin(' + value_servo_left_eye + ', ' + '0' + ');\n';
+   + 'servoWithPin(' + value_servo_right_eye + ', ' + '90' + ');\n' 
+   + machine + 'servoWithPin(' + value_servo_left_eye + ', ' + '90' + ');\n';
    console.log(code);
    return code;
  };
@@ -301,8 +301,8 @@ Blockly.JavaScript['output_servo_dropdown'] = function(block){
    var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye1', Blockly.JavaScript.ORDER_ATOMIC);
    
    var code = machine 
-   + 'servoWithPin(' + value_servo_right_eye + ', ' + '120' + ');\n' 
-   + machine + 'servoWithPin(' + value_servo_left_eye + ', ' + '120' + ');\n';
+   + 'servoWithPin(' + value_servo_right_eye + ', ' + '-90' + ');\n' 
+   + machine + 'servoWithPin(' + value_servo_left_eye + ', ' + '-90' + ');\n';
    console.log(code);
    return code;
  };
