@@ -48,27 +48,6 @@ let sslPort = process.env.SSLPORT || 443;;
 console.log("SSL port: " + sslPort);
 
 
-/** There are three environment settings
- *  1) production: set in the .env file on the server.
- *  2) standalone: set by the local server in the install.sh script.
- *  3) development: Not explicitly set in the environment (assumed when no environment is set)
- *  */ 
-
-// Use server sertificate in production and local self signed certificate in standalone and debug mode.
-/*if (process.env.NODE_ENV === 'production') {
-    // For SSL certificates with Certbot from Let's Encrypt
-    options['key'] = fs.readFileSync('/home/ubuntu/certs/privkey.pem');
-    options['cert'] = fs.readFileSync('/home/ubuntu/certs/cert.pem');
-}else if (process.env.NODE_ENV === 'standalone'){
-    options['key'] = fs.readFileSync('./security/cert.key');
-    options['cert'] = fs.readFileSync('./security/cert.pem');
-}else{
-    options['key'] = fs.readFileSync('./backend/security/cert.key');
-    options['cert'] = fs.readFileSync('./backend/security/cert.pem');
-}*/
-
-
-
 // Initialize the app
 let app = express();
 
@@ -117,20 +96,8 @@ console.log(emailService);
 export default emailService;
 
 
-/*if (process.env.NODE_ENV === 'production') {
-    // Redirect http requests to https
-    app.use((req, res, next) => {
-        let redirectport = (sslPort != 443 ? `:${sslPort}` : "")
-            if(req.protocol ==='http') {
-                    res.redirect(301, `https://${req.hostname}${redirectport}${req.url}`);
-            }
-            next();
-    });
-}*/
-
     // Setup static file serving
 if (process.env.NODE_ENV === 'production') {
-    //app.use(express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 } else if (process.env.NODE_ENV === 'standalone') {
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));

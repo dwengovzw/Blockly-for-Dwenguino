@@ -188,6 +188,7 @@ var MSG = {
   ledOptions: "Opties van de led",
   pinOptions: "Pin",
   colorOptions: "Kleur",
+  downloadError: "<h3>Sorry, het is niet gelukt om je code te downloaden</h3>",
   runError: "<h3>Sorry, het is niet gelukt om de code te uploaden naar het bord</h3>",
   uploadError: "Volg deze stappen om het Dwenguino-bord te herstarten: \n    1. Maak de USB-kabel los \n    2. Verbind de computer en het Dwenguino-bord met de USB-kabel \n    3. Druk tegelijkertijd de RESET-knop en de ZUID-knop in van het Dwenguino-bord \n    4. Los dan eerst de RESET-knop \n    5. Los daarna de ZUID-knop \n    6. Upload het programma opnieuw via de <span id='db_menu_item_run' class='fas fa-play-circle' alt='Upload code to Dwenguino board'></span>-knop in het hoofdmenu ",
   cleanError: "De code van het vorige programma kon niet worden verwijderd.\nControleer of er een ander programma een .cpp bestand gebruikt en sluit dit programma.",

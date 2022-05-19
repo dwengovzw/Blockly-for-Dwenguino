@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="google" value="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="./favicon.ico">
     <title>Blockly Demo:</title>
     <link rel="stylesheet" href="./DwenguinoIDE/css/all.css" rel="stylesheet">
     <link rel="stylesheet" href="./DwenguinoIDE/css/style.css">
@@ -34,15 +35,6 @@
                 </label>
                 <span id="switch_to_code">Code</span>
             </span>
-            |
-            <span id="switch_hardware_view">
-                <span id="switch_to_dwenguino">Dwenguino</span>
-                <label class="code-switch">
-                    <input id="hardware_checkbox" type="checkbox">
-                    <span class="code-slider round"></span>
-                </label>
-                <span id="switch_to_arduino">Arduino</span>
-            </span>
             
         </span>
         <span class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
@@ -62,25 +54,17 @@
     <div id="db_main_content" class="db_content resize-container">
         <div id="db_blockly" class="resize-drag">
             <div id="db_code_pane">
-                <div id="db_code_pane_utils" class="container">
+                <div id="db_code_pane_utils">
                     <div class="row">
-                        <div id="copy-arduino-code" class="col-6">
+                        <div id="copy-arduino-code" class="col-12">
                             <span id="copy-code" class="sim_item fas fa-copy"></span>
                             <span id="notification-copy"></span>
                         </div>
-                        <!--<div id="switch_hardware_view" class="col-4">
-                            <span id="switch_to_dwenguino">Dwenguino</span>
-                            <label class="code-switch">
-                                <input id="hardware_checkbox" type="checkbox">
-                                <span class="code-slider round"></span>
-                            </label>
-                            <span id="switch_to_arduino">Arduino</span>
-                        </div>-->
                     </div>
                 </div>
                 <div id="db_code_pane_code">
-                    <pre id="db_arduino_code" class="content">  
-                    </pre>  
+                    <!--<pre id="db_arduino_code" class="content">  
+                    </pre>  -->
                 </div>
             </div>
         </div>

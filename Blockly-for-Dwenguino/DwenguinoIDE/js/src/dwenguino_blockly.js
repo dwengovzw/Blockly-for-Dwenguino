@@ -10,6 +10,8 @@ import jQuery from "jquery";
 import 'jquery-ui-bundle';
 import 'bootstrap';
 import TextualEditor from './textual_editor/textual_editor.js'
+import * as monaco from 'monaco-editor';
+
 window.$ = window.jQuery = jQuery;
 
 /* global Blockly, hopscotch, tutorials, JsDiff, DwenguinoBlocklyLanguageSettings, MSG, BlocklyStorage */
@@ -97,23 +99,6 @@ let DwenguinoBlockly = {
           self.loginMenu.createInitialMenu();
         });
 
-        // //init slider control
-        // $( "#db_menu_item_difficulty_slider" ).slider({
-        //     value:0,
-        //     min: 0,
-        //     max: 2,
-        //     step: 1,
-        //     slide: function( event, ui ) {
-        //         DwenguinoBlockly.setDifficultyLevel(ui.value);
-        //         let data = { 
-        //           "difficultyLevel":ui.value,
-        //         }
-        //         let eventToRecord = self.logger.createEvent(EVENT_NAMES.difficultyLevel, data);
-        //         self.logger.recordEvent(eventToRecord);
-        //     }
-        // });
-        // $( "#db_menu_item_difficulty_slider_input" ).val( "$" + $( "#db_menu_item_difficulty_slider" ).slider( "value" ) );
-
         //init resizable panels
         $( "#db_blockly" ).resizable({
             handles: "e"
@@ -132,15 +117,6 @@ let DwenguinoBlockly = {
         //turn on the simulator by default
         DwenguinoBlockly.toggleSimulator();
 
-        //save/upload buttons
-        $("#db_menu_item_run").click(function(){
-          // TODO reset setup
-          // Following lines are disabled for testing webusb, PUT THEM BACK!
-          Blockly.Arduino.emptySetup();
-          var code = DwenguinoBlockly.getCodeForCurrentContext();
-          DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
-          //DwenguinoBlockly.runEventHandler(code);
-        });
 
         //The following code handles the upload of a saved file.
         //If it is run as an arduino ide plugin its shows a filechooser and returns the xml string (depricated and removed)
@@ -227,7 +203,6 @@ let DwenguinoBlockly = {
           
         });
 
-
         // This code handles the download of the workspace to a local file.
         // If this is run in the arduino ide, a filechooser is shown. (depricated and removed)
         // If it is run in the browser, the document is downloaded using the name blocks.xml.
@@ -261,11 +236,7 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.logger.recordEvent(event);
         });
 
-        $("#db_menu_item_clear").click(function(){
-          DwenguinoBlockly.simulationEnvironment.stop();
-          var code = '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
-          DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
-        });
+        this.resetRunButton(); // set event handlers on run and clear buttons
 
          $("#blocklyDiv").click(function(){
            DwenguinoBlockly.simulationEnvironment.stop();
@@ -401,7 +372,7 @@ let DwenguinoBlockly = {
       if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
         return Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
       } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
-        return DwenguinoBlockly.textualEditor.getCurrentCode();
+        return DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
       } else {
         return "";
       }
@@ -444,15 +415,47 @@ let DwenguinoBlockly = {
 
     downloadDwenguinoBinaryHandler: function(code){
       DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
-      // Old code now perform async
-      /*let url = DwenguinoBlockly.compilationPath + "?code=" + encodeURIComponent(code);
-      let res = "success";
-      try{
-        res = window.open(url, '_blank');
-        console.log(res);
-      } catch (e) {
-        console.log(res);
-      }*/
+    },
+
+    downloadBlobToFile: function(blob, filename){
+      let compilationSuccessMessage = "Compilation successful.</br>Downloading file..."
+      DwenguinoBlockly.textualEditor.getErrorLog().setContent(compilationSuccessMessage);
+      if (typeof window.navigator.msSaveBlob !== 'undefined') {
+        // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
+        window.navigator.msSaveBlob(blob, filename);
+      } else {
+          var URL = window.URL || window.webkitURL;
+          var downloadUrl = URL.createObjectURL(blob);
+
+          if (filename) {
+              // use HTML5 a[download] attribute to specify filename
+              var a = document.createElement("a");
+              // safari doesn't support this yet
+              if (typeof a.download === 'undefined') {
+                  window.location.href = downloadUrl;
+              } else {
+                  a.href = downloadUrl;
+                  a.download = filename;
+                  document.body.appendChild(a);
+                  a.click();
+              }
+          } else {
+              window.location.href = downloadUrl;
+          }
+          setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup          
+      }
+    },
+
+    setBlobContentToErrorWindow: function(blob){
+      blob.text().then(text => {
+        let errorInfo = JSON.parse(text);
+        if (DwenguinoBlockly.currentProgrammingContext == "text"){
+          DwenguinoBlockly.textualEditor.getErrorLog().setContent(errorInfo.trace);
+        } else {
+          DwenguinoBlockly.showModalErrorDialog(errorInfo);
+        }
+        
+      })
     },
 
     downloadDwenguinoBinaryHandlerAjax: function(code){
@@ -475,39 +478,18 @@ let DwenguinoBlockly = {
                 var matches = filenameRegex.exec(disposition);
                 if (matches != null && matches[1]) filename = matches[1].replace(/['"]/g, '');
             }
-
-            if (typeof window.navigator.msSaveBlob !== 'undefined') {
-                // IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
-                window.navigator.msSaveBlob(blob, filename);
+            if (filename === "error.log"){
+              DwenguinoBlockly.setBlobContentToErrorWindow(blob);
             } else {
-                var URL = window.URL || window.webkitURL;
-                var downloadUrl = URL.createObjectURL(blob);
-
-                if (filename) {
-                    // use HTML5 a[download] attribute to specify filename
-                    var a = document.createElement("a");
-                    // safari doesn't support this yet
-                    if (typeof a.download === 'undefined') {
-                        window.location.href = downloadUrl;
-                    } else {
-                        a.href = downloadUrl;
-                        a.download = filename;
-                        document.body.appendChild(a);
-                        a.click();
-                    }
-                } else {
-                    window.location.href = downloadUrl;
-                }
-
-                setTimeout(function () { URL.revokeObjectURL(downloadUrl); }, 100); // cleanup
-                
+              DwenguinoBlockly.downloadBlobToFile(blob, filename);
             }
+            // To here
+
             DwenguinoBlockly.resetRunButton();
           },
-          error: function(err){
+          error: function(err, textStatus, errorThrown){
             console.log(`Compilation failed with error: ${err}`)
             DwenguinoBlockly.resetRunButton();
-
           }
         })
         
@@ -516,75 +498,12 @@ let DwenguinoBlockly = {
       }
     },
 
-    runEventHandler: function(code){
-      
-      DwenguinoBlockly.disableRunButton();
-      
-      $.ajax({
-          url: ServerConfig.getServerUrl() + "/utilities/run",
-          dataType: 'json',
-          type: 'post',
-          contentType: 'application/x-www-form-urlencoded',
-          data: {"code": code},
-          success: function( data, textStatus, jQxhr ){
-              console.log('succes');
-              console.log(data);
-
-              if (data.status === "error"){
-                DwenguinoBlockly.showModalErrorDialog(data);
-              }
-              DwenguinoBlockly.resetRunButton();
-          },
-          error: function( jqXhr, textStatus, errorThrown ){
-              console.log( errorThrown );
-              DwenguinoBlockly.resetRunButton();
-          }
-      });
-      
-      console.log(code.replace(/\r?\n|\r/g, "\n"));
-
-      var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-      var xmlCode = Blockly.Xml.domToText(xml);
-      
-      // Get javascript and python for current code
-      let javascriptCode = "";
-      let pythonCode = "";
-      try {
-        javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
-      } catch (error){
-        javascriptCode = "invalid code";
-      }
-      try {
-        pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
-      } catch (error){
-        pythonCode = "invalid code";
-      }
-      let data = {
-        arduinoCode: code,
-        xmlCode: xmlCode,
-        javascriptCode: javascriptCode,
-        pythonCode: pythonCode
-      }
-
-      let eventToRecord = DwenguinoBlockly.logger.createEvent(EVENT_NAMES.runClicked, data);
-      DwenguinoBlockly.logger.recordEvent(eventToRecord);
-    },
-
-
-
-
     showModalErrorDialog: function(error){
-      $('#errorModal .modal-header').html(DwenguinoBlocklyLanguageSettings.translate(['runError']));
-      if (error.info === "Upload failed"){
-        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['uploadError']));
-      } else if (error.info === "Compilation failed"){
-        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['compileError']));
-      } else if (error.info === "Clean failed"){
-        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['cleanError']));
-      } else {
-        $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['uploadError']));
-      }
+      // Set modal dialog error messages.
+      $('#errorModal .modal-header').html(DwenguinoBlocklyLanguageSettings.translate(['downloadError']));
+      $('#errorModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['compileError']));
 
+      // Create additional info button
       $('#errorModal .modal-body .console').hide();
       $('#errorModal .modal-body .error_details').off("click");
       $('#errorModal .modal-body .error_details').click(function(){
@@ -599,6 +518,7 @@ let DwenguinoBlockly = {
       }
       $('#errorModal').modal('show');
     },
+
     disableRunButton: function(){
       $("#db_menu_item_run").off("click");
       $("#db_menu_item_clear").off("click");
@@ -607,12 +527,12 @@ let DwenguinoBlockly = {
       $("#db_menu_item_run").css({color: "gray"});
       $("#db_menu_item_clear").css({color: "gray"});
     },
+
     resetRunButton: function(){
           $("#db_menu_item_run").click(function(){
             Blockly.Arduino.emptySetup();
             var code = DwenguinoBlockly.getCodeForCurrentContext();
             DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
-            //DwenguinoBlockly.runEventHandler(code);
           });
 
           $("#db_menu_item_clear").click(function(){
@@ -696,31 +616,12 @@ let DwenguinoBlockly = {
      * has recently changed.
      */
     renderCode: function() {
-
-        // Log code change if code has changed
-        DwenguinoBlockly.logCodeChange();
+        DwenguinoBlockly.logCodeChange(); // Log code change if code has changed
 
         Blockly.Arduino.emptySetup();
         let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+        DwenguinoBlockly.textualEditor.getEditorPane().renderEditor(code);
 
-        DwenguinoBlockly.textualEditor.renderEditor(code);
-
-        /* // display code
-        if (DwenguinoBlockly.previouslyRenderedCode === null){
-            document.getElementById('db_arduino_code').innerHTML =
-                prettyPrintOne(code.replace(/</g, "&lt;").replace(/>/g, "&gt;"), 'cpp', false);
-                DwenguinoBlockly.previouslyRenderedCode = code;
-        }
-        else if (code !== DwenguinoBlockly.previouslyRenderedCode) {
-          //When the redered code changed log the block structures
-          //Do this because when the user moves blocks we do not want to log anything
-          //We want to log code progression not code movement
-          let resultStringArray = DwenguinoBlockly.highlightModifiedCode(code);            
-
-          document.getElementById('db_arduino_code').innerHTML =
-              prettyPrintOne(resultStringArray.join(''), 'cpp', false);
-          DwenguinoBlockly.previouslyRenderedCode = code;  
-        } */
     },
 
     highlightModifiedCode(code){
@@ -740,14 +641,6 @@ let DwenguinoBlockly = {
       }
       return resultStringArray
     }, 
-
-    // setDifficultyLevel: function(level){
-    //     DwenguinoBlockly.difficultyLevel = level;
-    //     $("#toolbox").load("./DwenguinoIDE/levels/lvl" + level + ".xml", function(){
-    //         DwenguinoBlockly.doTranslation();
-    //         DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
-    //     });
-    // },
 
     fallbackCopyCodeToClipboard: function(text) {
       var textArea = document.createElement("dummy-text-area");
@@ -777,7 +670,7 @@ let DwenguinoBlockly = {
     },
 
     copyCodeToClipboard: function(){
-      let code = DwenguinoBlockly.textualEditor.getCurrentCode();
+      let code = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
       if (!navigator.clipboard) {
         fallbackCopyCodeToClipboard(code);
         return;
@@ -1150,16 +1043,12 @@ let DwenguinoBlockly = {
       } else {
         $('#cookie-consent').remove();
       }    
-      
-      // <span>This site uses cookies to enhance user experience. see<a href="#" class="ml-1 text-decoration-none">Privacy policy</a> </span>
-      // <div class=" ml-2 d-flex align-items-center justify-content-center g-2"> <button class="allow-button mr-1">Allow cookies</button> <button class="allow-button">cancel</button> </div>
     }
 };
 
 
 
 $(document).ready(function() {
-  
   DwenguinoBlockly.setupEnvironment();
 });
 
