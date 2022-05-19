@@ -118,29 +118,29 @@ let generateBinary = function(res, objid){
     let tmp_file = path.resolve(prefix + "/compilation/sketch-" + objid + "/" + objdir + "/output-" + objid + ".bin");
     // Copy hardware folder to sketch folder (create first) to enable compilation using makefile
     handleExternalCommand("cp -R " + command_location + "/hardware " + command_location +  "/sketch-" + objid + "/ && cp " + command_location + "/Makefile " + command_location +  "/sketch-" + objid + "/", (error, stderr)=>{
-        sendErrorMessage(res, "error", "An error occured during hardware folder copy", error, stderr);
         cleanupCompile(objid)
+        sendErrorMessage(res, "error", "An error occured during hardware folder copy", error, stderr);
     }, (stdout)=>{
         // First try to clean the previous code
         handleExternalCommand(make_command + ' -C ' + command_location +  "/sketch-" + objid + " OBJDIR=" + objdir + ' clean', 
         (error, stderr) => {
             // If clean fails, send error message to client.
-            sendErrorMessage(res, "error", "An error occured during clean operation", error, stderr);
             cleanupCompile(objid)
+            sendErrorMessage(res, "error", "An error occured during clean operation", error, stderr);
         }, (stdout) => {
             // Clean successful -> compile
             handleExternalCommand(make_command + ' -C ' + command_location +  "/sketch-" + objid + " OBJDIR=" + objdir, 
             (error, stderr) => {
                 // If compile fails, send error message to client;
-                sendErrorMessage(res, "error", "An error occured during compilation", error, stderr);
                 cleanupCompile(objid)
+                sendErrorMessage(res, "error", "An error occured during compilation", error, stderr);
             }, (stdout => {
                 // Compile successful -> add signature
                 handleExternalCommand(sign_command + " " + signature_file + " " + file_to_sign + " " + binary_file + " " + tmp_file, 
                 (error, stderr) => {
                     // If sign fails, send error message to client.
-                    sendErrorMessage(res, "error", "An error occured during signing", error, stderr);
                     cleanupCompile(objid)
+                    sendErrorMessage(res, "error", "An error occured during signing", error, stderr);
                 }, (stdout) => {
                     res.download(binary_file, "program.dw", (err) => {
                         // Remove the object folder and sketch.cpp file
