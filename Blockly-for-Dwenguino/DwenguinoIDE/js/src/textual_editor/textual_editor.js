@@ -2,6 +2,7 @@ import * as monaco from 'monaco-editor';
 import BindMethods from "../utils/bindmethods.js"
 import ErrorLog from "./error_log.js"
 import EditorPane from "./editor_pane.js"
+import DwenguinoCodeSamples from "./dwenguino_code_samples.js"
 
 class TextualEditor {
     _containerId = null;   // The id of the container div element into which the text editor has to be injected;
@@ -62,11 +63,26 @@ class TextualEditor {
         })
         let examplesIcon = $("<span>")
             .attr("id", "show-examples")
-            .attr("class", "sim_item fas fa-book-open")
+            .attr("class", "sim_item fas fa-book-open my-dropdown-toggle")
             .css(iconStyle)
+        examplesIcon.append($("<span class='mytooltiptext'>").text(DwenguinoBlocklyLanguageSettings.translate(["examples"])));
+        let dropdown = $("<ul class='my-dropdown'>");
+        for (let sampleName of Object.keys(DwenguinoCodeSamples)){
+            let dropdownItem = $("<a href='#'>").text(sampleName)
+            dropdownItem.on("click", () => {
+                this.getEditorPane().renderEditor(DwenguinoCodeSamples[sampleName]);
+                examplesIcon.next(".my-dropdown").slideToggle();
+            })
+            dropdown.append($("<li>").append(dropdownItem));
+        }
+        examplesIcon.on("click", function(){
+            $(this).next(".my-dropdown").slideToggle();
+        })
+
 
         menuItems.push(copyItem);
         menuItems.push(examplesIcon);
+        menuItems.push(dropdown)
 
         for (let menuItem of menuItems){
             this.$_menuContainer.append(menuItem);

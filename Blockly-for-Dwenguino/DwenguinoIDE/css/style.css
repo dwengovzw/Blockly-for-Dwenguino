@@ -1761,3 +1761,35 @@ span.grippy::after {
   .mytooltip:hover .mytooltiptext {
     visibility: visible;
   }
+
+.my-dropdown-toggle {
+    padding: 0; 
+    background-color: #1e1e1e; 
+    color: #8bab42
+}
+/**** ****/
+ul.my-dropdown { 
+    display: none; 
+    position: absolute; 
+    top: 40px; 
+    left: 50px;
+    margin-top: 0px; 
+    padding: 0px 5px 0 0; 
+    background-color: #1e1e1e; 
+    color: #8bab42; 
+    border: solid 1px #8bab42; 
+    z-index: 2000
+}
+
+ul.my-dropdown li { 
+    list-style-type: none; 
+}
+ul.my-dropdown li a { 
+    text-decoration: none; 
+    padding: 0em 1em; 
+    display: block; 
+    color: #8bab42
+}
+ul.my-dropdown li a:hover {
+    filter: brightness(0.65);
+}

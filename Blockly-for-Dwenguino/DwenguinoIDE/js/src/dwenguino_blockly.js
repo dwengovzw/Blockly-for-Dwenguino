@@ -642,61 +642,10 @@ let DwenguinoBlockly = {
       return resultStringArray
     }, 
 
-   /* fallbackCopyCodeToClipboard: function(text) {
-      var textArea = document.createElement("dummy-text-area");
-      textArea.value = text;
-      
-      // Avoid scrolling to bottom
-      textArea.style.top = "0";
-      textArea.style.left = "0";
-      textArea.style.position = "fixed";
-    
-      document.body.appendChild(textArea);
-      textArea.focus();
-      textArea.select();
-    
-      try {
-        document.execCommand('copy');
-        $('#notification-copy').show();
-        $('#notification-copy').text(DwenguinoBlocklyLanguageSettings.translate(['arduinoCodeCopied']));
-        setTimeout(function() {
-          $("#notification-copy").hide('blind', {}, 500)
-        }, 3000);
-      } catch (err) {
-        console.error('Unable to copy Arduino code: ', err);
-      }
-    
-      document.body.removeChild(textArea);
-    },
-
-    copyCodeToClipboard: function(){
-      let code = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
-      if (!navigator.clipboard) {
-        fallbackCopyCodeToClipboard(code);
-        return;
-      }
-      navigator.clipboard.writeText(code).then(function() {
-        $('#notification-copy').show();
-        $('#notification-copy').text(DwenguinoBlocklyLanguageSettings.translate(['arduinoCodeCopied']));
-        setTimeout(function() {
-          $("#notification-copy").hide('blind', {}, 500)
-        }, 3000);
-      }, function(err) {
-        console.error('Unable to copy Arduino code: ', err);
-      });
-    },*/
-
-    /*
-      The following functions load the contents of a block xml file into the workspace.
-    */
-
-
     loadFileXmlIntoWorkspace: function(xml_content){
       console.log("loading into workspace");
       DwenguinoBlockly.setWorkspaceBlockFromXml(xml_content);
     },
-
-
 
     onresize: function(){
         var blocklyArea = document.getElementById('db_blockly');
@@ -1011,10 +960,6 @@ let DwenguinoBlockly = {
             }
           }
         });
-
-        /*$('#copy-code').click(function () {
-          DwenguinoBlockly.copyCodeToClipboard();
-        });*/
     },
 
     
@@ -1045,8 +990,6 @@ let DwenguinoBlockly = {
       }    
     }
 };
-
-
 
 $(document).ready(function() {
   DwenguinoBlockly.setupEnvironment();

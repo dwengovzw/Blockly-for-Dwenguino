@@ -32,6 +32,7 @@ var MSG = {
   catBoardIO: "IO",
   copy: "Kopiëren",
   createVar: "Maak nieuwe variabele",
+  examples: "Voorbeelden",
   listVariable: "lijst",
   textVariable: "tekst",
   httpRequestError: "Er is een probleem opgetreden tijdens het verwerken van het verzoek.",

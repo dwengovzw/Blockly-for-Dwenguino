@@ -29,6 +29,7 @@ var MSG_FALLBACK = {
   catBoardIO: "IO",
   copy: "Copy",
   createVar: "Create variable",
+  examples: "Examples",
   listVariable: "list",
   textVariable: "text",
   httpRequestError: "There was a problem with the request.",
