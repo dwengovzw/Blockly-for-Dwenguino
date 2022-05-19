@@ -28,6 +28,7 @@ var MSG = {
   catConveyor: "Conveyor",
   catComments: "Comments",
   catBoardIO: "IO",
+  copy: "Copy",
   createVar: "Create variable",
   listVariable: "list",
   textVariable: "text",

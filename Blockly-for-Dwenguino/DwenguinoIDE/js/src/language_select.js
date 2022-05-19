@@ -89,3 +89,4 @@ DwenguinoBlocklyLanguageSettings.getLang = function() {
 document.write('<script src="/dwenguinoblockly/DwenguinoIDE/msg/' + DwenguinoBlocklyLanguageSettings.getLang() + '.js"></script>\n');
 // Load Blockly's language strings.
 document.write('<script src="/dwenguinoblockly/blockly/msg/js/' + DwenguinoBlocklyLanguageSettings.getLang() + '.js"></script>\n');
+
