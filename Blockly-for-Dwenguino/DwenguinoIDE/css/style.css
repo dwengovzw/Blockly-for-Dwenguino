@@ -8,6 +8,7 @@ body{
     min-height: 100vh;
     font-size: 1rem;
     font-family: Roboto, sans-serif!important;
+    overflow: hidden;
 }
 
 .db_header{
@@ -59,8 +60,12 @@ body{
 }
 
 #copy-arduino-code{
-    margin: 1em;
+    padding: 1em;
+    padding-left: 68px;
+    margin: 0;
     font-size: 1.25rem;
+    color: white;
+    background-color: #1e1e1e;
 }
 
 #notification-copy{
@@ -190,7 +195,7 @@ body{
 
 #db_menu_item_language_selection{
     /* width: 200px; */
-    margin: 15px 0;
+    margin: 10.5px 0;
     background-color: #ffffff;
     border: 1px #8bab42 solid;
     font-family: Roboto, sans-serif;
@@ -215,6 +220,7 @@ body{
 }
 
 #db_blockly{
+    margin-top: 1px;
     float:left;
     height:100%;
     width:100%;
@@ -258,7 +264,8 @@ body{
 
 #db_code_pane{
     height: 100%;
-    overflow-y: scroll;
+    overflow-y: hidden;
+    overflow-x: hidden;
     display: flex;
     align-items: stretch;
     flex-direction: column;

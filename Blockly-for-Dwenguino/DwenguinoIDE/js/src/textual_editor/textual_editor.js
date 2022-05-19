@@ -1,32 +1,42 @@
 import * as monaco from 'monaco-editor';
+import BindMethods from "../utils/bindmethods.js"
+import ErrorLog from "./error_log.js"
+import EditorPane from "./editor_pane.js"
 
 class TextualEditor {
-    containerId = null;   // The id of the container div element into which the text editor has to be injected;
-    editor = null;
+    _containerId = null;   // The id of the container div element into which the text editor has to be injected;
+    _editorContainerId = null;
+    _logContainerId = null;
+    $_editorContainer = null;
+    $_logContainer = null;
+    _errorLog = null;
+    _editorPane = null;
     /**
-     * containerId String id of the container into which the text editor has to be injected.
+     * _containerId String id of the container into which the text editor has to be injected.
      */
-    constructor(containerId){
-        this.containerId = containerId;
+    constructor(_containerId){
+        BindMethods(this);
+        this._containerId = _containerId;
+        this._editorContainerId = "textual_editor_container";
+        this._logContainerId = "textual_editor_log_container";
+
+        let container = $("#" + _containerId).css({display: "flex", "flex-direction": "row", width: "100vw", "overflow": "hidden"});
+        this.$_editorContainer = $("<div>").attr("id", this._editorContainerId).css({"flex-grow": "1", "flex-basis": "50%", width: "50vw"});
+        this.$_logContainer = $("<div>").attr("id", this._logContainerId).css({"flex-grow": "1", "flex-basis": "50%"});
+        
+        container.append(this.$_editorContainer);
+        container.append(this.$_logContainer);
+
+        this._errorLog = new ErrorLog(this._logContainerId);
+        this._editorPane = new EditorPane(this._editorContainerId);
     }
 
-    renderEditor(code){
-        let editorElement = $(`#${this.containerId}`); // Find the container element using jQuery
-        editorElement.empty();  // Empty the element
-        this.editor = monaco.editor.create(editorElement.get(0), {  // Add editor to element
-            value: code.replace(/(\r\n|\r|\n){2}/g, '$1').replace(/(\r\n|\r|\n){3,}/g, '$1\n').trim(),
-            language: 'cpp',
-            roundedSelection: false,
-            scrollBeyondLastLine: false,
-            readOnly: false,
-            theme: 'vs-dark'
-        });
-        //this.editor.getAction('editor.action.format').run()
-
+    getErrorLog(){
+        return this._errorLog;
     }
 
-    getCurrentCode(){
-        return this.editor.getValue();
+    getEditorPane(){
+        return this._editorPane;
     }
 
 }

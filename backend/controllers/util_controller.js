@@ -164,18 +164,18 @@ let cleanupCompile = function(objid){
 }
 
 let sendErrorMessage = function(res, status, info, error, stderr){
-    res.render('error', {
+    let response = JSON.stringify({
         status: status,
         info: info,
         message: error,
         trace: stderr,
     });
-    // res.json({
-    //     status: status,
-    //     info: info,
-    //     message: error,
-    //     trace: stderr,
-    // });
+    res.writeHead(200, {
+        'Content-Type': "text/plain",
+        'Content-disposition': 'attachment;filename=' + "error.log",
+        'Content-Length': response.length
+    });
+    res.end(Buffer.from(response, 'binary'));
 }
 
 let sendSuccessMessage = function(res, status, info, trace, data){
