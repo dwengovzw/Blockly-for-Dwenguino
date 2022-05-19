@@ -263,6 +263,7 @@ body{
 }
 
 #db_code_pane{
+    visibility: hidden;
     height: 100%;
     overflow-y: hidden;
     overflow-x: hidden;
@@ -275,9 +276,6 @@ body{
     flex-basis: auto;
 }
 
-#db_code_pane_code{
-    flex-grow: 2;
-}
 
 
 #db_robot_pane{
@@ -1735,3 +1733,31 @@ span.grippy::after {
     content: url("../img/glyphicons_free/glyphicons/png/glyphicons-11-envelope.png");
 }
 
+/* Tooltip container */
+.mytooltip {
+    position: relative;
+    display: inline-block;
+    z-index: 5;
+  }
+  
+  /* Tooltip text */
+  .mytooltip .mytooltiptext {
+    top: 30px;
+    left: 5px;
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    padding: 5px 0;
+    border-radius: 6px;
+   
+    /* Position the tooltip text - see examples below! */
+    position: absolute;
+    z-index: 1;
+  }
+  
+  /* Show the tooltip text when you mouse over the tooltip container */
+  .mytooltip:hover .mytooltiptext {
+    visibility: visible;
+  }

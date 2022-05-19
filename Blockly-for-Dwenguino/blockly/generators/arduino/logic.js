@@ -75,8 +75,8 @@ Blockly.Arduino.logic_operation = function() {
   var operator = (this.getFieldValue('OP') == 'AND') ? '&&' : '||';
   var order = (operator == '&&') ? Blockly.Arduino.ORDER_LOGICAL_AND :
       Blockly.Arduino.ORDER_LOGICAL_OR;
-  var argument0 = Blockly.Arduino.valueToCode(this, 'A', order) || 'FALSE';
-  var argument1 = Blockly.Arduino.valueToCode(this, 'B', order) || 'FALSE';
+  var argument0 = Blockly.Arduino.valueToCode(this, 'A', order) || 'false';
+  var argument1 = Blockly.Arduino.valueToCode(this, 'B', order) || 'false';
   var code = argument0 + ' ' + operator + ' ' + argument1;
   return [code, order];
 };
@@ -84,14 +84,14 @@ Blockly.Arduino.logic_operation = function() {
 Blockly.Arduino.logic_negate = function() {
   // Negation.
   var order = Blockly.Arduino.ORDER_UNARY_PREFIX;
-  var argument0 = Blockly.Arduino.valueToCode(this, 'BOOL', order) || 'FALSE';
+  var argument0 = Blockly.Arduino.valueToCode(this, 'BOOL', order) || 'false';
   var code = '!' + argument0;
   return [code, order];
 };
 
 Blockly.Arduino.logic_boolean = function() {
   // Boolean values true and false.
-  var code = (this.getFieldValue('BOOL') == 'TRUE') ? 'TRUE' : 'FALSE';
+  var code = (this.getFieldValue('BOOL') == 'TRUE') ? 'true' : 'false';
   return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
 

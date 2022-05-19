@@ -42,7 +42,7 @@ let DwenguinoBlockly = {
 
     fileIOController: null,
     compilationPath: "",
-    textualEditor: new TextualEditor("db_code_pane_code"),
+    textualEditor: new TextualEditor("db_code_pane"),
     currentProgrammingContext: "blocks", // The current coding context can be blocks or text. 
 
     initDwenguinoBlockly: function(workspace){
@@ -642,7 +642,7 @@ let DwenguinoBlockly = {
       return resultStringArray
     }, 
 
-    fallbackCopyCodeToClipboard: function(text) {
+   /* fallbackCopyCodeToClipboard: function(text) {
       var textArea = document.createElement("dummy-text-area");
       textArea.value = text;
       
@@ -684,7 +684,7 @@ let DwenguinoBlockly = {
       }, function(err) {
         console.error('Unable to copy Arduino code: ', err);
       });
-    },
+    },*/
 
     /*
       The following functions load the contents of a block xml file into the workspace.
@@ -1012,9 +1012,9 @@ let DwenguinoBlockly = {
           }
         });
 
-        $('#copy-code').click(function () {
+        /*$('#copy-code').click(function () {
           DwenguinoBlockly.copyCodeToClipboard();
-        });
+        });*/
     },
 
     

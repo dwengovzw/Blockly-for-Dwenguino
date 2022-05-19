@@ -30,6 +30,7 @@ var MSG = {
   catConveyor: "Transportband",
   catComments: "Commentaar",
   catBoardIO: "IO",
+  copy: "Kopiëren",
   createVar: "Maak nieuwe variabele",
   listVariable: "lijst",
   textVariable: "tekst",
