@@ -63,7 +63,7 @@ class TextualEditor {
         })
         let examplesIcon = $("<span>")
             .attr("id", "show-examples")
-            .attr("class", "sim_item fas fa-book-open my-dropdown-toggle")
+            .attr("class", "sim_item fas fa-book-open mytooltip my-dropdown-toggle")
             .css(iconStyle)
         examplesIcon.append($("<span class='mytooltiptext'>").text(DwenguinoBlocklyLanguageSettings.translate(["examples"])));
         let dropdown = $("<ul class='my-dropdown'>");
