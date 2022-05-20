@@ -1,4 +1,5 @@
 import BindMethods from "../utils/bindmethods.js"
+import LayoutConfig from "./layout_config.js";
 
 class ErrorLog{
     containerId = null;
@@ -25,10 +26,10 @@ class ErrorLog{
      * @brief Set the style of the error pane
      */
     initStyle(){
-        this.$_container.css({"background-color": "#1e1e1e", "color": "#8bab42"});
-        this.$_container.css({"position": "relative", "border-left": "solid 1px #8bab42"});
-        this.$_logOutputContainer.css({"position": "absolute", "bottom": "0", "top": "30px", "left": "0px", "right": "0px", "padding": "5px 20px", "overflow": "scroll", "scrollbar-color": "#8bab42", "scrollbar-width": "thin"});
-        this.$_headerContainer.css({"height": "30px", "padding-left": "10px", "padding-top": "5px", "font-weight": "bold", "border-bottom": "solid gray 1px", "border-top": "solid gray 1px"});
+        this.$_container.css({"background-color": LayoutConfig.backgroundColor, "color": LayoutConfig.foregroundColor});
+        this.$_container.css({"position": "relative", "border-left": `solid 1px ${LayoutConfig.foregroundColor}`});
+        this.$_logOutputContainer.css({"position": "absolute", "bottom": "0", "top": LayoutConfig.paneHeaderHeight, "left": "0px", "right": "0px", "padding": "5px 20px", "overflow": "scroll", "scrollbar-color": LayoutConfig.foregroundColor, "scrollbar-width": "thin"});
+        this.$_headerContainer.css({"height": LayoutConfig.paneHeaderHeight, "padding-left": "10px", "padding-top": "5px", "font-weight": "bold", "border-bottom": `solid ${LayoutConfig.borderColor} 1px`, "border-top": `solid ${LayoutConfig.borderColor} 1px`});
     }
 
     /**

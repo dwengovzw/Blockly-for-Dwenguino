@@ -3,14 +3,13 @@ import DwenguinoSimulation from './simulation/dwenguino_simulation.js'
 import TutorialMenu from './tutorials/tutorial_menu.js'
 import CookiesInformation from './user/cookies_information.js'
 import LoginMenu from './user/login_menu.js'
-import FileIOController from './file_io_controller.js'
+import FileIOController from './utils/file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
 import ServerConfig from './server_config.js'
 import jQuery from "jquery";
 import 'jquery-ui-bundle';
 import 'bootstrap';
 import TextualEditor from './textual_editor/textual_editor.js'
-import * as monaco from 'monaco-editor';
 
 window.$ = window.jQuery = jQuery;
 
@@ -40,7 +39,6 @@ let DwenguinoBlockly = {
     loginMenu: null,
     tutorialMenu: null,
 
-    fileIOController: null,
     compilationPath: "",
     textualEditor: new TextualEditor("db_code_pane"),
     currentProgrammingContext: "blocks", // The current coding context can be blocks or text. 
@@ -69,8 +67,6 @@ let DwenguinoBlockly = {
         this.workspace = workspace;
         this.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
 
-        // Create file io controller responisble for saving and uploading files
-        this.fileIOController = new FileIOController();
         //Create device manager responsible for managing the connection to de Dwenguino board
 
         // Create DwenguinoEventLogger instance
@@ -123,113 +119,58 @@ let DwenguinoBlockly = {
         //If it is run in the browser it shows a modal dialog with two upload options:
         //1) Using the upload button.
         //2) Using the drag and drop system.
-        $("#db_menu_item_upload").click(function(){
-          let xml = "";
-          if (window.File && window.FileReader && window.FileList && window.Blob) {
-            // Great success! All the File APIs are supported.
-            console.log("yay, files supported");
-
-            // reset form
-            $('#dropzoneModal .modal-header').empty();
-            $('#dropzoneModal .modal-header').append('<h4 class="modal-title">'+ DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictUploadBlocks']) +'</h4>');
-            $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-            $('#dropzoneModal .modal-body .message').empty();
-            $('#dropzoneModal .modal-body .message').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictSelectFile']) + '</p>');
-            $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictChooseFile']) + '</label><input type="file" id="fileInput" class="form-control">');
-            $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictDefaultMessage']) + '</div>');
-            $('#dropzoneModal .modal-body .message').append('<pre id="fileDisplayArea"></pre>');
-            $('#dropzoneModal .modal-footer').empty();
-            $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>');
-
-            $("#dropzoneModal").modal('show');
-
-            var processFile = function(file){
-              var textType = /text.*/;
-    
-              if (file.type.match(textType)) {
-                var reader = new FileReader();
-    
-                reader.onload = function(e) {
-                  fileDisplayArea.innerText = file.name;
-                  DwenguinoBlockly.xmlLoadedFromFile = reader.result;
-                }
-    
-                reader.readAsText(file);
-              } else {
-                fileDisplayArea.innerText = DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictFileNotSupported']);
-              }
+        $("#db_menu_item_upload").on("click", function(){
+          FileIOController.uploadTextFile().then((result) => {
+            if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+              DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(result));
+            } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+              DwenguinoBlockly.textualEditor.getEditorPane().renderEditor(result);
+            } else {
+              console.log("Error uploading file");
             }
-    
-            let fileInput = document.getElementById('fileInput');
-            var fileDisplayArea = document.getElementById('fileDisplayArea');
-    
-            console.log(fileInput);
-            fileInput.addEventListener('change', function(e) {
-              console.log("file input changed");
-              var file = fileInput.files[0];
-              processFile(file);
-            });
-    
-            // file drag hover
-            var FileDragHover = function(e) {
-              e.stopPropagation();
-              e.preventDefault();
-              e.target.className = (e.type == "dragover" ? "hover" : "");
-            };
-    
-            // file selection
-            var FileSelectHandler = function(e) {
-              // cancel event and hover styling
-              FileDragHover(e);
-              // fetch FileList object
-              var files = e.target.files || e.dataTransfer.files;
-              var file = files[0];
-              processFile(file);
-            };
-    
-            var filedrag = document.getElementById("filedrag");
-            filedrag.addEventListener("dragover", FileDragHover, false);
-            filedrag.addEventListener("dragleave", FileDragHover, false);
-            filedrag.addEventListener("drop", FileSelectHandler, false);
-            filedrag.style.display = "block";
-    
-            $("#submit_upload_modal_dialog_button").click(function(){
-              DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(DwenguinoBlockly.xmlLoadedFromFile));
-            });
-
-          } else {
-            alert('The File APIs are not fully supported in this browser.');
-          }
-          
+          }, (err) => {
+            console.log(err);
+          })
         });
 
         // This code handles the download of the workspace to a local file.
         // If this is run in the arduino ide, a filechooser is shown. (depricated and removed)
         // If it is run in the browser, the document is downloaded using the name blocks.xml.
         $("#db_menu_item_download").click(function(){
-          var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-          var xmlCode = Blockly.Xml.domToText(xml);
-          console.debug(xmlCode);
-          localStorage.workspaceXml = xmlCode;
-          DwenguinoBlockly.download("blocks.xml", xmlCode);
-          
-          // Get javascript and python for current code
-          let javascriptCode = "";
-          let pythonCode = "";
-          try {
-              javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
-          } catch (error){
-              javascriptCode = "invalid code";
-          }
-          try {
-              pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
-          } catch (error){
-              pythonCode = "invalid code";
-          }
-          let data = {
-            xmlCode: xmlCode,
-            javascriptCode: javascriptCode,
-            pythonCode: pythonCode
+          let data = {};
+          if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+            var xmlCode = Blockly.Xml.domToText(xml);
+            console.debug(xmlCode);
+            localStorage.workspaceXml = xmlCode;
+            DwenguinoBlockly.download("blocks.xml", xmlCode);
+            
+            // Get javascript and python for current code
+            let javascriptCode = "";
+            let pythonCode = "";
+            try {
+                javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                javascriptCode = "invalid code";
+            }
+            try {
+                pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+            } catch (error){
+                pythonCode = "invalid code";
+            }
+             data = {
+              xmlCode: xmlCode,
+              javascriptCode: javascriptCode,
+              pythonCode: pythonCode
+            }
+          } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+            let cCode = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
+            DwenguinoBlockly.download("sketch.cpp", cCode);
+            data = {
+              cCode: cCode
+            }
+          }else{
+            return
           }
 
           let event = self.logger.createEvent(EVENT_NAMES.downloadClicked, data);
@@ -379,16 +320,7 @@ let DwenguinoBlockly = {
     },
 
     download: function(filename, text) {
-      var element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-      element.setAttribute('download', filename);
-
-      element.style.display = 'none';
-      document.body.appendChild(element);
-
-      element.click();
-
-      document.body.removeChild(element);
+      FileIOController.download(filename, text);
     },
 
     toggleSimulator: function(){
@@ -491,8 +423,7 @@ let DwenguinoBlockly = {
             console.log(`Compilation failed with error: ${err}`)
             DwenguinoBlockly.resetRunButton();
           }
-        })
-        
+        }) 
       } catch (e) {
         console.log(res);
       }

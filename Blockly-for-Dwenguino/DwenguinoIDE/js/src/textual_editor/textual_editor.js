@@ -1,8 +1,8 @@
-import * as monaco from 'monaco-editor';
 import BindMethods from "../utils/bindmethods.js"
 import ErrorLog from "./error_log.js"
 import EditorPane from "./editor_pane.js"
 import DwenguinoCodeSamples from "./dwenguino_code_samples.js"
+import LayoutConfig from "./layout_config.js"
 
 class TextualEditor {
     _containerId = null;   // The id of the container div element into which the text editor has to be injected;
@@ -28,13 +28,13 @@ class TextualEditor {
         this._panesContainerId = "textual_editor_panes_container";
 
         let container = $("#" + this._containerId);
-        container.css({"display": "flex", "flex-direction": "column", "background-color": "#1e1e1e", "position": "relative"})
+        container.css({"display": "flex", "flex-direction": "column", "background-color": LayoutConfig.backgroundColor, "position": "relative"})
 
         this.$_menuContainer = $("<div>").attr("id", this._menuContainerId).attr("class", "row");
-        this.$_menuContainer.css({"width": "100vw", "height": "40px", "padding-left": "10px"});
+        this.$_menuContainer.css({"width": "100vw", "height": LayoutConfig.editorMenuHeight, "padding-left": "10px"});
 
         this.$_panesContainer = $("<div>").attr("id", this._panesContainerId);
-        this.$_panesContainer.css({"position": "absolute", "top": "40px", left: 0, right: 0, bottom: 0, display: "flex", "flex-direction": "row", width: "100vw", "overflow": "hidden"});
+        this.$_panesContainer.css({"position": "absolute", "top": LayoutConfig.editorMenuHeight, left: 0, right: 0, bottom: 0, display: "flex", "flex-direction": "row", width: "100vw", "overflow": "hidden"});
         this.$_editorContainer = $("<div>").attr("id", this._editorContainerId).css({"flex-grow": "1", "flex-basis": "50%", width: "50vw"});
         this.$_logContainer = $("<div>").attr("id", this._logContainerId).css({"flex-grow": "1", "flex-basis": "50%"});
         
@@ -51,8 +51,7 @@ class TextualEditor {
     }
 
     populateMenu(){
-        let menuItems = []
-        let iconStyle = {"color": "#8bab42", width: "20px", height: "20px", display: "inline-block", "margin-top": "10px", "margin-left": "20px"};
+        let iconStyle = {"color": LayoutConfig.foregroundColor, width: "20px", height: "20px", display: "inline-block", "margin-top": "10px", "margin-left": "20px"};
         let copyItem = $("<span>")
             .attr("id", "copy-code")
             .attr("class", "mytooltip sim_item fas fa-copy")
@@ -79,14 +78,9 @@ class TextualEditor {
             $(this).next(".my-dropdown").slideToggle();
         })
 
-
-        menuItems.push(copyItem);
-        menuItems.push(examplesIcon);
-        menuItems.push(dropdown)
-
-        for (let menuItem of menuItems){
-            this.$_menuContainer.append(menuItem);
-        }
+        this.$_menuContainer.append(copyItem);
+        this.$_menuContainer.append(examplesIcon);
+        this.$_menuContainer.append(dropdown);
     }
 
     fallbackCopyCodeToClipboard(text) {
