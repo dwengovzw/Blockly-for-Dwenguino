@@ -1,5 +1,6 @@
 import BindMethods from "../utils/bindmethods.js"
 import * as monaco from 'monaco-editor';
+import LayoutConfig from "./layout_config.js";
 
 class EditorPane{
     _containerId = null;
@@ -34,8 +35,8 @@ class EditorPane{
      * @brief Set the style of the editor pane
      */
     initStyle(){
-        this.$_container.css({"display": "flex", "flex-direction": "column", "background-color": "#1e1e1e", "color": "#8bab42", "padding-right": "1px"});
-        this.$_headerContainer.css({"height": "30px", "padding-left": "10px", "padding-top": "5px", "font-weight": "bold", "border-bottom": "solid gray 1px", "border-top": "solid gray 1px"});
+        this.$_container.css({"display": "flex", "flex-direction": "column", "background-color": LayoutConfig.backgroundColor, "color": LayoutConfig.foregroundColor, "padding-right": "1px"});
+        this.$_headerContainer.css({"height": LayoutConfig.paneHeaderHeight, "padding-left": "10px", "padding-top": "5px", "font-weight": "bold", "border-bottom": `solid ${LayoutConfig.borderColor} 1px`, "border-top": `solid ${LayoutConfig.borderColor} 1px`});
         this.$_editorPaneEditorContainer.css({"flex-grow": "1", "padding-top": "10px"});
     }
 

@@ -1,6 +1,6 @@
 //import { DwenguinoBlockly } from "../../DwenguinoBlockly.js"
 
-import FileIOController from "../../file_io_controller.js";
+import FileIOController from "../../utils/file_io_controller.js"
 import { EVENT_NAMES } from "../../logging/event_names.js"
 import { EventsEnum } from "./scenario_event.js";
 export { DwenguinoScenarioUtils }
