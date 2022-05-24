@@ -136,46 +136,15 @@ let DwenguinoBlockly = {
         // This code handles the download of the workspace to a local file.
         // If this is run in the arduino ide, a filechooser is shown. (depricated and removed)
         // If it is run in the browser, the document is downloaded using the name blocks.xml.
-        $("#db_menu_item_download").click(function(){
-          let data = {};
-          if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
-            var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-            var xmlCode = Blockly.Xml.domToText(xml);
-            console.debug(xmlCode);
-            localStorage.workspaceXml = xmlCode;
-            DwenguinoBlockly.download("blocks.xml", xmlCode);
-            
-            // Get javascript and python for current code
-            let javascriptCode = "";
-            let pythonCode = "";
-            try {
-                javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
-            } catch (error){
-                javascriptCode = "invalid code";
-            }
-            try {
-                pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
-            } catch (error){
-                pythonCode = "invalid code";
-            }
-             data = {
-              xmlCode: xmlCode,
-              javascriptCode: javascriptCode,
-              pythonCode: pythonCode
-            }
-          } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
-            let cCode = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
-            DwenguinoBlockly.download("sketch.cpp", cCode);
-            data = {
-              cCode: cCode
-            }
-          }else{
-            return
-          }
-
-          let event = self.logger.createEvent(EVENT_NAMES.downloadClicked, data);
-          DwenguinoBlockly.logger.recordEvent(event);
+        $("#db_menu_item_download").on("click", (e) => {
+          DwenguinoBlockly.downloadFileHandler();
         });
+        document.addEventListener('keydown', e => {
+          if (e.ctrlKey && e.key === 's'){
+            e.preventDefault();
+            DwenguinoBlockly.downloadFileHandler();
+          }
+        })
 
         this.resetRunButton(); // set event handlers on run and clear buttons
 
@@ -297,6 +266,46 @@ let DwenguinoBlockly = {
           }
         });
 
+    },
+    downloadFileHandler: function(){
+      let data = {};
+      if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+        var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+        var xmlCode = Blockly.Xml.domToText(xml);
+        console.debug(xmlCode);
+        localStorage.workspaceXml = xmlCode;
+        DwenguinoBlockly.download("blocks.xml", xmlCode);
+        
+        // Get javascript and python for current code
+        let javascriptCode = "";
+        let pythonCode = "";
+        try {
+            javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+        } catch (error){
+            javascriptCode = "invalid code";
+        }
+        try {
+            pythonCode = Blockly.Python.workspaceToCode(DwenguinoBlockly.workspace);
+        } catch (error){
+            pythonCode = "invalid code";
+        }
+         data = {
+          xmlCode: xmlCode,
+          javascriptCode: javascriptCode,
+          pythonCode: pythonCode
+        }
+      } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+        let cCode = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
+        DwenguinoBlockly.download("sketch.cpp", cCode);
+        data = {
+          cCode: cCode
+        }
+      }else{
+        return
+      }
+
+      let event = DwenguinoBlockly.logger.createEvent(EVENT_NAMES.downloadClicked, data);
+      DwenguinoBlockly.logger.recordEvent(event);
     },
     restoreFromXml: function(xml){
       DwenguinoBlockly.workspace.clear();
