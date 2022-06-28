@@ -365,7 +365,7 @@ class SimulationCanvasRenderer {
      */
     drawServos(robot){
         for(var i = 0; i < robot.length; i++){
-            if(robot[i].getType() == TypesEnum.SERVO){
+            if(robot[i].getType() == TypesEnum.SERVO || robot[i].getType() == TypesEnum.CONTINUOUSSERVO){
                 let canvas = document.getElementById(robot[i].getCanvasId());
                 this.clearCanvas(robot[i].getCanvasId());
                 this.drawServo(robot[i], canvas);
@@ -383,6 +383,7 @@ class SimulationCanvasRenderer {
         if (canvas.getContext) {
             // in case the image isn't loaded yet.
             var self = this;
+            let backgroundLoaded = false;
             servo.getImage("background").onload = function() {
                 var ctx = canvas.getContext('2d');
                 switch(servo.getCostume()){
@@ -399,28 +400,37 @@ class SimulationCanvasRenderer {
                     case 'lefthand':
                         break;
                 }
+                backgroundLoaded = true;
             }
 
             servo.getImage("foreground").onload = function() {
-                var ctx = canvas.getContext('2d');
-                ctx.fillStyle = servo.getBackgroundColor();
-                switch(servo.getCostume()){
-                    case 'plain':
-                        self.drawRotatedServohead(ctx, servo);
-                        break;
-                    case 'plainrotate90':
-                        self.drawRotatedServohead(ctx, servo, 90);
-                        break;
-                    case 'eye':
-                        self.drawEye(ctx,servo, canvas);
-                        break;
-                    case 'righthand':
-                        self.drawHand(ctx,servo);
-                        break;
-                    case 'lefthand':
-                        self.drawHand(ctx,servo);
-                        break;
+                // This is a stupid hack to make sure the foreground is always drawn after te background has been drawn
+                let drawForeground = () => {
+                    if (!backgroundLoaded){
+                        setTimeout(drawForeground, 0); // Wait until next event loop cycle
+                        return
+                    }
+                    var ctx = canvas.getContext('2d');
+                    ctx.fillStyle = servo.getBackgroundColor();
+                    switch(servo.getCostume()){
+                        case 'plain':
+                            self.drawRotatedServohead(ctx, servo);
+                            break;
+                        case 'plainrotate90':
+                            self.drawRotatedServohead(ctx, servo, 90);
+                            break;
+                        case 'eye':
+                            self.drawEye(ctx,servo, canvas);
+                            break;
+                        case 'righthand':
+                            self.drawHand(ctx,servo);
+                            break;
+                        case 'lefthand':
+                            self.drawHand(ctx,servo);
+                            break;
+                    }
                 }
+                drawForeground();
             }
 
             var ctx = canvas.getContext('2d');

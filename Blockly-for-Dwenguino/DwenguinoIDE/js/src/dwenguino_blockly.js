@@ -401,12 +401,13 @@ let DwenguinoBlockly = {
 
     downloadDwenguinoBinaryHandlerAjax: function(code){
       DwenguinoBlockly.disableRunButton();
-      let url = DwenguinoBlockly.compilationPath + "?code=" + encodeURIComponent(code);
+      let url = DwenguinoBlockly.compilationPath// + "?code=" + encodeURIComponent(code);
       let res = "success";
       try{
         $.ajax({
-          type: "GET",
+          type: "POST",
           url: url,
+          data: {code: code},
           xhrFields: {
             responseType: "blob" 
           },

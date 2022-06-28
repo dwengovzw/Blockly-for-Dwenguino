@@ -872,6 +872,12 @@ background-color: #ffffff;
     background-image: url("../img/socialrobot/servo.png");
 }
 
+
+#rc_continuousservo_img {
+    background-image: url("../img/socialrobot/continuous_servo.png");
+}
+
+
 #rc_led_img {
     background-image: url("../img/socialrobot/led.png");
 }

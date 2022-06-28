@@ -1,7 +1,9 @@
 import SimulationCanvasRenderer from "./simulation_canvas_renderer.js"
 import { EVENT_NAMES } from "../../logging/event_names.js"
 
-import { SocialRobotServo, CostumesEnum } from "./components/servo.js"
+import { CostumesEnum } from "./components/base_servo.js"
+import { SocialRobotServo } from "./components/servo.js"
+import { SocialRobotContinuousServo } from "./components/continuous_servo.js"
 import { SocialRobotLed } from "./components/led.js"
 import { SocialRobotLcd } from "./components/lcd.js"
 import { SocialRobotSonar } from "./components/sonar.js"
@@ -23,6 +25,7 @@ export { TypesEnum as TypesEnum, RobotComponentsFactory }
  */
 const TypesEnum = {
   SERVO: 'servo',
+  CONTINUOUSSERVO: 'continuousservo',
   LED: 'led',
   RGBLED: 'rgbled',
   LEDMATRIX: 'ledmatrix',
@@ -132,6 +135,15 @@ class RobotComponentsFactory {
             this._robot[i].setPrevAngle(this._robot[i].getAngle());
             this._robot[i].setAngle(dwenguinoState.getIoPinState(pin));
           }
+          break;
+        case TypesEnum.CONTINUOUSSERVO:
+          pin = this._robot[i].getPin();
+          if(this._robot[i].getSpeed() != dwenguinoState.getIoPinState(pin)){
+            this._robot[i].setPrevSpeed(this._robot[i].getSpeed());
+            this._robot[i].setSpeed(dwenguinoState.getIoPinState(pin));
+          }
+          this._robot[i].rotateToNextAngle();
+          console.log(this._robot[i].getAngle());
           break;
         case TypesEnum.LED:
           pin = this._robot[i].getPin();
@@ -247,6 +259,9 @@ class RobotComponentsFactory {
       case TypesEnum.SERVO:
         this.addServo();
         break;
+      case TypesEnum.CONTINUOUSSERVO:
+        this.addContinuousServo();
+        break;
       case TypesEnum.LED:
         this.addLed();
         break;
@@ -291,6 +306,9 @@ class RobotComponentsFactory {
     switch (type) {
       case TypesEnum.SERVO:
         this.removeServo();
+        break;
+      case TypesEnum.CONTINUOUSSERVO:
+        this.removeContinuousServo();
         break;
       case TypesEnum.LED:
         this.removeLed();
@@ -338,6 +356,9 @@ class RobotComponentsFactory {
     switch (type) {
       case TypesEnum.SERVO:
         this.addServoFromXml(data);
+        break;
+      case TypesEnum.CONTINUOUSSERVO:
+        this.addContinuousServoFromXml(data);
         break;
       case TypesEnum.LED:
         this.addLedFromXml(data);
@@ -408,11 +429,11 @@ class RobotComponentsFactory {
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
-    let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
 
     let pins = {}
-    pins[SocialRobotServo.pinNames.digitalPin] = 22 - id;
+    pins[SocialRobotServo.pinNames.digitalPin] = 20 - id;
 
     
     let servo = new SocialRobotServo();
@@ -425,7 +446,7 @@ class RobotComponentsFactory {
   addServoFromXml(xml){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
-    let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
     let servo = new SocialRobotServo();
     servo.initComponentFromXml(this._eventBus, id, xml);
@@ -440,9 +461,65 @@ class RobotComponentsFactory {
   removeServo(){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.SERVO));
 
-    let id = this._numberOfComponentsOfType[TypesEnum.SERVO]+2;
+    let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
     this.removeRobotComponentWithTypeAndId(TypesEnum.SERVO, id);
   }
+
+
+
+
+
+    /**
+    * Add a new servo to the simulation container using default or custom values for the properties.
+    * @param {int} pin 
+    * @param {CostumesEnum} costume 
+    * @param {int} angle 
+    * @param {boolean} visible 
+    * @param {int} x 
+    * @param {int} y 
+    * @param {int} width 
+    * @param {int} height 
+    * @param {int} offsetLeft 
+    * @param {int} offsetTop 
+    * @param {string} htmlClasses 
+    */
+     addContinuousServo(pin=0, costume=CostumesEnum.PLAIN, speed=0, visible=true, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas continuous_servo_canvas'){
+
+      this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.CONTINUOUSSERVO));
+      this.incrementNumberOf(TypesEnum.CONTINUOUSSERVO);
+      let id = this._numberOfComponentsOfType[TypesEnum.CONTINUOUSSERVO];
+  
+      let pins = {}
+      pins[SocialRobotContinuousServo.pinNames.digitalPin] = 20 - id;
+  
+      let servo = new SocialRobotContinuousServo();
+      servo.initComponent(this._eventBus, id, pins, costume, speed, visible, width, height, offsetLeft, offsetTop, htmlClasses);
+      this._robot.push(servo);
+  
+      this.renderer.initializeCanvas(this._robot, servo); 
+    }
+  
+    addContinuousServoFromXml(xml){
+      this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.CONTINUOUSSERVO));
+      this.incrementNumberOf(TypesEnum.CONTINUOUSSERVO);
+      let id = this._numberOfComponentsOfType[TypesEnum.CONTINUOUSSERVO];
+  
+      let servo = new SocialRobotContinuousServo();
+      servo.initComponentFromXml(this._eventBus, id, xml);
+      this._robot.push(servo);
+  
+      this.renderer.initializeCanvas(this._robot, servo);
+    }
+  
+    /**
+     * Remove the most recently created servo from the simulation container.
+     */
+    removeContinuousServo(){
+      this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.removeRobotComponent, TypesEnum.CONTINUOUSSERVO));
+  
+      let id = this._numberOfComponentsOfType[TypesEnum.CONTINUOUSSERVO];
+      this.removeRobotComponentWithTypeAndId(TypesEnum.CONTINUOUSSERVO, id);
+    }
 
 
   /**

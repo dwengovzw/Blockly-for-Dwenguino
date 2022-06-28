@@ -22,7 +22,7 @@ let dwengo_base_uri = process.env.DOMAIN_URL
  * 
  * req.data contains:
  *  -> iss: (issuer) platform identifier ex.: https://auth-test.i-learn.be/
- *  -> login_hint: id of the user that will be loggin in ex.: 25700ac2-a88a-4446-a5db-4ab24711bace
+ *  -> login_hint: id of the user that will be logging in ex.: 25700ac2-a88a-4446-a5db-4ab24711bace
  *  -> target_link_uri: uri of content that is requested ex.: http://localhost:8085/interface/learningObject/getRaw&=hruid=test7-id
  *  -> lti_message_hint: internal i-Learn id of the exercise ex.: b8b7c7c1-23dc-49ec-a81f-2db269e30f4d
  * 
@@ -78,7 +78,7 @@ ltiController.authorize = async (req, res) => {
         let i_learn_key
         let i_learn_key_pem
         try {
-            i_learn_key_pem = ltiController.retrieve_i_learn_public_keys();  // Try to get the i_lear public key for signing the token
+            i_learn_key_pem = ltiController.retrieve_i_learn_public_keys();  // Try to get the i_learn public key for signing the token
         } catch (err) {
             res.sendStatus(500) // Unable to retrieve the key: Internal server error
             return

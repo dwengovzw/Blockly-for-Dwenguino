@@ -110,6 +110,35 @@ Blockly.Arduino['dwenguino_servo'] = function (block) {
     return code;
 };
 
+Blockly.Arduino['dwenguino_continuous_servo'] = function (block) {
+  var value_pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_ATOMIC);
+  var value_speed = Blockly.Arduino.valueToCode(block, 'speed', Blockly.Arduino.ORDER_ATOMIC);
+
+  // scale speed to number between 1000 and 2000 ms
+  let max_absolute_speed = 255;
+  let absolute_speed = Math.abs(value_speed);
+  let normalized_speed = 0; // normalized speed between -1 and 1
+  if (absolute_speed > max_absolute_speed){
+    normalized_speed = value_speed/absolute_speed;
+  }else{
+    normalized_speed = value_speed/max_absolute_speed;
+  }
+  let pwm_base_duty_cycle = 1500;
+  let pwm_max_variation_duty_cycle = 500;
+  value_speed = pwm_base_duty_cycle + normalized_speed * pwm_max_variation_duty_cycle;
+
+  Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
+
+  var code = '';
+
+  Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +";\n" 
+                                                               + "Servo servoOnPin" + value_pin + ";\n";
+  Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');\n';
+  code = 'servoOnPin' + value_pin + '.writeMicroseconds(' + value_speed + ');\n';
+  
+  return code;
+};
+
 Blockly.Arduino.dwenguino_servo_dropdown = function() {
   // Boolean values HIGH and LOW.
   var code = (this.getFieldValue('SERVO_DROPDOWN') == 'SERVO1') ? 40 : 41;
