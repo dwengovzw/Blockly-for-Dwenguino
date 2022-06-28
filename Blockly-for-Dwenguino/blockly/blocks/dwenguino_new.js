@@ -425,6 +425,50 @@ Blockly.Blocks['dwenguino_servo'] = {
   }
 };
 
+
+var dwenguino_continuous_servo_json = {
+  "id": "continuous_dwenguino_servo",
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoContinuousServoBlock']),
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": settings.basepath + "DwenguinoIDE/img/socialrobot/continuous_servo.png", // TODO: change this to gray servo image!
+      "width": 100,
+      "height": 100,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    },
+    {
+      "type": "input_value",
+      "name": "speed",
+      "check": "Number"
+    }
+  ],
+  "previousStatement": null,
+  "nextStatement": null,
+  "colour": Blockly.Msg.DWENGUINO_HUE,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoContinuousServoBlockTooltip']),
+  "helpUrl": "http://www.dwengo.org/tutorials"
+};
+
+
+Blockly.Blocks['dwenguino_continuous_servo'] = {
+  init: function() {
+    this.jsonInit(dwenguino_continuous_servo_json);
+  }
+};
+
+
 var dwenguino_servo_dropdown = {
   "id": "dwenguino_servo_dropdown",
   "message0": DwenguinoBlocklyLanguageSettings.translate(['dwenguinoServoDropdownBlock']),

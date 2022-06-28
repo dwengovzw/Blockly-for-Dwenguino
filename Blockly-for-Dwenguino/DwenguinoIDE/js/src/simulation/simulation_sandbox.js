@@ -190,6 +190,17 @@ class SimulationSandbox {
     }
   }
 
+  /**
+   * Sets the (extra) servo on the given pin to a given speed
+   * @param {int} pin 
+   * @param {int} speed 
+   */
+   continuousServoWithPin(pin, speed) {
+    if (speed !== this.boardState.getIoPinState(pin)) {
+      this.boardState.setIoPinState(pin, speed);
+    }
+  }
+
 
   /*
   * Turn a motor on at given speed

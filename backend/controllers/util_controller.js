@@ -81,7 +81,7 @@ exports.upload = function (req, res) {
 
 // Handle the compilation and translation to file compatible with the usb bootloader.
 exports.getDwenguinoBinary = function(req, res) {
-    let code = url.parse(req.url, true).query["code"];
+    let code = req.data["code"];
     console.log(code);
     let objid = makeid(20);
     saveFileAndRunNext(code, res, objid, generateBinary);

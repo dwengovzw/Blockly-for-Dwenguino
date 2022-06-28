@@ -83,6 +83,15 @@ Blockly.JavaScript['dwenguino_servo'] = function (block) {
     return code;
 };
 
+
+Blockly.JavaScript['dwenguino_continuous_servo'] = function (block) {
+  var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC);
+  // Assemble JavaScript into code variable.
+  var code = machine + 'continuousServoWithPin(' + value_pin + ', ' + value_speed + ');\n';
+  return code;
+};
+
 Blockly.JavaScript.dwenguino_servo_dropdown = function() {
   // Boolean values HIGH and LOW.
   var code = (this.getFieldValue('SERVO_DROPDOWN') === 'SERVO1') ? 40 : 41;

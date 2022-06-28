@@ -25,39 +25,39 @@ class DwenguinoSimulationRobotComponentsMenu {
     this._eventBus = eventBus;
     this._components = [
       {
+        type: TypesEnum.SONAR,
+        maximumAmount: 4
+      },{
+        type: TypesEnum.SOUND,
+        maximumAmount: 1
+      },{
         type: TypesEnum.SERVO,
         maximumAmount: 6
-      }, {
-        type: TypesEnum.LED,
-        maximumAmount: 3
-      }, {
-        type: TypesEnum.RGBLED,
-        maximumAmount: 3
-      }, {
-        type: TypesEnum.LEDMATRIX,
+      },{
+        type: TypesEnum.CONTINUOUSSERVO,
+        maximumAmount: 6
+      },{
+        type: TypesEnum.LCD,
         maximumAmount: 1
-      }, {
+      },{
         type: TypesEnum.LEDMATRIXSEGMENT,
         maximumAmount: 4
-      }, {
-        type: TypesEnum.TOUCH,
+      },{
+        type: TypesEnum.RGBLED,
         maximumAmount: 3
-      }, {
-        type: TypesEnum.BUTTON,
-        maximumAmount: 3
-      }, {
+      },{
         type: TypesEnum.PIR,
         maximumAmount: 2
       }, {
-        type: TypesEnum.SONAR,
-        maximumAmount: 4
-      }, {
-        type: TypesEnum.LCD,
-        maximumAmount: 1
-      }, {
-        type: TypesEnum.SOUND,
-        maximumAmount: 1
-      }, {
+        type: TypesEnum.TOUCH,
+        maximumAmount: 3
+      },{
+        type: TypesEnum.LED,
+        maximumAmount: 3
+      },{
+        type: TypesEnum.BUTTON,
+        maximumAmount: 3
+      }, ,    {
         type: TypesEnum.LIGHT,
         maximumAmount: 2
       }
@@ -88,73 +88,13 @@ class DwenguinoSimulationRobotComponentsMenu {
   initMenu() {
     $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
 
-    // INPUT 
-
-    $('#robot_components_menu').append('<div id="rc_sonar" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_sonar').append('<div id="rc_sonar_tag" class="rc_tag text-center"></div>');
-    $('#rc_sonar').append('<div id="rc_sonar_img" class="rc_img"></div>');
-    $('#rc_sonar').append('<div id="rc_sonar_value"></div>');
-    $('#rc_sonar').append('<div id="rc_sonar_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_sound" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_sound').append('<div id="rc_sound_tag" class="rc_tag text-center"></div>');
-    $('#rc_sound').append('<div id="rc_sound_img" class="rc_img"></div>');
-    $('#rc_sound').append('<div id="rc_sound_options" class="rc_options"></div>');
-
-    // OUTPUT
-
-    $('#robot_components_menu').append('<div id="rc_servo" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_servo').append('<div id="rc_servo_tag" class="rc_tag text-center"></div>');
-    $('#rc_servo').append('<div id="rc_servo_img" class="rc_img"></div>');
-    $('#rc_servo').append('<div id="rc_servo_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_lcd" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_tag" class="rc_tag text-center"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_img" class="rc_img"></div>');
-    $('#rc_lcd').append('<div id="rc_lcd_options" class="rc_options"></div>');
-  
-    $('#robot_components_menu').append('<div id="rc_ledmatrixsegment" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_tag" class="rc_tag text-center"></div>');
-    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_img" class="rc_img"></div>');
-    $('#rc_ledmatrixsegment').append('<div id="rc_ledmatrixsegment_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_rgbled" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_tag" class="rc_tag text-center"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_img" class="rc_img"></div>');
-    $('#rc_rgbled').append('<div id="rc_rgbled_options" class="rc_options"></div>');
-
-    // EXTRA
-
-    $('#robot_components_menu').append('<div id="rc_pir" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_pir').append('<div id="rc_pir_tag" class="rc_tag text-center"></div>');
-    $('#rc_pir').append('<div id="rc_pir_img" class="rc_img"></div>');
-    $('#rc_pir').append('<div id="rc_pir_value"></div>');
-    $('#rc_pir').append('<div id="rc_pir_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_touch" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_touch').append('<div id="rc_touch_tag" class="rc_tag text-center"></div>');
-    $('#rc_touch').append('<div id="rc_touch_img" class="rc_img"></div>');
-    $('#rc_touch').append('<div id="rc_touch_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_led" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_led').append('<div id="rc_led_tag" class="rc_tag text-center"></div>');
-    $('#rc_led').append('<div id="rc_led_img" class="rc_img"></div>');
-    $('#rc_led').append('<div id="rc_led_options" class="rc_options"></div>');
-
-    /*$('#robot_components_menu').append('<div id="rc_ledmatrix" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_tag" class="rc_tag text-center"></div>');
-    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_img" class="rc_img"></div>');
-    $('#rc_ledmatrix').append('<div id="rc_ledmatrix_options" class="rc_options"></div>');
-*/
-    $('#robot_components_menu').append('<div id="rc_button" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_button').append('<div id="rc_button_tag" class="rc_tag text-center"></div>');
-    $('#rc_button').append('<div id="rc_button_img" class="rc_img"></div>');
-    $('#rc_button').append('<div id="rc_button_options" class="rc_options"></div>');
-
-    $('#robot_components_menu').append('<div id="rc_light" class="robot_components_item bg-c-4 card"></div>');
-    $('#rc_light').append('<div id="rc_light_tag" class="rc_tag text-center"></div>');
-    $('#rc_light').append('<div id="rc_light_img" class="rc_img"></div>');
-    $('#rc_light').append('<div id="rc_light_options" class="rc_options"></div>');
+    this._components.forEach(function (component) {
+      $('#robot_components_menu').append('<div id="rc_' + component.type + '" class="robot_components_item bg-c-4 card"></div>');
+      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_tag" class="rc_tag text-center"></div>');
+      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_img" class="rc_img"></div>');
+      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_value"></div>');
+      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_options" class="rc_options"></div>');
+    });
 
     this.initButtons();
   }

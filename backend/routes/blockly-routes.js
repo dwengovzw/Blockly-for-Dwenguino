@@ -24,7 +24,7 @@ router.get('/', function (req, res) {
     });
 });
 
-let processStratBlocks = (startblock_xml, res) => {
+let processStartBlocks = (startblock_xml, res) => {
     let blocks_xml = startblock_xml;
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
@@ -39,13 +39,13 @@ let processStratBlocks = (startblock_xml, res) => {
 // load the application
 router.get("/simulator", function(req, res) {
     let blocks_xml = req.query.xml;
-    processStratBlocks(blocks_xml, res);
+    processStartBlocks(blocks_xml, res);
 })
 
 // load the application with a program from xml
 router.post("/simulator", function(req, res) {
     let blocks_xml = req.body.xml;
-    processStratBlocks(blocks_xml, res);
+    processStartBlocks(blocks_xml, res);
 })
 
 
@@ -99,8 +99,19 @@ router.route('/utilities/upload')
 router.route('/utilities/run', cors(corsOptions))
     .post(utilscontroller.run);
 
+
+// Handle get and post of compilation in the same way
 router.route('/utilities/getDwenguinoBinary')
-    .get(utilscontroller.getDwenguinoBinary)
+    .get((req, res) => {
+        req["data"] = req.query
+        utilscontroller.getDwenguinoBinary(req, res)
+    })
+
+router.route('/utilities/getDwenguinoBinary')
+    .post((req, res) => {
+        req["data"] = req.body
+        utilscontroller.getDwenguinoBinary(req, res)
+    })
 
 router.route('/utilities/getEnvironment', cors(corsOptions))
     .get(utilscontroller.getEnvironment)

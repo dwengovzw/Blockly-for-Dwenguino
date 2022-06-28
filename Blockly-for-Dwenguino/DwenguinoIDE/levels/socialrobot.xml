@@ -289,6 +289,19 @@
         </value>
     </block>
 
+    <block type="dwenguino_continuous_servo">
+        <value name="pin">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">SERVO_3</field>
+            </block>
+        </value>
+        <value name="speed">
+            <block type="math_number" id="116">
+                <field name="NUM">0</field>
+            </block>
+        </value>
+    </block>
+
     <block type="output_arms_down">
             <value name="servo_right_hand1">
                 <block type="dwenguino_pins"> 
