@@ -125,7 +125,7 @@ Blockly.Arduino['dwenguino_continuous_servo'] = function (block) {
   }
   let pwm_base_duty_cycle = 1500;
   let pwm_max_variation_duty_cycle = 500;
-  value_speed = pwm_base_duty_cycle + normalized_speed * pwm_max_variation_duty_cycle;
+  value_speed = Math.round(pwm_base_duty_cycle + normalized_speed * pwm_max_variation_duty_cycle);
 
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
