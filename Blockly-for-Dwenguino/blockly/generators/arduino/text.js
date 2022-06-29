@@ -52,7 +52,7 @@ Blockly.Arduino.text_join = function(){
     }
     for (var i = 1 ; i < itemCount ; ++i){
         var element = Blockly.Arduino.valueToCode(this, 'ADD' + i, Blockly.Arduino.ORDER_ATOMIC);
-        code = code + ' + ' + element;
+        code = code + ' + String(' + element + ')';
     }
     return [code, Blockly.Arduino.ORDER_ATOMIC];
 };
