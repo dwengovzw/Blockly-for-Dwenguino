@@ -262,7 +262,7 @@ Blockly.Arduino.dwenguino_leds_reg = function(){
 
 Blockly.Arduino.dwenguino_wait_for_switch = function(){
     var switch_number = this.getFieldValue('SWITCH');
-    var code = 'while(digitalRead(' + switch_number + ')){}';
+    var code = 'while(digitalRead(' + switch_number + ')){}\n';
 
     return code;
 };
