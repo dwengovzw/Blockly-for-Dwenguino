@@ -116,16 +116,11 @@ Blockly.Arduino['dwenguino_continuous_servo'] = function (block) {
 
   // scale speed to number between 1000 and 2000 ms
   let max_absolute_speed = 255;
-  let absolute_speed = Math.abs(value_speed);
-  let normalized_speed = 0; // normalized speed between -1 and 1
-  if (absolute_speed > max_absolute_speed){
-    normalized_speed = value_speed/absolute_speed;
-  }else{
-    normalized_speed = value_speed/max_absolute_speed;
-  }
   let pwm_base_duty_cycle = 1500;
   let pwm_max_variation_duty_cycle = 500;
-  value_speed = Math.round(pwm_base_duty_cycle + normalized_speed * pwm_max_variation_duty_cycle);
+  let constrained_speed_code = `constrain(${value_speed}, -${max_absolute_speed}, ${max_absolute_speed})`
+  let speed_mapping_code = `map(${constrained_speed_code}, -${max_absolute_speed}, ${max_absolute_speed}, ${pwm_base_duty_cycle} - ${pwm_max_variation_duty_cycle}, ${pwm_base_duty_cycle} + ${pwm_max_variation_duty_cycle})`
+  
 
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
@@ -134,7 +129,7 @@ Blockly.Arduino['dwenguino_continuous_servo'] = function (block) {
   Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +";\n" 
                                                                + "Servo servoOnPin" + value_pin + ";\n";
   Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');\n';
-  code = 'servoOnPin' + value_pin + '.writeMicroseconds(' + value_speed + ');\n';
+  code = 'servoOnPin' + value_pin + '.writeMicroseconds(' + speed_mapping_code + ');\n';
   
   return code;
 };

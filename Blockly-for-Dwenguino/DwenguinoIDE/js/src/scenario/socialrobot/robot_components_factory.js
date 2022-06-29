@@ -46,32 +46,7 @@ Object.freeze(TypesEnum);
  */
 class RobotComponentsFactory {
   logger = null;
-  inputState = {
-    pir: 0,
-    buttons: [1, 1, 1, 1, 1],
-    sonarDistance: -1
-  }
-  pinMappings = {
-    'rgbled': [
-        {
-          "red": 11,
-          "green": 14,
-          "blue": 15
-        }
-    ],
-
-    'sonar': [
-      { "trig": 25, 
-        "echo": 24 },
-      { "trig": 27,
-        "echo": 26 }
-    ],
-    'sound': [
-      { "analog": 29,
-        "digital": 15 }
-    ]
-  };
-
+ 
   /**
    * 
    * @constructs
@@ -142,8 +117,6 @@ class RobotComponentsFactory {
             this._robot[i].setPrevSpeed(this._robot[i].getSpeed());
             this._robot[i].setSpeed(dwenguinoState.getIoPinState(pin));
           }
-          this._robot[i].rotateToNextAngle();
-          console.log(this._robot[i].getAngle());
           break;
         case TypesEnum.LED:
           pin = this._robot[i].getPin();
@@ -431,10 +404,12 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SERVO);
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
-
     let pins = {}
-    pins[SocialRobotServo.pinNames.digitalPin] = 20 - id;
-
+    if (id <= 4){
+      pins[SocialRobotServo.pinNames.digitalPin] = 'SERVO_' + (id + 2); // The servo's in the simulator are on pins 3 to 6 by default
+    }else{
+      pins[SocialRobotServo.pinNames.digitalPin] = 20 - id;
+    }
     
     let servo = new SocialRobotServo();
     servo.initComponent(this._eventBus, id, pins, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses);
@@ -490,7 +465,11 @@ class RobotComponentsFactory {
       let id = this._numberOfComponentsOfType[TypesEnum.CONTINUOUSSERVO];
   
       let pins = {}
-      pins[SocialRobotContinuousServo.pinNames.digitalPin] = 20 - id;
+      if (id <= 4){
+        pins[SocialRobotContinuousServo.pinNames.digitalPin] = 'SERVO_' + (id + 2); // The servo's in the simulator are on pins 3 to 6 by default
+      }else{
+        pins[SocialRobotContinuousServo.pinNames.digitalPin] = 20 - id;
+      }
   
       let servo = new SocialRobotContinuousServo();
       servo.initComponent(this._eventBus, id, pins, costume, speed, visible, width, height, offsetLeft, offsetTop, htmlClasses);

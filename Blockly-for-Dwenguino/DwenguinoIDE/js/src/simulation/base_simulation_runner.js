@@ -133,7 +133,10 @@ class BaseSimulationRunner{
             
         } else {
             // sleep
-            var delayTime = Number(this.debugger.code.split("\n")[line].replace(/\D+/g, ''));
+            let time_strip_regex = /DwenguinoSimulation.sleep\((?<sleepval>\w+)\)/m;
+            let delay_param_value = time_strip_regex.exec(this.debugger.code.split("\n")[line]).groups.sleepval;
+            let evaluated_delay_param_value = this.debugger.debuggerjs.machine.$runner.gen.stackFrame.evalInScope(delay_param_value);
+            var delayTime = Number(evaluated_delay_param_value);
             this.delayStepsTaken = 0;
             this.delayStepsToTake = Math.floor(delayTime / this.baseSpeedDelay);
             this.delayRemainingAfterSteps = delayTime % this.baseSpeedDelay;

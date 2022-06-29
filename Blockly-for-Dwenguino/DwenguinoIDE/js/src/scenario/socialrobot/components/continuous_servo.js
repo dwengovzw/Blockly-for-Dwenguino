@@ -26,6 +26,8 @@ class SocialRobotContinuousServo extends SocialRobotServo{
         this._prevSpeed = 0;
         this._maxAbsoluteSpeed = 255;
         this._speedMultiplier = 10;
+
+        setTimeout(this.rotateToNextAngle, 33); // Start internal timing loop to update the state at 30fps
     }
 
     initComponent(eventBus, id, pins, costume, speed, visible, width, height, offsetLeft, offsetTop, htmlClasses){
@@ -50,14 +52,17 @@ class SocialRobotContinuousServo extends SocialRobotServo{
     reset(){
         super.reset();
         this.setSpeed(0);
+        this.setAngle(0);
         this.setPrevSpeed(0);
+        this.setPrevAngle(0);
     }
 
     rotateToNextAngle(){
         let angleDelta = this.getSpeed()/this._maxAbsoluteSpeed*this._speedMultiplier;
         this.setPrevAngle(this.getAngle());
-        this.setAngle((this.getPrevAngle() + angleDelta)%360);
+        this.setAngle((this.getPrevAngle() + angleDelta));
         console.log(this._angle);
+        setTimeout(this.rotateToNextAngle, 33);
     }
 
     setSpeed(speed){
