@@ -32,10 +32,10 @@ class DwenguinoSimulationRobotComponentsMenu {
         maximumAmount: 1
       },{
         type: TypesEnum.SERVO,
-        maximumAmount: 6
+        maximumAmount: 4
       },{
         type: TypesEnum.CONTINUOUSSERVO,
-        maximumAmount: 6
+        maximumAmount: 4
       },{
         type: TypesEnum.LCD,
         maximumAmount: 1
