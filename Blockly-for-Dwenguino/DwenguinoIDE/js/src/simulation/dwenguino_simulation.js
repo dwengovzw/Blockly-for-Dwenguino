@@ -17,14 +17,11 @@ class DwenguinoSimulation {
             "moving": new DwenguinoSimulationScenarioRidingRobot(logger),
             "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger),
             "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger),
-            //"plotter": new DwenguinoSimulationScenarioPlotter(logger),
             "conveyor": new DwenguinoSimulationScenarioConveyor(logger)
         };
         this.logger = logger;
         this.workspace = workspace;
         this.simControlsController = new SimulationControlsController(this.logger, this.workspace, this.scenarios);
-        //this.open();
-
     }
 
     open() {

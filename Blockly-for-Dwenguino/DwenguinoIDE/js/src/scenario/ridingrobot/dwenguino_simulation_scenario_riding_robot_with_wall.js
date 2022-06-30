@@ -14,7 +14,7 @@ class DwenguinoSimulationScenarioRidingRobotWithWall extends DwenguinoSimulation
         //call super prototype
         super(logger);
         //init robot state
-        this.initSimulationState(null);
+        //this.initSimulationState(null);
 
     }
 

@@ -30,7 +30,6 @@ class SimulationRunner extends BaseSimulationRunner{
         // reset scenario state
         this.currentScenario.initSimulationState(this.board);
         this.currentScenario.initSimulationDisplay(this.simulationViewContainerId);
-        this.currentScenario.updateScenario(this.board);
     }
 
 
