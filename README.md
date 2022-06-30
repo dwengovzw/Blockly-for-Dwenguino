@@ -1,6 +1,6 @@
 ## Dwenguinoblockly
 
-Dwenguinoblockly is a javascript application with nodejs backend which enables programming of the Dwenguino board (dwengo.org/dwenguino) using the blockly graphical code editor.
+Dwenguinoblockly is a javascript application with nodejs backend which enables programming of the Dwenguino board (dwengo.org/dwenguino) using the blockly graphical and textual code editor. Most of the application runs in browser. However, some parts, like the compilation service, user management, and logging system are contained in the backend application. Both applications can be run independently of each other. 
 
 The application has the following features:
 
@@ -8,24 +8,31 @@ The application has the following features:
 * Live translation of blocks to code.
 * In browser simulation environment with different scenarios.
 * Predefined tutorials to be used in a classroom.
-* Multiple language support (english, dutch, french, german, greek, italian, malay)
+* Multiple language support (English, Dutch, French, German, Greek, Italian, Malay)
 * Direct compilation and upload to the Dwenguino board through nodejs application.
+* Textual editor based on the [vscode monaco editor](https://github.com/microsoft/monaco-editor)
 
 
-Right now the backend was tested on Ubuntu 18.04 and runs when executing the install.sh script in the root of the repository.
-The frontend runs on all plaforms and is available on dwengo.org/dwenguinoblockly.
+To run the backend application:
+* Set the correct parameters in the backend/.env file. 
+* Be sure to set MONGODB_URI to a valid mongodb instance running on your system (or in the cloud).
+* Run `npm install`
+* Start the application using `node --experimental-modules index.js` 
 
 
 ### Dependencies
 
 * nodejs
-* python3
-    * pyserial module
-* google chrome
+* monogdb
+* webpack
+* babel
 
-### Installing the application
+To execute the compiled code on the Dwenguino µC, you need our custom usb bootloader. More information can be found on the [github page](https://github.com/dwengovzw/MassStorageBootloader) of the project.
 
-On Linux use the install script `install.sh` to install the application locally.
+
+### Deploying the application
+
+On linux, run the deploy.sh script in the deploy folder.
 
 ### Building the application
 
