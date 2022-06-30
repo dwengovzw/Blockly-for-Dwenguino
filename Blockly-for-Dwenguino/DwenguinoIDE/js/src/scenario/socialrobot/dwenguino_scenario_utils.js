@@ -40,7 +40,7 @@ class DwenguinoScenarioUtils{
      */
     async loadScenario(){
         try {
-            let xml = await FileIOController.uploadXml();
+            let xml = await FileIOController.uploadTextFile();
             this.scenario.xmlToRobot(xml);
             this._eventBus.dispatchEvent(EventsEnum.SAVE);
 
