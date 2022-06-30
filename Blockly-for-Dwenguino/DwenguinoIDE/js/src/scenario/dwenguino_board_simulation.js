@@ -46,9 +46,9 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         }
     }
 
-    // initSimulationState(boardState){
-
-    // }
+    initSimulationState(boardState){
+        this.updateScenarioState(boardState);
+    }
 
     initSimulationDisplay(containerId){
 

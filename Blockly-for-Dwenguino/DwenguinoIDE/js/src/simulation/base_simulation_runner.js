@@ -36,6 +36,7 @@ class BaseSimulationRunner{
     }
 
     setCurrentScenario(scenario){
+        scenario.initSimulationState(this.board);
         this.currentScenario = scenario;
         this.simulationSandbox.setCurrentScenario(this.currentScenario);
         this.resetDwenguino();
@@ -50,7 +51,7 @@ class BaseSimulationRunner{
         // reset scenario state
         this.currentScenario.initSimulationState(this.board);
         this.currentScenario.initSimulationDisplay("");
-        this.currentScenario.updateScenario(this.board);
+        //this.currentScenario.updateScenario(this.board);
     }
 
     /**
@@ -142,7 +143,6 @@ class BaseSimulationRunner{
             this.delayRemainingAfterSteps = delayTime % this.baseSpeedDelay;
             this.performDelayLoop(once);
         }
-        //this.simulationController.updateSimulationDisplay(this.board);
         this.checkForEnd();
     }
 

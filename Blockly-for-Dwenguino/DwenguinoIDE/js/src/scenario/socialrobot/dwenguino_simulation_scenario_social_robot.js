@@ -59,6 +59,9 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     this.scenarioUtils = new DwenguinoScenarioUtils(this, this._eventBus);
 
+    if (this.robotComponentsFactory){
+      this.robotComponentsFactory.removeAllSocialRobotComponents();
+    }
     this.robotComponentsFactory = new RobotComponentsFactory(this.scenarioUtils, this.logger, this._eventBus);
 
     this._eventBus.registerEvent(EventsEnum.CLEARCANVAS);
@@ -91,8 +94,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     this.initSimulation(containerIdSelector);
     
-
-    //this.renderer.render(this.robotComponentFactory.getRobot());
     
     var self = this;
     $("#sim_stop").click(function () {
@@ -376,6 +377,9 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    */
   xmlToRobot(xml){
     var data = this.scenarioUtils.textToDom(xml);
+
+    // Remove existing components
+    this.robotComponentsFactory.removeAllSocialRobotComponents();
 
     var childCount = data.childNodes.length;
     for (var i = 0; i < childCount; i++) {

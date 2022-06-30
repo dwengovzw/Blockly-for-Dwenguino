@@ -14,7 +14,7 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
     constructor(logger) {
         super(logger);
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
-        this.initSimulationState(null);
+        //this.initSimulationState(null);
     }
 
     /**
@@ -50,6 +50,8 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         };
         this.containerWidth = 0;
         this.containerHeight = 0;
+
+        this.dwenguinoBoardSimulation.initSimulationState(boardState);
 
     }
 
@@ -90,7 +92,7 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         db_simulator_panes.append(top_pane).append(bottom_pane);
 
         // init board simulation
-        this.dwenguinoBoardSimulation.initSimulationState(null);
+        
         this.dwenguinoBoardSimulation.initSimulationDisplay("db_simulator_top_pane");
         $("#sim_board").addClass("sim_board_row_placement");
 

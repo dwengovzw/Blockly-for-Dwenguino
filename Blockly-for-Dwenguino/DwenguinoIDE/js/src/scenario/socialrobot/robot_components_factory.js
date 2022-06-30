@@ -89,7 +89,7 @@ class RobotComponentsFactory {
    */
   removeAllSocialRobotComponents(){
     for(var i = 0; i < this._robot.length; i++){
-      this.removeRobotComponent(this._robot[i]);
+      this.removeRobotComponentWithTypeAndId(this._robot[i].getType(), this._robot[i].getId());
     }
   }
 
@@ -117,6 +117,7 @@ class RobotComponentsFactory {
             this._robot[i].setPrevSpeed(this._robot[i].getSpeed());
             this._robot[i].setSpeed(dwenguinoState.getIoPinState(pin));
           }
+          this._robot[i].startInnerLoop();
           break;
         case TypesEnum.LED:
           pin = this._robot[i].getPin();
@@ -211,10 +212,12 @@ class RobotComponentsFactory {
    */
   removeRobotComponentWithTypeAndId(type, id){
     let component = this.getRobotComponentWithTypeAndId(type, id);
+    component.reset();
 
     component.removeHtml();
     for(let i = 0; i < this._robot.length; i++){
       if(this._robot[i].getType() == type && this._robot[i].getId() == id){
+        this._robot[i].reset();
         this._robot.splice(i, 1);
         this.decrementNumberOf(type);
       }

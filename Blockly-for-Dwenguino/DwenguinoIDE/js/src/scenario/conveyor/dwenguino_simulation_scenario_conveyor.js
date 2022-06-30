@@ -55,7 +55,6 @@ class DwenguinoSimulationScenarioConveyor extends DwenguinoSimulationScenario {
 
         this.conveyorDisplayHelper = new ConveyorDisplayHelper(this.dimensions, this.amount, this.startPositionY, this.sensorPins, this.buttonPins);
 
-        this.initSimulationState(null);
     }
 
     /**
@@ -107,7 +106,8 @@ class DwenguinoSimulationScenarioConveyor extends DwenguinoSimulationScenario {
                     y: 0
                 }
             };
-        }        
+        }   
+        this.dwenguinoBoardSimulation.initSimulationState(boardState);     
     }
 
 
@@ -232,7 +232,6 @@ class DwenguinoSimulationScenarioConveyor extends DwenguinoSimulationScenario {
         // init board simulation
         this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("80%");
         this.dwenguinoBoardSimulation.setComponentsRightPosition("-1000px");
-        this.dwenguinoBoardSimulation.initSimulationState(null);
         this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);
         $("#sim_board").addClass("sim_board_column_placement");
 

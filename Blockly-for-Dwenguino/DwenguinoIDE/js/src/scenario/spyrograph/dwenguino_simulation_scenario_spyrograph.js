@@ -51,7 +51,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
     
     constructor(logger){
         super(logger);
-        this.initSimulationState(null);
+        //this.initSimulationState(null);
         this.graphicsLib = new SpyrographGraphicsLib();
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
         this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
@@ -59,7 +59,9 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
 
     initSimulationState(boardState){
         super.initSimulationState(boardState);
-        this.representationScale.motorAngles = [0, 0] // Determined by the simulation       
+        this.representationScale.motorAngles = [0, 0] // Determined by the simulation
+        this.dwenguinoBoardSimulation.initSimulationState(boardState);     
+        this.updateScenarioState(boardState); // Do first redraw  
     }
 
     initSimulationDisplay(containerId){
@@ -84,7 +86,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
         this.dwenguinoBoardSimulation.setComponentsTopOffset("55%");
         this.dwenguinoBoardSimulation.setComponentsRightPosition("55px");
-        this.dwenguinoBoardSimulation.initSimulationState(null);
+        
         this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);
         $("#sim_board").addClass("sim_board_column_placement");
 
