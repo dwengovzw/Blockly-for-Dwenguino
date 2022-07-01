@@ -27,7 +27,6 @@ class SocialRobotContinuousServo extends SocialRobotServo{
         this._maxAbsoluteSpeed = 255;
         this._speedMultiplier = 10;
 
-        this._intervalTimer = null;
         this._intervalTimerStarted = false;
     }
 
@@ -52,11 +51,7 @@ class SocialRobotContinuousServo extends SocialRobotServo{
 
     reset(){
         super.reset();
-        if (this._intervalTimer){
-            clearInterval(this._intervalTimer);
-            this._intervalTimer = null;
-            this._intervalTimerStarted = false;
-        }
+        this._intervalTimerStarted = false;
         this.setSpeed(0);
         this.setAngle(0);
         this.setPrevSpeed(0);
@@ -67,18 +62,27 @@ class SocialRobotContinuousServo extends SocialRobotServo{
      *  Start internal timing loop to update the state at 30fps
      */
     startInnerLoop(){
-        if (this._intervalTimer == null){
+        if (!this._intervalTimerStarted){
+            setTimeout(this.rotateToNextAngle, 33);
             this._intervalTimerStarted = true;
-            this._intervalTimer = setInterval(this.rotateToNextAngle, 33);
         }
     }
 
+    /**
+     * Rotate the servo to the next angle. Should only be called from startInnerLoop function!
+     */
     rotateToNextAngle(){
         // Schedule next update in about 33ms
         let angleDelta = this.getSpeed()/this._maxAbsoluteSpeed*this._speedMultiplier;
         this.setPrevAngle(this.getAngle());
         this.setAngle((this.getPrevAngle() + angleDelta));
         console.log(this._angle);
+        console.log(this._isSimulationRunning);
+        if (this._isSimulationRunning){
+            setTimeout(this.rotateToNextAngle, 33);
+        } else {
+            this._intervalTimerStarted = false;
+        }
     }
 
     setSpeed(speed){

@@ -18,6 +18,7 @@ export { DwenguinoSimulationScenarioSocialRobot }
 class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario{
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
+  robotComponentsFactory = null;
 
   // For buzzer which is not an extra robot component
   audioStarted = false;
@@ -39,6 +40,13 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
 
     this.initAudioContext();
+  }
+
+  setIsSimulationRunning(isSimulationRunning){
+    super.setIsSimulationRunning(isSimulationRunning);
+    if (this.robotComponentsFactory){
+      this.robotComponentsFactory.setIsSimulationRunning(isSimulationRunning);
+    }
   }
 
 
