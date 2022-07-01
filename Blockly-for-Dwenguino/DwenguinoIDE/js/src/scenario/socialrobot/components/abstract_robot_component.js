@@ -12,6 +12,7 @@ export { AbstractRobotComponent }
  */
 
 class AbstractRobotComponent{
+    _isSimulationRunning = true;
     constructor(){};
 
 
@@ -38,5 +39,14 @@ class AbstractRobotComponent{
      */
     getHtmlClasses() {
       return this._htmlClasses;
+    }
+
+    /**
+    * Sets the state of the simulation
+    * @param {*} isSimulationRunning true or false depending on if simulation is running or not.
+    */
+    setIsSimulationRunning(isSimulationRunning){
+      console.log(`Simulation running ?: ${isSimulationRunning}`)
+      this._isSimulationRunning = isSimulationRunning;
     }
 }

@@ -66,6 +66,15 @@ class RobotComponentsFactory {
       this._numberOfComponentsOfType[t] = 0;
     }
   }
+/**
+ * Sets the state of the simulation
+ * @param {*} isSimulationRunning true or false depending on if simulation is running or not.
+ */
+  setIsSimulationRunning(isSimulationRunning){
+    for(var i = 0; i < this._robot.length; i++){
+      this._robot[i].setIsSimulationRunning(isSimulationRunning);
+    }
+  }
 
   /**
    * 
@@ -213,11 +222,10 @@ class RobotComponentsFactory {
   removeRobotComponentWithTypeAndId(type, id){
     let component = this.getRobotComponentWithTypeAndId(type, id);
     component.reset();
-
     component.removeHtml();
+
     for(let i = 0; i < this._robot.length; i++){
       if(this._robot[i].getType() == type && this._robot[i].getId() == id){
-        this._robot[i].reset();
         this._robot.splice(i, 1);
         this.decrementNumberOf(type);
       }
