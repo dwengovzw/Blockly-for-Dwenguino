@@ -35,8 +35,8 @@ class BaseSocialRobotServo extends RobotComponent{
             foreground: {},
             background: {}
         };
-        this._costumeImageSources.foreground[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head_centered.png`;
-        this._costumeImageSources.foreground[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_head_centered.png`;
+        this._costumeImageSources.foreground[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_arm_new_centered.png`;
+        this._costumeImageSources.foreground[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_arm_new_centered.png`;
         this._costumeImageSources.foreground[CostumesEnum.EYE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_forground.svg`;
         this._costumeImageSources.foreground[CostumesEnum.LEFTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand.png`;
         this._costumeImageSources.foreground[CostumesEnum.RIGHTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand.png`;
@@ -48,8 +48,8 @@ class BaseSocialRobotServo extends RobotComponent{
         this._costumeImageSources.background[CostumesEnum.RIGHTHAND] = this._costumeImageSources.foreground[CostumesEnum.RIGHTHAND];
 
         this._costumeIcons = { 
-            'plain' : `${settings.basepath}DwenguinoIDE/img/socialrobot/servo.png`,
-            'plainrotate90' : `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_rotated_90.png`,
+            'plain' : `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_new_centered.png`,
+            'plainrotate90' : `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_new_rotated_90.png`,
             'eye' : `${settings.basepath}DwenguinoIDE/img/socialrobot/eye.png`,
             //'mouth' : './DwenguinoIDE/img/socialrobot/mouth.png',
             'righthand' : `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand_icon.png`,
@@ -141,7 +141,7 @@ class BaseSocialRobotServo extends RobotComponent{
                         this.setHtmlClasses('sim_canvas servo_canvas');
                         this.setCostume(newCostume);
                         this.setWidth(100);
-                        this.setHeight(50);
+                        this.setHeight(100);
                         this.setX(0);
                         this.setY(0);
                         break;
@@ -149,7 +149,7 @@ class BaseSocialRobotServo extends RobotComponent{
                         this.setHtmlClasses('sim_canvas servo_canvas');
                         this.setCostume(newCostume);
                         this.setWidth(100);
-                        this.setHeight(50);
+                        this.setHeight(100);
                         this.setX(0);
                         this.setY(30);
                         break;

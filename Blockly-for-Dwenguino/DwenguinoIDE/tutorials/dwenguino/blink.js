@@ -61,7 +61,6 @@ tutorials.blink = {
     },
   ],
   onEnd: function(){
-    console.log("introduction tutorial ended");
     DwenguinoBlockly.tutorialMenu.endTutorial();
   }
 };

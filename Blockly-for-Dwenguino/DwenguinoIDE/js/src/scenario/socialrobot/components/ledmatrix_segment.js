@@ -31,7 +31,6 @@ class SocialRobotLedMatrixSegment extends AbstractRobotComponent{
         this._dataPin = dataPin;
         this._csPin = csPin;
         this._clkPin = clkPin;
-        console.log('state adjusted');
         this._state = SocialRobotLedMatrixSegment.getEmptyLedMatrix();
         this._canvasId = 'sim_ledmatrixsegment_canvas' + this._id; 
         this._ledSvg = new Image();

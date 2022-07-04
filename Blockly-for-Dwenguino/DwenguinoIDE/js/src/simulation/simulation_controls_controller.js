@@ -75,7 +75,6 @@ class SimulationControlsController {
         // Ugly hack..
         let self = this;
         $("input[name=scenario_type]:radio").on("change", (event) => {
-            console.log($(event.currentTarget).val());
             self.scenarioView = $(event.currentTarget).val();
             self.translateSimulatorInterface();
 

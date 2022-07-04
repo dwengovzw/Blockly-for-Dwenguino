@@ -19,8 +19,8 @@ class SocialRobotContinuousServo extends SocialRobotServo{
         // Change default background costume
         this._costumeImageSources.background[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_background_centered.png`;
         this._costumeImageSources.background[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_background_centered.png`;
-        this._costumeIcons['plain'] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo.png`;
-        this._costumeIcons['plainrotate90'] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_rotated_90.png`;
+        this._costumeIcons['plain'] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_new_centered.png`;
+        this._costumeIcons['plainrotate90'] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_new_centered_rotated90.png`;
 
         this._speed = 0;
         this._prevSpeed = 0;
@@ -76,8 +76,6 @@ class SocialRobotContinuousServo extends SocialRobotServo{
         let angleDelta = this.getSpeed()/this._maxAbsoluteSpeed*this._speedMultiplier;
         this.setPrevAngle(this.getAngle());
         this.setAngle((this.getPrevAngle() + angleDelta));
-        console.log(this._angle);
-        console.log(this._isSimulationRunning);
         if (this._isSimulationRunning){
             setTimeout(this.rotateToNextAngle, 33);
         } else {

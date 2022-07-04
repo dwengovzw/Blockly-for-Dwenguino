@@ -735,7 +735,7 @@ MSG.tutorials.socialrobot['socialrobots'].stepContents = [
   "<div class='row'><div class='col-md-4 tutorial'><i>Czujnik ultradźwiękowy</i></div><div class='col-md-4 tutorial'><i>Pasywny czujnik podczerwieni</i>.</div><br><br>",
   "<b>Aktuatory</b> są wyjściami, które pozwalają robotowi 'działać'.",
   "Na przykład, pomyśl o silniku serwo, który kontroluje ramię robota tak, że robot macha do ciebie, gdy cię widzi.<br><br>",
-  "<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo.png' width='100px'></div>",
+  "<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo_new_centered.png' width='100px'></div>",
   "<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/dc.png' width='100px'></div></div>",
   "<div class='row'><div class='col-md-4 tutorial'><i>Silnik serwo</i></div><div class='col-md-4 tutorial'><i>Silnik prądu stałego</i></div></div>",
   "Robot musi podejmować własne <b>decyzje</b>. Może to zrobić w oparciu o dane",

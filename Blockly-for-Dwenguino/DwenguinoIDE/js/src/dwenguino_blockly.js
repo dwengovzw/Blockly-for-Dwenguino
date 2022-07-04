@@ -155,8 +155,6 @@ let DwenguinoBlockly = {
          // Process blockly events and log them
          DwenguinoBlockly.workspace.addChangeListener(function(event){
            // Stop de simulator
-           //DwenguinoBlockly.simulationEnvironment.stop();
-          console.log("blockly event");
           let eventToRecord = "";
 
           let javascriptCode = "";
@@ -262,7 +260,6 @@ let DwenguinoBlockly = {
             DwenguinoBlockly.logger.recordEvent(eventToRecord);
           } else {
             console.debug('Type of event unkown ', event);
-            console.log(event.type);
           }
         });
 
@@ -448,7 +445,6 @@ let DwenguinoBlockly = {
       $('#errorModal .modal-body .console').hide();
       $('#errorModal .modal-body .error_details').off("click");
       $('#errorModal .modal-body .error_details').click(function(){
-        console.log("toggle console")
         $('#errorModal .modal-body .console').toggle();
       });
 
@@ -506,7 +502,6 @@ let DwenguinoBlockly = {
     *   Take a snapshot of the current timestamp, simulatorstate, selectedDifficulty, activeTutorial and blocks in the workspace.
     */
     takeSnapshotOfWorkspace: function(){
-        console.log("taking snapshot");
         // Get xml for current code
         let xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
         let xmlCode = Blockly.Xml.domToText(xml);
@@ -584,7 +579,6 @@ let DwenguinoBlockly = {
     }, 
 
     loadFileXmlIntoWorkspace: function(xml_content){
-      console.log("loading into workspace");
       DwenguinoBlockly.setWorkspaceBlockFromXml(xml_content);
     },
 
@@ -637,7 +631,6 @@ let DwenguinoBlockly = {
           block_texts.push('<block type="variables_declare_set_string"></block>');
           block_texts.push('<block type="variables_get_string"></block>');
           
-          console.log(variables)
           for (var i = 0 ; i < variables.length ; i++){
             var type = "_int";
             if (variables[i]["type"] == "Number"){
@@ -652,7 +645,6 @@ let DwenguinoBlockly = {
             blockXml = blockXml + variables[i]["id_"] + '" variabletype="';
             blockXml = blockXml + variables[i]["type"] + '">';
             blockXml = blockXml + variables[i]["name"] + '</field></block>';
-            console.log(blockXml);
             block_texts.push(blockXml);
           }
           var blocks = []
@@ -702,7 +694,6 @@ let DwenguinoBlockly = {
         }
 
         let data = { lang: newLang };
-        console.log(data);
         $.ajax({
             type: "POST",
             headers: {

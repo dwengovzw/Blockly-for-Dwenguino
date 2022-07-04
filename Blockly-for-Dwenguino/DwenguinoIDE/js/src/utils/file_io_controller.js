@@ -92,7 +92,6 @@ class FileIOController {
 
                 $("#dropzoneModal").on('click',(e) => {
                     let target  = $(e.target);
-                    console.log(target);
                     if (target.is("button.close") || target.is("div#dropzoneModal.modal.fade")){
                         rej("Dialog closed without result");
                     }

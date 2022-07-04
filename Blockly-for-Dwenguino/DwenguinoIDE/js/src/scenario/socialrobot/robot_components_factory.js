@@ -409,7 +409,7 @@ class RobotComponentsFactory {
     * @param {int} offsetTop 
     * @param {string} htmlClasses 
     */
-  addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
+  addServo(pin=0, costume=CostumesEnum.PLAIN, angle=0, visible=true, width=100, height=100, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas servo_canvas'){
 
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.SERVO));
     this.incrementNumberOf(TypesEnum.SERVO);
@@ -469,7 +469,7 @@ class RobotComponentsFactory {
     * @param {int} offsetTop 
     * @param {string} htmlClasses 
     */
-     addContinuousServo(pin=0, costume=CostumesEnum.PLAIN, speed=0, visible=true, width=100, height=50, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas continuous_servo_canvas'){
+     addContinuousServo(pin=0, costume=CostumesEnum.PLAIN, speed=0, visible=true, width=100, height=100, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas continuous_servo_canvas'){
 
       this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.CONTINUOUSSERVO));
       this.incrementNumberOf(TypesEnum.CONTINUOUSSERVO);

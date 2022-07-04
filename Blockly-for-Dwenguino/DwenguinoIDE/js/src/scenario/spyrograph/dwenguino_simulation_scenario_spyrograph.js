@@ -163,7 +163,6 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         let colorpicker = $("<input>").attr("type", "color").attr("value", this.currentColor);
         let self = this;
         colorpicker.on("change", function(event){
-            console.log($(this).val());
             self.currentColor = $(this).val();
         });
         controlscontainer.append(colorpicker);
@@ -210,7 +209,6 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
             let self = this;
             l1Slider.on("change", function(event){
                 let sliderValue = parseInt($(this).val());
-                console.log(sliderValue);
                 self.representationScale.segmentCount[i] = sliderValue;
                 self.representationScale.segmentLengths[i] = self.representationScale.segmentIncrement*sliderValue;
                 self.calculateHingePoints();

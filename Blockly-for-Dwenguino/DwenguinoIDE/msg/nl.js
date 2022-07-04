@@ -830,7 +830,7 @@ MSG.tutorials.socialrobot['socialrobots'].stepContents = [
   + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passief infrarood sensor</i></div></div><br><br>"
   + "<b>Actuoren</b> vormen de uitgangen waarmee een robot kan 'handelen'. "
   + "Denk bijvoorbeeld aan een servomotor die de arm van een robot aanstuurt, zodat de robot naar je zwaait wanneer hij je ziet.<br><br>"
-  + `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo.png'  width='100px'></div>`
+  + `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo_new_centered.png'  width='100px'></div>`
   + `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/dc.png'  width='100px'></div></div>`
   + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
   "Een robot hoort zelf <b>beslissingen</b> te nemen. Dit kan hij doen op basis van de gegevens "
