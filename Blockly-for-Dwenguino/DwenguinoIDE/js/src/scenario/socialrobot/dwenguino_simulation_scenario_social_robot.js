@@ -19,6 +19,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   simulationComponentsMenu = null;
   simulationRobotComponents = null;
   robotComponentsFactory = null;
+  backgroundClassName = "";
 
   // For buzzer which is not an extra robot component
   audioStarted = false;
@@ -46,6 +47,13 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     super.setIsSimulationRunning(isSimulationRunning);
     if (this.robotComponentsFactory){
       this.robotComponentsFactory.setIsSimulationRunning(isSimulationRunning);
+    }
+  }
+
+
+  resetScenario(){
+    if (this.robotComponentsFactory){
+      this.robotComponentsFactory.resetSocialRobot();
     }
   }
 
@@ -102,16 +110,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     this.initSimulation(containerIdSelector);
     
-    
-    var self = this;
-    $("#sim_stop").click(function () {
-      let timer = setTimeout(() => {
-        self.resetSocialRobot();
-        self.renderer.render(self.robotComponentsFactory.getRobot());
-      }, 500);
-    });
-
-
     this.setBackground();
 
     this.initScenarioOptions();
@@ -263,6 +261,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   setBackground() {
     $('#sim_container').append("<div id='sim_background' class='sim_element row'></div>");
     $('#sim_background').append("<div id='sim_background_img' class='background1'></div>");
+    this.backgroundClassName = "background1";
     this._background = 1;
     var sensorOptionswidth = $('#sensor_options').width();
     var parentWidth = $('#sim_background').width() - sensorOptionswidth;
@@ -285,6 +284,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     document.getElementById('sim_background_img').className = "";
     document.getElementById('sim_background_img').className = 'background' + this._background;
+    this.backgroundClassName = 'background' + this._background;
     this._eventBus.dispatchEvent(EventsEnum.SAVE);
   }
 
@@ -296,7 +296,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
         
     data = data.concat("<Item ");
     data = data.concat(" Type='", "background", "'");
-    data = data.concat(" Class='", document.getElementById('sim_background_img').className, "'");
+    data = data.concat(" Class='", this.backgroundClassName, "'");
     data = data.concat(" Id='", this._background, "'");
     data = data.concat("></Item>");
     return data;

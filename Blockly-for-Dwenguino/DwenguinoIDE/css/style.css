@@ -1076,6 +1076,12 @@ background-color: #ffffff;
     width: 100px;
     height: 120px;
 }
+.continuous_servo_canvas{
+    margin-left: 25px;
+    margin-top: 0px;
+    width: 100px;
+    height: 120px;
+}
 
 .hand_canvas{
     margin-left: 0px;
