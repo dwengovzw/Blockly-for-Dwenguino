@@ -151,7 +151,7 @@ class BaseSocialRobotServo extends RobotComponent{
                         this.setWidth(100);
                         this.setHeight(100);
                         this.setX(0);
-                        this.setY(30);
+                        this.setY(15);
                         break;
                     case CostumesEnum.EYE:
                         this.setHtmlClasses('servo_canvas');
