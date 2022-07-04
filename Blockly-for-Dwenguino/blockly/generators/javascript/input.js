@@ -76,7 +76,7 @@ Blockly.JavaScript['input_sound_sensor'] = function (block) {
  Blockly.JavaScript['input_button'] = function(block) {
    var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
  
-   var code = machine + "readButton('" + pin + "')";
+   var code = machine + "readButton(" + pin + ")";
    return [code, Blockly.JavaScript.ORDER_ATOMIC];
  }
  
@@ -85,7 +85,7 @@ Blockly.JavaScript['input_sound_sensor'] = function (block) {
  
    //Blockly.JavaScript.setups_['setup_input_' + pin_number] = 'pinMode(' + pin_number + ', INPUT);\n';
  
-   var code = machine + 'digitalRead("' + pin_number + '")';
+   var code = machine + 'digitalRead(' + pin_number + ')';
    return [code, Blockly.Arduino.ORDER_ATOMIC];
  };
  

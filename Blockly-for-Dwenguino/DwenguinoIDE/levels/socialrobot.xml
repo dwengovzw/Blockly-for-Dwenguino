@@ -116,7 +116,7 @@
     <block type="input_read_pin">
         <value name="PIN">
             <block type="dwenguino_pins"> 
-                <field name="PIN">0</field>
+                <field name="PIN">12</field>
             </block>    
         </value>
     </block>
