@@ -39,7 +39,9 @@ class BaseSimulationRunner{
         scenario.initSimulationState(this.board);
         this.currentScenario = scenario;
         this.simulationSandbox.setCurrentScenario(this.currentScenario);
+        this.resetDebugger();
         this.resetDwenguino();
+        this.initScenario();
     }
 
     /**
@@ -51,22 +53,34 @@ class BaseSimulationRunner{
         // reset scenario state
         this.currentScenario.initSimulationState(this.board);
         this.currentScenario.initSimulationDisplay("");
-        //this.currentScenario.updateScenario(this.board);
     }
 
     /**
-    * Resets the dwenguino (drawing) to its initial state (remove text, no sound etc)
-    */
-   resetDwenguino() {
+     * Reset the debugger for next execution
+     */
+    resetDebugger(){
         // delete debugger
         this.debugger.debuggerjs = null;
         this.debugger.code = "";
         this.debugger.blocks.blockMapping = {};
+    }
 
+    /**
+    * Resets the virtual board state. 
+    * Notify the current scenario of the reset by passing the new board state.
+    */
+   resetDwenguino() {
         // Reset the board state
-        this.board.resetBoard();
-        
-        this.initScenario();
+        this.board.resetBoard(); 
+    }
+
+    /**
+     * Reset the current scenario to the initial state and update it based on the current board state.
+     */
+    resetScenario(){
+         // update the current scenario so it resets its state based on the current board state.
+         this.currentScenario.resetScenario(); 
+         this.currentScenario.updateScenarioDisplay(this.board);
     }
 
     /*
@@ -77,6 +91,8 @@ class BaseSimulationRunner{
    }
 
    initDebugger(code) {
+        // reset debugger
+        this.resetDebugger();
         // initialize simulation
         this.resetDwenguino();
         // get code

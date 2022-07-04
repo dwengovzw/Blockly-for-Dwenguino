@@ -28,26 +28,7 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
         // init superclass
         super.initSimulationState(boardState);
         //init robot statecontainerIdSelector
-        this.robot = {
-            image: {
-                width: 65,
-                height: 83
-            },
-            start: {
-                x: 100,
-                y: 100,
-                angle: 0
-            },
-            position: {
-                x: 100,
-                y: 100,
-                angle: 0
-            },
-            collision: [{
-                type: 'circle',
-                radius: 25
-            }]
-        };
+        this.resetScenario();
         this.containerWidth = 0;
         this.containerHeight = 0;
 
@@ -137,6 +118,29 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
             .css("background-size", "100%")
             .css('top', this.robot.position.y + 'px')
             .css('left', this.robot.position.x + 'px');  
+    }
+
+    resetScenario(){
+        this.robot = {
+            image: {
+                width: 65,
+                height: 83
+            },
+            start: {
+                x: 100,
+                y: 100,
+                angle: 0
+            },
+            position: {
+                x: 100,
+                y: 100,
+                angle: 0
+            },
+            collision: [{
+                type: 'circle',
+                radius: 25
+            }]
+        };
     }
 
 

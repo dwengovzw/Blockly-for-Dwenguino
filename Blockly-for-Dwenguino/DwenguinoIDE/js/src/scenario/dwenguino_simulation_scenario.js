@@ -79,6 +79,14 @@ class DwenguinoSimulationScenario {
         return this.isSimulationRunning;
     }
 
+    /**
+     * Resets the internal state of the scenario. 
+     * f.e. reset the social robot components to their original position or move the drawing robot arms to their start posistion.
+     */
+    resetScenario(){
+
+    }
+
 }
 
 export default DwenguinoSimulationScenario;

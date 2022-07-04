@@ -57,6 +57,16 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
     }
 
+    /**
+     * Resets the motors to their initial position and recalculates all other points based on that.
+     */
+    resetScenario(){
+        for (let i = 0 ; i < 2 ; i++){
+            this.representationScale.motorAngles[i] = 0;
+        }
+        this.calculateHingePoints();
+    }
+
     initSimulationState(boardState){
         super.initSimulationState(boardState);
         this.representationScale.motorAngles = [0, 0] // Determined by the simulation
@@ -300,8 +310,6 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
 
         let y31 = (-1*b + Math.sqrt(b*b-4*a*c))*noemerA/(2*tellerA);
         let y32 = (-1*b - Math.sqrt(b*b-4*a*c))*noemerA/(2*tellerA);
-        /*let y31 = (-1*b + Math.sqrt(b*b-4*a*c))/(2*a);
-        let y32 = (-1*b - Math.sqrt(b*b-4*a*c))/(2*a);*/
 
         let x31 = (2*y31*(y2-y1) + p)/q;
         let x32 = (2*y32*(y2-y1) + p)/q;
@@ -449,12 +457,6 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
             this.drawingScale.holeDiameter);
 
 
-        /*let p1 = new Point(this.representationScale.hinges[0][0], this.representationScale.hinges[0][1]);
-        let p2 = new Point(this.representationScale.hinges[4][0], this.representationScale.hinges[4][1]);
-        console.log("Arm 1 length:" + p1.getEuclideanDistanceTo(p2));
-        p1 = new Point(this.representationScale.hinges[1][0], this.representationScale.hinges[1][1]);
-        p2 = new Point(this.representationScale.hinges[3][0], this.representationScale.hinges[3][1]);
-        console.log("Arm 2 length:" + p1.getEuclideanDistanceTo(p2));*/
         
         // Draw a point on the drawingcanvas
         if (paintOnDrawingCanvas){

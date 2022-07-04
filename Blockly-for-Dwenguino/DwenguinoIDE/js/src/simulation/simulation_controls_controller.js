@@ -319,7 +319,10 @@ class SimulationControlsController {
     */
     stopSimulation() {
         this.stopDebuggingView();
+        // might need:
+        //this.simulationRunner.resetDebugger();
         this.simulationRunner.resetDwenguino();
+        this.simulationRunner.resetScenario();
     }
 
     /*
