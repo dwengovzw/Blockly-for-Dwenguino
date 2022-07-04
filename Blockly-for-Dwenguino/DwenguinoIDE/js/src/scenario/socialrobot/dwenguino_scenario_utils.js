@@ -26,7 +26,6 @@ class DwenguinoScenarioUtils{
      * @param {string} data - The XML data to be downloaded to the client.
      */
     saveScenario(data){
-        console.log('save scenario');
         FileIOController.download("scenario.xml", data);
         let eventToRecord = this.scenario.logger.createEvent(EVENT_NAMES.downloadScenarioClicked, "");
         this.scenario.logger.recordEvent(eventToRecord);

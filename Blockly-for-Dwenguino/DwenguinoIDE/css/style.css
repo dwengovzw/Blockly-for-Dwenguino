@@ -703,6 +703,7 @@ background-color: #ffffff;
     background-size: contain;
     background-repeat: no-repeat;
     z-index:-1;
+    background-color: #d3d3d3;
 }
 
 #sim_background_img {
@@ -869,12 +870,12 @@ background-color: #ffffff;
 }
 
 #rc_servo_img {
-    background-image: url("../img/socialrobot/servo.png");
+    background-image: url("../img/socialrobot/servo_new_centered.png");
 }
 
 
 #rc_continuousservo_img {
-    background-image: url("../img/socialrobot/continuous_servo.png");
+    background-image: url("../img/socialrobot/continuous_servo_new_centered.png");
 }
 
 

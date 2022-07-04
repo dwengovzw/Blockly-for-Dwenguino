@@ -62,7 +62,6 @@ tutorials.helloDwenguino = {
     },
   ],
   onEnd: function(){
-    console.log("introduction tutorial ended");
     DwenguinoBlockly.tutorialMenu.endTutorial();
   }
 };

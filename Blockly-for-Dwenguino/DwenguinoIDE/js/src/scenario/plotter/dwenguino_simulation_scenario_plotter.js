@@ -167,7 +167,6 @@ class DwenguinoSimulationScenarioPlotter extends DwenguinoSimulationScenario {
 
         let self = this;
         colorpicker.on("change", function(event){
-            console.log($(this).val());
             self.updateColor($(this).val());
         });
 

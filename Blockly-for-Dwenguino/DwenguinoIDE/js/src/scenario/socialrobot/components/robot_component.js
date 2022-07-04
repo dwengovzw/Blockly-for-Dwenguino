@@ -187,8 +187,6 @@ class RobotComponent extends AbstractRobotComponent {
     //pinName: digitalPin & analogPin -> keys in the pins object
 
     createPinOptionsInModalDialog(pinName){
-        console.log(this.getPins());
-        console.log(this.getAllPossiblePins());
         $('#componentOptionsModalBody').append('<div id="componentOptionsPin' + pinName + '" class="ui-widget row mb-4">');
         $('#componentOptionsPin' + pinName).append('<div class="col-md-2">' + DwenguinoBlocklyLanguageSettings.translate([ "pinNames", pinName])+'</div>');
         $('#componentOptionsPin' + pinName).append('<div id="pins_' + pinName +'" class="col-md-10"></div>');

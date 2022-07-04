@@ -12,7 +12,6 @@ tutorials.basic_test =    {
             target: DwengoBotId,
             placement: "left",
             onNext: function(){
-                console.log($('#basic_test_input_question_1').val());
                 setWorkspaceBlockFromXml('<xml xmlns="http://www.w3.org/1999/xhtml"><block type="variables_declare_set" id="`y=%Z@S4SJ=UiCxE[$N]" x="-24" y="46"><field name="VAR">a</field><value name="VALUE"><block type="char_type" id="`]d?45(Kl)D^`b63wz/T"><field name="BITMASK">1</field></block></value><next><block type="variables_declare_set" id="hcQaUUC6`g2o9-e;vM:A"><field name="VAR">b</field><value name="VALUE"><block type="char_type" id="72o,@xb$liy@J06:]Y*F"><field name="BITMASK">8</field></block></value><next><block type="variables_declare_set" id="`B(/ZAKvV,^w|u8d(v=3"><field name="VAR">a</field><value name="VALUE"><block type="variables_get" id="e/t%Qk]Yx}Iu6.3x6:Wx"><field name="VAR">b</field></block></value><next><block type="variables_declare_set" id=")LKO6aQVE*;:#.HGC},S"><field name="VAR">b</field><value name="VALUE"><block type="variables_get" id="Dfif*jovaqYb!=)F,pv-"><field name="VAR">a</field></block></value></block></next></block></next></block></next></block></xml>');
             }
         },
@@ -22,8 +21,6 @@ tutorials.basic_test =    {
             target: DwengoBotId,
             placement: "left",
             onNext: function(){
-                console.log($('#basic_test_input_question_1a').val());
-                console.log($('#basic_test_input_question_1b').val());
             }
         },
         {
@@ -34,7 +31,6 @@ tutorials.basic_test =    {
         },
     ],
     onEnd: function(){
-        console.log("Basic test ended");
         DwenguinoBlockly.tutorialMenu.endTutorial();
         DwenguinoBlockly.workspace.clear();
     }

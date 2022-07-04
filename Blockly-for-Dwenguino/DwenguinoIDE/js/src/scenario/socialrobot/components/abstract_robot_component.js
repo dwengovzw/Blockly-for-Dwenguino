@@ -46,7 +46,6 @@ class AbstractRobotComponent{
     * @param {*} isSimulationRunning true or false depending on if simulation is running or not.
     */
     setIsSimulationRunning(isSimulationRunning){
-      console.log(`Simulation running ?: ${isSimulationRunning}`)
       this._isSimulationRunning = isSimulationRunning;
     }
 }

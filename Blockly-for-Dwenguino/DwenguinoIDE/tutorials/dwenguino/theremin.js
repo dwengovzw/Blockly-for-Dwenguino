@@ -27,7 +27,6 @@ tutorials.theremin =    {
         },
     ],
     onEnd: function(){
-        console.log("Basic test ended");
         DwenguinoBlockly.tutorialMenu.endTutorial();
         DwenguinoBlockly.workspace.clear();
     }

@@ -392,7 +392,7 @@ var dwenguino_servo_json = {
     },
     {
       "type": "field_image",
-      "src": settings.basepath + "DwenguinoIDE/img/servo.png",
+      "src": settings.basepath + "DwenguinoIDE/img/socialrobot/servo_new_centered.png",
       "width": 100,
       "height": 100,
       "alt": "*"
@@ -435,7 +435,7 @@ var dwenguino_continuous_servo_json = {
     },
     {
       "type": "field_image",
-      "src": settings.basepath + "DwenguinoIDE/img/socialrobot/continuous_servo.png", // TODO: change this to gray servo image!
+      "src": settings.basepath + "DwenguinoIDE/img/socialrobot/continuous_servo_new_centered.png", // TODO: change this to gray servo image!
       "width": 100,
       "height": 100,
       "alt": "*"

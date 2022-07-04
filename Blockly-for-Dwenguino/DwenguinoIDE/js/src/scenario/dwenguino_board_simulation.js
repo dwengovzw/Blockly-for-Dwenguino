@@ -89,7 +89,6 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             if (e.key === 'Enter' || e.keyCode === 13) {
                 this.sonarInputChanged = true;
                 let value = $("#sonar_input").val();
-                console.log(parseInt(value.trim()));
                 this.sonarDistance = parseInt(value.trim());
             }
         });
@@ -97,23 +96,19 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $("#sonar_input").change((e) => {
             this.sonarInputChanged = true;
             let value = $("#sonar_input").val();
-            console.log(parseInt(value.trim()));
             this.sonarDistance = parseInt(value.trim());
         });
 
         $('#set_sonar_value').click((e) => {
             let value = $("#sonar_input").val();
-            console.log(parseInt(value.trim()));
             this.sonarDistance = parseInt(value.trim());
         });
 
         $("#sonar_input").focus(() => {
-            console.log("focus gained");
             this.sonarFieldBeingEdited = true;
         });
 
         $("#sonar_input").focusout(() => {
-            console.log("focus lost");
             this.sonarFieldBeingEdited = false;
         });
 

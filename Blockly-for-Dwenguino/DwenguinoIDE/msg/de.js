@@ -937,7 +937,7 @@ MSG.tutorials.socialrobot['socialrobots'].stepContents = [
     + "<div class='row'><div class='col-md-4 tutorial'><i>Ultrasoonsensor</i></div><div class='col-md-4 tutorial'><i>Passiv-Infrarotsensor</i></div></div><br><br>"
     + "<b>Aktoren</b> sind die Ausgänge, die es einem Roboter ermöglichen, zu 'handeln'."
     + "Denke zum Beispiel an einen Servomotor, der den Arm eines Roboters so steuert, dass der Roboter dir zuwinkt, wenn er dich sieht.<br><br>"
-    + `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo.png'  width='100px'></div>`
+    + `<div class='row'><div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/servo_new_centered.png'  width='100px'></div>`
     + `<div class='col-md-4'><img class='tutorial' src='${settings.basepath}DwenguinoIDE/img/dc.png'  width='100px'></div></div>`
     + "<div class='row'><div class='col-md-4 tutorial'><i>Servomotor</i></div><div class='col-md-4 tutorial'><i>DC motor</i></div></div>",
   "Ein Roboter soll <b>Entscheidungen</b> selbständig treffen. Er kann dies auf der Grundlage der Daten tun"

@@ -429,7 +429,7 @@ var output_rgbled_select_json = {
     },
     {
       "type": "field_image",
-      "src": settings.basepath + "DwenguinoIDE/img/servo.png",
+      "src": settings.basepath + "DwenguinoIDE/img/servo_new_centered.png",
       "width": 100,
       "height": 100,
       "alt": "*"
@@ -493,7 +493,7 @@ Blockly.Blocks['output_servo_dropdown'] = {
      },
      {
        "type": "field_image",
-       "src": settings.basepath + "DwenguinoIDE/img/servo.png",
+       "src": settings.basepath + "DwenguinoIDE/img/socialrobot/servo_new_centered.png",
        "width": 100,
        "height": 100,
        "alt": "*"
