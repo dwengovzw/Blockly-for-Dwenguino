@@ -59,14 +59,14 @@ class BaseSocialRobotServo extends RobotComponent{
         this._backgroundColor = '#206499';
 
         this._x = 0;
-        this._y = 30;
+        this._y = 0;
     }
 
     initComponent(eventBus, id, pins, costume, visible, width, height, offsetLeft, offsetTop, htmlClasses, type, canvasId){
         super.initComponent(eventBus, htmlClasses, id, type, "servo", pins, {}, visible, width, height, offsetLeft, offsetTop, this._costumeImageSources.background[CostumesEnum.PLAIN], canvasId);
         this._costume = costume;
         this._x = 0;
-        this._y = 30;
+        this._y = 0;
         this._images.background.src = this._costumeImageSources.background[costume];
         this._images.foreground.src = this._costumeImageSources.foreground[costume];
     }
