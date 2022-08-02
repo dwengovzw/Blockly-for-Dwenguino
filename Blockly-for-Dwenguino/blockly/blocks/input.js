@@ -275,4 +275,40 @@
          this.jsonInit(input_read_pin_json);
      }
  };
+
+
+ var input_light_sensor_json = {
+  "id": "input_light_sensor",
+  "message0": DwenguinoBlocklyLanguageSettings.translate(['inputLightSensorBlock']),
+  "args0": [
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "field_image",
+      "src": settings.basepath + "DwenguinoIDE/img/socialrobot/light_sensor.png",
+      "width": 50,
+      "height": 50,
+      "alt": "*"
+    },
+    {
+      "type": "input_dummy"
+    },
+    {
+      "type": "input_value",
+      "name": "pin",
+      "check": "Number"
+    }
+  ],
+  "output": "Number",
+  "colour": Blockly.Blocks.input.HUE,
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputLightSensorBlockTooltip']),
+  "helpUrl": DwenguinoHelpUrl
+};
+
+Blockly.Blocks['input_light_sensor'] = {
+  init: function() {
+    this.jsonInit(input_light_sensor_json);
+  }
+};
  

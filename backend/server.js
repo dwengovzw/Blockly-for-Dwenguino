@@ -106,7 +106,10 @@ if (process.env.NODE_ENV === 'production') {
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
 }
 
-
+// Set favicon
+app.get("/favicon.ico", (req, res) => {
+    return res.sendFile(path.join(__dirname + "/Blockly-for-Dwenguino/favicon.ico"));
+})
 
 // Use blockly routes for the app
 app.use('/', blocklyRoutes);

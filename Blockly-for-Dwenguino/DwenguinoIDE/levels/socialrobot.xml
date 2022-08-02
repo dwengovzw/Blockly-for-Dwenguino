@@ -130,7 +130,7 @@
      <block type="input_pir_sensor">
         <value name="trig">
             <block type="dwenguino_pins" id="pir_sensor_pin"> 
-                <field name="BITMASK">13</field>
+                <field name="PIN">12</field>
             </block>
         </value>
     </block>
@@ -138,11 +138,18 @@
     <block type="input_touch_sensor">
         <value name="pin">
             <block type="dwenguino_pins" id="touch_sensor_pin"> 
-                <field name="NUM">14</field>
+                <field name="PIN">12</field>
             </block>
         </value>
     </block>
     
+    <block type="input_light_sensor">
+        <value name="pin">
+            <block type="dwenguino_pins" id="touch_sensor_pin"> 
+                <field name="PIN">7</field>
+            </block>
+        </value>
+    </block>
 </category>
 
 <category id="catOutput" colour="315" name='Output'>

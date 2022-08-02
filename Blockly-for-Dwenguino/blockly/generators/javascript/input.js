@@ -89,5 +89,10 @@ Blockly.JavaScript['input_sound_sensor'] = function (block) {
    return [code, Blockly.Arduino.ORDER_ATOMIC];
  };
  
- 
+ Blockly.JavaScript['input_light_sensor'] = function (block) {
+  var pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_NONE);
+
+  var code = machine + "lightSensor(" + pin + ')';
+  return [code, Blockly.JavaScript.ORDER_ATOMIC];
+};
  

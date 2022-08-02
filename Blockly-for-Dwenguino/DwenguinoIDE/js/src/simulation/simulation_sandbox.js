@@ -257,6 +257,10 @@ class SimulationSandbox {
     return this.boardState.getIoPinState(pin);
   }
 
+  lightSensor(pin){
+    return this.boardState.getIoPinState(pin);
+  }
+
   readButton(pin){
     return this.boardState.getIoPinState(pin);
   }

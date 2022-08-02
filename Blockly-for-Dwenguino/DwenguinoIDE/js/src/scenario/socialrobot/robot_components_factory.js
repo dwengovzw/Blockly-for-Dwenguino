@@ -944,17 +944,13 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addLightSensor(pin=0, state=0, visible=true, width=100, height=45, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
+  addLightSensor(pin=6, state=0, visible=true, width=100, height=45, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas light_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LIGHT));
     this.incrementNumberOf(TypesEnum.LIGHT);
     let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
 
     let pins = {};
-    if(id == 1){
-      pins[SocialRobotLightSensor.pinNames.digitalPin] = "A0";
-    } else if (id == 2){
-      pins[SocialRobotLightSensor.pinNames.digitalPin] = "A1";
-    }
+    pins[SocialRobotLightSensor.pinNames.digitalPin] = pin + id;
 
     let lightSensor = new SocialRobotLightSensor();
     lightSensor.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
