@@ -54,4 +54,9 @@
  };
  
  
- 
+ Blockly.Python['light_sensor'] = function (block) {
+  var pin = Blockly.Python.valueToCode(block, 'pin', Blockly.Python.ORDER_NONE);
+
+  var code = machine + "lightSensor(" + pin + ')';
+  return [code, Blockly.Python.ORDER_ATOMIC];
+};

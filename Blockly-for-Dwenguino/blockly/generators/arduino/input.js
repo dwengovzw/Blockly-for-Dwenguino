@@ -111,3 +111,14 @@ Blockly.Arduino['input_sound_sensor_select'] = function (block) {
      var code = 'digitalRead(' + pin_number + ')';
      return [code, Blockly.Arduino.ORDER_ATOMIC];
  };
+
+
+ Blockly.Arduino['input_light_sensor'] = function (block) {
+  var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
+  Blockly.Arduino.definitions_['define_light_sensor_' + pin] = "#define LIGHT_SENSOR_PIN_" + pin + " " + pin + "\n";
+
+  Blockly.Arduino.setups_['define_dwenguino_light_sensor_' + pin] = "pinMode(LIGHT_SENSOR_PIN_" + pin + ", INPUT);";
+  var code = "digitalRead(LIGHT_SENSOR_PIN_" + pin + ")";
+
+  return [code, Blockly.Arduino.ORDER_NONE];
+};
