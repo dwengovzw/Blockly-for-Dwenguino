@@ -47,6 +47,8 @@ class SimulationSandbox {
     }
     let textAfter = this.boardState.getLcdContent(row).substr(text.length + column, 16);  // Get existing text after new text and keep it on the screen.
     text = existingText + " ".repeat(spaces) + text.substring(0, 16 - column) + textAfter;
+
+    text = text.substring(0, 16); // remove content outside the lcd screen.
     
     this.boardState.setLcdContent(row, text);
 

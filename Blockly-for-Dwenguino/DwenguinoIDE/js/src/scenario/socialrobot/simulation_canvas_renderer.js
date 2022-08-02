@@ -43,7 +43,7 @@ class SimulationCanvasRenderer {
                     $("#sim_lcd_row" + row).text(robot[i].getState()[row]);
                     if(document.getElementById('sim_lcd_row' + row) !== null){
                         document.getElementById('sim_lcd_row' + row).innerHTML =
-                        document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+                        document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&numsp;');
                     }
                 }
                 // repaint
