@@ -19,6 +19,9 @@ npm install bcrypt
 # Copy the new files to the deployment directory
 sudo cp -r /home/ubuntu/blockly_repo/Blockly-for-Dwenguino/* /home/ubuntu/blockly-build/
 
+# Copy the .env files from the config directory on the server into the deploy directory
+sudo cp /home/ubuntu/env/blockly_backend/.env /home/ubuntu/blockly-build/backend/
+
 cd /home/ubuntu/blockly-build
 
 # Give jenkins user write access to the compilation folder to be able to create the required files for compilation
