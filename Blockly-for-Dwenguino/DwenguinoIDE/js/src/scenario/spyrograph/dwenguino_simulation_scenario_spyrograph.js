@@ -65,6 +65,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
             this.representationScale.motorAngles[i] = 0;
         }
         this.calculateHingePoints();
+        this.dwenguinoBoardSimulation.resetScenario();
     }
 
     initSimulationState(boardState){

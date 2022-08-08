@@ -58,6 +58,13 @@ class DwenguinoSimulationScenarioConveyor extends DwenguinoSimulationScenario {
     }
 
     /**
+     * Resets the motors to their initial position and recalculates all other points based on that.
+     */
+     resetScenario(){
+        this.dwenguinoBoardSimulation.resetScenario();
+     }
+
+    /**
     * Initializes the simulator robot.
     * This resets the simulation state.
     *

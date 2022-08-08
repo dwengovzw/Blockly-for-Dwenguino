@@ -26,6 +26,20 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         }
     }
 
+    resetScenario(){
+        this.hideSonar();
+        this.inputsState = {
+            buttons: [1, 1, 1, 1, 1],
+            reset: 1,
+        }
+         // Set the board text on the screen
+         for (var row = 0 ; row < 2 ; ++row){
+            // write new text to lcd screen and replace spaces with &nbsp;
+            $("#sim_lcd_row" + row).text("");
+        }
+        $("#sim_lcds").removeClass("on");
+    }
+
     setBoardDisplayWidthWidth(width){
         this.boardDisplayWidth = width;
     }
@@ -178,12 +192,14 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $("#sim_sonar").show();
         $("#sim_sonar_distance").show();
         $("#sim_sonar_input").show();
+        $("#set_sonar_value").show();
     }
 
     hideSonar(){
         $("#sim_sonar").hide();
         $("#sim_sonar_distance").hide();
         $("#sim_sonar_input").hide();
+        $("#set_sonar_value").hide();
     }
 
 
@@ -265,7 +281,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             $("#sim_lcd_row" + row).text(board.getLcdContent(row));
             if(document.getElementById('sim_lcd_row' + row) !== null){
                 document.getElementById('sim_lcd_row' + row).innerHTML =
-                document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&nbsp;');
+                document.getElementById('sim_lcd_row' + row).innerHTML.replace(/ /g, '&numsp;');
             }
         }
         // repaint
@@ -277,7 +293,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
           let lcdElement = $(".sim_lcd");
           let boardElement = $("#sim_board")
           let boardElementWidth = boardElement.width();
-          let fontSize = boardElementWidth/16*1.25;
+          let fontSize = boardElementWidth/16*1.14;
           lcdElement.css({"font-size": fontSize});
         }
         

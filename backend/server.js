@@ -30,11 +30,11 @@ import helmet from 'helmet';
 // For cross origin requests in standalone and debug mode
 import cors from 'cors'
 
-// Load environment variables
-dotenv.config();
-
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
+
+// Load environment variables
+dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
 
 let key, cert, ca = 0;
 let options = {}
@@ -53,7 +53,7 @@ let app = express();
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', './Blockly-for-Dwenguino');   // For debug
+app.set('views', process.env.VIEWS_DIR);   // For debug
 //app.set('views', '../Blockly-for-Dwenguino');
 
 // Optimizations for production

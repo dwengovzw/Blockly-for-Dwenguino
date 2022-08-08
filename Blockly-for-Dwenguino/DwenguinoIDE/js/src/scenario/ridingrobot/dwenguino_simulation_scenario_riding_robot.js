@@ -141,6 +141,7 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
                 radius: 25
             }]
         };
+        this.dwenguinoBoardSimulation.resetScenario();
     }
 
 

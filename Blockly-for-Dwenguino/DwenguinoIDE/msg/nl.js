@@ -369,6 +369,9 @@ MSG.simulator = {
   buzzer: "Zoemer",
   buzzerDescription: "Met de zoemer kan je geluid laten afspelen met een frequentie die je zelf kiest. De gewenste frequentie (in Hz) geef je mee in je programma. Met een wacht-blok bepaal je hoelang het geluid wordt afgespeeld.",
   button: "Knop",
+  on: "op",
+  pin: "pin",
+  pins: "pinnen",
 };
 
 MSG.socialrobot = {

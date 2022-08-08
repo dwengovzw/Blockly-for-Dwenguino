@@ -183,18 +183,6 @@ class DwenguinoSimulationScenarioRidingRobotWithWall extends DwenguinoSimulation
      */
     updateScenarioDisplay(boardState) {
         super.updateScenarioDisplay(boardState);
-
-        /*var robot = this.robot;
-        var $robot = $('#sim_animation');
-    
-        // Update field size
-        this.containerWidth = $("#sim_container").width();
-        this.containerHeight = $("#sim_container").height();
-    
-        $robot
-        .css('top', this.robot.position.y + 'px')
-        .css('left', this.robot.position.x + 'px')
-        .css('transform', 'rotate(' + this.robot.position.angle + 'deg)');*/
     };
 
     setIsSimulationRunning(isSimulationRunning){

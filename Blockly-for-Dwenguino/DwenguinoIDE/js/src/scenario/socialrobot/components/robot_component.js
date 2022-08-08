@@ -62,9 +62,40 @@ class RobotComponent extends AbstractRobotComponent {
     toString() {
         return this._name;
     }
+
+    /*
+                + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) 
+            + " " 
+            + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',["on"])
+            + " " 
+            + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[pinsTranslationKey])
+            + " " 
+            + connectedPinNames
+    */
+
+    setComponentName(){
+        let connectedPinNames = "";
+        for (const [key, value] of Object.entries(this._pins)){
+            connectedPinNames += `(${key}:${value})\n`
+        }
+        let pinsTranslationKey = "pin";
+        if (Object.entries(this._pins).length > 1){
+            pinsTranslationKey = "pins";
+        }
+        let componentTitleElement = $("#component_title_" + this.getType() + "_" + this.getId());
+        componentTitleElement.html(connectedPinNames);
+        document.getSelection().removeAllRanges();
+    }
     
     insertHtml(optionsLabel = "options") {
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
+        
+        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() 
+            + "' class='sim_element sim_element_" 
+            + this.getType() 
+            + " draggable'><div>" 
+            + "<span id='component_title_" + this.getType() + "_" + this.getId() + "'>"
+            + "</span>"
+            + "</div></div>");
         // First add the element at position 0, 0
         $('#sim_' + this.getType() + this.getId()).css('top', 0 + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', 0 + 'px');
@@ -92,6 +123,8 @@ class RobotComponent extends AbstractRobotComponent {
             this.createComponentOptionsModalDialog(optionsLabel);
             this.showDialog();
         });
+
+        this.setComponentName();
     }
 
     removeHtml() {
@@ -218,7 +251,7 @@ class RobotComponent extends AbstractRobotComponent {
                         $('#pin' + key + newPin).addClass('option_button_disabled'); // disable button for newPin fo the key pin type
                     }
                 }
-                this._eventBus.dispatchEvent(EventsEnum.SAVE);
+                this._eventBus.dispatchEvent(EventsEnum.SAVE);                
             });
         }
     }
@@ -269,6 +302,7 @@ class RobotComponent extends AbstractRobotComponent {
 
     setPin(pinConnectedPin, pinName="digitalPin") {
         this.getPins()[pinName] = pinConnectedPin;
+        this.setComponentName();
     }
 
     getPin(pinName="digitalPin") {
