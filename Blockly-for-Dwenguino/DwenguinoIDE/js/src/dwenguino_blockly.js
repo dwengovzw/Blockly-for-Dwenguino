@@ -65,7 +65,7 @@ let DwenguinoBlockly = {
 
 
         this.workspace = workspace;
-        this.setWorkspaceBlockFromXml('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
+        this.setWorkspaceBlockFromXml(document.getElementById('startBlocks').innerHTML);
 
         //Create device manager responsible for managing the connection to de Dwenguino board
 
