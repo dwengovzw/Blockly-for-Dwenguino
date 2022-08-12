@@ -12,6 +12,7 @@ rm -Rf node_modules
 npm install
 npm install node-pre-gyp
 npm install bcrypt
+npm audit fix --force
 
 # Run webpack to compile frontend javascript into bundle
 # npm run build # -> This chrashes on the server, not enough memory.
