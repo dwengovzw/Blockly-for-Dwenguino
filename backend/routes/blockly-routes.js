@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
 });
 
 let processStartBlocks = (startblock_xml, res) => {
-    let blocks_xml = startblock_xml;
+    let blocks_xml = decodeURIComponent(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
     }
@@ -36,16 +36,25 @@ let processStartBlocks = (startblock_xml, res) => {
     res.render('index.ejs', {blocks_xml: blocks_xml_stripped});
 }
 
+let handleSimulatorRequest = (blocks_xml, res) => {
+    if (blocks_xml && blocks_xml !== ""){
+        processStartBlocks(blocks_xml, res);
+    }else{
+        let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
+        res.render('index.ejs', {blocks_xml: empty_program_xml});
+    }
+}
+
 // load the application
 router.get("/simulator", function(req, res) {
     let blocks_xml = req.query.xml;
-    processStartBlocks(blocks_xml, res);
+    handleSimulatorRequest(blocks_xml, res);
 })
 
 // load the application with a program from xml
 router.post("/simulator", function(req, res) {
     let blocks_xml = req.body.xml;
-    processStartBlocks(blocks_xml, res);
+    handleSimulatorRequest(blocks_xml, res);
 })
 
 
