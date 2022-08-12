@@ -423,10 +423,10 @@ class SimulationCanvasRenderer {
                             self.drawEye(ctx,servo, canvas);
                             break;
                         case 'righthand':
-                            self.drawHand(ctx,servo);
+                            self.drawHand(ctx,servo, 90);
                             break;
                         case 'lefthand':
-                            self.drawHand(ctx,servo);
+                            self.drawHand(ctx,servo, -270);
                             break;
                     }
                 }
@@ -448,10 +448,10 @@ class SimulationCanvasRenderer {
                     self.drawEye(ctx,servo, canvas);
                     break;
                 case 'righthand':
-                    self.drawHand(ctx,servo);
+                    self.drawHand(ctx,servo, 90);
                     break;
                 case 'lefthand':
-                    self.drawHand(ctx,servo);
+                    self.drawHand(ctx,servo, -270);
                     break;
             }
         } else {
@@ -766,9 +766,9 @@ class SimulationCanvasRenderer {
      * @param {RenderingContext} ctx 
      * @param {SocialRobotServo} servo 
      */
-    drawHand(ctx, servo){
+    drawHand(ctx, servo, startAngle = 0){
         let newAngle = this.calculateServoAngleStepwise(servo.getPrevAngle(), servo.getAngle());
-        let offsetAngle = 0; // rotate hand down by default
+        let offsetAngle = startAngle; // rotate hand down by default
         let offsetLeft = 35;
         servo.setPrevAngle(newAngle);
         let armShape = {
@@ -777,9 +777,10 @@ class SimulationCanvasRenderer {
             width: 32,
             height: 76
         }
-        ctx.fillRect(offsetLeft + armShape.x, armShape.y, armShape.width, armShape.height); // These numbers were calculated based on the png image offset
+        /*ctx.fillRect(offsetLeft + armShape.x, armShape.y, armShape.width, armShape.height); // These numbers were calculated based on the png image offset*/
         ctx.beginPath();
         ctx.arc(offsetLeft + armShape.x + armShape.width/2, armShape.height, armShape.width/2, 0, 2 * Math.PI);
+        ctx.fillStyle = "#8bab42";
         ctx.fill();
         this.drawRotatedImageOnCanvasAroundCenter(ctx, offsetLeft, 0, servo.getWidth(), servo.getHeight(), offsetAngle + newAngle, servo.getImage("background"));
     }

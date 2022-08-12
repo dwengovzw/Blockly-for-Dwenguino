@@ -390,29 +390,8 @@ Blockly.Arduino['output_servo'] = function (block) {
 };
 
 Blockly.Arduino['output_arms_down'] = function(block) {
-  var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand1', Blockly.JavaScript.ORDER_ATOMIC);
-  
-  Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
-
-  var code = '';
-
-  Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_hand] = "int servoPin" + value_servo_right_hand + " = " + value_servo_right_hand +";\n" 
-                                                                      + "Servo servoOnPin" + value_servo_right_hand + ";\n";
-  Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_hand] = 'servoOnPin' + value_servo_right_hand + '.attach(servoPin' + value_servo_right_hand + ');';
-  code += 'servoOnPin' + value_servo_right_hand + '.write(180);\n';
-
-  Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_hand] = "int servoPin" + value_servo_left_hand + " = " + value_servo_left_hand +";\n" 
-                                                                      + "Servo servoOnPin" + value_servo_left_hand + ";\n";
-  Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_hand] = 'servoOnPin' + value_servo_left_hand + '.attach(servoPin' + value_servo_left_hand + ');';
-  code += 'servoOnPin' + value_servo_left_hand + '.write(0);\n';
-
-  return code;
-};
-
-Blockly.Arduino['output_arms_up'] = function(block) {
-  var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand2', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand2', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_right_hand = Blockly.Arduino.valueToCode(block, 'servo_right_hand1', Blockly.Arduino.ORDER_ATOMIC);
+  var value_servo_left_hand = Blockly.Arduino.valueToCode(block, 'servo_left_hand1', Blockly.Arduino.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
@@ -426,14 +405,35 @@ Blockly.Arduino['output_arms_up'] = function(block) {
   Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_hand] = "int servoPin" + value_servo_left_hand + " = " + value_servo_left_hand +";\n" 
                                                                       + "Servo servoOnPin" + value_servo_left_hand + ";\n";
   Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_hand] = 'servoOnPin' + value_servo_left_hand + '.attach(servoPin' + value_servo_left_hand + ');';
+  code += 'servoOnPin' + value_servo_left_hand + '.write(0);\n';
+
+  return code;
+};
+
+Blockly.Arduino['output_arms_up'] = function(block) {
+  var value_servo_right_hand = Blockly.Arduino.valueToCode(block, 'servo_right_hand2', Blockly.Arduino.ORDER_ATOMIC);
+  var value_servo_left_hand = Blockly.Arduino.valueToCode(block, 'servo_left_hand2', Blockly.Arduino.ORDER_ATOMIC);
+  
+  Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
+
+  var code = '';
+
+  Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_right_hand] = "int servoPin" + value_servo_right_hand + " = " + value_servo_right_hand +";\n" 
+                                                                      + "Servo servoOnPin" + value_servo_right_hand + ";\n";
+  Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_right_hand] = 'servoOnPin' + value_servo_right_hand + '.attach(servoPin' + value_servo_right_hand + ');';
+  code += 'servoOnPin' + value_servo_right_hand + '.write(180);\n';
+
+  Blockly.Arduino.definitions_['define_servo_on_pin' + value_servo_left_hand] = "int servoPin" + value_servo_left_hand + " = " + value_servo_left_hand +";\n" 
+                                                                      + "Servo servoOnPin" + value_servo_left_hand + ";\n";
+  Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_servo_left_hand] = 'servoOnPin' + value_servo_left_hand + '.attach(servoPin' + value_servo_left_hand + ');';
   code += 'servoOnPin' + value_servo_left_hand + '.write(180);\n';
 
   return code;
 };
 
 Blockly.Arduino['output_wave_arms'] = function(block) {
-  var value_servo_right_hand = Blockly.JavaScript.valueToCode(block, 'servo_right_hand', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_right_hand = Blockly.Arduino.valueToCode(block, 'servo_right_hand', Blockly.Arduino.ORDER_ATOMIC);
+  var value_servo_left_hand = Blockly.Arduino.valueToCode(block, 'servo_left_hand', Blockly.Arduino.ORDER_ATOMIC);
 
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
@@ -461,8 +461,8 @@ Blockly.Arduino['output_wave_arms'] = function(block) {
 };
 
 Blockly.Arduino['output_eyes_left'] = function(block) {
-  var value_servo_right_eye = Blockly.JavaScript.valueToCode(block, 'servo_right_eye', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_right_eye = Blockly.Arduino.valueToCode(block, 'servo_right_eye', Blockly.Arduino.ORDER_ATOMIC);
+  var value_servo_left_eye = Blockly.Arduino.valueToCode(block, 'servo_left_eye', Blockly.Arduino.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
@@ -482,8 +482,8 @@ Blockly.Arduino['output_eyes_left'] = function(block) {
 };
 
 Blockly.Arduino['output_eyes_right'] = function(block) {
-  var value_servo_right_eye = Blockly.JavaScript.valueToCode(block, 'servo_right_eye1', Blockly.JavaScript.ORDER_ATOMIC);
-  var value_servo_left_eye = Blockly.JavaScript.valueToCode(block, 'servo_left_eye1', Blockly.JavaScript.ORDER_ATOMIC);
+  var value_servo_right_eye = Blockly.Arduino.valueToCode(block, 'servo_right_eye1', Blockly.Arduino.ORDER_ATOMIC);
+  var value_servo_left_eye = Blockly.Arduino.valueToCode(block, 'servo_left_eye1', Blockly.Arduino.ORDER_ATOMIC);
   
   Blockly.Arduino.definitions_['define_servo_h'] = "#include <Servo.h>\n";
 
