@@ -20,7 +20,8 @@ const DisplayDataTypesEnum = {
  */
 class SocialRobotLedMatrixSegment extends AbstractRobotComponent{
     constructor(eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses){
-        super(eventBus, htmlClasses);
+        super();
+        super.initComponent(eventBus, htmlClasses);
         BindMethods(this);
 
         this._id = id;

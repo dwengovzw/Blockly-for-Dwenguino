@@ -1,6 +1,7 @@
 // Filename: api-routes.js
 // Initialize express router
 import express from 'express';
+import querystring from "querystring"
 let router = express.Router();
 
 //xml parser
@@ -25,15 +26,15 @@ router.get('/', function (req, res) {
 });
 
 let processStartBlocks = (startblock_xml, res) => {
-    let blocks_xml = decodeURIComponent(startblock_xml);
+    let blocks_xml = querystring.unes(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
     }
 
     blocks_xml = blocks_xml.trim()  // remove whitespace
-    let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
-    let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
-    res.render('index.ejs', {blocks_xml: blocks_xml_stripped});
+    //let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
+    //let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
+    res.render('index.ejs', {blocks_xml: blocks_xml});
 }
 
 let handleSimulatorRequest = (blocks_xml, res) => {

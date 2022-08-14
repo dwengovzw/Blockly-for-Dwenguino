@@ -848,10 +848,12 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.initLanguage();
         let workspace = DwenguinoBlockly.injectBlockly();
 
-        //DwenguinoBlockly.loadBlocks('<xml id="startBlocks" style="display: none">' + document.getElementById('startBlocks').innerHTML + '</xml>');
+        
         DwenguinoBlockly.initDwenguinoBlockly(workspace);
         DwenguinoBlockly.doTranslation();
         //DwenguinoBlockly.setDifficultyLevel(0);
+
+        //DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
@@ -923,7 +925,7 @@ let DwenguinoBlockly = {
     }
 };
 
-$(document).ready(function() {
+window.addEventListener('load', function(e) {
   DwenguinoBlockly.setupEnvironment();
 });
 
