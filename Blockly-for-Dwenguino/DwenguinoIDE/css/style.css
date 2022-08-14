@@ -975,6 +975,11 @@ background-color: #ffffff;
     height: 75px;
 }
 
+.sim_element_ledmatrixsegment{
+    width: 110px;
+    height: 100px;
+}
+
 .sim_element_servo{
     width: 100px;
     height:150px;
@@ -1153,13 +1158,13 @@ background-color: #ffffff;
 }
 
 .ledmatrix_canvas{
-    width: 300px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
 }
 
 .ledmatrixsegment_canvas{
-    width: 175px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
 }
 
 .costumeButton:active,
