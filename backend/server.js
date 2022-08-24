@@ -13,11 +13,13 @@ import path from 'path';
 import i18n from 'i18n-x';
 import nodemailer from 'nodemailer';
 
-import ChromeLauncher from 'chrome-launcher';
+//import ChromeLauncher from 'chrome-launcher';
 
 // Import blockly router
 import blocklyRoutes from './routes/blockly-routes.js';
-//let blocklyRoutes = require('./routes/blockly-routes');
+
+// Import statistics routes
+import statsRoutes from './routes/stats-routes.js'
 
 // For deploying to production
 import compression from 'compression';
@@ -113,6 +115,10 @@ app.get("/favicon.ico", (req, res) => {
 
 // Use blockly routes for the app
 app.use('/', blocklyRoutes);
+
+// Use statistics routes
+app.use('/stats', statsRoutes);
+
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));
 
