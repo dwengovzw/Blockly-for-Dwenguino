@@ -12,9 +12,14 @@
       "<rootDir>/tests/integration_tests/**/*.test.js",
       "<rootDir>/tests/end_to_end_tests/**/*.test.js"
     ],
-    "preset": "@shelf/jest-mongodb",
     "transform": {},
-    "verbose": true
+    "verbose": true,
+    "globalSetup": "./tests/util/puppeteer_setup.js",
+    "globalTeardown": "./tests/util/puppeteer_teardown.js",
+    "testEnvironment": "./tests/util/puppeteer_environment.js",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    }
   },
   "description": "Logging server which provides unique session ids and receives logging data for all sessions running in the online version of google blockly",
   "main": "./backend/index.js",
@@ -35,15 +40,10 @@
     "db-start": "./cli.js"
   },
   "dependencies": {
-    "@babel/runtime": "^7.14.6",
-    "auto-bind": "^5.0.1",
-    "babel-jest": "^27.0.5",
-    "babel-runtime": "^6.26.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.5.3",
     "browser-sync-close-hook": "^1.0.5",
-    "chrome-launcher": "^0.13.1",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -65,20 +65,22 @@
     "mkdirp": "^0.5.5",
     "monaco-editor": "^0.31.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
-    "mongoose": "^5.7.12",
+    "mongoose": "^6.5.2",
     "node-pre-gyp": "^0.17.0",
     "nodemailer": "^6.4.18",
     "open": "^7.0.0",
     "opener": "^1.5.1",
     "pm2": "^5.1.2",
     "popper.js": "^1.14.3",
-    "pug": "^3.0.2",
     "regenerator": "^0.14.4",
     "style-loader": "^3.3.1",
-    "uuid": "^3.3.3",
-    "v8-profiler-node8": "^7.3.0"
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
+    "@babel/runtime": "^7.14.6",
+    "auto-bind": "^5.0.1",
+    "babel-jest": "^27.0.5",
+    "babel-runtime": "^6.26.0",
     "@babel/core": "^7.16.7",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-transform-classes": "^7.10.4",
@@ -93,13 +95,14 @@
     "babel-preset-env": "^1.7.0",
     "bent": "^7.3.12",
     "css-loader": "^6.5.1",
-    "electron": "^16.0.7",
     "file-loader": "^6.2.0",
     "fork-ts-checker-webpack-plugin": "^7.2.8",
     "jest": "^27.0.5",
+    "jest-puppeteer": "^6.1.1",
+    "puppeteer": "^16.2.0",
     "jsdoc": "^3.5.5",
     "mongodb-memory-server": "^7.3.0",
-    "open-cli": "^6.0.1",
+    "open-cli": "^7.0.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "supertest": "^6.1.3",
@@ -107,7 +110,8 @@
     "typescript": "^4.6.3",
     "webpack": "^5.66.0",
     "webpack-cli": "^4.9.1",
-    "webpack-dev-server": "^4.7.3"
+    "webpack-dev-server": "^4.7.3",
+    "v8-profiler-node8": "^7.3.0"
   },
   "repository": {
     "type": "git",
