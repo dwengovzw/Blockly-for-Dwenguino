@@ -1,0 +1,1 @@
+Results of tests should be logged to this folder.
