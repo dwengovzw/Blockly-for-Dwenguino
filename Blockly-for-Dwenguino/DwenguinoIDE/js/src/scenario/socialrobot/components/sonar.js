@@ -81,4 +81,10 @@ class SocialRobotSonar extends RobotComponent{
     getSlider(){
         return this._slider;
     }
+
+    reset() {
+        super.reset();
+        this.getSlider().updateValueLabel(0);
+        this.getSlider().reset();
+    }
 }
