@@ -209,6 +209,6 @@ export async function run() {
   await runner.run();
 }
 
-if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
+/*if (process && import.meta.url === url.pathToFileURL(process.argv[1]).href) {
   await run();
-}
+}*/
