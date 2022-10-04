@@ -277,10 +277,10 @@ Blockly.JavaScript['output_servo_dropdown'] = function(block){
    
    var code = machine 
    + 'servoWithPin(' + value_servo_right_hand + ', ' + '0' + ');\n' 
-   + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '180' + ');\n'
-   + machine + 'sleep(' + '1000' + ');\n'
-   + machine + 'servoWithPin(' + value_servo_right_hand + ', ' + '180' + ');\n'
    + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '0' + ');\n'
+   + machine + 'sleep(' + '1000' + ');\n'
+   + machine + 'servoWithPin(' + value_servo_right_hand + ', ' + '-180' + ');\n'
+   + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '180' + ');\n'
    + machine + 'sleep(' + '1000' + ');\n';
    return code;
  };
