@@ -266,7 +266,7 @@ Blockly.JavaScript['output_servo_dropdown'] = function(block){
    var value_servo_left_hand = Blockly.JavaScript.valueToCode(block, 'servo_left_hand2', Blockly.JavaScript.ORDER_ATOMIC);
    
    var code = machine 
-   + 'servoWithPin(' + value_servo_right_hand + ', ' + '180' + ');\n' 
+   + 'servoWithPin(' + value_servo_right_hand + ', ' + '-180' + ');\n' 
    + machine + 'servoWithPin(' + value_servo_left_hand + ', ' + '180' + ');\n';
    return code;
  };
