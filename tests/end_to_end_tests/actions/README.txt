@@ -1,0 +1,1 @@
+The actions folder will hold the Puppeteer scripts that will crawl your local web page.

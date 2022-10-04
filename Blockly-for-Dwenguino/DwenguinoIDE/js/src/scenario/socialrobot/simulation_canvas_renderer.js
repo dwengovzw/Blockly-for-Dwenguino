@@ -423,10 +423,10 @@ class SimulationCanvasRenderer {
                             self.drawEye(ctx,servo, canvas);
                             break;
                         case 'righthand':
-                            self.drawHand(ctx,servo, 90);
+                            self.drawHand(ctx,servo, 0);
                             break;
                         case 'lefthand':
-                            self.drawHand(ctx,servo, -270);
+                            self.drawHand(ctx,servo, -360);
                             break;
                     }
                 }
@@ -448,10 +448,10 @@ class SimulationCanvasRenderer {
                     self.drawEye(ctx,servo, canvas);
                     break;
                 case 'righthand':
-                    self.drawHand(ctx,servo, 90);
+                    self.drawHand(ctx,servo, 0);
                     break;
                 case 'lefthand':
-                    self.drawHand(ctx,servo, -270);
+                    self.drawHand(ctx,servo, -360);
                     break;
             }
         } else {
