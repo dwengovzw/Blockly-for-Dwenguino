@@ -150,6 +150,10 @@ class Slider {
     getClasses(){
         return this._classes;
     }
+
+    reset(){
+        $('#' + this._sliderRangeId).val(0)
+    }
 }
 
 export default Slider;
