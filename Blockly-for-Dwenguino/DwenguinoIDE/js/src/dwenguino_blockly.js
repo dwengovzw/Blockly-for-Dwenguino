@@ -65,7 +65,6 @@ let DwenguinoBlockly = {
 
 
         this.workspace = workspace;
-        this.setWorkspaceBlockFromXml(document.getElementById('startBlocks').innerHTML);
 
         //Create device manager responsible for managing the connection to de Dwenguino board
 
@@ -853,7 +852,7 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.doTranslation();
         //DwenguinoBlockly.setDifficultyLevel(0);
 
-        //DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
+        DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
         $(window).resize(function(){
             DwenguinoBlockly.onresize();
