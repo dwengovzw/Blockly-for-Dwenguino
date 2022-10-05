@@ -546,6 +546,7 @@ var MSG = {
     hello_dwenguino: {},
     blink: {},
     hello_robot: {},
+    socialrobot: {},
 }; 
 
 MSG.tutorials.general = {
