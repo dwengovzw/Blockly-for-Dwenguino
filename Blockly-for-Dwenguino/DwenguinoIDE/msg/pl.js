@@ -456,7 +456,7 @@ MSG.tutorials.hello_dwenguino = {
   step6Content: "Spróbuj teraz! Zmień tekst na ekranie na twoje własne imię. </br> Spróbuj też sprawić, by tekst pojawiał się w drugiej linii ekranu.",
 };
 
-SG.tutorials.blink = {
+MSG.tutorials.blink = {
   step1Title: "Migacz",
   step1Content: "W tym tutorialu napiszemy program, który będzie włączał i wyłączał LD13 na przemian. Zadbamy o to, aby LED zapalała się i gasła dwa razy na sekundę.",
   step2Title: "Symulator",

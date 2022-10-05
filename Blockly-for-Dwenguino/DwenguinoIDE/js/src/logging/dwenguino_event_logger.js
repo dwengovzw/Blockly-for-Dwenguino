@@ -34,9 +34,7 @@ class DwenguinoEventLogger {
                 url: ServerConfig.getServerUrl() + "/logging/newSessionId"}
             ).done((data) => {
                 this.sessionId = data;
-                console.debug(this.sessionId);
             }).fail(function(response, status)  {
-                console.warn('Failed to fetch sessionId:', status, response);
             });
         }
     }
@@ -73,7 +71,7 @@ class DwenguinoEventLogger {
      * @param {event} eventToRecord | The event that will be saved by the server into the database.
      */
     recordEvent(eventToRecord){
-        console.debug('Record event ' + eventToRecord.eventName + ' with data ' + eventToRecord.data);
+        //console.debug('Record event ' + eventToRecord.eventName + ' with data ' + eventToRecord.data);
         if (this.sessionId !== undefined){
             $.ajax({
                 type: "POST",
@@ -83,7 +81,7 @@ class DwenguinoEventLogger {
                 },
                 data: JSON.stringify(eventToRecord)
             }).done(function(data){
-                console.debug('Recording submitted', data);
+                //console.debug('Recording submitted', data);
             }).fail(function(response, status)  {
                 console.warn('Failed to submit recording:', status);
             });

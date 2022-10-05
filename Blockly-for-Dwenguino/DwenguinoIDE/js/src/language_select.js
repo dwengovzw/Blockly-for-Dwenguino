@@ -30,7 +30,10 @@ DwenguinoBlocklyLanguageSettings.translate = function(translationKey){
 };
 
 DwenguinoBlocklyLanguageSettings.translateFrom = function(subdevision, translationKey){
-  let translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG[subdevision]);
+  let translation;
+  if (MSG[subdevision]){
+    translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG[subdevision]);
+  }
   if (translation){
     return translation;
   }else{
