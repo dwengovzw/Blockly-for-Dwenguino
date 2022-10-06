@@ -9,7 +9,7 @@ import { runAddRemoveComponentsRecording } from "../../actions/adding_removing_s
 
 const timeout = 5000;
 
-jest.setTimeout(1000000) // 60s
+jest.setTimeout(900000) // 15m
 
 describe(
   '/ (Home Page)',
