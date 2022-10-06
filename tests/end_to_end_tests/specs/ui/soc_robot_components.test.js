@@ -1,0 +1,57 @@
+import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
+import puppeteer from 'puppeteer'
+import {connectDb, dropDb } from "../../../util/db_connection.js"
+import http from 'http';
+import { app } from "../../../../backend/server.js"
+import { startServer, endServer } from "../../../util/start_server.js"
+import { runAddRemoveComponentsWithScenarioSwitchRecording } from "../../actions/adding_removing_soc_robot_compontents_with_scenario_switch2.js"
+import { runAddRemoveComponentsRecording } from "../../actions/adding_removing_soc_robot_components.js"
+
+const timeout = 5000;
+
+jest.setTimeout(1000000) // 60s
+
+describe(
+  '/ (Home Page)',
+  () => {
+    let page;
+    let browser;
+    beforeAll(async () => {
+        await startServer();
+        // Set a definite size for the page viewport so view is consistent across browsers
+        //page = await globalThis.__BROWSER_GLOBAL__.newPage();
+        browser = await puppeteer.launch();
+        page = await browser.newPage();        
+    }, timeout);
+
+    let testMessage = "Adding and removing each component from the social robot simulation should not result in errors";
+    it(testMessage, async () => {
+      let pageErrors = 0;
+      // Register error message event handler to detect console errors
+      page.on('pageerror', error => {
+        pageErrors += 1;
+        console.log(`ERROR IN REPLAY (${testMessage}):\n${error}`)
+       });
+      await runAddRemoveComponentsRecording(browser, page) // run the recording and wait until finished.
+      expect(pageErrors).toBe(0); // Assert that there will not be any errors
+    });
+
+    testMessage = "Adding and removing each component from the social robot simulation and switching the scenario in between should not result in errors";
+    it(testMessage, async () => {
+      let pageErrors = 0;
+      // Register error message event handler to detect console errors
+      page.on('pageerror', error => {
+        pageErrors += 1;
+        console.log(`ERROR IN REPLAY (${testMessage}):\n${error}`)
+       });
+      await runAddRemoveComponentsWithScenarioSwitchRecording(browser, page) // run the recording and wait until finished.
+      expect(pageErrors).toBe(0); // Assert that there will not be any errors
+    });
+
+    afterAll(async () => {
+      browser.close()
+      await endServer();
+    })
+  },
+  timeout,
+);

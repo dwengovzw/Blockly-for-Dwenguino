@@ -511,6 +511,7 @@ let DwenguinoBlockly = {
           let cCode = "";
           try {
             javascriptCode = Blockly.JavaScript.workspaceToCode(DwenguinoBlockly.workspace);
+            console.log(javascriptCode);
           } catch (error){
             javascriptCode = "invalid code";
           }

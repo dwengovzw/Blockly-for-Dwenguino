@@ -221,7 +221,7 @@ class RobotComponentsFactory {
    */
   removeRobotComponentWithTypeAndId(type, id){
     let component = this.getRobotComponentWithTypeAndId(type, id);
-    component.reset();
+    //component.reset();
     component.removeHtml();
 
     for(let i = 0; i < this._robot.length; i++){

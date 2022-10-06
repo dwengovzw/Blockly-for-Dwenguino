@@ -77,7 +77,9 @@ class Button {
     }
 
     reset() {
-        this.getButtonElement().className = this.getInactiveClasses();
+        let buttonElement = this.getButtonElement();
+        if (buttonElement)
+            buttonElement.className = this.getInactiveClasses();
     }
 
     update() {

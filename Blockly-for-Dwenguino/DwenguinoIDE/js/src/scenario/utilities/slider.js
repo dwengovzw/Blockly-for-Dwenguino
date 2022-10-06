@@ -86,7 +86,9 @@ class Slider {
     }
 
     updateValueLabel(value) {
-        document.getElementById(this.getSliderValueId()).innerHTML = this.getValuePrefix() + value + this.getValueSuffix();
+        let sliderLabel = document.getElementById(this.getSliderValueId())
+        if (sliderLabel)
+            sliderLabel.innerHTML = this.getValuePrefix() + value + this.getValueSuffix();
     }
 
     remove(){
@@ -152,7 +154,10 @@ class Slider {
     }
 
     reset(){
-        $('#' + this._sliderRangeId).val(0)
+        this.updateValueLabel(0);
+        let sliderRange = $('#' + this._sliderRangeId);
+        if (sliderRange)
+            sliderRange.val(0)
     }
 }
 

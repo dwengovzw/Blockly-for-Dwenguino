@@ -84,7 +84,6 @@ class SocialRobotSonar extends RobotComponent{
 
     reset() {
         super.reset();
-        this.getSlider().updateValueLabel(0);
         this.getSlider().reset();
     }
 }
