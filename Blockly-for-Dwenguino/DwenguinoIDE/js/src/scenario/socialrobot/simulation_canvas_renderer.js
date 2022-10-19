@@ -30,6 +30,7 @@ class SimulationCanvasRenderer {
     this.drawSonars(robot);
     this.drawSoundSensors(robot);
     this.drawLightSensors(robot);
+    this.drawBuzzers(robot);
   }
 
     /**
@@ -372,6 +373,8 @@ class SimulationCanvasRenderer {
             }
         }
     }
+
+    
 
     /**
      * Draw a servo  on the given canvas with the state and image specified in robot.
@@ -907,6 +910,25 @@ class SimulationCanvasRenderer {
         } else {
             console.log(canvas, "This canvas has no context");
         } 
+    }
+
+    /**
+     * Draw a buzzer on the canvas of the component.
+     * @param {*} robot 
+     */
+    drawBuzzers(robot){
+        for(var i = 0; i < robot.length; i++){
+            if(robot[i].getType() == TypesEnum.BUZZER){
+                let canvas = document.getElementById(robot[i].getCanvasId());
+                this.clearCanvas(robot[i].getCanvasId());
+                let buzzer = robot[i];
+                let ctx = canvas.getContext("2d");
+                buzzer.getImage().onload = function(){
+                    ctx.drawImage(buzzer.getImage(), 0, 0, buzzer.getWidth(), buzzer.getHeight()); 
+                }
+                ctx.drawImage(buzzer.getImage(), 0, 0, buzzer.getWidth(), buzzer.getHeight());
+            }
+        }
     }
 
     /**
