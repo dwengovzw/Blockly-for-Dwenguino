@@ -6,9 +6,11 @@ import BindMethods from "../../../utils/bindmethods.js"
 export { BinaryInputRobotComponent };
 
 class BinaryInputRobotComponent extends RobotComponent {
-    constructor(){
+    constructor(activeValue = 1, inactiveValue = 0){
         super();
         BindMethods(this);
+        this.activeValue = activeValue;
+        this.inactiveValue = inactiveValue;
     }
 
     initComponent(type, buttonInputLabelTranslationKey, optionsMenuTranslationKey, componentName, activeImage, inactiveImage, componentCanvasClass, eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
@@ -16,7 +18,7 @@ class BinaryInputRobotComponent extends RobotComponent {
         this._optionsMenuTranslationKey = optionsMenuTranslationKey;
         this._activeImageUrl = activeImage;
         this._inactiveImageUrl = inactiveImage;
-        super.initComponent(eventBus, htmlClasses, id, type, componentName, pins, state, visible, width, height, offsetLeft, offsetTop, inactiveImage, componentCanvasClass + id);
+        super.initComponent(eventBus, htmlClasses, id, type, componentName, pins, this.inactiveValue, visible, width, height, offsetLeft, offsetTop, inactiveImage, componentCanvasClass + id);
     }
 
     initComponentFromXml(eventBus, type, buttonInputLabelTranslationKey, optionsMenuTranslationKey, activeImage, inactiveImage, id, xml){
@@ -40,12 +42,12 @@ class BinaryInputRobotComponent extends RobotComponent {
 
             if (self._button.isActive()) {
                 self.setImage(self._activeImageUrl);
-                self.setState(1);
+                self.setState(self.activeValue);
                 self._stateUpdated = true;
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);
             } else {
                 self.setImage(self._inactiveImageUrl);
-                self.setState(0);
+                self.setState(self.inactiveValue);
                 self._stateUpdated = true; 
                 self._eventBus.dispatchEvent(EventsEnum.SAVE);
             }
@@ -60,7 +62,7 @@ class BinaryInputRobotComponent extends RobotComponent {
     }
 
     reset(){
-        this.setState(0);
+        this.setState(this.inactiveValue);
         this._button.reset();
     }
 

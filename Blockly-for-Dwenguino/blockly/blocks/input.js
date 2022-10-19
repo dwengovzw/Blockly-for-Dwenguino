@@ -225,7 +225,7 @@
      },
      {
        "type": "field_image",
-       "src": settings.basepath + "DwenguinoIDE/img/socialrobot/button.svg",
+       "src": settings.basepath + "DwenguinoIDE/img/board/button.png",
        "width": 50,
        "height": 50,
        "alt": "*"

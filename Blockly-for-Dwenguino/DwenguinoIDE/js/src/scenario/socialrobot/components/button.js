@@ -16,13 +16,13 @@ class SocialRobotButton extends BinaryInputRobotComponent{
         digitalPin: "digitalPin"
     }
     constructor(){
-        super();
+        super(0, 1);
         BindMethods(this);
     }
 
     initComponent(eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
-        let activeImage = `${settings.basepath}DwenguinoIDE/img/socialrobot/button_pushed.svg`;
-        let inactiveImage = `${settings.basepath}DwenguinoIDE/img/socialrobot/button.svg`;
+        let activeImage = `${settings.basepath}DwenguinoIDE/img/board/button_pushed.png`;
+        let inactiveImage = `${settings.basepath}DwenguinoIDE/img/board/button.png`;
         
         super.initComponent(TypesEnum.BUTTON, 
             ['simulator', 'button'], 
@@ -44,8 +44,8 @@ class SocialRobotButton extends BinaryInputRobotComponent{
     }
 
     initComponentFromXml(eventBus, id, xml){
-        let activeImage = `${settings.basepath}DwenguinoIDE/img/socialrobot/button_pushed.svg`;
-        let inactiveImage = `${settings.basepath}DwenguinoIDE/img/socialrobot/button.svg`;
+        let activeImage = `${settings.basepath}DwenguinoIDE/img/board/button_pushed.png`;
+        let inactiveImage = `${settings.basepath}DwenguinoIDE/img/board/button.png`;
         super.initComponentFromXml(eventBus,
             TypesEnum.BUTTON,
             ['simulator', 'button'], 
@@ -58,7 +58,7 @@ class SocialRobotButton extends BinaryInputRobotComponent{
 
 
     getAllPossiblePins(){
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "SW_N", "SW_E", "SW_S", "SW_W", "SW_C"];
     }
 
 }
