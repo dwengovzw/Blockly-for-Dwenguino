@@ -57,9 +57,12 @@ class DwenguinoSimulationRobotComponentsMenu {
       },{
         type: TypesEnum.BUTTON,
         maximumAmount: 3
-      }, ,    {
+      }, {
         type: TypesEnum.LIGHT,
         maximumAmount: 2
+      }, {
+        type: TypesEnum.BUZZER,
+        maximumAmount: 1
       }
     ]
   }

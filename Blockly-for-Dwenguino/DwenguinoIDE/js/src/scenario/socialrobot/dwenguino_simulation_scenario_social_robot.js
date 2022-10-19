@@ -212,7 +212,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   updateScenarioDisplay(boardState) {
     super.updateScenarioDisplay(boardState);
     this.renderer.render(this.robotComponentsFactory.getRobot());
-    this.renderAudio(boardState);
+    //this.renderAudio(boardState);
   };
 
   renderAudio(boardState){

@@ -17,6 +17,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     sonarDistance = 0;
     sonarInputChanged = false;
     sonarFieldBeingEdited = false;
+    wasMuted = true;
 
     constructor(logger){
         super(logger);
@@ -38,6 +39,12 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             $("#sim_lcd_row" + row).text("");
         }
         $("#sim_lcds").removeClass("on");
+        this.muteClickHandler(true);
+        if (this.osc){
+            this.osc.stop();
+            this.osc.disconnect(this.audiocontext.destination);
+            this.osc = null;
+        }
     }
 
     setBoardDisplayWidthWidth(width){
@@ -171,21 +178,24 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         });
 
         $('#db_simulator_mute').on("click", () => {
-            if (this.audiocontext == null){
-                this.initAudioContext();
-            }
-            if (this.muted){
-                this.muted = false;
-                $('#db_simulator_mute').removeClass();
-                $('#db_simulator_mute').attr("class", "fas fa-volume-up")
-            }else{
-                this.muted = true;
-                $('#db_simulator_mute').removeClass();
-                $('#db_simulator_mute').attr("class", "fas fa-volume-mute")
-            }
-
+            this.muteClickHandler();
         });
     
+    }
+
+    muteClickHandler(setMute = false) {
+        if (this.audiocontext == null){
+            this.initAudioContext();
+        }
+        if (this.muted && !setMute){
+            this.muted = false;
+            $('#db_simulator_mute').removeClass();
+            $('#db_simulator_mute').attr("class", "fas fa-volume-up")
+        }else{
+            this.muted = true;
+            $('#db_simulator_mute').removeClass();
+            $('#db_simulator_mute').attr("class", "fas fa-volume-mute")
+        }
     }
 
     showSonar(){
@@ -240,21 +250,27 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             }
         }
     
-        // Play audio on the buzzer
-        if(this.audiocontext){
-            // If the buzzer is playing and the frequency has changed then stop the buzzer
-            if(this.prevFreq !== 0 && this.prevFreq !== board.getTonePlaying()){
-                this.osc.stop();
-                this.osc.disconnect(this.audiocontext.destination);
-                this.osc = null;
-            }
-            // If a new frequency needs to start playing
-            if(board.getTonePlaying() !== this.prevFreq && !this.muted){
-                this.osc = this.audiocontext.createOscillator();
-                this.osc.frequency.value = board.getTonePlaying();
-                this.osc.start(this.audiocontext.currentTime);
-                this.osc.connect(this.audiocontext.destination);
-                this.prevFreq = board.getTonePlaying();
+           // Play audio on the buzzer
+           if(this.audiocontext){
+            if ((this.muted || board.getTonePlaying() == 0) && this.osc){
+                this.osc.stop()
+                this.wasMuted = true;
+            } else if (!this.muted){
+                // If the buzzer is playing and the frequency has changed then stop the buzzer
+                if(this.prevFreq !== 0 && this.prevFreq !== board.getTonePlaying() && this.osc){
+                    this.osc.stop();
+                    this.osc.disconnect(this.audiocontext.destination);
+                    this.osc = null;
+                }
+                // If a new frequency needs to start playing
+                if(board.getTonePlaying() !== this.prevFreq || this.wasMuted || !this.osc){
+                    this.osc = this.audiocontext.createOscillator();
+                    this.osc.frequency.value = board.getTonePlaying();
+                    this.osc.start(this.audiocontext.currentTime);
+                    this.osc.connect(this.audiocontext.destination);
+                    this.prevFreq = board.getTonePlaying();
+                }
+                this.wasMuted = false;
             }
         }
     

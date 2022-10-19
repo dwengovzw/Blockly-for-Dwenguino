@@ -928,6 +928,10 @@ background-color: #ffffff;
     background-image: url("../img/socialrobot/light_sensor.png");
 }
 
+#rc_buzzer_img {
+    background-image: url("../img/socialrobot/buzzer.png");
+}
+
 #rc_decoration_img {
     width: 52px;
     height: 102px;

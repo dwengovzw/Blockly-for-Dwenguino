@@ -123,14 +123,14 @@ Blockly.JavaScript.dwenguino_tone_on_pin = function() {
   var value_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
   var value_num = Blockly.JavaScript.valueToCode(this, "NUM", Blockly.JavaScript.ORDER_ATOMIC);
   //Blockly.JavaScript.setups_['setup_output'+value_pin] = 'pinMode('+value_pin+', OUTPUT);\n';
-  var code = machine + "tone(\"" + value_pin + "\", " + value_num + ");\n";
+  var code = machine + "tone(" + value_pin + ", " + value_num + ");\n";
   return code;
 };
 
 Blockly.JavaScript.dwenguino_no_tone_on_pin = function() {
   var dropdown_pin = Blockly.JavaScript.valueToCode(this, "PIN", Blockly.JavaScript.ORDER_ATOMIC);
   //Blockly.JavaScript.setups_['setup_output'+dropdown_pin] = 'pinMode('+dropdown_pin+', OUTPUT);\n';
-  var code = machine + "noTone(\"" + dropdown_pin + "\");\n";
+  var code = machine + "noTone(" + dropdown_pin + ");\n";
   return code;
 };
 
