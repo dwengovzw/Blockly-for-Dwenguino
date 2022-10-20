@@ -46,6 +46,21 @@ let DwenguinoBlockly = {
     initDwenguinoBlockly: function(workspace){
 
           /**
+           * Show popup when users close the editor
+           */
+          let leavePageCheck = (e) => {
+            if (e) { e.returnValue = DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]) }
+            return DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]); 
+          }
+          window.addEventListener('onbeforeunload', (e) => {
+            return leavePageCheck(e);   
+          })
+          window.addEventListener('beforeunload', (e) => {
+            return leavePageCheck(e);   
+          })
+
+
+          /**
            * If local installation is running, generate binary locally. 
            * Otherwise generate binary on the server.
            */
