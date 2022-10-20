@@ -208,6 +208,7 @@ var MSG = {
   stepperMotorTooltip: "Select which stepper motor from the plotter robot you want to use.",
   triggerPin: "Trigger pin",
   echoPin: "Echo pin",
+  defaultTabTitle: "New tab",
 };
 
 MSG.cookieConsent = {

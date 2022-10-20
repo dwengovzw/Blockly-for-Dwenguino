@@ -609,6 +609,12 @@ readers do not read off random characters that represent icons */
 .fa-book-reader:before {
   content: "\f5da"; }
 
+.fa-xmark:before {
+  content: "\f00d"; }
+
+.fa-xmark:before {
+  content: "\f00d"; }
+
 .fa-bookmark:before {
   content: "\f02e"; }
 
