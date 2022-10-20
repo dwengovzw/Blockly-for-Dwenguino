@@ -793,8 +793,11 @@ let DwenguinoBlockly = {
         document.title += ' ' + DwenguinoBlocklyLanguageSettings.translate(['title']);
 
         document.getElementById('db_menu_item_upload').title = DwenguinoBlocklyLanguageSettings.translate(['loadBlocksFileTooltip']);
-        document.getElementById('db_menu_item_download').title = MSG['saveBlocksFileTooltip'];
-        document.getElementById('db_menu_item_simulator').title = MSG['toggleSimulator'];
+        document.getElementById('db_menu_item_download').title = DwenguinoBlocklyLanguageSettings.translate(['saveBlocksFileTooltip']);
+        document.getElementById('db_menu_item_simulator').title = DwenguinoBlocklyLanguageSettings.translate(['toggleSimulator']);
+        document.getElementById('db_menu_item_run').title = DwenguinoBlocklyLanguageSettings.translate(['compileAndDownload']);
+        document.getElementById('db_tutorials').title = DwenguinoBlocklyLanguageSettings.translate(['openTutorials']);
+        document.getElementById('db_menu_item_clear').title = DwenguinoBlocklyLanguageSettings.translate(['compileEmptyProgram']);
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
             'catColour', 'catVariables', 'catFunctions', 'catBoardIO', 'catDwenguino', 'catSocialRobot', 'catInput', 'catOutput', 'catArduino', 'catComments', 'catConveyor'];
