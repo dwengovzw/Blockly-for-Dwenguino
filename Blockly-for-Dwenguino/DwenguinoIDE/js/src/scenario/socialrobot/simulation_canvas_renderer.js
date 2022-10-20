@@ -1,6 +1,8 @@
 import csvtojson from "csvtojson";
 import { SocialRobotLedMatrix } from "./components/ledmatrix.js";
 import { TypesEnum } from "./robot_components_factory.js"
+import { CostumesEnum } from "./components/base_servo.js"
+
 
 /**
  * This renderer renders the robot component canvases in the simulation
@@ -390,7 +392,11 @@ class SimulationCanvasRenderer {
             servo.getImage("background").onload = function() {
                 var ctx = canvas.getContext('2d');
                 switch(servo.getCostume()){
-                    case 'plain':
+                    case CostumesEnum.PLAIN:
+                    case CostumesEnum.EYE:
+                    case CostumesEnum.HAT:
+                    case CostumesEnum.FLOWER:
+                    case CostumesEnum.CLOCK_HANDLE:
                         self.drawServoBackground(ctx, servo);
                         break;
                     case 'plainrotate90':
@@ -416,7 +422,11 @@ class SimulationCanvasRenderer {
                     var ctx = canvas.getContext('2d');
                     ctx.fillStyle = servo.getBackgroundColor();
                     switch(servo.getCostume()){
-                        case 'plain':
+                        case CostumesEnum.PLAIN:
+                        case CostumesEnum.EYE:
+                        case CostumesEnum.HAT:
+                        case CostumesEnum.FLOWER:
+                        case CostumesEnum.CLOCK_HANDLE:
                             self.drawRotatedServohead(ctx, servo);
                             break;
                         case 'plainrotate90':
@@ -439,7 +449,11 @@ class SimulationCanvasRenderer {
             var ctx = canvas.getContext('2d');
             ctx.fillStyle = servo.getBackgroundColor();
             switch(servo.getCostume()){
-                case 'plain':
+                case CostumesEnum.PLAIN:
+                case CostumesEnum.EYE:
+                case CostumesEnum.HAT:
+                case CostumesEnum.FLOWER:
+                case CostumesEnum.CLOCK_HANDLE:
                     self.drawServoBackground(ctx, servo);
                     self.drawRotatedServohead(ctx, servo);
                     break;

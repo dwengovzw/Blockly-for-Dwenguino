@@ -11,7 +11,10 @@ const CostumesEnum = {
     EYE: 'eye', 
     //MOUTH: 'mouth',
     RIGHTHAND: 'righthand',
-    LEFTHAND: 'lefthand'
+    LEFTHAND: 'lefthand',
+    HAT: 'hat',
+    CLOCK_HANDLE: "clock_handle",
+    FLOWER: "flower"
   };
 Object.freeze(CostumesEnum);
 
@@ -40,21 +43,30 @@ class BaseSocialRobotServo extends RobotComponent{
         this._costumeImageSources.foreground[CostumesEnum.EYE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_forground.svg`;
         this._costumeImageSources.foreground[CostumesEnum.LEFTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand.png`;
         this._costumeImageSources.foreground[CostumesEnum.RIGHTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand.png`;
+        this._costumeImageSources.foreground[CostumesEnum.HAT] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_hat.svg`;
+        this._costumeImageSources.foreground[CostumesEnum.FLOWER] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_flower.svg`;
+        this._costumeImageSources.foreground[CostumesEnum.CLOCK_HANDLE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_clock_handle.svg`;
 
         this._costumeImageSources.background[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_background_centered.png`;
         this._costumeImageSources.background[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_background_centered.png`;
         this._costumeImageSources.background[CostumesEnum.EYE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/eye1_background.svg`;
         this._costumeImageSources.background[CostumesEnum.LEFTHAND] = this._costumeImageSources.foreground[CostumesEnum.LEFTHAND];
         this._costumeImageSources.background[CostumesEnum.RIGHTHAND] = this._costumeImageSources.foreground[CostumesEnum.RIGHTHAND];
+        this._costumeImageSources.background[CostumesEnum.HAT] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_transparent_background.svg`;
+        this._costumeImageSources.background[CostumesEnum.FLOWER] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_transparent_background.svg`;
+        this._costumeImageSources.background[CostumesEnum.CLOCK_HANDLE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_transparent_background.svg`;
 
-        this._costumeIcons = { 
-            'plain' : `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_new_centered.png`,
-            'plainrotate90' : `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_new_rotated_90.png`,
-            'eye' : `${settings.basepath}DwenguinoIDE/img/socialrobot/eye.png`,
-            //'mouth' : './DwenguinoIDE/img/socialrobot/mouth.png',
-            'righthand' : `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand_icon.png`,
-            'lefthand' : `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand_icon.png`
-        }
+        this._costumeIcons = {  }
+
+        this._costumeIcons[CostumesEnum.PLAIN] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_new_centered.png`;
+        this._costumeIcons[CostumesEnum.PLAIN_ROTATE_90] = `${settings.basepath}DwenguinoIDE/img/socialrobot/servo_new_rotated_90.png`;
+        this._costumeIcons[CostumesEnum.EYE] =  `${settings.basepath}DwenguinoIDE/img/socialrobot/eye.png`;
+        this._costumeIcons[CostumesEnum.LEFTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/lefthand_icon.png`;
+        this._costumeIcons[CostumesEnum.RIGHTHAND] = `${settings.basepath}DwenguinoIDE/img/socialrobot/righthand_icon.png`;
+        this._costumeIcons[CostumesEnum.HAT] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_hat.svg`;
+        this._costumeIcons[CostumesEnum.FLOWER] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_flower.svg`;
+        this._costumeIcons[CostumesEnum.CLOCK_HANDLE] = `${settings.basepath}DwenguinoIDE/img/socialrobot/continuous_servo_clock_handle.svg`
+
 
         this._backgroundColor = '#206499';
 
@@ -176,6 +188,30 @@ class BaseSocialRobotServo extends RobotComponent{
                         this.setHeight(149);
                         this.setX(0);
                         this.setY(30);
+                        break;
+                    case CostumesEnum.HAT:
+                        this.setHtmlClasses('servo_canvas hat_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(200);
+                        this.setHeight(200);
+                        this.setX(0);
+                        this.setY(0);
+                        break;
+                    case CostumesEnum.FLOWER:
+                        this.setHtmlClasses('servo_canvas flower_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(100);
+                        this.setHeight(100);
+                        this.setX(0);
+                        this.setY(0);
+                        break;
+                    case CostumesEnum.CLOCK_HANDLE:
+                        this.setHtmlClasses('servo_canvas clock_handle_canvas');
+                        this.setCostume(newCostume);
+                        this.setWidth(100);
+                        this.setHeight(100);
+                        this.setX(0);
+                        this.setY(0);
                         break;
                     }
 

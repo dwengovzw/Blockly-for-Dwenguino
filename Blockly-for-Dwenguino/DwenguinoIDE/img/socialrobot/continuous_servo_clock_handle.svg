@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   viewBox="0 0 560.00001 560.00001"
+   version="1.1"
+   id="svg13"
+   sodipodi:docname="continuous_servo_clock_handle.svg"
+   width="560"
+   height="560"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)">
+  <metadata
+     id="metadata17">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>M005_Robots</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1387"
+     inkscape:window-height="836"
+     id="namedview15"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="0.59766561"
+     inkscape:cx="163.54328"
+     inkscape:cy="379.95102"
+     inkscape:window-x="53"
+     inkscape:window-y="105"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg13">
+    <sodipodi:guide
+       position="-541.8664,280"
+       orientation="0,1"
+       id="guide824"
+       inkscape:locked="false"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+    <sodipodi:guide
+       position="280,662.54407"
+       orientation="1,0"
+       id="guide826"
+       inkscape:locked="false"
+       inkscape:label=""
+       inkscape:color="rgb(0,0,255)" />
+  </sodipodi:namedview>
+  <defs
+     id="defs4">
+    <style
+       id="style2">.cls-1{fill:#0b75bb;}.cls-2{fill:#096f80;}</style>
+  </defs>
+  <title
+     id="title6">M005_Robots</title>
+  <g
+     id="wijzers"
+     transform="translate(246.86532,0.8305608)">
+    <path
+       class="cls-1"
+       d="m 33.36,21.63 v 0 A 16.85,16.85 0 0 0 16.5,38.48 v 240.81 a 16.86,16.86 0 0 0 16.86,16.85 v 0 A 16.86,16.86 0 0 0 50.21,279.29 V 38.48 A 16.85,16.85 0 0 0 33.36,21.63 Z m 0,266.88 a 9.3,9.3 0 1 1 9.29,-9.29 9.29,9.29 0 0 1 -9.29,9.29 z"
+       id="path8"
+       inkscape:connector-curvature="0"
+       style="fill:#0b75bb" />
+    <path
+       class="cls-2"
+       d="m 42.65,279.22 a 9.29,9.29 0 0 1 -9.29,9.29 v 7.63 A 16.86,16.86 0 0 0 50.21,279.29 V 38.48 A 16.85,16.85 0 0 0 33.36,21.63 v 248.29 a 9.29,9.29 0 0 1 9.29,9.3 z"
+       id="path10"
+       inkscape:connector-curvature="0"
+       style="fill:#096f80" />
+  </g>
+</svg>
