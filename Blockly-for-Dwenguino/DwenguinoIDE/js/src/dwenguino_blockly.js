@@ -790,8 +790,7 @@ let DwenguinoBlockly = {
 
     doTranslation: function() {
         // Inject language strings.
-        document.title += ' ' + DwenguinoBlocklyLanguageSettings.translate(['title']);
-        
+        document.title += ' ' + DwenguinoBlocklyLanguageSettings.translate(['title']);        
 
         document.getElementById('db_menu_item_upload').title = DwenguinoBlocklyLanguageSettings.translate(['loadBlocksFileTooltip']);
         document.getElementById('db_menu_item_download').title = DwenguinoBlocklyLanguageSettings.translate(['saveBlocksFileTooltip']);
