@@ -138,7 +138,7 @@ let DwenguinoBlockly = {
             if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
               DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(result));
             } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
-              DwenguinoBlockly.textualEditor.getEditorPane().renderEditor(result);
+              DwenguinoBlockly.textualEditor.getEditorPane().openTab(result);
             } else {
               console.log("Error uploading file");
             }
@@ -307,7 +307,8 @@ let DwenguinoBlockly = {
         }
       } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
         let cCode = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
-        DwenguinoBlockly.download("sketch.cpp", cCode);
+        let fileName = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
+        DwenguinoBlockly.download(`${fileName}.cpp`, cCode);
         data = {
           cCode: cCode
         }
@@ -571,7 +572,7 @@ let DwenguinoBlockly = {
 
         Blockly.Arduino.emptySetup();
         let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-        DwenguinoBlockly.textualEditor.getEditorPane().renderEditor(code);
+       //DwenguinoBlockly.textualEditor.getEditorPane().openTab(code);
 
     },
 
@@ -891,7 +892,8 @@ let DwenguinoBlockly = {
               DwenguinoBlockly.currentProgrammingContext = "text";
               document.getElementById("blocklyDiv").style.visibility = 'hidden';
               document.getElementById('db_code_pane').style.visibility = 'visible';
-              DwenguinoBlockly.renderCode();
+              let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+              DwenguinoBlockly.textualEditor.getEditorPane().openTab(code);
             } else {
               event.target.checked = false;
               return false;

@@ -50,6 +50,10 @@ class TextualEditor {
         this.populateMenu();
     }
 
+    closeTabs(){
+      this._editorContainerId.closeTabs();
+    }
+
     populateMenu(){
         let iconStyle = {"color": LayoutConfig.foregroundColor, width: "20px", height: "20px", display: "inline-block", "margin-top": "10px", "margin-left": "20px"};
         let copyItem = $("<span>")
@@ -69,7 +73,7 @@ class TextualEditor {
         for (let sampleName of Object.keys(DwenguinoCodeSamples)){
             let dropdownItem = $("<a href='#'>").text(sampleName)
             dropdownItem.on("click", () => {
-                this.getEditorPane().renderEditor(DwenguinoCodeSamples[sampleName]);
+                this.getEditorPane().openTab(DwenguinoCodeSamples[sampleName], sampleName);
                 examplesIcon.next(".my-dropdown").slideToggle();
             })
             dropdown.append($("<li>").append(dropdownItem));
