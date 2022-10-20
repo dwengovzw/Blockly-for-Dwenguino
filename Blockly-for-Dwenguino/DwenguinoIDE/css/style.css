@@ -1090,6 +1090,10 @@ background-color: #ffffff;
     width: 100px;
     height: 120px;
 }
+.servo_canvas.hat_canvas {
+    width: 400px;
+    height: 400px;
+}
 .continuous_servo_canvas{
     margin-left: 25px;
     margin-top: 0px;
@@ -1212,6 +1216,7 @@ background-color: #ffffff;
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 #scenario_options{
