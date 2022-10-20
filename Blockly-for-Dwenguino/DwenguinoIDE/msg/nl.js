@@ -228,6 +228,7 @@ var MSG = {
   restore: "Herstellen",
   open: "Open",
   confirm_close: "Ben je zeker dat je de pagina wil verlaten?\nJe code in de editor zal verloren gaan.",
+  
 };
 
 MSG.cookieConsent = {
