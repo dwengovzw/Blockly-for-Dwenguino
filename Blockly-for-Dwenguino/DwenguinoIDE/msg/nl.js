@@ -11,6 +11,9 @@ var MSG = {
   loadBlocksFileTooltip: "Laad een block bestand in dat je eerder hebt opgeslagen.",
   saveBlocksFileTooltip: "Sla de blokken op naar een lokaal bestand.",
   toggleSimulator: "Open of sluit het simulatorvenster.",
+  compileAndDownload: "Compileer en download je code om het over te zetten naar de Dwenguino",
+  compileEmptyProgram: "Download een leeg programma.",
+  openTutorials: "Open de tutorials",
   badCode: "Programmafout:\n%1",
   timeout: "Het maximale aantal iteraties is overschreden.",
   trashTooltip: "Alle blokken verwijderen",
@@ -228,7 +231,7 @@ var MSG = {
   restore: "Herstellen",
   open: "Open",
   confirm_close: "Ben je zeker dat je de pagina wil verlaten?\nJe code in de editor zal verloren gaan.",
-  
+
 };
 
 MSG.cookieConsent = {
