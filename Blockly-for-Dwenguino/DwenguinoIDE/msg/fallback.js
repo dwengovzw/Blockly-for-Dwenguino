@@ -191,6 +191,7 @@ var MSG_FALLBACK = {
   delete: "Delete",
   restore: "Restore",
   open: "Open",
+  confirm_close: "Are you sure you want to leave the page?\nYour current program will be lost.",
 
   // TODO: Translate:
   dwenguinoStepperMotorBlock: "stepper-motor %1 %2 %3 nummer %4 aantal stappen %5",
