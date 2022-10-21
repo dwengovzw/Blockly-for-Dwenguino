@@ -28,6 +28,7 @@ class ErrorLog{
     initStyle(){
         this.$_container.css({"background-color": LayoutConfig.backgroundColor, "color": LayoutConfig.foregroundColor});
         this.$_container.css({"position": "relative", "border-left": `solid 1px ${LayoutConfig.foregroundColor}`});
+        this.$_logOutputContainer.attr("class", "no_scrollbars");
         this.$_logOutputContainer.css({"position": "absolute", "bottom": "0", "top": LayoutConfig.paneHeaderHeight, "left": "0px", "right": "0px", "padding": "5px 20px", "overflow": "scroll", "scrollbar-color": LayoutConfig.foregroundColor, "scrollbar-width": "thin"});
         this.$_headerContainer.css({"height": LayoutConfig.paneHeaderHeight, "padding-left": "10px", "padding-top": "5px", "font-weight": "bold", "border-bottom": `solid ${LayoutConfig.borderColor} 1px`, "border-top": `solid ${LayoutConfig.borderColor} 1px`});
     }

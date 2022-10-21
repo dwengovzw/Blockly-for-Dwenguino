@@ -1824,3 +1824,23 @@ ul.my-dropdown li a {
 ul.my-dropdown li a:hover {
     filter: brightness(0.65);
 }
+
+/* Style for textual editor */
+#editor_pane_header .tab::-webkit-scrollbar {
+    display: none;
+}
+
+#editor_pane_header .tab{
+    -ms-overflow-style: none;
+    scrollbar-width: 0;
+}
+
+.no_scrollbars::-webkit-scrollbar {
+    display: none;
+}
+
+.no_scrollbars {
+    -ms-overflow-style: none;
+    scrollbar-width: 0; 
+}
+

@@ -27,6 +27,7 @@ class FileIOController {
     static uploadTextFile() {
         return new Promise((res, rej) => {
             let text = "";
+            let fileName = ""
             if (window.File && window.FileReader && window.FileList && window.Blob) {
 
                 $('#dropzoneModal .modal-header').empty();
@@ -50,6 +51,7 @@ class FileIOController {
 
                         reader.onload = function (e) {
                             fileDisplayArea.innerText = file.name;
+                            fileName = file.name
                             text = reader.result;
                         }
 
@@ -98,7 +100,7 @@ class FileIOController {
                 });
 
                 $("#submit_upload_modal_dialog_button").click(function () {
-                    res(text);
+                    res({filename: fileName, content: text});
                 });
 
             } else {

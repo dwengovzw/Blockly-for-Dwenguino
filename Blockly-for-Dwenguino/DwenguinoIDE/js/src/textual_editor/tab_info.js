@@ -65,7 +65,13 @@ class TabInfo{
     }
 
     getCode(){
-        return this._code;
+        if (this._editor){
+            this._code = this._editor.getValue();
+            return this._code;
+        } else {
+            return ""
+        }
+        
     }
 
     setCode(code){
