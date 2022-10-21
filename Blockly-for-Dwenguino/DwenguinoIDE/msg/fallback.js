@@ -222,6 +222,11 @@ var MSG_FALLBACK = {
   triggerPin: "Trigger pin",
   echoPin: "Echo pin",
   defaultTabTitle: "New tab",
+  connect: "Connect",
+  disConnect: "Disconnect",
+  send: "Send",
+  serial_monitor: "Serial monitor",
+  serial_not_supported: "Your browser does not support the WebSerial API. Choose another browser to use this feature (https://developer.mozilla.org/en-US/docs/Web/API/Serial#browser_compatibility).",
 };
 
 MSG_FALLBACK.cookieConsent = {

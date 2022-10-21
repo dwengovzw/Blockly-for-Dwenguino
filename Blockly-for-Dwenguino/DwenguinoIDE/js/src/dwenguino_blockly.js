@@ -136,9 +136,9 @@ let DwenguinoBlockly = {
         $("#db_menu_item_upload").on("click", function(){
           FileIOController.uploadTextFile().then((result) => {
             if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
-              DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(result));
+              DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(result.content));
             } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
-              DwenguinoBlockly.textualEditor.getEditorPane().openTab(result);
+              DwenguinoBlockly.textualEditor.getEditorPane().openTab(result.content, result.filename);
             } else {
               console.log("Error uploading file");
             }

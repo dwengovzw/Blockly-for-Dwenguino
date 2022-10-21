@@ -3,6 +3,7 @@ import ErrorLog from "./error_log.js"
 import EditorPane from "./editor_pane.js"
 import DwenguinoCodeSamples from "./dwenguino_code_samples.js"
 import LayoutConfig from "./layout_config.js"
+import SerialMonitor from "./serial_monitor.js"
 
 class TextualEditor {
     _containerId = null;   // The id of the container div element into which the text editor has to be injected;
@@ -10,12 +11,17 @@ class TextualEditor {
     _logContainerId = null;
     _menuContainerId = null;
     _panesContainerId = null;
+    _rightPanesContainerId = null;
+    _serialMonitorContainerId = null;
     $_editorContainer = null;
     $_logContainer = null;
+    $_serialMonitorContainer = null;
     $_menuContainer = null;
     $_panesContainer = null;
+    $_rightPanesContainer = null;
     _errorLog = null;
     _editorPane = null;
+    _serialMonitor = null;
     /**
      * _containerId String id of the container into which the text editor has to be injected.
      */
@@ -26,6 +32,8 @@ class TextualEditor {
         this._logContainerId = "textual_editor_log_container";
         this._menuContainerId = "textual_editor_menu";
         this._panesContainerId = "textual_editor_panes_container";
+        this._rightPanesContainerId = "textual_editor_right_panes_container";
+        this._serialMonitorContainerId = "textual_editor_serial_monitor_container";
 
         let container = $("#" + this._containerId);
         container.css({"display": "flex", "flex-direction": "column", "background-color": LayoutConfig.backgroundColor, "position": "relative"})
@@ -35,17 +43,27 @@ class TextualEditor {
 
         this.$_panesContainer = $("<div>").attr("id", this._panesContainerId);
         this.$_panesContainer.css({"position": "absolute", "top": LayoutConfig.editorMenuHeight, left: 0, right: 0, bottom: 0, display: "flex", "flex-direction": "row", width: "100vw", "overflow": "hidden"});
-        this.$_editorContainer = $("<div>").attr("id", this._editorContainerId).css({"flex-grow": "1", "flex-basis": "50%", width: "50vw"});
+        
+        this.$_rightPanesContainer = $("<div>").attr("id", this._rightPanesContainerId);
+        this.$_rightPanesContainer.css({"display": "flex", "flex-direction": "column", "align-items": "stretch", "flex-grow": "1", "flex-basis": "50%"})
+        
+        this.$_serialMonitorContainer = $("<div>").attr("id", this._serialMonitorContainerId).css({"flex-grow": "1", "flex-basis": "50%", "max-height": "50%"});
         this.$_logContainer = $("<div>").attr("id", this._logContainerId).css({"flex-grow": "1", "flex-basis": "50%"});
+
+        this.$_rightPanesContainer.append(this.$_logContainer);
+        this.$_rightPanesContainer.append(this.$_serialMonitorContainer);
+
+        this.$_editorContainer = $("<div>").attr("id", this._editorContainerId).css({"flex-grow": "1", "flex-basis": "50%", width: "50vw"});
         
         this.$_panesContainer.append(this.$_editorContainer);
-        this.$_panesContainer.append(this.$_logContainer);
+        this.$_panesContainer.append(this.$_rightPanesContainer);
 
         container.append(this.$_menuContainer);
         container.append(this.$_panesContainer);
 
         this._errorLog = new ErrorLog(this._logContainerId);
         this._editorPane = new EditorPane(this._editorContainerId);
+        this._serialMonitor = new SerialMonitor(this._serialMonitorContainerId);
 
         this.populateMenu();
     }

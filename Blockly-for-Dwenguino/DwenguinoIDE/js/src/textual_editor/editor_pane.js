@@ -29,7 +29,17 @@ class EditorPane{
         this.$_headerContainer = $("<div>").attr("id", this._headerId).css({display: "flex"});
 
         this._tabHeaderContainer = $("<div>").attr("id", this._tabHeaderContainerId).attr("class", "tab");
-        this._tabHeaderContainer.css({overflow_x: "scroll", display: "flex", flex_direction: "row"});
+        this._tabHeaderContainer.css(
+            {
+                width: "100%",
+                height: "100%",
+                "overflow-x": "scroll", 
+                display: "flex", 
+                "flex-direction": "row", 
+                "&::-webkit-scrollbar": "{display: 'none', width: 'none'}", 
+                "-ms-overflow-style": "none", 
+                "scrollbar-width": "none"
+            });
 
         this.$_headerContainer.append(this._tabHeaderContainer);
 
@@ -55,7 +65,7 @@ class EditorPane{
         $(".tabcontent").css({display: "none"});
         $(`#${tabInfo.getEditorContainerId()}`).css({display: "block"});
         $(".tablinks").css({"background-color": "rgba(255, 255, 255, 0.1)"});
-        $(`#${tabInfo.getTabId()}`).css({"background-color": "rgba(255, 255, 255, 0.3)"});
+        $(`#${tabInfo.getTabId()}`).css({"background-color": "rgba(255, 255, 255, 0.2)"});
         tabInfo.renderEditor();
     }
 
@@ -92,8 +102,8 @@ class EditorPane{
         let tabTextEditField = $("<textarea>").attr("rows", 1).attr("cols", 20);
         let tabCloseButton = $("<img>");
 
-        tabHtml.css({display: "flex", padding: "0 5px", margin: "0 5px", "flex-direction": "row", "justify-content": "space-between", "border-radius": "5px 5px 0 0", "background-color": "rgba(255, 255, 255, 0.3)", "align-items": "center"})
-        tabTextEditField.css({display: "none"});
+        tabHtml.css({display: "flex", padding: "0 5px", margin: "0 5px", "flex-direction": "row", "justify-content": "space-between", "border-radius": "5px 5px 0 0", "background-color": "rgba(255, 255, 255, 0.2)", "align-items": "center"})
+        tabTextEditField.css({display: "none", "background-color": "transparent", color: "inherit", "overflow": "hidden", border: "none", outline: "none", resize: "none", "box-shadow": "none"});
         tabCloseButton.attr("src", `${DwenguinoBlockly.basepath}DwenguinoIDE/img/icons/xmark-solid.svg`).css({width: "18px", height: "18px", "margin-left": "5px", "z-index": "30"})
 
         tabText.on("click", (e) => {
@@ -109,14 +119,32 @@ class EditorPane{
             tabTextEditField.val(oldText);
             tabText.css({display: "none"});
             tabTextEditField.css({display: "inline"});
+            tabTextEditField.select();
         })
 
-        tabTextEditField.on("focusout", (e) => {
+        let handleFinishEditing = (e) => {
             let newText = tabTextEditField.val();
             tabInfo.setTitle(newText);
             tabText.text(newText);
             tabText.css({display: "inline"});
             tabTextEditField.css({display: "none"});
+        }
+
+        tabTextEditField.on("focusout", (e) => {
+            handleFinishEditing(e);
+        })
+
+        tabTextEditField.on("keydown", (e) => {
+            if (e.key == "Enter"){
+                e.preventDefault();
+                handleFinishEditing(e)
+            } else if (e.key == "Escape"){ // hide textarea but do not update text
+                e.preventDefault();
+                let oldText = tabText.text();
+                tabTextEditField.val(oldText); // Set the text that was in the tab back into the textfield
+                tabText.css({display: "inline"});
+                tabTextEditField.css({display: "none"});
+            }
         })
 
         tabHtml.append(tabText);

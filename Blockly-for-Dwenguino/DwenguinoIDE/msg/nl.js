@@ -232,6 +232,11 @@ var MSG = {
   open: "Open",
   confirm_close: "Ben je zeker dat je de pagina wil verlaten?\nJe code in de editor zal verloren gaan.",
   defaultTabTitle: "Nieuw tabblad",
+  connect: "Verbinden",
+  disConnect: "Verbreken",
+  send: "Verzenden",
+  serial_monitor: "Seriële monitor",
+  serial_not_supported: "Je browser ondersteunt the WebSerial API niet. Gebruik een andere browser om deze functionaliteit te kunnen gebruiken (https://developer.mozilla.org/en-US/docs/Web/API/Serial#browser_compatibility).",
 };
 
 MSG.cookieConsent = {
