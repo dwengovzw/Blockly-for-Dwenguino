@@ -91,7 +91,7 @@ class TextualEditor {
         for (let sampleName of Object.keys(DwenguinoCodeSamples)){
             let dropdownItem = $("<a href='#'>").text(sampleName)
             dropdownItem.on("click", () => {
-                this.getEditorPane().openTab(DwenguinoCodeSamples[sampleName], sampleName);
+                this.getEditorPane().openTab(DwenguinoCodeSamples[sampleName], `${sampleName}.cpp`);
                 examplesIcon.next(".my-dropdown").slideToggle();
             })
             dropdown.append($("<li>").append(dropdownItem));
