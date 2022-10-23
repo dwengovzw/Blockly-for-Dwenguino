@@ -1,9 +1,9 @@
-import BindMethods from "../utils/bindmethods.js"
-import ErrorLog from "./error_log.js"
-import EditorPane from "./editor_pane.js"
-import DwenguinoCodeSamples from "./dwenguino_code_samples.js"
-import LayoutConfig from "./layout_config.js"
-import SerialMonitor from "./serial_monitor.js"
+import BindMethods from "../utils/bindmethods.js";
+import ErrorLog from "./error_log.js";
+import EditorPane from "./editor_pane.js";
+import DwenguinoCodeSamples from "./dwenguino_code_samples.js";
+import LayoutConfig from "./layout_config.js";
+import SerialMonitor from "./serial_monitor.js";
 
 class TextualEditor {
     _containerId = null;   // The id of the container div element into which the text editor has to be injected;
