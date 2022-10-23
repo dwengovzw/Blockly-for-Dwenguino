@@ -308,7 +308,7 @@ let DwenguinoBlockly = {
       } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
         let cCode = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
         let fileName = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
-        DwenguinoBlockly.download(`${fileName}.cpp`, cCode);
+        DwenguinoBlockly.download(`${fileName}`, cCode);
         data = {
           cCode: cCode
         }
@@ -893,7 +893,7 @@ let DwenguinoBlockly = {
               document.getElementById("blocklyDiv").style.visibility = 'hidden';
               document.getElementById('db_code_pane').style.visibility = 'visible';
               let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-              DwenguinoBlockly.textualEditor.getEditorPane().openTab(code);
+              DwenguinoBlockly.textualEditor.getEditorPane().openTab(code, "blocks.cpp");
             } else {
               event.target.checked = false;
               return false;
