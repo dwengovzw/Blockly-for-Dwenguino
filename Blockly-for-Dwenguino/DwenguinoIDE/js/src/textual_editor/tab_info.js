@@ -10,13 +10,28 @@ class TabInfo{
     _code = ""
     _editor = null;
 
+    static $_FALLBACKUUID = 0;
+
     constructor(code = "", title=null){
         BindMethods(this);
-        this._tabId = crypto.randomUUID();
+        // Fallback in non secure context. In non secure contexts the randomUUID function does not exist.
+        if (crypto.randomUUID){
+            this._tabId = crypto.randomUUID();
+        }else{
+            this._tabId = TabInfo.getFallbackId();
+        }
+        
         this._tabTitle = title ? title : DwenguinoBlocklyLanguageSettings.translate(["defaultTabTitle"]);
         this._editorContainerId = `editor_${this._tabId}`;
         this._code = code;
         
+    }
+
+    // Fallback in non secure context. 
+    static getFallbackId(){
+        let currentId = TabInfo.$_FALLBACKUUID;
+        TabInfo.$_FALLBACKUUID += 1;
+        return currentId;
     }
 
     renderEditor(){
