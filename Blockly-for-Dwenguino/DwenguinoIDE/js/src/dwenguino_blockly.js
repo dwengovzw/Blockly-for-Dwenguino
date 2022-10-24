@@ -903,6 +903,7 @@ let DwenguinoBlockly = {
               DwenguinoBlockly.currentProgrammingContext = "blocks";
               document.getElementById("blocklyDiv").style.visibility = 'visible';
               document.getElementById('db_code_pane').style.visibility = 'hidden';
+              DwenguinoBlockly.textualEditor.looseFocus();
               // Turn simulator on
               if (DwenguinoBlockly.simulatorState === "off"){
                 DwenguinoBlockly.toggleSimulator();

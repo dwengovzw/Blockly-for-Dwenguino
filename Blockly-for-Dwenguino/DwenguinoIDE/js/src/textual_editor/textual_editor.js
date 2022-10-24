@@ -157,6 +157,10 @@ class TextualEditor {
         return this._editorPane;
     }
 
+    looseFocus(){
+      this._serialMonitor.disconnect();
+    }
+
 }
 
 export default TextualEditor;
