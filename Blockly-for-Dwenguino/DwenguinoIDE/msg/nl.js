@@ -237,6 +237,10 @@ var MSG = {
   send: "Verzenden",
   serial_monitor: "Seriële monitor",
   serial_not_supported: "Je browser ondersteunt the WebSerial API niet. Gebruik een andere browser om deze functionaliteit te kunnen gebruiken (https://developer.mozilla.org/en-US/docs/Web/API/Serial#browser_compatibility).",
+  serial_monitor_data_type_setting: "Data type:",
+  serial_monitor_data_display_setting: "Weergave:",
+  serial_monitor_baud_rate_setting: "Baud rate:",
+  serial_monitor_send_field_placeholder: "Vul hier de data in die je wil sturen naar de µC",
 };
 
 MSG.cookieConsent = {

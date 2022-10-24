@@ -227,6 +227,10 @@ var MSG_FALLBACK = {
   send: "Send",
   serial_monitor: "Serial monitor",
   serial_not_supported: "Your browser does not support the WebSerial API. Choose another browser to use this feature (https://developer.mozilla.org/en-US/docs/Web/API/Serial#browser_compatibility).",
+  serial_monitor_data_type_setting: "Data type:",
+  serial_monitor_data_display_setting: "Display type:",
+  serial_monitor_baud_rate_setting: "Baud rate:",
+  serial_monitor_send_field_placeholder: "Enter the data you want to send to the µC",
 };
 
 MSG_FALLBACK.cookieConsent = {
