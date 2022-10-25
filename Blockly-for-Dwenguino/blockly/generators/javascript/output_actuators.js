@@ -178,7 +178,7 @@ Blockly.JavaScript['output_rgbled_select'] = function(block) {
   var pin_green = Blockly.JavaScript.output.pinMappings[number]["green"]; 
   var pin_blue = Blockly.JavaScript.output.pinMappings[number]["blue"]; 
   var color = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
-   var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + color + ');\n';
+   var code = machine + 'rgbLed([' + pin_red + ', ' + pin_green + ', ' + pin_blue + '],' + color + ');\n';
    return code;
 }
  
@@ -187,7 +187,7 @@ Blockly.JavaScript['output_rgbled_select'] = function(block) {
    var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
    var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
    var color = Blockly.JavaScript.valueToCode(block, 'color', Blockly.JavaScript.ORDER_NONE);
-   var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + color + ');\n';
+   var code = machine + 'rgbLed([' + pin_red + ', ' + pin_green + ', ' + pin_blue + '],' + color + ');\n';
    return code;
  };
 
@@ -196,7 +196,7 @@ Blockly.JavaScript['output_rgbled_select'] = function(block) {
   var pin_red = Blockly.JavaScript.output.pinMappings[number]["red"];
   var pin_green = Blockly.JavaScript.output.pinMappings[number]["green"]; 
   var pin_blue = Blockly.JavaScript.output.pinMappings[number]["blue"]; 
-  var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + '[0,0,0]);\n';
+  var code = machine + 'rgbLed([' + pin_red + ', ' + pin_green + ', ' + pin_blue + '],' + '[0,0,0]);\n';
   return code;
 }
  
@@ -204,7 +204,7 @@ Blockly.JavaScript['output_rgbled_select'] = function(block) {
    var pin_red = Blockly.JavaScript.valueToCode(block, 'pin_red', Blockly.JavaScript.ORDER_NONE);
    var pin_green = Blockly.JavaScript.valueToCode(block, 'pin_green', Blockly.JavaScript.ORDER_NONE);
    var pin_blue = Blockly.JavaScript.valueToCode(block, 'pin_blue', Blockly.JavaScript.ORDER_NONE);
-   var code = machine + 'rgbLed(["' + pin_red + '", "' + pin_green + '", "' + pin_blue + '"],' + '[0,0,0]);\n';
+   var code = machine + 'rgbLed([' + pin_red + ', ' + pin_green + ', ' + pin_blue + '],' + '[0,0,0]);\n';
    return code;
  };
  

@@ -21,7 +21,8 @@ describe(
         // Set a definite size for the page viewport so view is consistent across browsers
         //page = await globalThis.__BROWSER_GLOBAL__.newPage();
         browser = await puppeteer.launch();
-        page = await browser.newPage();        
+        page = await browser.newPage();
+        page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);
 
     let testMessage = "Adding and removing each component from the social robot simulation should not result in errors";
