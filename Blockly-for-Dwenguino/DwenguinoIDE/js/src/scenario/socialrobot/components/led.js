@@ -11,8 +11,8 @@ let ColorsEnum = {
     yellow: 'yellow', 
     blue: 'blue',
     green: '#72f542',
-    gray: 'gray',
-    black: 'black',
+    orange: '#FF5733',
+    white: '0xffffff',
   };
 
 /**
@@ -75,7 +75,7 @@ class SocialRobotLed extends RobotComponent{
 
 
     getAllPossiblePins() {
-        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+        return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, "LED0", "LED1", "LED2", "LED3", "LED4", "LED5", "LED6", "LED7", "LED13"];
     }
 
     createColorOptionsDialog() {

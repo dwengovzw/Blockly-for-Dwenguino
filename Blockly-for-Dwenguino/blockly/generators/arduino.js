@@ -121,6 +121,8 @@ var profile = {
               ["RGB_2_R", "RGB_2_R"], ["RGB_2_G", "RGB_2_G"], ["RGB_2_B", "RGB_2_B"],
               ["RGB_3_R", "RGB_3_R"], ["RGB_3_G", "RGB_3_G"], ["RGB_3_B", "RGB_3_B"],
               ["MATRIX_1_D", "MATRIX_1_D"], ["MATRIX_1_CS", "MATRIX_1_CS"], ["MATRIX_1_CLK", "MATRIX_1_CLK"],
+              ["LED0", "LED0"], ["LED1", "LED1"], ["LED2", "LED2"], ["LED3", "LED3"], ["LED4", "LED4"], ["LED5", "LED5"], 
+              ["LED6", "LED6"], ["LED7", "LED7"], ["LED13", "LED13"], 
               ],
     analog: [["A0", "A0"], ["A1", "A1"], ["A2", "A2"], ["A3", "A3"], ["A4", "A4"], ["A5", "A5"], ["A6", "A6"], ["A7", "A7"]],
     serial: 9600,
@@ -153,7 +155,16 @@ var profile = {
           "RGB_3_B": "25",
           "MATRIX_1_D": "2", 
           "MATRIX_1_CS": "10", 
-          "MATRIX_1_CLK": "13", 
+          "MATRIX_1_CLK": "13",
+          "LED0": "32",
+          "LED1": "33",
+          "LED2": "34",
+          "LED3": "35",
+          "LED4": "36",
+          "LED5": "37",
+          "LED6": "38",
+          "LED7": "39",
+          "LED13": "13",
         }
         if (knownPins.includes(pinAlias)){
           return pinAlias;

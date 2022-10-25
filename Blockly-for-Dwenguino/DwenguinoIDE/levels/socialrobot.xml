@@ -80,9 +80,14 @@
 <sep></sep>
 
 <category id="catInput" colour="315" name='Input'>
-    <!-- <block type="input_sonar_sensor_select"></block> -->
 
-    <!--<block type="input_sound_sensor_select"></block>-->
+        <block type="input_button">
+        <value name="pin">
+            <block type="dwenguino_pins" id="button_pin"> 
+                <field name="PIN">SW_S</field>
+            </block>
+        </value>
+    </block> 
 
     <block type="sonar_sensor">
         <value name="trig">
@@ -105,13 +110,6 @@
         </value>
     </block>
 
-    <block type="input_button">
-        <value name="pin">
-            <block type="dwenguino_pins" id="button_pin"> 
-                <field name="NUM">SW_C</field>
-            </block>
-        </value>
-    </block> 
 
     <block type="input_read_pin">
         <value name="PIN">
@@ -121,19 +119,9 @@
         </value>
     </block>
 
-    <block type="dwenguino_wait_for_switch"></block>
 
-    <block type="dwenguino_digital_read_switch"></block>
     <block type="dwenguino_pressed"></block>
     <block type="dwenguino_highlow"></block>
-
-     <block type="input_pir_sensor">
-        <value name="trig">
-            <block type="dwenguino_pins" id="pir_sensor_pin"> 
-                <field name="PIN">12</field>
-            </block>
-        </value>
-    </block>
 
     <block type="input_touch_sensor">
         <value name="pin">
@@ -142,7 +130,14 @@
             </block>
         </value>
     </block>
-    
+
+     <block type="input_pir_sensor">
+        <value name="trig">
+            <block type="dwenguino_pins" id="pir_sensor_pin"> 
+                <field name="PIN">12</field>
+            </block>
+        </value>
+    </block>    
     
     <block type="input_light_sensor">
         <value name="pin">
@@ -151,6 +146,10 @@
             </block>
         </value>
     </block>
+
+        <block type="dwenguino_wait_for_switch"></block>
+
+    <block type="dwenguino_digital_read_switch"></block>
 </category>
 
 <category id="catOutput" colour="315" name='Output'>
@@ -174,6 +173,48 @@
     </block>
 
     <block type="clear_lcd"></block>
+
+    <block type="dwenguino_tone_on_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">BUZZER</field>
+            </block>
+        </value>
+        <value name="NUM">
+            <block type="char_type">
+                <field name="BITMASK">440</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_no_tone_on_pin">
+        <value name="PIN">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">BUZZER</field>
+            </block>
+        </value>
+    </block>
+
+    <block type="dwenguino_leds_reg">
+        <value name="MASK">
+            <block type="char_type">
+                <field name="BITMASK">0b01010101</field>
+            </block>
+        </value>
+    </block>
+    <block type="output_set_pin" id="wCK[i|(*#%hrIF2e7W{9">
+        <value name="PIN">
+            <block type="dwenguino_pins" id="@vyt(SUbBxCC+B#7Q$Fb">
+                <field name="PIN">LED0</field>
+            </block>
+        </value>
+        <value name="PIN_STATE">
+            <block type="dwenguino_on_off" id="-tvROwoSimVs-0;U4KHq">
+                <field name="LED_ON_OFF">ON</field>
+            </block>
+        </value>
+    </block>
+    <block type="dwenguino_led_pins"></block>
+    <block type="dwenguino_on_off"></block>
 
     <block type="output_show_ledmatrix_image">
         <field name="NUMBERDISPLAY">0</field>
@@ -255,17 +296,22 @@
     <block type="output_clear_ledmatrix">
     </block>
 
-    <block type="dwenguino_leds_reg">
-        <value name="MASK">
-            <block type="char_type">
-                <field name="BITMASK">0b01010101</field>
+    <block type="output_rgbled">
+        <value name="pin_red">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_R</field>
             </block>
         </value>
-    </block>
-    <block type="dwenguino_led_pins"></block>
-    <block type="dwenguino_on_off"></block>
-    
-    <block type="output_rgbled_select">
+        <value name="pin_green">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_G</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_B</field>
+            </block>
+        </value>
         <value name="color">
             <block type="output_rgb_color" id="219">
                 <field name="RED">133</field>
@@ -275,7 +321,22 @@
         </value>
     </block>
 
-    <block type="output_rgbled_select_off">
+    <block type="output_rgbled_off">
+        <value name="pin_red">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_R</field>
+            </block>
+        </value>
+        <value name="pin_green">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_G</field>
+            </block>
+        </value>
+        <value name="pin_blue">
+            <block type="dwenguino_pins"> 
+            <field name="PIN">RGB_1_B</field>
+            </block>
+        </value>
     </block>
 
     <block type="output_rgb_color">
@@ -370,98 +431,6 @@
                 </block>
         </value>
     </block>
-
-    <block type="dwenguino_tone_on_pin">
-        <value name="PIN">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">BUZZER</field>
-            </block>
-        </value>
-        <value name="NUM">
-            <block type="char_type">
-                <field name="BITMASK">440</field>
-            </block>
-        </value>
-    </block>
-    <block type="dwenguino_no_tone_on_pin">
-        <value name="PIN">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">BUZZER</field>
-            </block>
-        </value>
-    </block>
-
-    <block type="output_rgbled">
-        <value name="pin_red">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">RGB_1_R</field>
-            </block>
-        </value>
-        <value name="pin_green">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">RGB_1_G</field>
-            </block>
-        </value>
-        <value name="pin_blue">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">RGB_1_B</field>
-            </block>
-        </value>
-        <value name="color">
-            <block type="output_rgb_color" id="219">
-                <field name="RED">133</field>
-                <field name="GREEN">196</field>
-                <field name="BLUE">65</field>
-            </block>
-        </value>
-    </block>
-    <!-- <block type="output_rgb_color_with_numbers">
-        <value name="RED">
-            <block type="math_number" id="220">
-                <field name="NUM">133</field>
-            </block>
-        </value>
-        <value name="GREEN">
-            <block type="math_number" id="221">
-                <field name="NUM">196</field>
-            </block>
-        </value>
-        <value name="BLUE">
-            <block type="math_number" id="222">
-                <field name="NUM">65</field>
-            </block>
-        </value>
-    </block> -->
-    <block type="output_rgbled_off">
-        <value name="pin_red">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">RGB_1_R</field>
-            </block>
-        </value>
-        <value name="pin_green">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">RGB_1_G</field>
-            </block>
-        </value>
-        <value name="pin_blue">
-            <block type="dwenguino_pins"> 
-            <field name="PIN">RGB_1_B</field>
-            </block>
-        </value>
-    </block>
-
-    <!-- <block type="output_servo">
-        <value name="pin">
-            <block type="math_number" id="212">
-                <field name="NUM">40</field>
-            </block>
-        </value>
-        <value name="angle">
-            <block type="math_number" id="213">
-                <field name="NUM">45</field>
-            </block>
-        </value>
-    </block> -->
 
     <block type="output_set_pin">
         <value name="PIN">

@@ -25,20 +25,17 @@ class DwenguinoSimulationRobotComponentsMenu {
     this._eventBus = eventBus;
     this._components = [
       {
-        type: TypesEnum.SONAR,
-        maximumAmount: 4
-      },{
-        type: TypesEnum.SOUND,
-        maximumAmount: 1
-      },{
-        type: TypesEnum.SERVO,
-        maximumAmount: 4
-      },{
-        type: TypesEnum.CONTINUOUSSERVO,
-        maximumAmount: 4
-      },{
         type: TypesEnum.LCD,
         maximumAmount: 1
+      },{
+        type: TypesEnum.BUTTON,
+        maximumAmount: 3
+      },{
+        type: TypesEnum.BUZZER,
+        maximumAmount: 1
+      },{
+        type: TypesEnum.LED,
+        maximumAmount: 3
       },{
         type: TypesEnum.LEDMATRIXSEGMENT,
         maximumAmount: 4
@@ -46,24 +43,27 @@ class DwenguinoSimulationRobotComponentsMenu {
         type: TypesEnum.RGBLED,
         maximumAmount: 3
       },{
-        type: TypesEnum.PIR,
-        maximumAmount: 2
-      }, {
+        type: TypesEnum.SERVO,
+        maximumAmount: 4
+      },{
+        type: TypesEnum.CONTINUOUSSERVO,
+        maximumAmount: 4
+      },{
+        type: TypesEnum.SONAR,
+        maximumAmount: 4
+      },{
+        type: TypesEnum.SOUND,
+        maximumAmount: 1
+      },{
         type: TypesEnum.TOUCH,
         maximumAmount: 3
       },{
-        type: TypesEnum.LED,
-        maximumAmount: 3
+        type: TypesEnum.PIR,
+        maximumAmount: 2
       },{
-        type: TypesEnum.BUTTON,
-        maximumAmount: 3
-      }, {
         type: TypesEnum.LIGHT,
         maximumAmount: 2
-      }, {
-        type: TypesEnum.BUZZER,
-        maximumAmount: 1
-      }
+      }, 
     ]
   }
 

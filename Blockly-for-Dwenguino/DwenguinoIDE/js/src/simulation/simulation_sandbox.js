@@ -60,9 +60,11 @@ class SimulationSandbox {
   * @param {string} state: 'HIGH' to trun light on or 'LOW' to turn light off
   */
   digitalWrite(pinNumber, state) {
+    this.boardState.setIoPinState(pinNumber, state);
     // turns light on or off
     var pin = Number(pinNumber);
-    if ((pin >= 32 && pin <= 39) || pin === 13) {
+  
+    /*if ( Number.isNaN(pin) && ((pin >= 32 && pin <= 39) || pin === 13)) {
       if (pin >= 32 && pin <= 39) {
         pin -= 32;
       }
@@ -73,7 +75,7 @@ class SimulationSandbox {
       }
     } else {
       this.boardState.setIoPinState(pin, state);
-    }
+    }*/
   }
 
   analogWrite(pinName, state) {

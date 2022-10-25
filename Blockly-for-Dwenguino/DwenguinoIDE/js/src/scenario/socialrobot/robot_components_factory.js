@@ -543,7 +543,7 @@ class RobotComponentsFactory {
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
     let pins = {};
-    pins[SocialRobotLed.pinNames.digitalPin] = pin + id - 1;
+    pins[SocialRobotLed.pinNames.digitalPin] = `LED${id-1}`
 
     let led = new SocialRobotLed();
     led.initComponent(onColor, offColor, this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
