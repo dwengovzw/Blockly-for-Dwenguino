@@ -1,8 +1,8 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
-import puppeteer from 'puppeteer'
 import {connectDb, dropDb } from "../../../util/db_connection.js"
 import http from 'http';
 import { app } from "../../../../backend/server.js"
+import puppeteer from 'puppeteer'
 import { startServer, endServer } from "../../../util/start_server.js"
 import { runDEToolboxRecording } from "../../actions/toolbox_clicks_de"
 import { runNLToolboxRecording } from "../../actions/toolbox_clicks_nl.js"
@@ -29,8 +29,21 @@ describe(
         // Set a definite size for the page viewport so view is consistent across browsers
         //page = await globalThis.__BROWSER_GLOBAL__.newPage();
         browser = await puppeteer.launch();
-        page = await browser.newPage();        
+        page = await browser.newPage();    
+        page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays    
     }, timeout);
+
+    let runENToolboxRecordingWithoutErrors = "All toolbox menus in English open without errors";
+    it(runENToolboxRecordingWithoutErrors, async () => {
+      let pageErrors = 0;
+      // Register error message event handler to detect console errors
+      page.on('pageerror', error => {
+        pageErrors += 1;
+        console.log(`ERROR IN REPLAY (${runENToolboxRecordingWithoutErrors}):\n${error}`)
+       });
+      await runENToolboxRecording(browser, page) // run the recording and wait until finished.
+      expect(pageErrors).toBe(0); // Assert that there will not be any errors
+    });
 
     let runDEToolboxRecordingWithoutErrors = "All toolbox menus in German open without errors";
     it(runDEToolboxRecordingWithoutErrors, async () => {
@@ -53,18 +66,6 @@ describe(
         console.log(`ERROR IN REPLAY (${runNLToolboxRecordingWithoutErrors}):\n${error}`)
        });
       await runNLToolboxRecording(browser, page) // run the recording and wait until finished.
-      expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
-
-    let runENToolboxRecordingWithoutErrors = "All toolbox menus in English open without errors";
-    it(runENToolboxRecordingWithoutErrors, async () => {
-      let pageErrors = 0;
-      // Register error message event handler to detect console errors
-      page.on('pageerror', error => {
-        pageErrors += 1;
-        console.log(`ERROR IN REPLAY (${runENToolboxRecordingWithoutErrors}):\n${error}`)
-       });
-      await runENToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     });
 
