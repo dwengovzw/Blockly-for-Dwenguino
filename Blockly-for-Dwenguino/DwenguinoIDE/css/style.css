@@ -1431,6 +1431,14 @@ span.grippy::after {
     background-color: #72f542;
 }
 
+.orange {
+    background-color: #FF5733;
+}
+
+.white {
+    background-color: 0xffffff;
+}
+
 .modal-content {
     border-radius: 0px!important;
 }
