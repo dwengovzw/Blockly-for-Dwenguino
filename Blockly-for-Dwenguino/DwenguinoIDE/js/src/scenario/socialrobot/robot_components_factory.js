@@ -429,7 +429,7 @@ class RobotComponentsFactory {
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
     let pins = {}
-    if (id <= 4){
+    if (id <= 2){
       pins[SocialRobotServo.pinNames.digitalPin] = 'SERVO_' + (id + 2); // The servo's in the simulator are on pins 3 to 6 by default
     }else{
       pins[SocialRobotServo.pinNames.digitalPin] = 20 - id;
@@ -486,8 +486,8 @@ class RobotComponentsFactory {
       let id = this._numberOfComponentsOfType[TypesEnum.CONTINUOUSSERVO];
   
       let pins = {}
-      if (id <= 4){
-        pins[SocialRobotContinuousServo.pinNames.digitalPin] = 'SERVO_' + (id + 2); // The servo's in the simulator are on pins 3 to 6 by default
+      if (id <= 2){
+        pins[SocialRobotContinuousServo.pinNames.digitalPin] = 'SERVO_' + (id + 4); // The servo's in the simulator are on pins 3 to 6 by default
       }else{
         pins[SocialRobotContinuousServo.pinNames.digitalPin] = 20 - id;
       }
