@@ -265,7 +265,7 @@ let handleRun = function(res, objid){
  * @param {Callback} successHandler 
  */
 let saveFile = function(code, objid, errorHandler, successHandler){
-    code = '#include <Arduino.h>\n' + code; // Append arduino include
+    //code = '#include <Arduino.h>\n' + code; // Append arduino include
     console.log(code);
     let filename =  path.resolve(prefix + '/compilation/sketch-' + objid + '/sketch.cpp');
     console.log(filename);
