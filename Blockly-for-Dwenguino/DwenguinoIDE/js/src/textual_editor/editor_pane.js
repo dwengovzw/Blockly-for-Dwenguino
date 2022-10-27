@@ -8,6 +8,7 @@ class EditorPane{
     _headerId = null;
     _editorId = null;
     _editor = null;
+    _tabSavedIndicatorId = "textual_editor_tab_saved_indicator";
     _tabHeaderContainer = null;
     _tabHeaderContainerId = null;
     $_container = null;
@@ -66,7 +67,7 @@ class EditorPane{
         $(`#${tabInfo.getEditorContainerId()}`).css({display: "block"});
         $(".tablinks").css({"background-color": "rgba(255, 255, 255, 0.1)"});
         $(`#${tabInfo.getTabId()}`).css({"background-color": "rgba(255, 255, 255, 0.2)"});
-        tabInfo.renderEditor();
+        
     }
 
     openTab(code = "", title=null){
@@ -75,6 +76,7 @@ class EditorPane{
         this.addTabHeader(newTabInfo);
         this.addTabContentPane(newTabInfo);
         this.selectTab(newTabInfo);
+        newTabInfo.renderEditor();
     }
 
     closeTabs(){
@@ -85,6 +87,12 @@ class EditorPane{
     }
 
     closeTab(tabInfo){
+        if (!tabInfo.getSaved()){
+            let confirmed = confirm(DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]));
+            if (!confirmed){
+                return;
+            }
+        }
         $(`#${tabInfo.getTabId()}`).remove();
         $(`#${tabInfo.getEditorContainerId()}`).remove();
         this.$_tabsInfo = this.$_tabsInfo.filter((ti) => ti.getTabId() != tabInfo.getTabId()); // Filter out the tabInfo tab
@@ -98,6 +106,7 @@ class EditorPane{
 
     addTabHeader(tabInfo){
         let tabHtml = $("<span>").attr("id", tabInfo.getTabId()).attr("class", "tablinks")
+        let tabSavedIndicator = $("<span>").attr("class", this._tabSavedIndicatorId).attr("hidden", tabInfo.getSaved()).text("*");
         let tabText = $("<span>").html(tabInfo.getTitle());
         let tabTextEditField = $("<textarea>").attr("rows", 1).attr("cols", 20);
         let tabCloseButton = $("<img>");
@@ -105,6 +114,11 @@ class EditorPane{
         tabHtml.css({display: "flex", padding: "0 5px", margin: "0 5px", "flex-direction": "row", "justify-content": "space-between", "border-radius": "5px 5px 0 0", "background-color": "rgba(255, 255, 255, 0.2)", "align-items": "center"})
         tabTextEditField.css({display: "none", "background-color": "transparent", color: "inherit", "overflow": "hidden", border: "none", outline: "none", resize: "none", "box-shadow": "none"});
         tabCloseButton.attr("src", `${DwenguinoBlockly.basepath}DwenguinoIDE/img/icons/xmark-solid.svg`).css({width: "18px", height: "18px", "margin-left": "5px", "z-index": "30"})
+
+        // Listen for saved state changes and hide star accordingly
+        tabInfo.addOnSavedStateChangedListener((savedState) => { 
+            tabSavedIndicator.attr("hidden", savedState);
+        })
 
         tabText.on("click", (e) => {
             this.selectTab(tabInfo);
@@ -147,6 +161,7 @@ class EditorPane{
             }
         })
 
+        tabHtml.append(tabSavedIndicator);
         tabHtml.append(tabText);
         tabHtml.append(tabTextEditField);
         tabHtml.append(tabCloseButton);
@@ -165,6 +180,12 @@ class EditorPane{
 
     getCurrentTabName(){
         return this.$_selectedTab ? this.$_selectedTab.getTitle() : "No file selected";
+    }
+
+    saveCurrentTab(){
+        if (this.$_selectedTab){ 
+            this.$_selectedTab.setSaved(true);
+        };
     }
 
    
