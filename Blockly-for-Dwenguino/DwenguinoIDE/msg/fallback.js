@@ -231,6 +231,7 @@ var MSG_FALLBACK = {
   serial_monitor_data_display_setting: "Display type:",
   serial_monitor_baud_rate_setting: "Baud rate:",
   serial_monitor_send_field_placeholder: "Enter the data you want to send to the µC",
+  change_to_textual_programming_info: "When changing to the textual editor, you are no longer able to simulate your robot. You can only run your code on the Dwenguino",
 };
 
 MSG_FALLBACK.cookieConsent = {

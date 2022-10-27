@@ -308,6 +308,7 @@ let DwenguinoBlockly = {
       } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
         let cCode = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
         let fileName = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
+        DwenguinoBlockly.textualEditor.getEditorPane().saveCurrentTab();
         DwenguinoBlockly.download(`${fileName}`, cCode);
         data = {
           cCode: cCode
@@ -899,19 +900,14 @@ let DwenguinoBlockly = {
               return false;
             }
           } else {
-            if (confirm("Opgepast! Wanneer je terugkeert naar blokken code dan ben je je aanpassingen aan de tekstuele code kwijt. Ben je zeker dat je wil verdergaan?")){
-              DwenguinoBlockly.currentProgrammingContext = "blocks";
-              document.getElementById("blocklyDiv").style.visibility = 'visible';
-              document.getElementById('db_code_pane').style.visibility = 'hidden';
-              DwenguinoBlockly.textualEditor.looseFocus();
-              // Turn simulator on
-              if (DwenguinoBlockly.simulatorState === "off"){
-                DwenguinoBlockly.toggleSimulator();
-                $("#db_menu_item_simulator").css("pointer-events","auto");
-              }
-            } else {
-              event.target.checked = true;
-              return false; // Cancel onchange handler
+            DwenguinoBlockly.currentProgrammingContext = "blocks";
+            document.getElementById("blocklyDiv").style.visibility = 'visible';
+            document.getElementById('db_code_pane').style.visibility = 'hidden';
+            DwenguinoBlockly.textualEditor.looseFocus();
+            // Turn simulator on
+            if (DwenguinoBlockly.simulatorState === "off"){
+              DwenguinoBlockly.toggleSimulator();
+              $("#db_menu_item_simulator").css("pointer-events","auto");
             }
           }
         });

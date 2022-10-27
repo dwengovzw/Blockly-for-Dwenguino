@@ -9,6 +9,8 @@ class TabInfo{
     _editorContainerId = ""
     _code = ""
     _editor = null;
+    _saved = true;
+    _onSaveStateChangedListeners = [];
 
     static $_FALLBACKUUID = 0;
 
@@ -34,6 +36,10 @@ class TabInfo{
         return currentId;
     }
 
+    addOnSavedStateChangedListener(func){
+        this._onSaveStateChangedListeners.push(func);
+    }
+
     renderEditor(){
         if (!this._editor){
             this._editor = monaco.editor.create(document.getElementById(this._editorContainerId), {  // Add editor to element
@@ -48,7 +54,9 @@ class TabInfo{
         }else{
             this._editor.getModel().setValue(this._code)
         }
-
+        this._editor.getModel().onDidChangeContent((e) => {
+            this.setSaved(false);
+        })
     }
 
     getEditor(){
@@ -93,6 +101,18 @@ class TabInfo{
         let cleanedCode = code.replace(/(\r\n|\r|\n){2}/g, '$1').replace(/(\r\n|\r|\n){3,}/g, '$1\n').trim();
         this._code = cleanedCode;
         this._editor.getModel().setValue(cleanedCode)
+        this.setSaved(false);
+    }
+
+    setSaved(saved){
+        if (this._saved != saved){
+            this._onSaveStateChangedListeners.forEach((listener) => listener(saved)); // Notify listerners of save state change.
+        }
+        this._saved = saved;
+    }
+
+    getSaved(){
+        return this._saved;
     }
 
     createGlobalDependencyProposals(range){
@@ -155,6 +175,8 @@ class TabInfo{
     createDCmotorDependencyProposals(range){
 
     }
+
+    
 
     registerCompletionProviders(){
         monaco.languages.registerCompletionItemProvider('cpp', {
