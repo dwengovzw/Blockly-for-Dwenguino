@@ -35,7 +35,7 @@ class DwenguinoSimulationRobotComponentsMenu {
         maximumAmount: 1
       },{
         type: TypesEnum.LED,
-        maximumAmount: 3
+        maximumAmount: 9
       },{
         type: TypesEnum.LEDMATRIXSEGMENT,
         maximumAmount: 4

@@ -126,7 +126,7 @@ class SimulationSandbox {
 
     // Turn all leds off
     for (var i = 0; i < 8; i++) {
-      this.digitalWrite(32 + i, 0);
+      this.boardState.setLedState(i, 0);
     }
     // Turn on the respective leds
     var diff = 8 - bin.length;
@@ -134,7 +134,8 @@ class SimulationSandbox {
       diff = 0
     }
     for (var i = 0; i < Math.min(bin.length, 8); i++) {
-      this.digitalWrite(39 - (diff + i), bin[i]);
+      this.boardState.setLedState(7-(diff + i), parseInt(bin[i]))
+      //this.digitalWrite(39 - (diff + i), bin[i]);
     }
   }
 

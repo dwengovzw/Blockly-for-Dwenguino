@@ -45,6 +45,14 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             this.osc.disconnect(this.audiocontext.destination);
             this.osc = null;
         }
+        // Set leds to right value
+        for (var i = 0; i < 8; i++) {
+            let classValue = "sim_light sim_light_off";
+            document.getElementById('sim_light_' + i).className = classValue;
+        }
+          // Set led 13 to right value
+        document.getElementById('sim_light_13').className = "sim_light sim_light_off";
+        
     }
 
     setBoardDisplayWidthWidth(width){
