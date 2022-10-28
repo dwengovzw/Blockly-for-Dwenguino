@@ -25,7 +25,7 @@ class BoardState {
         this.pinMapping["SW_E"] = 17;
         this.pinMapping["SW_S"] = 18;
         this.pinMapping["SW_W"] = 19;
-        this.pinMapping["SW_C"] = 32;
+        this.pinMapping["SW_C"] = 20;
         // Map BUZZER pin name to number
         this.pinMapping["BUZZER"] = 33;
         // Map backlight pin
