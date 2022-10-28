@@ -320,7 +320,7 @@ class RobotComponent extends AbstractRobotComponent {
     setState(state) {
         this._state = state;
         this._stateUpdated = true;
-        this._eventBus.dispatchEvent(EventsEnum.SAVE);
+       // this._eventBus.dispatchEvent(EventsEnum.SAVE);
     }
 
     getState() {
