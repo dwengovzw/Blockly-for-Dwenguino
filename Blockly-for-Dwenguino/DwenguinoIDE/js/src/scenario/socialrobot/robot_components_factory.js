@@ -829,11 +829,11 @@ class RobotComponentsFactory {
 
     let pins = {};
     if(id == 1){
-      pins[SocialRobotSonar.pinNames.triggerPin] = "A1";
-      pins[SocialRobotSonar.pinNames.echoPin] = "A0";
+      pins[SocialRobotSonar.pinNames.triggerPin] = "SONAR_1_TRIG";
+      pins[SocialRobotSonar.pinNames.echoPin] = "SONAR_1_ECHO";
     } else if (id == 2){
-      pins[SocialRobotSonar.pinNames.triggerPin] = "A3";
-      pins[SocialRobotSonar.pinNames.echoPin] = "A2";
+      pins[SocialRobotSonar.pinNames.triggerPin] = "SONAR_2_TRIG";
+      pins[SocialRobotSonar.pinNames.echoPin] = "SONAR_2_ECHO";
     }
 
     let sonar = new SocialRobotSonar();
