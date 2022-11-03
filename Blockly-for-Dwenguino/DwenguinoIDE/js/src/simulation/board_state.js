@@ -12,7 +12,7 @@ class BoardState {
 
     constructor(){
         // Map pin numbers to simulated pin indexes
-        for (let i = 0 ; i < 24 ; ++i){
+        for (let i = 0 ; i < 44 ; ++i){
             this.pinMapping[i + ""] = i;
         }
 

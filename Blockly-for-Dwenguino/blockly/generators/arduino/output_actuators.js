@@ -506,8 +506,8 @@ Blockly.Arduino['output_set_pin'] = function(block){
   var pin_number = Blockly.Arduino.valueToCode(block, "PIN", Blockly.Arduino.ORDER_ATOMIC);
   var led_state = Blockly.Arduino.valueToCode(block, "PIN_STATE", Blockly.Arduino.ORDER_ATOMIC);
 
-  Blockly.Arduino.setups_['setup_output_'+pin_number] = 'pinMode('+pin_number+', OUTPUT);\n';
-  
-  var code = 'digitalWrite(' + pin_number + ', ' + led_state + ');\n'
+  //Blockly.Arduino.setups_['setup_output_'+pin_number] = 'pinMode('+pin_number+', OUTPUT);\n';
+  var code = 'pinMode('+pin_number+', OUTPUT);\n';
+  code += 'digitalWrite(' + pin_number + ', ' + led_state + ');\n'
   return code;
 };
