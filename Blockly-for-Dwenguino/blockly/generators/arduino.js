@@ -170,7 +170,9 @@ var profile = {
           return pinAlias;
         }else if (Object.keys(pinMapping).includes(pinAlias)){
           return pinMapping[pinAlias];
-        }else{
+        }else if (!Number.isNaN(parseInt(pinAlias))){
+          return pinAlias;
+        } else {
           return "0";
         }
     }
