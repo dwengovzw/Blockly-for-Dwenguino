@@ -37,7 +37,7 @@ describe(
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     });*/
 
-    testMessage = "Adding and removing each component from the social robot simulation and switching the scenario in between should not result in errors";
+    let testMessage = "Adding and removing each component from the social robot simulation and switching the scenario in between should not result in errors";
     it(testMessage, async () => {
       let pageErrors = 0;
       // Register error message event handler to detect console errors
