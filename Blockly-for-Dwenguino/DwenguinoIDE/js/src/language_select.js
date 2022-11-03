@@ -1,4 +1,5 @@
-var DwenguinoBlocklyLanguageSettings = {};
+var DwenguinoBlocklyLanguageSettings = {}
+
 DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
       'en': 'English',
       'nl': 'Nederlands',
