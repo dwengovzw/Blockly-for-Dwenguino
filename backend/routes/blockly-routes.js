@@ -26,7 +26,7 @@ router.get('/', function (req, res) {
 });
 
 let processStartBlocks = (startblock_xml, res) => {
-    let blocks_xml = querystring.unes(startblock_xml);
+    let blocks_xml = querystring.unescape(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
     }
