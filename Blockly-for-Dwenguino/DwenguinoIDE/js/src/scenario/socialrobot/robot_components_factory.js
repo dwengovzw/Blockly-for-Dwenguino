@@ -537,13 +537,17 @@ class RobotComponentsFactory {
    * @param {string} borderColor 
    * @param {string} htmlClasses 
    */
-  addLed(pin=0, state=0, visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, onColor='yellow', offColor='gray', borderColor='black', htmlClasses='sim_canvas led_canvas') {
+  addLed(pin=0, state=0, visible=true, radius=10, x=0, y=0, offsetLeft=5, offsetTop=5, onColor='red', offColor='gray', borderColor='black', htmlClasses='sim_canvas led_canvas') {
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.LED));
     this.incrementNumberOf(TypesEnum.LED);
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
+    let pinName = `LED${id-1}`
+    if (id == 8){
+      pinName = "LED13";
+    }
     let pins = {};
-    pins[SocialRobotLed.pinNames.digitalPin] = `LED${id-1}`
+    pins[SocialRobotLed.pinNames.digitalPin] = pinName;
 
     let led = new SocialRobotLed();
     led.initComponent(onColor, offColor, this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
