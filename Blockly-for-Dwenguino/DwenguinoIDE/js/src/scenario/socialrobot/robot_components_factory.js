@@ -543,7 +543,7 @@ class RobotComponentsFactory {
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
     let pinName = `LED${id-1}`
-    if (id == 8){
+    if (id == 9){
       pinName = "LED13";
     }
     let pins = {};
