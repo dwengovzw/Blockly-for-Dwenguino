@@ -12,7 +12,7 @@ class BoardState {
 
     constructor(){
         // Map pin numbers to simulated pin indexes
-        for (let i = 0 ; i < 44 ; ++i){
+        for (let i = 0 ; i < 45 ; ++i){
             this.pinMapping[i + ""] = i;
         }
 
@@ -25,15 +25,15 @@ class BoardState {
         this.pinMapping["SW_E"] = 17;
         this.pinMapping["SW_S"] = 18;
         this.pinMapping["SW_W"] = 19;
-        this.pinMapping["SW_C"] = 20;
+        this.pinMapping["SW_C"] = 47;
         // Map BUZZER pin name to number
-        this.pinMapping["BUZZER"] = 33;
+        this.pinMapping["BUZZER"] = 46;
         // Map backlight pin
         this.pinMapping["LCD_BACKLIGHT"] = 20;
         // Motor pin mappings: normally uses 2 pins but simulated by one 
         // since it cannot interfere with other connections since not exposed on external connector
-        this.pinMapping["DC_MOTOR_1"] = 34;
-        this.pinMapping["DC_MOTOR_2"] = 35;
+        this.pinMapping["DC_MOTOR_1"] = 44;
+        this.pinMapping["DC_MOTOR_2"] = 45;
         // Same for servo motors
         this.pinMapping["SERVO_MOTOR_1"] = 40;
         this.pinMapping["SERVO_MOTOR_2"] = 41;
@@ -43,9 +43,9 @@ class BoardState {
         }
         
         // In case built-in components are directly programmed on the pins
-        for (let i = 33 ; i < 45 ; i++){
+        /*for (let i = 33 ; i < 45 ; i++){
             this.pinMapping[i + ""] = i;
-        }
+        }*/
 
         this.pinMapping["LED13"] = 13;
         this.pinMapping["SOUND_1"] = 28;
@@ -262,6 +262,10 @@ class BoardState {
             throw new Error("Not a valid analog pin name!")
         }
         return this.getIoPinState(pinName);
+    }
+
+    getPinMapping(){
+        return this.pinMapping;
     }
 }
 

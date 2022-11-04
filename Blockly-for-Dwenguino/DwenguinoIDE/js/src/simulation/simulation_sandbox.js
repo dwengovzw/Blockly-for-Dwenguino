@@ -63,19 +63,6 @@ class SimulationSandbox {
     this.boardState.setIoPinState(pinNumber, state);
     // turns light on or off
     var pin = Number(pinNumber);
-  
-    /*if ( Number.isNaN(pin) && ((pin >= 32 && pin <= 39) || pin === 13)) {
-      if (pin >= 32 && pin <= 39) {
-        pin -= 32;
-      }
-      if (state === 'HIGH' || state == 1) {
-        pin === 13 ? this.boardState.setLedState(8, 1) : this.boardState.setLedState(pin, 1);
-      } else {
-        pin === 13 ? this.boardState.setLedState(8, 0) : this.boardState.setLedState(pin, 0);
-      }
-    } else {
-      this.boardState.setIoPinState(pin, state);
-    }*/
   }
 
   analogWrite(pinName, state) {
@@ -94,21 +81,21 @@ class SimulationSandbox {
   */
   digitalRead(pin) {
     // read value from buttons
-    if (pin.startsWith("SW_")) {
+    /*if (pin.startsWith("SW_")) {
       let pinIndex = ButtonMap.mapButtonPinNameToIndex(pin);
       return this.boardState.getButtonState(pinIndex);
-    }
+    }*/
 
     // Return the value that is set to the leds
-    pin = Number(pin);
+    /*pin = Number(pin);
     if ((pin >= 32 && pin <= 39) || pin === 13) {
       if (pin >= 32 && pin <= 39) {
         pin -= 32;
       }
       return this.boardState.getLedState(pin);
-    } else {
+    } else {*/
       return this.boardState.getIoPinState(pin);
-    }
+    //}
   }
 
   // TODO: implement this when the time is right :p
@@ -145,7 +132,7 @@ class SimulationSandbox {
   * @param {int} frequency of the wanted sound
   */
   tone(pin, frequency) {
-    if (pin !== "BUZZER") {
+    if (pin !== "BUZZER" && this.boardState.getPinMapping()["BUZZER"] !== pin) {
       return;
     }
     this.boardState.setTonePlaying(frequency);
@@ -156,7 +143,7 @@ class SimulationSandbox {
   * @param {string} id of the pin "BUZZER"
   */
   noTone(pin) {
-    if (pin === "BUZZER") {
+    if (pin === "BUZZER" || this.boardState.getPinMapping()["BUZZER"] === pin) {
       // stop tone
       this.boardState.setTonePlaying(0);
     }

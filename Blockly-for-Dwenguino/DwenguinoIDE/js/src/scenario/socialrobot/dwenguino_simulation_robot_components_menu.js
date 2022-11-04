@@ -29,7 +29,7 @@ class DwenguinoSimulationRobotComponentsMenu {
         maximumAmount: 1
       },{
         type: TypesEnum.BUTTON,
-        maximumAmount: 3
+        maximumAmount: 5
       },{
         type: TypesEnum.BUZZER,
         maximumAmount: 1
