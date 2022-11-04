@@ -97,13 +97,22 @@ class BaseSimulationRunner{
         this.resetDwenguino();
         // get code
         this.debugger.code = code;
+
+        // create execution context
+        let context = {
+            DwenguinoSimulation: this.simulationSandbox
+        }
+        // Add pin names as variables to the execution context
+        let pinMapping = this.board.getPinMapping()
+        for (let key in pinMapping){
+            context[key] = pinMapping[key];
+        }
+
         // create debugger
         this.debugger.debuggerjs = this.createDebugger({
             iframeParentElement: document.getElementById('debug'),
             // declare context that should be available in debugger
-            sandbox: {
-                DwenguinoSimulation: this.simulationSandbox
-            }
+            sandbox: context
         });
 
         this.debugger.debuggerjs.machine.on('error', function (err) {

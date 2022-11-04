@@ -48,10 +48,17 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         // Set leds to right value
         for (var i = 0; i < 8; i++) {
             let classValue = "sim_light sim_light_off";
-            document.getElementById('sim_light_' + i).className = classValue;
+            let ledElement = document.getElementById('sim_light_' + i);
+            if (ledElement){
+                ledElement.className = classValue;
+            }
+            
         }
           // Set led 13 to right value
-        document.getElementById('sim_light_13').className = "sim_light sim_light_off";
+          let ledElement = document.getElementById('sim_light_13')
+          if (ledElement){
+            ledElement.className = "sim_light sim_light_off";
+          }
         
     }
 

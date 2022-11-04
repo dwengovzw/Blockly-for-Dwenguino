@@ -213,7 +213,10 @@
             </block>
         </value>
     </block>
-    <block type="dwenguino_led_pins"></block>
+    <!--<block type="dwenguino_led_pins"></block>-->
+    <block type="dwenguino_pins" id="@vyt(SUbBxCC+B#7Q$Fb">
+        <field name="PIN">LED0</field>
+    </block>
     <block type="dwenguino_on_off"></block>
 
     <block type="output_show_ledmatrix_image">

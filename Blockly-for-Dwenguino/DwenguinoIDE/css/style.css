@@ -1223,7 +1223,7 @@ background-color: #ffffff;
     float: bottom;
     width: 50px;
     height: 120px;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     right: 0;
 }

@@ -94,3 +94,4 @@ document.write('<script src="/dwenguinoblockly/DwenguinoIDE/msg/' + DwenguinoBlo
 // Load Blockly's language strings.
 document.write('<script src="/dwenguinoblockly/blockly/msg/js/' + DwenguinoBlocklyLanguageSettings.getLang() + '.js"></script>\n');
 
+export default DwenguinoBlocklyLanguageSettings;
