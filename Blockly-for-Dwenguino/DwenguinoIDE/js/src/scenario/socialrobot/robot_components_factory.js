@@ -597,10 +597,25 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.RGBLED);
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
 
+    let rgbPins = null;
+    if (id >= 1 && id <= 3){
+      rgbPins = {
+        "red": `RGB_${id}_R`,
+        "green": `RGB_${id}_G`,
+        "blue": `RGB_${id}_B`,
+      }
+    }else{
+      rgbPins = {
+        "red": redPin,
+        "green": greenPin,
+        "blue": bluePin,
+      }
+    }
+
     let pins = {};
-    pins[SocialRobotRgbLed.pinNames.redPin] = redPin;
-    pins[SocialRobotRgbLed.pinNames.greenPin] = greenPin;
-    pins[SocialRobotRgbLed.pinNames.bluePin] = bluePin;
+    pins[SocialRobotRgbLed.pinNames.redPin] = rgbPins.red;
+    pins[SocialRobotRgbLed.pinNames.greenPin] = rgbPins.green;
+    pins[SocialRobotRgbLed.pinNames.bluePin] = rgbPins.blue;
 
     let rgbled = new SocialRobotRgbLed();
     rgbled.initComponent(this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
@@ -732,8 +747,20 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.BUTTON);
     let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
 
+    let pinMapping = {
+      1: "SW_S",
+      2: "SW_W",
+      3: "SW_N",
+      4: "SW_E",
+      5: "SW_C"
+    }
     let pins = {};
-    pins[SocialRobotButton.pinNames.digitalPin] = pin + id - 1;
+    if (id >= 1 && id <= 5){
+      pins[SocialRobotButton.pinNames.digitalPin] = pinMapping[id];
+    }else{
+      pins[SocialRobotButton.pinNames.digitalPin] = pin + id - 1;
+    }
+    
 
     let button = new SocialRobotButton();
     button.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);

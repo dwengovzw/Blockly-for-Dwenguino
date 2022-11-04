@@ -130,8 +130,12 @@ var profile = {
         , ["4", "4"], ["5", "5"], ["6", "6"], ["7", "7"], ["13", "13"]],
     switches: [["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"]],
     mapPinAliasToNumber: function(pinAlias){
+      // The list of known pins do not have to be translated since they are known by the dwenguino cpp lib. 
+      // They are defined in the global scope of the cpp program.
         let knownPins = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", 
                       "23", "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "BUZZER", "SW_N", "SW_E", "SW_S", "SW_W", "SW_C"];
+        // Some pins are used in the simulator but do not have a definition in the dwenguino cpp lib.
+        // These pins have to be mapped to the corresponding pin number.
         let pinMapping = {
           "SOUND_1": "A4",
           "SONAR_1_TRIG": "A1",
