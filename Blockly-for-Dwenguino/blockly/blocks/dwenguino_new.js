@@ -22,6 +22,7 @@
 
 goog.provide('Blockly.Blocks.dwenguino');
 
+goog.require('Blockly');
 goog.require('Blockly.Blocks');
 
 

@@ -37,12 +37,12 @@ let processStartBlocks = (startblock_xml, res) => {
     res.render('index.ejs', {blocks_xml: blocks_xml});
 }
 
-let handleSimulatorRequest = (blocks_xml, res) => {
+let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
     if (blocks_xml && blocks_xml !== ""){
         processStartBlocks(blocks_xml, res);
     }else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
-        res.render('index.ejs', {blocks_xml: empty_program_xml});
+        res.render(view, {blocks_xml: empty_program_xml, form_target: process.env.SERVER_URL + "simulator"});
     }
 }
 
@@ -58,6 +58,18 @@ router.post("/simulator", function(req, res) {
     handleSimulatorRequest(blocks_xml, res);
 })
 
+
+// load the application
+router.get("/readonly", function(req, res) {
+    let blocks_xml = req.query.xml;
+    handleSimulatorRequest(blocks_xml, res, "readonly.ejs");
+})
+
+// load the application with a program from xml
+router.post("/readonly", function(req, res) {
+    let blocks_xml = req.body.xml;
+    handleSimulatorRequest(blocks_xml, res, "readonly.ejs");
+})
 
 
 // Import contact controller

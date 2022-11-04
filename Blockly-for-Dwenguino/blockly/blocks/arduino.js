@@ -22,6 +22,7 @@
 
 goog.provide('Blockly.Blocks.arduino');
 
+goog.require('Blockly');
 goog.require('Blockly.Blocks');
 
 var ArduinoHelpUrl = "http://www.arduino.cc";
