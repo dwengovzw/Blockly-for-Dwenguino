@@ -111,18 +111,21 @@ class RobotComponent extends AbstractRobotComponent {
     
         let simSensor = document.getElementById('sim_'+this.getType() + this.getId());
 
-        simSensor.addEventListener('mouseup', (event) => {
-            let offset = {
-                "left": event.currentTarget.getAttribute("data-x"),
-                "top": event.currentTarget.getAttribute("data-y")
-                };
-            this.setOffset(offset);
-        })
-
-        simSensor.addEventListener('dblclick', () => { 
-            this.createComponentOptionsModalDialog(optionsLabel);
-            this.showDialog();
-        });
+        if (simSensor){
+            simSensor.addEventListener('mouseup', (event) => {
+                let offset = {
+                    "left": event.currentTarget.getAttribute("data-x"),
+                    "top": event.currentTarget.getAttribute("data-y")
+                    };
+                this.setOffset(offset);
+            })
+    
+            simSensor.addEventListener('dblclick', () => { 
+                this.createComponentOptionsModalDialog(optionsLabel);
+                this.showDialog();
+            });
+        }
+       
 
         this.setComponentName();
     }

@@ -25,7 +25,7 @@ describe(
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);
 
-    let testMessage = "Adding and removing each component from the social robot simulation should not result in errors";
+    /*let testMessage = "Adding and removing each component from the social robot simulation should not result in errors";
     it(testMessage, async () => {
       let pageErrors = 0;
       // Register error message event handler to detect console errors
@@ -35,9 +35,9 @@ describe(
        });
       await runAddRemoveComponentsRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
-    testMessage = "Adding and removing each component from the social robot simulation and switching the scenario in between should not result in errors";
+    let testMessage = "Adding and removing each component from the social robot simulation and switching the scenario in between should not result in errors";
     it(testMessage, async () => {
       let pageErrors = 0;
       // Register error message event handler to detect console errors

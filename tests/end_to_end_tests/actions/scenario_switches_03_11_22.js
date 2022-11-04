@@ -1,7 +1,9 @@
 import puppeteer from 'puppeteer'
 
-let runAddRemoveComponentsRecording = async (browser, page) => {
-    const timeout = 1000000;
+let runSwitchScenarioRecording = async () => {
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+    const timeout = 5000;
     page.setDefaultTimeout(timeout);
 
     {
@@ -17,287 +19,177 @@ let runAddRemoveComponentsRecording = async (browser, page) => {
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_lcd_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_moving > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 4.25,
-            y: 12.078125,
+            x: 14.359375,
+            y: 22,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_button_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_wall > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 7.75,
-            y: 13.078125,
+            x: 23.640625,
+            y: 27,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_buzzer_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_socialrobot > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 9.25,
-            y: 6.078125,
+            x: 10.9375,
+            y: 27,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_led_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_conveyor > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 9.75,
-            y: 12.078125,
+            x: 11.890625,
+            y: 27,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_ledmatrixsegment_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_socialrobot > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 6.25,
-            y: 7.078125,
+            x: 27.9375,
+            y: 28,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_rgbled_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_wall > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 6.75,
-            y: 3.078125,
+            x: 15.640625,
+            y: 21,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_servo_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_moving > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 7.25,
-            y: 11.078125,
+            x: 27.359375,
+            y: 26,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_continuousservo_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_spyrograph > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 7.75,
-            y: 11.078125,
+            x: 21.078125,
+            y: 32,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_sonar_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_wall > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 6.40625,
-            y: 13.078125,
+            x: 32.640625,
+            y: 25,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_sound_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_conveyor > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 0.75,
-            y: 7.078125,
+            x: 22.890625,
+            y: 25,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_touch_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_moving > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 8.609375,
-            y: 7.078125,
+            x: 21.359375,
+            y: 30,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_pir_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_wall > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 3.40625,
-            y: 17.078125,
+            x: 16.640625,
+            y: 25,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_light_plus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_socialrobot > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 10.046875,
-            y: 5.078125,
+            x: 10.9375,
+            y: 28,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_light_minus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_spyrograph > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 19.15625,
-            y: 18.078125,
+            x: 18.078125,
+            y: 44,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_pir_minus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_conveyor > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 11.359375,
-            y: 7.078125,
+            x: 20.890625,
+            y: 20,
           },
         });
     }
     {
         const targetPage = page;
-        const element = await waitForSelectors([["#rc_touch_minus_button"]], targetPage, { timeout, visible: true });
+        const element = await waitForSelectors([["#scenario_label_moving > img"]], targetPage, { timeout, visible: true });
         await scrollIntoViewIfNeeded(element, timeout);
         await element.click({
           offset: {
-            x: 19.5,
-            y: 21.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_sound_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 12.15625,
-            y: 11.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_sonar_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 5.5,
-            y: 8.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_continuousservo_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 9,
-            y: 9.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_servo_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 7.5,
-            y: 9.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_rgbled_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 4,
-            y: 5.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_ledmatrixsegment_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 11.5,
-            y: 13.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_led_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 4,
-            y: 10.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_buzzer_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 6.5,
-            y: 7.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_button_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 2,
-            y: 12.078125,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#rc_lcd_minus_button"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 8.5,
-            y: 11.078125,
+            x: 16.359375,
+            y: 33,
           },
         });
     }
@@ -446,4 +338,4 @@ let runAddRemoveComponentsRecording = async (browser, page) => {
     }
 }
 
-export { runAddRemoveComponentsRecording }
+export { runSwitchScenarioRecording }
