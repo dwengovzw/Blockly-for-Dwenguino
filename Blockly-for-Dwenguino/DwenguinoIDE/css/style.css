@@ -1291,6 +1291,7 @@ background-color: #ffffff;
 .labels > span > ul > li.label4 { background: #9ff57d; }
 
 #sensor_options{
+    z-index: 5;
     align-self: flex-end;
     width: 170px;
     height: 100px;

@@ -364,7 +364,7 @@
     <block type="dwenguino_continuous_servo">
         <value name="pin">
             <block type="dwenguino_pins"> 
-            <field name="PIN">SERVO_3</field>
+            <field name="PIN">SERVO_5</field>
             </block>
         </value>
         <value name="speed">
