@@ -29,14 +29,16 @@
 </head>
 <body id="db_body">
     <!--Blockly is injected into the following div, therafter it is positioned over the db_blockly div -->
-    <div id="blocklyDiv" class="blocklyDiv" style="height: 480px;">
-    </div>
+    <div id="container" style="display: flex;flex-direction: column;position:absolute;top:0;bottom:0;left:0;right:0">
+        <div id="blocklyDiv" class="blocklyDiv" style="flex-grow:1">
+        </div>
 
-    <div id="simulator_link">
-        <form formtarget="_blank" target="_blank" method="post" action="<%- form_target %>" target="_blank">
-            <input type="hidden" name="xml" value='<%- blocks_xml %>' /> 
-            <a target="_blank" class="btn simulator" role="button" aria-disabled="true" onclick="this.parentNode.submit();" style="margin-top:5px">Simulator</a>
-        </form>
+        <div id="simulator_link">
+            <form target="_blank" method="post" action="<%- form_target %>" target="_blank">
+                <input type="hidden" name="xml" value='<%- blocks_xml %>' /> 
+                <a target="_blank" class="btn simulator" role="button" aria-disabled="true" onclick="this.parentNode.submit();" style="margin-top:5px;padding: 0.375rem 0.75rem;border-radius:0.25rem;background-color:#87C544;color:white">Simulator</a>
+            </form>
+        </div>
     </div>
 
 
