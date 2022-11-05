@@ -25,7 +25,7 @@ router.get('/', function (req, res) {
     });
 });
 
-let processStartBlocks = (startblock_xml, res) => {
+let processStartBlocks = (startblock_xml, res, view="index.ejs") => {
     let blocks_xml = querystring.unescape(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
@@ -34,12 +34,12 @@ let processStartBlocks = (startblock_xml, res) => {
     blocks_xml = blocks_xml.trim()  // remove whitespace
     //let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
     //let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
-    res.render('index.ejs', {blocks_xml: blocks_xml});
+    res.render(view, {blocks_xml: blocks_xml, form_target: process.env.SERVER_URL + "simulator"});
 }
 
 let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
     if (blocks_xml && blocks_xml !== ""){
-        processStartBlocks(blocks_xml, res);
+        processStartBlocks(blocks_xml, res, view);
     }else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
         res.render(view, {blocks_xml: empty_program_xml, form_target: process.env.SERVER_URL + "simulator"});
