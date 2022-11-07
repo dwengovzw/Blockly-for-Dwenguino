@@ -1,6 +1,7 @@
 const path = require("path");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = [
     {
@@ -48,11 +49,12 @@ module.exports = [
                 }
             ]
         },
-        plugins: [new MonacoWebpackPlugin()],
+        plugins: [new MonacoWebpackPlugin(), new CompressionPlugin()],
         optimization: {
             minimize: true,
             minimizer: [new TerserPlugin()]
-        }
+        },
+        devtool: false,
     },
     {
         name: "admin-panel",
