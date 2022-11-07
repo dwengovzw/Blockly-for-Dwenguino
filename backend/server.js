@@ -61,7 +61,9 @@ app.set('views', process.env.VIEWS_DIR);   // For debug
 // Optimizations for production
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
-    app.use(helmet());
+    app.use(helmet({
+        frameguard: false // Allow use in iframe
+      }));
 }else{
     app.use(cors({
         origin: '*'
