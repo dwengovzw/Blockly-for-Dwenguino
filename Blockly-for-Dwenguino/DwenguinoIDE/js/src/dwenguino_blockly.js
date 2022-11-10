@@ -9,7 +9,7 @@ import ServerConfig from './server_config.js'
 import jQuery from "jquery";
 import 'jquery-ui-bundle';
 import 'bootstrap';
-import TextualEditor from './textual_editor/textual_editor.js'
+import TextualEditor from './textual_editor/textual_editor.ts'
 
 window.$ = window.jQuery = jQuery;
 

@@ -9,7 +9,7 @@ module.exports = [
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', ''] 
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
@@ -17,6 +17,29 @@ module.exports = [
         },
         module: {
             rules: [
+                {
+                    test: /\.tsx?$/,
+                    exclude: /node_modules/, 
+                    use:{
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                ["@babel/preset-env",
+                                {
+                                    'targets': {
+                                        'browsers': ['last 2 version']
+                                    }
+                                }], 
+                                "@babel/preset-react",
+                                "@babel/preset-typescript",
+                            ],
+                            plugins: ["@babel/plugin-proposal-class-properties",
+                                    "@babel/plugin-transform-classes",
+                                    '@babel/plugin-transform-runtime',
+                                    "autobind-class-methods"]
+                        }
+                    }
+                },
                 {
                     test: /\.js?$/,
                     exclude: /node_modules/, 
@@ -29,7 +52,9 @@ module.exports = [
                                     'targets': {
                                         'browsers': ['last 2 version']
                                     }
-                                }]
+                                }],
+                                "@babel/preset-react",
+                                "@babel/preset-typescript",
                             ],
                             plugins: ["@babel/plugin-proposal-class-properties",
                                     "@babel/plugin-transform-classes",
@@ -37,11 +62,6 @@ module.exports = [
                                     "autobind-class-methods"]
                         }
                     }
-                },
-                {
-                    test: /\.tsx?$/,
-                    use: 'ts-loader',
-                    exclude: /node_modules/,
                 },
                 {
                     test: /\.css$/,
