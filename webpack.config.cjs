@@ -20,6 +20,29 @@ module.exports = [
         module: {
             rules: [
                 {
+                    test: /\.tsx?$/,
+                    exclude: /node_modules/, 
+                    use:{
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                ["@babel/preset-env",
+                                {
+                                    'targets': {
+                                        'browsers': ['last 2 version']
+                                    }
+                                }], 
+                                "@babel/preset-react",
+                                "@babel/preset-typescript",
+                            ],
+                            plugins: ["@babel/plugin-proposal-class-properties",
+                                    "@babel/plugin-transform-classes",
+                                    '@babel/plugin-transform-runtime',
+                                    "autobind-class-methods"]
+                        }
+                    }
+                },
+                {
                     test: /\.js?$/,
                     exclude: /node_modules/, 
                     use:{
