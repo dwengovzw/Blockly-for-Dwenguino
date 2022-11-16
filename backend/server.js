@@ -21,6 +21,9 @@ import blocklyRoutes from './routes/blockly-routes.js';
 // Import statistics routes
 import statsRoutes from './routes/stats-routes.js'
 
+// Import dashboard routes
+import dashboardRouter from './routes/dashboard-router.js'
+
 // For deploying to production
 import compression from 'compression';
 import helmet from 'helmet';
@@ -55,7 +58,7 @@ let app = express();
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', process.env.VIEWS_DIR);   // For debug
+app.set('views', JSON.parse(process.env.VIEWS_DIR));   // For debug
 //app.set('views', '../Blockly-for-Dwenguino');
 
 // Optimizations for production
@@ -120,6 +123,9 @@ app.use('/', blocklyRoutes);
 
 // Use statistics routes
 app.use('/stats', statsRoutes);
+
+// Use dashboard routes
+app.use('/dashboard', dashboardRouter);
 
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));

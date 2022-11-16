@@ -81,17 +81,41 @@ module.exports = [
         devtool: false,
     },
     {
-        name: "admin-panel",
-        mode: "production",
+        name: "dashboards",
+        mode: "development",
+        devtool: "eval-source-map",
         entry: {
-            app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/admin/admin_panel.js'
+            app: './Blockly-for-Dwenguino/dashboards/js/src/index.ts'
         },
         output: {
-            path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
-            filename: 'admin-panel.bundle.js'
+            path: path.resolve('./Blockly-for-Dwenguino/dashboards/js/dist/'),
+            filename: 'dashboards.bundle.js'
         },
         module: {
             rules: [
+                {
+                    test: /\.tsx?$/,
+                    exclude: /node_modules/, 
+                    use:{
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                ["@babel/preset-env",
+                                {
+                                    'targets': {
+                                        'browsers': ['last 2 version']
+                                    }
+                                }], 
+                                "@babel/preset-react",
+                                "@babel/preset-typescript",
+                            ],
+                            plugins: ["@babel/plugin-proposal-class-properties",
+                                    "@babel/plugin-transform-classes",
+                                    '@babel/plugin-transform-runtime',
+                                    "autobind-class-methods"]
+                        }
+                    }
+                },
                 {
                     test: /\.js?$/,
                     exclude: /node_modules/, 
@@ -111,8 +135,13 @@ module.exports = [
                                     '@babel/plugin-transform-runtime']
                         }
                     }
-                }
+                },
+                {
+                    test: /\.s[ac]ss$/i,
+                    use: [MiniCssExtractPlugin.loader,'css-loader']
+                },
             ]
-        }
+        },
+        plugins: [new MiniCssExtractPlugin()],
     }
 ];
