@@ -75,7 +75,8 @@ module.exports = [
         plugins: [new MonacoWebpackPlugin(), new CompressionPlugin()],
         optimization: {
             minimize: true,
-            minimizer: [new TerserPlugin()]
+            minimizer: [new TerserPlugin()],
+            chunkIds: "size"
         },
         devtool: false,
     },
