@@ -1,5 +1,57 @@
-import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate } from '@microsoft/fast-element';
+import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate, css, ElementStyles } from '@microsoft/fast-element';
 
+
+const elementStyle: ElementStyles = css`
+  :host {
+    display: inline-block;
+    contain: content;
+    color: white;
+    background: var(--fill-color);
+    border-radius: var(--border-radius);
+    min-width: 325px;
+    text-align: center;
+    box-shadow: 0 0 calc(var(--depth) * 1px) rgba(0,0,0,.5);
+  }
+
+  :host([hidden]) { 
+    display: none;
+  }
+
+  .header {
+    margin: 16px 0;
+    position: relative;
+  }
+
+  h3 {
+    font-weight: bold;
+    font-family: 'Source Sans Pro';
+    letter-spacing: 4px;
+    font-size: 32px;
+    margin: 0;
+    padding: 0;
+  }
+
+  h4 {
+    font-family: sans-serif;
+    font-size: 18px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .body {
+    background: white;
+    color: black;
+    padding: 32px 8px;
+    font-size: 42px;
+    font-family: cursive;
+  }
+
+  .footer {
+    height: 16px;
+    background: var(--fill-color);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+`;
 
 const numberConverter: ValueConverter = {
     toView(value: number): string {
@@ -15,28 +67,34 @@ const numberConverter: ValueConverter = {
     }
   };
 
-const template: ViewTemplate<NameTag> = html`
+const nameTagTemplate: ViewTemplate<NameTag> = html`
   <div class="header">
+    <slot name="avatar"></slot>
     <h3>${x => x.greeting.toUpperCase()}</h3>
     <h4>my name is</h4>
   </div>
+  
+  <div class="body">
+    <slot></slot>
+  </div>
 
-  <div class="body">${name_tag => name_tag.numberOfGreets }</div>
   <button @click="${x => x.handleButtonClick()}">Greet</button>
+  <h3>You have greeted me ${name_tag => name_tag.numberOfGreets} times, thank you!</h3>
 
   <div class="footer"></div>
 `;
 
 @customElement({
   name: 'name-tag',
-  template
+  template: nameTagTemplate,
+  styles: elementStyle
 })
 export class NameTag extends FASTElement {
     @attr greeting: string = 'Hello';
-    @attr({ converter: numberConverter }) numberOfGreets: number = 2;
+    @attr({ converter: numberConverter }) numberOfGreets: number = 0;
 
     handleButtonClick() {
-      this.numberOfGreetsChanged(this.numberOfGreets, this.numberOfGreets + 1);
+      this.numberOfGreets += 1;
     }
 
     connectedCallback() {
@@ -47,11 +105,10 @@ export class NameTag extends FASTElement {
     // optional method 
     greetingChanged() {
         console.log(this.greeting)
-        this.shadowRoot!.innerHTML = this.greeting;
+        //this.shadowRoot!.innerHTML = this.greeting;
     }
 
     numberOfGreetsChanged(oldValue: number, newValue: number){
-      this.numberOfGreets = newValue
         console.log(this.numberOfGreets);
     }
 }
