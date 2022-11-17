@@ -1,5 +1,5 @@
-import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate, css, ElementStyles } from '@microsoft/fast-element';
-
+import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate, css, ElementStyles, when } from '@microsoft/fast-element';
+import axios from "axios";
 
 const elementStyle: ElementStyles = css`
   :host {
@@ -81,6 +81,16 @@ const nameTagTemplate: ViewTemplate<NameTag> = html`
   <button @click="${x => x.handleButtonClick()}">Greet</button>
   <h3>You have greeted me ${name_tag => name_tag.numberOfGreets} times, thank you!</h3>
 
+
+  ${when(elem => !elem.loggedIn, html<NameTag>`
+    <button id="loginbutton" type="primary"
+      className="btn"
+      size="lg"
+      href="https://github.com/login/oauth/authorize?client_id=8f672e53bc6b92be977d&redirect_uri=http://localhost:8080/oauth/redirect">
+        Login
+    </button>
+  `)}
+  
   <div class="footer"></div>
 `;
 
@@ -92,6 +102,7 @@ const nameTagTemplate: ViewTemplate<NameTag> = html`
 export class NameTag extends FASTElement {
     @attr greeting: string = 'Hello';
     @attr({ converter: numberConverter }) numberOfGreets: number = 0;
+    @attr loggedIn: boolean = false;
 
     handleButtonClick() {
       this.numberOfGreets += 1;

@@ -22,7 +22,10 @@ import blocklyRoutes from './routes/blockly-routes.js';
 import statsRoutes from './routes/stats-routes.js'
 
 // Import dashboard routes
-import dashboardRouter from './routes/dashboard-router.js'
+import dashboardRouter from './routes/dashboard-routes.js'
+
+// Import oauth routes
+import oauthRouter from './routes/oauth-routes.js'
 
 // For deploying to production
 import compression from 'compression';
@@ -69,7 +72,8 @@ if (process.env.NODE_ENV === 'production') {
       }));
 }else{
     app.use(cors({
-        origin: '*'
+        origin: '*',
+        credentials: true
       }));
 }
 
@@ -126,6 +130,9 @@ app.use('/stats', statsRoutes);
 
 // Use dashboard routes
 app.use('/dashboard', dashboardRouter);
+
+// Use oauth routes
+app.use('/oauth', oauthRouter);
 
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));
