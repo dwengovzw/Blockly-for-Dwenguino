@@ -1,7 +1,6 @@
 import { AbstractRobotComponent } from './abstract_robot_component.js'
 import { TypesEnum } from '../robot_components_factory.js';
 import { EventsEnum } from '../scenario_event.js';
-import { SoundSensor } from '../../../tutorials/components/SoundSensor.js';
 import { Button } from '../../utilities/button.js';
 import { RobotComponent } from './robot_component.js';
 import { BinaryInputRobotComponent } from './binary_input_robot_component.js';

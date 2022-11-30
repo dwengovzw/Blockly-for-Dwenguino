@@ -1,19 +1,11 @@
-import express from 'express';
-import fs from 'fs';
-
-//let express = require('express');
-// Import body parser
-// import bodyParser from 'body-parser';
-import cookieParser from 'cookie-parser';
-import dotenv from 'dotenv';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-//mongoose.set('debug', true);
 import path from 'path';
-import i18n from 'i18n-x';
-import nodemailer from 'nodemailer';
+let __dirname = path.resolve();
 
-//import ChromeLauncher from 'chrome-launcher';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+
+//mongoose.set('debug', true);
+import i18n from 'i18n-x';
 
 // Import blockly router
 import blocklyRoutes from './routes/blockly-routes.js';
@@ -27,22 +19,28 @@ import dashboardRouter from './routes/dashboard-routes.js'
 // Import oauth routes
 import oauthRouter from './routes/oauth-routes.js'
 
+// Import user routes
+import userRouter from "./routes/user.routes.js"
+
+// Import test router
+import testRouter from './routes/test_auth.routes.js';
+
 // For deploying to production
 import compression from 'compression';
 import helmet from 'helmet';
 
+// For keeping track of sessions
+import cookieSession from "cookie-session"
+
 // For profiling the application in development
 //import profiler from 'v8-profiler-node8'
 
+//Configure cors middleware for the run route to allow all requests
+import cors from 'cors';
 
-// For cross origin requests in standalone and debug mode
-import cors from 'cors'
-
-let __dirname = path.resolve();
-console.log(`dirname: ${__dirname}`);
-
-// Load environment variables
-dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
+let corsOptions = {
+    origin: process.env.CORS_ORIGIN,
+};
 
 let key, cert, ca = 0;
 let options = {}
@@ -58,6 +56,8 @@ console.log("SSL port: " + sslPort);
 
 // Initialize the app
 let app = express();
+
+app.use(cors(corsOptions));
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -91,21 +91,12 @@ app.use(i18n({
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
 
-let emailOptions = { 
-    host: process.env.EMAIL_HOST,
-    port: process.env.EMAIL_PORT,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASSWORD
-    },
-    debug: true,
-    logger: true
-}
-const emailService = nodemailer.createTransport(emailOptions);
-console.log(emailService);
-
-export default emailService;
-
+app.use(
+    cookieSession({
+        name: process.env.COOKIE_NAME,
+        secret: process.env.COOKIE_SECRET
+    })
+)
 
     // Setup static file serving
 if (process.env.NODE_ENV === 'production') {
@@ -134,9 +125,14 @@ app.use('/dashboard', dashboardRouter);
 // Use oauth routes
 app.use('/oauth', oauthRouter);
 
+// Use user routes
+app.use("/user", userRouter);
+
+// Test router
+app.use("/test", testRouter)
+
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));
-
 
 export { app, port, sslPort, options }
 

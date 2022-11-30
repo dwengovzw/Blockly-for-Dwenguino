@@ -1,8 +1,6 @@
 import DwenguinoEventLogger from './logging/dwenguino_event_logger.js'
 import DwenguinoSimulation from './simulation/dwenguino_simulation.js'
-import TutorialMenu from './tutorials/tutorial_menu.js'
 import CookiesInformation from './user/cookies_information.js'
-import LoginMenu from './user/login_menu.js'
 import FileIOController from './utils/file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
 import ServerConfig from './server_config.js'
@@ -36,8 +34,6 @@ let DwenguinoBlockly = {
     simulationEnvironment: null,
 
     cookiesInformation: null,
-    loginMenu: null,
-    tutorialMenu: null,
 
     compilationPath: "",
     textualEditor: new TextualEditor("db_code_pane"),
@@ -92,12 +88,6 @@ let DwenguinoBlockly = {
         this.cookiesInformation = new CookiesInformation();
         DwenguinoBlockly.displayCookieConsent();
 
-        this.loginMenu = new LoginMenu();
-
-        // Create an instance of the tutorial menu (persists until the application stops).
-        // Uses the event logger to capture tutorial actions.
-        this.tutorialMenu = new TutorialMenu(this.logger);
-
         // Create new simulationenvironment
         this.simulationEnvironment = new DwenguinoSimulation(this.logger, this.workspace);  // This is weird, workspace should be created in a different place..
 
@@ -105,9 +95,6 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "";
         delete window.sessionStorage.loadOnceRecording;
 
-        $("#db_menu_item_dwengo_robot_teacher_image").click(function() {
-          self.loginMenu.createInitialMenu();
-        });
 
         //init resizable panels
         $( "#db_blockly" ).resizable({

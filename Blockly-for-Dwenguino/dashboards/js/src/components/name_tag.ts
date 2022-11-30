@@ -1,4 +1,4 @@
-import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate, css, ElementStyles, when } from '@microsoft/fast-element';
+import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate, css, ElementStyles, when, observable } from '@microsoft/fast-element';
 import axios from "axios";
 
 const elementStyle: ElementStyles = css`
@@ -83,12 +83,15 @@ const nameTagTemplate: ViewTemplate<NameTag> = html`
 
 
   ${when(elem => !elem.loggedIn, html<NameTag>`
-    <button id="loginbutton" type="primary"
+    <a href="https://github.com/login/oauth/authorize?client_id=1a0bffd9565f3e1c7c47&redirect_uri=http://localhost:12032/oauth/redirect"><button id="loginbutton" type="primary"
       className="btn"
-      size="lg"
-      href="https://github.com/login/oauth/authorize?client_id=8f672e53bc6b92be977d&redirect_uri=http://localhost:8080/oauth/redirect">
+      size="lg">
         Login
-    </button>
+    </button></a>
+  `)}
+
+  ${when(elem => elem.loggedIn, html<NameTag>`
+  Yay, you have been logged in.
   `)}
   
   <div class="footer"></div>
@@ -103,6 +106,22 @@ export class NameTag extends FASTElement {
     @attr greeting: string = 'Hello';
     @attr({ converter: numberConverter }) numberOfGreets: number = 0;
     @attr loggedIn: boolean = false;
+    @observable user: any|null = null;
+
+    constructor(){
+      super();
+      const token: string = new URLSearchParams(window.location.search).get("access_token") as string;
+      axios.get(`https://api.github.com/user`, {
+        headers: {
+          Authorization: "token " + token
+        }
+      }).then((res) => {
+        this.user = res.data;
+        this.loggedIn = true;
+      }).catch(error => {
+        console.log(error)
+      })
+    }
 
     handleButtonClick() {
       this.numberOfGreets += 1;
@@ -111,6 +130,11 @@ export class NameTag extends FASTElement {
     connectedCallback() {
         super.connectedCallback();
         console.log("name-tag is now connected to the DOM");
+    }
+
+    // optional method called when user is changed
+    userChanged(oldUser: any, newUser: any){
+      console.log(newUser);
     }
 
     // optional method 

@@ -6,17 +6,18 @@ module.exports = [
     {
         name: "simulator",
         mode: "development",
-        context: path.resolve(__dirname, "Blockly-for-Dwenguino/DwenguinoIDE"),
+        //context: path.resolve(__dirname, "Blockly-for-Dwenguino/DwenguinoIDE"),
         entry: {
-            app: './js/src/dwenguino_blockly.js'
+            app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
         },
         resolve:{
             extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
         },
         output: {
-            path: path.resolve('./js/dist'),
+            path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
             filename: 'dwenguinoblockly.bundle.js'
         },
+        devtool: 'source-map',
         module: {
             rules: [
                 {

@@ -11,7 +11,7 @@ class CookiesInformation {
      */
     initCookiesInformation(){
         this.loadCookiesInformationDialog();
-        this.addCookiesInformationDialogEventHandlers();
+        //this.addCookiesInformationDialogEventHandlers();
         this.showCookiesInformationDialog();
     }
 
@@ -42,7 +42,7 @@ class CookiesInformation {
      */
     addCookiesInformationDialogEventHandlers(){
         $('.close').click(() => {
-            this.hideTutorialDialog();
+            //this.hideTutorialDialog();
         });
     }
 
