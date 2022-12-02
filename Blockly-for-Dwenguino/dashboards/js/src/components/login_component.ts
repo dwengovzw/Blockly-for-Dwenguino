@@ -38,9 +38,10 @@ export class LoginComponent extends FASTElement {
 
     constructor(){
         super();
-        fetch("/user/isLoggedIn").then((response) => {
+        fetch("/user/isLoggedIn").then(async (response) => {
           if (response.status == 200){
             this.loggedIn = true;
+            this.username = await response.text();
           } else {
             this.loggedIn = false;
           }

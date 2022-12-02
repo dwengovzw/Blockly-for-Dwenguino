@@ -12,11 +12,24 @@ class UserController {
         if (!token) {
             return res.status(401).send(false); // TODO: redirect to login page
         }
-        jwt.verify(token, jwt_settings.secret, (err, decoded) => {
+        jwt.verify(token, jwt_settings.secret, async (err, decoded) => {
             if (err) {
                 return res.status(401).send(false)
             }
-            return res.status(200).send(true);
+            try{
+                let platform = decoded?.platform;
+                let userId = decoded?.id;
+                let user = await User.findOne({
+                    platform: platform,
+                    userId: userId
+                })
+                if (!user || !user.name){
+                    res.status(401).send("No display name set");
+                }
+                return res.status(200).send(user.name)
+            } catch (e) {
+                return res.status(401).send({message: e})
+            }
         })
     }
 
@@ -30,15 +43,15 @@ class UserController {
                     userId: userId
                 })
                 if (!user || !user.name){
-                    res.status(200).send("No display name set");
+                    res.status(401).send("No display name set");
                 }
-                res.status(200).send(user.name)
+                return res.status(200).send(user.name)
             } catch (e) {
-                res.status(500).send({message: e})
+                return res.status(401).send({message: e})
             }
             
         } else {
-            res.status(500).send({message: "Cannot get name"})
+            return res.status(401).send({message: "Cannot get name"})
         }
     }
 }
