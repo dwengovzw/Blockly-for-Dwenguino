@@ -1,4 +1,6 @@
 import mongoose from 'mongoose';
+import db from "../config/db.config.js"
+
 
 const Role = mongoose.model(
     "Role",
@@ -8,9 +10,9 @@ const Role = mongoose.model(
             required: true,
             lowercase: true,
             trim: true,
-            enum: ["student", "teacher", "admin", "subscriber"],
+            enum: Object.values(db.ROLES),
         }
     })
 )
 
-export default Role;
+export { Role };

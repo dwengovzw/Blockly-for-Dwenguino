@@ -1,11 +1,17 @@
-import mongoose from 'mongoose';
-import { User, Student, Teacher } from "../models/users.model.js"
-import Role from "../models/role.model.js"
+const PLATFORMS = {
+    github: "github",
+    leerId: "leerId",
+    beACM: "beACM"
+}
+
+const ROLES = {
+    student: "student", 
+    teacher: "teacher", 
+    admin: "admin",
+};
 
 const db = {}
-db.mongoose = mongoose;
-db.user = User;
-db.role = Role;
-db.ROLES = ["student", "teacher", "admin", "subscriber"]
+db.PLATFORMS = PLATFORMS;
+db.ROLES = ROLES;
 
 export default db

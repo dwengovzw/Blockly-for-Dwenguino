@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import db from "../config/db.config.js"
-import jwt_secret from "../config/jwt.config.js";
+import jwt_settings from "../config/jwt.config.js";
 
 const User = db.user;
 const Role = db.role;
@@ -87,7 +87,7 @@ let signup = (req, res) => {
           return res.status(401).send({ message: "Invalid Password!" });
         }
   
-        var token = jwt.sign({ id: user.id }, jwt_secret.secret, {
+        var token = jwt.sign({ id: user.id }, jwt_settings.secret, {
           expiresIn: 86400, // 24 hours
         });
   

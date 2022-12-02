@@ -1,16 +1,22 @@
 import mongoose from "mongoose"
-import util from "util"
+import db from "../config/db.config.js"
 
 class UserSchema extends mongoose.Schema{
     constructor(extraAttributes = {}){
         super(extraAttributes)
         // Add the base properties for each user = email, oauth token, and role;
         this.add({
-            username: String,
+            userId:{
+                type: String,
+                required: true,
+            },
+            platform: {
+                type: String,
+                required: true,
+                enum: Object.values(db.PLATFORMS)
+            },
+            name: String,
             email: String,
-            accessToken: String,
-            idToken: String,
-            password: String,
             roles: [
                 {
                     type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +28,10 @@ class UserSchema extends mongoose.Schema{
 }
 
 const userSchema = new UserSchema();
+// Enforce userId and platform combination to be unique
+userSchema.index({ userId: 1, platform: 1 }, { unique: true });
+
+
 const studentSchema = new UserSchema({
     schoolId: String,
     grade: String,
@@ -37,6 +47,8 @@ const teacherSchema = new UserSchema({
 const User = mongoose.model("User", userSchema)
 const Student = User.discriminator("Student", studentSchema);
 const Teacher = User.discriminator("Teacher", teacherSchema);
+
+
 
 
 export { User, Student, Teacher }

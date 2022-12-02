@@ -162,7 +162,7 @@ then
     echo "EMAIL_PASSWORD=KdPMjvvxchp6ps5YXq" >> $work_dir/backend/.env
     echo "EMAIL_FROM_ADDRESS=noreply@dwengo.org" >> $work_dir/backend/.env
     echo "EMAIL_FROM_NAME=\"Dwengo\"" >> $work_dir/backend/.env
-    echo "SERVER_URL=http://localhost:12032/" >> $work_dir/backend/.env
+    echo "SERVER_URL=http://localhost:12032" >> $work_dir/backend/.env
     echo "STATIC_SERVING_URL=http://localhost:12032/dwenguinoblockly" >> $work_dir/backend/.env
     
     # Configure start file
