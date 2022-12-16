@@ -46,6 +46,36 @@ Run `npm install` and use `npm run build-dev` to build the application. This mak
 
 ### Contributing
 
+# Running the application
+
+### Instal dependencies
+
+Install node and npm:
+
+```bash
+sudo apt update
+sudo apt install curl dirmngr apt-transport-https lsb-release ca-certificates vim
+sudo apt update
+curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+sudo apt install nodejs
+```
+
+Install mongodb
+
+```bash
+wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc |  gpg --dearmor | sudo tee /usr/share/keyrings/mongodb.gpg > /dev/null
+echo "deb [ arch=amd64,arm64 signed-by=/usr/share/keyrings/mongodb.gpg ] https://repo.mongodb.org/apt/ubuntu jammy/mongodb-org/6.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+sudo apt update
+sudo apt install mongodb-org
+```
+
+Install npm dependencies:
+```bash
+cd Blockly-for-Dwenguino
+npm install --legacy-peer-deps
+```
+
+
 We refer to [this styleguide](https://google.github.io/styleguide/jsguide.html) to help you contribute to the Dwenguinoblockly project. 
 
 The documentation can be accessed from the `docs` folder (`docs/index.html`). You can generate new documentation by running the following command: `./node_modules/.bin/jsdoc -c jsdoc-conf.json -r -d docs`.
