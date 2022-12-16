@@ -1,3 +1,7 @@
+import dotenv from 'dotenv';
+import path from "path"
+dotenv.config({path: path.resolve() + "/tests/.env"})
+
 import http from 'http'
 import { app, port } from "../../backend/server.js"
 import mongoose from 'mongoose';
@@ -7,6 +11,7 @@ let db = null;
 
 let startServer = () =>
 {
+    
     return new Promise((resolve, reject) => {
         setupDatabaseConnection();
         // Launch app to listen to specified port

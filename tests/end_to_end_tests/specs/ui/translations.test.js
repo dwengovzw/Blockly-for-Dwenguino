@@ -1,7 +1,4 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
-import {connectDb, dropDb } from "../../../util/db_connection.js"
-import http from 'http';
-import { app } from "../../../../backend/server.js"
 import puppeteer from 'puppeteer'
 import { startServer, endServer } from "../../../util/start_server.js"
 import { runDEToolboxRecording } from "../../actions/toolbox_clicks_de"
