@@ -163,7 +163,7 @@ void loop()
 void setup()
 {
   initDwenguino(); // Initialize all Dwenguino functionality.
-  LEDS = 0b00000001; // The horizontal row of leds is mapped to the `LEDS` variable.
+  LEDS = 0b00000001; // The horizontal row of leds is mapped to the 'LEDS' variable.
 }
 void loop()
 {
@@ -491,7 +491,7 @@ void loop()
 {
   // The loop function runs over and over again forever.
   digitalWrite(13, HIGH); // Turn the LED on pin 13 on (HIGH is the voltage level and equals 5V).
-  LEDS = 0b10101010;      // The horizontal row of leds is mapped to the `LEDS` variable.
+  LEDS = 0b10101010;      // The horizontal row of leds is mapped to the 'LEDS' variable.
   delay(1000);            // Wait for 1000 milliseconds, which equals 1 second.
   digitalWrite(13, LOW);  // Turn the LED on pin 13 off by making the voltage LOW (0V).
   LEDS = 0b01010101;      // Assign a new led pattern to the leds
