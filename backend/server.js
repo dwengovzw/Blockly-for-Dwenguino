@@ -55,7 +55,8 @@ let app = express();
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', process.env.VIEWS_DIR);   // For debug
+let viewDirs = JSON.parse(process.env.VIEWS_DIR).map((elem) => {return __dirname + "/" + elem})
+app.set('views', viewDirs);   // For debug
 //app.set('views', '../Blockly-for-Dwenguino');
 
 // Optimizations for production
