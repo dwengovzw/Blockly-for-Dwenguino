@@ -14,7 +14,7 @@ describe(
     let browser;
     beforeAll(async () => {
         await startServer();
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
         page = await browser.newPage();
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);
