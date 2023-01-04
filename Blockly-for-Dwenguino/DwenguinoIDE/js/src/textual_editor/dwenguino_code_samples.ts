@@ -163,7 +163,7 @@ void loop()
 void setup()
 {
   initDwenguino(); // Initialize all Dwenguino functionality.
-  LEDS = 0b00000001; // The horizontal row of leds is mapped to the `LEDS` variable.
+  LEDS = 0b00000001; // The horizontal row of leds is mapped to the 'LEDS' variable.
 }
 void loop()
 {
