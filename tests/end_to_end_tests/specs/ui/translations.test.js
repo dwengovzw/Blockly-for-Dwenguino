@@ -158,7 +158,7 @@ describe(
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     });*/
 
-    /*let runARToolboxRecordingWithoutErrors = "All toolbox menus in Arabic open without errors";
+    let runARToolboxRecordingWithoutErrors = "All toolbox menus in Arabic open without errors";
     it(runARToolboxRecordingWithoutErrors, async () => {
       console.info(runARToolboxRecordingWithoutErrors)
       let pageErrors = 0;
@@ -169,7 +169,7 @@ describe(
        });
       await runARToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });*/
+    });
 
     afterAll(async () => {
       browser.close()

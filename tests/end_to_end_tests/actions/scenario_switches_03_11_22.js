@@ -1,6 +1,6 @@
 import puppeteer from 'puppeteer'
 
-let runSwitchScenarioRecording = async () => {
+let runSwitchScenarioRecording = async (browser, page) => {
     const timeout = 10000;
     page.setDefaultTimeout(timeout);
 
