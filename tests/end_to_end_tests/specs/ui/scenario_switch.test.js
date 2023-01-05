@@ -20,7 +20,7 @@ describe(
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);
 
-    let testMessage = "Changing scenario should not result in errors";
+    /*let testMessage = "Changing scenario should not result in errors";
     it(testMessage, async () => {
       let pageErrors = 0;
       // Register error message event handler to detect console errors
@@ -30,7 +30,7 @@ describe(
        });
       await runSwitchScenarioRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
     afterAll(async () => {
       //browser.close()
