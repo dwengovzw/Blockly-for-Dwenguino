@@ -6,6 +6,8 @@ cd /home/node/deploy
 # Copy the .env files from the config directory on the server into the deploy directory
 cp /home/node/env/.env /home/node/deploy/.env
 
+ls /home/node/deploy
+
 # Give jenkins user write access to the compilation folder to be able to create the required files for compilation
 sudo chown -R node:node /home/node/deploy/backend/compilation
 
