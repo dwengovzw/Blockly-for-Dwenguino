@@ -36,7 +36,7 @@ let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
 // Load environment variables
-dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
+dotenv.config({path: __dirname + '/.env'}); // configure .env location
 
 let key, cert, ca = 0;
 let options = {}
