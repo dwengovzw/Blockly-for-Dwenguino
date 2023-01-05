@@ -20,7 +20,7 @@
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     },
-    "preset": "jest-puppeteer"
+    "preset": "jest-puppeteer" 
   },
   "description": "Logging server which provides unique session ids and receives logging data for all sessions running in the online version of google blockly",
   "main": "./backend/index.js",
