@@ -1,5 +1,6 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
 import puppeteer from 'puppeteer'
+import mongoose from 'mongoose';
 import { startServer, endServer } from "../../../util/start_server.js"
 import { runSwitchScenarioRecording } from "../../actions/scenario_switches_03_11_22.js"
 
@@ -32,7 +33,7 @@ describe(
     });
 
     afterAll(async () => {
-      browser.close()
+      //browser.close()
       await endServer();
     })
   },

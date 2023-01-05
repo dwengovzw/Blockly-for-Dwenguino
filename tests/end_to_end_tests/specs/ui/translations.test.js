@@ -3,6 +3,7 @@ import {connectDb, dropDb } from "../../../util/db_connection.js"
 import http from 'http';
 import { app } from "../../../../backend/server.js"
 import puppeteer from 'puppeteer'
+import mongoose from 'mongoose';
 import { startServer, endServer } from "../../../util/start_server.js"
 import { runDEToolboxRecording } from "../../actions/toolbox_clicks_de"
 import { runNLToolboxRecording } from "../../actions/toolbox_clicks_nl.js"
@@ -171,7 +172,7 @@ describe(
     });
 
     afterAll(async () => {
-      browser.close()
+      //browser.close()
       await endServer();
     })
   },
