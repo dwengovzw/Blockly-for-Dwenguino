@@ -25,7 +25,7 @@
   "description": "Logging server which provides unique session ids and receives logging data for all sessions running in the online version of google blockly",
   "main": "./backend/index.js",
   "scripts": {
-    "test": "node --input-type module --experimental-vm-modules node_modules/jest/bin/jest.js --detectOpenHandles",
+    "test": "node --input-type module --experimental-vm-modules node_modules/jest/bin/jest.js --setupFiles dotenv/config --detectOpenHandles",
     "start": "node --experimental-vm-modules backend/index.js",
     "build": "webpack --mode production --progress --config webpack.config.cjs",
     "build-dev": "webpack --mode development --progress --stats-error-details --config webpack.config.dev.cjs"
