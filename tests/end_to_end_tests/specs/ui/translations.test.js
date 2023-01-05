@@ -172,7 +172,7 @@ describe(
     });*/
 
     afterAll(async () => {
-      //browser.close()
+      browser.close()
       await endServer();
     })
   },
