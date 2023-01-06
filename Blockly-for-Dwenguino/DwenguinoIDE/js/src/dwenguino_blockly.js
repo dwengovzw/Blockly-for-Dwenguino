@@ -73,7 +73,7 @@ let DwenguinoBlockly = {
                 DwenguinoBlockly.compilationPath = `${settings.hostname}/utilities/getDwenguinoBinary`;
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                DwenguinoBlockly.compilationPath = ${settings.hostname} + "/utilities/getDwenguinoBinary"
+                DwenguinoBlockly.compilationPath = settings.hostname + "/utilities/getDwenguinoBinary"
                 console.log( errorThrown );
             }
         });
