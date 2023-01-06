@@ -65,15 +65,15 @@ let DwenguinoBlockly = {
            * Otherwise generate binary on the server.
            */
           $.ajax({
-            url: "http://localhost:12032/utilities/getEnvironment",
+            url: `${settings.hostname}/utilities/getEnvironment`,
             dataType: 'text',
             type: 'get',
             success: function( data, textStatus, jQxhr ){
                 console.log('succes');
-                DwenguinoBlockly.compilationPath = "http://localhost:12032/utilities/getDwenguinoBinary";
+                DwenguinoBlockly.compilationPath = `${settings.hostname}/utilities/getDwenguinoBinary`;
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                DwenguinoBlockly.compilationPath = ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary"
+                DwenguinoBlockly.compilationPath = ${settings.hostname} + "/utilities/getDwenguinoBinary"
                 console.log( errorThrown );
             }
         });
