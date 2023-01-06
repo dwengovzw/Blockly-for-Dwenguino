@@ -2,6 +2,7 @@
 
 # Get the environment from argument or set default
 env=${1:-dev.env}
+echo $env
 
 # Go to deploy directory
 cd /home/node/deploy
