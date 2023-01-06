@@ -58,6 +58,18 @@ router.post("/simulator", function(req, res) {
     handleSimulatorRequest(blocks_xml, res);
 })
 
+// load the application
+router.get("/", function(req, res) {
+    let blocks_xml = req.query.xml;
+    handleSimulatorRequest(blocks_xml, res);
+})
+
+// load the application with a program from xml
+router.post("/", function(req, res) {
+    let blocks_xml = req.body.xml;
+    handleSimulatorRequest(blocks_xml, res);
+})
+
 
 // load the application
 router.get("/readonly", function(req, res) {
