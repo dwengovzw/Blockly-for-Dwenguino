@@ -18,12 +18,12 @@ let corsOptions = {
 };
 
 // // Set default API response
-router.get('/', function (req, res) {
+/*router.get('/', function (req, res) {
     res.json({
         status: 'The system is working!',
         message: 'To the moon and back.'
     });
-});
+});*/
 
 let processStartBlocks = (startblock_xml, res, view="index.ejs") => {
     let blocks_xml = querystring.unescape(startblock_xml);
