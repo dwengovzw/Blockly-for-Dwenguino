@@ -715,7 +715,7 @@ let DwenguinoBlockly = {
             headers: {
               "Content-Type": "application/json"
             },
-            url: ServerConfig.getServerUrl() + "/lang",
+            url: settins.hostname + "/lang",
             data: JSON.stringify(data)}
         ).done(function(data){
             console.log(data);
@@ -753,7 +753,7 @@ let DwenguinoBlockly = {
           headers: {
             "Content-Type": "application/json"
           },
-          url: ServerConfig.getServerUrl() + "/lang",
+          url: settings.hostname + "/lang",
           data: JSON.stringify(data)}
       ).done(function(data){
           console.log(data);

@@ -31,7 +31,7 @@ class DwenguinoEventLogger {
         if (!this.sessionId){
             $.ajax({
                 type: "GET",
-                url: ServerConfig.getServerUrl() + "/logging/newSessionId"}
+                url: settings.hostname + "/logging/newSessionId"}
             ).done((data) => {
                 this.sessionId = data;
             }).fail(function(response, status)  {
