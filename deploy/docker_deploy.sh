@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# Get the environment from argument or set default
+env=${1:-dev.env}
+
 # Go to deploy directory
 cd /home/node/deploy
 
 # Copy the .env files from the config directory on the server into the deploy directory
-cp /var/environments/dev.env /home/node/deploy/.env
+cp /var/environments/$env /home/node/deploy/.env
 
 ls /home/node/deploy
 
