@@ -74,7 +74,7 @@ class DwenguinoEventLogger {
         if (this.sessionId !== undefined){
             $.ajax({
                 type: "POST",
-                url: ServerConfig.getServerUrl() + "/logging/event",
+                url: settings.hostname + "/logging/event",
                 headers: {
                     "Content-Type": "application/json"
                 },
