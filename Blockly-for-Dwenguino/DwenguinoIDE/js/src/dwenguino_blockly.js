@@ -715,7 +715,7 @@ let DwenguinoBlockly = {
             headers: {
               "Content-Type": "application/json"
             },
-            url: settins.hostname + "/lang",
+            url: settings.hostname + "/lang",
             data: JSON.stringify(data)}
         ).done(function(data){
             console.log(data);
