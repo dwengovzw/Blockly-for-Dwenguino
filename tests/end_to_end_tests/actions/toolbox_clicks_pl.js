@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
 
 let runPLToolboxRecording = async (browser, page) => {
-  const timeout = 1000000;
+  const timeout = 10000;
   page.setDefaultTimeout(timeout);
 
    {

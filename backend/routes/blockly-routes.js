@@ -18,12 +18,12 @@ let corsOptions = {
 };
 
 // // Set default API response
-router.get('/', function (req, res) {
+/*router.get('/', function (req, res) {
     res.json({
         status: 'The system is working!',
         message: 'To the moon and back.'
     });
-});
+});*/
 
 let processStartBlocks = (startblock_xml, res, view="index.ejs") => {
     let blocks_xml = querystring.unescape(startblock_xml);
@@ -34,7 +34,7 @@ let processStartBlocks = (startblock_xml, res, view="index.ejs") => {
     blocks_xml = blocks_xml.trim()  // remove whitespace
     //let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
     //let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
-    res.render(view, {blocks_xml: blocks_xml, form_target: process.env.SERVER_URL + "simulator"});
+    res.render(view, {blocks_xml: blocks_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "simulator"});
 }
 
 let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
@@ -42,7 +42,7 @@ let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
         processStartBlocks(blocks_xml, res, view);
     }else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
-        res.render(view, {blocks_xml: empty_program_xml, form_target: process.env.SERVER_URL + "simulator"});
+        res.render(view, {blocks_xml: empty_program_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "simulator"});
     }
 }
 
@@ -54,6 +54,18 @@ router.get("/simulator", function(req, res) {
 
 // load the application with a program from xml
 router.post("/simulator", function(req, res) {
+    let blocks_xml = req.body.xml;
+    handleSimulatorRequest(blocks_xml, res);
+})
+
+// load the application
+router.get("/", function(req, res) {
+    let blocks_xml = req.query.xml;
+    handleSimulatorRequest(blocks_xml, res);
+})
+
+// load the application with a program from xml
+router.post("/", function(req, res) {
     let blocks_xml = req.body.xml;
     handleSimulatorRequest(blocks_xml, res);
 })

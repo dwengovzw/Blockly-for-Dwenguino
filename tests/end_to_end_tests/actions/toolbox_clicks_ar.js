@@ -1,9 +1,7 @@
 import puppeteer from 'puppeteer'
 
-let runARToolboxRecording = async () => {
-    const browser = await puppeteer.launch();
-    const page = await browser.newPage();
-    const timeout = 5000;
+let runARToolboxRecording = async (browser, page) => {
+    const timeout = 10000;
     page.setDefaultTimeout(timeout);
 
    {

@@ -1,4 +1,3 @@
-import ServerConfig from '../server_config.js'
 
 /**
  * 
@@ -31,7 +30,7 @@ class DwenguinoEventLogger {
         if (!this.sessionId){
             $.ajax({
                 type: "GET",
-                url: ServerConfig.getServerUrl() + "/logging/newSessionId"}
+                url: settings.hostname + "/logging/newSessionId"}
             ).done((data) => {
                 this.sessionId = data;
             }).fail(function(response, status)  {
@@ -75,7 +74,7 @@ class DwenguinoEventLogger {
         if (this.sessionId !== undefined){
             $.ajax({
                 type: "POST",
-                url: ServerConfig.getServerUrl() + "/logging/event",
+                url: settings.hostname + "/logging/event",
                 headers: {
                     "Content-Type": "application/json"
                 },

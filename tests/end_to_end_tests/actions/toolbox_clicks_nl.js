@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer'
 
 let runNLToolboxRecording = async (browser, page) => {
-  const timeout = 1000000;
+  const timeout = 10000;
   page.setDefaultTimeout(timeout);
 
     {
@@ -13,6 +13,8 @@ let runNLToolboxRecording = async (browser, page) => {
         const promises = [];
         promises.push(targetPage.waitForNavigation());
         await targetPage.goto("http://localhost:12032/simulator?lang=nl");
+        const html = await targetPage.content();
+        console.log("-------------------->>>>>>>>>>>>>>> \n", html, "\n<<<<<<<<<<<<<<<<<<<-----------------")
         await Promise.all(promises);
     }
     {

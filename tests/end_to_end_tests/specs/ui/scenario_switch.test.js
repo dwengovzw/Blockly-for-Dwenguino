@@ -1,5 +1,6 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
 import puppeteer from 'puppeteer'
+import mongoose from 'mongoose';
 import { startServer, endServer } from "../../../util/start_server.js"
 import { runSwitchScenarioRecording } from "../../actions/scenario_switches_03_11_22.js"
 
@@ -14,7 +15,7 @@ describe(
     let browser;
     beforeAll(async () => {
         await startServer();
-        browser = await puppeteer.launch();
+        browser = await puppeteer.launch({ headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox']});
         page = await browser.newPage();
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);

@@ -36,7 +36,7 @@ let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
 // Load environment variables
-dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
+dotenv.config({path: __dirname + '/.env'}); // configure .env location
 
 let key, cert, ca = 0;
 let options = {}
@@ -54,7 +54,7 @@ console.log("SSL port: " + sslPort);
 let app = express();
 
 // Set view engine
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs');  
 let viewDirs = JSON.parse(process.env.VIEWS_DIR).map((elem) => {return __dirname + "/" + elem})
 app.set('views', viewDirs);   // For debug
 //app.set('views', '../Blockly-for-Dwenguino');
@@ -101,15 +101,9 @@ console.log(emailService);
 export default emailService;
 
 
-    // Setup static file serving
-if (process.env.NODE_ENV === 'production') {
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-} else if (process.env.NODE_ENV === 'standalone') {
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
-} else {
-    // Debug setup
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-}
+// Static files dir
+app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+
 
 // Set favicon
 app.get("/favicon.ico", (req, res) => {
