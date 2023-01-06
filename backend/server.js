@@ -101,15 +101,9 @@ console.log(emailService);
 export default emailService;
 
 
-    // Setup static file serving
-if (process.env.NODE_ENV === 'production') {
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-} else if (process.env.NODE_ENV === 'standalone') {
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, '..', 'Blockly-for-Dwenguino')));
-} else {
-    // Debug setup
-    app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
-}
+// Static files dir
+app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
+
 
 // Set favicon
 app.get("/favicon.ico", (req, res) => {

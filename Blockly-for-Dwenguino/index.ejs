@@ -317,8 +317,13 @@
         </div>
     </div>
 
-    <!-- import global settings-->
-    <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/src/settings.js"></script>
+    <!-- set base path for front end application-->
+    <script>
+        let settings = {
+            basepath: "<%- base_url %>/dwenguinoblockly/"
+        }
+    </script>
+    <!--<script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/src/settings.js"></script>-->
 
     <!-- import jquery -->
 

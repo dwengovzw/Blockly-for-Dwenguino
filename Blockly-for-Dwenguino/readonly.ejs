@@ -14,18 +14,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <title>Blockly Demo:</title>
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/all.css" rel="stylesheet">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/style.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/colors.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/bootstrap-grid.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/bootstrap-reboot.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/prettify.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/hopscotch.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/jquery.contextMenu.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/tutorials.css">
-    <link rel="stylesheet" href="/dwenguinoblockly/DwenguinoIDE/css/auto-complete.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/all.css" rel="stylesheet">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/style.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/colors.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/lib/jquery-ui/jquery-ui.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/bootstrap.min.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/bootstrap-grid.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/bootstrap-reboot.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/prettify.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/hopscotch.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/jquery.contextMenu.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/tutorials.css">
+    <link rel="stylesheet" href="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/css/auto-complete.css">
 </head>
 <body id="db_body">
     <!--Blockly is injected into the following div, therafter it is positioned over the db_blockly div -->
@@ -43,41 +43,41 @@
 
 
     <!-- import global settings-->
-    <script src="/dwenguinoblockly/DwenguinoIDE/js/src/settings.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/src/settings.js"></script>
 
     <!-- import jquery -->
 
 
-    <script src="/dwenguinoblockly/DwenguinoIDE/js/lib/jquery/jquery-3.1.1.min.js"></script>
-    <script src="/dwenguinoblockly/DwenguinoIDE/js/lib/jquery-ui/jquery-ui.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/lib/jquery/jquery-3.1.1.min.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/lib/jquery-ui/jquery-ui.js"></script>
 
     <!-- Import translation fallback file, needs to be loaded before Blockly and DwenguinoBlockly -->
-    <script src="/dwenguinoblockly/DwenguinoIDE/msg/fallback.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/msg/fallback.js"></script>
 
-    <script src="/dwenguinoblockly/blockly/blockly_uncompressed.js"></script>
-    <script src="/dwenguinoblockly/blockly/msg/messages.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blockly_uncompressed.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/msg/messages.js"></script>
 
-    <script src="/dwenguinoblockly/DwenguinoIDE/js/src/language_select.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/src/language_select.js"></script>
 
-    <script src="/dwenguinoblockly/blockly/generators/arduino.js"></script>
-    <script src="/dwenguinoblockly/blockly/generators/python.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/generators/arduino.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/generators/python.js"></script>
 
     <!-- Blockly block definitions -->
-    <script src="/dwenguinoblockly/blockly/blocks/logic.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/loops.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/math.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/text.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/lists.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/colour.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/variables.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/procedures.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/dwenguino_new.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/input.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/output_actuators.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/arduino.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/comments.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/drawingrobot.js"></script>
-    <script src="/dwenguinoblockly/blockly/blocks/conveyor.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/logic.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/loops.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/math.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/text.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/lists.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/colour.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/variables.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/procedures.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/dwenguino_new.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/input.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/output_actuators.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/arduino.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/comments.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/drawingrobot.js"></script>
+    <script src="<%- base_url %>/dwenguinoblockly/blockly/blocks/conveyor.js"></script>
 
     <script>
         let injectBlockly = function(){

@@ -573,7 +573,6 @@ let DwenguinoBlockly = {
 
         Blockly.Arduino.emptySetup();
         let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-       //DwenguinoBlockly.textualEditor.getEditorPane().openTab(code);
 
     },
 
@@ -871,7 +870,6 @@ let DwenguinoBlockly = {
         
         DwenguinoBlockly.initDwenguinoBlockly(workspace);
         DwenguinoBlockly.doTranslation();
-        //DwenguinoBlockly.setDifficultyLevel(0);
 
         DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
         DwenguinoBlockly.takeSnapshotOfWorkspace();
