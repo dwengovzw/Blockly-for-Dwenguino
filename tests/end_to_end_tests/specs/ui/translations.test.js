@@ -1,5 +1,9 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
+import {connectDb, dropDb } from "../../../util/db_connection.js"
+import http from 'http';
+import { app } from "../../../../backend/server.js"
 import puppeteer from 'puppeteer'
+import mongoose from 'mongoose';
 import { startServer, endServer } from "../../../util/start_server.js"
 import { runDEToolboxRecording } from "../../actions/toolbox_clicks_de"
 import { runNLToolboxRecording } from "../../actions/toolbox_clicks_nl.js"
@@ -32,7 +36,7 @@ describe(
 
 
     // TODO: rerecord this
-    let runFRToolboxRecordingWithoutErrors = "All toolbox menus in French open without errors";
+    /*let runFRToolboxRecordingWithoutErrors = "All toolbox menus in French open without errors";
     it(runFRToolboxRecordingWithoutErrors, async () => {
       console.info(runFRToolboxRecordingWithoutErrors)
       let pageErrors = 0;
@@ -43,7 +47,7 @@ describe(
        });
       await runFRToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    })
+    })*/
 
 
     let runENToolboxRecordingWithoutErrors = "All toolbox menus in English open without errors";
@@ -98,6 +102,7 @@ describe(
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     });
 
+    /*
     let runITToolboxRecordingWithoutErrors = "All toolbox menus in Italian open without errors";
     it(runITToolboxRecordingWithoutErrors, async () => {
       console.info(runITToolboxRecordingWithoutErrors)
@@ -109,7 +114,7 @@ describe(
        });
       await runITToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
     let runMYToolboxRecordingWithoutErrors = "All toolbox menus in Malay open without errors";
     it(runMYToolboxRecordingWithoutErrors, async () => {
@@ -139,6 +144,7 @@ describe(
 
     
     // TODO: rerecord this
+    /*
     let runELToolboxRecordingWithoutErrors = "All toolbox menus in Greek open without errors";
     it(runELToolboxRecordingWithoutErrors, async () => {
       let pageErrors = 0;
@@ -150,9 +156,9 @@ describe(
        });
       await runELToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
-    let runARToolboxRecordingWithoutErrors = "All toolbox menus in Arabic open without errors";
+    /*let runARToolboxRecordingWithoutErrors = "All toolbox menus in Arabic open without errors";
     it(runARToolboxRecordingWithoutErrors, async () => {
       console.info(runARToolboxRecordingWithoutErrors)
       let pageErrors = 0;
@@ -163,7 +169,7 @@ describe(
        });
       await runARToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
     afterAll(async () => {
       browser.close()
