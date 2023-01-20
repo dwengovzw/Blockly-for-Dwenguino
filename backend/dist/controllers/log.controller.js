@@ -1,10 +1,9 @@
 // Import contact model
-import Logitem from '../models/log_model.js';
+import Logitem from '../models/logitem.model.js';
 import uuidv4 from 'uuid/v4.js';
 import { EVENT_NAMES } from '../utils/event_names.js';
 import mongoose from 'mongoose';
 import Validator from '../utils/validator.js';
-let exports = {};
 let newSessionId = function (req, res) {
     let id = uuidv4();
     console.debug(id);
@@ -145,5 +144,5 @@ let exportLogItems = function (req, res) {
         res.status(200).send(logItems);
     });
 };
-export { newSessionId, getTotalNumberOfLogItems, getTotoalNumberOfRecentLogItems, getRecentLogItems, getRecent100LogItems, exportLogItems };
+export { event, newSessionId, getTotalNumberOfLogItems, getTotoalNumberOfRecentLogItems, getRecentLogItems, getRecent100LogItems, exportLogItems };
 //# sourceMappingURL=log.controller.js.map

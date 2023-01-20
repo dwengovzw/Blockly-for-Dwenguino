@@ -51,9 +51,8 @@ router.post("/readonly", function (req, res) {
 });
 // Import contact controller
 import UtilController from '../controllers/util.controller.js';
-const utilController = new UtilController();
 router.route('/lang')
-    .post(utilController.setLanguage);
+    .post(UtilController.setLanguage);
 /* Data collection */
 import { loggingRouter } from "./logging-routes.js";
 router.use("/logging", loggingRouter);

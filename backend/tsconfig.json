@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "target": "ESNext",                          
-      "module": "ES2015",  
+      "module": "NodeNext",  
       "moduleResolution": "NodeNext",                  
       "lib": ["es6"],                     
       "allowJs": true,
@@ -12,13 +12,14 @@
       "noImplicitAny": false,
       "esModuleInterop": true,
       "resolveJsonModule": true,
-      "sourceMap": true
+      "skipLibCheck": true,
+      "sourceMap": true,
+      "forceConsistentCasingInFileNames": true,
     },
     "exclude": [
       "compilation",
       "security",
       "dist",
-      "../node_modules/**",
-      "node_modules"
+      "../node_modules/**"
     ]
   }

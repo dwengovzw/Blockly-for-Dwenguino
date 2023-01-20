@@ -1,5 +1,8 @@
 // State to pass along with the OAuth authorize route
 class OAuthState {
+    platform;
+    originalTarget;
+    originalQuery;
     /**
      *
      * @param {*} platform The auth provider we are using

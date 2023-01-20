@@ -1,8 +1,9 @@
-import jwt from "jsonwebtoken"
+import * as jwt from "jsonwebtoken"
 import jwt_settings from "../config/jwt.config.js";
-import { User, IUserDoc } from "../models/users.model.js"
+import { User, IUserDoc, IUser } from "../models/users.model.js"
 import { Role } from "../models/role.model.js"
 import mongoose from "mongoose";
+import { Populated } from "../models/modelutils.js"
 
 
 class AbstractOAuthController {
@@ -26,15 +27,14 @@ class AbstractOAuthController {
             userId: minUserInfo.getUserId(),
             platform: minUserInfo.getPlatform()
         }).populate("roles", "-__v")
-          .exec(async (err, user) => {
+          .exec(async (err, u) => {
+            let user:Populated<IUserDoc, 'roles'> = u as Populated<IUserDoc, 'roles'>
             if (err) {
                 res.status(500).send({message: err})
             }
             // If user does not exist, create it
             if (!user){
-                user = await this.createUser(req, res, minUserInfo) as (IUserDoc & {
-                    _id: mongoose.Types.ObjectId;
-                });
+                user = await this.createUser(req, res, minUserInfo) as Populated<IUserDoc, 'roles'>
             }
             if (!user){
                 res.status(500).send({message: "Unable to create user"})            
@@ -43,11 +43,14 @@ class AbstractOAuthController {
             let token = jwt.sign({id: user?.userId, platform: user?.platform }, jwt_settings.secret as string, {
                 expiresIn: jwt_settings.expiresIn, // 24h
             })
-            var authorities = [];
+            var authorities:string[] = [];
   
-            for (let i = 0; i < user?.roles?.length; i++) {
-            authorities.push("ROLE_" + user?.roles?[i].name.toUpperCase());
+            if (user?.roles){
+                for (let i = 0; i < user?.roles.length; i++) {
+                    authorities.push("ROLE_" + user?.roles[i].name.toUpperCase());
+                    }
             }
+            
     
             req.session.token = token;
             //res.send(`<h1>Test</h1><p><a href="${process.env.SERVER_URL}${authState.originalTarget}?${authState.originalQuery}">Return to original page</a></p>`)

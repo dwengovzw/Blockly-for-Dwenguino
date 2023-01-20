@@ -1,9 +1,9 @@
 import express from 'express';
-import logcontroller from '../controllers/log.controller.js';
+import { newSessionId, event } from '../controllers/log.controller.js';
 let loggingRouter = express.Router();
 loggingRouter.route('/newSessionId')
-    .get(logcontroller.newSessionId);
+    .get(newSessionId);
 loggingRouter.route('/event')
-    .post(logcontroller.event);
+    .post(event);
 export { loggingRouter };
 //# sourceMappingURL=logging-routes.js.map

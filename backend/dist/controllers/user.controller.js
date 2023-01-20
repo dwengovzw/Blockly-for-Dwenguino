@@ -20,10 +20,10 @@ class UserController {
                     platform: platform,
                     userId: userId
                 });
-                if (!user || !user.name) {
+                if (!user || !user.firstname) {
                     res.status(401).send("No display name set");
                 }
-                return res.status(200).send(user?.name);
+                return res.status(200).send(user?.firstname);
             }
             catch (e) {
                 return res.status(401).send({ message: e });
@@ -39,10 +39,10 @@ class UserController {
                     platform: platform,
                     userId: userId
                 });
-                if (!user || !user.name) {
+                if (!user || !user.firstname) {
                     res.status(401).send("No display name set");
                 }
-                return res.status(200).send(user?.name);
+                return res.status(200).send(user?.firstname);
             }
             catch (e) {
                 return res.status(401).send({ message: e });

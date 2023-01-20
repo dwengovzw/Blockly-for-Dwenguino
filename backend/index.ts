@@ -1,5 +1,5 @@
-import dotenv from 'dotenv';
-import path from 'path';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 import { Role } from "./models/role.model.js"
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
@@ -8,7 +8,7 @@ console.log(`dirname: ${__dirname}`);
 dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
 
 import { app, port } from "./server.js";
-import http from 'http';
+import * as http from 'http';
 import mongoose from 'mongoose';
 
 const httpServer = http.createServer(app);

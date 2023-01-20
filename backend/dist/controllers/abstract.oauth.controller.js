@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import * as jwt from "jsonwebtoken";
 import jwt_settings from "../config/jwt.config.js";
 import { User } from "../models/users.model.js";
 import { Role } from "../models/role.model.js";
@@ -20,7 +20,8 @@ class AbstractOAuthController {
             userId: minUserInfo.getUserId(),
             platform: minUserInfo.getPlatform()
         }).populate("roles", "-__v")
-            .exec(async (err, user) => {
+            .exec(async (err, u) => {
+            let user = u;
             if (err) {
                 res.status(500).send({ message: err });
             }
@@ -31,12 +32,14 @@ class AbstractOAuthController {
             if (!user) {
                 res.status(500).send({ message: "Unable to create user" });
             }
-            let token = jwt.sign({ id: user.userId, platform: user.platform }, jwt_settings.secret, {
+            let token = jwt.sign({ id: user?.userId, platform: user?.platform }, jwt_settings.secret, {
                 expiresIn: jwt_settings.expiresIn, // 24h
             });
             var authorities = [];
-            for (let i = 0; i < user.roles.length; i++) {
-                authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
+            if (user?.roles) {
+                for (let i = 0; i < user?.roles.length; i++) {
+                    authorities.push("ROLE_" + user?.roles[i].name.toUpperCase());
+                }
             }
             req.session.token = token;
             //res.send(`<h1>Test</h1><p><a href="${process.env.SERVER_URL}${authState.originalTarget}?${authState.originalQuery}">Return to original page</a></p>`)

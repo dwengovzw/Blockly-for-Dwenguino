@@ -1,26 +1,26 @@
 import express from 'express';
-import utilscontroller from '../controllers/util.controller.js';
+import UtilController from '../controllers/util.controller.js';
 let utilitiesRouter = express.Router();
 utilitiesRouter.route('/clean')
-    .get(utilscontroller.clean);
+    .get(UtilController.clean);
 utilitiesRouter.route('/compile')
-    .get(utilscontroller.compile);
+    .get(UtilController.compile);
 utilitiesRouter.route('/upload')
-    .get(utilscontroller.upload);
+    .get(UtilController.upload);
 utilitiesRouter.route('/run')
-    .post(utilscontroller.run);
+    .post(UtilController.run);
 // Handle get and post of compilation in the same way
 utilitiesRouter.route('/getDwenguinoBinary')
     .get((req, res) => {
     req["data"] = req.query;
-    utilscontroller.getDwenguinoBinary(req, res);
+    UtilController.getDwenguinoBinary(req, res);
 });
 utilitiesRouter.route('/getDwenguinoBinary')
     .post((req, res) => {
     req["data"] = req.body;
-    utilscontroller.getDwenguinoBinary(req, res);
+    UtilController.getDwenguinoBinary(req, res);
 });
 utilitiesRouter.route('/getEnvironment')
-    .get(utilscontroller.getEnvironment);
+    .get(UtilController.getEnvironment);
 export { utilitiesRouter };
 //# sourceMappingURL=utilities-router.js.map

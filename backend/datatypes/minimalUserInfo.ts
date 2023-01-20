@@ -1,5 +1,10 @@
 class MinimalUserInfo {
-    roles = [];
+    userId: string;
+    platform: string;
+    name: string;
+    email: string;
+    role: string;
+    roles: string[] = [];
 
     constructor(userId, platform, name, email, role){
         this.userId = userId;

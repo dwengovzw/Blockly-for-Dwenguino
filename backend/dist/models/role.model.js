@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import db from "../config/db.config.js";
-const Role = mongoose.model("Role", new mongoose.Schema({
+const RoleSchemaFields = {
     name: {
         type: String,
         required: true,
@@ -8,6 +8,8 @@ const Role = mongoose.model("Role", new mongoose.Schema({
         trim: true,
         enum: Object.values(db.ROLES),
     }
-}));
+};
+const RoleSchema = new mongoose.Schema(RoleSchemaFields);
+const Role = mongoose.model('Role', RoleSchema);
 export { Role };
 //# sourceMappingURL=role.model.js.map

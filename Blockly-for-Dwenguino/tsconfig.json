@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+      "outDir": "./Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
+      "noImplicitAny": true,
+      "module": "es6",
+      "target": "es6",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "importHelpers": false,
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "types": ["jquery"],
+      "lib": [
+        "DOM",
+        "ES6"
+      ],
+    },
+    "exclude": [
+      "**/node_modules/*",
+      "Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
+      "Blockly-for-Dwenguino/dashboards/js/dist",
+      "**/.git/*",
+      "**/dist/*",
+      "Blockly-for-Dwenguino/blockly/*",
+      "Blockly-for-Dwenguino/closure/*",
+    ]
+  }

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import db from "../config/db.config.js";
-import isEmail from 'validator/es/lib/isEmail.js';
+import { SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js";
 const UserSchemaFields = {
     userId: {
         type: String,
@@ -15,12 +15,9 @@ const UserSchemaFields = {
     lastname: String,
     email: {
         type: String,
-        validate: [isEmail, ""]
+        //validate: [isEmail, ""]
     },
-    savedEnvironmentState: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SavedState"
-    },
+    savedEnvironmentState: SavedEnvironmentStateSchema,
     birthdate: Date,
     roles: [
         {
@@ -32,15 +29,13 @@ const UserSchemaFields = {
 const UserSchema = new mongoose.Schema(UserSchemaFields);
 const User = mongoose.model('User', UserSchema);
 const StudentSchemaFields = {
-    ...UserSchemaFields,
     schoolId: String,
     grade: String
 };
 const StudentSchema = new mongoose.Schema(StudentSchemaFields);
 const Student = User.discriminator('Student', StudentSchema);
-const TeacherSchemaFields = {
-    ...UserSchemaFields
-};
+const TeacherSchemaFields = {};
 const TeacherSchema = new mongoose.Schema(TeacherSchemaFields);
 const Teacher = User.discriminator('Teacher', TeacherSchema);
+export { User, Teacher, Student };
 //# sourceMappingURL=users.model.js.map

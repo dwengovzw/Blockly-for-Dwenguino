@@ -1,13 +1,11 @@
 // Import contact model
-import Logitem from '../models/log_model.js';
+import Logitem from '../models/logitem.model.js';
 import uuidv4 from 'uuid/v4.js';
 import { EVENT_NAMES } from '../utils/event_names.js';
 import mongoose from 'mongoose';
 import Validator from '../utils/validator.js';
 
 import { Worker, isMainThread, parentPort } from 'worker_threads';
-
-let exports = {};
 
 let newSessionId = function(req, res) {
     let id = uuidv4();
@@ -173,4 +171,4 @@ let exportLogItems = function(req, res) {
   });
 }
 
-export { newSessionId, getTotalNumberOfLogItems, getTotoalNumberOfRecentLogItems, getRecentLogItems, getRecent100LogItems, exportLogItems };
+export { event, newSessionId, getTotalNumberOfLogItems, getTotoalNumberOfRecentLogItems, getRecentLogItems, getRecent100LogItems, exportLogItems };

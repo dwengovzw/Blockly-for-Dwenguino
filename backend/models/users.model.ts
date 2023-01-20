@@ -1,8 +1,9 @@
 import mongoose from "mongoose"
 import db from "../config/db.config.js"
-import isEmail from 'validator/es/lib/isEmail.js';
-
-
+//import isEmail from 'validator/es/lib/isEmail.js';
+import { IRoleDoc } from './role.model.js'
+import { ID } from "./modelutils.js"
+import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
 
 
 interface IUserShared {
@@ -11,7 +12,7 @@ interface IUserShared {
     firstname?: string,
     lastname?: string,
     email?: string,
-    savedEnvironmentState?: mongoose.Types.ObjectId,
+    savedEnvironmentState?: ISavedEnvironmentState,
     birthdate?: Date,
 }
 
@@ -20,13 +21,13 @@ interface IUserFrontend extends IUserShared {
 
 }
 
-interface IUserBackend extends IUserShared {
-    roles?: mongoose.Types.ObjectId[]
+interface IUser extends IUserShared {
+    roles?: ID[] | IRoleDoc[]
 }
 
-interface IUserDoc extends IUserBackend, mongoose.Document {}
+interface IUserDoc extends IUser , mongoose.Document {}
 
-const UserSchemaFields: Record<keyof IUserBackend, any> = 
+const UserSchemaFields: Record<keyof IUser, any> = 
 {
     userId:{
         type: String,
@@ -41,12 +42,9 @@ const UserSchemaFields: Record<keyof IUserBackend, any> =
     lastname: String,
     email: {
         type: String,
-        validate: [isEmail, ""]
+        //validate: [isEmail, ""]
     },
-    savedEnvironmentState: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SavedState"
-    },
+    savedEnvironmentState: SavedEnvironmentStateSchema,
     birthdate: Date,
     roles: [
         {
@@ -59,16 +57,18 @@ const UserSchema = new mongoose.Schema(UserSchemaFields)
 const User = mongoose.model<IUserDoc>('User', UserSchema)
 
 
-
-
-interface IStudent extends IUserBackend {
+// This is needed because for mongoose a discriminator type only contains new fields.
+// These the fields of the base type are automatically added to the subtype.
+// Since we want the IStudent interface to have all fields it combines the fields of
+// the super type (IUser) and the IStudentExtraFields type.
+interface IStudentExtraFields {
     schoolId?: String,
     grade?: String,
 }
+interface IStudent extends IUser, IStudentExtraFields {}
 interface IStudentDoc extends IStudent, mongoose.Document {}
-const StudentSchemaFields: Record<keyof IStudent, any> = 
+const StudentSchemaFields: Record<keyof IStudentExtraFields, any> = 
 {
-    ...UserSchemaFields,
     schoolId: String,
     grade: String
 }
@@ -77,17 +77,16 @@ interface IStudentModel extends mongoose.Model<IStudentDoc> {}
 const Student = User.discriminator<IStudentDoc, IStudentModel>('Student', StudentSchema)
 
 
-
-interface ITeacher extends IUserBackend {
-    // Empty for now, add fields if needed
+interface ITeacherExtraFields {
+// Empty for now, add fields if needed
 }
+interface ITeacher extends IUser, ITeacherExtraFields {}
 interface ITeacherDoc extends ITeacher, mongoose.Document {}
-const TeacherSchemaFields: Record<keyof ITeacher, any> = 
+const TeacherSchemaFields: Record<keyof ITeacherExtraFields, any> = 
 {
-    ...UserSchemaFields
 }
 const TeacherSchema = new mongoose.Schema(TeacherSchemaFields)
 interface ITeacherModel extends mongoose.Model<ITeacherDoc> {}
 const Teacher = User.discriminator<ITeacherDoc, ITeacherModel>('Teacher', TeacherSchema)
 
-export { User, Teacher, Student, IUserBackend, IUserFrontend, IUserShared, ITeacher, IStudent, IUserDoc, IStudentDoc, ITeacherDoc }
+export { User, Teacher, Student, IUser, IUserFrontend, IUserShared, ITeacher, IStudent, IUserDoc, IStudentDoc, ITeacherDoc } 
