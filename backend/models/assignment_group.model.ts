@@ -1,15 +1,14 @@
 import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
-import { IStudentTeamDoc } from "./student_team.model.js"
-import { IClassGroupDoc } from "./class_group.model.js"
+import { IStudentTeam } from "./student_team.model.js"
+import { IClassGroup } from "./class_group.model.js"
 
 interface IAssignmentGroup {
     name: string,
     description?: string,
-    studentTeams: ID[] | IStudentTeamDoc[],
-    inClassGroup: ID | IClassGroupDoc
+    studentTeams: ID[] | IStudentTeam[],
+    inClassGroup: ID | IClassGroup
 }
-interface IAssignmentGroupDoc extends IAssignmentGroup, Document {}
 const AssignmentGroupFields: Record<keyof IAssignmentGroup, any> = {
     name: {
         type: String,
@@ -27,11 +26,10 @@ const AssignmentGroupFields: Record<keyof IAssignmentGroup, any> = {
         ref: 'ClassGroup'
     }
 }
-const AssignmentGroupSchema = new Schema(AssignmentGroupFields)
-const AssignmentGroup = model<IAssignmentGroupDoc>('AssignmentGroup', AssignmentGroupSchema)
+const AssignmentGroupSchema = new Schema<IAssignmentGroup>(AssignmentGroupFields)
+const AssignmentGroup = model<IAssignmentGroup>('AssignmentGroup', AssignmentGroupSchema)
 
 export  {
     IAssignmentGroup,
-    IAssignmentGroupDoc,
     AssignmentGroup
 }

@@ -1,20 +1,12 @@
-import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
-import {connectDb, dropDb } from "../../../util/db_connection.js"
-import http from 'http';
-import { app } from "../../../../backend/server.js"
+import {afterAll, expect, jest, describe, beforeAll} from '@jest/globals'
 import puppeteer from 'puppeteer'
-import mongoose from 'mongoose';
-import { startServer, endServer } from "../../../util/start_server.js"
+import { startServer, endServer } from "../../../../util/start_server.js"
 import { runDEToolboxRecording } from "../../actions/toolbox_clicks_de"
 import { runNLToolboxRecording } from "../../actions/toolbox_clicks_nl.js"
 import { runENToolboxRecording } from "../../actions/toolbox_clicks_en.js"
 import { runESToolboxRecording } from "../../actions/toolbox_clicks_es.js"
-import { runITToolboxRecording } from "../../actions/toolbox_clicks_it.js"
 import { runMYToolboxRecording } from "../../actions/toolbox_clicks_my.js"
 import { runPLToolboxRecording } from "../../actions/toolbox_clicks_pl.js"
-import { runFRToolboxRecording } from "../../actions/toolbox_clicks_fr.js"
-import { runELToolboxRecording } from "../../actions/toolbox_clicks_el.js"
-import { runARToolboxRecording } from "../../actions/toolbox_clicks_ar.js"
 
 const timeout = 5000;
 

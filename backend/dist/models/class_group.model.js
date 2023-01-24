@@ -11,18 +11,24 @@ const ClassGroupFields = {
                 type: Schema.Types.ObjectId,
                 ref: 'Teacher',
             }],
+        required: true,
+        default: [],
         validate: v => Array.isArray(v) && v.length > 0,
     },
     awaitingStudents: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student'
+            ref: 'Student',
+            required: true,
+            default: []
         }
     ],
     students: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student'
+            ref: 'Student',
+            required: true,
+            default: []
         }
     ]
 };

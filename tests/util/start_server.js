@@ -1,5 +1,5 @@
 import http from 'http'
-import { app, port } from "../../backend/server.js"
+import { app, port } from "../../backend/dist/server.js"
 import mongoose from 'mongoose';
 
 const httpServer = http.createServer(app);

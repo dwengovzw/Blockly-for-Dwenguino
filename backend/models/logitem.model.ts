@@ -1,17 +1,16 @@
 import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
-import { IUserDoc } from "./users.model.js";
+import { IUser } from "./user.model.js";
 
 interface ILogItem {
     timestamp: Date,
-    userId?: ID | IUserDoc,
+    userId?: ID | IUser,
     sessionId?: string,
     activityId?: number,
     eventName: string,
     data?: string,
     functionalVector?: [],
 }
-interface ILogItemDoc extends ILogItem, Document{}
 const LogSchemaFields: Record<keyof ILogItem, any> = {
     timestamp: {
         type: Date,
@@ -45,13 +44,13 @@ const LogSchemaFields: Record<keyof ILogItem, any> = {
 }
 
 // Setup schema
-const LogItemSchema = new Schema(LogSchemaFields);
-const LogItem = model('loggings', LogItemSchema);
+const LogItemSchema = new Schema<ILogItem>(LogSchemaFields);
+const LogItem = model<ILogItem>('loggings', LogItemSchema);
 
 let getLogItem = function (callback, limit) {
     LogItem.find(callback).limit(limit);
 }
 
-export { getLogItem, ILogItem, ILogItemDoc, LogSchemaFields, LogItemSchema }
+export { getLogItem, ILogItem, LogSchemaFields, LogItemSchema }
 
 export default LogItem;

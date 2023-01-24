@@ -1,7 +1,7 @@
-import * as jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken"
 import jwt_settings from "../config/jwt.config.js";
-import { User, IUserDoc, IUser } from "../models/users.model.js"
-import { Role } from "../models/role.model.js"
+import { User, IUser } from "../models/user.model.js"
+import { IRole, Role } from "../models/role.model.js"
 import mongoose from "mongoose";
 import { Populated } from "../models/modelutils.js"
 
@@ -26,56 +26,45 @@ class AbstractOAuthController {
         User.findOne({
             userId: minUserInfo.getUserId(),
             platform: minUserInfo.getPlatform()
-        }).populate("roles", "-__v")
-          .exec(async (err, u) => {
-            let user:Populated<IUserDoc, 'roles'> = u as Populated<IUserDoc, 'roles'>
+        }).exec(async (err, u) => {
+            let user:IUser = u as IUser
             if (err) {
                 res.status(500).send({message: err})
             }
             // If user does not exist, create it
             if (!user){
-                user = await this.createUser(req, res, minUserInfo) as Populated<IUserDoc, 'roles'>
+                user = await this.createUser(req, res, minUserInfo) as IUser
+                if (!user){
+                    res.status(500).send({message: "Unable to create user"})            
+                }
             }
-            if (!user){
-                res.status(500).send({message: "Unable to create user"})            
-            }
+            
 
             let token = jwt.sign({id: user?.userId, platform: user?.platform }, jwt_settings.secret as string, {
                 expiresIn: jwt_settings.expiresIn, // 24h
-            })
-            var authorities:string[] = [];
-  
-            if (user?.roles){
-                for (let i = 0; i < user?.roles.length; i++) {
-                    authorities.push("ROLE_" + user?.roles[i].name.toUpperCase());
-                    }
-            }
-            
+            })        
     
             req.session.token = token;
-            //res.send(`<h1>Test</h1><p><a href="${process.env.SERVER_URL}${authState.originalTarget}?${authState.originalQuery}">Return to original page</a></p>`)
-            res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery ? "?" + authState.originalQuery : ""}`)
+            //res.send(`<h1>Test</h1><p><a href="http://${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}">Return to original page</a></p>`)
+            res.redirect(`http://${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
             //Save new cookie in session and redirect
         })
     }
 
     async createUser(req, res, minUserInfo){
-        const user = new User({
+        const roles: IRole[] = minUserInfo.getRoles().map(role => new Role({name: role}))
+        const userInit: IUser = {
             userId: minUserInfo.getUserId(),
             platform: minUserInfo.getPlatform(),
             email: minUserInfo.getEmail(),
-            name: minUserInfo.getName()
-        })
+            firstname: minUserInfo.getName(),
+            roles: roles
+        }
+        const user = new User(userInit)
         try {
             let newUser = await user.save();
-            let roles = await Role.find(
-                {
-                    name: { $in: minUserInfo.getRoles() }
-                }
-            )
-            newUser.roles = roles.map((role) => role._id)
             // Return new user with roles populated.
-            return await (await newUser.save()).populate("roles", "-__v");
+            return newUser
         } catch (err){
             res.status(500).send({message: err});
         }

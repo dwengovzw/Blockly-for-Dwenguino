@@ -1,20 +1,22 @@
 import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
-import { IUserDoc } from "./users.model.js"
+import { IUser } from "./user.model.js"
 
 interface ISavedProgram {
     blocklyXml: string,
-    savedAt?: Date,
+    savedAt: Date,
     name: string,
-    user: ID | IUserDoc
+    user: ID | IUser
 }
-interface ISavedProgramDoc extends ISavedProgram, Document {}
 const SavedProgramFields: Record<keyof ISavedProgram, any> = {
     blocklyXml: {
         type: String,
         required: true
     },
-    savedAt: Date,
+    savedAt: {
+        type: Date,
+        required: true
+    },
     name: {
         required: true,
         type: String
@@ -25,7 +27,7 @@ const SavedProgramFields: Record<keyof ISavedProgram, any> = {
         ref: 'User'
     }
 }
-const SavedProgramSchema = new Schema(SavedProgramFields)
-const SavedProgram = model<ISavedProgramDoc>('SavedProgram', SavedProgramSchema)
+const SavedProgramSchema = new Schema<ISavedProgram>(SavedProgramFields)
+const SavedProgram = model<ISavedProgram>('SavedProgram', SavedProgramSchema)
 
-export { SavedProgram, ISavedProgram, ISavedProgramDoc }
+export { SavedProgram, ISavedProgram }

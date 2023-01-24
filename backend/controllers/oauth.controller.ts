@@ -40,6 +40,12 @@ class OAuthController {
             res.status(401).send({ message: "Authentication failed! Unknown OAuth platform" });
         }
     }
+
+    logout(req, res){
+        req.session.token = null;
+        res.redirect("/dashboard")
+        //res.status(200).send({message: "Logout successful"})
+    }
 }
 
 export { OAuthController }

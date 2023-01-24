@@ -4,7 +4,10 @@ const SavedProgramFields = {
         type: String,
         required: true
     },
-    savedAt: Date,
+    savedAt: {
+        type: Date,
+        required: true
+    },
     name: {
         required: true,
         type: String

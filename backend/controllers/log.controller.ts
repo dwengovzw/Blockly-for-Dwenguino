@@ -31,7 +31,7 @@ let event = function(req, res) {
     if (req.user){
       logitem.userId = req.user._id;
     } else {
-      logitem.userId = "anonymous"
+      //logitem.userId = "anonymous"
     }
     
     logitem.sessionId = sessionId;

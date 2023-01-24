@@ -1,21 +1,20 @@
-import { Document, Schema, model } from "mongoose"
+import { Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
 import { v4 as uuidv4 } from 'uuid'
-import { ITeacherDoc } from "./users.model.js";
-import { IPortfolioItemDoc } from "./portfolio_items/portfolio_item.model.js";
+import { ITeacher } from "./user.model.js";
+import { IPortfolioItem } from "./portfolio_items/portfolio_item.model.js";
 
 interface IPortfolio {
     created: Date,
     lastEdited: Date,
     name: string,
     description?: string,
-    sharedWith?: ID[] | ITeacherDoc[],
+    sharedWith?: ID[] | ITeacher[],
     isPublic: boolean,
     publicId: string,
     folder?: string,
-    items: ID[] | IPortfolioItemDoc[]
+    items: ID[] | IPortfolioItem[]
 }
-interface IPortfolioDoc extends IPortfolio, Document{}
 const PortfolioFields: Record<keyof IPortfolio, any> = {
     created: {
         type: Date,
@@ -56,11 +55,10 @@ const PortfolioFields: Record<keyof IPortfolio, any> = {
         }
     ]
 }
-const PortfolioSchema = new Schema(PortfolioFields)
-const Portfolio = model<IPortfolioDoc>('Portfolio', PortfolioSchema)
+const PortfolioSchema = new Schema<IPortfolio>(PortfolioFields)
+const Portfolio = model<IPortfolio>('Portfolio', PortfolioSchema)
 
 export {
     IPortfolio,
-    IPortfolioDoc,
     Portfolio
 }

@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
 import db from "../config/db.config.js"
 import jwt_settings from "../config/jwt.config.js";
-import { User } from "../models/users.model.js"
+import { User } from "../models/user.model.js"
 import { Role } from "../models/role.model.js"
 
 
@@ -37,27 +37,14 @@ let roleCheck = (role) => {
                 res.status(500).send({ message: err });
                 return;
             }
-    
-            Role.find(
-                {
-                _id: { $in: user.roles },
-                },
-                (err, roles) => {
-                if (err) {
-                    res.status(500).send({ message: err });
-                    return;
-                }
-        
-                for (let i = 0; i < roles.length; i++) {
-                    if (roles[i].name === role) {
-                    next();
-                    return;
-                    }
-                }
-                res.status(403).send({ message: "You do not have the authority to access this route!" });
+            for (let i = 0; i < user.roles.length; i++) {
+                if (user.roles[i].name === role) {
+                next();
                 return;
                 }
-            );
+            }
+            res.status(403).send({ message: "You do not have the authority to access this route!" });
+            return;
         });
   }
 }

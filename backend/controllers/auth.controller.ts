@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken"
+/*import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import db from "../config/db.config.js"
 import jwt_settings from "../config/jwt.config.js";
@@ -117,4 +117,4 @@ let signup = (req, res) => {
     }
   };
 
-  export { signup, signin, signout }
+  export { signup, signin, signout }*/

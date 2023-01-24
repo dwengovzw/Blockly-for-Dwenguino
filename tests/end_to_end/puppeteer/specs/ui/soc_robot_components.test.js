@@ -1,6 +1,6 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
 import puppeteer from 'puppeteer'
-import { startServer, endServer } from "../../../util/start_server.js"
+import { startServer, endServer } from "../../../../util/start_server.js"
 import { runAddRemoveComponentsWithScenarioSwitchRecording } from "../../actions/adding_removing_soc_robot_compontents_with_scenario_switch2.js"
 
 const timeout = 5000;

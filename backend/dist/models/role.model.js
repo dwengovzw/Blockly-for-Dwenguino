@@ -11,5 +11,5 @@ const RoleSchemaFields = {
 };
 const RoleSchema = new mongoose.Schema(RoleSchemaFields);
 const Role = mongoose.model('Role', RoleSchema);
-export { Role };
+export { Role, RoleSchema };
 //# sourceMappingURL=role.model.js.map

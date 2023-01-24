@@ -1,0 +1,11 @@
+{
+    "testEnvironment": "jsdom",
+    "moduleNameMapper": {
+      "@exmpl/(.*)": "<rootDir>/src/$1"
+    },
+    "transform": {},
+    "verbose": true,
+    "testMatch": [
+      "<rootDir>/**/*.test.js"
+    ]
+  }

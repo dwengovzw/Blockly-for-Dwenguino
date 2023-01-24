@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import db from "../config/db.config.js";
+import validator from 'validator';
 import { SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js";
 const UserSchemaFields = {
     userId: {
@@ -15,7 +16,7 @@ const UserSchemaFields = {
     lastname: String,
     email: {
         type: String,
-        //validate: [isEmail, ""]
+        validate: [validator.default.isEmail, ""]
     },
     savedEnvironmentState: SavedEnvironmentStateSchema,
     birthdate: Date,

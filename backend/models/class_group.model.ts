@@ -1,16 +1,15 @@
 import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
-import { IStudentDoc, ITeacherDoc, IUserDoc } from "./users.model.js"
+import { IStudent, ITeacher, IUser } from "./user.model.js"
 
 interface IClassGroup {
     name: string,
     sharingCode?: string,
     description?: string,
-    ownedBy: ID[] | ITeacherDoc[],
-    awaitingStudents: ID[] | IStudentDoc[],
-    students: ID[] | IStudentDoc[]
+    ownedBy: ID[] | ITeacher[],
+    awaitingStudents: ID[] | IStudent[],
+    students: ID[] | IStudent[]
 }
-interface IClassGroupDoc extends IClassGroup, Document {}
 const ClassGroupFields: Record<keyof IClassGroup, any> = {
     name: {
         type: String,
@@ -23,26 +22,31 @@ const ClassGroupFields: Record<keyof IClassGroup, any> = {
             type: Schema.Types.ObjectId,
             ref: 'Teacher',
         }],
+        required: true,
+        default: [],
         validate: v => Array.isArray(v) && v.length > 0,
     },
     awaitingStudents: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student'
+            ref: 'Student', 
+            required: true, 
+            default: []
         }
     ],
     students:[
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student'
+            ref: 'Student',
+            required: true,
+            default: []
         }
     ]
 }
-const ClassGroupSchema = new Schema(ClassGroupFields)
-const ClassGroup = model<IClassGroupDoc>('ClassGroup', ClassGroupSchema)
+const ClassGroupSchema = new Schema<IClassGroup>(ClassGroupFields)
+const ClassGroup = model<IClassGroup>('ClassGroup', ClassGroupSchema)
 
 export {
     IClassGroup,
-    IClassGroupDoc,
     ClassGroup
 }

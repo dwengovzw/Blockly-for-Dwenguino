@@ -5,19 +5,17 @@ interface ISocialRobotDesignItemExtraFields {
     socialRobotDesignXml: string
 }
 interface ISocialRobotDesignItem extends ISolutionItem, ISocialRobotDesignItemExtraFields {}
-interface ISocialRobotDesignItemDoc extends ISocialRobotDesignItem, Document {}
 const SocialRobotDesignItemSchemaFields: Record<keyof ISocialRobotDesignItemExtraFields, any> = {
     socialRobotDesignXml: {
         type: String,
         required: true
     }
 }
-const SocialRobotDesignItemSchema = new Schema(SocialRobotDesignItemSchemaFields)
-interface ISocialRobotDesignItemModel extends Model<ISocialRobotDesignItemDoc>{}
-const SocialRobotDesignItem = SolutionItem.discriminator<ISocialRobotDesignItemDoc, ISocialRobotDesignItemModel>('SocialRobotDesignItem', SocialRobotDesignItemSchema)
+const SocialRobotDesignItemSchema = new Schema<ISocialRobotDesignItem>(SocialRobotDesignItemSchemaFields)
+interface ISocialRobotDesignItemModel extends Model<ISocialRobotDesignItem>{}
+const SocialRobotDesignItem = SolutionItem.discriminator<ISocialRobotDesignItem, ISocialRobotDesignItemModel>('SocialRobotDesignItem', SocialRobotDesignItemSchema)
 
 export {
     ISocialRobotDesignItem,
-    ISocialRobotDesignItemDoc,
     SocialRobotDesignItem
 }

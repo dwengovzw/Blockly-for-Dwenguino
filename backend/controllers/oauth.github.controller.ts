@@ -12,6 +12,12 @@ class GithubOAuthController extends AbstractOAuthController{
         super();
     }
 
+    /**
+     * Redirect the user to the OAuth login url of the platform they have chosen
+     * @param req express request
+     * @param res express response
+     * @param authState contains information about the OAuth provider to be used.
+     */
     login(req, res, authState) {
         if (authState.platform !== db.PLATFORMS.github){
             return res.status(500).send({message: "Internal server error: platform name does not match controller."})

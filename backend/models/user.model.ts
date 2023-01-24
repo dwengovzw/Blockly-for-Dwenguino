@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 import db from "../config/db.config.js"
-//import isEmail from 'validator/es/lib/isEmail.js';
-import { IRoleDoc } from './role.model.js'
+//import { isEmail } from 'validator/es/index.js'
+import { IRole, RoleSchema } from './role.model.js'
 import { ID } from "./modelutils.js"
 import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
 
@@ -22,10 +22,8 @@ interface IUserFrontend extends IUserShared {
 }
 
 interface IUser extends IUserShared {
-    roles?: ID[] | IRoleDoc[]
+    roles?: IRole[]
 }
-
-interface IUserDoc extends IUser , mongoose.Document {}
 
 const UserSchemaFields: Record<keyof IUser, any> = 
 {
@@ -36,6 +34,7 @@ const UserSchemaFields: Record<keyof IUser, any> =
     platform: {
         type: String,
         required: true,
+        trim: true, 
         enum: Object.values(db.PLATFORMS)
     },
     firstname: String,
@@ -46,15 +45,13 @@ const UserSchemaFields: Record<keyof IUser, any> =
     },
     savedEnvironmentState: SavedEnvironmentStateSchema,
     birthdate: Date,
-    roles: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Role"
+    roles: [{
+            type: RoleSchema
         }
     ]
 }
-const UserSchema = new mongoose.Schema(UserSchemaFields)
-const User = mongoose.model<IUserDoc>('User', UserSchema)
+const UserSchema = new mongoose.Schema<IUser>(UserSchemaFields)
+const User = mongoose.model<IUser>('User', UserSchema)
 
 
 // This is needed because for mongoose a discriminator type only contains new fields.
@@ -66,27 +63,25 @@ interface IStudentExtraFields {
     grade?: String,
 }
 interface IStudent extends IUser, IStudentExtraFields {}
-interface IStudentDoc extends IStudent, mongoose.Document {}
 const StudentSchemaFields: Record<keyof IStudentExtraFields, any> = 
 {
     schoolId: String,
     grade: String
 }
-const StudentSchema = new mongoose.Schema(StudentSchemaFields)
-interface IStudentModel extends mongoose.Model<IStudentDoc> {}
-const Student = User.discriminator<IStudentDoc, IStudentModel>('Student', StudentSchema)
+const StudentSchema = new mongoose.Schema<IStudent>(StudentSchemaFields)
+interface IStudentModel extends mongoose.Model<IStudent> {}
+const Student = User.discriminator<IStudent, IStudentModel>('Student', StudentSchema)
 
 
 interface ITeacherExtraFields {
 // Empty for now, add fields if needed
 }
 interface ITeacher extends IUser, ITeacherExtraFields {}
-interface ITeacherDoc extends ITeacher, mongoose.Document {}
 const TeacherSchemaFields: Record<keyof ITeacherExtraFields, any> = 
 {
 }
-const TeacherSchema = new mongoose.Schema(TeacherSchemaFields)
-interface ITeacherModel extends mongoose.Model<ITeacherDoc> {}
-const Teacher = User.discriminator<ITeacherDoc, ITeacherModel>('Teacher', TeacherSchema)
+const TeacherSchema = new mongoose.Schema<ITeacher>(TeacherSchemaFields)
+interface ITeacherModel extends mongoose.Model<ITeacher> {}
+const Teacher = User.discriminator<ITeacher, ITeacherModel>('Teacher', TeacherSchema)
 
-export { User, Teacher, Student, IUser, IUserFrontend, IUserShared, ITeacher, IStudent, IUserDoc, IStudentDoc, ITeacherDoc } 
+export { User, Teacher, Student, IUser, IUserFrontend, IUserShared, ITeacher, IStudent } 

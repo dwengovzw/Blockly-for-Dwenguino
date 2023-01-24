@@ -2,7 +2,7 @@ import {afterEach, beforeEach, expect, jest, test} from '@jest/globals'
 import express from 'express'
 import mongoose from 'mongoose'
 import supertest from 'supertest'
-import { app } from "../../backend/server"
+import { app } from "../../../backend/dist/server"
 import http from 'http';
 
 const httpServer = http.createServer(app);

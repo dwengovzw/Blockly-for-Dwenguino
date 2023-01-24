@@ -1,0 +1,19 @@
+{
+    "launch": {
+      "headless": true,
+        "args": [ "--window-size=1366,768" ]
+    },
+    "browser": "chromium",
+    "testMatch": [
+      "<rootDir>/specs/**/*.test.js"
+    ],
+    "transform": {},
+    "verbose": true,
+    "globalSetup": "../../util/puppeteer_setup.js",
+    "globalTeardown": "../../util/puppeteer_teardown.js",
+    "testEnvironment": "../../util/puppeteer_environment.js",
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "preset": "jest-puppeteer"
+  }

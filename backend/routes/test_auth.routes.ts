@@ -2,7 +2,7 @@
 
 // Filename: api-routes.js
 // Initialize express router
-import express from 'express';
+/*import express from 'express';
 import { verifyToken, roleCheck, checkRolesExisted, checkDuplicateUsernameOrEmail } from "../middleware/middleware.js"
 import { signup, signin, signout } from "../controllers/auth.controller.js"
 
@@ -20,4 +20,4 @@ testRouter.post("/auth/signin", signin);
 
 testRouter.post("/auth/signout", signout);
 
-export default testRouter;
+export default testRouter;*/

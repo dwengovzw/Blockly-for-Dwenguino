@@ -1,14 +1,13 @@
 import { Document, Schema, Model } from "mongoose"
 import { ID } from "../modelutils.js"
-import { ITeacherDoc } from "../users.model.js"
-import { IAssignmentItemDoc } from "./assignment_item.model.js"
+import { ITeacher } from "../user.model.js"
+import { IAssignmentItem } from "./assignment_item.model.js"
 import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model.js"
 
 interface ISolutionItemExtraFields {
-    solutionTo?: ID | IAssignmentItemDoc
+    solutionTo?: ID | IAssignmentItem
 }
 interface ISolutionItem extends IPortfolioItem, ISolutionItemExtraFields {}
-interface ISolutionItemDoc extends ISolutionItem, Document {}
 const SolutionSchemaFields: Record<keyof ISolutionItemExtraFields, any> = {
     solutionTo:{
         type: Schema.Types.ObjectId,
@@ -16,12 +15,11 @@ const SolutionSchemaFields: Record<keyof ISolutionItemExtraFields, any> = {
         required: false
     }
 }
-const SolutionItemSchema = new Schema(SolutionSchemaFields)
-interface ISolutionItemModel extends Model<ISolutionItemDoc>{}
-const SolutionItem = PortfolioItem.discriminator<ISolutionItemDoc, ISolutionItemModel>('SolutionItem', SolutionItemSchema)
+const SolutionItemSchema = new Schema<ISolutionItem>(SolutionSchemaFields)
+interface ISolutionItemModel extends Model<ISolutionItem>{}
+const SolutionItem = PortfolioItem.discriminator<ISolutionItem, ISolutionItemModel>('SolutionItem', SolutionItemSchema)
 
 export {
     ISolutionItem,
-    ISolutionItemDoc,
     SolutionItem
 }

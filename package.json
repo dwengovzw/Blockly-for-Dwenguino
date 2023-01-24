@@ -6,30 +6,20 @@
     "node": ">=16.0.0",
     "npm": ">=6.13.4"
   },
-  "jest": {
-    "testMatch": [
-      "<rootDir>/tests/unit_tests/**/*.test.js",
-      "<rootDir>/tests/integration_tests/**/*.test.js",
-      "<rootDir>/tests/end_to_end_tests/**/*.test.js"
-    ],
-    "transform": {},
-    "verbose": true,
-    "globalSetup": "./tests/util/puppeteer_setup.js",
-    "globalTeardown": "./tests/util/puppeteer_teardown.js",
-    "testEnvironment": "./tests/util/puppeteer_environment.js",
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "preset": "jest-puppeteer"
-  },
   "description": "Logging server which provides unique session ids and receives logging data for all sessions running in the online version of google blockly",
   "main": "./backend/index.js",
   "scripts": {
-    "test": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --setupFiles dotenv/config --detectOpenHandles",
+    "test": "npm run test-frontend && npm run test-backend",
+    "test-frontend": "npm run test-frontend-unit && npm run test-puppeteer",
+    "test-frontend-unit": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/unit/Blockly-for-Dwenguino/jest.config.json --setupFiles dotenv/config --detectOpenHandles",
+    "test-puppeteer": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/end_to_end/puppeteer/jest-puppeteer.config.json --setupFiles dotenv/config --detectOpenHandles",
+    "test-backend": "npm run test-backend-unit",
+    "test-backend-unit": "ENV_FILE=environments/test.env node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/unit/backend/jest.config.json --setupFiles dotenv/config --detectOpenHandles",
+    "devstart": "npm run build-backend && npm run start",
     "start": "node --experimental-vm-modules -r dotenv/config backend/dist/index.js dotenv_config_path=backend/.env",
     "build": "webpack --mode production --progress --config webpack.config.cjs",
     "build-dev": "webpack --mode development --progress --stats-error-details --config webpack.config.dev.cjs",
-    "build-backend": "tsc --project backend/tsconfig.json"
+    "build-backend": "tsc --sourcemap --project backend/tsconfig.json"
   },
   "keywords": [
     "logging",
@@ -37,7 +27,7 @@
     "dwengo"
   ],
   "author": "Tom Neutens",
-  "license": "ISC",
+  "license": "MIT",
   "bin": {
     "db-start": "./cli.js"
   },
@@ -50,9 +40,10 @@
     "@types/cors": "^2.8.13",
     "@types/helmet": "^4.0.0",
     "@types/uuid4": "^2.0.0",
+    "@types/validator": "^13.7.10",
     "axios": "^1.1.3",
     "bcrypt": "^5.0.0",
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "bootstrap": "^4.5.3",
     "browser-sync-close-hook": "^1.0.5",
     "compression": "^1.7.4",
@@ -86,6 +77,7 @@
     "popper.js": "^1.14.3",
     "regenerator": "^0.14.4",
     "style-loader": "^3.3.1",
+    "ts-node": "^10.9.1",
     "uuid": "^3.3.3",
     "uuid4": "^2.0.3",
     "validator": "^13.7.0"
@@ -105,8 +97,8 @@
     "@shelf/jest-mongodb": "^2.0.1",
     "@tsconfig/node16": "^1.0.3",
     "@types/express": "^4.17.15",
+    "@types/jest": "^29.2.6",
     "@types/jquery": "^3.5.14",
-    "@types/mongoose": "^5.11.97",
     "@types/morgan": "^1.9.4",
     "@types/node": "^18.11.18",
     "@types/w3c-web-serial": "^1.0.3",
@@ -138,6 +130,7 @@
     "sass-loader": "^13.2.0",
     "source-map-loader": "^1.0.0",
     "supertest": "^6.1.3",
+    "ts-jest": "^29.0.5",
     "ts-loader": "^9.4.1",
     "tslib": "^2.4.1",
     "typescript": "^4.9.4",

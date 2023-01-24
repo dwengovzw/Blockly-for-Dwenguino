@@ -14,7 +14,8 @@ oauthRouter.post("/signup", (req, res) => {
 oauthRouter.post("/signin", (req, res) => {
     // Redirect to overview page with auth providers (we do not support user creation ourselves)
 });
-oauthRouter.post("/signout", (req, res) => {
+oauthRouter.get("/logout", (req, res) => {
+    oauthController.logout(req, res);
 });
 export default oauthRouter;
 //# sourceMappingURL=oauth-routes.js.map

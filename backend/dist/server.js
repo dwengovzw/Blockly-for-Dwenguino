@@ -15,7 +15,7 @@ import oauthRouter from './routes/oauth-routes.js';
 // Import user routes
 import userRouter from "./routes/user.routes.js";
 // Import test router
-import testRouter from './routes/test_auth.routes.js';
+//import testRouter from './routes/test_auth.routes.js';
 // For deploying to production
 import compression from 'compression';
 import helmet from 'helmet';
@@ -99,7 +99,7 @@ app.use('/oauth', oauthRouter);
 // Use user routes
 app.use("/user", userRouter);
 // Test router
-app.use("/test", testRouter);
+//app.use("/test", testRouter)
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));
 export { app, port, sslPort, options };

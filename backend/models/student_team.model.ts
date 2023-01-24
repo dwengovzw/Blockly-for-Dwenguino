@@ -1,14 +1,13 @@
 import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
-import { IUserDoc } from "./users.model.js"
-import { IPortfolioDoc } from "./portfolio.model.js"
+import { IUser } from "./user.model.js"
+import { IPortfolio } from "./portfolio.model.js"
 
 interface IStudentTeam {
     name: string,
-    students: ID[] | IUserDoc[],
-    portfolio: ID | IPortfolioDoc
+    students: ID[] | IUser[],
+    portfolio: ID | IPortfolio
 }
-interface IStudentTeamDoc extends IStudentTeam, Document {}
 const StudentTeamFields: Record<keyof IStudentTeam, any> = {
     name: {
         type: String,
@@ -25,11 +24,10 @@ const StudentTeamFields: Record<keyof IStudentTeam, any> = {
         ref: 'Portfolio'
     }
 }
-const StudentTeamSchema = new Schema(StudentTeamFields)
-const StudentTeam = model<IStudentTeamDoc>('StudentTeam', StudentTeamSchema)
+const StudentTeamSchema = new Schema<IStudentTeam>(StudentTeamFields)
+const StudentTeam = model<IStudentTeam>('StudentTeam', StudentTeamSchema)
 
 export {
     IStudentTeam,
-    IStudentTeamDoc,
     StudentTeam
 }
