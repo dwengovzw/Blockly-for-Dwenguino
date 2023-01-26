@@ -13,3 +13,4 @@ package-lock.json
 Blockly-for-Dwenguino/DwenguinoIDE/js/lib/nerdamer/.gitignore
 Blockly-for-Dwenguino/DwenguinoIDE/js/lib/nerdamer/.travis.yml
 *.env
+dist/
