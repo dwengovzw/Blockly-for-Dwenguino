@@ -1,4 +1,9 @@
 {
+    "launch": {
+      "headless": true,
+        "args": [ "--window-size=1366,768" ]
+    },
+    "browser": "chromium",
     "testMatch": [
       "<rootDir>/specs/**/*.test.js"
     ],
