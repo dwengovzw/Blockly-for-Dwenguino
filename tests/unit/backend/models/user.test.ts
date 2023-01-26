@@ -6,6 +6,8 @@ import db from "../../../../backend/dist/config/db.config"
 import { Role } from '../../../../backend/dist/models/role.model'
 import { ClassGroup } from "../../../../backend/dist/models/class_group.model"
 
+import { describe, expect, it } from '@jest/globals';
+
 
 describe("User model", () => {
     it("without userId should throw error", async () => {
