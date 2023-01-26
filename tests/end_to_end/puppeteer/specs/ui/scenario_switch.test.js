@@ -1,7 +1,6 @@
 import {afterEach, afterAll, beforeEach, expect, jest, test, describe, beforeAll} from '@jest/globals'
 import puppeteer from 'puppeteer'
-import mongoose from 'mongoose';
-import { startServer, endServer } from "../../../util/start_server.js"
+import { startServer, endServer } from "../../../../util/start_server.js"
 import { runSwitchScenarioRecording } from "../../actions/scenario_switches_03_11_22.js"
 
 const timeout = 5000;
@@ -31,3 +30,11 @@ describe(
       await runSwitchScenarioRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     });
+
+    afterAll(async () => {
+      browser.close()
+      await endServer();
+    })
+  },
+  timeout,
+);

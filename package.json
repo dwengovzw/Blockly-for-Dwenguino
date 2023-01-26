@@ -18,7 +18,7 @@
     
     "build-dev": "npm run build-dev-frontend && npm run build-dev-backend",
     "build-dev-frontend": "webpack --mode development --progress --stats-error-details --config webpack.config.dev.cjs",
-    "build-dev-backend": "tsc --verbose --sourcemap --project backend/tsconfig.json",
+    "build-dev-backend": "tsc --sourcemap --project backend/tsconfig.json",
     "build": "npm run build-frontend && npm run build-backend",
     "build-frontend": "webpack --mode production --progress --config webpack.config.cjs",
     "build-backend": "tsc --project backend/tsconfig.json",

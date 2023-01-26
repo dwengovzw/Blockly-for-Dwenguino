@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { User, Teacher } from '../../../../backend/dist/models/users.model'
+import { User, Teacher } from '../../../../backend/dist/models/user.model'
 import db from "../../../../backend/dist/config/db.config"
 import { Role } from '../../../../backend/dist/models/role.model'
 import { ClassGroup } from "../../../../backend/dist/models/class_group.model"

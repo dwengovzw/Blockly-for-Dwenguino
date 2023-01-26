@@ -1,6 +1,5 @@
 const path = require("path");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = [
     {
@@ -100,7 +99,7 @@ module.exports = [
                     {
                         loader: 'ts-loader',
                         options:{
-                            configFile: "dashboards.tsconfig.json"
+                            configFile: "dev.dashboards.tsconfig.json"
                         },
                     }]
                 },
