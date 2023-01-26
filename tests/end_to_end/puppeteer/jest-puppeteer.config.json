@@ -4,9 +4,9 @@
     ],
     "transform": {},
     "verbose": true,
-    "globalSetup": "jest-environment-puppeteer/setup",
-    "globalTeardown": "jest-environment-puppeteer/teardown",
-    "testEnvironment": "jest-environment-puppeteer",
+    "globalSetup": "../../util/puppeteer_setup.cjs",
+    "globalTeardown": "../../util/puppeteer_teardown.cjs",
+    "testEnvironment": "../../util/puppeteer_environment.cjs",
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     },
