@@ -1,5 +1,4 @@
 {
-    "browser": "chromium",
     "testMatch": [
       "<rootDir>/specs/**/*.test.js"
     ],
