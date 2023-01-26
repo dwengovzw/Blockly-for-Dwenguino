@@ -1,1 +1,0 @@
-{"version":3,"file":"saved_evnironment_state.model.js","sourceRoot":"","sources":["../../models/saved_evnironment_state.model.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,MAAM,EAAE,MAAM,UAAU,CAAA;AAKjC,MAAM,2BAA2B,GAA8C;IAC3E,eAAe,EAAE;QACb,IAAI,EAAE,MAAM;QACZ,QAAQ,EAAE,IAAI;KACjB;CACJ,CAAA;AACD,MAAM,2BAA2B,GAAI,IAAI,MAAM,CAAyB,2BAA2B,CAAC,CAAA;AAEpG,OAAO,EAA0B,2BAA2B,EAAE,CAAA"}
