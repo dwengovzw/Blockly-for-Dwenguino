@@ -1,3 +1,5 @@
+
+
 // State to pass along with the OAuth authorize route
 class OAuthState {
     platform: string;

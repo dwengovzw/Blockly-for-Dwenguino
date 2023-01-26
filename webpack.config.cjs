@@ -96,52 +96,30 @@ module.exports = [
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/, 
-                    use:{
-                        loader: 'babel-loader',
-                        options: {
-                            presets: [
-                                ["@babel/preset-env",
-                                {
-                                    'targets': {
-                                        'browsers': ['last 2 version']
-                                    }
-                                }], 
-                                "@babel/preset-react",
-                                "@babel/preset-typescript",
-                            ],
-                            plugins: ["@babel/plugin-proposal-class-properties",
-                                    "@babel/plugin-transform-classes",
-                                    '@babel/plugin-transform-runtime',
-                                    "autobind-class-methods"]
-                        }
-                    }
-                },
-                {
-                    test: /\.js?$/,
-                    exclude: /node_modules/, 
-                    use:{
-                        loader: 'babel-loader',
-                        options: {
-                            presets: [
-                                ["@babel/preset-env",
-                                {
-                                    'targets': {
-                                        'browsers': ['last 2 version']
-                                    }
-                                }]
-                            ],
-                            plugins: ["@babel/plugin-proposal-class-properties",
-                                    "@babel/plugin-transform-classes",
-                                    '@babel/plugin-transform-runtime']
-                        }
-                    }
+                    include: /dashboards/,
+                    use: ["babel-loader", 
+                    {
+                        loader: 'ts-loader',
+                        options:{
+                            configFile: "dashboards.tsconfig.json"
+                        },
+                    }]
                 },
                 {
                     test: /\.s[ac]ss$/i,
-                    use: [MiniCssExtractPlugin.loader,'css-loader']
-                },
+                    use: ['style-loader', 'css-loader', {
+                        loader: "sass-loader",
+                        options: {
+                            sassOptions: {
+                                indentWidth: 4,
+                                includePaths: [path.resolve(__dirname, 'Blockly-for-Dwenguino/dashboards/scss')],
+                                outputStyle: "compressed",
+                            },
+                            sourceMap: true,
+                        }
+                    }]
+                }
             ]
-        },
-        plugins: [new MiniCssExtractPlugin()],
+        }
     }
 ];

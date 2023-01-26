@@ -1,5 +1,4 @@
-import { FASTElement, customElement, attr, ValueConverter, html, ViewTemplate, css, ElementStyles, when, observable } from '@microsoft/fast-element';
-import axios from "axios";
+import { FASTElement, customElement, attr, html, ViewTemplate, css, ElementStyles, when } from '@microsoft/fast-element';
 
 
 const elementStyle: ElementStyles = css`
@@ -11,7 +10,7 @@ const loginTemplate: ViewTemplate<LoginComponent> = html`
 
 
   ${when(elem => !elem.loggedIn, html<LoginComponent>`
-    <a href="/oauth/login?platform=github${x => x.originalRequestInfo}"><button id="loginbutton" type="primary"
+    <a href="/oauth/login?platform=leerId${x => x.originalRequestInfo}"><button id="loginbutton" type="primary"
       className="btn"
       size="lg">
         Login

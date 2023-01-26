@@ -10,7 +10,7 @@
       "importHelpers": true,
       "declaration": true,
       "declarationMap": true,
-      "sourceMap": false,
+      "sourceMap": true,
       "noEmitOnError": true,
       "strict": true,
       "allowJs": true,

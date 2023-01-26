@@ -2,7 +2,6 @@ import mongoose from "mongoose"
 import db from "../config/db.config.js"
 //import { isEmail } from 'validator/es/index.js'
 import { IRole, RoleSchema } from './role.model.js'
-import { ID } from "./modelutils.js"
 import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
 
 
@@ -12,6 +11,8 @@ interface IUserShared {
     firstname?: string,
     lastname?: string,
     email?: string,
+    emailConfirmed?: boolean,
+    emailConfirmationCode?: string,
     savedEnvironmentState?: ISavedEnvironmentState,
     birthdate?: Date,
 }
@@ -43,6 +44,8 @@ const UserSchemaFields: Record<keyof IUser, any> =
         type: String,
         //validate: [isEmail, ""]
     },
+    emailConfirmed: Boolean,
+    emailConfirmationCode: String,
     savedEnvironmentState: SavedEnvironmentStateSchema,
     birthdate: Date,
     roles: [{
