@@ -378,6 +378,8 @@ MSG.simulator = {
   touchDescription: "Gebruik deze sensor om te detecteren of de robot wordt aangeraakt. In de simulator is een knopvvoorzien om aanraking te simuleren door de knop in te drukken. Bij aanraking geeft de sensor een 1 terug, anders een 0.",
   lcd: "Lcd-scherm",
   lcdDescription: "Het lcd-scherm bevat twee lijnen met elk 16 karakters. De gewenste tekst geef je mee in je programma.",
+  button: "Knop",
+  buttonDescription: "",
   touchsensor: "Tastsensor",
   touchDescription: "Gebruik deze sensor om te detecteren of de robot wordt aangeraakt. In de simulator is een knopvvoorzien om aanraking te simuleren door de knop in te drukken. Bij aanraking geeft de sensor een 1 terug, anders een 0.",
   decoration: "Decoratie",

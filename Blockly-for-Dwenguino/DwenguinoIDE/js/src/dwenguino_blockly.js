@@ -61,15 +61,15 @@ let DwenguinoBlockly = {
            * Otherwise generate binary on the server.
            */
           $.ajax({
-            url: "http://localhost:12032/utilities/getEnvironment",
+            url: `${settings.hostname}/utilities/getEnvironment`,
             dataType: 'text',
             type: 'get',
             success: function( data, textStatus, jQxhr ){
                 console.log('succes');
-                DwenguinoBlockly.compilationPath = "http://localhost:12032/utilities/getDwenguinoBinary";
+                DwenguinoBlockly.compilationPath = `${settings.hostname}/utilities/getDwenguinoBinary`;
             },
             error: function( jqXhr, textStatus, errorThrown ){
-                DwenguinoBlockly.compilationPath = ServerConfig.getServerUrl() + "/utilities/getDwenguinoBinary"
+                DwenguinoBlockly.compilationPath = settings.hostname + "/utilities/getDwenguinoBinary"
                 console.log( errorThrown );
             }
         });
@@ -560,7 +560,6 @@ let DwenguinoBlockly = {
 
         Blockly.Arduino.emptySetup();
         let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-       //DwenguinoBlockly.textualEditor.getEditorPane().openTab(code);
 
     },
 
@@ -703,7 +702,7 @@ let DwenguinoBlockly = {
             headers: {
               "Content-Type": "application/json"
             },
-            url: ServerConfig.getServerUrl() + "/lang",
+            url: settings.hostname + "/lang",
             data: JSON.stringify(data)}
         ).done(function(data){
             console.log(data);
@@ -741,7 +740,7 @@ let DwenguinoBlockly = {
           headers: {
             "Content-Type": "application/json"
           },
-          url: ServerConfig.getServerUrl() + "/lang",
+          url: settings.hostname + "/lang",
           data: JSON.stringify(data)}
       ).done(function(data){
           console.log(data);
@@ -858,7 +857,6 @@ let DwenguinoBlockly = {
         
         DwenguinoBlockly.initDwenguinoBlockly(workspace);
         DwenguinoBlockly.doTranslation();
-        //DwenguinoBlockly.setDifficultyLevel(0);
 
         DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
         DwenguinoBlockly.takeSnapshotOfWorkspace();

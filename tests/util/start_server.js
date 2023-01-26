@@ -8,7 +8,8 @@ let db = null;
 let startServer = () =>
 {
     
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
+        await mongoose.disconnect()
         setupDatabaseConnection();
         // Launch app to listen to specified port
         try {
@@ -37,18 +38,22 @@ let setupDatabaseConnection = () => {
     }
 }
 
-let endServer = () =>
+let endServer = async () =>
 {
-    return new Promise(function (resolve) {
-        httpServer.close((err) => {
-            db.close(); // close database connection
-            if (err){
-                reject();
-            }else{
-                resolve();
-            }
-        })
-    });
+    try {
+        // Drop the test database is being dropped.
+        await mongoose.connection.dropDatabase();
+        // Connection to Mongo killed.
+        await mongoose.disconnect();
+        // Server connection closed.
+        await httpServer.close();
+      } catch (error) {
+        console.log(`
+          You did something wrong dummy!
+          ${error}
+        `);
+        throw error;
+      }
 }
 
 export { startServer, endServer }
