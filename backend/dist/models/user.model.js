@@ -20,6 +20,8 @@ const UserSchemaFields = {
         type: String,
         //validate: [isEmail, ""]
     },
+    emailConfirmed: Boolean,
+    emailConfirmationCode: String,
     savedEnvironmentState: SavedEnvironmentStateSchema,
     birthdate: Date,
     roles: [{

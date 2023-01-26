@@ -4,6 +4,7 @@ import AbstractOAuthController from "./abstract.oauth.controller.js";
 import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
 import db from "../config/db.config.js";
 import oauthConfig from "../config/oauth.config.js";
+import crypto from "crypto";
 class GithubOAuthController extends AbstractOAuthController {
     constructor() {
         super();
@@ -18,6 +19,10 @@ class GithubOAuthController extends AbstractOAuthController {
         if (authState.platform !== db.PLATFORMS.github) {
             return res.status(500).send({ message: "Internal server error: platform name does not match controller." });
         }
+        // add nonce to both session cookie as well as request state to mitigate csrf
+        let nonce = crypto.randomBytes(128).toString('hex');
+        req.session.nonce = nonce;
+        authState.nonce = nonce;
         let authorizeUrl = oauthConfig.authorizeUrlMap[db.PLATFORMS.github](JSON.stringify(authState));
         res.redirect(authorizeUrl);
     }
@@ -30,6 +35,16 @@ class GithubOAuthController extends AbstractOAuthController {
     redirect(req, res, authState) {
         if (authState.platform !== db.PLATFORMS.github) {
             return res.status(500).send({ message: "Internal server error: platform name does not match controller." });
+        }
+        let reqNonce = authState.nonce;
+        let sessionNonce = req.session.nonce;
+        // Check if nonce sent in state matches nonce in session cookie. To prevent replay attack
+        if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce) {
+            req.session.nonce = null;
+            res.status(401).send({ message: "Authentication failed! Nonce did not match" });
+        }
+        else {
+            req.session.nonce = null;
         }
         axios({
             method: "POST",
