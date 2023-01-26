@@ -65,6 +65,7 @@
     "helmet": "^3.22.0",
     "i18n-x": "^0.1.6",
     "interactjs": "^1.6.2",
+    "jest-environment-puppeteer": "^6.2.0",
     "jquery": "^3.6.0",
     "jquery-ui-bundle": "^1.12.1-migrate",
     "jsonwebtoken": "^9.0.0",
