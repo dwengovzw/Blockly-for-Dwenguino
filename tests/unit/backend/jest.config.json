@@ -1,16 +1,12 @@
 {
-    "testEnvironment": "node",
-    "moduleNameMapper": {
-      "@exmpl/(.*)": "<rootDir>/src/$1"
-    },
-    "extensionsToTreatAsEsm": [".ts"],
-    "transform": {
-      "^.+\\.(ts|tsx)?$": ["ts-jest", { "useESM": true }]
-    },
-
-    "preset": "ts-jest/presets/default-esm",
-    "verbose": true,
-    "testMatch": [
-      "<rootDir>/**/*.test.ts"
-    ]
-  }
+  "testEnvironment": "node",
+  "moduleNameMapper": {
+    "@exmpl/(.*)": "<rootDir>/src/$1"
+  },
+  "transform": {},
+  "verbose": true,
+  "preset": "ts-jest/presets/default-esm",
+  "testMatch": [
+    "<rootDir>/**/*.test.ts"
+  ]
+}

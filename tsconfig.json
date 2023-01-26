@@ -6,6 +6,7 @@
       "module": "es6",
       "target": "es6",
       "experimentalDecorators": true,
+      "esModuleInterop": true,
       "emitDecoratorMetadata": true,
       "importHelpers": false,
       "jsx": "react",

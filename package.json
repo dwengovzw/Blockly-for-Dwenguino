@@ -10,7 +10,7 @@
   "main": "./backend/index.js",
   "scripts": {
     "test": "npm run test-frontend && npm run test-backend",
-    "test-frontend": "npm run test-frontend-unit",
+    "test-frontend": "npm run test-frontend-unit && npm run test-puppeteer",
     "test-frontend-unit": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/unit/Blockly-for-Dwenguino/jest.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
     "test-puppeteer": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/end_to_end/puppeteer/jest-puppeteer.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
     "test-backend": "npm run test-backend-unit",
@@ -87,7 +87,7 @@
     "validator": "^13.7.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.7",
+    "@babel/core": "^7.20.12",
     "@babel/plugin-proposal-class-properties": "^7.10.4",
     "@babel/plugin-proposal-decorators": "^7.3.0",
     "@babel/plugin-transform-classes": "^7.10.4",
@@ -109,8 +109,8 @@
     "@types/webpack-env": "^1.18.0",
     "auto-bind": "^5.0.1",
     "babel-core": "7.0.0-bridge.0",
-    "babel-jest": "^27.0.5",
-    "babel-loader": "^8.1.0",
+    "babel-jest": "^29.4.0",
+    "babel-loader": "^9.1.2",
     "babel-plugin-autobind-class-methods": "^5.0.1",
     "babel-preset-env": "^1.7.0",
     "babel-runtime": "^6.26.0",
