@@ -24,6 +24,10 @@ oauthRouter.get("/logout", (req, res) => {
     oauthController.logout(req, res);
 })
 
+oauthRouter.get("/platforms", (req, res) => {
+    oauthController.getPlatforms(req, res);
+})
+
 
 
 export default oauthRouter;

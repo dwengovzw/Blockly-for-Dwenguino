@@ -60,6 +60,10 @@ class OAuthController {
         res.redirect("/dashboard")
         //res.status(200).send({message: "Logout successful"})
     }
+
+    getPlatforms(req, res){
+        res.json(db.PLATFORMS)
+    }
 }
 
 export { OAuthController }
