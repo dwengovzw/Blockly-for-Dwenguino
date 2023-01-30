@@ -7,7 +7,7 @@ import {customElement, state} from 'lit/decorators.js';
 import { store } from "../state/store"
 import { Unsubscribe } from "redux";
 import { connect } from "pwa-helpers"
-import { addPlatform } from "../state/features/oauth_slice";
+import { addPlatform, fetchPlatforms } from "../state/features/oauth_slice";
 
 
 
@@ -43,8 +43,9 @@ class LoginMenu extends connect(store)(LitElement) {
         if (reqInfo){
           this.originalRequestInfo = `&originalRequestInfo=${reqInfo}`
         } 
-        
+        store.dispatch(fetchPlatforms())
     }
+
 
 
     protected render() {

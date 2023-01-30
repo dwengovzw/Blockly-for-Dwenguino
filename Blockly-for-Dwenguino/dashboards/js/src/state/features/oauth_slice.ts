@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 export const oauthSlice = createSlice({
     name: "oauth",
     initialState: {
-        platforms: ["apple", "google", "microsoft"]
+        platforms: ["none"]
     }, 
     /* In these functions you can use mutating logic since the createSlice
     function uses Immer to make sure the logic your write will be immutable.*/
@@ -26,7 +26,9 @@ const fetchPlatforms = () => {
             // make async call
             let response = await fetch("/oauth/platforms")
             if (response.status == 200){
-                dispatch(update(await response.json()))
+                let resp = await response.json()
+                let platforms = Object.keys(resp).map(key => resp[key])
+                dispatch(update(platforms))
             } 
         } catch (err) {
             console.error(err)
