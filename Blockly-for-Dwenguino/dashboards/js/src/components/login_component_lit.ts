@@ -46,20 +46,19 @@ class LoginMenu extends connect(store)(LitElement) {
         store.dispatch(fetchPlatforms())
     }
 
+    getLoginURI(platform: string, originalRequestInfo:string){
+        return `/oauth/login?platform=${platform}${originalRequestInfo}`
+    }
 
 
     protected render() {
         return html`<div>
             platforms:
             <ul>
-                ${this.platforms.map(p => html`<li>${p}</li>`)}
+                ${this.platforms.map(p => html`<li><a href="${this.getLoginURI(p, this.originalRequestInfo)}">${p}</a></li>`)}
             </ul>
         </div>
-        <div>
-        <button id="add_platform" @click=${() => store.dispatch(addPlatform("test"))} type="primary" className="btn" size="lg">
-          Add platform
-      </button>
-        </div>`
+        ${this.loggedIn ? html`You are logged in. <a href='/oauth/logout'>Logout</a>` : html`Not logged in yet`}`
         /*if (!this.loggedIn){
             return html`
             <a href="/oauth/login?platform=leerId${this.originalRequestInfo}"><button id="loginbutton" type="primary"
