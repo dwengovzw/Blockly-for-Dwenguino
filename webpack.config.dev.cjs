@@ -90,6 +90,9 @@ module.exports = [
             path: path.resolve(__dirname, 'Blockly-for-Dwenguino/dashboards/js/dist/'),
             filename: 'dashboards.bundle.js'
         },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+        },
         module: {
             rules: [
                 {

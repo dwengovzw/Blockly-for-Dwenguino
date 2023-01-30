@@ -4,9 +4,12 @@
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, state} from 'lit/decorators.js';
-import { msg } from '@lit/localize';
-import { connect } from 'pwa-helpers'
-import store from '../state/store'
+import { store } from "../state/store"
+import { Unsubscribe } from "redux";
+import { connect } from "pwa-helpers"
+import { addPlatform } from "../state/features/oauth_slice";
+
+
 
 @customElement("dwengo-login-menu")
 class LoginMenu extends connect(store)(LitElement) {
@@ -19,7 +22,7 @@ class LoginMenu extends connect(store)(LitElement) {
     @state() platforms: string[] = []
 
     stateChanged(state: any): void {
-        this.platforms = state.login_menu.platforms
+        this.platforms = state.oauth.platforms
     }
 
     constructor(){
@@ -43,8 +46,20 @@ class LoginMenu extends connect(store)(LitElement) {
         
     }
 
+
     protected render() {
-        if (!this.loggedIn){
+        return html`<div>
+            platforms:
+            <ul>
+                ${this.platforms.map(p => html`<li>${p}</li>`)}
+            </ul>
+        </div>
+        <div>
+        <button id="add_platform" @click=${() => store.dispatch(addPlatform("test"))} type="primary" className="btn" size="lg">
+          Add platform
+      </button>
+        </div>`
+        /*if (!this.loggedIn){
             return html`
             <a href="/oauth/login?platform=leerId${this.originalRequestInfo}"><button id="loginbutton" type="primary"
               className="btn"
@@ -55,7 +70,7 @@ class LoginMenu extends connect(store)(LitElement) {
           `
         } else {
             return html`<span>${this.username}</span`
-        }
+        }*/
     }
 }
 

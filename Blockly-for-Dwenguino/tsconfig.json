@@ -2,7 +2,7 @@
     "compilerOptions": {
       "outDir": "./Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
       "typeRoots": ["../node_modules/@types"],
-      "noImplicitAny": true,
+      "noImplicitAny": false,
       "module": "es6",
       "target": "es6",
       "experimentalDecorators": true,
