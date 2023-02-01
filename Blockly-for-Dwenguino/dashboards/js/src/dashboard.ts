@@ -1,15 +1,38 @@
-import { LitElement, css, html } from "lit";
-import { customElement } from "lit/decorators.js";
-import "./components/login_component_lit.ts";
+import { LitElement, css, html, CSSResultGroup } from "lit";
+import { customElement, state } from "lit/decorators.js"; // needs .js to transpile
+import "./components/header";
+import "./components/menu"
+import { Router } from "@lit-labs/router"
+import { store } from "./state/store"
+import { connect } from "pwa-helpers"
+import "./components/intro_page"
+import "./components/notify"
 
 @customElement("dwengo-dashboard")
-class Dashboard extends LitElement {
+class Dashboard extends connect(store)(LitElement) {
+    private router = new Router(this, [
+        {path: '/dashboard', render: this.renderMainPage},
+        {path: '/dashboard/*', render: this.renderMainPage},
+    ]);
+
+    static styles?: CSSResultGroup = css``
+
+    @state() loggedIn: boolean = false;
+
+    stateChanged(state: any): void {
+        this.loggedIn = state.user.loggedIn
+    }
+
+    renderMainPage(){
+        return html`<dwengo-menu></dwengo-menu>`
+    }
+
     protected render() {
-        return html`<dwengo-login-menu></dwengo-login-menu>`
+        return html`<dwengo-notify></dwengo-notify>
+                    <dwengo-header></dwengo-header>
+                    ${this.loggedIn ? this.router.outlet() : html`<dwengo-intro-page></dwengo-intro-page>`}`
     }
 }
 
-const globalStyle = css`
-`
 
 export default Dashboard

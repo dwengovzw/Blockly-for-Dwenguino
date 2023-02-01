@@ -7,53 +7,33 @@ class UserController {
 
     }
 
-    async isLoggedIn(req, res){
-        let token  = req.session.token;
-        if (!token) {
-            return res.status(401).send(false); // TODO: redirect to login page
-        }
-        jwt.verify(token, jwt_settings.secret as string, async (err, decoded) => {
-            if (err) {
-                return res.status(401).send(false)
-            }
-            try{
-                let platform = decoded?.platform;
-                let userId = decoded?.id;
+    async info(req, res){
+        let userId = req.userId
+        let platform = req.platform
+        if (userId && platform){
+            try {
                 let user = await User.findOne({
                     platform: platform,
                     userId: userId
                 })
-                if (!user || !user.firstname){
-                    res.status(200).send("No display name set");
+                let userInfo = {
+                    loggedIn: true,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                    birthdate: user.birthdate,
+                    roles: user.roles
                 }
-                return res.status(200).send(user?.firstname)
-            } catch (e) {
-                return res.status(401).send({message: e})
+                return res.status(200).json(userInfo)
+            } catch (err){
+                return res.status(500).send({message: "Unable to retrieve user"})
             }
-        })
+        } else {
+            return res.status(500).send({message: "Cannot get user info"})
+        }
+        
     }
 
-    async getName(req, res){
-        let platform = req.platform;
-        let userId = req.userId;
-        if (platform && userId){
-            try{
-                let user = await User.findOne({
-                    platform: platform,
-                    userId: userId
-                })
-                if (!user || !user.firstname){
-                    return res.status(200).send("No display name set");
-                }
-                return res.status(200).send(user?.firstname)
-            } catch (e) {
-                return res.status(401).send({message: e})
-            }
-            
-        } else {
-            return res.status(401).send({message: "Cannot get name"})
-        }
-    }
 }
 
 export default UserController

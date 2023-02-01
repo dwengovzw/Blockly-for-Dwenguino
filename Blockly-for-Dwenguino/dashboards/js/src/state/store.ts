@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { testReducer, increment } from './features/test_slice'
 import { oauthReducer } from './features/oauth_slice'
+import { userReducer } from './features/user_slice'
+import { notificationReducer } from "./features/notification_slice"
 
 const store = configureStore({
     reducer: {
         test: testReducer,
-        oauth: oauthReducer
+        oauth: oauthReducer,
+        user: userReducer,
+        notification: notificationReducer
     }
 })
 

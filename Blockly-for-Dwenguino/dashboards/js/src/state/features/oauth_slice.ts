@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit"
 export const oauthSlice = createSlice({
     name: "oauth",
     initialState: {
-        platforms: ["none"]
+        platforms: ["none"],
+        loggedIn: false
     }, 
     /* In these functions you can use mutating logic since the createSlice
     function uses Immer to make sure the logic your write will be immutable.*/
@@ -14,7 +15,6 @@ export const oauthSlice = createSlice({
         addPlatform: (state, action) =>{
             state.platforms.push(action.payload)
         }
-
     }
 })
 
@@ -35,6 +35,8 @@ const fetchPlatforms = () => {
         }
     }
 }
+
+
 
 
 const { update, addPlatform } = oauthSlice.actions
