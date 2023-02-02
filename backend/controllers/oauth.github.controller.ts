@@ -64,11 +64,11 @@ class GithubOAuthController extends AbstractOAuthController{
             try {
                 let userInfo = await octo.request("GET /user", {});
                 console.log(userInfo);
-                let minUserInfo = new MinimalUserInfo(userInfo.data.id,
+                let minUserInfo = new MinimalUserInfo(userInfo.data.id.toString(),
                     db.PLATFORMS.github, 
                     userInfo.data.name, 
                     userInfo.data.email, 
-                    db.ROLES.student)
+                    [db.ROLES.student, db.ROLES.user])
                 this.signin(req, res, minUserInfo, authState); // Call super class method to sign in
             } catch (err) {
                 console.log(err);

@@ -5,6 +5,7 @@ const PLATFORMS = {
 }
 
 const ROLES = {
+    user: "user",
     student: "student", 
     teacher: "teacher", 
     admin: "admin",

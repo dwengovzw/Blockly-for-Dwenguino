@@ -9,20 +9,24 @@ interface UserInfo {
     firstname: string,
     lastname: string,
     email: string,
-    birthdate: Date,
+    platform?: string,
+    birthdate: Date | null,
     roles: string[]
+}
+
+const initialUserState: UserInfo = {
+    loggedIn: false,
+    firstname: "",
+    lastname: "",
+    email: "",
+    platform: "unknown",
+    birthdate: null,
+    roles: []
 }
 
 export const userSlice = createSlice({
     name: "user",
-    initialState: {
-        loggedIn: false,
-        firstname: "",
-        lastname: "",
-        email: "",
-        birthdate: null,
-        roles: []
-    }, 
+    initialState: initialUserState, 
     /* In these functions you can use mutating logic since the createSlice
     function uses Immer to make sure the logic your write will be immutable.*/
     reducers: {
@@ -38,7 +42,8 @@ export const userSlice = createSlice({
             state.lastname = action.payload.lastname
             state.email = action.payload.email
             state.birthdate = action.payload.birthdate
-            state.roles = action.payload.roles
+            state.roles = action.payload.roles.map((role) => role.name)
+            state.platform = action.payload.platform
         }
 
     }
@@ -53,12 +58,12 @@ const fetchUserInfo = () => {
             if (response.status == 200){
                 let info: UserInfo = await response.json();
                 dispatch(setInfo(info))
-                let notification: NotificationInfo = {
+                /*let notification: NotificationInfo = {
                     message: msg("Login successful"),
                     class: "message",
                     time: 2500
                 }
-                dispatch(setNotification(notification))
+                dispatch(setNotification(notification))*/
             } else if (response.status == 401){ 
                 // Unauthorized => logout
                 dispatch(logout())
@@ -91,4 +96,4 @@ const { login, logout, setInfo } = userSlice.actions
 
 const userReducer = userSlice.reducer
 
-export { userReducer, fetchUserInfo, login, logout }
+export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState }
