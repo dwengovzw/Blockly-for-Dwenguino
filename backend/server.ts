@@ -95,7 +95,9 @@ app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
 app.use(
     cookieSession({
         name: process.env.COOKIE_NAME,
-        secret: process.env.COOKIE_SECRET
+        secret: process.env.COOKIE_SECRET,
+        sameSite: true,
+        secure: process.env.COOKIE_SECURE === "true" ? true : false
     })
 )
 

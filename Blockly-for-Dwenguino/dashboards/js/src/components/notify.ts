@@ -13,6 +13,7 @@ class Notify extends connect(store)(LitElement) {
             display: flex;
             flex-direction: column;
             align-items: center;
+            
         }
         div {
             position: absolute;
@@ -21,6 +22,7 @@ class Notify extends connect(store)(LitElement) {
             border-radius: 10px;
             padding: 2rem;
             margin: 11rem auto;
+            z-index: 10000;
         }
         div.message {
             border-color: var(--theme-notification-message-border-color);

@@ -19,9 +19,26 @@ class Header extends connect(store)(LitElement) {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            height: 75px;
+            min-height: 75px;
             padding: 0 30px;
             background-color: var(--theme-neutralFocusInnerAccent);
+        }
+        .dwengo-header-logo {
+            display: inline-block;
+            padding-top: 0.3125rem;
+            padding-bottom: 0.3125rem;
+            margin-right: 1rem;
+            font-size: 1.25rem;
+            line-height: inherit;
+            white-space: nowrap;
+            height: auto;
+            max-width: 150px;
+        }
+        .navbar-brand {
+            display: inline-block;
+            padding-top: 0.3125rem;
+            padding-bottom: 0.3125rem;
+            margin-right: 1rem;
         }
     `
 
@@ -39,7 +56,7 @@ class Header extends connect(store)(LitElement) {
     protected render() {
         console.log(globalThis)
         return html`
-            <img class='dwengo-header-logo' src="${globalThis.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/>
+            <a class="navbar-brand" href="/dashboard"><img class='dwengo-header-logo' src="${globalThis.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/></a>
             <dwengo-login-menu></dwengo-login-menu>
         `
     }

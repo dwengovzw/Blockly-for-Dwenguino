@@ -84,7 +84,7 @@ class Menu extends connect(store)(LitElement){
             overflow: hidden;
             margin: 0;
             padding: 0;
-            margin-top: 2.5rem;
+            margin-top: calc(var(--theme-base-font-size) + 1rem);
         }
         li {
             overflow: hidden;
@@ -103,7 +103,7 @@ class Menu extends connect(store)(LitElement){
             background-color: var(--theme-accentFillSelected);
             color: var(--theme-white);
             padding: 0.5rem 1rem;
-            font-size: 1.5rem;
+            font-size: var(--theme-base-font-size);
             text-align: right;
             position: absolute;
         }
@@ -120,6 +120,7 @@ class Menu extends connect(store)(LitElement){
         }
         .menu-logo {
             margin-right: 0.5rem;
+            font-size: var(--theme-base-font-size);
         }
         li:hover{
             background-color: var(--theme-accentFillHover);

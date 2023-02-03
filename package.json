@@ -38,6 +38,8 @@
     "@lit-labs/router": "^0.1.1",
     "@lit/localize": "^0.11.4",
     "@material/mwc-button": "^0.27.0",
+    "@material/mwc-checkbox": "^0.27.0",
+    "@material/mwc-formfield": "^0.27.0",
     "@material/mwc-textfield": "^0.27.0",
     "@microsoft/fast-components": "^2.30.6",
     "@microsoft/fast-element": "^1.11.0",

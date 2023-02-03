@@ -19,7 +19,8 @@ userRouter.get("/student", [verifyToken, roleCheck("student")], studentBoard);
 
 
 
-userRouter.get("/info", [verifyTokenAjax], userController.info)
+userRouter.get("/info", [verifyTokenAjax], userController.getInfo)
+userRouter.put("/info", [verifyTokenAjax], userController.putInfo)
 
 
 

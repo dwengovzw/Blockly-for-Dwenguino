@@ -1,5 +1,5 @@
 import { msg } from "@lit/localize"
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { state } from "lit/decorators"
 import { setNotification, NotificationInfo } from "./notification_slice"
 
@@ -11,7 +11,8 @@ interface UserInfo {
     email: string,
     platform?: string,
     birthdate: Date | null,
-    roles: string[]
+    roles: string[],
+    loading: boolean
 }
 
 const initialUserState: UserInfo = {
@@ -21,7 +22,8 @@ const initialUserState: UserInfo = {
     email: "",
     platform: "unknown",
     birthdate: null,
-    roles: []
+    roles: [],
+    loading: false
 }
 
 export const userSlice = createSlice({
@@ -44,10 +46,60 @@ export const userSlice = createSlice({
             state.birthdate = action.payload.birthdate
             state.roles = action.payload.roles.map((role) => role.name)
             state.platform = action.payload.platform
+            state.loading = false
+        }, 
+        loading: (state) => {
+            state.loading = true;
+        },
+        loadFailed: (state) => {
+            state.loading = false
         }
-
     }
 })
+
+
+const putUserInfo = (userInfo) => {
+    return async (dispatch, getState) => {
+        dispatch(loading())
+        try {
+            const response = await fetch("/user/info", {
+                method: "PUT", 
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(userInfo)
+            })
+            if (response.status == 200){
+                let info: UserInfo = await response.json();
+                dispatch(setInfo(info))
+                let notification: NotificationInfo = {
+                    message: msg("Profile info saved :)"),
+                    class: "message",
+                    time: 2500
+                }
+                dispatch(setNotification(notification))
+            } else if (response.status == 401){
+                dispatch(logout())
+                let notification: NotificationInfo = {
+                    message: msg("You are not logged in!"),
+                    class: "error",
+                    time: 2500
+                }
+                dispatch(loadFailed())
+                dispatch(setNotification(notification))
+            } else {
+                let notification: NotificationInfo = {
+                    message: msg("Unable to save user data!"),
+                    class: "error",
+                    time: 2500
+                }
+                dispatch(setNotification(notification))
+            }
+        } catch (err) {
+            
+        }
+        
+    }
+}
+
 
 const fetchUserInfo = () => {
     // The inside thunk function
@@ -58,12 +110,6 @@ const fetchUserInfo = () => {
             if (response.status == 200){
                 let info: UserInfo = await response.json();
                 dispatch(setInfo(info))
-                /*let notification: NotificationInfo = {
-                    message: msg("Login successful"),
-                    class: "message",
-                    time: 2500
-                }
-                dispatch(setNotification(notification))*/
             } else if (response.status == 401){ 
                 // Unauthorized => logout
                 dispatch(logout())
@@ -92,8 +138,8 @@ const fetchUserInfo = () => {
 
 
 
-const { login, logout, setInfo } = userSlice.actions
+const { login, logout, setInfo, loading, loadFailed } = userSlice.actions
 
 const userReducer = userSlice.reducer
 
-export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState }
+export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState, putUserInfo }

@@ -95,9 +95,8 @@ class LoginMenu extends connect(store)(LitElement) {
     }
     .dwengo-login-menu-icon {
         color: --theme-accentFillSelected;
-        width: 50px;
-        height: 50px;
-        font-size: 50px;
+        font-size: 3rem;
+        line-height: 1;
     }
     .dwengo-login-menu-icon:hover {
         cursor: pointer;
@@ -113,11 +112,12 @@ class LoginMenu extends connect(store)(LitElement) {
         right: 10px;
         top: 75px;
         padding: 20px;
-        border-radius: 5px;
+        border-radius: 4px;
         border: 2px solid var(--theme-accentFillRest);
-        box-shadow: 5px 5px 10px var(--theme-accentFillSelected);
+        box-shadow: 5px 5px -5px var(--theme-accentFillSelected);
         background-color: var(--theme-neutralFocusInnerAccent);
         color: var(--theme-white);
+        z-index: 1000;
     }
     .dwengo-login-menu-dropdown div {
         display: flex;
