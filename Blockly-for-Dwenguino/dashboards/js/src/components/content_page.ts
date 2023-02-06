@@ -13,6 +13,7 @@ import { Router, Routes } from "@lit-labs/router"
 import "./menu"
 import "./welcome"
 import "./profile"
+import "./classes"
 
 
 
@@ -21,7 +22,8 @@ class ContentPage extends connect(store)(LitElement) {
     
     private router = new Routes(this, [
         {path: 'home', render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
-        {path: 'profile', render: () => html`<dwengo-profile-page></dwengo-profile-page>`}
+        {path: 'profile', render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
+        {path: 'classes', render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
     ]);
     
     stateChanged(state: any): void {

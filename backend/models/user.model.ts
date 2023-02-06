@@ -26,6 +26,10 @@ interface IUser extends IUserShared {
     roles?: IRole[]
 }
 
+interface IUserDoc extends IUser, Document {
+
+}
+
 const UserSchemaFields: Record<keyof IUser, any> = 
 {
     userId:{

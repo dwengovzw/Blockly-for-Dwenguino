@@ -2,15 +2,17 @@ import { msg } from "@lit/localize"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { state } from "lit/decorators"
 import { setNotification, NotificationInfo } from "./notification_slice"
+import { fetchAuth } from "../../middleware/fetch"
+import { LoadableState } from "../../util"
 
 
-interface UserInfo {
+interface UserInfo extends LoadableState{
     loggedIn: boolean,
     firstname: string,
     lastname: string,
     email: string,
     platform?: string,
-    birthdate: Date | null,
+    birthdate: string | null,
     roles: string[],
     loading: boolean
 }
@@ -57,8 +59,30 @@ export const userSlice = createSlice({
     }
 })
 
-
 const putUserInfo = (userInfo) => {
+    return async (dispatch, getState) => {
+        dispatch(loading())
+        try {
+            const response = await fetchAuth("/user/info", {
+                method: "PUT", 
+                headers: { "Content-Type": "application/json"},
+                body: JSON.stringify(userInfo)
+            })
+            let info: UserInfo = await response.json();
+            dispatch(setInfo(info))
+            dispatch(setNotification({
+                message: msg("Profile info saved :)"),
+                class: "message",
+                time: 2500
+            }))
+        } catch (err) {
+            dispatch(loadFailed())
+        }
+    }
+}
+
+
+/* const putUserInfo = (userInfo) => {
     return async (dispatch, getState) => {
         dispatch(loading())
         try {
@@ -98,7 +122,7 @@ const putUserInfo = (userInfo) => {
         }
         
     }
-}
+} */
 
 
 const fetchUserInfo = () => {
@@ -142,4 +166,4 @@ const { login, logout, setInfo, loading, loadFailed } = userSlice.actions
 
 const userReducer = userSlice.reducer
 
-export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState, putUserInfo }
+export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState, putUserInfo, loadFailed }

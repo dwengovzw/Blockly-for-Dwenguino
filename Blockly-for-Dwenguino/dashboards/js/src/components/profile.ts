@@ -16,6 +16,8 @@ import "@material/mwc-textfield"
 import "@material/mwc-button"
 import "@material/mwc-checkbox"
 import "@material/mwc-formfield"
+import "@material/mwc-icon"
+import "@material/mwc-circular-progress"
 
 
 
@@ -52,12 +54,13 @@ class Profile extends connect(store)(LitElement) {
     
     protected render() {
         return html`
+            ${getGoogleMateriaIconsLinkTag()}
             <h1>${msg("Profile")} ${this.userInfo?.firstname} ${this.userInfo?.lastname}</h1>
             <div class="profile-info">
                 <div><mwc-textfield @change=${(e) => this.userInfo.firstname = e.target.value } outlined label="${msg("Firstname")}" type="text" value="${this.userInfo?.firstname}"></mwc-textfield></div>
                 <div><mwc-textfield @change=${(e) => this.userInfo.lastname = e.target.value } outlined label="${msg("Lastname")}" type="text" value="${this.userInfo?.lastname}"></mwc-textfield></div>
                 <div><mwc-textfield @change=${(e) => this.userInfo.email = e.target.value } outlined label="${msg("Email")}" type="email" value="${this.userInfo?.email}"></mwc-textfield></div>
-                <div><mwc-textfield @change=${(e) => this.userInfo.birthdate = new Date(e.target.value) } outlined label="${msg("Birthdate")}" type="date" value= "${this.userInfo?.birthdate}"></mwc-textfield></div>
+                <div><mwc-textfield @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" type="date" ${this.userInfo?.birthdate ? html`value="${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}"`: ""}"></mwc-textfield></div>
                 <div class="checkbox-container ${this.checkboxFocussed ? "highlightborder" : ""}">
                     <span class="checkbox-label ${this.checkboxFocussed ? "highlightlabel" : ""}">${msg('My roles')}</span>
                     <mwc-formfield label="${msg("Student")}">
@@ -77,6 +80,7 @@ class Profile extends connect(store)(LitElement) {
                 </div>
                 <div><mwc-textfield outlined label="${msg("You are logged in with")}" type="text" disabled="true" value= "${this.userInfo?.platform}"></mwc-textfield></div>
                 <mwc-button @click=${this.handleSave} raised>${msg("Save")}</mwc-button>
+                ${ this.userInfo.loading ? html`<mwc-circular-progress indeterminate></mwc-circular-progress>` : ""}
             </div>
         `
     }
@@ -127,6 +131,9 @@ class Profile extends connect(store)(LitElement) {
         }
         mwc-checkbox {
             --mdc-theme-secondary: var(--theme-accentFillSelected);
+        }
+        mwc-circular-progress {
+            --mdc-theme-primary: var(--theme-accentFillSelected);
         }
         
     `

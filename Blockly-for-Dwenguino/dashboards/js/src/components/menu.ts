@@ -24,7 +24,9 @@ class Menu extends connect(store)(LitElement){
             {label: msg("Profile"), href: "/dashboard/profile", icon: "person"}
         ],
         "student": [],
-        "teacher": [],
+        "teacher": [
+            {label: msg("Class groups"), href: "/dashboard/classes", icon: "groups"},
+        ],
         "admin": []
     }
     

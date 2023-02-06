@@ -1,0 +1,116 @@
+import { ClassGroup, IClassGroup } from "../models/class_group.model.js";
+import { User } from "../models/user.model.js"
+
+//https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript?page=1&tab=modifieddesc#tab-top
+let makeid = (length=8 ) => {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
+}
+
+let getUniqueClassCode = async () => {
+    let found = false
+    let code = ""
+    let iter = 0
+    while (!found && iter < 10000) {
+        code = makeid()
+        let exists = await ClassGroup.exists({sharingCode: code})
+        if (!exists){
+            found = true;
+        }
+        iter++
+    }
+    return code
+}
+
+class ClassGroupController {
+    constructor() {
+
+    }
+
+    
+
+    async all(req, res){
+        try {
+            let user = await User.findOne({
+                userId: req.userId,
+                platform: req.platform
+            })
+            let classGroups = await ClassGroup.aggregate([
+                {
+                    $match: {
+                        ownedBy: {
+                            $in: [ user._id ]
+                        }
+                    }
+                }
+            ])
+            res.status(200).json(classGroups)
+        } catch (err) {
+            console.log(err)
+            res.status(500).send()
+        }
+    }
+
+    async add(req, res){
+        try {
+            let user = await User.findOne({
+                userId: req.userId,
+                platform: req.platform
+            })
+            let sharingCode = await getUniqueClassCode()
+            const cg: IClassGroup = {
+                name: req.body.name,
+                description: req.body.description,
+                sharingCode: sharingCode,
+                ownedBy: [user._id],
+                awaitingStudents: [],
+                students: []
+            }
+            let classGroup = new ClassGroup(cg)
+            await classGroup.save()
+            res.status(200).json(cg)
+        } catch (err) {
+            console.log(err)
+            res.status(500).send("Failed to create classgroup")
+        }
+    }
+    async delete(req, res){
+        try {
+            let user = await User.findOneAndRemove({userId: req.userId, platform: req.platform})
+            await ClassGroup.findOne({
+                ownedBy: {
+                    $in: [ user._id ]
+                },
+                _id: req.params.classgroupId
+            })
+            res.status(200).send()
+        } catch (err) {
+            console.log(err)
+            res.status(500).send("Failed to remove classgroup")
+        }
+    } 
+    async get(req, res){
+        try {
+            let user = await User.findOne({userId: req.userId, platform: req.platform})
+            let classGroup = await ClassGroup.findOne({
+                ownedBy: {
+                    $in: [ user._id ]
+                },
+                _id: req.params.classgroupId
+            })
+            res.status(200).json(classGroup)
+        } catch (err) {
+            console.log(err)
+            res.status(500).send("Failed to get classgroup")
+        }
+    }
+}
+
+export { ClassGroupController }

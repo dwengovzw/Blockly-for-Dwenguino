@@ -7,20 +7,13 @@ import cookieParser from 'cookie-parser';
 //mongoose.set('debug', true);
 import i18n from 'i18n-x';
 
-// Import blockly router
+// Import routers
 import blocklyRoutes from './routes/blockly-routes.js';
-
-// Import statistics routes
 import statsRoutes from './routes/stats-routes.js'
-
-// Import dashboard routes
 import dashboardRouter from './routes/dashboard-routes.js'
-
-// Import oauth routes
 import oauthRouter from './routes/oauth-routes.js'
-
-// Import user routes
 import userRouter from "./routes/user.routes.js"
+import classGroupRouter from './routes/classgroup.router.js';
 
 // Import test router
 //import testRouter from './routes/test_auth.routes.js';
@@ -130,6 +123,9 @@ app.use('/oauth', oauthRouter);
 
 // Use user routes
 app.use("/user", userRouter);
+
+// Use classgroup routes
+app.use("/classgroup", classGroupRouter)
 
 // Test router
 //app.use("/test", testRouter)

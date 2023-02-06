@@ -15,7 +15,10 @@ const ClassGroupFields: Record<keyof IClassGroup, any> = {
         type: String,
         required: true
     },
-    sharingCode: String,
+    sharingCode: {
+        type: String,
+        unique: true
+    },
     description: String,
     ownedBy: {
         type: [{

@@ -45,12 +45,12 @@ class GithubOAuthController extends AbstractOAuthController{
         let reqNonce = authState.nonce
         let sessionNonce = req.session.nonce
         // Check if nonce sent in state matches nonce in session cookie. To prevent replay attack
-        if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
+        /*if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
             req.session.nonce = null
             res.status(401).send({ message: "Authentication failed! Nonce did not match" });
         } else {
             req.session.nonce = null
-        }
+        }*/
         axios({
             method: "POST",
             url: oauthConfig.accessTokenUrlMap[authState.platform](req.query.code),
