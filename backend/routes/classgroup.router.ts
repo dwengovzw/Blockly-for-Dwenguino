@@ -10,7 +10,10 @@ let classGroupRouter = express.Router()
 classGroupRouter.get("/all", [verifyTokenAjax, roleCheck("teacher")], classGroupController.all)
 
 classGroupRouter.put("/add", [verifyTokenAjax, roleCheck("teacher")], classGroupController.add)
-classGroupRouter.delete("/delete/:classgroupId", [verifyTokenAjax, roleCheck("teacher")], classGroupController.delete)
-classGroupRouter.get("/:classgroupId", [verifyTokenAjax, roleCheck("teacher")], classGroupController.get)
+classGroupRouter.delete("/delete/:uuid", [verifyTokenAjax, roleCheck("teacher")], classGroupController.delete)
+classGroupRouter.get("/:uuid", [verifyTokenAjax, roleCheck("teacher")], classGroupController.get)
+classGroupRouter.get("/:uuid/students", [verifyTokenAjax, roleCheck("teacher")], classGroupController.getStudents)
+classGroupRouter.get("/:uuid/pending", [verifyTokenAjax, roleCheck("teacher")], classGroupController.getPending)
+
 
 export default classGroupRouter

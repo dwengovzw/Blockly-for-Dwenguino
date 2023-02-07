@@ -40,6 +40,7 @@
     "@material/mwc-button": "^0.27.0",
     "@material/mwc-checkbox": "^0.27.0",
     "@material/mwc-circular-progress": "^0.27.0",
+    "@material/mwc-dialog": "^0.27.0",
     "@material/mwc-formfield": "^0.27.0",
     "@material/mwc-icon": "^0.27.0",
     "@material/mwc-textfield": "^0.27.0",
@@ -96,8 +97,9 @@
     "regenerator": "^0.14.4",
     "style-loader": "^3.3.1",
     "ts-node": "^10.9.1",
-    "uuid": "^3.3.3",
+    "uuid": "^3.4.0",
     "uuid4": "^2.0.3",
+    "uuidv4": "^6.2.13",
     "validator": "^13.7.0"
   },
   "devDependencies": {

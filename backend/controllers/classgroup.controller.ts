@@ -29,12 +29,21 @@ let getUniqueClassCode = async () => {
     return code
 }
 
+let getClassGroupForUser = async (userId, platform, classGroupUUID) => {
+    let user = await User.findOne({userId: userId, platform: platform})
+    let classGroup = await ClassGroup.findOne({
+        ownedBy: {
+            $in: [ user._id ]
+        },
+        uuid: classGroupUUID
+    })
+    return classGroup
+}
+
 class ClassGroupController {
     constructor() {
 
     }
-
-    
 
     async all(req, res){
         try {
@@ -60,10 +69,7 @@ class ClassGroupController {
 
     async add(req, res){
         try {
-            let user = await User.findOne({
-                userId: req.userId,
-                platform: req.platform
-            })
+            let user = await User.findOne({userId: req.userId, platform: req.platform})
             let sharingCode = await getUniqueClassCode()
             const cg: IClassGroup = {
                 name: req.body.name,
@@ -74,6 +80,7 @@ class ClassGroupController {
                 students: []
             }
             let classGroup = new ClassGroup(cg)
+            cg.uuid = classGroup.uuid
             await classGroup.save()
             res.status(200).json(cg)
         } catch (err) {
@@ -81,14 +88,15 @@ class ClassGroupController {
             res.status(500).send("Failed to create classgroup")
         }
     }
+
     async delete(req, res){
         try {
-            let user = await User.findOneAndRemove({userId: req.userId, platform: req.platform})
-            await ClassGroup.findOne({
+            let user = await User.findOne({userId: req.userId, platform: req.platform})
+            await ClassGroup.findOneAndRemove({
                 ownedBy: {
                     $in: [ user._id ]
                 },
-                _id: req.params.classgroupId
+                uuid: req.params.uuid
             })
             res.status(200).send()
         } catch (err) {
@@ -96,20 +104,32 @@ class ClassGroupController {
             res.status(500).send("Failed to remove classgroup")
         }
     } 
+
+    
+
     async get(req, res){
         try {
-            let user = await User.findOne({userId: req.userId, platform: req.platform})
-            let classGroup = await ClassGroup.findOne({
-                ownedBy: {
-                    $in: [ user._id ]
-                },
-                _id: req.params.classgroupId
-            })
+            let classGroup = await getClassGroupForUser(req.userId, req.platform, req.params.uuid)
+            classGroup = await classGroup.populate(["ownedBy", "students", "awaitingStudents"])
             res.status(200).json(classGroup)
         } catch (err) {
             console.log(err)
             res.status(500).send("Failed to get classgroup")
         }
+    }
+
+    async getStudents(req, res) {
+        try {
+            let classGroup = await getClassGroupForUser(req.userId, req.platform, req.params.uuid)
+            res.status(200).json(classGroup)
+        } catch (err) {
+            console.log(err)
+            res.status(500).send("Failed to get classgroup")
+        }
+    }
+
+    async getPending(req, res) {
+
     }
 }
 

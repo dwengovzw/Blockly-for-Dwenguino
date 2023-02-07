@@ -7,16 +7,22 @@ import { LoadableState } from "../../util"
 
 
 interface ClassGroupInfo extends LoadableState{
+    uuid?: string,
     name: string,
     sharingCode?: string,
     description: string,
+    ownedBy?: any[],
+    students?: any[],
+    awaitingStudents?: any[]
 }
 interface ClassGroups extends LoadableState {
-    groups: ClassGroupInfo[]
+    groups: ClassGroupInfo[],
+    currentGroup: ClassGroupInfo | null
 }
 
 const initialClassGroupState: ClassGroups = {
-    groups: []
+    groups: [], 
+    currentGroup: null
 }
 export const classGroupSlice = createSlice({
     name: "classGroup",
@@ -26,6 +32,7 @@ export const classGroupSlice = createSlice({
     reducers: {
         addGroup: (state, action) => {
             let classGroup: ClassGroupInfo = {
+                uuid: action.payload.uuid,
                 name: action.payload.name,
                 sharingCode: action.payload.sharingCode,
                 description: action.payload.description
@@ -40,10 +47,21 @@ export const classGroupSlice = createSlice({
         },
         doneLoading: (state) => {
             state.loading = false
+        },
+        setCurrentGroup: (state, action) => {
+            let classGroup: ClassGroupInfo = {
+                uuid: action.payload.uuid,
+                name: action.payload.name,
+                sharingCode: action.payload.sharingCode,
+                description: action.payload.description,
+                students: action.payload.students,
+                awaitingStudents: action.payload.awaitingStudents,
+                ownedBy: action.payload.ownedBy
+            }
+            state.currentGroup = classGroup
         }
     }
 })
-
 
 const addClassGroup = (classGroupInfo) => {
     return async (dispatch, getState) =>{
@@ -72,7 +90,7 @@ const getAllClassGroups = () => {
                 headers: { "Content-Type": "application/json"}
             })
             let json = await response.json()
-            let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode}})
+            let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid}})
             console.log(response)
             dispatch(doneLoading())
             dispatch(setGroups(groups))
@@ -82,11 +100,41 @@ const getAllClassGroups = () => {
     }
 }
 
+const deleteClassGroup = (uuid: string) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await fetchAuth(`/classgroup/delete/${uuid}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json"}
+            })
+            dispatch(doneLoading())
+            dispatch(getAllClassGroups())
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+const getClassGroup = (uuid: string) => {
+    return async (dispatch, getState) => {
+        try {
+            const response = await fetchAuth(`/classgroup/${uuid}`, {
+                method: "GET",
+                headers: { "Content-Type": "application/json"}
+            })
+            let group = await response.json()
+            dispatch(setCurrentGroup(group))
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
 
 
 
-const { addGroup, setGroups, loading, doneLoading } = classGroupSlice.actions
+
+const { addGroup, setGroups, loading, doneLoading, setCurrentGroup } = classGroupSlice.actions
 
 const classGroupReducer = classGroupSlice.reducer
 
-export { classGroupReducer, addClassGroup, getAllClassGroups, ClassGroupInfo, ClassGroups }
+export { classGroupReducer, addClassGroup, getAllClassGroups, deleteClassGroup, getClassGroup, ClassGroupInfo, ClassGroups }

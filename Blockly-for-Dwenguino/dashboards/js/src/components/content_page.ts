@@ -13,7 +13,8 @@ import { Router, Routes } from "@lit-labs/router"
 import "./menu"
 import "./welcome"
 import "./profile"
-import "./classes"
+import "./classes/classes"
+import "./classes/class"
 
 
 
@@ -24,6 +25,7 @@ class ContentPage extends connect(store)(LitElement) {
         {path: 'home', render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
         {path: 'profile', render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
         {path: 'classes', render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
+        {path: 'class/:uuid', render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`}
     ]);
     
     stateChanged(state: any): void {
