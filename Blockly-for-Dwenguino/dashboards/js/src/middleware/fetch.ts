@@ -2,7 +2,6 @@
 import { setNotification, NotificationInfo } from "../state/features/notification_slice"
 import { store } from "../state/store"
 import { msg } from "@lit/localize"
-import { logout, loadFailed } from "../state/features/user_slice"
 
 
 const fetchAuth = async (resource: RequestInfo | URL, options: RequestInit = {}) => {

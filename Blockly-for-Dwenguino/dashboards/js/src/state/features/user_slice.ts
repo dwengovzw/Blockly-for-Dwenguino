@@ -48,12 +48,11 @@ export const userSlice = createSlice({
             state.birthdate = action.payload.birthdate
             state.roles = action.payload.roles.map((role) => role.name)
             state.platform = action.payload.platform
-            state.loading = false
         }, 
         loading: (state) => {
             state.loading = true;
         },
-        loadFailed: (state) => {
+        doneLoading: (state) => {
             state.loading = false
         }
     }
@@ -61,8 +60,8 @@ export const userSlice = createSlice({
 
 const putUserInfo = (userInfo) => {
     return async (dispatch, getState) => {
-        dispatch(loading())
         try {
+            dispatch(loading())
             const response = await fetchAuth("/user/info", {
                 method: "PUT", 
                 headers: { "Content-Type": "application/json"},
@@ -70,66 +69,21 @@ const putUserInfo = (userInfo) => {
             })
             let info: UserInfo = await response.json();
             dispatch(setInfo(info))
-            dispatch(setNotification({
-                message: msg("Profile info saved :)"),
-                class: "message",
-                time: 2500
-            }))
+            dispatch(setNotification({message: msg("Profile info saved :)"), class: "message", time: 2500}))
         } catch (err) {
-            dispatch(loadFailed())
+            dispatch(setNotification({message: msg("Error while saving!"), class: "error", time: 2500}))
+        } finally {
+            dispatch(doneLoading())
         }
     }
 }
-
-
-/* const putUserInfo = (userInfo) => {
-    return async (dispatch, getState) => {
-        dispatch(loading())
-        try {
-            const response = await fetch("/user/info", {
-                method: "PUT", 
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(userInfo)
-            })
-            if (response.status == 200){
-                let info: UserInfo = await response.json();
-                dispatch(setInfo(info))
-                let notification: NotificationInfo = {
-                    message: msg("Profile info saved :)"),
-                    class: "message",
-                    time: 2500
-                }
-                dispatch(setNotification(notification))
-            } else if (response.status == 401){
-                dispatch(logout())
-                let notification: NotificationInfo = {
-                    message: msg("You are not logged in!"),
-                    class: "error",
-                    time: 2500
-                }
-                dispatch(loadFailed())
-                dispatch(setNotification(notification))
-            } else {
-                let notification: NotificationInfo = {
-                    message: msg("Unable to save user data!"),
-                    class: "error",
-                    time: 2500
-                }
-                dispatch(setNotification(notification))
-            }
-        } catch (err) {
-            
-        }
-        
-    }
-} */
 
 
 const fetchUserInfo = () => {
     // The inside thunk function
     return async (dispatch: any, getState: any) => {
         try {
-            // make async call
+            dispatch(loading())
             let response = await fetch("/user/info")
             if (response.status == 200){
                 let info: UserInfo = await response.json();
@@ -143,27 +97,26 @@ const fetchUserInfo = () => {
                     time: 2500
                 }
                 dispatch(setNotification(notification))
+            } else if (response.status == 403){
+                let notification: NotificationInfo = {message: msg("Not allowed to access this route!"), class: "error", time: 2500}
+                dispatch(setNotification(notification))
             } else {
-                // no state change 
-                // TODO: notify users when they acces a restricted route (403)
-                // TODO: notify users when error occurs
-                let notification: NotificationInfo = {
-                    message: msg("Unable to login!"),
-                    class: "error",
-                    time: 2500
-                }
+                let notification: NotificationInfo = {message: msg("Unable to login!"), class: "error", time: 2500}
                 dispatch(setNotification(notification))
             }
         } catch (err) {
-            console.error(err)
+            let notification: NotificationInfo = {message: msg("Unable to login!"), class: "error", time: 2500}
+            dispatch(setNotification(notification))
+        } finally {
+            dispatch(doneLoading())
         }
     }
 }
 
 
 
-const { login, logout, setInfo, loading, loadFailed } = userSlice.actions
+const { login, logout, setInfo, loading, doneLoading } = userSlice.actions
 
 const userReducer = userSlice.reducer
 
-export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState, putUserInfo, loadFailed }
+export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState, putUserInfo }

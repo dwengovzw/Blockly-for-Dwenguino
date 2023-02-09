@@ -17,7 +17,7 @@ import "@material/mwc-checkbox"
 import "@material/mwc-formfield"
 import "@material/mwc-icon"
 import "@material/mwc-circular-progress"
-import "./classgroup_list_item"
+import "../util/deletable_list_item"
 
 
 
@@ -49,12 +49,37 @@ class Class extends connect(store)(LitElement) {
         }
     }
 
+    handleDeleteOwner(uuid){
+        console.log("Handle delete owner", uuid)
+    }
+
+    handleShowOwnerDetail(uuid){
+        console.log("Handle show owner deail", uuid)
+    }
+
     
     protected render() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
             ${this.loading ? html`<mwc-circular-progress></mwc-circular-progress>` : ""}
-            ${this.classGroup?.ownedBy?.map((owner) => { return owner.name })}
+            <h1>${this.classGroup?.name}</h1>
+            <p>${this.classGroup?.description}</p>
+            <h2>${msg("Sharing code")}</h2>
+            <p>${this.classGroup?.sharingCode}</p>
+            <h2>${msg("Owners")}</h2>
+            ${this.classGroup?.ownedBy?.map((owner) => { 
+                return html`
+                <dwengo-deletable-list-element 
+                    fields='${JSON.stringify([ owner.firstname, owner.uuid ])}' 
+                    uuid='${owner.uuid}'
+                    button_icons='${JSON.stringify(["delete", "list"])}'
+                    @dwengo-list-item-delete=${(e) => this.handleDeleteOwner(e.detail.uuid)}
+                    @dwengo-list-item-action=${(e) => this.handleShowOwnerDetail(e.detail.uuid)}>
+                </dwengo-deletable-list-element>` })}
+            <h2>${msg("Students")}</h2>
+            ${this.classGroup?.students?.map((student) => { return html`<dwengo-deletable-list-element fields='${JSON.stringify([ student.firstname, student.lastname ])}' uuid='${student.uuid}'></dwengo-deletable-list-element>` })}
+            <h2>${msg("Awaiting students")}</h2>
+            ${this.classGroup?.awaitingStudents?.map((student) => { return html`<div>${student.firstname}</div>` })}
         `
     }
 

@@ -7,6 +7,8 @@ import cookieParser from 'cookie-parser';
 //mongoose.set('debug', true);
 import i18n from 'i18n-x';
 
+import axios from 'axios';
+
 // Import routers
 import blocklyRoutes from './routes/blockly-routes.js';
 import statsRoutes from './routes/stats-routes.js'
@@ -69,6 +71,13 @@ if (process.env.NODE_ENV === 'production') {
         origin: '*',
         credentials: true
       }));
+}
+
+if (process.env.NODE_ENV !== "production"){
+    axios.interceptors.request.use(request => {
+        console.log('Starting Request', JSON.stringify(request, null, 2))
+        return request
+      })
 }
 
 app.use(cookieParser());

@@ -74,10 +74,11 @@ const addClassGroup = (classGroupInfo) => {
             })
             let json = await response.json()
             console.log(response)
-            dispatch(doneLoading())
             dispatch(addGroup(json))
         } catch (err) {
-            console.log(err)
+            dispatch(setNotification({message: msg("Error adding classgroup"), class: "error", time: 2500 }))
+        } finally {
+            dispatch(doneLoading())
         }
     }
 }
@@ -85,6 +86,7 @@ const addClassGroup = (classGroupInfo) => {
 const getAllClassGroups = () => {
     return async (dispatch, getState) => {
         try {
+            dispatch(loading())
             const response = await fetchAuth("/classgroup/all", {
                 method: "GET",
                 headers: { "Content-Type": "application/json"}
@@ -92,10 +94,11 @@ const getAllClassGroups = () => {
             let json = await response.json()
             let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid}})
             console.log(response)
-            dispatch(doneLoading())
             dispatch(setGroups(groups))
         } catch (err) {
-            console.log(err)
+            dispatch(setNotification({message: msg("Error getting classgroup"), class: "error", time: 2500 }))
+        } finally {
+            dispatch(doneLoading())
         }
     }
 }
@@ -103,14 +106,16 @@ const getAllClassGroups = () => {
 const deleteClassGroup = (uuid: string) => {
     return async (dispatch, getState) => {
         try {
+            dispatch(loading())
             const response = await fetchAuth(`/classgroup/delete/${uuid}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json"}
             })
-            dispatch(doneLoading())
             dispatch(getAllClassGroups())
         } catch (err) {
-            console.log(err)
+            dispatch(setNotification({message: msg("Error deleting classgroup"), class: "error", time: 2500 }))
+        } finally {
+            dispatch(doneLoading())
         }
     }
 }
@@ -118,6 +123,7 @@ const deleteClassGroup = (uuid: string) => {
 const getClassGroup = (uuid: string) => {
     return async (dispatch, getState) => {
         try {
+            dispatch(loading())
             const response = await fetchAuth(`/classgroup/${uuid}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json"}
@@ -126,11 +132,11 @@ const getClassGroup = (uuid: string) => {
             dispatch(setCurrentGroup(group))
         } catch (err) {
             console.log(err)
+        } finally {
+            dispatch(doneLoading())
         }
     }
 }
-
-
 
 
 const { addGroup, setGroups, loading, doneLoading, setCurrentGroup } = classGroupSlice.actions

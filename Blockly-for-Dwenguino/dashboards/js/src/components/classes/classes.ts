@@ -8,8 +8,8 @@ import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import {addClassGroup, ClassGroupInfo, getAllClassGroups} from "../../state/features/class_group_slice"
-
+import {addClassGroup, ClassGroupInfo, getAllClassGroups, deleteClassGroup} from "../../state/features/class_group_slice"
+import { Router, Routes } from "@lit-labs/router"
 
 import "../menu"
 import "@material/mwc-textfield"
@@ -18,7 +18,7 @@ import "@material/mwc-checkbox"
 import "@material/mwc-formfield"
 import "@material/mwc-icon"
 import "@material/mwc-circular-progress"
-import "./classgroup_list_item"
+import "../util/deletable_list_item"
 
 
 
@@ -31,6 +31,8 @@ class Classes extends connect(store)(LitElement) {
 
     @state() newClassName: string = ""
     @state() newClassDescription: string = ""
+
+    private router = new Routes(this, []);
 
     stateChanged(state: any): void {
         console.log(state)
@@ -52,6 +54,15 @@ class Classes extends connect(store)(LitElement) {
         this.newClassDescription = ""
         store.dispatch(addClassGroup(info))
     }
+
+    handleDeleteClassGroup(uuid){
+        store.dispatch(deleteClassGroup(uuid))
+    }
+
+    handleShowClassGroup(uuid) {
+        //this.router.goto(`/dashboard/class/${uuid}`)
+       window.location.href=`/dashboard/class/${uuid}`;
+    }
     
     protected render() {
         return html`
@@ -63,12 +74,12 @@ class Classes extends connect(store)(LitElement) {
                 header="true">
             </dwengo-classes-list-element>
             ${this.groups.map((group) => {
-                return html`<dwengo-classes-list-element 
-                                name="${group.name}"
-                                description="${group.description}"
-                                sharingCode="${group.sharingCode}"
-                                uuid="${group.uuid}">
-                            </dwengo-classes-list-element>`})
+                return html`<dwengo-deletable-list-element
+                                fields="${JSON.stringify([group.name, group.description, group.sharingCode])}"
+                                uuid="${group.uuid}"
+                                @dwengo-list-item-delete=${(e) => this.handleDeleteClassGroup(e.detail.uuid)}
+                                @dwengo-list-item-action=${(e) => this.handleShowClassGroup(e.detail.uuid)}>
+                            </dwengo-deletable-list-element>`})
             }
             <div class="add_menu">
                 <mwc-textfield class="item add_name_field" @change=${(e) => this.newClassName = e.target.value } outlined label="${msg("Name")}" type="text" value="${this.newClassName}"></mwc-textfield>

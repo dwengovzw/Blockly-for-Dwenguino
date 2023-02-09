@@ -56,6 +56,9 @@ class ContentPage extends connect(store)(LitElement) {
         dwengo-profile-page {
             flex-grow: 1;
         }
+        dwengo-class-page {
+            flex-grow: 1;
+        }
     `
 }
 

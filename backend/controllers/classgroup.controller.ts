@@ -111,6 +111,10 @@ class ClassGroupController {
         try {
             let classGroup = await getClassGroupForUser(req.userId, req.platform, req.params.uuid)
             classGroup = await classGroup.populate(["ownedBy", "students", "awaitingStudents"])
+            classGroup = await (await (await classGroup
+                .populate("ownedBy", ["firstname", "lastname", "uuid"]))
+                .populate("students", ["firstname", "lastname", "uuid"]))
+                .populate("awaitingStudents", ["firstname", "lastname", "uuid"])
             res.status(200).json(classGroup)
         } catch (err) {
             console.log(err)

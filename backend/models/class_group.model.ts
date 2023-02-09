@@ -27,15 +27,12 @@ const ClassGroupFields: Record<keyof IClassGroup, any> = {
         unique: true
     },
     description: String,
-    ownedBy: {
-        type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Teacher',
-        }],
+    ownedBy: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
         default: [],
-        validate: v => Array.isArray(v) && v.length > 0,
-    },
+    }],
     awaitingStudents: [
         {
             type: Schema.Types.ObjectId,

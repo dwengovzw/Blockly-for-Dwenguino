@@ -3,6 +3,7 @@ import db from "../config/db.config.js"
 import jwt_settings from "../config/jwt.config.js";
 import { User } from "../models/user.model.js"
 import { Role } from "../models/role.model.js"
+import { platform } from "os";
 
 
 let verifyToken = (req, res, next) => {
@@ -45,6 +46,24 @@ let verifyTokenWithRedirect = (req, res, next, redirectAction) => {
         next();
     })
 }
+
+let verifyUserExists = (req, res, next) => {
+    User.findOne({
+        platform: req.platform,
+        userId: req.userId
+    }).exec((err, user) => {
+        if (err) {
+            res.status(500).send({ message: "Error during login" });
+            return
+        }
+        if (!user){
+            res.status(401).send("User does not exist!")
+            return
+        }
+        next();
+        return
+    })
+}
  
 // Returns a middleware function that checks if a user has a specific role.
 /**
@@ -58,9 +77,8 @@ let roleCheck = (role) => {
             userId: req.userId, 
             platform: req.platform})
         .exec((err, user) => {
-            if (err) {
-                res.status(500).send({ message: err });
-                return;
+            if (err || !user){
+                res.status(500).send("User does not exist")
             }
             for (let i = 0; i < user.roles.length; i++) {
                 if (user.roles[i].name === role) {
@@ -74,4 +92,4 @@ let roleCheck = (role) => {
   }
 }
 
-export { verifyToken, verifyTokenAjax, roleCheck }
+export { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists }

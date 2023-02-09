@@ -67,7 +67,7 @@ class UserController {
                 await user.save();
                 return res.status(200).json(userInfo)
             } catch (err) {
-                console.log("Failed to save user data")
+                return res.status(500).send("Unable to complete request");
             }
         }
     }

@@ -4,22 +4,17 @@
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
-import { store } from "../../state/store"
 import { msg } from '@lit/localize';
-import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import {deleteClassGroup} from "../../state/features/class_group_slice"
 
 import "@material/mwc-button"
 import "@material/mwc-dialog"
 
-@customElement("dwengo-classes-list-element")
-class ClassListElement extends connect(store)(LitElement) {
-    @property({type: String}) name: string = "";
-    @property({type: String}) description: string = "";
-    @property({type: String}) sharingCode: string = "";
+@customElement("dwengo-deletable-list-element")
+class DeletableListItem extends LitElement {
+    @property({type: Array}) fields: string[] = [];
     @property({type: String}) uuid: string = "";
-    @property({type: Boolean}) header: boolean = false;
+    @property({type: Array}) button_icons: string[] = ["delete", "list"]
 
     @state() showConfirmDialog: boolean = false;
 
@@ -36,39 +31,49 @@ class ClassListElement extends connect(store)(LitElement) {
     }
 
     handleDialogConfirm(){
-        store.dispatch(deleteClassGroup(this.uuid))
+        const event = new CustomEvent( 'dwengo-list-item-delete', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                uuid: this.uuid
+            }
+        })
         this.showConfirmDialog = false;
+        this.dispatchEvent(event)
     }
 
     handleList(){
-
+        const event = new CustomEvent( 'dwengo-list-item-action', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                uuid: this.uuid
+            }
+        })
+        this.dispatchEvent(event)
     }
 
     renderButtons(){
         return html`
-        <mwc-button class="item" @click=${this.handleDelete} raised>
-            <span class="material-symbols-outlined">
-                delete
-            </span>
-        </mwc-button>
-        <a class="no-decoration" href="/dashboard/class/${this.uuid}">
-            <mwc-button class="item" raised>
+        <span>
+            <mwc-button class="button" @click=${this.handleDelete} raised>
                 <span class="material-symbols-outlined">
-                    list
+                    ${this.button_icons[0]}
                 </span>
             </mwc-button>
-        </a>`
-    }
-
-    renderEmptySpace() {
-        return html`<div class="empty_space"></div>`
+            <mwc-button class="button" @click=${this.handleList} raised>
+                <span class="material-symbols-outlined">
+                    ${this.button_icons[1]}
+                </span>
+            </mwc-button>
+        </span>`
     }
 
     renderConfirmDialog(){
         return html`
         <mwc-dialog open="${this.showConfirmDialog}">
             <div>
-                ${msg("Are you sure you want to delete the item ")}<em>${this.name}</em>?
+                ${msg("Are you sure you want to delete the item ")}<em>${this.fields.join(" - ")}</em>?
             </div>
             <mwc-button @click="${() => {this.handleDialogConfirm()}}" slot="primaryAction" dialogAction="close">
                 ${msg("Yes")}
@@ -84,10 +89,10 @@ class ClassListElement extends connect(store)(LitElement) {
         return html`
         ${getGoogleMateriaIconsLinkTag()}
         <div class="container">
-            <span class="item name">${this.name}</span>
-            <span class="item description">${this.description}</span>
-            <span class="item sharingCode">${this.sharingCode}</span>
-            ${this.header ? this.renderEmptySpace() : this.renderButtons()}
+            ${this.fields?.map(field => {
+                return html`<span class="item">${field}</span>`
+            })} 
+            ${this.renderButtons()}
         </div>
         ${this.showConfirmDialog ? this.renderConfirmDialog() : ""}
         `
@@ -111,21 +116,18 @@ class ClassListElement extends connect(store)(LitElement) {
     mwc-button {
         --mdc-theme-primary: var(--theme-accentFillSelected);
     }
-    .description {
-        flex-grow: 5;
-    }
     .item {
         margin: 2px 5px;
     }
-    .name {
+    .button {
+        margin: 2px 5px;
+    }
+    .item:nth-of-type(2){
+        flex-grow: 5;
+    }
+    .item.nth-of-type(1) {
         min-width: 150px;
-    }
-    .sharingCode {
-        min-width: 100px;
-    }
-    .empty_space {
-        display: inline-block;
-        width: 148px;
+        max-width: 250px;
     }
     .no-decoration {
         text-decoration: none;
@@ -134,4 +136,4 @@ class ClassListElement extends connect(store)(LitElement) {
 
 }
 
-export default ClassListElement
+export default DeletableListItem
