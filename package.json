@@ -17,6 +17,7 @@
     "test-backend-unit": "ENV_FILE=environments/test.env node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/unit/backend/jest.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
     "build-dev": "npm run build-dev-frontend && npm run build-dev-backend",
     "build-dev-frontend": "webpack --mode development --progress --stats-error-details --config webpack.config.dev.cjs",
+    "build-dev-frontend-watch": "webpack --mode development --watch --progress --stats-error-details --config webpack.config.dev.cjs",
     "build-dev-backend": "tsc --sourcemap --project backend/tsconfig.json",
     "build": "npm run build-frontend && npm run build-backend",
     "build-frontend": "webpack --mode production --progress --config webpack.config.cjs",

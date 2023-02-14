@@ -80,7 +80,6 @@ module.exports = [
     {
         name: "dashboards",
         mode: "development",
-        watch: true,
         devtool: "eval-source-map",
         context: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards"),
         entry: {

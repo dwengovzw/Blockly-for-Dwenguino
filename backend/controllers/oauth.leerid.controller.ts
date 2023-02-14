@@ -38,7 +38,8 @@ class LeerIdOAuthController extends AbstractOAuthController{
      */
     redirect(req, res, authState) {
         
-        if (authState.platform !== db.PLATFORMS.leerId){
+        if (authState.
+            platform !== db.PLATFORMS.leerId){
             return res.status(500).send({message: "Internal server error: platform name does not match controller."})
         }
         let state = JSON.parse(req.query.state)
@@ -61,6 +62,7 @@ class LeerIdOAuthController extends AbstractOAuthController{
         }).then(async (response) => {
             console.log(response)    
             let access_token = response.data.access_token
+            console.log(`${new Date().toLocaleString()}: Sending new request.`)
             axios({
                 method: "GET",
                 url: process.env.LEERID_OAUTH_USERINFO_URL,
@@ -70,7 +72,12 @@ class LeerIdOAuthController extends AbstractOAuthController{
             }).then(async (id_response) => {
                 console.log(id_response)
             }).catch(err => {
-                console.log(err)
+                console.log(`${new Date().toLocaleString()}: .
+                Received response headers:
+                    ${JSON.stringify(err.response.headers)}
+                Received response data:
+                    ${JSON.stringify(err.response.data)}
+                .`)
             })
 
         }).catch((err) => {
