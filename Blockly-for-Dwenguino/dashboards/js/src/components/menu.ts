@@ -20,12 +20,12 @@ class Menu extends connect(store)(LitElement){
     userInfo: UserInfo = initialUserState
     menuItemOptions: Record<string, MenuItem[]> = {
         "user": [
-            {label: msg("Home"), href: "/dashboard/home", icon: "home"},
-            {label: msg("Profile"), href: "/dashboard/profile", icon: "person"}
+            {label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home"},
+            {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person"}
         ],
         "student": [],
         "teacher": [
-            {label: msg("Class groups"), href: "/dashboard/classes", icon: "groups"},
+            {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups"},
         ],
         "admin": []
     }

@@ -56,8 +56,8 @@ class LoginMenu extends connect(store)(LitElement) {
     renderLoginMenuLoggedIn(){
         return html`<div>
                 <span class='loggedin-item login-title'>${msg("Welcome")} ${this.name}</span>
-                <span class='loggedin-item'><a href='/dashboard/profile'>${msg("View profile")}</a></span>
-                <span class='loggedin-item'><a rel="external" href='/oauth/logout'>${msg("Logout")}</a></span>
+                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/profile'>${msg("View profile")}</a></span>
+                <span class='loggedin-item'><a rel="external" href='${globalSettings.hostname}/oauth/logout'>${msg("Logout")}</a></span>
             </div>` 
     }
 

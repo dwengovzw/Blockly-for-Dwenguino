@@ -56,7 +56,7 @@ class Header extends connect(store)(LitElement) {
     protected render() {
         console.log(globalThis)
         return html`
-            <a class="navbar-brand" href="/dashboard"><img class='dwengo-header-logo' src="${globalThis.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/></a>
+            <a class="navbar-brand" href="${globalSettings.hostname}/dashboard"><img class='dwengo-header-logo' src="${globalThis.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/></a>
             <dwengo-login-menu></dwengo-login-menu>
         `
     }

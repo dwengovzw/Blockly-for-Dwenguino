@@ -16,6 +16,12 @@
               'opsz' 48
             }
             </style>
+        <script>
+            let globalSettings = {
+                basepath: "<%- base_url %>/dwenguinoblockly/",
+                hostname: "<%- base_url %>"
+            }
+        </script>
         <script type="text/javascript" src="<%- base_url %>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>
         <style>
             body {
@@ -91,10 +97,5 @@
     </head>
     <body>
         <dwengo-dashboard></dwengo-dashboard>
-        <script>
-            let globalSettings = {
-                basepath: "<%- base_url %>/dwenguinoblockly/",
-                hostname: "<%- base_url %>"
-            }
-        </script>
+        
 </html>
