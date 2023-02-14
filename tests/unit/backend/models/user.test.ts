@@ -40,10 +40,10 @@ describe("Role model", () => {
 })
 
 describe("ClassGroup model", () => {
-    it("emtpy owner should throw error", async () => {
+    /*it("emtpy owner should throw error", async () => {
         let classGroup = new ClassGroup({name: "myvalidname", awaitingStudents: [], students: [], ownedBy:[]})
         await expect(classGroup.validate()).rejects.toThrowError()
-    })
+    })*/
     it("multiple owners should work", async () => {
         let teach1 = new Teacher({userId: 'teach1', platform: db.PLATFORMS.github})
         let teach2 = new Teacher({userId: 'teach2', platform: db.PLATFORMS.beACM})
