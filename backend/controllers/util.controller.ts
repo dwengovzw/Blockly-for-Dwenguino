@@ -116,9 +116,9 @@ class UtilController{
         let binary_file = path.resolve(UtilController.prefix + "/compilation/sketch-" + objid + "/" + objdir + "/sketch-" + objid + ".bin");
         let tmp_file = path.resolve(UtilController.prefix + "/compilation/sketch-" + objid + "/" + objdir + "/output-" + objid + ".bin");
         // Copy hardware folder to sketch folder (create first) to enable compilation using makefile
-        UtilController.handleExternalCommand("cp -R " + command_location + "/hardware " + command_location +  "/sketch-" + objid + "/ && cp " + command_location + "/Makefile " + command_location +  "/sketch-" + objid + "/", (error, stderr)=>{
+        UtilController.handleExternalCommand("ln -s " + command_location + "/hardware " + command_location +  "/sketch-" + objid + "/ && cp " + command_location + "/Makefile " + command_location +  "/sketch-" + objid + "/", (error, stderr)=>{
             UtilController.cleanupCompile(objid)
-            UtilController.sendErrorMessage(res, "error", "An error occured during hardware folder copy", error, stderr);
+            UtilController.sendErrorMessage(res, "error", "An error occured during hardware folder symlink", error, stderr);
         }, (stdout)=>{
             // First try to clean the previous code
             UtilController.handleExternalCommand(make_command + ' -C ' + command_location +  "/sketch-" + objid + " OBJDIR=" + objdir + ' clean', 
