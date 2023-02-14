@@ -49,7 +49,7 @@ class LoginMenu extends connect(store)(LitElement) {
     }
 
     getLoginURI(platform: string, originalRequestInfo:string){
-        return `/oauth/login?platform=${platform}${originalRequestInfo}`
+        return `${globalSettings.hostname}/oauth/login?platform=${platform}${originalRequestInfo}`
     }
 
 
