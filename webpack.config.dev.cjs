@@ -80,21 +80,25 @@ module.exports = [
     {
         name: "dashboards",
         mode: "development",
+        watch: true,
         devtool: "eval-source-map",
         context: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards"),
         entry: {
-            app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/index.ts"),
+            app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts"),
         },
         output: {
             path: path.resolve(__dirname, 'Blockly-for-Dwenguino/dashboards/js/dist/'),
             filename: 'dashboards.bundle.js'
+        },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
         },
         module: {
             rules: [
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/,
-                    include: /dashboards/,
+                    include: [/dashboards/],
                     use:["babel-loader", 
                     {
                         loader: 'ts-loader',

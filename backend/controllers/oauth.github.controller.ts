@@ -45,12 +45,12 @@ class GithubOAuthController extends AbstractOAuthController{
         let reqNonce = authState.nonce
         let sessionNonce = req.session.nonce
         // Check if nonce sent in state matches nonce in session cookie. To prevent replay attack
-        if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
+        /*if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
             req.session.nonce = null
             res.status(401).send({ message: "Authentication failed! Nonce did not match" });
         } else {
             req.session.nonce = null
-        }
+        }*/
         axios({
             method: "POST",
             url: oauthConfig.accessTokenUrlMap[authState.platform](req.query.code),
@@ -64,11 +64,11 @@ class GithubOAuthController extends AbstractOAuthController{
             try {
                 let userInfo = await octo.request("GET /user", {});
                 console.log(userInfo);
-                let minUserInfo = new MinimalUserInfo(userInfo.data.id,
+                let minUserInfo = new MinimalUserInfo(userInfo.data.id.toString(),
                     db.PLATFORMS.github, 
                     userInfo.data.name, 
                     userInfo.data.email, 
-                    db.ROLES.student)
+                    [db.ROLES.student, db.ROLES.user])
                 this.signin(req, res, minUserInfo, authState); // Call super class method to sign in
             } catch (err) {
                 console.log(err);

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { Octokit } from 'octokit'
 import AbstractOAuthController from "./abstract.oauth.controller.js";
-import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
 import db from "../config/db.config.js"
 import oauthConfig from "../config/oauth.config.js";
 import crypto from "crypto"
@@ -25,8 +24,9 @@ class LeerIdOAuthController extends AbstractOAuthController{
         // add nonce to both session cookie as well as request to mitigate csrf
         let nonce = crypto.randomBytes(128).toString('hex')
         req.session.nonce = nonce
+        authState.nonce = nonce
         let authorizeUrl = 
-        oauthConfig.authorizeUrlMap[db.PLATFORMS.leerId](JSON.stringify(authState), nonce)
+        oauthConfig.authorizeUrlMap[db.PLATFORMS.leerId](JSON.stringify(authState))
         res.redirect(authorizeUrl);
     }
 
@@ -37,10 +37,12 @@ class LeerIdOAuthController extends AbstractOAuthController{
      * @param {*} res 
      */
     redirect(req, res, authState) {
+        
         if (authState.platform !== db.PLATFORMS.leerId){
             return res.status(500).send({message: "Internal server error: platform name does not match controller."})
         }
-        let reqNonce = req.query?.nonce
+        let state = JSON.parse(req.query.state)
+        let reqNonce = state.nonce
         let sessionNonce = req.session.nonce
         // Check if nonce sent in state matches nonce in session cookie. To avoid replay atacks
         if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
@@ -53,10 +55,24 @@ class LeerIdOAuthController extends AbstractOAuthController{
             method: "POST",
             url: oauthConfig.accessTokenUrlMap[authState.platform](req.query.code),
             headers: {
-                Accept: "application/json"
-            }
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            data: oauthConfig.queryStringMap[authState.platform](req.query.code)
         }).then(async (response) => {
-            console.log(response)            
+            console.log(response)    
+            let access_token = response.data.access_token
+            axios({
+                method: "GET",
+                url: process.env.LEERID_OAUTH_USERINFO_URL,
+                headers: {
+                    'Authorization': `Bearer ${access_token}`
+                }
+            }).then(async (id_response) => {
+                console.log(id_response)
+            }).catch(err => {
+                console.log(err)
+            })
+
         }).catch((err) => {
             res.status(401).send({ message: "Authentication failed!" });
         });

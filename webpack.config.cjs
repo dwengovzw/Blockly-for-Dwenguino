@@ -85,7 +85,7 @@ module.exports = [
         mode: "development",
         devtool: "eval-source-map",
         entry: {
-            app: './Blockly-for-Dwenguino/dashboards/js/src/index.ts'
+            app: './Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts'
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/dashboards/js/dist/'),

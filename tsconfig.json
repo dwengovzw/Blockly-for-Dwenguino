@@ -15,7 +15,8 @@
       "types": ["jquery"],
       "lib": [
         "DOM",
-        "ES6"
+        "ES6", 
+        "es2017"
       ],
     },
     "exclude": [

@@ -3,9 +3,11 @@ import db from "../config/db.config.js"
 //import { isEmail } from 'validator/es/index.js'
 import { IRole, RoleSchema } from './role.model.js'
 import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
+import  v4 from "uuid/v4.js"
 
 
 interface IUserShared {
+    uuid?: string,
     userId: string,
     platform: string,
     firstname?: string,
@@ -26,8 +28,17 @@ interface IUser extends IUserShared {
     roles?: IRole[]
 }
 
+interface IUserDoc extends IUser, Document {
+
+}
+
 const UserSchemaFields: Record<keyof IUser, any> = 
 {
+    uuid: {
+        type: String,
+        required: true,
+        default: v4
+    },
     userId:{
         type: String,
         required: true,

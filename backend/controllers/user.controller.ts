@@ -1,59 +1,77 @@
 import { User } from "../models/user.model.js"
 import jwt from "jsonwebtoken"
 import jwt_settings from "../config/jwt.config.js";
+import { UserInfo } from "os";
+import { Role } from "../models/role.model.js"
 
 class UserController {
     constructor(){
 
     }
 
-    async isLoggedIn(req, res){
-        let token  = req.session.token;
-        if (!token) {
-            return res.status(401).send(false); // TODO: redirect to login page
-        }
-        jwt.verify(token, jwt_settings.secret as string, async (err, decoded) => {
-            if (err) {
-                return res.status(401).send(false)
-            }
-            try{
-                let platform = decoded?.platform;
-                let userId = decoded?.id;
+    async getInfo(req, res){
+        let userId = req.userId
+        let platform = req.platform
+        if (userId && platform){
+            try {
                 let user = await User.findOne({
                     platform: platform,
                     userId: userId
                 })
-                if (!user || !user.firstname){
-                    res.status(200).send("No display name set");
+                let userInfo = {
+                    loggedIn: true,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                    birthdate: user.birthdate,
+                    roles: user.roles,
+                    platform: user.platform
                 }
-                return res.status(200).send(user?.firstname)
-            } catch (e) {
-                return res.status(401).send({message: e})
+                return res.status(200).json(userInfo)
+            } catch (err){
+                return res.status(500).send({message: "Unable to retrieve user"})
             }
-        })
+        } else {
+            return res.status(500).send({message: "Cannot get user info"})
+        }
+        
     }
 
-    async getName(req, res){
-        let platform = req.platform;
-        let userId = req.userId;
-        if (platform && userId){
-            try{
+    async putInfo(req, res) {
+        console.log(req)
+        let info = req.body
+        let userId = req.userId
+        let platform = req.platform
+        if (userId && platform){
+            try {
                 let user = await User.findOne({
-                    platform: platform,
-                    userId: userId
+                        platform: platform,
+                        userId: userId
                 })
-                if (!user || !user.firstname){
-                    return res.status(200).send("No display name set");
+                user.email = info.email
+                user.firstname = info.firstname
+                user.lastname = info.lastname
+                if (info.birthdate){
+                    user.birthdate = new Date(info.birthdate)
                 }
-                return res.status(200).send(user?.firstname)
-            } catch (e) {
-                return res.status(401).send({message: e})
+                user.roles = info.roles.map(role => new Role({name: role}))
+                let userInfo = {
+                    loggedIn: true,
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email,
+                    birthdate: user.birthdate,
+                    roles: user.roles,
+                    platform: user.platform
+                }
+                await user.save();
+                return res.status(200).json(userInfo)
+            } catch (err) {
+                return res.status(500).send("Unable to complete request");
             }
-            
-        } else {
-            return res.status(401).send({message: "Cannot get name"})
         }
     }
+
 }
 
 export default UserController

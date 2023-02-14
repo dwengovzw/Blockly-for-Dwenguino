@@ -1,8 +1,10 @@
-import { Document, Schema, model } from "mongoose"
+import mongoose, { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
 import { IStudent, ITeacher, IUser } from "./user.model.js"
+import  v4 from "uuid/v4.js"
 
 interface IClassGroup {
+    uuid?: string,
     name: string,
     sharingCode?: string,
     description?: string,
@@ -11,21 +13,26 @@ interface IClassGroup {
     students: ID[] | IStudent[]
 }
 const ClassGroupFields: Record<keyof IClassGroup, any> = {
+    uuid: {      // UUID (different from the automatically generated _id)
+        type: String,
+        required: true,
+        default: v4, // Use automatically generated uuid as identifier (unique in combination with version and language)
+    },
     name: {
         type: String,
         required: true
     },
-    sharingCode: String,
+    sharingCode: {
+        type: String,
+        unique: true
+    },
     description: String,
-    ownedBy: {
-        type: [{
-            type: Schema.Types.ObjectId,
-            ref: 'Teacher',
-        }],
+    ownedBy: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
         required: true,
         default: [],
-        validate: v => Array.isArray(v) && v.length > 0,
-    },
+    }],
     awaitingStudents: [
         {
             type: Schema.Types.ObjectId,

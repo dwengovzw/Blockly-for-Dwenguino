@@ -4,6 +4,7 @@
       "module": "NodeNext",  
       "moduleResolution": "NodeNext",      
       "typeRoots": ["../node_modules/@types"],     
+      "experimentalDecorators": true,
       "lib": ["es6"],                     
       "allowJs": true,
       "checkJs": false,
