@@ -24,7 +24,7 @@ const fetchPlatforms = () => {
     return async (dispatch: any, getState: any) => {
         try {
             // make async call
-            let response = await fetch("/oauth/platforms")
+            let response = await fetch(`${globalSettings.hostname}/oauth/platforms`)
             if (response.status == 200){
                 let resp = await response.json()
                 let platforms = Object.keys(resp).map(key => resp[key])

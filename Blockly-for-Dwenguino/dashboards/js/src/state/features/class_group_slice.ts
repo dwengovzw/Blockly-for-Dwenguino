@@ -67,7 +67,7 @@ const addClassGroup = (classGroupInfo) => {
     return async (dispatch, getState) =>{
         dispatch(loading())
         try {
-            const response = await fetchAuth("/classgroup/add", {
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/add`, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(classGroupInfo)
@@ -87,7 +87,7 @@ const getAllClassGroups = () => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth("/classgroup/all", {
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/all`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json"}
             })
@@ -107,7 +107,7 @@ const deleteClassGroup = (uuid: string) => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth(`/classgroup/delete/${uuid}`, {
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/delete/${uuid}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json"}
             })
@@ -124,7 +124,7 @@ const getClassGroup = (uuid: string) => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth(`/classgroup/${uuid}`, {
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/${uuid}`, {
                 method: "GET",
                 headers: { "Content-Type": "application/json"}
             })

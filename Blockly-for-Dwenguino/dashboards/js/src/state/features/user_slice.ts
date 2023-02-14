@@ -62,7 +62,7 @@ const putUserInfo = (userInfo) => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth("/user/info", {
+            const response = await fetchAuth(`${globalSettings.hostname}/user/info`, {
                 method: "PUT", 
                 headers: { "Content-Type": "application/json"},
                 body: JSON.stringify(userInfo)
@@ -84,7 +84,7 @@ const fetchUserInfo = () => {
     return async (dispatch: any, getState: any) => {
         try {
             dispatch(loading())
-            let response = await fetch("/user/info")
+            let response = await fetch(`${globalSettings.hostname}/user/info`)
             if (response.status == 200){
                 let info: UserInfo = await response.json();
                 dispatch(setInfo(info))
