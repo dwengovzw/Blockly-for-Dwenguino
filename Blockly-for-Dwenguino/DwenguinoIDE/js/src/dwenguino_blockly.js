@@ -328,6 +328,21 @@ let DwenguinoBlockly = {
       }
     },
 
+    getFilenameForCurrentContext: function(){
+      if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+        return "program.dw"
+      } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+        let tabname = `${DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName()}`
+        if (tabname.includes(".")){
+          let extRegex = /^(.*)\.(.*)$/
+          tabname = tabname.match(extRegex)[1]
+        }
+        return `${tabname}.dw`
+      } else {
+        return "";
+      }
+    },
+
     download: function(filename, text) {
       FileIOController.download(filename, text);
     },
@@ -354,8 +369,8 @@ let DwenguinoBlockly = {
       Blockly.svgResize(DwenguinoBlockly.workspace);
     },
 
-    downloadDwenguinoBinaryHandler: function(code){
-      DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
+    downloadDwenguinoBinaryHandler: function(code, localfilename=""){
+      DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code, localfilename);
     },
 
     downloadBlobToFile: function(blob, filename){
@@ -399,7 +414,7 @@ let DwenguinoBlockly = {
       })
     },
 
-    downloadDwenguinoBinaryHandlerAjax: function(code){
+    downloadDwenguinoBinaryHandlerAjax: function(code, localfilename=""){
       DwenguinoBlockly.disableRunButton();
       let url = DwenguinoBlockly.compilationPath// + "?code=" + encodeURIComponent(code);
       let res = "success";
@@ -423,6 +438,9 @@ let DwenguinoBlockly = {
             if (filename === "error.log"){
               DwenguinoBlockly.setBlobContentToErrorWindow(blob);
             } else {
+              if (localfilename !== ""){
+                filename = localfilename
+              }
               DwenguinoBlockly.downloadBlobToFile(blob, filename);
             }
             // To here
@@ -472,7 +490,8 @@ let DwenguinoBlockly = {
           $("#db_menu_item_run").click(function(){
             Blockly.Arduino.emptySetup();
             var code = DwenguinoBlockly.getCodeForCurrentContext();
-            DwenguinoBlockly.downloadDwenguinoBinaryHandler(code);
+            let filename = DwenguinoBlockly.getFilenameForCurrentContext()
+            DwenguinoBlockly.downloadDwenguinoBinaryHandler(code, filename);
           });
 
           $("#db_menu_item_clear").click(function(){
