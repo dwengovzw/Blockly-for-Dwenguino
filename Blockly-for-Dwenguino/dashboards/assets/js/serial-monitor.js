@@ -7,7 +7,7 @@
 		exports["SerialMonitor"] = factory();
 	else
 		root["SerialMonitor"] = factory();
-})(this, () => {
+})(self, () => {
 return /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
@@ -36,7 +36,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
 
 
 let LabeledDropdown = class LabeledDropdown extends lit__WEBPACK_IMPORTED_MODULE_0__.LitElement {
@@ -97,7 +96,7 @@ __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({
         type: (Array)
     }),
-    __metadata("design:type", typeof (_a = typeof Array !== "undefined" && Array) === "function" ? _a : Object)
+    __metadata("design:type", Array)
 ], LabeledDropdown.prototype, "options", void 0);
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)(),
@@ -105,7 +104,7 @@ __decorate([
 ], LabeledDropdown.prototype, "labelText", void 0);
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({ type: Number }),
-    __metadata("design:type", typeof (_b = typeof Number !== "undefined" && Number) === "function" ? _b : Object)
+    __metadata("design:type", Number)
 ], LabeledDropdown.prototype, "selectedIndex", void 0);
 LabeledDropdown = __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.customElement)("labeled-dropdown"),
@@ -143,7 +142,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
 
 
 
@@ -235,7 +233,7 @@ __decorate([
 ], MonitorMenubar.prototype, "labelText", void 0);
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({ type: Object }),
-    __metadata("design:type", typeof (_a = typeof _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_4__.SerialMonitorConfig !== "undefined" && _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_4__.SerialMonitorConfig) === "function" ? _a : Object)
+    __metadata("design:type", _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_4__.SerialMonitorConfig)
 ], MonitorMenubar.prototype, "config", void 0);
 MonitorMenubar = __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.customElement)("monitor-menubar"),
@@ -270,7 +268,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
 
 
 let MonitorOutput = class MonitorOutput extends lit__WEBPACK_IMPORTED_MODULE_0__.LitElement {
@@ -326,7 +323,7 @@ __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({
         type: (Array)
     }),
-    __metadata("design:type", typeof (_a = typeof Array !== "undefined" && Array) === "function" ? _a : Object)
+    __metadata("design:type", Array)
 ], MonitorOutput.prototype, "lines", void 0);
 MonitorOutput = __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.customElement)("monitor-output"),
@@ -365,7 +362,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a, _b;
 
 
 
@@ -518,8 +514,10 @@ let SendReceiveSerialControls = class SendReceiveSerialControls extends lit__WEB
         this.byteInterpreter[this.config.getDataType()](byte);
         return "";
     }
-    handleSend(event) {
+    handleSend() {
         this.writeSerialValue(this.inputData);
+        console.log(this.inputData);
+        this.inputData = "";
     }
     writeSerialValue(value) {
         let valueArray = [];
@@ -540,6 +538,15 @@ let SendReceiveSerialControls = class SendReceiveSerialControls extends lit__WEB
     handleDownload() {
         _utils_FileIOController__WEBPACK_IMPORTED_MODULE_4__["default"].download("data.csv", this.datalog.join("\n"));
     }
+    handleInput(data) {
+        if (data.charAt(data.length - 1) == "\n") {
+            this.inputData = this.inputData.trim();
+            this.handleSend();
+        }
+        else {
+            this.inputData = data;
+        }
+    }
     render() {
         return lit__WEBPACK_IMPORTED_MODULE_0__.html `
             <button @click=${async () => {
@@ -550,7 +557,7 @@ let SendReceiveSerialControls = class SendReceiveSerialControls extends lit__WEB
             });
         }} ?disabled="${!this.connectPossible}">${(0,_lit_localize__WEBPACK_IMPORTED_MODULE_2__.msg)("Connect")}</button>
             <button @click=${() => this.serialConnection.disconnect()} ?disabled=${!this.disconnectPossible}>${(0,_lit_localize__WEBPACK_IMPORTED_MODULE_2__.msg)("Disconnect")}</button>
-            <textarea ?disabled=${!this.textInputPossible} rows="1" @input=${(e) => { this.inputData = e.target.value; }} placeholder="${(0,_lit_localize__WEBPACK_IMPORTED_MODULE_2__.msg)("Enter the data you want to send to the device!")}"></textarea>
+            <textarea ?disabled=${!this.textInputPossible} rows="1" @input=${(e) => { this.handleInput(e.target.value); }} .value=${this.inputData} placeholder="${(0,_lit_localize__WEBPACK_IMPORTED_MODULE_2__.msg)("Enter the data you want to send to the device!")}"></textarea>
             <button @click=${this.handleSend} ?disabled=${!this.sendPossible}>${(0,_lit_localize__WEBPACK_IMPORTED_MODULE_2__.msg)("Send")}</button>
             <button @click=${this.handleDownload} class="fas fa-download" ?disabled=${!this.downloadPossible}>${(0,_lit_localize__WEBPACK_IMPORTED_MODULE_2__.msg)("Download csv")}</button>
         `;
@@ -643,7 +650,7 @@ __decorate([
 ], SendReceiveSerialControls.prototype, "textInputPossible", void 0);
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.state)(),
-    __metadata("design:type", typeof (_a = typeof Array !== "undefined" && Array) === "function" ? _a : Object)
+    __metadata("design:type", Array)
 ], SendReceiveSerialControls.prototype, "datalog", void 0);
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.property)({
@@ -654,7 +661,7 @@ __decorate([
             return conv;
         }
     }),
-    __metadata("design:type", typeof (_b = typeof _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_3__["default"] !== "undefined" && _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_3__["default"]) === "function" ? _b : Object)
+    __metadata("design:type", _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_3__["default"])
 ], SendReceiveSerialControls.prototype, "config", void 0);
 SendReceiveSerialControls = __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.customElement)("send-receive-serial-controls"),
@@ -695,7 +702,6 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 var __metadata = (undefined && undefined.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var _a;
 
 
 
@@ -785,7 +791,7 @@ SerialMonitor.styles = lit__WEBPACK_IMPORTED_MODULE_0__.css `
     `;
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.state)(),
-    __metadata("design:type", typeof (_a = typeof _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_6__.SerialMonitorConfig !== "undefined" && _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_6__.SerialMonitorConfig) === "function" ? _a : Object)
+    __metadata("design:type", _state_SerialMonitorConfig__WEBPACK_IMPORTED_MODULE_6__.SerialMonitorConfig)
 ], SerialMonitor.prototype, "monitorConfig", void 0);
 __decorate([
     (0,lit_decorators_js__WEBPACK_IMPORTED_MODULE_1__.state)(),
