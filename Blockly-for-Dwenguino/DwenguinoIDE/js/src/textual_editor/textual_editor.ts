@@ -3,7 +3,6 @@ import ErrorLog from "./error_log";
 import EditorPane from "./editor_pane";
 import DwenguinoCodeSamples from "./dwenguino_code_samples";
 import LayoutConfig from "./layout_config";
-import SerialMonitor from "./serial_monitor";
 
 class TextualEditor {
     _containerId:string = "";   // The id of the container div element into which the text editor has to be injected;
@@ -21,7 +20,7 @@ class TextualEditor {
     $_rightPanesContainer:JQuery;
     _errorLog:ErrorLog;
     _editorPane:EditorPane;
-    _serialMonitor:SerialMonitor;
+    //_serialMonitor:SerialMonitor;
     /**
      * _containerId String id of the container into which the text editor has to be injected.
      */
@@ -63,7 +62,7 @@ class TextualEditor {
 
         this._errorLog = new ErrorLog(this._logContainerId);
         this._editorPane = new EditorPane(this._editorContainerId);
-        this._serialMonitor = new SerialMonitor(this._serialMonitorContainerId);
+        this.$_serialMonitorContainer.html(`<serial-monitor serial-port-filters='[{"usbVendorId":54240}]'></serial-monitor>`)
 
         this.populateMenu();
     }
@@ -158,7 +157,7 @@ class TextualEditor {
     }
 
     looseFocus(){
-      this._serialMonitor.disconnect();
+
     }
 
 }

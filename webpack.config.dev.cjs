@@ -10,7 +10,8 @@ module.exports = [
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] ,
+            fullySpecified: false,
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
@@ -22,6 +23,9 @@ module.exports = [
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/, 
+                    resolve: {
+                        fullySpecified: false,
+                      },
                     use:{
                         loader: 'babel-loader',
                         options: {
@@ -43,7 +47,11 @@ module.exports = [
                     }
                 },
                 {
-                    test: /\.js?$/,
+                    test: /\.m?js$/,
+                    type: "javascript/auto",
+                    resolve: {
+                        fullySpecified: false,
+                      },
                     exclude: /node_modules/, 
                     use:{
                         loader: 'babel-loader',

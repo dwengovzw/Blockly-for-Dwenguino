@@ -438,6 +438,10 @@
         // Load Blockly's language strings.
         document.write(`<script src="<%- base_url %>/dwenguinoblockly/blockly/msg/js/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
     </script>
+    <!-- Custom components -->
+    <script type="text/javascript" src="<%- base_url %>/dashboard/assets/js/serial-monitor.js"></script>
+
+    <script type="text/javascript" src="<%- base_url %>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>
 
     <!--Scripts for step by step tutorials -->
     <script src="<%- base_url %>/dwenguinoblockly/DwenguinoIDE/js/lib/hopscotch.js"></script>
