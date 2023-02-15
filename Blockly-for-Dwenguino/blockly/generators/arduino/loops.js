@@ -54,12 +54,17 @@ Blockly.Arduino.controls_for = function() {
 
 Blockly.Arduino.controls_whileUntil = function() {
   // Do while/until loop.
+  var until = this.getFieldValue('MODE') == 'UNTIL';
   var argument0 = Blockly.Arduino.valueToCode(this, 'BOOL',
       Blockly.Arduino.ORDER_NONE) || 'false';
   var branch = Blockly.Arduino.statementToCode(this, 'DO');
   if (Blockly.Arduino.INFINITE_LOOP_TRAP) {
     branch = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + this.id + '\'') + branch;
+  }
+  // Reverse condition when until loop
+  if (until){
+    argument0 = "!(" + argument0 + ")";
   }
   return 'while (' + argument0 + ') {\n' + branch + '}\n';
 }
