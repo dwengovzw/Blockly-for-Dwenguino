@@ -251,16 +251,16 @@ class BoardState {
     }
 
     setAnalogIoPinState(pinName, value){
-        if (!pinName.startsWith("A")){
+        /*if (!`${pinName}`.startsWith("A")){
             throw new Error("Not a valid analog pin name!")
-        }
+        }*/
         this.setIoPinState(pinName, value);
     }
 
     getAnalogIoPinState(pinName){
-        if (!pinName.startsWith("A")){
+        /*if (!`${pinName}`.startsWith("A")){
             throw new Error("Not a valid analog pin name!")
-        }
+        }*/
         return this.getIoPinState(pinName);
     }
 

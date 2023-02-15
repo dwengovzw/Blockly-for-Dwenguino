@@ -98,7 +98,7 @@ Blockly.Arduino['input_sound_sensor_select'] = function (block) {
    var pin = Blockly.Arduino.valueToCode(block, 'pin', Blockly.Arduino.ORDER_NONE);
    Blockly.Arduino.definitions_['define_button_' + pin] = "#define BUTTON_PIN_" + pin + " " + pin + "\n";
  
-   Blockly.Arduino.setups_['define_dwenguino_button_' + pin] = "pinMode(BUTTON_PIN_" + pin + ", INPUT);";
+   Blockly.Arduino.setups_['define_dwenguino_button_' + pin] = "pinMode(BUTTON_PIN_" + pin + ", INPUT_PULLUP);";
    var code = "digitalRead(BUTTON_PIN_" + pin + ")";
  
    return [code, Blockly.Arduino.ORDER_NONE];

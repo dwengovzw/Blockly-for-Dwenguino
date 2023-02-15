@@ -257,11 +257,14 @@ Blockly.Arduino['output_rgbled_select'] = function(block) {
   var pin_blue = Blockly.Arduino.output.pinMappings[number]["blue"]; 
   var color = Blockly.Arduino.valueToCode(block, 'color', Blockly.Arduino.ORDER_NONE);
 
-  Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
 
   var code = '';
+  code += 'pinMode(' + pin_red + ', OUTPUT);';
+  code += 'pinMode(' + pin_green + ', OUTPUT);';
+  code += 'pinMode(' + pin_blue + ', OUTPUT);';
   code += color;
   code += 'analogWrite(' + pin_red + ', ' + 'red_value' + ');\n';
   code += 'analogWrite(' + pin_green + ', ' + 'green_value' + ');\n';
@@ -275,11 +278,14 @@ Blockly.Arduino['output_rgbled'] = function(block) {
   var pin_blue = Blockly.Arduino.valueToCode(block, 'pin_blue', Blockly.Arduino.ORDER_NONE);
   var color = Blockly.Arduino.valueToCode(block, 'color', Blockly.Arduino.ORDER_NONE);
 
-  Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
 
   var code = '';
+  code += 'pinMode(' + pin_red + ', OUTPUT);';
+  code += 'pinMode(' + pin_green + ', OUTPUT);';
+  code += 'pinMode(' + pin_blue + ', OUTPUT);';
   code += color;
   code += 'analogWrite(' + pin_red + ', ' + 'red_value' + ');\n';
   code += 'analogWrite(' + pin_green + ', ' + 'green_value' + ');\n';
@@ -293,11 +299,14 @@ Blockly.Arduino['output_rgbled_select_off'] = function(block) {
   var pin_green = Blockly.Arduino.output.pinMappings[number]["green"]; 
   var pin_blue = Blockly.Arduino.output.pinMappings[number]["blue"]; 
   
-  Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
 
   var code = '';
+  code += 'pinMode(' + pin_red + ', OUTPUT);';
+  code += 'pinMode(' + pin_green + ', OUTPUT);';
+  code += 'pinMode(' + pin_blue + ', OUTPUT);';
   code += 'analogWrite(' + pin_red + ', ' + '0' + ');\n';
   code += 'analogWrite(' + pin_green + ', ' + '0' + ');\n';
   code += 'analogWrite(' + pin_blue + ', ' + '0' + ');\n';
@@ -309,11 +318,14 @@ Blockly.Arduino['output_rgbled_off'] = function(block) {
   var pin_green = Blockly.Arduino.valueToCode(block, 'pin_green', Blockly.Arduino.ORDER_NONE);
   var pin_blue = Blockly.Arduino.valueToCode(block, 'pin_blue', Blockly.Arduino.ORDER_NONE);
 
-  Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
-  Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_red] = 'pinMode(' + pin_red + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_green] = 'pinMode(' + pin_green + ', OUTPUT);';
+  //Blockly.Arduino.setups_['setup_output_' + pin_blue] = 'pinMode(' + pin_blue + ', OUTPUT);';
 
   var code = '';
+  code += 'pinMode(' + pin_red + ', OUTPUT);';
+  code += 'pinMode(' + pin_green + ', OUTPUT);';
+  code += 'pinMode(' + pin_blue + ', OUTPUT);';
   code += 'analogWrite(' + pin_red + ', ' + '0' + ');\n';
   code += 'analogWrite(' + pin_green + ', ' + '0' + ');\n';
   code += 'analogWrite(' + pin_blue + ', ' + '0' + ');\n';
@@ -383,8 +395,9 @@ Blockly.Arduino['output_servo'] = function (block) {
 
   Blockly.Arduino.definitions_['define_servo_on_pin' + value_pin] = "int servoPin" + value_pin + " = " + value_pin +";\n" 
                                                                       + "Servo servoOnPin" + value_pin + ";\n";
-  Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');';
-  code = 'servoOnPin' + value_pin + '.write(' + value_angle + ');\n';
+  //Blockly.Arduino.setups_['define_dwenguino_servo_on_pin' + value_pin] = 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');';
+  code += 'servoOnPin' + value_pin + '.attach(servoPin' + value_pin + ');\n'
+  code += 'servoOnPin' + value_pin + '.write(' + value_angle + ');\n';
   
   return code;
 };
