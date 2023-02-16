@@ -62,6 +62,7 @@ class BinaryInputRobotComponent extends RobotComponent {
     }
 
     reset(){
+        this.setImage(this._inactiveImageUrl);
         this.setState(this.inactiveValue);
         this._button.reset();
     }
