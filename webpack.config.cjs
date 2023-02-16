@@ -68,7 +68,7 @@ module.exports = [
                 },
                 {
                     test: /\.ttf$/,
-                    use: ['file-loader']
+                    type: "asset/resource"
                 }
             ]
         },
