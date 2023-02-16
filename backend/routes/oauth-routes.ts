@@ -1,5 +1,6 @@
 import express from 'express';
 import { OAuthController } from "../controllers/oauth.controller.js"
+import { verifyToken } from "../middleware/middleware.js"
 
 let oauthRouter = express.Router();
 const oauthController = new OAuthController();
@@ -13,7 +14,7 @@ oauthRouter.get("/login", (req, res) => {
 })
 
 
-oauthRouter.get("/logout", (req, res) => {
+oauthRouter.get("/logout", [verifyToken], (req, res) => {
     oauthController.logout(req, res);
 })
 

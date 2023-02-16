@@ -2,12 +2,15 @@ import GithubOAuthController from "./oauth.github.controller.js";
 import OAuthState from "../datatypes/oauthState.js";
 import db from "../config/db.config.js"
 import LeerIdOAuthController from "./oauth.leerid.controller.js";
+import ACMOAuthController from "./oauth.acm.controller.js";
 
 const oauthControllers = {}
 const githubOAuthController = new GithubOAuthController();
 const leerIdOAuthController = new LeerIdOAuthController();
+const acmOAuthController = new ACMOAuthController();
 oauthControllers[db.PLATFORMS.github] = githubOAuthController;
 oauthControllers[db.PLATFORMS.leerId] = leerIdOAuthController;
+oauthControllers[db.PLATFORMS.beACM] = acmOAuthController;
 
 
 class OAuthController {
@@ -56,8 +59,9 @@ class OAuthController {
     }
 
     logout(req, res){
+        let platform = req.platform
         req.session.token = null;
-        res.redirect("/dashboard")
+        oauthControllers[platform].logout()
         //res.status(200).send({message: "Logout successful"})
     }
 

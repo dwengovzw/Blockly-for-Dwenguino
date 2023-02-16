@@ -1,14 +1,16 @@
 class MinimalUserInfo {
     userId: string;
     platform: string;
-    name: string;
+    firstname: string;
+    lastname: string;
     email: string;
     roles: string[] = [];
 
-    constructor(userId:string, platform:string, name:string, email:string, roles:string[]){
+    constructor(userId:string, platform:string, firstname:string, lastname: string, email:string, roles:string[]){
         this.userId = userId;
         this.platform = platform;
-        this.name = name;
+        this.firstname = firstname;
+        this.lastname = lastname;
         this.email = email;
         this.roles = roles;
     }
@@ -21,8 +23,12 @@ class MinimalUserInfo {
         return this.platform;
     }
 
-    getName(){
-        return this.name;
+    getFirstName(){
+        return this.firstname;
+    }
+
+    getLastName(){
+        return this.lastname;
     }
 
     getEmail(){

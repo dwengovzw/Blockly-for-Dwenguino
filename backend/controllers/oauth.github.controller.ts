@@ -10,27 +10,9 @@ import crypto from "crypto"
 
 class GithubOAuthController extends AbstractOAuthController{
     constructor(){
-        super();
+        super(db.PLATFORMS.github);
     }
 
-    /**
-     * Redirect the user to the OAuth login url of the platform they have chosen
-     * @param req express request
-     * @param res express response
-     * @param authState contains information about the OAuth provider to be used.
-     */
-    login(req, res, authState) {
-        if (authState.platform !== db.PLATFORMS.github){
-            return res.status(500).send({message: "Internal server error: platform name does not match controller."})
-        }
-        // add nonce to both session cookie as well as request state to mitigate csrf
-        let nonce = crypto.randomBytes(128).toString('hex')
-        req.session.nonce = nonce
-        authState.nonce = nonce
-        let authorizeUrl = 
-        oauthConfig.authorizeUrlMap[db.PLATFORMS.github](JSON.stringify(authState))
-        res.redirect(authorizeUrl);
-    }
 
     /**
      * Github OAuth API redirects to this route when login is successful. 
@@ -39,18 +21,8 @@ class GithubOAuthController extends AbstractOAuthController{
      * @param {*} res 
      */
     redirect(req, res, authState) {
-        if (authState.platform !== db.PLATFORMS.github){
-            return res.status(500).send({message: "Internal server error: platform name does not match controller."})
-        }
-        let reqNonce = authState.nonce
-        let sessionNonce = req.session.nonce
-        // Check if nonce sent in state matches nonce in session cookie. To prevent replay attack
-        /*if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
-            req.session.nonce = null
-            res.status(401).send({ message: "Authentication failed! Nonce did not match" });
-        } else {
-            req.session.nonce = null
-        }*/
+        super.redirect(req, res, authState) // Do general checks like nonce verification and platform check 
+        // Get access token
         axios({
             method: "POST",
             url: oauthConfig.accessTokenUrlMap[authState.platform](req.query.code),
@@ -58,6 +30,7 @@ class GithubOAuthController extends AbstractOAuthController{
                 Accept: "application/json"
             }
         }).then(async (response) => {
+            // Get user info
             const octo = new Octokit({
                 auth: response.data.access_token
             })
@@ -67,6 +40,7 @@ class GithubOAuthController extends AbstractOAuthController{
                 let minUserInfo = new MinimalUserInfo(userInfo.data.id.toString(),
                     db.PLATFORMS.github, 
                     userInfo.data.name, 
+                    "",
                     userInfo.data.email, 
                     [db.ROLES.student, db.ROLES.user])
                 this.signin(req, res, minUserInfo, authState); // Call super class method to sign in
@@ -74,17 +48,23 @@ class GithubOAuthController extends AbstractOAuthController{
                 console.log(err);
                 res.status(401).send({ message: "Authentication failed!" });
             }
-
-            // Get user info, check if user exists
-            //  yes -> create session token for user
-            //  no -> create user and create session token for user.
-            // Create session token based on access token + check for errors + redirect to login page with valid session token.
-            //res.redirect(`http://localhost:12032/dashboard?access_token=${response.data.access_token}`)
         }).catch((err) => {
             res.status(401).send({ message: "Authentication failed!" });
         });
     }
+
+    logout(req, res){
+        axios({
+            method: "get", 
+            url: oauthConfig.logoutUrlMap[db.PLATFORMS.github]
+        }).then(async (resp) => {
+            console.log("Starting logout")
+        }).catch(err => {
+            console.log("Unable to logout" + err)
+        });   
+    }
 }
+
 
 export default GithubOAuthController;
 

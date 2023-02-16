@@ -2,24 +2,58 @@ import jwt from "jsonwebtoken"
 import jwt_settings from "../config/jwt.config.js";
 import { User, IUser } from "../models/user.model.js"
 import { IRole, Role } from "../models/role.model.js"
-import mongoose from "mongoose";
-import { Populated } from "../models/modelutils.js"
+import oauthConfig from "../config/oauth.config.js";
+import crypto from "crypto"
 
 
 class AbstractOAuthController {
-    constructor(){
+    platform: string
+    constructor(platform:string){
         if (new.target === AbstractOAuthController) {
             throw new TypeError("Cannot construct Abstract instances directly");
           }
+        this.platform = platform
     }
 
+     /**
+     * Redirect the user to the OAuth login url of the platform they have chosen
+     * @param req express request
+     * @param res express response
+     * @param authState contains information about the OAuth provider to be used.
+     */
     login(req, res, authState){
-        throw new TypeError("This method is abstract!")
+        if (authState.platform !== this.platform){
+            return res.status(500).send({message: "Internal server error: platform name does not match controller."})
+        }
+        // add nonce to both session cookie as well as request to mitigate csrf
+        let nonce = crypto.randomBytes(32).toString('hex')
+        req.session.nonce = nonce
+        authState.nonce = nonce
+        let authorizeUrl = 
+        oauthConfig.authorizeUrlMap[this.platform](JSON.stringify(authState))
+        res.redirect(authorizeUrl);
     }
 
     redirect(req, res, authState){
-        throw new TypeError("This method is abstract!")
+        if (authState.platform !== this.platform){
+            return res.status(500).send({message: "Internal server error: platform name does not match controller."})
+        }
+        let state = JSON.parse(req.query.state)
+        let reqNonce = state.nonce
+        let sessionNonce = req.session.nonce
+        // Check if nonce sent in state matches nonce in session cookie. To avoid replay atacks
+        /*if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
+            req.session.nonce = null
+            res.status(401).send({ message: "Authentication failed! Nonce did not match" });
+        } else {
+            req.session.nonce = null
+        }*/
     } 
+
+
+    logout(req, res){
+        throw new Error("This method is abstract")
+    }
 
     async signin(req, res, minUserInfo, authState) {
         // Check if user exists in system
@@ -57,7 +91,8 @@ class AbstractOAuthController {
             userId: minUserInfo.getUserId(),
             platform: minUserInfo.getPlatform(),
             email: minUserInfo.getEmail(),
-            firstname: minUserInfo.getName(),
+            firstname: minUserInfo.getFirstName(),
+            lastname: minUserInfo.getLastName(),
             roles: roles
         }
         const user = new User(userInit)

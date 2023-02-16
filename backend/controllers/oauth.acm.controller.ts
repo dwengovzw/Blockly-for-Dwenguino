@@ -5,10 +5,9 @@ import oauthConfig from "../config/oauth.config.js";
 import crypto from "crypto"
 import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
 
-
-class LeerIdOAuthController extends AbstractOAuthController{
-    constructor(){
-        super(db.PLATFORMS.leerId);
+class ACMOAuthController extends AbstractOAuthController {
+    constructor() {
+        super(db.PLATFORMS.beACM)
     }
 
     /**
@@ -28,7 +27,7 @@ class LeerIdOAuthController extends AbstractOAuthController{
             },
             data: oauthConfig.queryStringMap[authState.platform](req.query.code)
         }).then(async (response) => {
-            // Get user info   
+            // Get user info
             let access_token = response.data.access_token
             console.log(`${new Date().toLocaleString()}: Sending new request.`)
             axios({
@@ -39,17 +38,14 @@ class LeerIdOAuthController extends AbstractOAuthController{
                 }
             }).then(async (id_response) => {
                 console.log(id_response)
-                if (id_response.data.ov_leerid_uuid.length < 1){
-                    res.status(401).send({message: "Authentication failed, no valid leerid"})
-                }
                 try {
                     let minimalUserInfo = new MinimalUserInfo(
-                        id_response.data.ov_leerid_uuid[0],
-                        db.PLATFORMS.leerId,
+                        id_response.data.sub,
+                        db.PLATFORMS.beACM,
                         id_response.data.given_name,
                         id_response.data.family_name,
                         "",
-                        [db.ROLES.student, db.ROLES.user]
+                        [db.ROLES.teacher, db.ROLES.user]
                     )
                     this.signin(req, res, minimalUserInfo, authState)
                 } catch (err) {
@@ -70,11 +66,10 @@ class LeerIdOAuthController extends AbstractOAuthController{
             res.status(401).send({ message: "Authentication failed!" });
         });
     }
-
     logout(req, res){
         axios({
             method: "get", 
-            url: oauthConfig.logoutUrlMap[db.PLATFORMS.leerId]
+            url: oauthConfig.logoutUrlMap[db.PLATFORMS.beACM]
         }).then(async (resp) => {
             console.log("Starting logout")
         }).catch(err => {
@@ -83,9 +78,4 @@ class LeerIdOAuthController extends AbstractOAuthController{
     }
 }
 
-export default LeerIdOAuthController;
-
-
-
-
-
+export default ACMOAuthController
