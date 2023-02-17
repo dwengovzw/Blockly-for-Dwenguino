@@ -19,6 +19,7 @@
         "es2017"
       ],
     },
+    "include": ["./declarations.d.ts"],
     "exclude": [
       "**/node_modules/*",
       "Blockly-for-Dwenguino/DwenguinoIDE/js/dist",

@@ -67,12 +67,11 @@ class Classes extends connect(store)(LitElement) {
     protected render() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
-            <dwengo-classes-list-element class="header"
-                name="${msg("Name")}"
-                description="${msg("Description")}"
-                sharingCode="${msg("Sharing Code")}"
-                header="true">
-            </dwengo-classes-list-element>
+            <dwengo-deletable-list-element 
+                fields="${JSON.stringify([msg("Name"), msg("Description"), msg("Sharing Code")])}"
+                header="true"
+                class="tableheader">
+            </dwengo-deletable-list-element>
             ${this.groups.map((group) => {
                 return html`<dwengo-deletable-list-element
                                 fields="${JSON.stringify([group.name, group.description, group.sharingCode])}"
@@ -124,6 +123,7 @@ class Classes extends connect(store)(LitElement) {
         dwengo-classes-list-element:nth-child(odd){
             background-color: var(--theme-neutralFillRest);
         }
+        
     `
 }
 

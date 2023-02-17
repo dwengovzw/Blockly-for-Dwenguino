@@ -2,7 +2,6 @@ import { LitElement, css, html, CSSResultGroup } from "lit";
 import { customElement, state } from "lit/decorators.js"; // needs .js to transpile
 import { connect } from "pwa-helpers"
 import { store } from "../state/store"
-import { hide } from "../state/features/notification_slice"
 
 @customElement("dwengo-notify")
 class Notify extends connect(store)(LitElement) {
@@ -43,17 +42,16 @@ class Notify extends connect(store)(LitElement) {
     `
 
     @state() message: string = ""
-    @state() styleClass: string = ""
+    @state() styleClass: string = "hidden"
     prevVisibility = "hidden"
 
     stateChanged(state: any): void {
         this.message = state.notification.message
+        // Only update visibility if it does not match with the state
         if (this.prevVisibility === "hidden" && state.notification.visible){
             this.styleClass = `${state.notification.class} visible` 
             this.prevVisibility = "visible"
-            // Dispatch hide action after n ms
-            setTimeout(() => {store.dispatch(hide())}, state.notification.time)
-        } else {
+        } else if (this.prevVisibility === "visible" && !state.notification.visible){
             this.styleClass = `${state.notification.class} hidden` 
             this.prevVisibility = "hidden"
         }

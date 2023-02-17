@@ -40,7 +40,7 @@ class ContentPage extends connect(store)(LitElement) {
     protected render() {
         return html`
             <dwengo-menu></dwengo-menu>
-            ${this.router.outlet()}
+            <div class="main_page">${this.router.outlet()}</div>
         `
     }
 
@@ -56,8 +56,17 @@ class ContentPage extends connect(store)(LitElement) {
         dwengo-profile-page {
             flex-grow: 1;
         }
+        dwengo-classes-page {
+            flex-grow: 1;
+        }
         dwengo-class-page {
             flex-grow: 1;
+        }
+        .main_page {
+            padding: 1rem;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 30px;
         }
     `
 }

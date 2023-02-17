@@ -1,7 +1,7 @@
 import { msg } from "@lit/localize"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { state } from "lit/decorators"
-import { setNotification, NotificationInfo } from "./notification_slice"
+import { setNotificationMessage, NotificationMessageType } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
@@ -76,7 +76,7 @@ const addClassGroup = (classGroupInfo) => {
             console.log(response)
             dispatch(addGroup(json))
         } catch (err) {
-            dispatch(setNotification({message: msg("Error adding classgroup"), class: "error", time: 2500 }))
+            dispatch(setNotificationMessage(msg("Error adding classgroup"), NotificationMessageType.ERROR, 2500))
         } finally {
             dispatch(doneLoading())
         }
@@ -96,7 +96,7 @@ const getAllClassGroups = () => {
             console.log(response)
             dispatch(setGroups(groups))
         } catch (err) {
-            dispatch(setNotification({message: msg("Error getting classgroup"), class: "error", time: 2500 }))
+            dispatch(setNotificationMessage(msg("Error getting classgroup"), NotificationMessageType.ERROR, 2500))
         } finally {
             dispatch(doneLoading())
         }
@@ -113,7 +113,7 @@ const deleteClassGroup = (uuid: string) => {
             })
             dispatch(getAllClassGroups())
         } catch (err) {
-            dispatch(setNotification({message: msg("Error deleting classgroup"), class: "error", time: 2500 }))
+            dispatch(setNotificationMessage(msg("Error deleting classgroup"), NotificationMessageType.ERROR, 2500))
         } finally {
             dispatch(doneLoading())
         }

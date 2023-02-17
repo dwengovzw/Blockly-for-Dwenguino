@@ -60,7 +60,7 @@ class Profile extends connect(store)(LitElement) {
                 <div><mwc-textfield @change=${(e) => this.userInfo.firstname = e.target.value } outlined label="${msg("Firstname")}" type="text" value="${this.userInfo?.firstname}"></mwc-textfield></div>
                 <div><mwc-textfield @change=${(e) => this.userInfo.lastname = e.target.value } outlined label="${msg("Lastname")}" type="text" value="${this.userInfo?.lastname}"></mwc-textfield></div>
                 <div><mwc-textfield @change=${(e) => this.userInfo.email = e.target.value } outlined label="${msg("Email")}" type="email" value="${this.userInfo?.email}"></mwc-textfield></div>
-                <div><mwc-textfield @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" type="date" ${this.userInfo?.birthdate ? html`value="${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}"`: ""}"></mwc-textfield></div>
+                <div><mwc-textfield @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" type="date" .value="${this.userInfo?.birthdate ? `${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}`: ""}"></mwc-textfield></div>
                 <div class="checkbox-container ${this.checkboxFocussed ? "highlightborder" : ""}">
                     <span class="checkbox-label ${this.checkboxFocussed ? "highlightlabel" : ""}">${msg('My roles')}</span>
                     <mwc-formfield label="${msg("Student")}">

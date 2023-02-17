@@ -1,7 +1,7 @@
 import { msg } from "@lit/localize"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { state } from "lit/decorators"
-import { setNotification, NotificationInfo } from "./notification_slice"
+import { NotificationInfo, setNotificationMessage, NotificationMessageType } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
@@ -69,9 +69,9 @@ const putUserInfo = (userInfo) => {
             })
             let info: UserInfo = await response.json();
             dispatch(setInfo(info))
-            dispatch(setNotification({message: msg("Profile info saved :)"), class: "message", time: 2500}))
+            dispatch(setNotificationMessage(msg("Profile info saved :)"), NotificationMessageType.MESSAGE, 2500))
         } catch (err) {
-            dispatch(setNotification({message: msg("Error while saving!"), class: "error", time: 2500}))
+            dispatch(setNotificationMessage(msg("Error while saving!"), NotificationMessageType.ERROR, 2500))
         } finally {
             dispatch(doneLoading())
         }
@@ -91,22 +91,14 @@ const fetchUserInfo = () => {
             } else if (response.status == 401){ 
                 // Unauthorized => logout
                 dispatch(logout())
-                let notification: NotificationInfo = {
-                    message: msg("You are not logged in!"),
-                    class: "error",
-                    time: 2500
-                }
-                dispatch(setNotification(notification))
+                dispatch(setNotificationMessage(msg("You are not logged in!"), NotificationMessageType.ERROR, 2500))
             } else if (response.status == 403){
-                let notification: NotificationInfo = {message: msg("Not allowed to access this route!"), class: "error", time: 2500}
-                dispatch(setNotification(notification))
+                dispatch(setNotificationMessage(msg("Not allowed to access this route!"), NotificationMessageType.ERROR, 2500))
             } else {
-                let notification: NotificationInfo = {message: msg("Unable to login!"), class: "error", time: 2500}
-                dispatch(setNotification(notification))
+                dispatch(setNotificationMessage(msg("Unable to login!"), NotificationMessageType.ERROR, 2500))
             }
         } catch (err) {
-            let notification: NotificationInfo = {message: msg("Unable to login!"), class: "error", time: 2500}
-            dispatch(setNotification(notification))
+            dispatch(setNotificationMessage(msg("Unable to login!"), NotificationMessageType.ERROR, 2500))
         } finally {
             dispatch(doneLoading())
         }

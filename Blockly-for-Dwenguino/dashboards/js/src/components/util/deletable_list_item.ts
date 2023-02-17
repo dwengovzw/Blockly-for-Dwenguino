@@ -15,6 +15,7 @@ class DeletableListItem extends LitElement {
     @property({type: Array}) fields: string[] = [];
     @property({type: String}) uuid: string = "";
     @property({type: Array}) button_icons: string[] = ["delete", "list"]
+    @property({type: Boolean}) header: boolean = false
 
     @state() showConfirmDialog: boolean = false;
 
@@ -55,13 +56,13 @@ class DeletableListItem extends LitElement {
 
     renderButtons(){
         return html`
-        <span>
-            <mwc-button class="button" @click=${this.handleDelete} raised>
+        <span class="button_container">
+            <mwc-button class="button ${this.header ? "hidden" : ""}" @click=${this.handleDelete} raised>
                 <span class="material-symbols-outlined">
                     ${this.button_icons[0]}
                 </span>
             </mwc-button>
-            <mwc-button class="button" @click=${this.handleList} raised>
+            <mwc-button class="button ${this.header ? "hidden" : ""}" @click=${this.handleList} raised>
                 <span class="material-symbols-outlined">
                     ${this.button_icons[1]}
                 </span>
@@ -88,12 +89,12 @@ class DeletableListItem extends LitElement {
     protected render(): unknown {
         return html`
         ${getGoogleMateriaIconsLinkTag()}
-        <div class="container">
+        <tr class="container ${this.header ? "tableheader" : ""}">
             ${this.fields?.map(field => {
-                return html`<span class="item">${field}</span>`
+                return html`<td class="item">${field}</td>`
             })} 
             ${this.renderButtons()}
-        </div>
+        </tr>
         ${this.showConfirmDialog ? this.renderConfirmDialog() : ""}
         `
     }
@@ -109,7 +110,6 @@ class DeletableListItem extends LitElement {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        flex-wrap: wrap;
         background-color: inherit;
         padding: 5px 0;
     }
@@ -118,6 +118,9 @@ class DeletableListItem extends LitElement {
     }
     .item {
         margin: 2px 5px;
+        overflow-x: hidden; 
+        white-space: nowrap;
+        min-width: 60px;
     }
     .button {
         margin: 2px 5px;
@@ -125,12 +128,22 @@ class DeletableListItem extends LitElement {
     .item:nth-of-type(2){
         flex-grow: 5;
     }
-    .item.nth-of-type(1) {
-        min-width: 150px;
-        max-width: 250px;
+    .item:nth-of-type(1){
     }
     .no-decoration {
         text-decoration: none;
+    }
+    .button_container {
+        display: flex;
+        flex-direction: row;
+    }
+    .hidden {
+        visibility: hidden;
+    }
+    .tableheader {
+        background-color: var(--theme-accentFillSelected);
+        color: var(--theme-white);
+        padding: 0px 2px;
     }
     `
 

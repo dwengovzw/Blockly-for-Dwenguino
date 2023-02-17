@@ -1,4 +1,4 @@
-import { LitElement, css, html, CSSResultGroup } from "lit";
+import { LitElement, css, html, CSSResultGroup, unsafeCSS } from "lit";
 import { customElement, state } from "lit/decorators.js"; // needs .js to transpile
 import { Router } from "@lit-labs/router"
 import { store } from "./state/store"
@@ -9,6 +9,11 @@ import "./components/intro_page"
 import "./components/notify"
 import "./components/content_page"
 
+// Polyfill URLPattern
+import {URLPattern} from "urlpattern-polyfill";
+// @ts-ignore: Property 'UrlPattern' does not exist 
+globalThis.URLPattern = URLPattern
+
 @customElement("dwengo-dashboard")
 class Dashboard extends connect(store)(LitElement) {
     private router = new Router(this, [
@@ -16,7 +21,11 @@ class Dashboard extends connect(store)(LitElement) {
         { path: '/dashboard/*', render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
     ]);
 
-    static styles?: CSSResultGroup = css``
+    createRenderRoot() {
+        return this; // turn off shadow dom to access external styles
+      }
+
+    static styles?: CSSResultGroup = [ css``]
 
     @state() loggedIn: boolean = false;
 

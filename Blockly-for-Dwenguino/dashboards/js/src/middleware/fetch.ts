@@ -1,5 +1,5 @@
 
-import { setNotification, NotificationInfo } from "../state/features/notification_slice"
+import { NotificationInfo, setNotificationMessage, NotificationMessageType } from "../state/features/notification_slice"
 import { store } from "../state/store"
 import { msg } from "@lit/localize"
 
@@ -13,20 +13,10 @@ const fetchAuth = async (resource: RequestInfo | URL, options: RequestInit = {})
         window.location.href="/oauth/logout";
         throw new Error("Unauthorized")
     } else if (response.status === 403) { // Forbidden
-        let notification: NotificationInfo = {
-            message: msg("You do not have the rights to access this content!"),
-            class: "error",
-            time: 2500
-        }
-        store.dispatch(setNotification(notification))
+        store.dispatch(setNotificationMessage(msg("You do not have the rights to access this content!"), NotificationMessageType.ERROR, 2500))
         throw new Error("Forbidden");
     } else {
-        let notification: NotificationInfo = {
-            message: msg("Unable complete request!"),
-            class: "error",
-            time: 2500
-        }
-        store.dispatch(setNotification(notification))
+        store.dispatch(setNotificationMessage(msg("Unable complete request!"), NotificationMessageType.ERROR, 2500))
         throw new Error("Unable to complete");
     }
 }

@@ -67,14 +67,7 @@ class ACMOAuthController extends AbstractOAuthController {
         });
     }
     logout(req, res){
-        axios({
-            method: "get", 
-            url: oauthConfig.logoutUrlMap[db.PLATFORMS.beACM]
-        }).then(async (resp) => {
-            console.log("Starting logout")
-        }).catch(err => {
-            console.log("Unable to logout" + err)
-        });   
+        res.status(200).send({message: "Logout successful"})    
     }
 }
 

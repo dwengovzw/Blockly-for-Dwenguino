@@ -102,6 +102,19 @@ module.exports = [
         },
         module: {
             rules: [
+                
+                {
+                    test: /\.css$/i,
+                    use: ['style-loader', 
+                        { loader: "css-modules-typescript-loader"},
+                        {
+                                loader: "css-loader",
+                                options: {
+                                    modules: true,
+                                    sourceMap: true
+                                }
+                        }, 'postcss-loader']
+                },
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/,
@@ -115,19 +128,9 @@ module.exports = [
                     }]
                 },
                 {
-                    test: /\.s[ac]ss$/i,
-                    use: ['style-loader', 'css-loader', {
-                        loader: "sass-loader",
-                        options: {
-                            sassOptions: {
-                                indentWidth: 4,
-                                includePaths: [path.resolve(__dirname, 'Blockly-for-Dwenguino/dashboards/scss')],
-                                outputStyle: "compressed",
-                            },
-                            sourceMap: true,
-                        }
-                    }]
-                },
+                    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                    type: 'asset',
+                  },
             ]
         }
     }
