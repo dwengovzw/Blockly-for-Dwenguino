@@ -120,7 +120,7 @@ class Classes extends connect(store)(LitElement) {
             background-color: var(--theme-accentFillSelected);
             color: var(--theme-white);
         }
-        dwengo-classes-list-element:nth-child(odd){
+        dwengo-deletable-list-element:nth-child(odd){
             background-color: var(--theme-neutralFillRest);
         }
         

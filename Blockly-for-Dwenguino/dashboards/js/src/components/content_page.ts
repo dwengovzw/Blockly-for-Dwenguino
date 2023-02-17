@@ -66,7 +66,8 @@ class ContentPage extends connect(store)(LitElement) {
             padding: 1rem;
             width: 100%;
             box-sizing: border-box;
-            margin-top: 30px;
+            margin: 30px auto;
+            max-width: 1366px;
         }
     `
 }

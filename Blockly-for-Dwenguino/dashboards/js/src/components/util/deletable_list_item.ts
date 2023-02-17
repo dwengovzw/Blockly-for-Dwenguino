@@ -128,7 +128,7 @@ class DeletableListItem extends LitElement {
     .item:nth-of-type(2){
         flex-grow: 5;
     }
-    .item:nth-of-type(1){
+    .item:nth-of-type(odd){
     }
     .no-decoration {
         text-decoration: none;
