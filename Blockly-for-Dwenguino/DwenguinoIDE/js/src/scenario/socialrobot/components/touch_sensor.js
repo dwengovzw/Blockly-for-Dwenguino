@@ -15,17 +15,17 @@ class SocialRobotTouchSensor extends BinaryInputRobotComponent{
     constructor(){
         super();
         BindMethods(this);
-        this._activeImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor_on.svg`;
-        this._inactiveImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor.svg`;
     }
 
     initComponent(eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
+        let activeImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor_on.svg`;
+        let inactiveImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor.svg`;
         super.initComponent(TypesEnum.TOUCH, 
             ['touchButtonLabel'], 
             ['touchOptions'], 
             "touch sensor", 
-            this._activeImageUrl, 
-            this._inactiveImageUrl, 
+            activeImageUrl, 
+            inactiveImageUrl, 
             'sim_touch_canvas', 
             eventBus, 
             id, 
@@ -41,12 +41,14 @@ class SocialRobotTouchSensor extends BinaryInputRobotComponent{
     }
 
     initComponentFromXml(eventBus, id, xml){
+        let activeImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor_on.svg`;
+        let inactiveImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/touch_sensor.svg`;
         super.initComponentFromXml(eventBus,
-            TypesEnum.BUTTON,
+            TypesEnum.TOUCH,
             ['touchButtonLabel'], 
             ['touchOptions'],
-            this._activeImageUrl, 
-            this._inactiveImageUrl, 
+            activeImageUrl, 
+            inactiveImageUrl, 
             id,
             xml);
     }
