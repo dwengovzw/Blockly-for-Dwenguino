@@ -662,6 +662,13 @@ background-color: #ffffff;
     max-width: 20%;
 }
 
+.component_item_input.input-number {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; 
+    pointer-events: none;
+}
 
 .component_item_input{
     display: inline-block;
@@ -671,6 +678,7 @@ background-color: #ffffff;
     -webkit-appearance: none;
     border: 1px solid transparent;
     background-color: #FFFFFF;
+    
 }
 
 #sim_scope_name {
