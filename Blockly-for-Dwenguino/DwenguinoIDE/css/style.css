@@ -953,7 +953,7 @@ background-color: #ffffff;
 }
 
 .sim_element{
-    color: darkgrey;
+    color: transparent;
     position: absolute;
     top: 5px;
     left: 5px;
