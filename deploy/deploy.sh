@@ -15,7 +15,7 @@ npm install bcrypt
 npm audit fix --force
 
 # Run webpack to compile frontend javascript into bundle
-# npm run build # -> This chrashes on the server, not enough memory.
+npm run build # -> This chrashes on the server, not enough memory.
 
 # Copy the new files to the deployment directory
 sudo cp -r /home/ubuntu/blockly_repo/Blockly-for-Dwenguino/* /home/ubuntu/blockly-build/
