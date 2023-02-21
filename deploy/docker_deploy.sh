@@ -9,6 +9,8 @@ cd /home/node/deploy
 
 # Copy the .env files from the config directory on the server into the deploy directory
 cp /var/environments/$env /home/node/deploy/.env
+cat /var/environments/$env
+cat /home/node/deploy/.env
 
 ls /home/node/deploy
 
