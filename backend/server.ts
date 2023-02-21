@@ -122,19 +122,19 @@ app.get("/favicon.ico", (req, res) => {
 app.use('/', blocklyRoutes);
 
 // Use statistics routes
-app.use('/stats', statsRoutes);
+//app.use('/stats', statsRoutes);
 
 // Use dashboard routes
 app.use('/dashboard', dashboardRouter);
 
 // Use oauth routes
-app.use('/oauth', oauthRouter);
+//app.use('/oauth', oauthRouter);
 
 // Use user routes
-app.use("/user", userRouter);
+//app.use("/user", userRouter);
 
 // Use classgroup routes
-app.use("/classgroup", classGroupRouter)
+//app.use("/classgroup", classGroupRouter)
 
 // Test router
 //app.use("/test", testRouter)

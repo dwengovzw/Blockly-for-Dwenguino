@@ -2,7 +2,7 @@
     "compilerOptions": {
       "pretty": true,
       "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
-      "noImplicitAny": true,
+      "noImplicitAny": false,
       "module": "es6",
       "target": "es6",
       "experimentalDecorators": true,
