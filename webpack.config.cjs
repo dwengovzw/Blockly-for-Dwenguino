@@ -84,12 +84,16 @@ module.exports = [
         name: "dashboards",
         mode: "development",
         devtool: "eval-source-map",
+        context: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards"),
         entry: {
-            app: './Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts'
+            app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts"),
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/dashboards/js/dist/'),
             filename: 'dashboards.bundle.js'
+        },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
         },
         module: {
             rules: [
@@ -114,7 +118,7 @@ module.exports = [
                     {
                         loader: 'ts-loader',
                         options:{
-                            configFile: "dashboards.tsconfig.json"
+                            configFile: "dev.dashboards.tsconfig.json"
                         },
                     }]
                 },
