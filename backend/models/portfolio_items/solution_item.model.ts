@@ -15,11 +15,14 @@ const SolutionSchemaFields: Record<keyof ISolutionItemExtraFields, any> = {
         required: false
     }
 }
-const SolutionItemSchema = new Schema<ISolutionItem>(SolutionSchemaFields)
-interface ISolutionItemModel extends Model<ISolutionItem>{}
-const SolutionItem = PortfolioItem.discriminator<ISolutionItem, ISolutionItemModel>('SolutionItem', SolutionItemSchema)
+
+let SolutionItemSchema = (props) => {
+    const params = SolutionSchemaFields
+    if(props) Object.assign(params, props);
+	return new Schema(params);
+}
 
 export {
     ISolutionItem,
-    SolutionItem
+    SolutionItemSchema
 }

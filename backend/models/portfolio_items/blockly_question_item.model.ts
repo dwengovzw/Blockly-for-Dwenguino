@@ -1,5 +1,6 @@
 import { Schema, Model } from "mongoose"
-import { AssignmentItem, IAssignmentItem } from "./assignment_item.model.js"
+import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model.js"
+import { PortfolioItem } from "./portfolio_item.model.js"
 
 interface IBlocklyQuestionItemExtraFields {
     questionText: string
@@ -8,9 +9,9 @@ interface IBlocklyQuestionItem extends IAssignmentItem, IBlocklyQuestionItemExtr
 const BlocklyQuestionSchemaFields: Record<keyof IBlocklyQuestionItemExtraFields, any> = {
     questionText: String
 }
-const BlocklyQuestionItemSchema = new Schema<IBlocklyQuestionItem>(BlocklyQuestionSchemaFields)
+const BlocklyQuestionItemSchema = AssignmentItemSchema(BlocklyQuestionSchemaFields)
 interface IBlocklyQuestionItemModel extends Model<IBlocklyQuestionItem>{}
-const BlocklyQuestionItem = AssignmentItem.discriminator<IBlocklyQuestionItem, IBlocklyQuestionItemModel>('BlocklyQuestion', BlocklyQuestionItemSchema)
+const BlocklyQuestionItem = PortfolioItem.discriminator<IBlocklyQuestionItem, IBlocklyQuestionItemModel>('BlocklyQuestion', BlocklyQuestionItemSchema)
 
 export {
     IBlocklyQuestionItem,

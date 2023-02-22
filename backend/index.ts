@@ -10,6 +10,7 @@ dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
 import { app, port } from "./server.js";
 import * as http from 'http';
 import mongoose from 'mongoose';
+import { mockDatabaseData } from './utils/add_mock_database_data.js';
 
 const httpServer = http.createServer(app);
 
@@ -20,12 +21,16 @@ let mongoDB = process.env.MONGODB_URI || dev_db_url;
 mongoose.connect(mongoDB/*, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-}*/).then(() => {
+}*/).then(async () => {
     if (process.env.ERASE_DATABASE_ON_SYNC){
         dropDb();
     }
     console.log("Successfully connected to the MongoDb database.");
-    initDb();
+    if (process.env.NODE_ENV == "debug"){
+        console.log("Creating mock data in debug mode!");
+        await initDb();
+    }
+    console.log(("Starting web server"));
     launch();
 }).catch((err) => {
     console.log(`Error connecting to db: ${err}`);
@@ -37,24 +42,8 @@ let dropDb = () => {
     mongoose.connection.dropDatabase();
 }
 
-let initDb = () => {
-    // Add default roles 
-    Role.estimatedDocumentCount((err, count) => {
-        if (!err && count  === 0) {
-            let roleNames = ["student", "teacher", "admin"]
-            roleNames.forEach((role) => {
-                new Role({
-                    name: role
-                }).save((err) => {
-                    if (err) {
-                        console.log("Error", err);
-                    } else {
-                        console.log(`Added ${role} role`);
-                    }
-                });
-            })
-        }
-    })
+let initDb = async () => {
+    await mockDatabaseData()
 }
 
 let launch = () => {

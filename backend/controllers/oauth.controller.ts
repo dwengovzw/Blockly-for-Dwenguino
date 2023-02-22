@@ -3,14 +3,17 @@ import OAuthState from "../datatypes/oauthState.js";
 import db from "../config/db.config.js"
 import LeerIdOAuthController from "./oauth.leerid.controller.js";
 import ACMOAuthController from "./oauth.acm.controller.js";
+import MockAuthController from "./oauth.mock.controller.js";
 
 const oauthControllers = {}
 const githubOAuthController = new GithubOAuthController();
 const leerIdOAuthController = new LeerIdOAuthController();
 const acmOAuthController = new ACMOAuthController();
+const mockOAuthController = new MockAuthController();
 oauthControllers[db.PLATFORMS.github] = githubOAuthController;
 oauthControllers[db.PLATFORMS.leerId] = leerIdOAuthController;
 oauthControllers[db.PLATFORMS.beACM] = acmOAuthController;
+oauthControllers[db.PLATFORMS.test] = mockOAuthController;
 
 
 class OAuthController {

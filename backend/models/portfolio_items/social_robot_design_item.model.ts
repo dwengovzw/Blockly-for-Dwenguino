@@ -1,5 +1,6 @@
 import { Document, Schema, Model } from "mongoose"
-import { ISolutionItem, SolutionItem } from "./solution_item.model.js"
+import { PortfolioItem } from "./portfolio_item.model.js"
+import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js"
 
 interface ISocialRobotDesignItemExtraFields {
     socialRobotDesignXml: string
@@ -11,9 +12,9 @@ const SocialRobotDesignItemSchemaFields: Record<keyof ISocialRobotDesignItemExtr
         required: true
     }
 }
-const SocialRobotDesignItemSchema = new Schema<ISocialRobotDesignItem>(SocialRobotDesignItemSchemaFields)
+const SocialRobotDesignItemSchema = SolutionItemSchema(SocialRobotDesignItemSchemaFields)
 interface ISocialRobotDesignItemModel extends Model<ISocialRobotDesignItem>{}
-const SocialRobotDesignItem = SolutionItem.discriminator<ISocialRobotDesignItem, ISocialRobotDesignItemModel>('SocialRobotDesignItem', SocialRobotDesignItemSchema)
+const SocialRobotDesignItem = PortfolioItem.discriminator<ISocialRobotDesignItem, ISocialRobotDesignItemModel>('SocialRobotDesignItem', SocialRobotDesignItemSchema)
 
 export {
     ISocialRobotDesignItem,

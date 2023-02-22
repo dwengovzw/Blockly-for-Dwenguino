@@ -13,11 +13,14 @@ const AssignmentSchemaFields: Record<keyof IAssignmentItemExtraFields, any> = {
         ref: 'Teacher'
     }
 }
-const AssignmentItemSchema = new Schema<IAssignmentItem>(AssignmentSchemaFields)
-interface IAssignmentItemModel extends Model<IAssignmentItem>{}
-const AssignmentItem = PortfolioItem.discriminator<IAssignmentItem, IAssignmentItemModel>('AssignmentItem', AssignmentItemSchema);
+
+let AssignmentItemSchema = (props) => {
+    const params = AssignmentSchemaFields
+    if (props) Object.assign(params, props);
+    return new Schema(params)
+}
 
 export {
     IAssignmentItem,
-    AssignmentItem
+    AssignmentItemSchema
 }

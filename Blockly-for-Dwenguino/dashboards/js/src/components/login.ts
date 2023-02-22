@@ -68,8 +68,20 @@ class LoginMenu extends connect(store)(LitElement) {
                 ${this.platforms.map(p => {
                     return html`<li><a rel="external" href="${this.getLoginURI(p, this.originalRequestInfo)}">${this.platformToLabelMap[p]}</a></li>`
                 })}
+                ${this.renderTestLoginOptions()}
             </ul>
         </div>`
+    }
+
+    /**
+     * This funciton is only for testing purpouses
+     */
+    renderTestLoginOptions(){
+        return html`
+        <li><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=admin">Login as admin</a></li>
+        <li><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=teacher1">Login as teacher</a></li>
+        <li><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=student1">Login as student</a></li>
+        `
     }
 
     renderLoginMenu(){

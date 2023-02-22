@@ -2,14 +2,21 @@ import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
 import { IStudentTeam } from "./student_team.model.js"
 import { IClassGroup } from "./class_group.model.js"
+import  v4 from "uuid/v4.js"
 
 interface IAssignmentGroup {
+    uuid?: string,
     name: string,
     description?: string,
     studentTeams: ID[] | IStudentTeam[],
     inClassGroup: ID | IClassGroup
 }
 const AssignmentGroupFields: Record<keyof IAssignmentGroup, any> = {
+    uuid: {
+        type: String,
+        required: true,
+        default: v4
+    },
     name: {
         type: String,
         required: true

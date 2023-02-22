@@ -1,25 +1,13 @@
 import { ClassGroup, IClassGroup } from "../models/class_group.model.js";
 import { User } from "../models/user.model.js"
-
-//https://stackoverflow.com/questions/1349404/generate-random-string-characters-in-javascript?page=1&tab=modifieddesc#tab-top
-let makeid = (length=8 ) => {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNPQRSTUVWXYZ123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-}
+import { makeSharingCode } from "../utils/utils.js";
 
 let getUniqueClassCode = async () => {
     let found = false
     let code = ""
     let iter = 0
     while (!found && iter < 10000) {
-        code = makeid()
+        code = makeSharingCode()
         let exists = await ClassGroup.exists({sharingCode: code})
         if (!exists){
             found = true;

@@ -1,7 +1,12 @@
 const PLATFORMS = {
     github: "github",
     leerId: "leerId",
-    beACM: "beACM"
+    beACM: "beACM",
+}
+
+// only support test platform in dev mode
+if (process.env.NODE_ENV == "debug"){
+    PLATFORMS["test"] = "test"
 }
 
 const ROLES = {

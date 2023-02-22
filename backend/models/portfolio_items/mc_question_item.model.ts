@@ -1,5 +1,6 @@
 import { Schema, Model } from "mongoose"
-import { AssignmentItem, IAssignmentItem } from "./assignment_item.model.js"
+import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model.js"
+import { PortfolioItem } from "./portfolio_item.model.js"
 
 interface IMCQuestionItemExtraFields {
     questionText: string,
@@ -12,9 +13,9 @@ const MCQuestionSchemaFields: Record<keyof IMCQuestionItemExtraFields, any> = {
     answerOptions: [String],
     correctAnswers: [String]
 }
-const MCQuestionItemSchema = new Schema<IMCQuestionItem>(MCQuestionSchemaFields)
+const MCQuestionItemSchema = AssignmentItemSchema(MCQuestionSchemaFields)
 interface IMCQuestionItemModel extends Model<IMCQuestionItem>{}
-const MCQuestionItem = AssignmentItem.discriminator<IMCQuestionItem, IMCQuestionItemModel>('MCQuestion', MCQuestionItemSchema)
+const MCQuestionItem = PortfolioItem.discriminator<IMCQuestionItem, IMCQuestionItemModel>('MCQuestion', MCQuestionItemSchema)
 
 export {
     IMCQuestionItem,
