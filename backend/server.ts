@@ -58,7 +58,6 @@ app.use(cors(corsOptions));
 app.set('view engine', 'ejs');
 let viewDirs = JSON.parse(process.env.VIEWS_DIR as string).map((elem) => {return __dirname + "/" + elem})
 app.set('views', viewDirs);   // For debug
-//app.set('views', '../Blockly-for-Dwenguino');
 
 // Optimizations for production
 if (process.env.NODE_ENV === 'production') {
@@ -121,23 +120,17 @@ app.get("/favicon.ico", (req, res) => {
 // Use blockly routes for the app
 app.use('/', blocklyRoutes);
 
-// Use statistics routes
-//app.use('/stats', statsRoutes);
-
 // Use dashboard routes
 app.use('/dashboard', dashboardRouter);
 
 // Use oauth routes
-//app.use('/oauth', oauthRouter);
+app.use('/oauth', oauthRouter);
 
 // Use user routes
-//app.use("/user", userRouter);
+app.use("/user", userRouter);
 
 // Use classgroup routes
-//app.use("/classgroup", classGroupRouter)
-
-// Test router
-//app.use("/test", testRouter)
+app.use("/classgroup", classGroupRouter)
 
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));
