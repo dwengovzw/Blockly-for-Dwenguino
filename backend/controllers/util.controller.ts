@@ -143,7 +143,7 @@ class UtilController{
                     }, (stdout) => {
                         res.download(binary_file, "program.dw", (err) => {
                             // Remove the object folder and sketch.cpp file
-                            //UtilController.cleanupCompile(objid)
+                            UtilController.cleanupCompile(objid)
                         });
                     })
                 }))
