@@ -480,8 +480,8 @@ let DwenguinoBlockly = {
     disableRunButton: function(){
       $("#db_menu_item_run").off("click");
       $("#db_menu_item_clear").off("click");
-      $("#db_menu_item_dwengo_robot_teacher_image").attr("src", DwenguinoBlockly.basepath + "DwenguinoIDE/img/gear_animation.gif");
-      $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px 25px", maxHeight: "100%", float: "right"});
+      $("#db_menu_item_loading_gear").show();
+      $("#db_menu_item_run").hide();
       $("#db_menu_item_run").css({color: "gray"});
       $("#db_menu_item_clear").css({color: "gray"});
     },
@@ -515,8 +515,11 @@ let DwenguinoBlockly = {
             $(this).css({color: "black"});
           });
 
-          $("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px", maxHeight: "100%", float: "right"});
-          $("#db_menu_item_dwengo_robot_teacher_image").attr("src", DwenguinoBlockly.basepath + "DwenguinoIDE/img/dwengo_robot_plain.svg");
+          $("#db_menu_item_loading_gear").hide();
+          $("#db_menu_item_run").show();
+
+          //$("#db_menu_item_dwengo_robot_teacher_image").css({padding: "10px", maxHeight: "100%", float: "right"});
+          //$("#db_menu_item_dwengo_robot_teacher_image").attr("src", DwenguinoBlockly.basepath + "DwenguinoIDE/img/dwengo_robot_plain.svg");
     },
 
     prevWorkspaceXml: "",

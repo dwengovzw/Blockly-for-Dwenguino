@@ -314,9 +314,18 @@ body{
 }
 
 #db_menu_item_dwengo_robot_teacher_image{
-    padding: 10px;
     max-height: 100%;
     float: right;
+}
+
+#db_menu_item_loading_gear_image {
+    max-height: 100%;
+    float: right;
+}
+
+#db_menu_item_login_menu {
+    margin-top: -3px;
+    font-size: 1rem;
 }
 
 .dropdownmenuitem{

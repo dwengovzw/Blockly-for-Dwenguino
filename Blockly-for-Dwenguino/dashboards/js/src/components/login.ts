@@ -43,7 +43,9 @@ class LoginMenu extends connect(store)(LitElement) {
         let reqInfo:string = params.get("originalRequestInfo")?.toString() as string;
         if (reqInfo){
           this.originalRequestInfo = `&originalRequestInfo=${reqInfo}`
-        } 
+        } else {
+            this.originalRequestInfo = `&originalRequestInfo=${JSON.stringify({originalTarget: window.location.pathname, originalQuery: window.location.search})}`
+        }
         store.dispatch(fetchUserInfo())
         store.dispatch(fetchPlatforms())
     }
@@ -92,10 +94,10 @@ class LoginMenu extends connect(store)(LitElement) {
         return html`
         ${getGoogleMateriaIconsLinkTag()}
         <span class="dwengo-login-menu-icon-container">
+        ${this.loggedIn ? html`<span class="dwengo-login-menu-icon" @click=${() => this.menuIsOpen = !this.menuIsOpen }>${this.name ? this.name : msg("No name set")}</span>` : html`
         <span @click=${() => this.menuIsOpen = !this.menuIsOpen } class="dwengo-login-menu-icon material-symbols-outlined">
             account_circle
-        </span>
-        ${this.loggedIn ? html`<span>${this.name}</span>` : ""}
+        </span>`}
         </span>
         ${this.menuIsOpen ? html`<div class='dwengo-login-menu-dropdown'>${this.renderLoginMenu()}</div>` : ""}
         `
@@ -107,7 +109,7 @@ class LoginMenu extends connect(store)(LitElement) {
     }
     .dwengo-login-menu-icon {
         color: --theme-accentFillSelected;
-        font-size: 3rem;
+        font-size: 2rem;
         line-height: 1;
     }
     .dwengo-login-menu-icon:hover {
@@ -129,7 +131,7 @@ class LoginMenu extends connect(store)(LitElement) {
         box-shadow: 5px 5px -5px var(--theme-accentFillSelected);
         background-color: var(--theme-neutralFocusInnerAccent);
         color: var(--theme-white);
-        z-index: 1000;
+        z-index: 10000;
     }
     .dwengo-login-menu-dropdown div {
         display: flex;

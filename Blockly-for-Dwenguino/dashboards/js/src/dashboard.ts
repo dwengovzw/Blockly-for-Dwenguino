@@ -16,9 +16,13 @@ globalThis.URLPattern = URLPattern
 
 @customElement("dwengo-dashboard")
 class Dashboard extends connect(store)(LitElement) {
+    private urlPrefixRegex: RegExp = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(\/(.*))$/
+    private urlPrefixArray: RegExpMatchArray | null = globalSettings?.hostname?.match(this.urlPrefixRegex)
+    private urlPrefix: string = this.urlPrefixArray ? this.urlPrefixArray[4] : ""
+
     private router = new Router(this, [
-        { path: "/dashboard", render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
-        { path: '/dashboard/*', render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
+        { path: `${this.urlPrefix}/dashboard`, render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
+        { path: `${this.urlPrefix}/dashboard/*`, render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
     ]);
 
     createRenderRoot() {
