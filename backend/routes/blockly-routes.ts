@@ -34,7 +34,7 @@ let processStartBlocks = (startblock_xml, res, view="index.ejs") => {
     blocks_xml = blocks_xml.trim()  // remove whitespace
     //let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
     //let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
-    res.render(view, {blocks_xml: blocks_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "simulator"});
+    res.render(view, {blocks_xml: blocks_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "/simulator"});
 }
 
 let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
@@ -42,7 +42,7 @@ let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
         processStartBlocks(blocks_xml, res, view);
     }else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
-        res.render(view, {blocks_xml: empty_program_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "simulator"});
+        res.render(view, {blocks_xml: empty_program_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "/simulator"});
     }
 }
 
