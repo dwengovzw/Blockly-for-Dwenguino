@@ -9,7 +9,7 @@ import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { fetchPlatforms } from "../state/features/oauth_slice";
 import { fetchUserInfo } from "../state/features/user_slice";
-import { getGoogleMateriaIconsLinkTag } from "../util"
+import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../util"
 
 
 
@@ -44,7 +44,13 @@ class LoginMenu extends connect(store)(LitElement) {
         if (reqInfo){
           this.originalRequestInfo = `&originalRequestInfo=${reqInfo}`
         } else {
-            this.originalRequestInfo = `&originalRequestInfo=${JSON.stringify({originalTarget: window.location.pathname, originalQuery: window.location.search})}`
+            let targetRegex = new RegExp(`${escapeRegExp(globalSettings.hostname)}(.*)$`)
+            let targetMatches = window.location.href.match(targetRegex)
+            let target = "/"
+            if (targetMatches){
+                target = targetMatches[1]
+            }
+            this.originalRequestInfo = `&originalRequestInfo=${JSON.stringify({originalTarget: target, originalQuery: window.location.search})}`
         }
         store.dispatch(fetchUserInfo())
         store.dispatch(fetchPlatforms())
