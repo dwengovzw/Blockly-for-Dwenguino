@@ -1,6 +1,5 @@
 import { msg } from "@lit/localize"
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { state } from "lit/decorators"
+import { createSlice } from "@reduxjs/toolkit"
 import { setNotificationMessage, NotificationMessageType } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
@@ -73,7 +72,6 @@ const addClassGroup = (classGroupInfo) => {
                 body: JSON.stringify(classGroupInfo)
             })
             let json = await response.json()
-            console.log(response)
             dispatch(addGroup(json))
         } catch (err) {
             dispatch(setNotificationMessage(msg("Error adding classgroup"), NotificationMessageType.ERROR, 2500))

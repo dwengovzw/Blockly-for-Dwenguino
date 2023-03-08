@@ -15,6 +15,7 @@ import "./welcome"
 import "./profile"
 import "./classes/classes"
 import "./classes/class"
+import "./savedprograms/list"
 
 
 
@@ -25,7 +26,8 @@ class ContentPage extends connect(store)(LitElement) {
         {path: 'home', render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
         {path: 'profile', render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
         {path: 'classes', render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
-        {path: 'class/:uuid', render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`}
+        {path: 'class/:uuid', render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
+        {path: 'savedprograms', render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`}
     ]);
     
     stateChanged(state: any): void {

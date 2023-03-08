@@ -41,7 +41,7 @@ class Classes extends connect(store)(LitElement) {
     }
 
     constructor(){
-        super();
+        super()
         store.dispatch(getAllClassGroups())
     }
 

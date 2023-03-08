@@ -8,6 +8,7 @@ import jQuery from "jquery";
 import 'jquery-ui-bundle';
 import 'bootstrap';
 import TextualEditor from './textual_editor/textual_editor.ts'
+import { store } from "../../../dashboards/js/src/state/store.ts"
 
 window.$ = window.jQuery = jQuery;
 
@@ -65,7 +66,6 @@ let DwenguinoBlockly = {
             dataType: 'text',
             type: 'get',
             success: function( data, textStatus, jQxhr ){
-                console.log('succes');
                 DwenguinoBlockly.compilationPath = `${settings.hostname}/utilities/getDwenguinoBinary`;
             },
             error: function( jqXhr, textStatus, errorThrown ){
@@ -111,12 +111,13 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.toggleSimulator();
         });
 
+        
+
         //turn on the simulator by default
         DwenguinoBlockly.toggleSimulator();
 
 
         //The following code handles the upload of a saved file.
-        //If it is run as an arduino ide plugin its shows a filechooser and returns the xml string (depricated and removed)
         //If it is run in the browser it shows a modal dialog with two upload options:
         //1) Using the upload button.
         //2) Using the drag and drop system.
@@ -134,12 +135,23 @@ let DwenguinoBlockly = {
           })
         });
 
+        //The following code handles saving of the current program in the users' account
+        //If it is run in the browser it shows a modal dialog enabeling them to choose a name:
+        $("#db_menu_item_save").on("click", function(){
+          DwenguinoBlockly.showSaveToProfileModal()
+        });
+
         // This code handles the download of the workspace to a local file.
         // If this is run in the arduino ide, a filechooser is shown. (depricated and removed)
         // If it is run in the browser, the document is downloaded using the name blocks.xml.
         $("#db_menu_item_download").on("click", (e) => {
           DwenguinoBlockly.downloadFileHandler();
         });
+
+        $("#submit_save_modal_dialog_button").on("click", (e) => {
+          DwenguinoBlockly.saveFileHandler();
+        })
+
         document.addEventListener('keydown', e => {
           if (e.ctrlKey && e.key === 's'){
             e.preventDefault();
@@ -307,6 +319,46 @@ let DwenguinoBlockly = {
       let event = DwenguinoBlockly.logger.createEvent(EVENT_NAMES.downloadClicked, data);
       DwenguinoBlockly.logger.recordEvent(event);
     },
+
+    saveFileHandler: async function(){
+      let filename = ""
+      let program = ""
+      if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+        var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+        program = Blockly.Xml.domToText(xml);
+        filename = $('#saveToProfileModal .modal-body #filename').val()
+      } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+          program = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
+          filename = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
+          DwenguinoBlockly.textualEditor.getEditorPane().saveCurrentTab();
+      }
+      if (filename == ""){
+        filename = "noname"
+      }
+      try {
+        let result = await fetch(
+          `${globalSettings.hostname}/savedprograms/save`, {
+            method: "POST", // *GET, POST, PUT, DELETE, etc.
+            cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+            headers: { "Content-Type": "application/json"},
+            body: JSON.stringify({
+              program: program,
+              name: filename
+          })
+        })
+        if (result.status == 200){
+          DwenguinoBlockly.showNotificationModal("Success", "The file has been saved!")
+        }else{
+          DwenguinoBlockly.showNotificationModal("Failed", "Unable to save file in your account!")
+        }
+      } catch (e) {
+
+      } finally {
+        $('#saveToProfileModal .modal-body #filename').val("")
+      }
+      
+    },
+
     restoreFromXml: function(xml){
       DwenguinoBlockly.workspace.clear();
       Blockly.Xml.domToWorkspace(xml, DwenguinoBlockly.workspace);
@@ -448,12 +500,11 @@ let DwenguinoBlockly = {
             DwenguinoBlockly.resetRunButton();
           },
           error: function(err, textStatus, errorThrown){
-            console.log(`Compilation failed with error: ${err}`)
             DwenguinoBlockly.resetRunButton();
           }
         }) 
       } catch (e) {
-        console.log(res);
+        console.log(e);
       }
     },
 
@@ -475,6 +526,20 @@ let DwenguinoBlockly = {
         $('#errorModal .modal-body .console').html(error.trace);
       }
       $('#errorModal').modal('show');
+    },
+    showNotificationModal: function(title, message){
+      // Set modal dialog error messages.
+      $('#notificationModal .modal-header').html(title);
+      $('#notificationModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+      $('#notificationModal .modal-body .message').html(message);
+      $('#notificationModal').modal('show');
+    },
+
+    showSaveToProfileModal: function(){
+      $('#saveToProfileModal .modal-header').html(DwenguinoBlocklyLanguageSettings.translate(['saveToProfile']));
+      $('#saveToProfileModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+      $('#saveToProfileModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['nameFileToSave']));
+      $('#saveToProfileModal').modal('show');
     },
 
     disableRunButton: function(){
@@ -726,9 +791,7 @@ let DwenguinoBlockly = {
             url: settings.hostname + "/lang",
             data: JSON.stringify(data)}
         ).done(function(data){
-            console.log(data);
         }).fail(function(response, status)  {
-            console.log(status, response);
         }); 
 
         window.location = window.location.protocol + '//' +
@@ -764,7 +827,6 @@ let DwenguinoBlockly = {
           url: settings.hostname + "/lang",
           data: JSON.stringify(data)}
       ).done(function(data){
-          console.log(data);
       }).fail(function(response, status)  {
           console.log(status, response);
       }); 
@@ -803,9 +865,9 @@ let DwenguinoBlockly = {
 
         document.getElementById('db_menu_item_upload').title = DwenguinoBlocklyLanguageSettings.translate(['loadBlocksFileTooltip']);
         document.getElementById('db_menu_item_download').title = DwenguinoBlocklyLanguageSettings.translate(['saveBlocksFileTooltip']);
+        document.getElementById('db_menu_item_save').title = DwenguinoBlocklyLanguageSettings.translate(['saveBlocksToProfileTooltip']);
         document.getElementById('db_menu_item_simulator').title = DwenguinoBlocklyLanguageSettings.translate(['toggleSimulator']);
         document.getElementById('db_menu_item_run').title = DwenguinoBlocklyLanguageSettings.translate(['compileAndDownload']);
-        document.getElementById('db_tutorials').title = DwenguinoBlocklyLanguageSettings.translate(['openTutorials']);
         document.getElementById('db_menu_item_clear').title = DwenguinoBlocklyLanguageSettings.translate(['compileEmptyProgram']);
 
         var categories = ['catLogic', 'catLoops', 'catMath', 'catText', 'catLists',
@@ -871,7 +933,31 @@ let DwenguinoBlockly = {
         Blockly.Xml.domToWorkspace(xmlDom, DwenguinoBlockly.workspace);
     },
 
-    setupEnvironment: function(){
+    checkLoggedIn: async function() {
+      $("#db_menu_item_save").hide()
+      try {
+        let response = await fetch(`${globalSettings.hostname}/user/info`)
+        if (response.status == 200){
+          $("#db_menu_item_save").show()
+            this.loggedIn = true;
+        } else if (response.status == 401){ 
+            this.loggedIn = false;
+        } else if (response.status == 403){
+            this.loggedIn = false;
+        } else {
+            this.loggedIn = false;
+        }
+    } catch (err) {
+        this.loggedIn = false;
+    } finally {
+        this.loggedIn = false;
+    }
+    },
+
+    setupEnvironment: async function(){
+        this.checkLoggedIn();
+        
+        
         DwenguinoBlockly.initLanguage();
         let workspace = DwenguinoBlockly.injectBlockly();
 

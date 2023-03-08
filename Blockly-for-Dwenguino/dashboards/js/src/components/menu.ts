@@ -21,7 +21,8 @@ class Menu extends connect(store)(LitElement){
     menuItemOptions: Record<string, MenuItem[]> = {
         "user": [
             {label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home"},
-            {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person"}
+            {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person"},
+            {label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open"}
         ],
         "student": [],
         "teacher": [
@@ -51,6 +52,7 @@ class Menu extends connect(store)(LitElement){
             ${this.menuItems.map((item) => {
                 return html`<a href="${item.href}" @click=${()=>{this.visible = false}}><li><span class="material-symbols-outlined menu-logo">${item.icon}</span><span class="item-label">${item.label}</span></li></a>`
             })}
+            <a href="${globalSettings.hostname}" rel="external"><li><span class="material-symbols-outlined menu-logo">code_blocks</span><span class="item-label">${msg("Simulator")}</span></li></a>
         </ul>`
     }
 
