@@ -1,11 +1,11 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
-import { setNotificationMessage, NotificationMessageType } from "./notification_slice"
+import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
 
-interface ClassGroupInfo extends LoadableState{
+interface ClassGroupInfo {
     uuid?: string,
     name: string,
     sharingCode?: string,
@@ -14,7 +14,7 @@ interface ClassGroupInfo extends LoadableState{
     students?: any[],
     awaitingStudents?: any[]
 }
-interface ClassGroups extends LoadableState {
+interface ClassGroups {
     groups: ClassGroupInfo[],
     currentGroup: ClassGroupInfo | null
 }
@@ -40,12 +40,6 @@ export const classGroupSlice = createSlice({
         },
         setGroups: (state, action) => {
             state.groups = action.payload
-        },
-        loading: (state) => {
-            state.loading = true
-        },
-        doneLoading: (state) => {
-            state.loading = false
         },
         setCurrentGroup: (state, action) => {
             let classGroup: ClassGroupInfo = {
@@ -137,7 +131,7 @@ const getClassGroup = (uuid: string) => {
 }
 
 
-const { addGroup, setGroups, loading, doneLoading, setCurrentGroup } = classGroupSlice.actions
+const { addGroup, setGroups, setCurrentGroup } = classGroupSlice.actions
 
 const classGroupReducer = classGroupSlice.reducer
 

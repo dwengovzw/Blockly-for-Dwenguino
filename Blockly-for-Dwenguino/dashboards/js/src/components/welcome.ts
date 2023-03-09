@@ -36,7 +36,6 @@ class WelcomePage extends connect(store)(LitElement) {
 
     static styles?: CSSResultGroup = css`
         :host {
-            background-color: var(--theme-neutralFocusInnerAccent);
             padding: var(--theme-main-page-margin);
             margin: 0;
         }

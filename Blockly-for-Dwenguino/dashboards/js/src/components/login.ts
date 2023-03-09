@@ -11,6 +11,7 @@ import { fetchPlatforms } from "../state/features/oauth_slice";
 import { fetchUserInfo } from "../state/features/user_slice";
 import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../util"
 
+import '@vaadin/avatar';
 
 
 @customElement("dwengo-login-menu")
@@ -64,7 +65,7 @@ class LoginMenu extends connect(store)(LitElement) {
     renderLoginMenuLoggedIn(){
         return html`<div>
                 <span class='loggedin-item login-title'>${msg("Welcome")} ${this.name}</span>
-                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/profile'>${msg("View profile")}</a></span>
+                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/home'>${msg("Dashboard")}</a></span>
                 <span class='loggedin-item'><a rel="external" href='${globalSettings.hostname}/oauth/logout'>${msg("Logout")}</a></span>
             </div>` 
     }
@@ -100,7 +101,9 @@ class LoginMenu extends connect(store)(LitElement) {
         return html`
         ${getGoogleMateriaIconsLinkTag()}
         <span class="dwengo-login-menu-icon-container">
-        ${this.loggedIn ? html`<span class="dwengo-login-menu-icon" @click=${() => this.menuIsOpen = !this.menuIsOpen }>${this.name ? this.name : msg("No name set")}</span>` : html`
+        ${this.loggedIn ? html`<span class="dwengo-login-menu-icon" @click=${() => this.menuIsOpen = !this.menuIsOpen }>
+            <vaadin-avatar .name="${this.name}"></vaadin-avatar>
+        </span>` : html`
         <span @click=${() => this.menuIsOpen = !this.menuIsOpen } class="dwengo-login-menu-icon material-symbols-outlined">
             account_circle
         </span>`}

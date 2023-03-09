@@ -80,14 +80,12 @@ class Profile extends connect(store)(LitElement) {
                 </div>
                 <div><mwc-textfield outlined label="${msg("You are logged in with")}" type="text" disabled="true" value= "${this.userInfo?.platform}"></mwc-textfield></div>
                 <mwc-button @click=${this.handleSave} raised>${msg("Save")}</mwc-button>
-                ${ this.userInfo.loading ? html`<mwc-circular-progress indeterminate></mwc-circular-progress>` : ""}
             </div>
         `
     }
 
     static styles?: CSSResultGroup = css`
         :host{
-            background-color: var(--theme-neutralFocusInnerAccent);
             padding: var(--theme-main-page-margin);
             margin: 0;
         }

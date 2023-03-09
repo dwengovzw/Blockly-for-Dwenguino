@@ -1,20 +1,19 @@
 import { msg } from "@lit/localize"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { state } from "lit/decorators"
-import { NotificationInfo, setNotificationMessage, NotificationMessageType } from "./notification_slice"
+import { NotificationInfo, setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
 
-interface UserInfo extends LoadableState{
+interface UserInfo {
     loggedIn: boolean,
     firstname: string,
     lastname: string,
     email: string,
     platform?: string,
     birthdate: string | null,
-    roles: string[],
-    loading: boolean
+    roles: string[]
 }
 
 const initialUserState: UserInfo = {
@@ -24,8 +23,7 @@ const initialUserState: UserInfo = {
     email: "",
     platform: "unknown",
     birthdate: null,
-    roles: [],
-    loading: false
+    roles: []
 }
 
 export const userSlice = createSlice({
@@ -48,12 +46,6 @@ export const userSlice = createSlice({
             state.birthdate = action.payload.birthdate
             state.roles = action.payload.roles.map((role) => role.name)
             state.platform = action.payload.platform
-        }, 
-        loading: (state) => {
-            state.loading = true;
-        },
-        doneLoading: (state) => {
-            state.loading = false
         }
     }
 })
@@ -107,7 +99,7 @@ const fetchUserInfo = () => {
 
 
 
-const { login, logout, setInfo, loading, doneLoading } = userSlice.actions
+const { login, logout, setInfo } = userSlice.actions
 
 const userReducer = userSlice.reducer
 

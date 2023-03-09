@@ -8,6 +8,7 @@ import "./components/header";
 import "./components/intro_page"
 import "./components/notify"
 import "./components/content_page"
+import "./components/welcome"
 
 // Polyfill URLPattern
 import {URLPattern} from "urlpattern-polyfill";
@@ -21,7 +22,7 @@ class Dashboard extends connect(store)(LitElement) {
     private urlPrefix: string = this.urlPrefixArray ? this.urlPrefixArray[4] : ""
 
     private router = new Router(this, [
-        { path: `${this.urlPrefix}/dashboard`, render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
+        { path: `${this.urlPrefix}/dashboard`, render: () => {return html`<dwengo-welcome-page></dwengo-welcome-page>` }},
         { path: `${this.urlPrefix}/dashboard/*`, render: () => {return html`<dwengo-content-page></dwengo-content-page>` }},
     ]);
 
@@ -39,8 +40,10 @@ class Dashboard extends connect(store)(LitElement) {
 
     protected render() {
         return html`<dwengo-notify></dwengo-notify>
-                    <dwengo-header></dwengo-header>
-                    ${this.loggedIn ? this.router.outlet() : html`<dwengo-intro-page></dwengo-intro-page>`}`
+                    <dwengo-menu>
+                        ${this.loggedIn ? this.router.outlet() : html`<dwengo-intro-page></dwengo-intro-page>`}
+                    </dwengo-menu>`
+                    
     }
 }
 

@@ -13,12 +13,16 @@ savedProgramsRouter.post("/save", [verifyTokenAjax, verifyUserExists], (req, res
     saveProgramController.save(req, res)
 })
 
-savedProgramsRouter.post("remove", [verifyTokenAjax, verifyUserExists], (req, res) => {
-    saveProgramController.remove(req, res)
+savedProgramsRouter.delete("/delete/:uuid", [verifyTokenAjax, verifyUserExists], (req, res) => {
+    saveProgramController.delete(req, res)
 })
 
 savedProgramsRouter.get("/all", [verifyTokenAjax, verifyUserExists], (req, res) => {
     saveProgramController.all(req, res)
+})
+
+savedProgramsRouter.get("/open", [verifyTokenAjax, verifyUserExists], (req, res) => {
+    saveProgramController.open(req, res)
 })
 
 export default savedProgramsRouter

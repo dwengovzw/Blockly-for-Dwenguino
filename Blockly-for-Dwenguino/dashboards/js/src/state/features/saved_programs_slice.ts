@@ -1,11 +1,11 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
-import { setNotificationMessage, NotificationMessageType } from "./notification_slice"
+import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
 interface SavedProgramInfo {
-    uuid?: string,
+    uuid: string,
     blocklyXml: string,
     savedAt: Date,
     name: string
@@ -38,13 +38,7 @@ export const savedProgramsSlice = createSlice({
         },
         setPrograms: (state, action) => {
             state.programs = action.payload
-        },
-        loading: (state) => {
-            state.loading = true
-        },
-        doneLoading: (state) => {
-            state.loading = false
-        },
+        }
     }
 })
 
@@ -67,8 +61,29 @@ const getAllSavedPrograms = () => {
     }
 }
 
-const { addProgram, setPrograms, loading, doneLoading } = savedProgramsSlice.actions
+const deleteSavedProgram = (uuid: string) => {
+    return async (dispatch: any, getState: any) => {
+        try {
+            dispatch(loading())
+            const response = await fetchAuth(`${globalSettings.hostname}/savedprograms/delete/${uuid}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json"}
+            })
+            if (response.status == 200){
+                dispatch(getAllSavedPrograms())
+            } else {
+                dispatch(setNotificationMessage(msg("Error deleting saved program"), NotificationMessageType.ERROR, 2500))
+            }
+        } catch (err) {
+            dispatch(setNotificationMessage(msg("Error deleting saved program"), NotificationMessageType.ERROR, 2500))
+        } finally {
+            dispatch(doneLoading())
+        }
+    }
+}
+
+const { addProgram, setPrograms } = savedProgramsSlice.actions
 
 const savedProgramsReducer = savedProgramsSlice.reducer
 
-export { savedProgramsReducer, getAllSavedPrograms, SavedProgramInfo }
+export { savedProgramsReducer, getAllSavedPrograms, SavedProgramInfo, deleteSavedProgram }

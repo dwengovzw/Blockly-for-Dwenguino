@@ -6,27 +6,39 @@ import { connect } from "pwa-helpers"
 import { UserInfo, initialUserState } from "../state/features/user_slice"
 import { getGoogleMateriaIconsLinkTag } from "../util"
 
+import '@vaadin/app-layout';
+import '@vaadin/app-layout/vaadin-drawer-toggle';
+import '@vaadin/icon';
+import '@vaadin/icons';
+import '@vaadin/tabs';
+import '@vaadin/progress-bar';
+
 interface MenuItem {
     label: string,
     href: string,
-    icon?: string
+    icon?: string,
+    external: boolean
 }
 
 @customElement("dwengo-menu")
 class Menu extends connect(store)(LitElement){
     @state() menuItems:MenuItem[] = []
     @state() visible: boolean = false;
+    @state() loading: boolean = false;
 
     userInfo: UserInfo = initialUserState
     menuItemOptions: Record<string, MenuItem[]> = {
+        "all": [
+            {label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
+            {label: msg("Simulator"), href: `${globalSettings.hostname}`, icon: "code", external: true},
+        ],
         "user": [
-            {label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home"},
-            {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person"},
-            {label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open"}
+            {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
+            {label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open", external: false}
         ],
         "student": [],
         "teacher": [
-            {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups"},
+            {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
         ],
         "admin": []
     }
@@ -38,93 +50,91 @@ class Menu extends connect(store)(LitElement){
     stateChanged(state: any): void {
         this.userInfo = state.user
         let newMenuItems: MenuItem[] = []
+        newMenuItems.push(...this.menuItemOptions["all"]) // Add items you can see without being logged in.
         for (let role of this.userInfo?.roles){
             newMenuItems.push(...this.menuItemOptions[role])
         }
         this.menuItems = newMenuItems
+        this.loading = state.notification.loading
     }
 
-    protected render() {
+    protected override render() {
         return html`
-        ${getGoogleMateriaIconsLinkTag()}
-        <span class="hamburger material-symbols-outlined ${this.visible ? "open" : "closed"}" @click=${()=>{this.visible = !this.visible}}>menu</span>
-        <ul class="${this.visible ? "show" : "hide"}">
-            ${this.menuItems.map((item) => {
-                return html`<a href="${item.href}" @click=${()=>{this.visible = false}}><li><span class="material-symbols-outlined menu-logo">${item.icon}</span><span class="item-label">${item.label}</span></li></a>`
-            })}
-            <a href="${globalSettings.hostname}" rel="external"><li><span class="material-symbols-outlined menu-logo">code_blocks</span><span class="item-label">${msg("Simulator")}</span></li></a>
-        </ul>`
-    }
+          ${getGoogleMateriaIconsLinkTag()}
+          <vaadin-app-layout>
+            <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
+            <h1 slot="navbar" class="header">
+                <img class='dwengo-header-logo' src="${globalSettings.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/>
+                <dwengo-login-menu></dwengo-login-menu>
+                ${this.loading ? html`<vaadin-progress-bar indeterminate></vaadin-progress-bar>` : ""}
+            </h1>
+            
+            <vaadin-tabs slot="drawer" orientation="vertical">
+                ${this.menuItems.map(item => {
+                    return html`
+                    <vaadin-tab>
+                        <a tabindex="-1" href="${item.href}" rel="${item.external ? "external" : "next"}">
+                            <span class="material-symbols-outlined menu-logo">${item.icon}</span>
+                            <span class="item-label">${item.label}</span>
+                        </a>
+                    </vaadin-tab>
+                    `
+                })}
+            </vaadin-tabs>
+            <slot></slot>
+          </vaadin-app-layout>
+        `;
+      }
 
-    static styles?: CSSResultGroup = css`
-        :host {
-            background-color: transparent;
-            display: flex;
-            flex-direction: column;
-            align-items: stretch;
-            position: absolute;
+
+    static override styles = css`
+        h1 {
+        font-size: var(--lumo-font-size-l);
+        margin: 0;
         }
-        ul.show {
-            visibility: visible;
-            content-visibility: visible;
+
+        .menu-logo {
+        box-sizing: border-box;
+        margin-inline-end: var(--lumo-space-m);
+        margin-inline-start: var(--lumo-space-xs);
+        padding: var(--lumo-space-xs);
         }
-        ul.hide {
-            visibility: hidden;
-            content-visibility: hidden;
+
+        .dwengo-header-logo{
+            display: inline-block;
+            max-width: 100px;
         }
-        ul {
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            white-space: nowrap;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-            margin-top: calc(var(--theme-base-font-size) + 1rem);
-            z-index:50;
+
+        vaadin-tab[selected] {
+            color: var(--theme-accentFillSelected);
         }
-        li {
-            overflow: hidden;
-            list-style: none;
-            box-sizing: border-box;
-            margin: 0;
-            background-color: var(--theme-accentFillSelected);
-            text-align: center;
-            padding: 0.5rem 1rem;
+
+        dwengo-login-menu {
+            display: inline-block;
+            max-width: 100px;
+            margin-right: 20px;
+        }
+
+        .header {
             display: flex;
             flex-direction: row;
-            align-items: center;
-            
-        }
-        .hamburger {
-            background-color: var(--theme-accentFillSelected);
-            color: var(--theme-white);
-            padding: 0.5rem 1rem;
-            font-size: var(--theme-base-font-size);
-            text-align: right;
-            position: absolute;
-        }
-        .hamburger:hover {
-            cursor: pointer;
-        }
-        
-        a:visited {
-            color: var(--theme-white);
-        }
-        a {
-            color: var(--theme-white);
-            text-decoration: none;
-        }
-        .menu-logo {
-            margin-right: 0.5rem;
-            font-size: var(--theme-base-font-size);
-        }
-        li:hover{
-            background-color: var(--theme-accentFillHover);
+            justify-content: space-between;
+            width: 100%;
         }
 
-        
-    `
+        vaadin-app-layout::part(navbar) {
+            background-color: var(--theme-neutralFocusInnerAccent);
+        }
+
+        vaadin-progress-bar {
+            position: absolute;
+            width: 100vw;
+            left: 0;
+            top: 0;
+            margin-top: 0;
+        }
+    `;
+
 }
 
 

@@ -23,6 +23,7 @@ import "./savedprograms/list"
 class ContentPage extends connect(store)(LitElement) {
     
     private router = new Routes(this, [
+        {path: '', render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
         {path: 'home', render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
         {path: 'profile', render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
         {path: 'classes', render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
@@ -41,7 +42,6 @@ class ContentPage extends connect(store)(LitElement) {
     
     protected render() {
         return html`
-            <dwengo-menu></dwengo-menu>
             <div class="main_page">${this.router.outlet()}</div>
         `
     }

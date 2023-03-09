@@ -13,6 +13,7 @@ export const notificationSlice = createSlice({
         message: "",
         class: "message",
         visible: false,
+        loading: false
     },
     reducers: {
         setNotification: (state, action) => {
@@ -22,7 +23,13 @@ export const notificationSlice = createSlice({
         },
         hide: (state) => {
             state.visible = false;
-        }
+        },
+        loading: (state) => {
+            state.loading = true
+        },
+        doneLoading: (state) => {
+            state.loading = false
+        },
     }
 })
 
@@ -40,7 +47,7 @@ const setNotificationMessage = (message: string, type: NotificationMessageType, 
     }
 }
 
-const { setNotification, hide } = notificationSlice.actions
+const { setNotification, hide, loading, doneLoading } = notificationSlice.actions
 const notificationReducer = notificationSlice.reducer
 
-export { notificationReducer, NotificationInfo, NotificationMessageType, setNotificationMessage }
+export { notificationReducer, NotificationInfo, NotificationMessageType, setNotificationMessage, loading, doneLoading }

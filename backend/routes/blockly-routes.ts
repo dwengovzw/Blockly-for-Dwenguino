@@ -107,3 +107,5 @@ router.use("/utilities", utilitiesRouter);
 
 // Export API routes
 export default router;
+
+export { processStartBlocks }

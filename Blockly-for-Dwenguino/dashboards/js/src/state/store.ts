@@ -8,7 +8,6 @@ import { savedProgramsReducer } from './features/saved_programs_slice'
 
 const store = configureStore({
     reducer: {
-        test: testReducer,
         oauth: oauthReducer,
         user: userReducer,
         notification: notificationReducer,
