@@ -18,7 +18,9 @@ import "@material/mwc-checkbox"
 import "@material/mwc-formfield"
 import "@material/mwc-icon"
 import "@material/mwc-circular-progress"
-
+import '@vaadin/date-picker';
+import '@vaadin/text-field';
+import '@vaadin/email-field';
 
 
 
@@ -57,10 +59,10 @@ class Profile extends connect(store)(LitElement) {
             ${getGoogleMateriaIconsLinkTag()}
             <h1>${msg("Profile")} ${this.userInfo?.firstname} ${this.userInfo?.lastname}</h1>
             <div class="profile-info">
-                <div><mwc-textfield @change=${(e) => this.userInfo.firstname = e.target.value } outlined label="${msg("Firstname")}" type="text" value="${this.userInfo?.firstname}"></mwc-textfield></div>
-                <div><mwc-textfield @change=${(e) => this.userInfo.lastname = e.target.value } outlined label="${msg("Lastname")}" type="text" value="${this.userInfo?.lastname}"></mwc-textfield></div>
-                <div><mwc-textfield @change=${(e) => this.userInfo.email = e.target.value } outlined label="${msg("Email")}" type="email" value="${this.userInfo?.email}"></mwc-textfield></div>
-                <div><mwc-textfield @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" type="date" .value="${this.userInfo?.birthdate ? `${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}`: ""}"></mwc-textfield></div>
+                <div><vaadin-text-field @change=${(e) => this.userInfo.firstname = e.target.value } outlined label="${msg("Firstname")}" type="text" value="${this.userInfo?.firstname}"></vaadin-text-field></div>
+                <div><vaadin-text-field @change=${(e) => this.userInfo.lastname = e.target.value } outlined label="${msg("Lastname")}" type="text" value="${this.userInfo?.lastname}"></vaadin-text-field></div>
+                <div><vaadin-email-field @change=${(e) => this.userInfo.email = e.target.value } outlined label="${msg("Email")}" type="email" value="${this.userInfo?.email}"></vaadin-email-field></div>
+                <div><vaadin-date-picker @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" value="${this.userInfo?.birthdate ? `${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}`: ""}"></vaadin-date-picker></div>
                 <div class="checkbox-container ${this.checkboxFocussed ? "highlightborder" : ""}">
                     <span class="checkbox-label ${this.checkboxFocussed ? "highlightlabel" : ""}">${msg('My roles')}</span>
                     <mwc-formfield label="${msg("Student")}">
@@ -68,14 +70,16 @@ class Profile extends connect(store)(LitElement) {
                             @change=${(e) => e.target.checked ? this.addRole("student") : this.removeRole("student") } 
                             @focusout=${(e)=>{this.checkboxFocussed = false}} 
                             @focus=${(e)=>{this.checkboxFocussed = true}}
-                            ?checked=${this.userInfo.roles.includes("student")}></mwc-checkbox>
+                            ?checked=${this.userInfo.roles.includes("student")}
+                            disabled="true"></mwc-checkbox>
                     </mwc-formfield>
                     <mwc-formfield label="${msg("Teacher")}">
                         <mwc-checkbox 
                             @change=${(e) => e.target.checked ? this.addRole("teacher") : this.removeRole("teacher") } 
                             @focusout=${(e)=>{this.checkboxFocussed = false}} 
                             @focus=${(e)=>{this.checkboxFocussed = true}} 
-                            ?checked=${this.userInfo.roles.includes("teacher")}></mwc-checkbox>
+                            ?checked=${this.userInfo.roles.includes("teacher")}
+                            disabled="true"></mwc-checkbox>
                     </mwc-formfield>
                 </div>
                 <div><mwc-textfield outlined label="${msg("You are logged in with")}" type="text" disabled="true" value= "${this.userInfo?.platform}"></mwc-textfield></div>
@@ -88,6 +92,17 @@ class Profile extends connect(store)(LitElement) {
         :host{
             padding: var(--theme-main-page-margin);
             margin: 0;
+        }
+        vaadin-email-field::part(label) {
+            color: var(--theme-accentFillSelected);
+        }
+        
+        vaadin-date-picker::part(label) {
+            color: var(--theme-accentFillSelected);
+        }
+        
+        vaadin-text-field::part(label) {
+            color: var(--theme-accentFillSelected);
         }
 
         mwc-textfield {

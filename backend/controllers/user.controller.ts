@@ -54,7 +54,7 @@ class UserController {
                 if (info.birthdate){
                     user.birthdate = new Date(info.birthdate)
                 }
-                user.roles = info.roles.map(role => new Role({name: role}))
+                //user.roles = info.roles.map(role => new Role({name: role})) // Do not allow users to change their own role.
                 let userInfo = {
                     loggedIn: true,
                     firstname: user.firstname,

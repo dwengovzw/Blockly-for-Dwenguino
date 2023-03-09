@@ -34,7 +34,7 @@ class SavedProgramsList extends connect(store)(LitElement){
     }
 
     handleOpenSavedProgram(uuid: string){
-        window.location.href=`${globalSettings.hostname}/savedprograms/open?uuid=${uuid}`
+        window.open(`${globalSettings.hostname}/savedprograms/open?uuid=${uuid}`, "_blank")
     }
 
     handleRemoveSavedProgram(uuid: string){
