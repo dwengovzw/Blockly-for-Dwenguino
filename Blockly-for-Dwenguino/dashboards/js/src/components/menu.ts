@@ -36,7 +36,9 @@ class Menu extends connect(store)(LitElement){
             {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
             {label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open", external: false}
         ],
-        "student": [],
+        "student": [
+            {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
+        ],
         "teacher": [
             {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
         ],
@@ -61,7 +63,7 @@ class Menu extends connect(store)(LitElement){
     protected override render() {
         return html`
           ${getGoogleMateriaIconsLinkTag()}
-          <vaadin-app-layout>
+          <vaadin-app-layout .drawerOpened=${false}>
             <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
             <h1 slot="navbar" class="header">
                 <img class='dwengo-header-logo' src="${globalSettings.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/>
@@ -72,7 +74,7 @@ class Menu extends connect(store)(LitElement){
             <vaadin-tabs slot="drawer" orientation="vertical">
                 ${this.menuItems.map(item => {
                     return html`
-                    <vaadin-tab>
+                    <vaadin-tab .selected=${window.location.href.startsWith(item.href)}>
                         <a tabindex="-1" href="${item.href}" rel="${item.external ? "external" : "next"}">
                             <span class="material-symbols-outlined menu-logo">${item.icon}</span>
                             <span class="item-label">${item.label}</span>

@@ -23,8 +23,8 @@ import "../util/deletable_list_item"
 
 
 
-@customElement("dwengo-classes-page")
-class Classes extends connect(store)(LitElement) {
+@customElement("dwengo-student-classes-page")
+class StudentClasses extends connect(store)(LitElement) {
 
     @state() groups: ClassGroupInfo[] = []
     @state() loading: boolean = false;
