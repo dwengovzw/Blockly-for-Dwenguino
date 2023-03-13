@@ -85,7 +85,6 @@ const getAllClassGroups = () => {
             })
             let json = await response.json()
             let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid}})
-            console.log(response)
             dispatch(setGroups(groups))
         } catch (err) {
             dispatch(setNotificationMessage(msg("Error getting classgroup"), NotificationMessageType.ERROR, 2500))

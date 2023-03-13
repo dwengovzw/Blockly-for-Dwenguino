@@ -8,9 +8,9 @@ interface IClassGroup {
     name: string,
     sharingCode?: string,
     description?: string,
-    ownedBy: ID[] | ITeacher[],
-    awaitingStudents: ID[] | IStudent[],
-    students: ID[] | IStudent[]
+    ownedBy: ID[] | IUser[],
+    awaitingStudents: ID[] | IUser[],
+    students: ID[] | IUser[]
 }
 const ClassGroupFields: Record<keyof IClassGroup, any> = {
     uuid: {      // UUID (different from the automatically generated _id)

@@ -76,6 +76,9 @@ interface IStudentExtraFields {
     schoolId?: String,
     grade?: String,
 }
+interface IStudentDoc extends IStudent, Document {
+
+}
 interface IStudent extends IUser, IStudentExtraFields {}
 const StudentSchemaFields: Record<keyof IStudentExtraFields, any> = 
 {
@@ -91,6 +94,9 @@ interface ITeacherExtraFields {
 // Empty for now, add fields if needed
 }
 interface ITeacher extends IUser, ITeacherExtraFields {}
+interface ITeacherDoc extends ITeacher, Document {
+
+}
 const TeacherSchemaFields: Record<keyof ITeacherExtraFields, any> = 
 {
 }
@@ -98,4 +104,4 @@ const TeacherSchema = new mongoose.Schema<ITeacher>(TeacherSchemaFields)
 interface ITeacherModel extends mongoose.Model<ITeacher> {}
 const Teacher = User.discriminator<ITeacher, ITeacherModel>('Teacher', TeacherSchema)
 
-export { User, Teacher, Student, IUser, IUserFrontend, IUserShared, ITeacher, IStudent } 
+export { User, Teacher, Student, IUser, IUserFrontend, IUserShared, ITeacher, IStudent, IStudentModel, IUserDoc} 

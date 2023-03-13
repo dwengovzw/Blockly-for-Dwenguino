@@ -15,5 +15,9 @@ classGroupRouter.get("/:uuid", [verifyTokenAjax, verifyUserExists, roleCheck("te
 classGroupRouter.get("/:uuid/students", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.getStudents)
 classGroupRouter.get("/:uuid/pending", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.getPending)
 
+classGroupRouter.get("/mine",  [verifyTokenAjax, verifyUserExists, roleCheck("student")], classGroupController.mine)
+classGroupRouter.delete("/:uuid/leave",  [verifyTokenAjax, verifyUserExists, roleCheck("student")], classGroupController.leave)
+classGroupRouter.put("/:sharingCode/join", [verifyTokenAjax, verifyUserExists, roleCheck("student")], classGroupController.join)
+
 
 export default classGroupRouter
