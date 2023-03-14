@@ -1,16 +1,16 @@
 import mongoose, { Document, Schema, model } from "mongoose"
-import { ID } from "./modelutils.js"
-import { IStudent, ITeacher, IUser } from "./user.model.js"
+import { IUser } from "./user.model.js"
 import  v4 from "uuid/v4.js"
+import { PopulatedDoc } from 'mongoose';
 
 interface IClassGroup {
     uuid?: string,
     name: string,
     sharingCode?: string,
     description?: string,
-    ownedBy: ID[] | IUser[],
-    awaitingStudents: ID[] | IUser[],
-    students: ID[] | IUser[]
+    ownedBy: PopulatedDoc<IUser>[],
+    awaitingStudents: PopulatedDoc<IUser>[],
+    students: PopulatedDoc<IUser>[]
 }
 const ClassGroupFields: Record<keyof IClassGroup, any> = {
     uuid: {      // UUID (different from the automatically generated _id)
@@ -36,7 +36,7 @@ const ClassGroupFields: Record<keyof IClassGroup, any> = {
     awaitingStudents: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student', 
+            ref: 'User', 
             required: true, 
             default: []
         }
@@ -44,7 +44,7 @@ const ClassGroupFields: Record<keyof IClassGroup, any> = {
     students:[
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student',
+            ref: 'User',
             required: true,
             default: []
         }

@@ -122,7 +122,25 @@ const getClassGroup = (uuid: string) => {
             let group = await response.json()
             dispatch(setCurrentGroup(group))
         } catch (err) {
-            console.log(err)
+            dispatch(setNotificationMessage(msg("Unable to get classgroup."), NotificationMessageType.ERROR, 2500))
+        } finally {
+            dispatch(doneLoading())
+        }
+    }
+}
+
+const approveStudent = (classGroupUuid: string, studentUuid: string) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(loading())
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/${classGroupUuid}/approve/${studentUuid}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json"}
+            })
+            let resp = await response.json()
+            dispatch(getClassGroup(classGroupUuid))
+        }catch (err) {
+            dispatch(setNotificationMessage(msg("Unable to approve student."), NotificationMessageType.ERROR, 2500))
         } finally {
             dispatch(doneLoading())
         }
@@ -134,4 +152,4 @@ const { addGroup, setGroups, setCurrentGroup } = classGroupSlice.actions
 
 const classGroupReducer = classGroupSlice.reducer
 
-export { classGroupReducer, addClassGroup, getAllClassGroups, deleteClassGroup, getClassGroup, ClassGroupInfo, ClassGroups }
+export { classGroupReducer, addClassGroup, getAllClassGroups, deleteClassGroup, getClassGroup, approveStudent, ClassGroupInfo, ClassGroups }

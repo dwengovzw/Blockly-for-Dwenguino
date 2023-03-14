@@ -83,13 +83,21 @@ class Menu extends connect(store)(LitElement){
                     `
                 })}
             </vaadin-tabs>
-            <slot></slot>
+            <div class="main_page">
+                <slot></slot>
+            </div>
           </vaadin-app-layout>
         `;
       }
 
 
     static override styles = css`
+        .main_page {
+            margin: 1rem;
+            width: 90%;
+            max-width: 1366px;
+        }
+
         h1 {
         font-size: var(--lumo-font-size-l);
         margin: 0;

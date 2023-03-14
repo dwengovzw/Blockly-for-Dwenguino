@@ -2,13 +2,14 @@ import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
 import { IUser } from "./user.model.js"
 import  v4 from "uuid/v4.js"
+import { PopulatedDoc } from 'mongoose';
 
 interface ISavedProgram {
     uuid?: string,
     blocklyXml: string,
     savedAt: Date,
     name: string,
-    user: ID | IUser
+    user: PopulatedDoc<IUser>
 }
 const SavedProgramFields: Record<keyof ISavedProgram, any> = {
     uuid: {

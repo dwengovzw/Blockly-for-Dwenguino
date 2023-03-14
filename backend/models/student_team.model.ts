@@ -3,12 +3,13 @@ import { ID } from "./modelutils.js"
 import { IUser } from "./user.model.js"
 import { IPortfolio } from "./portfolio.model.js"
 import  v4 from "uuid/v4.js"
+import { PopulatedDoc } from 'mongoose';
 
 interface IStudentTeam {
     uuid?: string,
     name: string,
-    students: ID[] | IUser[],
-    portfolio: ID | IPortfolio
+    students: PopulatedDoc<IUser>[],
+    portfolio: PopulatedDoc<IPortfolio>
 }
 const StudentTeamFields: Record<keyof IStudentTeam, any> = {
     uuid: {
@@ -23,7 +24,7 @@ const StudentTeamFields: Record<keyof IStudentTeam, any> = {
     students: [
         {
             type: Schema.Types.ObjectId,
-            ref: 'Student'
+            ref: 'User'
         }
     ],
     portfolio: {

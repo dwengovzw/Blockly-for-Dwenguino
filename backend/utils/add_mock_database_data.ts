@@ -1,4 +1,4 @@
-import { User, Student, Teacher, IUser, IStudent, ITeacher } from "../models/user.model.js"
+import { User, IUser } from "../models/user.model.js"
 import { StudentTeam, IStudentTeam } from "../models/student_team.model.js"
 import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model.js"
 import { ClassGroup, IClassGroup } from "../models/class_group.model.js"
@@ -41,7 +41,7 @@ const mockDatabaseData = async () => {
     }
     let teacher2 = new User(teacher2Data)
 
-    let student1Data: IStudent = {
+    let student1Data: IUser = {
         platform: db.PLATFORMS.test,
         userId: "student1",
         firstname: "Raf",
@@ -49,7 +49,7 @@ const mockDatabaseData = async () => {
     }
     let student1 = new User(student1Data)
 
-    let student2Data: IStudent = {
+    let student2Data: IUser = {
         platform: db.PLATFORMS.test,
         userId: "student2",
         firstname: "Jana",
@@ -57,7 +57,7 @@ const mockDatabaseData = async () => {
     }
     let student2 = new User(student2Data)
 
-    let student3Data: IStudent = {
+    let student3Data: IUser = {
         platform: db.PLATFORMS.test,
         userId: "student3",
         firstname: "Mat",
@@ -65,7 +65,7 @@ const mockDatabaseData = async () => {
     }
     let student3 = new User(student3Data)
 
-    let student4Data: IStudent = {
+    let student4Data: IUser = {
         platform: db.PLATFORMS.test,
         userId: "student4",
         firstname: "Lisa",
@@ -73,7 +73,7 @@ const mockDatabaseData = async () => {
     }
     let student4 = new User(student4Data)
 
-    let student5Data: IStudent = {
+    let student5Data: IUser = {
         platform: db.PLATFORMS.test,
         userId: "student5",
         firstname: "Carine",

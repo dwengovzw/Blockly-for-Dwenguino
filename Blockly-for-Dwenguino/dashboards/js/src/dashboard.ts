@@ -12,6 +12,7 @@ import "./components/menu"
 import "./components/profile"
 import "./components/classes/classes"
 import "./components/classes/class"
+import "./components/classes/student_classes"
 import "./components/savedprograms/list"
 
 // Polyfill URLPattern
@@ -48,12 +49,13 @@ class Dashboard extends connect(store)(LitElement) {
     protected render() {
         return html`<dwengo-notify></dwengo-notify>
                     <dwengo-menu>
-                        ${this.loggedIn ? html`<div class="main_page">${this.router.outlet()}</div>` : html`<dwengo-intro-page></dwengo-intro-page>`}
+                        ${this.loggedIn ? html`${this.router.outlet()}` : html`<dwengo-intro-page></dwengo-intro-page>`}
                     </dwengo-menu>`
                     
     }
 
     static styles?: CSSResultGroup = css`
+        
         :host {
             display: flex;
             flex-direction: row;
@@ -71,13 +73,7 @@ class Dashboard extends connect(store)(LitElement) {
         dwengo-class-page {
             flex-grow: 1;
         }
-        .main_page {
-            margin: 1rem;
-            width: 100%;
-            box-sizing: border-box;
-            margin: 30px auto;
-            max-width: 1366px;
-        }
+        
     `
 }
 

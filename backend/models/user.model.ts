@@ -17,6 +17,8 @@ interface IUserShared {
     emailConfirmationCode?: string,
     savedEnvironmentState?: ISavedEnvironmentState,
     birthdate?: Date,
+    schoolId?: String,
+    grade?: String,
 }
 
 // only for data associated with the user that is only used in the frontend: nothing for now..
@@ -62,46 +64,13 @@ const UserSchemaFields: Record<keyof IUser, any> =
     roles: [{
             type: RoleSchema
         }
-    ]
+    ],
+    schoolId: String,
+    grade: String
 }
 const UserSchema = new mongoose.Schema<IUser>(UserSchemaFields)
 const User = mongoose.model<IUser>('User', UserSchema)
 
 
-// This is needed because for mongoose a discriminator type only contains new fields.
-// These the fields of the base type are automatically added to the subtype.
-// Since we want the IStudent interface to have all fields it combines the fields of
-// the super type (IUser) and the IStudentExtraFields type.
-interface IStudentExtraFields {
-    schoolId?: String,
-    grade?: String,
-}
-interface IStudentDoc extends IStudent, Document {
 
-}
-interface IStudent extends IUser, IStudentExtraFields {}
-const StudentSchemaFields: Record<keyof IStudentExtraFields, any> = 
-{
-    schoolId: String,
-    grade: String
-}
-const StudentSchema = new mongoose.Schema<IStudent>(StudentSchemaFields)
-interface IStudentModel extends mongoose.Model<IStudent> {}
-const Student = User.discriminator<IStudent, IStudentModel>('Student', StudentSchema)
-
-
-interface ITeacherExtraFields {
-// Empty for now, add fields if needed
-}
-interface ITeacher extends IUser, ITeacherExtraFields {}
-interface ITeacherDoc extends ITeacher, Document {
-
-}
-const TeacherSchemaFields: Record<keyof ITeacherExtraFields, any> = 
-{
-}
-const TeacherSchema = new mongoose.Schema<ITeacher>(TeacherSchemaFields)
-interface ITeacherModel extends mongoose.Model<ITeacher> {}
-const Teacher = User.discriminator<ITeacher, ITeacherModel>('Teacher', TeacherSchema)
-
-export { User, Teacher, Student, IUser, IUserFrontend, IUserShared, ITeacher, IStudent, IStudentModel, IUserDoc} 
+export { User, IUser, IUserFrontend, IUserShared, IUserDoc} 

@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose"
-import { ID } from "./modelutils.js"
 import  v4 from "uuid/v4.js"
-import { ITeacher } from "./user.model.js";
 import { IPortfolioItem } from "./portfolio_items/portfolio_item.model.js";
+import { PopulatedDoc } from 'mongoose';
+import { IUser } from "./user.model.js";
 
 interface IPortfolio {
     uuid?: string,
@@ -10,11 +10,11 @@ interface IPortfolio {
     lastEdited: Date,
     name: string,
     description?: string,
-    sharedWith?: ID[] | ITeacher[],
+    sharedWith?: PopulatedDoc<IUser>[],
     isPublic: boolean,
     publicId?: string,
     folder?: string,
-    items: ID[] | IPortfolioItem[]
+    items: PopulatedDoc<IPortfolioItem>[]
 }
 const PortfolioFields: Record<keyof IPortfolio, any> = {
     uuid: {
@@ -38,7 +38,7 @@ const PortfolioFields: Record<keyof IPortfolio, any> = {
     sharedWith:[
         {
             type: Schema.Types.ObjectId,
-            ref: 'Teacher'
+            ref: 'User'
         }
     ],
     isPublic: {

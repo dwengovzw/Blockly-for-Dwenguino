@@ -1,6 +1,5 @@
 import { Document, Schema, Model } from "mongoose"
 import { ID } from "../modelutils.js"
-import { ITeacher } from "../user.model.js"
 import { IAssignmentItem } from "./assignment_item.model.js"
 import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model.js"
 

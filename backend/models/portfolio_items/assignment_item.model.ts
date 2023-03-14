@@ -1,16 +1,16 @@
 import { Document, Schema, Model } from "mongoose"
-import { ID } from "../modelutils.js"
-import { ITeacher } from "../user.model.js"
 import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model.js"
+import { PopulatedDoc } from 'mongoose';
+import { IUser } from "../user.model.js";
 
 interface IAssignmentItemExtraFields {
-    ownedBy: ID | ITeacher
+    ownedBy: PopulatedDoc<IUser>
 }
 interface IAssignmentItem extends IPortfolioItem, IAssignmentItemExtraFields {}
 const AssignmentSchemaFields: Record<keyof IAssignmentItemExtraFields, any> = {
     ownedBy: {
         type: Schema.Types.ObjectId,
-        ref: 'Teacher'
+        ref: 'User'
     }
 }
 

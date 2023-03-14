@@ -1,5 +1,5 @@
 import { ClassGroup, IClassGroup } from "../models/class_group.model.js";
-import { User, IStudent, Student, IStudentModel } from "../models/user.model.js"
+import { User } from "../models/user.model.js"
 import { makeSharingCode } from "../utils/utils.js";
 
 let getUniqueClassCode = async () => {
@@ -122,11 +122,11 @@ class ClassGroupController {
                 awaitingStudents: {
                     $in: [ user._id ]
                 }
-            })
+            }).select("name description uuid")
             res.status(200).json({
                     classGroups: classGroups,
                     pendingClassGroups: pendingClassGroups
-            }).select("name description uuid")
+            })
         } catch (e) {
             res.status(500).send("Error requesting class groups.")
         }
@@ -138,10 +138,16 @@ class ClassGroupController {
             let user = await User.findOne({userId: req.userId, platform: req.platform})
             let uuid = req.params.uuid
             let classGroup = await ClassGroup.findOne({uuid: uuid})
-            classGroup.students = classGroup.students.filter((student) => {return student._id != user._id})
-            classGroup.awaitingStudents = classGroup.awaitingStudents.filter((student) => {return student._id != user._id})
+            let indexToRemove = classGroup.students.indexOf(user._id)
+            if (indexToRemove !== -1) {
+                classGroup.students.splice(indexToRemove, 1)
+            }
+            indexToRemove = classGroup.awaitingStudents.indexOf(user._id)
+            if (indexToRemove !== -1) {
+                classGroup.awaitingStudents.splice(indexToRemove, 1)
+            }
             classGroup.save()
-            res.status(200).send("Left classgroup")
+            res.status(200).send({message: "Left classgroup"})
         } catch (e) {
             res.status(500).send("Error requesting class groups.")
         }
@@ -149,7 +155,7 @@ class ClassGroupController {
 
     async join(req, res) {
         try {
-            let student = await Student.findOne({userId: req.userId, platform: req.platform})
+            let student = await User.findOne({userId: req.userId, platform: req.platform})
             let sharingCode = req.params.sharingCode
             let classGroup = await ClassGroup.findOne({sharingCode: sharingCode})
             classGroup.awaitingStudents.push(student._id)
@@ -157,6 +163,32 @@ class ClassGroupController {
             res.status(200).send("Joind classgroup awaiting approval.")
         } catch (e) {
             res.status(500).send("Error joining class groups.")
+        }
+    }
+
+    async approve(req, res) {
+        try {
+            
+            let classUuid = req.params.uuid
+            let studentUuid = req.params.studentUuid
+            let teacher = await User.findOne({userId: req.userId, platform: req.platform})
+            let student = await User.findOne({uuid: studentUuid})
+            let classGroup = await ClassGroup.findOne({
+                uuid: classUuid, 
+                ownedBy: {
+                    $in: [ teacher._id ]
+                }
+            })
+            let index = classGroup.awaitingStudents.indexOf(student._id)
+            if (index === -1){
+                return res.status(500).send({message: "Student not in approval list."})
+            }
+            classGroup.awaitingStudents.splice(index, 1)
+            classGroup.students.push(student._id)
+            classGroup.save()
+            res.status(200).send({message: "Successfuly approved student"})
+        } catch (e) {
+            res.status(500).send({message: "Unable to approve student"})
         }
     }
 

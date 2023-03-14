@@ -8,7 +8,8 @@ import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import {getClassGroup, ClassGroupInfo, getAllClassGroups} from "../../state/features/class_group_slice"
+import {getClassGroup, ClassGroupInfo, getAllClassGroups, approveStudent} from "../../state/features/class_group_slice"
+import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice"
 
 import "../menu"
 import "@material/mwc-textfield"
@@ -69,8 +70,12 @@ class Class extends connect(store)(LitElement) {
         console.log("Handle reject student", uuid);
     }
 
-    handleApproveStudent(uuid){
-        console.log("Handle approve student", uuid);
+    handleApproveStudent(studentUuid: string){
+        if (!this.uuid){
+            store.dispatch(setNotificationMessage(msg("The uuid of this classgroup is unknown."), NotificationMessageType.ERROR, 2500))
+            return
+        }
+        store.dispatch(approveStudent(this.uuid, studentUuid))
     }
 
     renderOwnerList(){
@@ -86,34 +91,6 @@ class Class extends connect(store)(LitElement) {
                 </dwengo-deletable-list-element>` })}`
     }
 
-    renderStudentList(){
-        return html`
-        ${this.classGroup?.students?.map((student) => {
-            return html`
-            <dwengo-deletable-list-element
-                fields='${JSON.stringify([ student.firstname, student.uuid ])}
-                uuid='${student.uuid}'
-                button_icons='${JSON.stringify(["delete", "list"])}'
-                @dwengo-list-item-delete=${(e) => this.handleDeleteStudent(e.detail.uuid)}
-                @dwengo-list-item-action=${(e) => this.handleShowStudentDetail(e.detail.uuid)}>
-            </dwengo-deletable-list-element>`
-        })}`
-    }
-
-    renderAwaitingStudentList(){
-        return html`
-        ${this.classGroup?.awaitingStudents?.map((student) => {
-            return html`
-            <dwengo-deletable-list-element
-                fields='${JSON.stringify([ student.firstname, student.uuid ])}
-                uuid='${student.uuid}'
-                button_icons='${JSON.stringify(["close", "done"])}'
-                @dwengo-list-item-delete=${(e) => this.handleRejectStudent(e.detail.uuid)}
-                @dwengo-list-item-action=${(e) => this.handleApproveStudent(e.detail.uuid)}>
-            </dwengo-deletable-list-element>`
-        })}`
-    }
-
     protected render() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
@@ -125,9 +102,27 @@ class Class extends connect(store)(LitElement) {
             <h2>${msg("Owners")}</h2>
                 ${this.renderOwnerList()}
             <h2>${msg("Students")}</h2>
-            ${this.classGroup?.students?.map((student) => { return html`<dwengo-deletable-list-element fields='${JSON.stringify([ student.firstname, student.lastname ])}' uuid='${student.uuid}'></dwengo-deletable-list-element>` })}
+            ${this.classGroup?.students?.map((student) => 
+                { 
+                    return html`
+                        <dwengo-deletable-list-element 
+                            fields='${JSON.stringify([ student.firstname, student.lastname ])}' 
+                            uuid='${student.uuid}'
+                            @dwengo-list-item-delete=${(e) => this.handleDeleteStudent(e.detail.uuid)}
+                            @dwengo-list-item-action=${(e) => this.handleShowStudentDetail(e.detail.uuid)}>
+                        </dwengo-deletable-list-element>` })
+                }
             <h2>${msg("Awaiting students")}</h2>
-            ${this.classGroup?.awaitingStudents?.map((student) => { return html`<div>${student.firstname}</div>` })}
+            ${this.classGroup?.awaitingStudents?.map((student) => 
+                { 
+                    return html`<dwengo-deletable-list-element 
+                        fields='${JSON.stringify([ student.firstname, student.lastname ])}' 
+                        button_icons=${JSON.stringify(["delete", "done"])}
+                        uuid='${student.uuid}'
+                        @dwengo-list-item-delete=${(e) => this.handleRejectStudent(e.detail.uuid)}
+                        @dwengo-list-item-action=${(e) => this.handleApproveStudent(e.detail.uuid)}>
+                    </dwengo-deletable-list-element>` })
+                }
         `
     }
 

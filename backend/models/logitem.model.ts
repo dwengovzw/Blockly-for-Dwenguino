@@ -1,10 +1,11 @@
 import { Document, Schema, model } from "mongoose"
 import { ID } from "./modelutils.js"
 import { IUser } from "./user.model.js";
+import { PopulatedDoc } from 'mongoose';
 
 interface ILogItem {
     timestamp: Date,
-    userId?: ID | IUser,
+    userId?: PopulatedDoc<IUser>,
     sessionId?: string,
     activityId?: number,
     eventName: string,

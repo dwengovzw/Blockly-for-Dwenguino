@@ -61,8 +61,7 @@ class Classes extends connect(store)(LitElement) {
 
     handleShowClassGroup(uuid) {
         //this.router.goto(`/dashboard/class/${uuid}`)
-       //window.location.href=`${globalSettings.hostname}/dashboard/class/${uuid}`;
-       window.open(`${globalSettings.hostname}/dashboard/class/${uuid}`)
+       window.location.href=`${globalSettings.hostname}/dashboard/class/${uuid}`;
     }
     
     protected render() {

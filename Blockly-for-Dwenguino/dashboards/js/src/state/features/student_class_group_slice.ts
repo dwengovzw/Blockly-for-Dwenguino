@@ -4,19 +4,18 @@ import { setNotificationMessage, NotificationMessageType, loading, doneLoading }
 import { fetchAuth } from "../../middleware/fetch"
 
 interface StudentClassGroupInfo {
-    uuid? : string,
-    name?: string,
-    description?: string
+    uuid : string,
+    name: string,
+    description: string
 }
 
-interface StudentClassGroups {
-    groups: StudentClassGroupInfo[],
-    pending: StudentClassGroupInfo[]
-}
 
-const initialStudentClassGroups: StudentClassGroups = {
-    groups: [],
-    pending: []
+const initialGroups: StudentClassGroupInfo[] = []
+const initialPending: StudentClassGroupInfo[] = []
+
+const initialStudentClassGroups = {
+    groups: initialGroups,
+    pending: initialPending
 }
 
 export const studentClassGroupSlice = createSlice({
@@ -63,7 +62,7 @@ const leaveClassGroup = (uuid) => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/${uuid}/leave`, {
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/leave/${uuid}`, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" }
             })
@@ -82,7 +81,7 @@ const joinClassGroup = (sharingCode) => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/${sharingCode}/join`,
+            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/join/${sharingCode}`,
             {
                 method: "PUT",
                 headers: { "Content-Type": "application/json"}
@@ -101,4 +100,4 @@ const { setGroups, setPending, removeGroup, removePending } = studentClassGroupS
 
 const studentClassGroupReducer = studentClassGroupSlice.reducer
 
-export { studentClassGroupReducer, leaveClassGroup, getAllStudentClassGroups, joinClassGroup }
+export { studentClassGroupReducer, leaveClassGroup, getAllStudentClassGroups, joinClassGroup, StudentClassGroupInfo }
