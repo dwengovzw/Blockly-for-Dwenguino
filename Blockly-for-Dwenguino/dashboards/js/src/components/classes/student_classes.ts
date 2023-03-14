@@ -109,9 +109,9 @@ class StudentClasses extends connect(store)(LitElement) {
     renderClassGroupList(list: StudentClassGroupInfo[]){
         return html`
             <vaadin-grid .items="${list}">
-                <vaadin-grid-sort-column frozen header="${msg("Name")}" auto-width flex-grow="1" path="name">
+                <vaadin-grid-sort-column frozen header="${msg("Name")}" auto-width flex-grow="0" path="name">
                 </vaadin-grid-sort-column>
-                <vaadin-grid-sort-column flex-grow="0" header="${msg("Description")}" path="savedAt" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="1" header="${msg("Description")}" path="description" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-column
                 frozen-to-end
                 auto-width

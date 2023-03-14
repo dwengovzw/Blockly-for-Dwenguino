@@ -30,9 +30,9 @@ class Dashboard extends connect(store)(LitElement) {
         {path: `${this.urlPrefix}/dashboard`, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
         {path: `${this.urlPrefix}/dashboard/home`, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
         {path: `${this.urlPrefix}/dashboard/profile`, render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
-        {path: `${this.urlPrefix}/dashboard/classes`, render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
+        {path: `${this.urlPrefix}/dashboard/classes*`, render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
         {path: `${this.urlPrefix}/dashboard/studentclasses`, render: () => html`<dwengo-student-classes-page></dwengo-student-classes-page>`},
-        {path: `${this.urlPrefix}/dashboard/class/:uuid`, render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
+        //{path: `${this.urlPrefix}/dashboard/class/:uuid`, render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
         {path: `${this.urlPrefix}/dashboard/savedprograms`, render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`}
     ]);
 

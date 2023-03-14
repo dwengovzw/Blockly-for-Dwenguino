@@ -20,7 +20,12 @@ import "@material/mwc-icon"
 import "@material/mwc-circular-progress"
 import "../util/deletable_list_item"
 
-
+'@vaadin/button';
+import '@vaadin/grid';
+import { columnBodyRenderer } from '@vaadin/grid/lit.js';
+import "@material/mwc-button"
+import '@vaadin/grid/vaadin-grid-sort-column.js';
+import "@material/mwc-dialog"
 
 
 @customElement("dwengo-classes-page")
@@ -32,7 +37,13 @@ class Classes extends connect(store)(LitElement) {
     @state() newClassName: string = ""
     @state() newClassDescription: string = ""
 
-    private router = new Routes(this, []);
+    @state() showConfirmDialog: boolean = false
+    @state() itemSelectedToDelete: ClassGroupInfo | null = null
+
+    private _routes = new Routes(this, [
+        {path: '', render: () => this.renderClassesList()},
+        {path: '/class/:uuid', name: "classdetails", render: ({uuid}) => this.renderClassDetails(uuid)},
+      ]);
 
     stateChanged(state: any): void {
         console.log(state)
@@ -57,14 +68,31 @@ class Classes extends connect(store)(LitElement) {
 
     handleDeleteClassGroup(uuid){
         store.dispatch(deleteClassGroup(uuid))
+        this.showConfirmDialog = false
     }
 
     handleShowClassGroup(uuid) {
-        //this.router.goto(`/dashboard/class/${uuid}`)
-       window.location.href=`${globalSettings.hostname}/dashboard/class/${uuid}`;
+        this._routes.goto(`/class/${uuid}`)
+       //window.location.href=`${globalSettings.hostname}/dashboard/class/${uuid}`;
     }
-    
-    protected render() {
+
+    renderConfirmDialog(name: string | undefined, uuid: string | undefined){
+        return html`
+        <mwc-dialog open="${this.showConfirmDialog}">
+            <div>
+                ${msg("Are you sure you want to remove this classgroup: ")}<em>${name}</em>?
+            </div>
+            <mwc-button @click="${() => {this.handleDeleteClassGroup(uuid)}}" slot="primaryAction" dialogAction="close">
+                ${msg("Yes")}
+            </mwc-button>
+            <mwc-button @click="${() => {this.showConfirmDialog = false}}" slot="secondaryAction" dialogAction="close">
+                ${msg("Cancel")}
+            </mwc-button>
+        </mwc-dialog>
+        `
+    }
+
+    /*renderClassesList() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
             <dwengo-deletable-list-element 
@@ -86,6 +114,74 @@ class Classes extends connect(store)(LitElement) {
                 <mwc-button class="item" @click=${this.addClassGroup} raised>${msg("Create")}</mwc-button>
             </div>
         `
+    }*/
+
+
+    renderClassesList() {
+        return html`
+            ${getGoogleMateriaIconsLinkTag()}
+            <vaadin-grid .items="${this.groups}">
+                <vaadin-grid-sort-column frozen header="${msg("Name")}" auto-width flex-grow="0" path="name"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="1" header="${msg("Description")}" path="description" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="0" header="${msg("Sharing code")}" path="sharingCode" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-column
+                frozen-to-end
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (classGroup: ClassGroupInfo) => html`
+                        <vaadin-button 
+                            theme="primary" 
+                            class="item" 
+                            @click="${() => {this.itemSelectedToDelete = classGroup; this.showConfirmDialog = true}}">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
+                        </vaadin-button>`,
+                    []
+                )}
+                ></vaadin-grid-column>
+                <vaadin-grid-column
+                frozen-to-end
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (classGroup: ClassGroupInfo) => html`
+                        <a href="${globalSettings.hostname}/dashboard/classes/class/${classGroup.uuid}">
+                            <vaadin-button 
+                                theme="primary" 
+                                class="item">
+                                <span class="material-symbols-outlined">
+                                    info
+                                </span>
+                            </vaadin-button>
+                        </a>`,
+                    []
+                )}
+                ></vaadin-grid-column>
+            </vaadin-grid>
+            <div class="add_menu">
+                <mwc-textfield class="item add_name_field" @change=${(e) => this.newClassName = e.target.value } outlined label="${msg("Name")}" type="text" value="${this.newClassName}"></mwc-textfield>
+                <mwc-textfield class="item add_description_field" @change=${(e) => this.newClassDescription = e.target.value } outlined label="${msg("Description")}" type="text" value="${this.newClassDescription}"></mwc-textfield>
+                <mwc-button class="item" @click=${this.addClassGroup} raised>${msg("Create")}</mwc-button>
+            </div>
+            ${this.showConfirmDialog ? this.renderConfirmDialog(this.itemSelectedToDelete?.name, this.itemSelectedToDelete?.uuid) : ""}
+        `
+    }    
+
+    renderClassDetails(uuid: string | undefined) {
+        if (uuid){
+            return html`
+                <dwengo-class-page uuid="${uuid}"></dwengo-class-page>
+            `
+        } else {
+            return ""
+        }
+        
+    }
+    
+    protected render() {
+        return this._routes.outlet()
     }
 
     static styles?: CSSResultGroup = css`

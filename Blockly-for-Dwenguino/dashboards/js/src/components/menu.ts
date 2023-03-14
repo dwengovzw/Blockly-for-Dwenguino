@@ -63,7 +63,7 @@ class Menu extends connect(store)(LitElement){
     protected override render() {
         return html`
           ${getGoogleMateriaIconsLinkTag()}
-          <vaadin-app-layout .drawerOpened=${false}>
+          <vaadin-app-layout .drawerOpened=${true}>
             <vaadin-drawer-toggle slot="navbar"></vaadin-drawer-toggle>
             <h1 slot="navbar" class="header">
                 <img class='dwengo-header-logo' src="${globalSettings.hostname}/dashboard/assets/img/components/shared/dwengo-groen-zwart.svg"/>
