@@ -1,7 +1,7 @@
 /**
  * @jest-environment node
  */
-import { User, Teacher } from '../../../../backend/dist/models/user.model'
+import { User } from '../../../../backend/dist/models/user.model'
 import db from "../../../../backend/dist/config/db.config"
 import { Role } from '../../../../backend/dist/models/role.model'
 import { ClassGroup } from "../../../../backend/dist/models/class_group.model"
@@ -45,8 +45,8 @@ describe("ClassGroup model", () => {
         await expect(classGroup.validate()).rejects.toThrowError()
     })*/
     it("multiple owners should work", async () => {
-        let teach1 = new Teacher({userId: 'teach1', platform: db.PLATFORMS.github})
-        let teach2 = new Teacher({userId: 'teach2', platform: db.PLATFORMS.beACM})
+        let teach1 = new User({userId: 'teach1', platform: db.PLATFORMS.github})
+        let teach2 = new User({userId: 'teach2', platform: db.PLATFORMS.beACM})
         let teachers = [teach1, teach2]
         let classGroup = new ClassGroup({name: "myvalidname", awaitingStudents: [], students: [], ownedBy: teachers})
         await expect(classGroup.validate()).resolves.toBeUndefined()
