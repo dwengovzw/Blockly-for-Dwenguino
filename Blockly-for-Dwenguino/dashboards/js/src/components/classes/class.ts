@@ -13,6 +13,7 @@ import { setNotificationMessage, NotificationMessageType } from "../../state/fea
 import { Routes } from "@lit-labs/router"
 
 import '@vaadin/button';
+import '@vaadin/tabs'
 import '@vaadin/grid';
 import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import "@material/mwc-button"
@@ -259,16 +260,17 @@ class Class extends connect(store)(LitElement) {
 
     renderDetailsPage() {
         return html`${getGoogleMateriaIconsLinkTag()}
-            <h1>${this.classGroup?.name}</h1>
-            <p>${this.classGroup?.description}</p>
-            <h2>${msg("Sharing code")}</h2>
-            <p>${this.classGroup?.sharingCode}</p>
-            <h2>${msg("Owners")}</h2>
-            ${this.renderOwnersList()}
-            <h2>${msg("Students")}</h2>
-            ${this.renderStudentsList()}
-            <h2>${msg("Awaiting students")}</h2>
-            ${this.renderPendingList()}
+                <div tab="details-tab">
+                    <h1>${this.classGroup?.name}</h1>
+                    <p>${this.classGroup?.description}</p>
+                    <h2>${msg("Sharing code")}</h2>
+                    <p>${this.classGroup?.sharingCode}</p>
+                    <h2>${msg("Owners")}</h2>
+                    ${this.renderOwnersList()}
+                    <h2>${msg("Students")}</h2>
+                    ${this.renderStudentsList()}
+                    <h2>${msg("Awaiting students")}</h2>
+                    ${this.renderPendingList()}
             ${this.showConfirmDialog ? this.renderConfirmDialog() : ""}
     `
     }

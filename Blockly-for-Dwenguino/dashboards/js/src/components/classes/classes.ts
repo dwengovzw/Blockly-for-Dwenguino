@@ -19,6 +19,7 @@ import "@material/mwc-icon"
 import "@material/mwc-circular-progress"
 import "../util/deletable_list_item"
 import "./class"
+import "./class_nav"
 
 import '@vaadin/button';
 import '@vaadin/grid';
@@ -42,7 +43,7 @@ class Classes extends connect(store)(LitElement) {
 
     private _routes = new Routes(this, [
         {path: '', render: () => this.renderClassesList()},
-        {path: '/class/:uuid/info*', name: "classdetails", render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
+        {path: '/class*', render: ({uuid}) => html`<dwengo-class-nav></dwengo-class-nav>`},
       ]);
 
     stateChanged(state: any): void {
