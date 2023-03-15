@@ -9,9 +9,8 @@ import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import {addClassGroup, ClassGroupInfo, getAllClassGroups, deleteClassGroup} from "../../state/features/class_group_slice"
-import { Router, Routes } from "@lit-labs/router"
+import { Routes } from "@lit-labs/router"
 
-import "../menu"
 import "@material/mwc-textfield"
 import "@material/mwc-button"
 import "@material/mwc-checkbox"
@@ -19,8 +18,9 @@ import "@material/mwc-formfield"
 import "@material/mwc-icon"
 import "@material/mwc-circular-progress"
 import "../util/deletable_list_item"
+import "./class"
 
-'@vaadin/button';
+import '@vaadin/button';
 import '@vaadin/grid';
 import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import "@material/mwc-button"
@@ -42,7 +42,7 @@ class Classes extends connect(store)(LitElement) {
 
     private _routes = new Routes(this, [
         {path: '', render: () => this.renderClassesList()},
-        {path: '/class/:uuid', name: "classdetails", render: ({uuid}) => this.renderClassDetails(uuid)},
+        {path: '/class/:uuid/info*', name: "classdetails", render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
       ]);
 
     stateChanged(state: any): void {
@@ -93,6 +93,7 @@ class Classes extends connect(store)(LitElement) {
     }
 
 
+
     renderClassesList() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
@@ -123,7 +124,7 @@ class Classes extends connect(store)(LitElement) {
                 flex-grow="0"
                 ${columnBodyRenderer(
                     (classGroup: ClassGroupInfo) => html`
-                        <a href="${globalSettings.hostname}/dashboard/classes/class/${classGroup.uuid}">
+                        <a href="${globalSettings.hostname}/dashboard/classes/class/${classGroup.uuid}/info">
                             <vaadin-button 
                                 theme="primary" 
                                 class="item">
@@ -136,6 +137,12 @@ class Classes extends connect(store)(LitElement) {
                 )}
                 ></vaadin-grid-column>
             </vaadin-grid>
+            <div class="add_menu">
+                <mwc-textfield class="item add_name_field" @change=${(e) => this.newClassName = e.target.value } outlined label="${msg("Name")}" type="text" value="${this.newClassName}"></mwc-textfield>
+                <mwc-textfield class="item add_description_field" @change=${(e) => this.newClassDescription = e.target.value } outlined label="${msg("Description")}" type="text" value="${this.newClassDescription}"></mwc-textfield>
+                <mwc-button class="item" @click=${this.addClassGroup} raised>${msg("Create")}</mwc-button>
+            </div>
+            ${this.showConfirmDialog ? this.renderConfirmDialog(this.itemSelectedToDelete?.name, this.itemSelectedToDelete?.uuid) : ""}
         `
     }    
 

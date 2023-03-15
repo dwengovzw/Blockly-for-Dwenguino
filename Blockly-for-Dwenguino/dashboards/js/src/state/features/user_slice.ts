@@ -7,6 +7,7 @@ import { LoadableState } from "../../util"
 
 
 interface UserInfo {
+    uuid?: string,
     loggedIn: boolean,
     firstname: string,
     lastname: string,
@@ -46,6 +47,7 @@ export const userSlice = createSlice({
             state.birthdate = action.payload.birthdate
             state.roles = action.payload.roles.map((role) => role.name)
             state.platform = action.payload.platform
+            state.uuid = action.payload.uuid
         }
     }
 })

@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
 import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
+import { UserInfo } from "./user_slice"
 
 
 interface ClassGroupInfo {
@@ -10,9 +11,9 @@ interface ClassGroupInfo {
     name: string,
     sharingCode?: string,
     description: string,
-    ownedBy?: any[],
-    students?: any[],
-    awaitingStudents?: any[]
+    ownedBy?: UserInfo[],
+    students?: UserInfo[],
+    awaitingStudents?: UserInfo[]
 }
 interface ClassGroups {
     groups: ClassGroupInfo[],
@@ -156,11 +157,29 @@ const approveStudent = (classGroupUuid: string, studentUuid: string, approve: bo
     }
 }
 
-
+const deleteStudent = (classGroupUuid: string, studentUuid) => {
+    return async (dispatch, getState) => {
+        try {
+            dispatch(loading())
+            let route = `${globalSettings.hostname}/classgroup/${classGroupUuid}/delete/${studentUuid}`
+            let method = "DELETE"
+            const response = await fetchAuth(route, {
+                method: method,
+                headers: { "Content-Type": "application/json"}
+            })
+            let resp = await response.json()
+            dispatch(getClassGroup(classGroupUuid))
+        }catch (err) {
+            dispatch(setNotificationMessage(msg("Unable to delete student."), NotificationMessageType.ERROR, 2500))
+        } finally {
+            dispatch(doneLoading())
+        }
+    }
+}
 
 
 const { addGroup, setGroups, setCurrentGroup } = classGroupSlice.actions
 
 const classGroupReducer = classGroupSlice.reducer
 
-export { classGroupReducer, addClassGroup, getAllClassGroups, deleteClassGroup, getClassGroup, approveStudent, ClassGroupInfo, ClassGroups }
+export { classGroupReducer, addClassGroup, getAllClassGroups, deleteClassGroup, getClassGroup, approveStudent, deleteStudent, ClassGroupInfo, ClassGroups }

@@ -8,18 +8,18 @@ import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import {getClassGroup, ClassGroupInfo, getAllClassGroups, approveStudent} from "../../state/features/class_group_slice"
+import {getClassGroup, ClassGroupInfo, getAllClassGroups, approveStudent, deleteStudent} from "../../state/features/class_group_slice"
 import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice"
+import { Routes } from "@lit-labs/router"
 
-import "../menu"
-import "@material/mwc-textfield"
+import '@vaadin/button';
+import '@vaadin/grid';
+import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import "@material/mwc-button"
-import "@material/mwc-checkbox"
-import "@material/mwc-formfield"
-import "@material/mwc-icon"
-import "@material/mwc-circular-progress"
-import "../util/deletable_list_item"
-
+import '@vaadin/grid/vaadin-grid-sort-column.js';
+import "@material/mwc-dialog"
+import { UserInfo } from "../../state/features/user_slice";
+import "../user/public_profile"
 
 
 
@@ -27,8 +27,17 @@ import "../util/deletable_list_item"
 class Class extends connect(store)(LitElement) {
 
     @property() uuid: string | null = null
-
     @state() classGroup: ClassGroupInfo | null = null
+    @state() showConfirmDialog: boolean = false
+
+    private itemSelectedToDelete: UserInfo | null = null
+    private owner: boolean = false
+    
+
+    private _routes = new Routes(this, [
+        {path: '', render: () => this.renderDetailsPage()},
+        {path: '/user/:uuid', render: ({uuid}) => html`<dwengo-public-profile-page uuid=${uuid}></dwengo-public-profile-page>`},
+      ]);
 
     stateChanged(state: any): void {
         console.log(state)
@@ -48,25 +57,29 @@ class Class extends connect(store)(LitElement) {
         }
     }
 
-    handleDeleteOwner(uuid){
-        console.log("Handle delete owner", uuid)
-    }
-
-    handleShowOwnerDetail(uuid){
-        console.log("Handle show owner deail", uuid)
-    }
-
-    handleDeleteStudent(studentUuid: string){
+    handleDeleteOwner(ownerUuid){
         if (!this.uuid){
             store.dispatch(setNotificationMessage(msg("The uuid of this classgroup is unknown."), NotificationMessageType.ERROR, 2500))
             return
         } else {
-            //store.dispatch(deleteStudent(this.uuid, studentUuid))
+            let owners = store.getState().classGroup.currentGroup?.ownedBy
+            if (owners && owners.length > 1){
+                //store.dispatch(deleteOwner(this.uuid, ownerUuid))
+            } else {
+                store.dispatch(setNotificationMessage(msg("Cannot remove last owner."), NotificationMessageType.ERROR, 2500))
+            }   
         }
+        this.showConfirmDialog = false
     }
 
-    handleShowStudentDetail(uuid){
-        console.log("handle show student detail", uuid);
+    handleDeleteStudent(studentUuid){
+        if (!this.uuid){
+            store.dispatch(setNotificationMessage(msg("The uuid of this classgroup is unknown."), NotificationMessageType.ERROR, 2500))
+            return
+        } else {
+            store.dispatch(deleteStudent(this.uuid, studentUuid))
+        }
+        this.showConfirmDialog = false
     }
 
     handleApproveStudent(studentUuid: string, approve: boolean){
@@ -77,51 +90,191 @@ class Class extends connect(store)(LitElement) {
         store.dispatch(approveStudent(this.uuid, studentUuid, approve))
     }
 
-    renderOwnerList(){
+    renderOwnersList() {
         return html`
-            ${this.classGroup?.ownedBy?.map((owner) => { 
-                return html`
-                <dwengo-deletable-list-element 
-                    fields='${JSON.stringify([ owner.firstname, owner.uuid ])}' 
-                    uuid='${owner.uuid}'
-                    button_icons='${JSON.stringify(["delete", "list"])}'
-                    @dwengo-list-item-delete=${(e: any) => this.handleDeleteOwner(e.detail.uuid)}
-                    @dwengo-list-item-action=${(e: any) => this.handleShowOwnerDetail(e.detail.uuid)}>
-                </dwengo-deletable-list-element>` })}`
+        <vaadin-grid .items="${this.classGroup?.ownedBy}">
+                <vaadin-grid-sort-column frozen header="${msg("Firstname")}" auto-width flex-grow="0" path="firstname"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column frozen header="${msg("Lastname")}" auto-width flex-grow="0" path="lastname"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="1" header="${msg("UUID")}" path="uuid" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-column
+                    header="${msg("Delete")}"
+                    frozen-to-end
+                    auto-width
+                    flex-grow="0"
+                    ${columnBodyRenderer(
+                        (user: UserInfo) => html`
+                            <vaadin-button 
+                                theme="primary" 
+                                class="item" 
+                                @click="${() => {
+                                    this.itemSelectedToDelete = user; 
+                                    this.showConfirmDialog = true;
+                                    this.owner = true;
+                                }
+                                }">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </vaadin-button>`,
+                        []
+                    )}>
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                header="${msg("Info")}"
+                frozen-to-end
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (user: UserInfo) => html`
+                        <a href="${globalSettings.hostname}/dashboard/classes/class/${this.uuid}/info/user/${user.uuid}">
+                            <vaadin-button 
+                                theme="primary" 
+                                class="item">
+                                <span class="material-symbols-outlined">
+                                    info
+                                </span>
+                            </vaadin-button>
+                        </a>`,
+                    []
+                )}
+                ></vaadin-grid-column>
+            </vaadin-grid>`
     }
 
-    protected render() {
+    renderStudentsList() {
         return html`
-            ${getGoogleMateriaIconsLinkTag()}
+        <vaadin-grid .items="${this.classGroup?.students}">
+                <vaadin-grid-sort-column frozen header="${msg("Firstname")}" auto-width flex-grow="0" path="firstname"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column frozen header="${msg("Lastname")}" auto-width flex-grow="0" path="lastname"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="1" header="${msg("UUID")}" path="uuid" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-column
+                    header="${msg("Delete")}"
+                    frozen-to-end
+                    auto-width
+                    flex-grow="0"
+                    ${columnBodyRenderer(
+                        (user: UserInfo) => html`
+                            <vaadin-button 
+                                theme="primary" 
+                                class="item" 
+                                @click="${() => 
+                                        {
+                                            this.itemSelectedToDelete = user; 
+                                            this.showConfirmDialog = true;
+                                            this.owner = false;
+                                        }
+                                    }"
+                                >
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </vaadin-button>`,
+                        []
+                    )}>
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                header="${msg("Info")}"
+                frozen-to-end
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (user: UserInfo) => html`
+                        <a href="${globalSettings.hostname}/dashboard/classes/class/${this.uuid}/info/user/${user.uuid}">
+                            <vaadin-button 
+                                theme="primary" 
+                                class="item">
+                                <span class="material-symbols-outlined">
+                                    info
+                                </span>
+                            </vaadin-button>
+                        </a>`,
+                    []
+                )}
+                ></vaadin-grid-column>
+            </vaadin-grid>`
+    }
+
+    renderPendingList() {
+        return html`
+        <vaadin-grid .items="${this.classGroup?.awaitingStudents}">
+                <vaadin-grid-sort-column frozen header="${msg("Firstname")}" auto-width flex-grow="0" path="firstname"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column frozen header="${msg("Lastname")}" auto-width flex-grow="0" path="lastname"></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="1" header="${msg("UUID")}" path="uuid" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-column
+                    header="${msg("Delete")}"
+                    frozen-to-end
+                    auto-width
+                    flex-grow="0"
+                    ${columnBodyRenderer(
+                        (user: UserInfo) => html`
+                            <vaadin-button 
+                                theme="primary" 
+                                class="item" 
+                                @click="${() => {user.uuid ? this.handleApproveStudent(user.uuid, false) : console.log("No uuid")}}">
+                                <span class="material-symbols-outlined">
+                                    delete
+                                </span>
+                            </vaadin-button>`,
+                        []
+                    )}>
+                </vaadin-grid-column>
+                <vaadin-grid-column
+                header="${msg("Approve")}"
+                frozen-to-end
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (user: UserInfo) => html`
+                            <vaadin-button 
+                                @click="${() => {user.uuid ? this.handleApproveStudent(user.uuid, true) : console.log("No uuid")}}"
+                                theme="primary" 
+                                class="item">
+                                <span class="material-symbols-outlined">
+                                    done
+                                </span>
+                            </vaadin-button>
+                        `,
+                    []
+                )}
+                ></vaadin-grid-column>
+            </vaadin-grid>`
+    }
+
+
+    renderConfirmDialog(){
+        return html`
+        <mwc-dialog open="${this.showConfirmDialog}">
+            <div>
+                ${msg("Are you sure you want to remove this ")}${this.owner ? msg("owner") : msg("student")}: <em>${name}</em>?
+            </div>
+            <mwc-button @click="${() => {this.owner ? this.handleDeleteOwner(this.itemSelectedToDelete?.uuid) : this.handleDeleteStudent(this.itemSelectedToDelete?.uuid)}}" slot="primaryAction" dialogAction="close">
+                ${msg("Yes")}
+            </mwc-button>
+            <mwc-button @click="${() => {this.showConfirmDialog = false}}" slot="secondaryAction" dialogAction="close">
+                ${msg("Cancel")}
+            </mwc-button>
+        </mwc-dialog>
+        `
+    }
+
+    renderDetailsPage() {
+        return html`${getGoogleMateriaIconsLinkTag()}
             <h1>${this.classGroup?.name}</h1>
             <p>${this.classGroup?.description}</p>
             <h2>${msg("Sharing code")}</h2>
             <p>${this.classGroup?.sharingCode}</p>
             <h2>${msg("Owners")}</h2>
-                ${this.renderOwnerList()}
+            ${this.renderOwnersList()}
             <h2>${msg("Students")}</h2>
-            ${this.classGroup?.students?.map((student) => 
-                { 
-                    return html`
-                        <dwengo-deletable-list-element 
-                            fields='${JSON.stringify([ student.firstname, student.lastname ])}' 
-                            uuid='${student.uuid}'
-                            @dwengo-list-item-delete=${(e: any) => this.handleDeleteStudent(e.detail.uuid)}
-                            @dwengo-list-item-action=${(e: any) => this.handleShowStudentDetail(e.detail.uuid)}>
-                        </dwengo-deletable-list-element>` })
-                }
+            ${this.renderStudentsList()}
             <h2>${msg("Awaiting students")}</h2>
-            ${this.classGroup?.awaitingStudents?.map((student) => 
-                { 
-                    return html`<dwengo-deletable-list-element 
-                        fields='${JSON.stringify([ student.firstname, student.lastname ])}' 
-                        button_icons=${JSON.stringify(["delete", "done"])}
-                        uuid='${student.uuid}'
-                        @dwengo-list-item-delete=${(e: any) => this.handleApproveStudent(e.detail.uuid, false)}
-                        @dwengo-list-item-action=${(e: any) => this.handleApproveStudent(e.detail.uuid, true)}>
-                    </dwengo-deletable-list-element>` })
-                }
-        `
+            ${this.renderPendingList()}
+            ${this.showConfirmDialog ? this.renderConfirmDialog() : ""}
+    `
+    }
+
+    protected render() {
+        return this._routes.outlet()
     }
 
     static styles?: CSSResultGroup = css`
