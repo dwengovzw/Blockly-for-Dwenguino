@@ -22,6 +22,8 @@ userRouter.get("/student", [verifyToken, verifyUserExists, roleCheck("student")]
 userRouter.get("/info", [verifyTokenAjax, verifyUserExists], userController.getInfo)
 userRouter.put("/info", [verifyTokenAjax, verifyUserExists], userController.putInfo)
 
+userRouter.get("/publicInfo/:uuid", [verifyTokenAjax, verifyUserExists], userController.publicInfo)
+
 
 
 

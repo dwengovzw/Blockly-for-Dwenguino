@@ -129,12 +129,21 @@ const getClassGroup = (uuid: string) => {
     }
 }
 
-const approveStudent = (classGroupUuid: string, studentUuid: string) => {
+const approveStudent = (classGroupUuid: string, studentUuid: string, approve: boolean) => {
     return async (dispatch, getState) => {
         try {
             dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/${classGroupUuid}/approve/${studentUuid}`, {
-                method: "PUT",
+            let route = ""
+            let method = ""
+            if (approve){
+                route = `${globalSettings.hostname}/classgroup/${classGroupUuid}/approve/${studentUuid}`
+                method = "PUT"
+            } else {
+                route = `${globalSettings.hostname}/classgroup/${classGroupUuid}/reject/${studentUuid}`
+                method = "DELETE"
+            }
+            const response = await fetchAuth(route, {
+                method: method,
                 headers: { "Content-Type": "application/json"}
             })
             let resp = await response.json()
@@ -146,6 +155,8 @@ const approveStudent = (classGroupUuid: string, studentUuid: string) => {
         }
     }
 }
+
+
 
 
 const { addGroup, setGroups, setCurrentGroup } = classGroupSlice.actions

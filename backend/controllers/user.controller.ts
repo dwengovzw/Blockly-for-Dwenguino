@@ -72,6 +72,17 @@ class UserController {
         }
     }
 
+    async publicInfo(req, res) {
+        try {
+            let user = await User.findOne({uuid: req.params.uuid}).select("firstname lastname")
+            return res.status(200).json(user)
+        } catch (err) {
+            return res.status(500).send("Unable to complete request");
+        }
+        
+
+    }
+
 }
 
 export default UserController

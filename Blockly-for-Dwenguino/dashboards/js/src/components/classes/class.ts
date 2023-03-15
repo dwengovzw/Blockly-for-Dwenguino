@@ -29,14 +29,12 @@ class Class extends connect(store)(LitElement) {
     @property() uuid: string | null = null
 
     @state() classGroup: ClassGroupInfo | null = null
-    @state() loading: boolean = false;
 
     stateChanged(state: any): void {
         console.log(state)
         if (state.classGroup.currentGroup){
             this.classGroup = structuredClone(state.classGroup.currentGroup)
         }
-        this.loading = state.loading
     }
 
     constructor(){
@@ -58,24 +56,25 @@ class Class extends connect(store)(LitElement) {
         console.log("Handle show owner deail", uuid)
     }
 
-    handleDeleteStudent(uuid){
-        console.log("Handle delete student", uuid)
+    handleDeleteStudent(studentUuid: string){
+        if (!this.uuid){
+            store.dispatch(setNotificationMessage(msg("The uuid of this classgroup is unknown."), NotificationMessageType.ERROR, 2500))
+            return
+        } else {
+            //store.dispatch(deleteStudent(this.uuid, studentUuid))
+        }
     }
 
     handleShowStudentDetail(uuid){
         console.log("handle show student detail", uuid);
     }
 
-    handleRejectStudent(uuid){
-        console.log("Handle reject student", uuid);
-    }
-
-    handleApproveStudent(studentUuid: string){
+    handleApproveStudent(studentUuid: string, approve: boolean){
         if (!this.uuid){
             store.dispatch(setNotificationMessage(msg("The uuid of this classgroup is unknown."), NotificationMessageType.ERROR, 2500))
             return
         }
-        store.dispatch(approveStudent(this.uuid, studentUuid))
+        store.dispatch(approveStudent(this.uuid, studentUuid, approve))
     }
 
     renderOwnerList(){
@@ -86,15 +85,14 @@ class Class extends connect(store)(LitElement) {
                     fields='${JSON.stringify([ owner.firstname, owner.uuid ])}' 
                     uuid='${owner.uuid}'
                     button_icons='${JSON.stringify(["delete", "list"])}'
-                    @dwengo-list-item-delete=${(e) => this.handleDeleteOwner(e.detail.uuid)}
-                    @dwengo-list-item-action=${(e) => this.handleShowOwnerDetail(e.detail.uuid)}>
+                    @dwengo-list-item-delete=${(e: any) => this.handleDeleteOwner(e.detail.uuid)}
+                    @dwengo-list-item-action=${(e: any) => this.handleShowOwnerDetail(e.detail.uuid)}>
                 </dwengo-deletable-list-element>` })}`
     }
 
     protected render() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
-            ${this.loading ? html`<mwc-circular-progress></mwc-circular-progress>` : ""}
             <h1>${this.classGroup?.name}</h1>
             <p>${this.classGroup?.description}</p>
             <h2>${msg("Sharing code")}</h2>
@@ -108,8 +106,8 @@ class Class extends connect(store)(LitElement) {
                         <dwengo-deletable-list-element 
                             fields='${JSON.stringify([ student.firstname, student.lastname ])}' 
                             uuid='${student.uuid}'
-                            @dwengo-list-item-delete=${(e) => this.handleDeleteStudent(e.detail.uuid)}
-                            @dwengo-list-item-action=${(e) => this.handleShowStudentDetail(e.detail.uuid)}>
+                            @dwengo-list-item-delete=${(e: any) => this.handleDeleteStudent(e.detail.uuid)}
+                            @dwengo-list-item-action=${(e: any) => this.handleShowStudentDetail(e.detail.uuid)}>
                         </dwengo-deletable-list-element>` })
                 }
             <h2>${msg("Awaiting students")}</h2>
@@ -119,17 +117,14 @@ class Class extends connect(store)(LitElement) {
                         fields='${JSON.stringify([ student.firstname, student.lastname ])}' 
                         button_icons=${JSON.stringify(["delete", "done"])}
                         uuid='${student.uuid}'
-                        @dwengo-list-item-delete=${(e) => this.handleRejectStudent(e.detail.uuid)}
-                        @dwengo-list-item-action=${(e) => this.handleApproveStudent(e.detail.uuid)}>
+                        @dwengo-list-item-delete=${(e: any) => this.handleApproveStudent(e.detail.uuid, false)}
+                        @dwengo-list-item-action=${(e: any) => this.handleApproveStudent(e.detail.uuid, true)}>
                     </dwengo-deletable-list-element>` })
                 }
         `
     }
 
     static styles?: CSSResultGroup = css`
-        mwc-circular-progress {
-            --mdc-theme-primary: var(--theme-accentFillSelected);
-        }
     `
 }
 

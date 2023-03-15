@@ -20,6 +20,8 @@ classGroupRouter.delete("/leave/:uuid",  [verifyTokenAjax, verifyUserExists, rol
 classGroupRouter.put("/join/:sharingCode", [verifyTokenAjax, verifyUserExists, roleCheck("student")], classGroupController.join)
 
 classGroupRouter.get("/:uuid", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.get)
-classGroupRouter.put("/:uuid/approve/:studentUuid", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.approve)
+classGroupRouter.put("/:uuid/approve/:studentUuid", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.changeApprovalStatusRouterWrapper(true))
+classGroupRouter.delete("/:uuid/reject/:studentUuid", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.changeApprovalStatusRouterWrapper(false))
+classGroupRouter.delete("/:uuid/delete/:studentUuid", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], classGroupController.deleteStudent)
 
 export default classGroupRouter

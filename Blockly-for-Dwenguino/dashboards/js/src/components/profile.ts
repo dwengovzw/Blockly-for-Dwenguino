@@ -11,7 +11,6 @@ import { getGoogleMateriaIconsLinkTag } from "../util"
 import { UserInfo, initialUserState, putUserInfo } from "../state/features/user_slice"
 
 
-import "./menu"
 import "@material/mwc-textfield"
 import "@material/mwc-button"
 import "@material/mwc-checkbox"

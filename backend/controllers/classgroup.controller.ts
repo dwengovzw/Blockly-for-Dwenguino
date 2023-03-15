@@ -17,6 +17,13 @@ let getUniqueClassCode = async () => {
     return code
 }
 
+/**
+ * Get classgroup with UUID classGroupUUID and check if the requesting user is the owner
+ * @param userId 
+ * @param platform 
+ * @param classGroupUUID 
+ * @returns 
+ */
 let getClassGroupForUser = async (userId, platform, classGroupUUID) => {
     let user = await User.findOne({userId: userId, platform: platform})
     let classGroup = await ClassGroup.findOne({
@@ -33,6 +40,11 @@ class ClassGroupController {
 
     }
 
+    /**
+     * Get all classgroups owned by a teacher
+     * @param req 
+     * @param res 
+     */
     async all(req, res){
         try {
             let user = await User.findOne({
@@ -55,6 +67,11 @@ class ClassGroupController {
         }
     }
 
+    /**
+     * Add a classgroup with the current logged in user as owner
+     * @param req 
+     * @param res 
+     */
     async add(req, res){
         try {
             let user = await User.findOne({userId: req.userId, platform: req.platform})
@@ -77,6 +94,11 @@ class ClassGroupController {
         }
     }
 
+    /**
+     * Delete a classgroup, only possible if the logged in user is one of the owners of the group.
+     * @param req 
+     * @param res 
+     */
     async delete(req, res){
         try {
             let user = await User.findOne({userId: req.userId, platform: req.platform})
@@ -93,8 +115,11 @@ class ClassGroupController {
         }
     } 
 
-    
-
+    /**
+     * Get a specific classgroup based on its uuid, check ownership and populate its fields
+     * @param req 
+     * @param res 
+     */
     async get(req, res){
         try {
             let classGroup = await getClassGroupForUser(req.userId, req.platform, req.params.uuid)
@@ -110,6 +135,11 @@ class ClassGroupController {
         }
     }
 
+    /**
+     * Get all the class groups for a student (both approved and pending)
+     * @param req 
+     * @param res 
+     */
     async mine(req, res) {
         try {
             let user = await User.findOne({userId: req.userId, platform: req.platform})
@@ -133,6 +163,11 @@ class ClassGroupController {
         
     }
 
+    /**
+     * A student removes itself from a class group.
+     * @param req 
+     * @param res 
+     */
     async leave(req, res) {
         try {
             let user = await User.findOne({userId: req.userId, platform: req.platform})
@@ -153,6 +188,11 @@ class ClassGroupController {
         }
     }
 
+    /**
+     * A student joins a classgroup using its sharingcode
+     * @param req 
+     * @param res 
+     */
     async join(req, res) {
         try {
             let student = await User.findOne({userId: req.userId, platform: req.platform})
@@ -166,9 +206,26 @@ class ClassGroupController {
         }
     }
 
-    async approve(req, res) {
+    /**
+     * Router wrapper to return router function with approval parameter.
+     * @param approve 
+     * @returns 
+     */
+    changeApprovalStatusRouterWrapper(approve: boolean){
+        return (req, res, next) => {
+            this.changeApprovalStatus(req, res, approve)
+        }
+    }
+
+    /**
+     * Approve or reject a student that has joined a class group.
+     * @param req 
+     * @param res 
+     * @param approve 
+     * @returns 
+     */
+    async changeApprovalStatus(req, res, approve: boolean) {
         try {
-            
             let classUuid = req.params.uuid
             let studentUuid = req.params.studentUuid
             let teacher = await User.findOne({userId: req.userId, platform: req.platform})
@@ -183,8 +240,10 @@ class ClassGroupController {
             if (index === -1){
                 return res.status(500).send({message: "Student not in approval list."})
             }
-            classGroup.awaitingStudents.splice(index, 1)
-            classGroup.students.push(student._id)
+            classGroup.awaitingStudents.splice(index, 1)  // Remove student from awaiting list
+            if (approve){
+                classGroup.students.push(student._id)  // Add the student to the students list if approved
+            }
             classGroup.save()
             res.status(200).send({message: "Successfuly approved student"})
         } catch (e) {
@@ -192,18 +251,42 @@ class ClassGroupController {
         }
     }
 
-    async getStudents(req, res) {
+    async deleteStudent(req, res){
         try {
-            let classGroup = await getClassGroupForUser(req.userId, req.platform, req.params.uuid)
-            res.status(200).json(classGroup)
-        } catch (err) {
-            console.log(err)
-            res.status(500).send("Failed to get classgroup")
+            let classUuid = req.params.uuid
+            let studentUuid = req.params.studentUuid
+            let teacher = await User.findOne({userId: req.userId, platform: req.platform})
+            let student = await User.findOne({uuid: studentUuid})
+            let classGroup = await ClassGroup.findOne({
+                uuid: classUuid, 
+                ownedBy: {
+                    $in: [ teacher._id ]
+                }
+            })
+            let index = classGroup.students.indexOf(student._id)
+            if (index === -1){
+                return res.status(500).send({message: "Student not in classgroup."})
+            }
+            classGroup.students.splice(index, 1)  // Remove student from students list
+
+            classGroup.save()
+            res.status(200).send({message: "Successfuly approved student"})
+        } catch (e) {
+            res.status(500).send({message: "Unable to approve student"})
         }
     }
 
-    async getPending(req, res) {
+    /**
+     * 
+     * @param req 
+     * @param res 
+     */
+    async getStudents(req, res) {
+        res.status(500).send({message: "Not implemented"})
+    }
 
+    async getPending(req, res) {
+        res.status(500).send({message: "Not implemented"})
     }
 }
 

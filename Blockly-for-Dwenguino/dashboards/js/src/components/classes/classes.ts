@@ -92,30 +92,6 @@ class Classes extends connect(store)(LitElement) {
         `
     }
 
-    /*renderClassesList() {
-        return html`
-            ${getGoogleMateriaIconsLinkTag()}
-            <dwengo-deletable-list-element 
-                fields="${JSON.stringify([msg("Name"), msg("Description"), msg("Sharing Code")])}"
-                header="true"
-                class="tableheader">
-            </dwengo-deletable-list-element>
-            ${this.groups.map((group) => {
-                return html`<dwengo-deletable-list-element
-                                fields="${JSON.stringify([group.name, group.description, group.sharingCode])}"
-                                uuid="${group.uuid}"
-                                @dwengo-list-item-delete=${(e) => this.handleDeleteClassGroup(e.detail.uuid)}
-                                @dwengo-list-item-action=${(e) => this.handleShowClassGroup(e.detail.uuid)}>
-                            </dwengo-deletable-list-element>`})
-            }
-            <div class="add_menu">
-                <mwc-textfield class="item add_name_field" @change=${(e) => this.newClassName = e.target.value } outlined label="${msg("Name")}" type="text" value="${this.newClassName}"></mwc-textfield>
-                <mwc-textfield class="item add_description_field" @change=${(e) => this.newClassDescription = e.target.value } outlined label="${msg("Description")}" type="text" value="${this.newClassDescription}"></mwc-textfield>
-                <mwc-button class="item" @click=${this.addClassGroup} raised>${msg("Create")}</mwc-button>
-            </div>
-        `
-    }*/
-
 
     renderClassesList() {
         return html`
@@ -160,12 +136,6 @@ class Classes extends connect(store)(LitElement) {
                 )}
                 ></vaadin-grid-column>
             </vaadin-grid>
-            <div class="add_menu">
-                <mwc-textfield class="item add_name_field" @change=${(e) => this.newClassName = e.target.value } outlined label="${msg("Name")}" type="text" value="${this.newClassName}"></mwc-textfield>
-                <mwc-textfield class="item add_description_field" @change=${(e) => this.newClassDescription = e.target.value } outlined label="${msg("Description")}" type="text" value="${this.newClassDescription}"></mwc-textfield>
-                <mwc-button class="item" @click=${this.addClassGroup} raised>${msg("Create")}</mwc-button>
-            </div>
-            ${this.showConfirmDialog ? this.renderConfirmDialog(this.itemSelectedToDelete?.name, this.itemSelectedToDelete?.uuid) : ""}
         `
     }    
 

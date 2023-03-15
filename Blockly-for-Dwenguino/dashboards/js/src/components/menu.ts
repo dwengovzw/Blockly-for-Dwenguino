@@ -74,7 +74,7 @@ class Menu extends connect(store)(LitElement){
             <vaadin-tabs slot="drawer" orientation="vertical">
                 ${this.menuItems.map(item => {
                     return html`
-                    <vaadin-tab .selected=${window.location.href.startsWith(item.href)}>
+                    <vaadin-tab>
                         <a tabindex="-1" href="${item.href}" rel="${item.external ? "external" : "next"}">
                             <span class="material-symbols-outlined menu-logo">${item.icon}</span>
                             <span class="item-label">${item.label}</span>
