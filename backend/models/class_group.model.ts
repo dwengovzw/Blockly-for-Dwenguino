@@ -8,6 +8,7 @@ interface IClassGroup {
     name: string,
     sharingCode?: string,
     description?: string,
+    createdAt?: Date,
     ownedBy: PopulatedDoc<IUser>[],
     awaitingStudents: PopulatedDoc<IUser>[],
     students: PopulatedDoc<IUser>[]
@@ -27,6 +28,7 @@ const ClassGroupFields: Record<keyof IClassGroup, any> = {
         unique: true
     },
     description: String,
+    createdAt: Date,
     ownedBy: [{
         type: Schema.Types.ObjectId,
         ref: 'User',

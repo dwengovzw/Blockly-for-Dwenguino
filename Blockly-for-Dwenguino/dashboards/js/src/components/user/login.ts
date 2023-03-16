@@ -4,12 +4,12 @@
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, state} from 'lit/decorators.js';
-import { store } from "../state/store"
+import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
-import { fetchPlatforms } from "../state/features/oauth_slice";
-import { fetchUserInfo } from "../state/features/user_slice";
-import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../util"
+import { fetchPlatforms } from "../../state/features/oauth_slice";
+import { fetchUserInfo } from "../../state/features/user_slice";
+import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../../util"
 
 import '@vaadin/avatar';
 

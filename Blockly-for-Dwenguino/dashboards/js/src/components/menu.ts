@@ -1,5 +1,5 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
-import { customElement, state } from "lit/decorators.js"; // needs .js to transpile
+import { customElement, state, property } from "lit/decorators.js"; // needs .js to transpile
 import { store } from "../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
@@ -14,6 +14,7 @@ import '@vaadin/tabs';
 import '@vaadin/progress-bar';
 
 interface MenuItem {
+    id: string,
     label: string,
     href: string,
     icon?: string,
@@ -23,24 +24,26 @@ interface MenuItem {
 @customElement("dwengo-menu")
 class Menu extends connect(store)(LitElement){
     @state() menuItems:MenuItem[] = []
-    @state() visible: boolean = false;
-    @state() loading: boolean = false;
+    @state() visible: boolean = false
+    @state() loading: boolean = false
+
+    @property() selectedId: string = "home"
 
     userInfo: UserInfo = initialUserState
     menuItemOptions: Record<string, MenuItem[]> = {
         "all": [
-            {label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
-            {label: msg("Simulator"), href: `${globalSettings.hostname}`, icon: "code", external: true},
+            {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
+            {id: "simulator", label: msg("Simulator"), href: `${globalSettings.hostname}`, icon: "code", external: true},
         ],
         "user": [
-            {label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
-            {label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open", external: false}
+            {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
+            {id: "savedprograms", label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open", external: false}
         ],
         "student": [
-            {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
+            {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
         ],
         "teacher": [
-            {label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
+            {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
         ],
         "admin": []
     }
@@ -71,7 +74,7 @@ class Menu extends connect(store)(LitElement){
                 ${this.loading ? html`<vaadin-progress-bar indeterminate></vaadin-progress-bar>` : ""}
             </h1>
             
-            <vaadin-tabs slot="drawer" orientation="vertical">
+            <vaadin-tabs slot="drawer" orientation="vertical" selected=${this.menuItems.map(item => item.id).indexOf(this.selectedId)}>
                 ${this.menuItems.map(item => {
                     return html`
                     <vaadin-tab>
@@ -93,7 +96,7 @@ class Menu extends connect(store)(LitElement){
 
     static override styles = css`
         .main_page {
-            margin: 1rem;
+            margin: 1rem auto;
             width: 90%;
             max-width: 1366px;
         }

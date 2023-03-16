@@ -79,6 +79,7 @@ class ClassGroupController {
             const cg: IClassGroup = {
                 name: req.body.name,
                 description: req.body.description,
+                createdAt: new Date(),
                 sharingCode: sharingCode,
                 ownedBy: [user._id],
                 awaitingStudents: [],
@@ -87,7 +88,7 @@ class ClassGroupController {
             let classGroup = new ClassGroup(cg)
             cg.uuid = classGroup.uuid
             await classGroup.save()
-            res.status(200).json(cg)
+            res.status(200).json({message: "Classgroup successfuly created"})
         } catch (err) {
             console.log(err)
             res.status(500).send("Failed to create classgroup")

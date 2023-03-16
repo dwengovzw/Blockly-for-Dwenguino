@@ -98,10 +98,12 @@ class Classes extends connect(store)(LitElement) {
     renderClassesList() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}
+            <h1>${msg("Your classes")}</h1>
             <vaadin-grid .items="${this.groups}">
                 <vaadin-grid-sort-column frozen header="${msg("Name")}" auto-width flex-grow="0" path="name"></vaadin-grid-sort-column>
                 <vaadin-grid-sort-column flex-grow="1" header="${msg("Description")}" path="description" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-sort-column flex-grow="0" header="${msg("Sharing code")}" path="sharingCode" auto-width></vaadin-grid-sort-column>
+                <vaadin-grid-sort-column flex-grow="0" header="${msg("Created")}" path="createdAt" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-column
                 frozen-to-end
                 auto-width

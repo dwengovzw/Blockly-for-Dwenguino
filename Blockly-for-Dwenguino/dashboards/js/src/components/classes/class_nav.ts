@@ -36,7 +36,11 @@ class ClassNav extends connect(store)(LitElement) {
                             ${msg("Assignments")}
                         </a>
                     </vaadin-tab>
-               
+                    <vaadin-tab>
+                    <a href="${globalSettings.hostname}/dashboard/classes/class/${uuid}/insights">
+                        ${msg("Insights")}
+                    </a>
+                </vaadin-tab>
             </vaadin-tabs>`
     }
     renderDetails(uuid: string | undefined){

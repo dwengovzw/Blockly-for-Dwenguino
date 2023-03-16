@@ -4,11 +4,11 @@
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, state} from 'lit/decorators.js';
-import { store } from "../state/store"
+import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
-import { getGoogleMateriaIconsLinkTag } from "../util"
-import { UserInfo, initialUserState, putUserInfo } from "../state/features/user_slice"
+import { getGoogleMateriaIconsLinkTag } from "../../util"
+import { UserInfo, initialUserState, putUserInfo } from "../../state/features/user_slice"
 
 
 import "@material/mwc-textfield"

@@ -7,9 +7,9 @@ import { connect } from "pwa-helpers"
 import "./components/header";
 import "./components/intro_page"
 import "./components/notify"
-import "./components/welcome"
+import "./components/user/welcome"
 import "./components/menu"
-import "./components/profile"
+import "./components/user/profile"
 import "./components/classes/classes"
 import "./components/classes/class"
 import "./components/classes/student_classes"
@@ -26,14 +26,16 @@ class Dashboard extends connect(store)(LitElement) {
     private urlPrefixArray: RegExpMatchArray | null = globalSettings?.hostname?.match(this.urlPrefixRegex)
     private urlPrefix: string = this.urlPrefixArray ? this.urlPrefixArray[4] : ""
 
+    @state() selectedId: string = "home"
+
     private router = new Router(this, [
-        {path: `${this.urlPrefix}/dashboard`, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
-        {path: `${this.urlPrefix}/dashboard/home`, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
-        {path: `${this.urlPrefix}/dashboard/profile`, render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
-        {path: `${this.urlPrefix}/dashboard/classes*`, render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
-        {path: `${this.urlPrefix}/dashboard/studentclasses`, render: () => html`<dwengo-student-classes-page></dwengo-student-classes-page>`},
+        {path: `${this.urlPrefix}/dashboard`, enter: async () => {this.selectedId = "home"; return true}, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
+        {path: `${this.urlPrefix}/dashboard/home`, enter: async () => {this.selectedId = "home"; return true}, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
+        {path: `${this.urlPrefix}/dashboard/profile`, enter: async () => {this.selectedId ="profile"; return true}, render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
+        {path: `${this.urlPrefix}/dashboard/classes*`, enter: async () => {this.selectedId = "classgroups"; return true}, render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
+        {path: `${this.urlPrefix}/dashboard/studentclasses`, enter: async () => {this.selectedId = "studentclassgroups"; return true}, render: () => html`<dwengo-student-classes-page></dwengo-student-classes-page>`},
         //{path: `${this.urlPrefix}/dashboard/class/:uuid`, render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
-        {path: `${this.urlPrefix}/dashboard/savedprograms`, render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`}
+        {path: `${this.urlPrefix}/dashboard/savedprograms`, enter: async () => {this.selectedId = "savedprograms"; return true}, render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`}
     ]);
 
     createRenderRoot() {
@@ -48,7 +50,7 @@ class Dashboard extends connect(store)(LitElement) {
 
     protected render() {
         return html`<dwengo-notify></dwengo-notify>
-                    <dwengo-menu>
+                    <dwengo-menu selectedId="${this.selectedId}">
                         ${this.loggedIn ? html`${this.router.outlet()}` : html`<dwengo-intro-page></dwengo-intro-page>`}
                     </dwengo-menu>`
                     

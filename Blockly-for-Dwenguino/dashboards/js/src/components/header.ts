@@ -9,7 +9,7 @@ import { Unsubscribe } from "redux";
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 
-import "./login"
+import "./user/login"
 
 
 @customElement("dwengo-header")

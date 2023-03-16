@@ -11,6 +11,7 @@ interface ClassGroupInfo {
     name: string,
     sharingCode?: string,
     description: string,
+    createdAt?: string,
     ownedBy?: UserInfo[],
     students?: UserInfo[],
     awaitingStudents?: UserInfo[]
@@ -43,11 +44,13 @@ export const classGroupSlice = createSlice({
             state.groups = action.payload
         },
         setCurrentGroup: (state, action) => {
+            console.log((new Date(action.payload.createdAt)).toLocaleDateString(msg("en-GB")));
             let classGroup: ClassGroupInfo = {
                 uuid: action.payload.uuid,
                 name: action.payload.name,
                 sharingCode: action.payload.sharingCode,
                 description: action.payload.description,
+                createdAt: action.payload.createdAt,
                 students: action.payload.students,
                 awaitingStudents: action.payload.awaitingStudents,
                 ownedBy: action.payload.ownedBy
@@ -67,7 +70,7 @@ const addClassGroup = (classGroupInfo) => {
                 body: JSON.stringify(classGroupInfo)
             })
             let json = await response.json()
-            dispatch(addGroup(json))
+            dispatch(getAllClassGroups())
         } catch (err) {
             dispatch(setNotificationMessage(msg("Error adding classgroup"), NotificationMessageType.ERROR, 2500))
         } finally {
@@ -85,7 +88,7 @@ const getAllClassGroups = () => {
                 headers: { "Content-Type": "application/json"}
             })
             let json = await response.json()
-            let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid}})
+            let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid, createdAt: (new Date(info.createdAt)).toLocaleDateString(msg("en-GB")).split("T")[0]}})
             dispatch(setGroups(groups))
         } catch (err) {
             dispatch(setNotificationMessage(msg("Error getting classgroup"), NotificationMessageType.ERROR, 2500))
