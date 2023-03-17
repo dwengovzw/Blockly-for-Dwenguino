@@ -9,6 +9,7 @@ interface IAssignmentGroup {
     uuid?: string,
     name: string,
     description?: string,
+    starred?: boolean,
     studentTeams: PopulatedDoc<IStudentTeam>[],
     inClassGroup: PopulatedDoc<IClassGroup>
 }
@@ -23,6 +24,10 @@ const AssignmentGroupFields: Record<keyof IAssignmentGroup, any> = {
         required: true
     },
     description: String,
+    starred: {
+        type: Boolean,
+        default: false
+    },
     studentTeams: [
         {
             type: Schema.Types.ObjectId,

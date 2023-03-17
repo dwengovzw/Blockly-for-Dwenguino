@@ -105,7 +105,6 @@ class Classes extends connect(store)(LitElement) {
                 <vaadin-grid-sort-column flex-grow="0" header="${msg("Sharing code")}" path="sharingCode" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-sort-column flex-grow="0" header="${msg("Created")}" path="createdAt" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-column
-                frozen-to-end
                 auto-width
                 flex-grow="0"
                 ${columnBodyRenderer(
@@ -122,7 +121,6 @@ class Classes extends connect(store)(LitElement) {
                 )}
                 ></vaadin-grid-column>
                 <vaadin-grid-column
-                frozen-to-end
                 auto-width
                 flex-grow="0"
                 ${columnBodyRenderer(

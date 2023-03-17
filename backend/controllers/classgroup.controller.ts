@@ -45,6 +45,7 @@ class ClassGroupController {
      * @param req 
      * @param res 
      */
+    // TODO: check to filter out unneeded data from classes 
     async all(req, res){
         try {
             let user = await User.findOne({

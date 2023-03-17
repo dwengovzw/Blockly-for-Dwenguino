@@ -14,6 +14,7 @@ import { Routes } from "@lit-labs/router"
 
 import '@vaadin/tabs'
 import "./class"
+import "../assignments/assignments"
 
 @customElement("dwengo-class-nav")
 class ClassNav extends connect(store)(LitElement) {
@@ -57,7 +58,7 @@ class ClassNav extends connect(store)(LitElement) {
         }
         return html`
             ${this.renderTabs(1, uuid)}
-            <h1>Assignments</h1>`
+            <dwengo-assignment-list classGroupUUID=${uuid}></dwengo-assignment-list>`
     }
 
     protected render(){
