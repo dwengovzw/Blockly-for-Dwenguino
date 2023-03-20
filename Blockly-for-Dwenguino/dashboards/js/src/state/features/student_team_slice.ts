@@ -8,7 +8,6 @@ import { ClassGroupInfo } from "./class_group_slice"
 
 interface StudentTeamInfo {
     uuid?: string,
-    name: string,
     students: UserInfo[],
     portfolio?: string // Toto change this to porfolioInfo reference
 }

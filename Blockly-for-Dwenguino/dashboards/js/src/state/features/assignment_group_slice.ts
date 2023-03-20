@@ -5,13 +5,9 @@ import { fetchAuth } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 import { UserInfo } from "./user_slice"
 import { ClassGroupInfo } from "./class_group_slice"
+import { StudentTeamInfo } from "./student_team_slice"
 
 // TODO: move this to separate slice and update with correct types
-interface StudentTeamInfo {
-    name: string,
-    students: UserInfo[],
-    portfolio?: string
-}
 
 interface AssignmentGroupInfo {
     uuid?: string,
@@ -26,7 +22,7 @@ interface AssignmentGroups {
     groups: AssignmentGroupInfo[]
 }
 
-const initialAssignmentGroups: AssignmentGroups = {
+const initialAssignmentGroups = {
     groups: []
 }
 
@@ -59,6 +55,31 @@ const getAllAssignmentGroups = (classGroupUUID: string) => {
                 headers: { "Content-Type": "application/json"},
             })
             let json = await response.json()
+            let groups: AssignmentGroupInfo[] = json.map(
+                (assignmentGroup) => {
+                    return {
+                        uuid: assignmentGroup.uuid,
+                        name: assignmentGroup.name,
+                        description: assignmentGroup.description,
+                        starred: assignmentGroup.starred,
+                        inClassGroupUUID: classGroupUUID,
+                        studentTeams: assignmentGroup.studentTeams.map((team) => {
+                            let sTeam: StudentTeamInfo = {
+                                uuid: team.uuid,
+                                students: team.students.map((student) => {
+                                    return {
+                                        firstname: student.firstname,
+                                        lastname: student.lastname,
+                                        uuid: student.uuid
+                                    }
+                                })
+                            }
+                            return sTeam
+                        })
+                    }
+                }
+            )
+            dispatch(setGroups(groups))
         } catch (err) {
             dispatch(setNotificationMessage(msg("Error getting assignments"), NotificationMessageType.ERROR, 2500))
         } finally {
@@ -77,7 +98,25 @@ const createAssignmentGroup = (assignmentGroupInfo: AssignmentGroupInfo) => {
                 body: JSON.stringify(assignmentGroupInfo)
             })
             let json = await response.json()
-            dispatch(getAllAssignmentGroups(json.uuid))
+            dispatch(getAllAssignmentGroups(assignmentGroupInfo.inClassGroupUUID))
+        } catch (err) {
+            dispatch(setNotificationMessage(msg("Error adding assignment"), NotificationMessageType.ERROR, 2500))
+        } finally {
+            dispatch(doneLoading())
+        }
+    }
+}
+
+const deleteAssignmentGroup = (classGroupUUID: string, assignmentUUID: string) => {
+    return async (dispatch, getState) => {
+        dispatch(loading())
+        try {
+            const response = await fetchAuth(`${globalSettings.hostname}/assignment/${assignmentUUID}`, {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json"}
+            })
+            let json = await response.json()
+            dispatch(getAllAssignmentGroups(classGroupUUID))
         } catch (err) {
             dispatch(setNotificationMessage(msg("Error adding assignment"), NotificationMessageType.ERROR, 2500))
         } finally {
@@ -90,4 +129,4 @@ const { addGroup, setGroups } = assignmentGroupSlice.actions
 
 const assignmentGroupReducer = assignmentGroupSlice.reducer
 
-export { AssignmentGroupInfo, assignmentGroupReducer, createAssignmentGroup }
+export { AssignmentGroupInfo, assignmentGroupReducer, createAssignmentGroup, getAllAssignmentGroups, deleteAssignmentGroup }

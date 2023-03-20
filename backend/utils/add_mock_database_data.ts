@@ -121,7 +121,6 @@ const mockDatabaseData = async () => {
         let savedCg1 = await cg1.save()
 
         let st1Data: IStudentTeam = {
-            name: "team 1",
             portfolio: savedPortfolio1._id,
             students: [savedStudent3._id, savedStudent4._id]
         }
@@ -131,7 +130,7 @@ const mockDatabaseData = async () => {
         let assignmentGroup1Data: IAssignmentGroup = {
             inClassGroup: savedCg1._id,
             name: `Assignment group for class ${savedCg1.name}`,
-            description: `Assignment group for class ${savedCg1.name} with teams: ${savedSt1.name}}`,
+            description: `Assignment group for class ${savedCg1.name} with teams: ${savedSt1.uuid}}`,
             studentTeams: [ savedSt1._id ]
         }
         let assignmentGroup1 = new AssignmentGroup(assignmentGroup1Data)

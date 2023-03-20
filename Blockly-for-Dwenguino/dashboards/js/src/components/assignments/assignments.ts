@@ -14,21 +14,23 @@ import {getClassGroup} from "../../state/features/class_group_slice"
 import '@vaadin/dialog';
 import '@vaadin/text-field';
 import '@vaadin/text-area';
+import '@vaadin/button';
 import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import type { GridDragStartEvent } from '@vaadin/grid';
 import { dialogFooterRenderer, dialogRenderer } from '@vaadin/dialog/lit.js';
 import type { DialogOpenedChangedEvent } from '@vaadin/dialog';
 import { UserInfo } from "../../state/features/user_slice";
-import { AssignmentGroupInfo, createAssignmentGroup } from "../../state/features/assignment_group_slice"
+import { AssignmentGroupInfo, createAssignmentGroup, deleteAssignmentGroup, getAllAssignmentGroups } from "../../state/features/assignment_group_slice"
 import { StudentTeamInfo } from "../../state/features/student_team_slice";
+import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice";
 
 @customElement("dwengo-assignment-list")
 class AssignmentList extends connect(store)(LitElement){
     @property() classGroupUUID: string= ""
 
-    @state() showCreateDialog: boolean = false
+    @state() showEditDialog: boolean = false
 
-    @state() newAssignmentGroupInfo: AssignmentGroupInfo = {
+    @state() editedAssignmentGroupInfo: AssignmentGroupInfo = {
         name: "",
         description: "",
         starred: false,
@@ -37,6 +39,8 @@ class AssignmentList extends connect(store)(LitElement){
     }
 
     @state() assignmentGroups: AssignmentGroupInfo[] = []
+    @state() itemSelectedToDelete: AssignmentGroupInfo | null = null
+    @state() showConfirmDialog: boolean = false
 
     @state() students: UserInfo[] = []
     @state() draggedItem?: UserInfo
@@ -45,26 +49,72 @@ class AssignmentList extends connect(store)(LitElement){
     // Using -1 as null value since null and 0 conflict
     private draggedItemSourceIndex: number = -1
 
+    /**
+     * Reset the contents of the assignment edit dialog to an empty value.
+     * Used to render the dialog for creating new assignment.
+     */
+    private resetEditDialog(){
+        this.studentTeams = [
+            {
+                students: [...this.students]
+            }
+        ]
+        this.editedAssignmentGroupInfo = {
+            name: "",
+            description: "",
+            starred: false,
+            studentTeams: [],
+            inClassGroupUUID: this.classGroupUUID
+        }
+    }
+
     stateChanged(state: any): void {
         if (state.classGroup?.currentGroup?.students){
             this.students = structuredClone(state.classGroup.currentGroup.students)
         }
-        
+        this.assignmentGroups = structuredClone(state.assignments.groups)
     }
 
     connectedCallback() {
         super.connectedCallback()
         if (this.classGroupUUID){
             store.dispatch(getClassGroup(this.classGroupUUID))
+            store.dispatch(getAllAssignmentGroups(this.classGroupUUID))
         }
     }
 
     private createTeam(name) {
         let team: StudentTeamInfo = {
-            name: name,
             students: []
         }
         this.studentTeams = [...this.studentTeams, team]
+    }
+
+    private handleDeleteAssignment(uuid: string | undefined) {
+        if (this.classGroupUUID && uuid){
+            store.dispatch(deleteAssignmentGroup(this.classGroupUUID, uuid))
+        }
+        this.showConfirmDialog = false
+    }
+
+    private handleShowEditDialog(assignmentGroup: AssignmentGroupInfo | null){
+        if (!assignmentGroup){
+            this.resetEditDialog()
+        } else {
+            // Aggregate all students that have been teamed up in this assignmentGroup
+            let teamedUpStudents = assignmentGroup.studentTeams.reduce((reduced:UserInfo[], current) => {
+                return [...reduced, ...current.students]
+            }, [])
+            // Filter out the students that have not been teamed up
+            let remainingStudents: StudentTeamInfo = {
+                students: this.students.filter(student => {return !teamedUpStudents.includes(student)})
+            }
+            // Create student teams array with the first item containing the remaining students
+            this.studentTeams = [remainingStudents, ...assignmentGroup.studentTeams]
+            this.editedAssignmentGroupInfo.name = assignmentGroup.name
+            this.editedAssignmentGroupInfo.description = assignmentGroup.description
+        }
+        this.showEditDialog = true;
     }
 
     renderHeader(){
@@ -72,7 +122,7 @@ class AssignmentList extends connect(store)(LitElement){
         <div class="header">
             <h1>${msg("Assignments")}</h1>
             <h1>
-                <vaadin-button theme="primary" @click="${() => {this.showCreateDialog = true}}">
+                <vaadin-button theme="primary" @click="${() => {this.handleShowEditDialog(null)}}">
                     <span>
                         ${msg("Create assignment")}
                     </span>
@@ -82,11 +132,80 @@ class AssignmentList extends connect(store)(LitElement){
         `
     }
 
+    renderConfirmDialog(name: string | undefined, uuid: string | undefined){
+        return html`
+        <mwc-dialog open="${this.showConfirmDialog}">
+            <div>
+                ${msg("Are you sure you want to remove this classgroup: ")}<em>${name}</em>?
+            </div>
+            <mwc-button @click="${() => {this.handleDeleteAssignment(uuid)}}" slot="primaryAction" dialogAction="close">
+                ${msg("Yes")}
+            </mwc-button>
+            <mwc-button @click="${() => {this.showConfirmDialog = false}}" slot="secondaryAction" dialogAction="close">
+                ${msg("Cancel")}
+            </mwc-button>
+        </mwc-dialog>
+        `
+    }
+
+    renderEditMenu() {
+
+    }
+
+
+    renderAssignmentsOverview(){
+        return html`
+            <vaadin-grid .items="${this.assignmentGroups}">
+                <vaadin-grid-column path="name"></vaadin-grid-column>
+                <vaadin-grid-column path="description"></vaadin-grid-column>
+                <vaadin-grid-column path="starred"></vaadin-grid-column>
+                <vaadin-grid-column path="inClassGroupUUID"></vaadin-grid-column>
+                <vaadin-grid-column
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (assignmentGroup: AssignmentGroupInfo) => html`
+                        <vaadin-button 
+                            theme="primary" 
+                            class="item" 
+                            @click="${() => {this.handleShowEditDialog(assignmentGroup)}}">
+                            <span class="material-symbols-outlined">
+                                edit
+                            </span>
+                        </vaadin-button>`,
+                    []
+                )}
+                ></vaadin-grid-column>
+                <vaadin-grid-column
+                auto-width
+                flex-grow="0"
+                ${columnBodyRenderer(
+                    (assignmentGroup: AssignmentGroupInfo) => html`
+                        <vaadin-button 
+                            theme="primary" 
+                            class="item" 
+                            @click="${() => {this.itemSelectedToDelete = assignmentGroup; this.showConfirmDialog = true}}">
+                            <span class="material-symbols-outlined">
+                                delete
+                            </span>
+                        </vaadin-button>`,
+                    []
+                )}
+                ></vaadin-grid-column>
+            </vaadin-grid>
+        `
+    }
+
 
     private saveStudentTeams = () => {
-        this.newAssignmentGroupInfo.studentTeams = this.studentTeams.filter((element, i) => {return (i > 0 ? true : false)})
-        this.newAssignmentGroupInfo.inClassGroupUUID = this.classGroupUUID
-        store.dispatch(createAssignmentGroup(this.newAssignmentGroupInfo))
+        if (!this.editedAssignmentGroupInfo.name){
+            store.dispatch(setNotificationMessage(msg("An assignment name is required"), NotificationMessageType.ERROR, 2500))
+            return
+        }
+        this.editedAssignmentGroupInfo.studentTeams = this.studentTeams.filter((element, i) => {return (i > 0 ? true : false)})
+        this.editedAssignmentGroupInfo.inClassGroupUUID = this.classGroupUUID
+        store.dispatch(createAssignmentGroup(this.editedAssignmentGroupInfo))
+        this.showEditDialog = false;
     }
     
       private clearDraggedItem = () => {
@@ -201,16 +320,11 @@ class AssignmentList extends connect(store)(LitElement){
         `
       }
 
-      /* THIS FUNCTION IS UGLY!
-         Style tags are needed to 
-         Should look into abstracting out the drop event handler
-         However, this is not trivial since parameterizing the sources and destination lists looses the reference to the observed state field.
-         Consequently, changes to these do not trigger an update.*/
     renderDialogContent() {
         return html`
         ${this.renderDialogStyle()}
-        <div><vaadin-text-field @change=${(e) => this.newAssignmentGroupInfo.name = e.target.value } outlined label="${msg("Name")}" type="text"></vaadin-text-field></div>
-        <div><vaadin-text-area @change=${(e) => this.newAssignmentGroupInfo.description = e.target.value } outlined label="${msg("Description")}"></vaadin-text-area></div>
+        <div><vaadin-text-field .value=${this.editedAssignmentGroupInfo.name} .required=${true} @change=${(e) => this.editedAssignmentGroupInfo.name = e.target.value } outlined label="${msg("Name")}" type="text"></vaadin-text-field></div>
+        <div><vaadin-text-area .value=${this.editedAssignmentGroupInfo.description} @change=${(e) => this.editedAssignmentGroupInfo.description = e.target.value } outlined label="${msg("Description")}"></vaadin-text-area></div>
         <div class="manual_group_creation_view">
             <div class="students_list_container list_container">
                 ${this.studentTeams.length > 0 ? this.renderCreateDialogDraggableGrid(this.studentTeams[0], 0) : ""}
@@ -239,36 +353,28 @@ class AssignmentList extends connect(store)(LitElement){
     }
 
     private close() {
-        this.showCreateDialog = false;
+        this.showEditDialog = false;
     }
 
     renderDialogFooter() {
         return html`
             <vaadin-button @click="${this.close}">${msg("Cancel")}</vaadin-button>
-            <vaadin-button theme="primary" @click="${this.saveStudentTeams}">${msg("Create")}</vaadin-button>
+            <vaadin-button theme="primary" @click="${this.saveStudentTeams}">${msg("Save")}</vaadin-button>
         `
     }
 
-    renderCreateDialog(){
+    renderEditDialog(){
         // Add the students in this class to the first student team (= frow which to pick)
         return html`
         <vaadin-dialog
             resizable
             theme="primary"
             draggable
-            header-title="${msg("Create assignment")}"
-            .opened="${this.showCreateDialog}"
+            header-title="${msg("Edit assignment")}"
+            .opened="${this.showEditDialog}"
             @opened-changed="${(event: DialogOpenedChangedEvent) => {
-                this.showCreateDialog = event.detail.value;
-                // Set initial value when dialog is opened
-                if (this.showCreateDialog){
-                    this.studentTeams = [
-                        {
-                            name: "class",
-                            students: [...this.students]
-                        }
-                    ]
-                }
+                this.showEditDialog = event.detail.value;
+                
             }}"
             ${dialogRenderer(this.renderDialogContent, [this.students, this.studentTeams])}
             ${dialogFooterRenderer(this.renderDialogFooter, [])}
@@ -280,7 +386,9 @@ class AssignmentList extends connect(store)(LitElement){
             return html`
                 ${getGoogleMateriaIconsLinkTag()}
                 ${this.renderHeader()}
-                ${this.renderCreateDialog()}
+                ${this.renderAssignmentsOverview()}
+                ${this.renderEditDialog()}
+                ${this.showConfirmDialog ? this.renderConfirmDialog(this.itemSelectedToDelete?.name, this.itemSelectedToDelete?.uuid) : ""}
             `
     }
 

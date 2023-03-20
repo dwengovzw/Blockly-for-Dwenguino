@@ -9,5 +9,6 @@ let assignmentGroupRouter = express.Router()
 
 assignmentGroupRouter.get("/all/:classGroupUUID", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], assignmentGroupController.all)
 assignmentGroupRouter.put("/add/:classGroupUUID", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], assignmentGroupController.createForClassGroup)
+assignmentGroupRouter.delete("/:uuid", [verifyTokenAjax, verifyUserExists, roleCheck("teacher")], assignmentGroupController.delete)
 
 export default assignmentGroupRouter

@@ -1,9 +1,11 @@
 import mongoose from "mongoose"
+import { Document, Schema, model } from "mongoose"
 import db from "../config/db.config.js"
 //import { isEmail } from 'validator/es/index.js'
 import { IRole, RoleSchema } from './role.model.js'
 import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
 import  v4 from "uuid/v4.js"
+import { IPortfolio } from "./portfolio.model.js"
 
 
 interface IUserShared {
@@ -16,6 +18,7 @@ interface IUserShared {
     emailConfirmed?: boolean,
     emailConfirmationCode?: string,
     savedEnvironmentState?: ISavedEnvironmentState,
+    portfolios?: IPortfolio[],
     birthdate?: Date,
     schoolId?: String,
     grade?: String,
@@ -60,6 +63,14 @@ const UserSchemaFields: Record<keyof IUser, any> =
     emailConfirmed: Boolean,
     emailConfirmationCode: String,
     savedEnvironmentState: SavedEnvironmentStateSchema,
+    portfolios: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'Portfolio', 
+            required: true, 
+            default: []
+        }
+    ],
     birthdate: Date,
     roles: [{
             type: RoleSchema
