@@ -45,10 +45,15 @@ const AssignmentGroupSchema = new Schema<IAssignmentGroup>(AssignmentGroupFields
  * Recursively delete the student teams in this assignment group
  */
 AssignmentGroupSchema.pre('deleteOne', {document:true, query: false}, async function(next) {
-    this.studentTeams.forEach(async element => {
-        let bybyTeam = await StudentTeam.findOne({_id: element})
-        await bybyTeam.deleteOne()
-    })
+    try{
+        this.studentTeams.forEach(async element => {
+            let bybyTeam = await StudentTeam.findOne({_id: element})
+            if (bybyTeam) await bybyTeam.deleteOne()
+        })
+    } catch (e) {
+        console.log(e)
+    }
+    
 })
 
 const AssignmentGroup = model<IAssignmentGroup>('AssignmentGroup', AssignmentGroupSchema)

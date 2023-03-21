@@ -20,7 +20,7 @@ import type { GridDragStartEvent } from '@vaadin/grid';
 import { dialogFooterRenderer, dialogRenderer } from '@vaadin/dialog/lit.js';
 import type { DialogOpenedChangedEvent } from '@vaadin/dialog';
 import { UserInfo } from "../../state/features/user_slice";
-import { AssignmentGroupInfo, createAssignmentGroup, deleteAssignmentGroup, getAllAssignmentGroups } from "../../state/features/assignment_group_slice"
+import { AssignmentGroupInfo, saveAssignmentGroup, deleteAssignmentGroup, getAllAssignmentGroups } from "../../state/features/assignment_group_slice"
 import { StudentTeamInfo } from "../../state/features/student_team_slice";
 import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice";
 
@@ -101,18 +101,19 @@ class AssignmentList extends connect(store)(LitElement){
         if (!assignmentGroup){
             this.resetEditDialog()
         } else {
-            // Aggregate all students that have been teamed up in this assignmentGroup
-            let teamedUpStudents = assignmentGroup.studentTeams.reduce((reduced:UserInfo[], current) => {
-                return [...reduced, ...current.students]
+            // Aggregate all students that have been teamed up in this assignmentGroup by collecting their uuid
+            let teamedUpStudents = assignmentGroup.studentTeams.reduce((reduced:string[], current) => {
+                return [...reduced, ...current.students.map(student => student.uuid ? student.uuid : "")]
             }, [])
             // Filter out the students that have not been teamed up
             let remainingStudents: StudentTeamInfo = {
-                students: this.students.filter(student => {return !teamedUpStudents.includes(student)})
+                students: this.students.filter(student => {return student.uuid ? !teamedUpStudents.includes(student.uuid) : false})
             }
             // Create student teams array with the first item containing the remaining students
             this.studentTeams = [remainingStudents, ...assignmentGroup.studentTeams]
             this.editedAssignmentGroupInfo.name = assignmentGroup.name
             this.editedAssignmentGroupInfo.description = assignmentGroup.description
+            this.editedAssignmentGroupInfo.uuid = assignmentGroup.uuid
         }
         this.showEditDialog = true;
     }
@@ -159,6 +160,7 @@ class AssignmentList extends connect(store)(LitElement){
                 <vaadin-grid-column path="name"></vaadin-grid-column>
                 <vaadin-grid-column path="description"></vaadin-grid-column>
                 <vaadin-grid-column path="starred"></vaadin-grid-column>
+                <vaadin-grid-column path="uuid"></vaadin-grid-column>
                 <vaadin-grid-column path="inClassGroupUUID"></vaadin-grid-column>
                 <vaadin-grid-column
                 auto-width
@@ -204,7 +206,7 @@ class AssignmentList extends connect(store)(LitElement){
         }
         this.editedAssignmentGroupInfo.studentTeams = this.studentTeams.filter((element, i) => {return (i > 0 ? true : false)})
         this.editedAssignmentGroupInfo.inClassGroupUUID = this.classGroupUUID
-        store.dispatch(createAssignmentGroup(this.editedAssignmentGroupInfo))
+        store.dispatch(saveAssignmentGroup(this.editedAssignmentGroupInfo))
         this.showEditDialog = false;
     }
     
@@ -213,7 +215,7 @@ class AssignmentList extends connect(store)(LitElement){
         delete this.draggedItem;
       };
 
-      private renderCreateDialogDraggableGrid(team, index) {
+      private renderEditDialogDraggableGrid(team, index) {
         return html`
                     <div class="draggable_grid_container">
                         <vaadin-grid
@@ -259,7 +261,7 @@ class AssignmentList extends connect(store)(LitElement){
                     `
       }
 
-      private renderCreateDialogDraggableGridDeleteButton(team, index) {
+      private renderEditDialogDraggableGridDeleteButton(team, index) {
         return html`
             <vaadin-button 
                 theme="primary" 
@@ -327,14 +329,14 @@ class AssignmentList extends connect(store)(LitElement){
         <div><vaadin-text-area .value=${this.editedAssignmentGroupInfo.description} @change=${(e) => this.editedAssignmentGroupInfo.description = e.target.value } outlined label="${msg("Description")}"></vaadin-text-area></div>
         <div class="manual_group_creation_view">
             <div class="students_list_container list_container">
-                ${this.studentTeams.length > 0 ? this.renderCreateDialogDraggableGrid(this.studentTeams[0], 0) : ""}
+                ${this.studentTeams.length > 0 ? this.renderEditDialogDraggableGrid(this.studentTeams[0], 0) : ""}
             </div>
             <div class="students_teams_list_container list_container">
                 ${this.studentTeams.filter((element, i) => {return (i > 0 ? true : false)}).map((team, index) => {
                     return html`
                     <div class="teamcontainer">
-                        ${this.renderCreateDialogDraggableGrid(team, index+1)}
-                        ${this.renderCreateDialogDraggableGridDeleteButton(team, index+1)}
+                        ${this.renderEditDialogDraggableGrid(team, index+1)}
+                        ${this.renderEditDialogDraggableGridDeleteButton(team, index+1)}
                     </div>
                         `
                 })}

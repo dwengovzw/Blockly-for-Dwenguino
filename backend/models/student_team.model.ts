@@ -32,13 +32,19 @@ const StudentTeamSchema = new Schema<IStudentTeam>(StudentTeamFields)
 
 /**
  * When a student team is deleted the corresponding portfolio is attached to each student in the team.
+ * TODO: only do this when the portfolio has items, otherwise, remove.
  */
 StudentTeamSchema.pre("deleteOne", {document:true, query: false}, async function(next) {
-    let teamWithStudents = await this.populate<{students: IUser[], portfolio: IPortfolio}>("students portfolio")
-    teamWithStudents.students.forEach(student => {
-        student.portfolios.push(teamWithStudents.portfolio)
-    })
-    next()
+    try {
+        let teamWithStudents = await this.populate<{students: IUser[], portfolio: IPortfolio}>("students portfolio")
+        teamWithStudents.students.forEach(student => {
+            student.portfolios.push(teamWithStudents.portfolio)
+        })
+        next()
+    } catch (e) {
+        console.log(e)
+    }
+    
 })
 
 const StudentTeam = model<IStudentTeam>('StudentTeam', StudentTeamSchema)

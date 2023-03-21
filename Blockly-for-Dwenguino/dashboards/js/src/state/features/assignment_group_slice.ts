@@ -88,7 +88,7 @@ const getAllAssignmentGroups = (classGroupUUID: string) => {
     }
 }
 
-const createAssignmentGroup = (assignmentGroupInfo: AssignmentGroupInfo) => {
+const saveAssignmentGroup = (assignmentGroupInfo: AssignmentGroupInfo) => {
     return async (dispatch, getState) => {
         dispatch(loading())
         try {
@@ -129,4 +129,4 @@ const { addGroup, setGroups } = assignmentGroupSlice.actions
 
 const assignmentGroupReducer = assignmentGroupSlice.reducer
 
-export { AssignmentGroupInfo, assignmentGroupReducer, createAssignmentGroup, getAllAssignmentGroups, deleteAssignmentGroup }
+export { AssignmentGroupInfo, assignmentGroupReducer, saveAssignmentGroup, getAllAssignmentGroups, deleteAssignmentGroup }
