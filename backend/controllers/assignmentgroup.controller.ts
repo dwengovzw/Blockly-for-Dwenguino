@@ -1,7 +1,9 @@
+import { Types } from "mongoose"
 import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model.js"
 import { ClassGroup } from "../models/class_group.model.js"
+import { Portfolio } from "../models/portfolio.model.js"
 import { IStudentTeam, StudentTeam } from "../models/student_team.model.js"
-import { User } from "../models/user.model.js"
+import { User, IUser, IUserDoc } from "../models/user.model.js"
 
 class AssignmentGroupController {
     constructor() {
@@ -35,34 +37,44 @@ class AssignmentGroupController {
         }
     }
 
-    /*updateStudentTeams(currentTeams: IStudentTeam[], newTeams: IStudentTeam[]){
-        if (currentTeams.length <= newTeams.length){    // There were 0 or more new teams added
-            //Add extra teams to teams list
-            for (let i = 0 ; i < newTeams.length - currentTeams.length ; ++i){
-                let newTeam:IStudentTeam ={
-                    portfolio: null,
-                    students: []
-                } 
-                currentTeams.push()
-            }
-        } else { // There was at least one team removed
-            for (let i = 0 ; i < currentTeams.length - newTeams.length ; i++){
-                let team = currentTeams.pop()
-                StudentTeam.deleteOne({uuid: team.uuid})
-            }
+    updateStudentTeams = async (currentTeams: IStudentTeam[], newTeams: IStudentTeam[], teacher: IUserDoc): Promise<Types.ObjectId[]> => {
+        // Find the student teams that no longer exist = their uuid is not in the newTeams list
+        let teamsToRemove = currentTeams.filter(team => {
+            return !newTeams.map(newTeam => newTeam.uuid).includes(team.uuid)
+        })
+        // Remove them from the database
+        for (const team of teamsToRemove){
+            await StudentTeam.findOneAndDelete({uuid: team.uuid})
         }
-        // Update the existing items that stay the same
-        return await Promise.all(currentTeams.map(async (item, index) => {
-            item.uuid = newTeams[index].uuid
-            item.students = await Promise.all(newTeams[index].students.map( async (student) => {
-                let s = await User.findOne({uuid: student.uuid})
+        // Add new teams to the database
+        let newTeamIds = []
+        for (let newTeam of newTeams){
+            let newTeamToSave
+            if (newTeam.uuid){ // If team has uuid, it should exist
+                newTeamToSave = await StudentTeam.findOne({uuid: newTeam.uuid})
+                // No need to create portfolio here, should already exist.
+            }
+            if (!newTeamToSave){ // If team was new = no uuid, or not found => create new team
+                newTeamToSave = new StudentTeam()
+                let portfolioForTeam = await new Portfolio({
+                    name: "New portfolio",
+                    sharedWith: teacher._id
+                }).save() // Create new portfolio for this team
+                newTeamToSave.portfolio = portfolioForTeam
+            }
+            // Update the students in this team
+            newTeamToSave.students = await Promise.all(newTeam.students.map( async (student) => {
+                // Find the students and return their id
+                let s = await User.findOne({uuid: (student as IUser).uuid})
                 return s._id
             }))
-        }))
-    }*/
-
-    // TODO: continue here one monday.
-    async createForClassGroup(req, res){
+            let savedTeam = await newTeamToSave.save() // Save the new/updated team
+            newTeamIds.push(savedTeam._id) // Add to teams list
+        }
+        return newTeamIds // Return the new list of team ids
+    }
+    
+    createForClassGroup = async (req, res) => {
         try{
             let classGroupUUID = req.params.classGroupUUID
             let teacher = await User.findOne({userId: req.userId, platform: req.platform})
@@ -72,33 +84,19 @@ class AssignmentGroupController {
                     $in: [ teacher._id ]
                 }
             })
-            /*let assignment = await AssignmentGroup.findOne({uuid: req.body.uuid})
-            if (assignment){
-                assignment = new AssignmentGroup()
+            let assignment
+            if (req.body.uuid){
+                assignment = await AssignmentGroup.findOne({uuid: req.body.uuid}).populate("studentTeams").exec()
+            }
+            if (!assignment){
+                assignment = await new AssignmentGroup()
             }
             assignment.inClassGroup = classGroup._id
-            assignment.studentTeams = this.updateStudentTeams(assignment.studentTeams as IStudentTeam[], req.body.studentTeams)*/
-
-
-            let assignment = new AssignmentGroup({
-                inClassGroup: classGroup._id,
-                studentTeams: await Promise.all(req.body.studentTeams.map( async (team) => {
-                    let st = new StudentTeam(
-                        {
-                            students: await Promise.all(team.students.map( async (student) => {
-                                let s = await User.findOne({uuid: student.uuid})
-                                return s._id
-                            }))
-                        }
-                    )
-                    return (await st.save())._id
-                })),
-                name: req.body.name,
-                description: req.body.description,
-                starred: req.body.starred,
-            })
+            assignment.studentTeams = await this.updateStudentTeams(assignment.studentTeams as IStudentTeam[], req.body.studentTeams, teacher)
+            assignment.name = req.body.name
+            assignment.description = req.body.description
+            assignment.starred = req.body.starred
             let savedAssignment = await assignment.save()
-            console.log(savedAssignment)
             res.status(200).json({message: "Assignment successfuly created", uuid: savedAssignment.uuid})
         } catch (e) {
             res.status(500).send({message: "Unable to create assignment"})

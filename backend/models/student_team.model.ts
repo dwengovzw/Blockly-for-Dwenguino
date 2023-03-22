@@ -1,4 +1,4 @@
-import { Document, Schema, model } from "mongoose"
+import { Document, Schema, model, Types } from "mongoose"
 import { ID } from "./modelutils.js"
 import { IUser, User } from "./user.model.js"
 import { IPortfolio } from "./portfolio.model.js"

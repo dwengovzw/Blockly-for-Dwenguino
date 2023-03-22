@@ -12,7 +12,6 @@ interface IPortfolio {
     description?: string,
     sharedWith?: PopulatedDoc<IUser>[],
     isPublic: boolean,
-    publicId?: string,
     folder?: string,
     items: PopulatedDoc<IPortfolioItem>[]
 }
@@ -24,11 +23,13 @@ const PortfolioFields: Record<keyof IPortfolio, any> = {
     },
     created: {
         type: Date,
-        required: true
+        required: true,
+        default: new Date()
     },
     lastEdited: {
         type: Date,
-        required: true
+        required: true,
+        default: new Date()
     },
     name: {
         type: String,
@@ -45,11 +46,6 @@ const PortfolioFields: Record<keyof IPortfolio, any> = {
         type: Boolean,
         required: true,
         default: false
-    },
-    publicId: {      // UUID (different from the automatically generated _id)
-        type: String,
-        required: true,
-        default: v4, // Use automatically generated uuid as identifier (unique in combination with version and language)
     },
     folder: {
         type: String
