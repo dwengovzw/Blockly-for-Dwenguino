@@ -104,9 +104,24 @@ class AssignmentGroupController {
     }
 
     async delete(req, res){
-        let assignmentUUID = req.params.uuid
         try{
-            let bybyGroup = await AssignmentGroup.findOne({uuid: assignmentUUID})
+            let assignmentUUID = req.params.uuid
+            let teacher = await User.findOne({userId: req.userId, platform: req.platform})
+            let classGroupsOwnedByLoggedInUser = await ClassGroup.find({
+                ownedBy: {
+                    $in: [ teacher._id ]
+                }
+            })
+            let bybyGroup = await AssignmentGroup.findOne({
+                uuid: assignmentUUID,
+                inClassGroup: {
+                    $in: classGroupsOwnedByLoggedInUser.map(cg => cg._id)
+                }
+            })
+            if (!bybyGroup){
+                res.status(404).send({message: "Assignment not found"})
+                return  
+            }
             await bybyGroup.deleteOne()
             res.status(200).send({message: "Assignment succesfully deleted."})
         } catch (e) {
@@ -114,6 +129,31 @@ class AssignmentGroupController {
         }
         
     }
+
+    async favorite(req, res){
+        try {
+            let assignmentUUID = req.params.uuid
+            let teacher = await User.findOne({userId: req.userId, platform: req.platform})
+            let classGroupsOwnedByLoggedInUser = await ClassGroup.find({
+                ownedBy: {
+                    $in: [ teacher._id ]
+                }
+            })
+            let groupToFavorite = await AssignmentGroup.findOne({
+                uuid: assignmentUUID,
+                inClassGroup: {
+                    $in: classGroupsOwnedByLoggedInUser.map(cg => cg._id)
+                }
+            })
+            groupToFavorite.starred = req.body.favorite
+            await groupToFavorite.save()
+            res.status(200).send({message: "Assignment succesfully favorited."})
+        } catch (e) {
+            res.status(500).send({message: "An error occured when removing the assignment"})
+        }
+        
+    }
+
 }
 
 export { AssignmentGroupController }

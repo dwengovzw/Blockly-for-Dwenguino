@@ -2,19 +2,24 @@ import { msg } from "@lit/localize"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { state } from "lit/decorators"
 import { NotificationInfo, setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth } from "../../middleware/fetch"
+import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
-
-interface UserInfo {
-    uuid?: string,
-    loggedIn: boolean,
+interface MinimalUserInfo {
     firstname: string,
     lastname: string,
-    email: string,
-    platform?: string,
-    birthdate: string | null,
+    uuid: string
+}
+
+interface MiniamLoggedInUserInfo extends MinimalUserInfo {
+    loggedIn: boolean,
+    platform: string,
     roles: string[]
+}
+
+interface UserInfo extends MiniamLoggedInUserInfo{
+    email: string,
+    birthdate: string | null,
 }
 
 const initialUserState: UserInfo = {
@@ -24,7 +29,8 @@ const initialUserState: UserInfo = {
     email: "",
     platform: "unknown",
     birthdate: null,
-    roles: []
+    roles: [],
+    uuid: ""
 }
 
 export const userSlice = createSlice({
@@ -53,23 +59,10 @@ export const userSlice = createSlice({
 })
 
 const putUserInfo = (userInfo) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/user/info`, {
-                method: "PUT", 
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(userInfo)
-            })
-            let info: UserInfo = await response.json();
-            dispatch(setInfo(info))
-            dispatch(setNotificationMessage(msg("Profile info saved :)"), NotificationMessageType.MESSAGE, 2500))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error while saving!"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/user/info`, "PUT", (dispatch: any, getState: any, json: any) => {
+        dispatch(setInfo(json))
+        dispatch(setNotificationMessage(msg("Profile info saved :)"), NotificationMessageType.MESSAGE, 2500))
+    }, userInfo, msg("Error while saving!"))
 }
 
 
@@ -105,4 +98,4 @@ const { login, logout, setInfo } = userSlice.actions
 
 const userReducer = userSlice.reducer
 
-export { userReducer, fetchUserInfo, login, logout, UserInfo, initialUserState, putUserInfo }
+export { userReducer, fetchUserInfo, login, logout, UserInfo, MiniamLoggedInUserInfo, MinimalUserInfo, initialUserState, putUserInfo }

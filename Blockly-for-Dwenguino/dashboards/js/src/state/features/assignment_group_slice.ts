@@ -1,9 +1,9 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
 import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth } from "../../middleware/fetch"
+import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
-import { UserInfo } from "./user_slice"
+import { MinimalUserInfo } from "./user_slice"
 import { ClassGroupInfo } from "./class_group_slice"
 import { StudentTeamInfo } from "./student_team_slice"
 
@@ -47,86 +47,60 @@ export const assignmentGroupSlice = createSlice({
 })
 
 const getAllAssignmentGroups = (classGroupUUID: string) => {
-    return async (dispatch, getState) => {
-        dispatch(loading())
-        try {
-            const response = await fetchAuth(`${globalSettings.hostname}/assignment/all/${classGroupUUID}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json"},
-            })
-            let json = await response.json()
-            let groups: AssignmentGroupInfo[] = json.map(
-                (assignmentGroup) => {
-                    return {
-                        uuid: assignmentGroup.uuid,
-                        name: assignmentGroup.name,
-                        description: assignmentGroup.description,
-                        starred: assignmentGroup.starred,
-                        inClassGroupUUID: classGroupUUID,
-                        studentTeams: assignmentGroup.studentTeams.map((team) => {
-                            let sTeam: StudentTeamInfo = {
-                                uuid: team.uuid,
-                                students: team.students.map((student) => {
-                                    return {
-                                        firstname: student.firstname,
-                                        lastname: student.lastname,
-                                        uuid: student.uuid
-                                    }
-                                })
-                            }
-                            return sTeam
-                        })
-                    }
+    return createRequestMiddleware(`${globalSettings.hostname}/assignment/all/${classGroupUUID}`, "GET", (dispatch, getState, json) => {
+        let groups: AssignmentGroupInfo[] = json.map(
+            (assignmentGroup: AssignmentGroupInfo) => {
+                return {
+                    uuid: assignmentGroup.uuid,
+                    name: assignmentGroup.name,
+                    description: assignmentGroup.description,
+                    starred: assignmentGroup.starred,
+                    inClassGroupUUID: classGroupUUID,
+                    studentTeams: assignmentGroup.studentTeams.map((team) => {
+                        let sTeam: StudentTeamInfo = {
+                            uuid: team.uuid,
+                            students: team.students.map((student) => {
+                                let s: MinimalUserInfo = {
+                                    firstname: student.firstname,
+                                    lastname: student.lastname,
+                                    uuid: student.uuid,
+
+                                }
+                                return s
+                            })
+                        }
+                        return sTeam
+                    })
                 }
-            )
-            dispatch(setGroups(groups))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error getting assignments"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+            }
+        )
+        dispatch(setGroups(groups))
+    }, {}, msg("Error getting assignments"))
 }
 
 const saveAssignmentGroup = (assignmentGroupInfo: AssignmentGroupInfo) => {
-    return async (dispatch, getState) => {
-        dispatch(loading())
-        try {
-            const response = await fetchAuth(`${globalSettings.hostname}/assignment/add/${assignmentGroupInfo.inClassGroupUUID}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(assignmentGroupInfo)
-            })
-            let json = await response.json()
-            dispatch(getAllAssignmentGroups(assignmentGroupInfo.inClassGroupUUID))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error adding assignment"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/assignment/add/${assignmentGroupInfo.inClassGroupUUID}`, "PUT", (dispatch, getState, json) => {
+        dispatch(getAllAssignmentGroups(assignmentGroupInfo.inClassGroupUUID))
+    }, assignmentGroupInfo, msg("Error adding assignment"))
 }
 
 const deleteAssignmentGroup = (classGroupUUID: string, assignmentUUID: string) => {
-    return async (dispatch, getState) => {
-        dispatch(loading())
-        try {
-            const response = await fetchAuth(`${globalSettings.hostname}/assignment/${assignmentUUID}`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json"}
-            })
-            let json = await response.json()
+    return createRequestMiddleware(`${globalSettings.hostname}/assignment/${assignmentUUID}`, "DELETE", (dispatch, getState, json) => {
+        dispatch(getAllAssignmentGroups(classGroupUUID))
+    }, {}, msg("Error deleting assignment"))
+
+}
+
+const favortieAssignmentGroup = (classGroupUUID: string, assignmentUUID: string, isFavorite:boolean) => {
+    return createRequestMiddleware(
+        `${globalSettings.hostname}/assignment/favorite/${assignmentUUID}`, "PUT", (dispatch, getState, json) => {
             dispatch(getAllAssignmentGroups(classGroupUUID))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error adding assignment"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+        }, {favorite: isFavorite}, msg("Error starring assignment")
+    )
 }
 
 const { addGroup, setGroups } = assignmentGroupSlice.actions
 
 const assignmentGroupReducer = assignmentGroupSlice.reducer
 
-export { AssignmentGroupInfo, assignmentGroupReducer, saveAssignmentGroup, getAllAssignmentGroups, deleteAssignmentGroup }
+export { AssignmentGroupInfo, assignmentGroupReducer, saveAssignmentGroup, getAllAssignmentGroups, deleteAssignmentGroup, favortieAssignmentGroup }

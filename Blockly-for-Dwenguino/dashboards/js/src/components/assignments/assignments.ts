@@ -15,12 +15,13 @@ import '@vaadin/dialog';
 import '@vaadin/text-field';
 import '@vaadin/text-area';
 import '@vaadin/button';
+import "../util/star-checkbox"
 import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import type { GridDragStartEvent } from '@vaadin/grid';
 import { dialogFooterRenderer, dialogRenderer } from '@vaadin/dialog/lit.js';
 import type { DialogOpenedChangedEvent } from '@vaadin/dialog';
 import { UserInfo } from "../../state/features/user_slice";
-import { AssignmentGroupInfo, saveAssignmentGroup, deleteAssignmentGroup, getAllAssignmentGroups } from "../../state/features/assignment_group_slice"
+import { AssignmentGroupInfo, saveAssignmentGroup, deleteAssignmentGroup, getAllAssignmentGroups, favortieAssignmentGroup } from "../../state/features/assignment_group_slice"
 import { StudentTeamInfo } from "../../state/features/student_team_slice";
 import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice";
 
@@ -157,11 +158,28 @@ class AssignmentList extends connect(store)(LitElement){
     renderAssignmentsOverview(){
         return html`
             <vaadin-grid .items="${this.assignmentGroups}">
+            
                 <vaadin-grid-column path="name"></vaadin-grid-column>
                 <vaadin-grid-column path="description"></vaadin-grid-column>
-                <vaadin-grid-column path="starred"></vaadin-grid-column>
-                <vaadin-grid-column path="uuid"></vaadin-grid-column>
-                <vaadin-grid-column path="inClassGroupUUID"></vaadin-grid-column>
+                <vaadin-grid-column 
+                    path="starred"
+                    ${columnBodyRenderer(
+                        (assignmentGroup: AssignmentGroupInfo) => html`
+                            <star-checkbox  
+                                .checked=${assignmentGroup.starred}
+                                @click=${
+                                    (e)=>{
+                                        if (assignmentGroup.uuid) {
+                                            store.dispatch(
+                                                favortieAssignmentGroup(
+                                                    this.classGroupUUID, 
+                                                    assignmentGroup.uuid, 
+                                                    e.target.checked))}}}>
+                            </star-checkbox>`,
+                        []
+                    )}
+                    >
+                </vaadin-grid-column>
                 <vaadin-grid-column
                 auto-width
                 flex-grow="0"

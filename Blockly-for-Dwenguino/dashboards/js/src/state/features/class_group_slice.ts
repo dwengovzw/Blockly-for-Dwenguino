@@ -1,7 +1,7 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
 import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth } from "../../middleware/fetch"
+import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 import { UserInfo } from "./user_slice"
 
@@ -61,123 +61,40 @@ export const classGroupSlice = createSlice({
 })
 
 const addClassGroup = (classGroupInfo) => {
-    return async (dispatch, getState) =>{
-        dispatch(loading())
-        try {
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/add`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json"},
-                body: JSON.stringify(classGroupInfo)
-            })
-            let json = await response.json()
-            dispatch(getAllClassGroups())
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error adding classgroup"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/add`, "PUT", (dispatch, getState, json) => {
+        dispatch(getAllClassGroups())
+    }, classGroupInfo, msg("Error adding classgroup"))
 }
 
 const getAllClassGroups = () => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/all`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json"}
-            })
-            let json = await response.json()
-            let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid, createdAt: (new Date(info.createdAt)).toLocaleDateString(msg("en-GB")).split("T")[0]}})
-            dispatch(setGroups(groups))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error getting classgroup"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/all`, "GET", (dispatch, getState, json) => {
+        let groups: ClassGroupInfo[] = json.map((info) => {return {name: info.name, description: info.description, sharingCode: info.sharingCode, uuid: info.uuid, createdAt: (new Date(info.createdAt)).toLocaleDateString(msg("en-GB")).split("T")[0]}})
+        dispatch(setGroups(groups))
+    }, {}, msg("Error getting classgroup"))
 }
 
 const deleteClassGroup = (uuid: string) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/delete/${uuid}`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json"}
-            })
-            dispatch(getAllClassGroups())
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error deleting classgroup"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/delete/${uuid}`, "DELETE", (dispatch, getState, json) => {
+        dispatch(getAllClassGroups())
+    }, {}, msg("Error deleting classgroup"))
 }
 
 const getClassGroup = (uuid: string) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/${uuid}`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json"}
-            })
-            let group = await response.json()
-            dispatch(setCurrentGroup(group))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Unable to get classgroup."), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/${uuid}`, "GET", (dispatch, getState, json) => {
+        dispatch(setCurrentGroup(json))
+    }, {}, msg("Error getting classgroup"))
 }
 
 const approveStudent = (classGroupUuid: string, studentUuid: string, approve: boolean) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            let route = ""
-            let method = ""
-            if (approve){
-                route = `${globalSettings.hostname}/classgroup/${classGroupUuid}/approve/${studentUuid}`
-                method = "PUT"
-            } else {
-                route = `${globalSettings.hostname}/classgroup/${classGroupUuid}/reject/${studentUuid}`
-                method = "DELETE"
-            }
-            const response = await fetchAuth(route, {
-                method: method,
-                headers: { "Content-Type": "application/json"}
-            })
-            let resp = await response.json()
-            dispatch(getClassGroup(classGroupUuid))
-        }catch (err) {
-            dispatch(setNotificationMessage(msg("Unable to approve student."), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/${classGroupUuid}/${approve ? "approve" : "reject"}/${studentUuid}`, approve ? "PUT" : "DELETE", (dispatch, getState, json) => {
+        dispatch(getClassGroup(classGroupUuid))
+    }, {}, msg("Error approving student"))
 }
 
 const deleteStudent = (classGroupUuid: string, studentUuid) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            let route = `${globalSettings.hostname}/classgroup/${classGroupUuid}/delete/${studentUuid}`
-            let method = "DELETE"
-            const response = await fetchAuth(route, {
-                method: method,
-                headers: { "Content-Type": "application/json"}
-            })
-            let resp = await response.json()
-            dispatch(getClassGroup(classGroupUuid))
-        }catch (err) {
-            dispatch(setNotificationMessage(msg("Unable to delete student."), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/${classGroupUuid}/delete/${studentUuid}`, "DELETE", (dispatch, getState, json) => {
+        dispatch(getClassGroup(classGroupUuid))
+    }, {}, msg("Error deleting student"))
 }
 
 

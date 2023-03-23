@@ -26,7 +26,7 @@ let verifyToken = (req, res, next) => {
 let verifyTokenAjax = (req, res, next) => {
     verifyTokenWithRedirect(req, res, next, ((requ, resp) => {
         resp.loggedIn = false;
-        return resp.status(401).send()
+        return resp.status(401).send({message: "You are not logged in!"})
     }))
 }
 
@@ -57,7 +57,7 @@ let verifyUserExists = (req, res, next) => {
             return
         }
         if (!user){
-            res.status(401).send("User does not exist!")
+            res.status(401).send({message: "User does not exist!"})
             return
         }
         next();
@@ -78,7 +78,7 @@ let roleCheck = (role) => {
             platform: req.platform})
         .exec((err, user) => {
             if (err || !user){
-                res.status(500).send("User does not exist")
+                res.status(500).send({message: "User does not exist"})
             }
             for (let i = 0; i < user.roles.length; i++) {
                 if (user.roles[i].name === role) {

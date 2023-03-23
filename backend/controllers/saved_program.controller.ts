@@ -24,7 +24,7 @@ class SavedProgramController {
                     user: user._id
                 })
                 prog.save()
-                return res.status(200).send("")
+                return res.status(200).send({message: "Saved program"})
             } catch (err){
                 return res.status(500).send({message: "Unable to retrieve user"})
             }
@@ -40,10 +40,10 @@ class SavedProgramController {
                 user: user._id,
                 uuid: req.params.uuid
             })
-            res.status(200).send()
+            res.status(200).send({message: "Saved program removed"})
         } catch (err) {
             console.log(err)
-            res.status(500).send("Failed to remove saved program")
+            res.status(500).send({message: "Failed to remove saved program"})
         }
     }
 
@@ -59,10 +59,10 @@ class SavedProgramController {
                 let savedPrograms = await SavedProgram.find({user: user._id})
                 res.status(200).json(savedPrograms)
             } catch (e){
-                res.status(500).send("Unable to fetch saved programs")
+                res.status(500).send({message: "Unable to fetch saved programs"})
             }
         } else {
-            res.status(401).send("Unable to fetch saved programs")
+            res.status(401).send({message: "Unable to fetch saved programs"})
         }
     }
 
@@ -79,10 +79,10 @@ class SavedProgramController {
                 let savedProgram = await SavedProgram.findOne({user: user._id, uuid: uuid})
                 processStartBlocks(savedProgram.blocklyXml, res)
             } catch (e){
-                res.status(500).send("Unable to fetch saved programs")
+                res.status(500).send({message: "Unable to fetch saved programs"})
             }
         } else {
-            res.status(401).send("Unable to fetch saved programs")
+            res.status(401).send({message: "Unable to fetch saved programs"})
         }
     }
 }

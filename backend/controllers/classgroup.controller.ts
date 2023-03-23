@@ -64,7 +64,7 @@ class ClassGroupController {
             res.status(200).json(classGroups)
         } catch (err) {
             console.log(err)
-            res.status(500).send()
+            res.status(500).send({message: "Failed to get classgroups"})
         }
     }
 
@@ -110,7 +110,7 @@ class ClassGroupController {
                 },
                 uuid: req.params.uuid
             })
-            res.status(200).send()
+            res.status(200).send({message: "Classgroup successfuly removed"})
         } catch (err) {
             console.log(err)
             res.status(500).send("Failed to remove classgroup")
@@ -202,9 +202,9 @@ class ClassGroupController {
             let classGroup = await ClassGroup.findOne({sharingCode: sharingCode})
             classGroup.awaitingStudents.push(student._id)
             classGroup.save()
-            res.status(200).send("Joind classgroup awaiting approval.")
+            res.status(200).send({message: "Joined classgroup awaiting approval."})
         } catch (e) {
-            res.status(500).send("Error joining class groups.")
+            res.status(500).send({message: "Error joining class groups."})
         }
     }
 

@@ -1,7 +1,7 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
 import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth } from "../../middleware/fetch"
+import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
 
 interface StudentClassGroupInfo {
     uuid : string,
@@ -38,62 +38,26 @@ export const studentClassGroupSlice = createSlice({
 })
 
 const getAllStudentClassGroups = () => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/mine`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json" }
-            })
-            let json = await response.json()
-            let groups: StudentClassGroupInfo[] = json.classGroups.map((info) => {return {uuid: info.uuid, description: info.description, name: info.name}})
-            let pending:  StudentClassGroupInfo[] = json.pendingClassGroups.map((info) => {return {uuid: info.uuid, description: info.description, name: info.name}})
-            dispatch(setGroups(groups))
-            dispatch(setPending(pending))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error getting classgroup"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/mine`, "GET", (dispatch: any, getState: any, json: any) => {
+        let groups: StudentClassGroupInfo[] = json.classGroups.map((info) => {return {uuid: info.uuid, description: info.description, name: info.name}})
+        let pending:  StudentClassGroupInfo[] = json.pendingClassGroups.map((info) => {return {uuid: info.uuid, description: info.description, name: info.name}})
+        dispatch(setGroups(groups))
+        dispatch(setPending(pending))
+        }, null, msg("Error getting classgroup"))
 }
 
 const leaveClassGroup = (uuid) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/leave/${uuid}`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json" }
-            })
-            let json = await response.json()
-            dispatch(setNotificationMessage(msg("Left classgroup " + uuid), NotificationMessageType.MESSAGE, 2500))
-            dispatch(getAllStudentClassGroups())
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error leaving classgroup"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/leave/${uuid}`, "DELETE", (dispatch: any, getState: any, json: any) => {
+        dispatch(setNotificationMessage(msg("Left classgroup ") + uuid, NotificationMessageType.MESSAGE, 2500))
+        dispatch(getAllStudentClassGroups())
+    }, null, msg("Error leaving classgroup"))
 }
 
 const joinClassGroup = (sharingCode) => {
-    return async (dispatch, getState) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/classgroup/join/${sharingCode}`,
-            {
-                method: "PUT",
-                headers: { "Content-Type": "application/json"}
-            })
-            dispatch(setNotificationMessage(msg("Joined classgroup, awaiting approval by teacher"), NotificationMessageType.MESSAGE, 2500))
-            dispatch(getAllStudentClassGroups())
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error joining classgroup"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/classgroup/join/${sharingCode}`, "PUT", (dispatch: any, getState: any, json: any) => {
+        dispatch(setNotificationMessage(msg("Joined classgroup, awaiting approval by teacher"), NotificationMessageType.MESSAGE, 2500))
+        dispatch(getAllStudentClassGroups())
+    }, null, msg("Error joining classgroup"))
 }
 
 const { setGroups, setPending, removeGroup, removePending } = studentClassGroupSlice.actions

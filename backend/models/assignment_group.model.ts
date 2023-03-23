@@ -53,7 +53,6 @@ AssignmentGroupSchema.pre('deleteOne', {document:true, query: false}, async func
     } catch (e) {
         console.log(e)
     }
-    
 })
 
 const AssignmentGroup = model<IAssignmentGroup>('AssignmentGroup', AssignmentGroupSchema)

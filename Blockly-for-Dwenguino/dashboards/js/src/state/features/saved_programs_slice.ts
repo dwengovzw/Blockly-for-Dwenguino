@@ -1,7 +1,7 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
 import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth } from "../../middleware/fetch"
+import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
 import { LoadableState } from "../../util"
 
 interface SavedProgramInfo {
@@ -43,43 +43,16 @@ export const savedProgramsSlice = createSlice({
 })
 
 const getAllSavedPrograms = () => {
-    return async (dispatch: any, getState: any) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/savedprograms/all`, {
-                method: "GET",
-                headers: { "Content-Type": "application/json"}
-            })
-            let json = await response.json()
-            let progs: SavedProgramInfo[] = json.map((savedProgram) => {return {uuid: savedProgram.uuid, blocklyXml: savedProgram.blocklyXml, savedAt: savedProgram.savedAt, name: savedProgram.name}})
-            dispatch(setPrograms(progs))
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error getting saved programs"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/savedprograms/all`, "GET", (dispatch: any, getState: any, json: any) => {
+        let progs: SavedProgramInfo[] = json.map((savedProgram:any) => {return {uuid: savedProgram.uuid, blocklyXml: savedProgram.blocklyXml, savedAt: savedProgram.savedAt, name: savedProgram.name}})
+        dispatch(setPrograms(progs))
+    }, null, msg("Error getting saved programs"))
 }
 
 const deleteSavedProgram = (uuid: string) => {
-    return async (dispatch: any, getState: any) => {
-        try {
-            dispatch(loading())
-            const response = await fetchAuth(`${globalSettings.hostname}/savedprograms/delete/${uuid}`, {
-                method: "DELETE",
-                headers: { "Content-Type": "application/json"}
-            })
-            if (response.status == 200){
-                dispatch(getAllSavedPrograms())
-            } else {
-                dispatch(setNotificationMessage(msg("Error deleting saved program"), NotificationMessageType.ERROR, 2500))
-            }
-        } catch (err) {
-            dispatch(setNotificationMessage(msg("Error deleting saved program"), NotificationMessageType.ERROR, 2500))
-        } finally {
-            dispatch(doneLoading())
-        }
-    }
+    return createRequestMiddleware(`${globalSettings.hostname}/savedprograms/delete/${uuid}`, "DELETE", (dispatch: any, getState: any, json: any) => {
+        dispatch(getAllSavedPrograms())
+    }, null, msg("Error deleting saved program"))
 }
 
 const { addProgram, setPrograms } = savedProgramsSlice.actions

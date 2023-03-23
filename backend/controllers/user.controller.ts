@@ -67,7 +67,7 @@ class UserController {
                 await user.save();
                 return res.status(200).json(userInfo)
             } catch (err) {
-                return res.status(500).send("Unable to complete request");
+                return res.status(500).send({message: "Unable to complete request"})
             }
         }
     }
@@ -77,7 +77,7 @@ class UserController {
             let user = await User.findOne({uuid: req.params.uuid}).select("firstname lastname")
             return res.status(200).json(user)
         } catch (err) {
-            return res.status(500).send("Unable to complete request");
+            return res.status(500).send({message: "Unable to complete request"})
         }
         
 
