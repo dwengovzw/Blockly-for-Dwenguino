@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { PopulatedDoc } from 'mongoose';
 import { Document, Schema, model } from "mongoose"
 import db from "../config/db.config.js"
 //import { isEmail } from 'validator/es/index.js'
@@ -18,7 +19,7 @@ interface IUserShared {
     emailConfirmed?: boolean,
     emailConfirmationCode?: string,
     savedEnvironmentState?: ISavedEnvironmentState,
-    portfolios?: IPortfolio[],
+    portfolios: PopulatedDoc<IPortfolio>[] | IPortfolio[],
     birthdate?: Date,
     schoolId?: String,
     grade?: String,

@@ -7,6 +7,7 @@ import { savedProgramsReducer } from './features/saved_programs_slice'
 import { studentClassGroupReducer } from "./features/student_class_group_slice"
 import { publicProfileInfoReducer } from './features/public_profile_slice'
 import { assignmentGroupReducer } from "./features/assignment_group_slice"
+import { portfolioReducer } from "./features/portfolio_slice"
 
 const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
         studentClassGroup: studentClassGroupReducer,
         publicProfile: publicProfileInfoReducer, 
         assignments: assignmentGroupReducer,
+        portfolio: portfolioReducer
     }
 })
 

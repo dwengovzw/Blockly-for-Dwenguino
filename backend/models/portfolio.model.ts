@@ -4,16 +4,19 @@ import { IPortfolioItem } from "./portfolio_items/portfolio_item.model.js";
 import { PopulatedDoc } from 'mongoose';
 import { IUser } from "./user.model.js";
 
-interface IPortfolio {
-    uuid?: string,
+interface INewPortfolio {
     created: Date,
     lastEdited: Date,
     name: string,
     description?: string,
-    sharedWith?: PopulatedDoc<IUser>[],
+    sharedWith?: PopulatedDoc<IUser>[] | IUser[],
     isPublic: boolean,
     folder?: string,
-    items: PopulatedDoc<IPortfolioItem>[]
+    items: PopulatedDoc<IPortfolioItem>[] | IPortfolioItem[]
+}
+
+interface IPortfolio extends INewPortfolio {
+    uuid: string,
 }
 const PortfolioFields: Record<keyof IPortfolio, any> = {
     uuid: {
@@ -62,5 +65,6 @@ const Portfolio = model<IPortfolio>('Portfolio', PortfolioSchema)
 
 export {
     IPortfolio,
-    Portfolio
+    Portfolio,
+    INewPortfolio
 }

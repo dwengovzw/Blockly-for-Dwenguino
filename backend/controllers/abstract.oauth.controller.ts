@@ -93,6 +93,7 @@ class AbstractOAuthController {
             email: minUserInfo.getEmail(),
             firstname: minUserInfo.getFirstName(),
             lastname: minUserInfo.getLastName(),
+            portfolios: [],
             roles: roles
         }
         const user = new User(userInit)

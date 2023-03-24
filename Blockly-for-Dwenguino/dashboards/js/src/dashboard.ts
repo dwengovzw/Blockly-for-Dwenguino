@@ -14,6 +14,7 @@ import "./components/classes/classes"
 import "./components/classes/class"
 import "./components/classes/student_classes"
 import "./components/savedprograms/list"
+import "./components/portfolios/list"
 
 // Polyfill URLPattern
 import {URLPattern} from "urlpattern-polyfill";
@@ -35,7 +36,8 @@ class Dashboard extends connect(store)(LitElement) {
         {path: `${this.urlPrefix}/dashboard/classes*`, enter: async () => {this.selectedId = "classgroups"; return true}, render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
         {path: `${this.urlPrefix}/dashboard/studentclasses`, enter: async () => {this.selectedId = "studentclassgroups"; return true}, render: () => html`<dwengo-student-classes-page></dwengo-student-classes-page>`},
         //{path: `${this.urlPrefix}/dashboard/class/:uuid`, render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
-        {path: `${this.urlPrefix}/dashboard/savedprograms`, enter: async () => {this.selectedId = "savedprograms"; return true}, render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`}
+        {path: `${this.urlPrefix}/dashboard/savedprograms`, enter: async () => {this.selectedId = "savedprograms"; return true}, render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`},
+        {path: `${this.urlPrefix}/dashboard/portfolios`, enter: async () => {this.selectedId = "portfolios"; return true}, render: ({uuid}) => html`<dwengo-portfolios-list></dwengo-portfolios-list>`},
     ]);
 
     createRenderRoot() {

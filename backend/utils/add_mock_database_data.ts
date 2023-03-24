@@ -1,8 +1,8 @@
-import { User, IUser } from "../models/user.model.js"
+import { User, IUser, IUserDoc } from "../models/user.model.js"
 import { StudentTeam, IStudentTeam } from "../models/student_team.model.js"
 import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model.js"
 import { ClassGroup, IClassGroup } from "../models/class_group.model.js"
-import { Portfolio, IPortfolio } from "../models/portfolio.model.js"
+import { Portfolio, INewPortfolio, IPortfolio } from "../models/portfolio.model.js"
 import { PortfolioItem, IPortfolioItem } from "../models/portfolio_items/portfolio_item.model.js"
 import { OpenQuestionItem, IOpenQuestionItem } from "../models/portfolio_items/open_question_item.model.js"
 import { TextItem, ITextItem } from "../models/portfolio_items/text_item.model.js"
@@ -11,77 +11,118 @@ import { makeSharingCode } from "./utils.js"
 import { Role } from "../models/role.model.js"
 
 const mockDatabaseData = async () => {
-    // Add default roles 
-    let adminData: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "admin",
-        birthdate: new Date(1990, 6, 20),
-        email: "tom@dwengo.org",
-        firstname: "Tom",
-        lastname: "Neutens",
-        roles: [db.ROLES.user, db.ROLES.teacher, db.ROLES.student, db.ROLES.admin].map(role => new Role({name: role})),
-    }
-    let admin = new User(adminData)
-
-    let teacher1Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "teacher1",
-        email: "natacha@dwengo.org",
-        firstname: "Natacha",
-        roles: [db.ROLES.user, db.ROLES.teacher].map(role => new Role({name: role})),
-    }
-    let teacher1 = new User(teacher1Data)
-
-    let teacher2Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "teacher2",
-        email: "bjarne@dwengo.org",
-        firstname: "Bjarne",
-        roles: [db.ROLES.user, db.ROLES.teacher].map(role => new Role({name: role})),
-    }
-    let teacher2 = new User(teacher2Data)
-
-    let student1Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "student1",
-        firstname: "Raf",
-        roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
-    }
-    let student1 = new User(student1Data)
-
-    let student2Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "student2",
-        firstname: "Jana",
-        roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
-    }
-    let student2 = new User(student2Data)
-
-    let student3Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "student3",
-        firstname: "Mat",
-        roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
-    }
-    let student3 = new User(student3Data)
-
-    let student4Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "student4",
-        firstname: "Lisa",
-        roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
-    }
-    let student4 = new User(student4Data)
-
-    let student5Data: IUser = {
-        platform: db.PLATFORMS.test,
-        userId: "student5",
-        firstname: "Carine",
-        roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
-    }
-    let student5 = new User(student5Data)
 
     try {
+
+        let textItemData2: ITextItem = {
+            name: "Text item",
+            mdText: "#Title \n This is a text based portfolio item."
+        }
+        let textItem2 = new TextItem(textItemData2)
+        let savedTextItem2 = await textItem2.save();
+
+        let portfolio2Data: INewPortfolio = {
+            created: new Date(),
+            isPublic: false,
+            items: [savedTextItem2._id],
+            lastEdited: new Date(),
+            name: "Test Portfolio 2",
+        }
+
+        let portfolio2 = new Portfolio(portfolio2Data)
+        let savedPortfolio2 = await portfolio2.save();
+
+        let portfolio3Data: INewPortfolio = {
+            created: new Date(),
+            isPublic: false,
+            items: [savedTextItem2._id],
+            lastEdited: new Date(),
+            name: "Test Portfolio 3",
+        }
+
+        let portfolio3 = new Portfolio(portfolio3Data)
+        let savedPortfolio3 = await portfolio3.save();
+
+
+        // Add default roles 
+        let adminData: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "admin",
+            portfolios: [savedPortfolio2._id, savedPortfolio3._id],
+            birthdate: new Date(1990, 6, 20),
+            email: "tom@dwengo.org",
+            firstname: "Tom",
+            lastname: "Neutens",
+            roles: [db.ROLES.user, db.ROLES.teacher, db.ROLES.student, db.ROLES.admin].map(role => new Role({name: role})),
+        }
+        let admin = new User(adminData)
+
+        let teacher1Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "teacher1",
+            email: "natacha@dwengo.org",
+            firstname: "Natacha",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.teacher].map(role => new Role({name: role})),
+        }
+        let teacher1 = new User(teacher1Data)
+
+        let teacher2Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "teacher2",
+            email: "bjarne@dwengo.org",
+            firstname: "Bjarne",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.teacher].map(role => new Role({name: role})),
+        }
+        let teacher2 = new User(teacher2Data)
+
+        let student1Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "student1",
+            firstname: "Raf",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
+        }
+        let student1 = new User(student1Data)
+
+        let student2Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "student2",
+            firstname: "Jana",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
+        }
+        let student2 = new User(student2Data)
+
+        let student3Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "student3",
+            firstname: "Mat",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
+        }
+        let student3 = new User(student3Data)
+
+        let student4Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "student4",
+            firstname: "Lisa",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
+        }
+        let student4 = new User(student4Data)
+
+        let student5Data: IUser = {
+            platform: db.PLATFORMS.test,
+            userId: "student5",
+            firstname: "Carine",
+            portfolios: [],
+            roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
+        }
+        let student5 = new User(student5Data)
+
+
         let savedAdmin = await admin.save()
         let savedTeacher1 = await teacher1.save()
         let savedTeacher2 = await teacher2.save()
@@ -98,7 +139,7 @@ const mockDatabaseData = async () => {
         let textItem1 = new TextItem(textItemData)
         let savedTextItem1 = await textItem1.save();
 
-        let portfolio1Data: IPortfolio = {
+        let portfolio1Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
             items: [savedTextItem1._id],
@@ -136,6 +177,8 @@ const mockDatabaseData = async () => {
         let assignmentGroup1 = new AssignmentGroup(assignmentGroup1Data)
         let savedAssignmentGroup1 = assignmentGroup1.save()
 
+
+        
 
     } catch (err) {
         console.log(err);

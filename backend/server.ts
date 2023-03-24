@@ -34,6 +34,7 @@ import cookieSession from "cookie-session"
 //Configure cors middleware for the run route to allow all requests
 import cors from 'cors';
 import assignmentGroupRouter from './routes/assignmentgroup.router.js';
+import { portfolioRouter } from './routes/portfolio.router.js';
 
 let corsOptions = {
     origin: process.env.CORS_ORIGIN,
@@ -139,6 +140,9 @@ app.use("/classgroup", classGroupRouter)
 
 // Use assignment group routes
 app.use("/assignment", assignmentGroupRouter)
+
+// Use assignment group routes
+app.use("/portfolio", portfolioRouter)
 
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));

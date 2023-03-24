@@ -37,7 +37,8 @@ class Menu extends connect(store)(LitElement){
         ],
         "user": [
             {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
-            {id: "savedprograms", label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open", external: false}
+            {id: "savedprograms", label: msg("Saved programs"), href: `${globalSettings.hostname}/dashboard/savedprograms`, icon: "folder_open", external: false},
+            {id: "portfolios", label: msg("Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios`, icon: "menu_book", external: false},
         ],
         "student": [
             {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
