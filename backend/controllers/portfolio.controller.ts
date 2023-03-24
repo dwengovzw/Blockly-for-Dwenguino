@@ -28,6 +28,10 @@ class PortfolioController {
                         lastEdited: {$gte: filter.startDate ?? new Date(0), $lte: filter.endDate ?? new Date()}, // If startDate or endDate are not specified, match all portfolios
                         sharedWith: sharedWithUsersIds.length > 0 ? { $in: sharedWithUsersIds } : {$exists: true} , // If sharedWithUUIDs is not specified, match all portfolios
                     },
+                }, {
+                    $addFields: {
+                        convertedId: { $toObjectId: "$_id" }
+                    }
                 }, 
                 {
                     "$lookup": {    // Get the owner of the portfolio
@@ -40,19 +44,30 @@ class PortfolioController {
                                         "$in": ["$$portfolioId", "$portfolios"]
                                     }
                                 }
+                            },{
+                                $unwind: {
+                                    path: "$portfolios",
+                                }
                             }
                         ],
-                        as: "userOwner"
+                        as: "userOwners"
                     }
                 },{
                     "$lookup": {    // Get the student teams that have this portfolio       
                         from: "StudentTeam",
-                        localField: "_id",
+                        localField: "convertedId",
                         foreignField: "portfolio",
-                        as: "teamOwner"
+                        as: "teamOwners"
                     }
                 }
             ]);
+            let users = await User.aggregate([
+                {
+                    $match: {
+                        uuid: {$exists: true}
+                    }
+                }
+            ])
             res.status(200).send(portfolios)
         } catch (e) {
             res.status(500).send("Error filtering portfolios.")

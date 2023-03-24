@@ -8,7 +8,7 @@ import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import { PortfolioItemInfo, getMyPortfolios } from "../../state/features/portfolio_slice";
+import { PortfolioItemInfo, getMyPortfolios, getPortfolios } from "../../state/features/portfolio_slice";
 
 
 @customElement('dwengo-portfolios-list')
@@ -21,7 +21,8 @@ class DwengoPortfoliosList extends connect(store)(LitElement) {
 
     connectedCallback(): void {
         super.connectedCallback()
-        store.dispatch(getMyPortfolios())
+        //store.dispatch(getMyPortfolios())
+        store.dispatch(getPortfolios({}))
     }
 
     protected render() {
