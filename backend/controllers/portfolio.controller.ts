@@ -1,7 +1,8 @@
 import { IPortfolio, Portfolio } from "../models/portfolio.model.js"
 import { StudentTeam } from "../models/student_team.model.js"
 import { User } from "../models/user.model.js"
-
+import { Types } from "mongoose"
+import { PipelineStage } from "mongoose";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -20,7 +21,7 @@ class PortfolioController {
             let filter: PortfolioFilter = req.body
             // Get the users that match the sharedWithUUIDs
             let sharedWithUsersIds = (await User.find({uuid: {$in: filter.sharedWithUUID ?? []}})).map(user => user._id)
-            let portfolios = await Portfolio.aggregate([
+            let pipeline = [
                 {
                     "$match": {
                         uuid: filter.uuid ?? {$exists: true}, // If uuid is not specified, match all portfolios
@@ -29,14 +30,9 @@ class PortfolioController {
                         sharedWith: sharedWithUsersIds.length > 0 ? { $in: sharedWithUsersIds } : {$exists: true} , // If sharedWithUUIDs is not specified, match all portfolios
                     },
                 }, {
-                    $addFields: {
-                        convertedId: { $toObjectId: "$_id" }
-                    }
-                }, 
-                {
                     "$lookup": {    // Get the owner of the portfolio
-                        from: "User",
-                        let: {"portfolioId": "$_id"},
+                        from: "users",
+                        let: {portfolioId: "$_id"},
                         pipeline: [
                             {
                                 "$match": {
@@ -44,30 +40,79 @@ class PortfolioController {
                                         "$in": ["$$portfolioId", "$portfolios"]
                                     }
                                 }
-                            },{
-                                $unwind: {
-                                    path: "$portfolios",
-                                }
                             }
                         ],
                         as: "userOwners"
                     }
-                },{
+                }, {
                     "$lookup": {    // Get the student teams that have this portfolio       
-                        from: "StudentTeam",
-                        localField: "convertedId",
+                        from: "studentteams",
+                        localField: "_id",
                         foreignField: "portfolio",
                         as: "teamOwners"
                     }
-                }
-            ]);
-            let users = await User.aggregate([
+                },{
+                    //convert array of objects to array of ids
+                    $addFields: {
+                        userOwnerUUIDs: {
+                            $map: {
+                                input: '$userOwners',
+                                as: 'obj',
+                                in: '$$obj.uuid',
+                            },
+                        },
+                        teamOwnerUUIDs: {
+                            $map: {
+                                input: '$teamOwners',
+                                as: 'obj',
+                                in: '$$obj.uuid',
+                            }
+                        }
+                    },
+                },
                 {
-                    $match: {
-                        uuid: {$exists: true}
+                    $unwind: {
+                        path: "$userOwnerUUIDs",
+                        preserveNullAndEmptyArrays: true
                     }
+                },
+                {
+                    $unwind: {
+                        path: "$teamOwnerUUIDs",
+                        preserveNullAndEmptyArrays: true
+                    }
+                },
+                {
+                    $match: filter.ofStudentsUUID || filter.ofStudentTeamsUUID ?
+                        {
+                            $or: [
+                                {userOwnerUUIDs: {$in: filter.ofStudentsUUID ?? []}},
+                                {teamOwnerUUIDs: {$in: filter.ofStudentTeamsUUID ?? []}}
+                            ]
+                        } : 
+                        {uuid: {$exists: true}}
+                },
+                {
+                    "$group": {
+                        "_id": "$_id",
+                        "name": { "$first": "$name" },
+                        "description": { "$first": "$description" },
+                        "created": { "$first": "$created" },
+                        "isPublic": { "$first": "$isPublic" },
+                        "items": { "$first": "$items" },
+                        "lastEdited": { "$first": "$lastEdited" },
+                        "sharedWith": { "$first": "$sharedWith" },
+                        "teamOwners": { "$first": "$teamOwners" },
+                        "userOwners": { "$first": "$userOwners" },
+                        "uuid": { "$first": "$uuid" },
+                    }
+                },
+                {
+                    $unset: ["_id"]
                 }
-            ])
+
+            ]
+            let portfolios = await Portfolio.aggregate(pipeline);
             res.status(200).send(portfolios)
         } catch (e) {
             res.status(500).send("Error filtering portfolios.")

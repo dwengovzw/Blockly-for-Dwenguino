@@ -3,6 +3,7 @@ let __dirname = path.resolve();
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
+import mongoSanitize from 'express-mongo-sanitize';
 
 //mongoose.set('debug', true);
 import i18n from 'i18n-x';
@@ -95,6 +96,7 @@ app.use(i18n({
 
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
+app.use(mongoSanitize()); // Sanitize data in the request body/params/header/query
 
 app.use(
     cookieSession({

@@ -90,6 +90,7 @@
     "ejs": "^3.1.6",
     "esm": "^3.2.25",
     "express": "^4.17.1",
+    "express-mongo-sanitize": "^2.2.0",
     "fast-xml-parser": "^3.20.3",
     "helmet": "^3.22.0",
     "i18n-x": "^0.1.6",
