@@ -160,7 +160,7 @@ class AssignmentList extends connect(store)(LitElement){
             <vaadin-grid .items="${this.assignmentGroups}">
             
                 <vaadin-grid-column path="name"></vaadin-grid-column>
-                <vaadin-grid-column path="description"></vaadin-grid-column>
+                <vaadin-grid-column flex-grow="10" path="description"></vaadin-grid-column>
                 <vaadin-grid-column 
                     path="starred"
                     ${columnBodyRenderer(

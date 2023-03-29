@@ -118,4 +118,4 @@ const { setPortfolioList, setSelectedPortfolio } = portfolioSlice.actions
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, PortfolioItemInfo, portfolioReducer }
+export { getPortfolios, getMyPortfolios, PortfolioItemInfo, portfolioReducer, PortfolioInfo }
