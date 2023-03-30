@@ -8,7 +8,8 @@ import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio
 
 interface PortfolioItemInfo {
     uuid: string,
-    name: string
+    name: string,
+    __t: string,
 }
 
 interface SolutionItemInfo extends PortfolioItemInfo {
@@ -113,9 +114,16 @@ const getMyPortfolios = () => {
     }, null, msg("Error while fetching portfolios"))
 }
 
+const getPortfolio = (uuid: string) => {
+    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${uuid}`, "GET", (dispatch, getState, json) => {
+        console.log(json)
+        dispatch(setSelectedPortfolio(json))
+    }, null, msg("Error while fetching portfolio"))
+}
+
 
 const { setPortfolioList, setSelectedPortfolio } = portfolioSlice.actions
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, PortfolioItemInfo, portfolioReducer, PortfolioInfo }
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo }

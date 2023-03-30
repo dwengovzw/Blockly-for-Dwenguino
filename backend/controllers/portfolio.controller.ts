@@ -158,6 +158,21 @@ class PortfolioController {
             res.status(500).send("Error requesting portfolios.")
         }
     }
+
+    // TODO remove _id and __v from the response
+    get = async (req, res) => {
+        try {
+            let portfolio = await Portfolio.findOne({uuid: req.params.uuid})
+                .populate("items sharedWith")
+            if (!portfolio){
+                res.status(404).send({message: "Portfolio not found."})
+                return
+            }
+            res.status(200).send(portfolio)
+        } catch (e) {
+            res.status(500).send("Error requesting portfolio.")
+        }
+    }
 }
 
 export { PortfolioController, PortfolioFilter }

@@ -21,10 +21,24 @@ const mockDatabaseData = async () => {
         let textItem2 = new TextItem(textItemData2)
         let savedTextItem2 = await textItem2.save();
 
+        let textItemData3: ITextItem = {
+            name: "Text item 3",
+            mdText: "#Title \n This is a text based portfolio item."
+        }
+        let textItem3 = new TextItem(textItemData3)
+        let savedTextItem3 = await textItem3.save();
+
+        let textItemData4: ITextItem = {
+            name: "Text item 4",
+            mdText: "#Title \n This is a text based portfolio item."
+        }
+        let textItem4 = new TextItem(textItemData4)
+        let savedTextItem4 = await textItem4.save();
+
         let portfolio2Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
-            items: [savedTextItem2._id],
+            items: [savedTextItem2._id, savedTextItem3._id, savedTextItem4._id],
             lastEdited: new Date(),
             name: "Test Portfolio 2",
         }
@@ -133,11 +147,13 @@ const mockDatabaseData = async () => {
         let savedStudent5 = await student5.save()
 
         let textItemData: ITextItem = {
-            name: "Text item",
+            name: "Text item 1",
             mdText: "#Title \n This is a text based portfolio item."
         }
         let textItem1 = new TextItem(textItemData)
         let savedTextItem1 = await textItem1.save();
+
+        
 
         let portfolio1Data: INewPortfolio = {
             created: new Date(),
