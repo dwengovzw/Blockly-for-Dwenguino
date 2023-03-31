@@ -95,6 +95,11 @@ export const portfolioSlice = createSlice({
         },
         setSelectedPortfolio: (state, action) => {
             state.selectedPortfolio = action.payload
+        },
+        setSelectedPortfolioItems: (state, action) => {
+            if (state.selectedPortfolio){
+                (state.selectedPortfolio as PortfolioInfo).items = action.payload
+            }
         }
     }
 })
@@ -122,8 +127,8 @@ const getPortfolio = (uuid: string) => {
 }
 
 
-const { setPortfolioList, setSelectedPortfolio } = portfolioSlice.actions
+const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems } = portfolioSlice.actions
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo }
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo,  setSelectedPortfolioItems}

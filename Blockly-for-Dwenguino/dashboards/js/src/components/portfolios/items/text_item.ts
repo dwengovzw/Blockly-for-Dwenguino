@@ -18,7 +18,7 @@ class PortfolioTextItem extends connect(store)(LitElement) {
 
     protected render() {
         return html`
-            <div class="portfolio_text_item" dragable=true>
+            <div class="portfolio_text_item">
                 ${this.item?.name}
             </div>
         `

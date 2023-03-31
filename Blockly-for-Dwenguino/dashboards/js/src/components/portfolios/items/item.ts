@@ -11,14 +11,16 @@ import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 
 import "./text_item"
+import "./droptarget"
 
 @customElement("dwengo-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
     @property({type: Object}) 
     item: PortfolioItemInfo | null = null
+    @property({type: Number}) index = 0
 
-    @state() dragging: boolean = false
     @state() draggable: boolean = false
+    @state() hidden: boolean = false
     @state() x: number = 0
     @state() y: number = 0
 
@@ -40,44 +42,32 @@ class PortfolioItem extends connect(store)(LitElement) {
     }
 
     protected render() {
+        console.log("Rendering....");
         return html`
-        ${getGoogleMateriaIconsLinkTag()}
-            <div class="portfolio_item" 
-                draggable="${this.draggable}"
-                @dragstart=${ e => { 
-                        this.dragging = true;
-                        e.dataTransfer.effectAllowed = "move";
-                        e.dataTransfer.setData("text/plain", JSON.stringify(this.item));
+            <div class="container ${this.hidden ? "hidden" : "shown"}">
+                ${getGoogleMateriaIconsLinkTag()}
+                <dwengo-drop-target index=${this.index}></dwengo-drop-target>
+                <div class="portfolio_item"
+                    draggable="${this.draggable}"
+                    @dragstart=${ e => { 
+                            e.dataTransfer.effectAllowed = "move";
+                            e.dataTransfer.setData("text/plain", JSON.stringify(this.index));
+                            setTimeout(_ => { this.hidden = true }, 0)
+                        }
                     }
-                }
-                @dragend=${ _ => { this.dragging = false; this.draggable = false }}
-                @drag=${ e => {
-                    console.log(e)
-                    this.x = e.screenX
-                    this.y = e.screenY
-                }}
-                @dragenter=${ e => {
-                    console.log("Entering drag area");
-                    console.log(e);
-                }}
-                @dragover=${ e => {
-                    //console.log("Over drag area");
-                    //console.log(e);
-                }}
-                @drop=${
-                    e=>{
-                        console.log("drop");
-                        console.log(e)
+                    @dragend=${ _ => { this.draggable = false; this.hidden = false }}
+                    @dragover=${ e => {
                         e.preventDefault();
-                    }
-                }
-                style="transform: translate(${this.x}px, ${this.y}px)">
-                <span class="material-symbols-outlined portfolio_item_handle"
-                    @mousedown=${_ => this.draggable = true}>
-                    drag_indicator
-                </span>
-                <div class="portfolio_item_content">
-                    ${this.mapItemToElement()}
+                        return false
+                    }}
+                    >
+                    <span class="material-symbols-outlined portfolio_item_handle"
+                        @mousedown=${_ => this.draggable = true}>
+                        drag_indicator
+                    </span>
+                    <div class="portfolio_item_content">
+                        ${this.mapItemToElement()}
+                    </div>
                 </div>
             </div>
         `
@@ -96,18 +86,13 @@ class PortfolioItem extends connect(store)(LitElement) {
         .portfolio_item_handle {
             cursor: move;
         }
-
-        .hide {
-            position:absolute;
-            opacity: 0.4;
-        }
-        .show {
-            position: relative;
-            opacity: 1;
-        }
         .portfolio_item_content {
             display: inline-block;
         }
+        .hidden {
+            display: none;
+        }
+        
         `
 
 }
