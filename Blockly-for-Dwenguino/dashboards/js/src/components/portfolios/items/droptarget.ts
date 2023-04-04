@@ -62,7 +62,7 @@ class DropTarget extends connect(store)(LitElement) {
         .drop_target.over{
             min-height: 50px;
             transition: min-height 0.15s ease-out; 
-            background-color: var(--theme-neutralFocusInnerAccent);
+            background-color: var(--theme-neutralFocus);
             border-radius: 0.5rem;
         }
         .drop_target {

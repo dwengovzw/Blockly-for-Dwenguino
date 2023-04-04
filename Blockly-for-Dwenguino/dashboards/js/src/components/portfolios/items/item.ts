@@ -18,6 +18,7 @@ class PortfolioItem extends connect(store)(LitElement) {
     @property({type: Object}) 
     item: PortfolioItemInfo | null = null
     @property({type: Number}) index = 0
+    @property({type: String}) portfolioUUID = ""
 
     @state() draggable: boolean = false
     @state() hidden: boolean = false
@@ -29,7 +30,7 @@ class PortfolioItem extends connect(store)(LitElement) {
         const itemType: string = this.item?.__t || ""
         switch(itemType){
             case "TextItem":
-                return html`<dwengo-portfolio-text-item item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
+                return html`<dwengo-portfolio-text-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
             // TODO: add other item types
             default:    
                 return html`${msg("Unknown item type")}`
@@ -88,9 +89,12 @@ class PortfolioItem extends connect(store)(LitElement) {
         }
         .portfolio_item_content {
             display: inline-block;
+            flex-grow: 1;
         }
         .hidden {
-            display: none;
+            visibility: hidden;
+            margin-top: -100px;
+            transition: margin-top 0.5s;
         }
         
         `

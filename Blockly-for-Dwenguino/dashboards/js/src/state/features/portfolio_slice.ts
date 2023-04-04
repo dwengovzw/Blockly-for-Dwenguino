@@ -100,10 +100,26 @@ export const portfolioSlice = createSlice({
             if (state.selectedPortfolio){
                 (state.selectedPortfolio as PortfolioInfo).items = action.payload
             }
+        },
+        updateSelectedPortfolioItem: (state, action) => {
+            if (state.selectedPortfolio){
+                let index = (state.selectedPortfolio as PortfolioInfo).items.findIndex(item => item.uuid === action.payload.uuid)
+                if (index >= 0){
+                    (state.selectedPortfolio as PortfolioInfo).items[index] = action.payload
+                } else {
+                    (state.selectedPortfolio as PortfolioInfo).items.push(action.payload)
+                }
+            }
         }
     }
 })
 
+const savePortfolioItem = (portfolioUuid: string, item: PortfolioItemInfo) => {
+    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/saveItem`, "PUT", (dispatch, getState, json) => {
+        console.log(json)
+        dispatch(updateSelectedPortfolioItem(json))
+    }, item, msg("Error while saving portfolio item"))
+}
 
 const getPortfolios = (filter: PortfolioFilter) => {
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/filter`, "POST", (dispatch, getState, json) => {
@@ -127,8 +143,8 @@ const getPortfolio = (uuid: string) => {
 }
 
 
-const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems } = portfolioSlice.actions
+const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updateSelectedPortfolioItem } = portfolioSlice.actions
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo,  setSelectedPortfolioItems}
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem}

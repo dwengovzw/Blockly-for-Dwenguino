@@ -62,6 +62,7 @@ class EditDashboard extends connect(store)(LitElement){
                 >
                 ${this.portfolio?.items.map( (item, index) => html`
                     <dwengo-portfolio-item 
+                        portfolioUUID=${this.portfolio?.uuid}
                         index=${index}
                         item="${JSON.stringify(item)}"
                         @orderchanged=${e => {

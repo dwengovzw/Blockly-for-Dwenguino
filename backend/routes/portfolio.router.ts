@@ -9,6 +9,7 @@ const portfolioRouter = express.Router();
 
 portfolioRouter.post("/filter", [verifyTokenAjax, verifyUserExists], portfolioController.filter);
 portfolioRouter.get("/mine", [verifyTokenAjax, verifyUserExists], portfolioController.mine);
-portfolioRouter.get("/:uuid", [verifyTokenAjax, verifyUserExists], portfolioController.get);
+portfolioRouter.put("/:uuid/saveItem", [verifyTokenAjax, verifyUserExists, portfolioController.checkIfUserOwnsPortfolio], portfolioController.saveItem)
+portfolioRouter.get("/:uuid", [verifyTokenAjax, verifyUserExists,portfolioController.checkIfUserOwnsPortfolio], portfolioController.get);
 
 export { portfolioRouter }
