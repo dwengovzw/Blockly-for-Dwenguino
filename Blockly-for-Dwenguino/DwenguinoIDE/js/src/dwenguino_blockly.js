@@ -46,7 +46,13 @@ let DwenguinoBlockly = {
            * Show popup when users close the editor
            */
           let leavePageCheck = (e) => {
-            if (e) { e.returnValue = DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]) }
+            if (e) { 
+              if (e.target.activeElement.id === "dwengo_login_menu"){
+                e.preventDefault()
+                return
+              }
+              e.returnValue = DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]) 
+            }
             return DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]); 
           }
           window.addEventListener('onbeforeunload', (e) => {
