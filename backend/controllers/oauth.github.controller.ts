@@ -53,7 +53,8 @@ class GithubOAuthController extends AbstractOAuthController{
     }
 
     logout(req, res){
-        res.status(200).send({message: "Logout successful"})  
+        // Github does not support logout, so we just redirect to the homepage
+        res.redirect(`${process.env.SERVER_URL}`)
     }
 }
 

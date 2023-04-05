@@ -67,7 +67,7 @@ class ACMOAuthController extends AbstractOAuthController {
         });
     }
     logout(req, res){
-        res.status(200).send({message: "Logout successful"})    
+        res.redirect(oauthConfig.logoutUrlMap[this.platform])  
     }
 }
 

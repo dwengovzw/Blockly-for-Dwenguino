@@ -64,7 +64,8 @@ class OAuthController {
     logout(req, res){
         let platform = req.platform
         req.session.token = null;
-        res.redirect(`${process.env.SERVER_URL}`)
+        oauthControllers[platform].logout(req, res)
+        //res.redirect(`${process.env.SERVER_URL}`)
         //oauthControllers[platform].logout(req, res)
         //res.status(200).send({message: "Logout successful"})
     }
