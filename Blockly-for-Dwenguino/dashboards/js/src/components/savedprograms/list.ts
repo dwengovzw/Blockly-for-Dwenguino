@@ -43,7 +43,7 @@ class SavedProgramsList extends connect(store)(LitElement){
 
     renderConfirmDialog(name: string, uuid: string){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to delete the item ")}<em>${name}</em>?
             </div>

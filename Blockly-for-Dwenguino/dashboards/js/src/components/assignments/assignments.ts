@@ -136,7 +136,7 @@ class AssignmentList extends connect(store)(LitElement){
 
     renderConfirmDialog(name: string | undefined, uuid: string | undefined){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to remove this classgroup: ")}<em>${name}</em>?
             </div>

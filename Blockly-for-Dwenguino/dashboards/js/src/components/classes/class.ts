@@ -244,9 +244,9 @@ class Class extends connect(store)(LitElement) {
 
     renderConfirmDialog(){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
-                ${msg("Are you sure you want to remove this ")}${this.owner ? msg("owner") : msg("student")}: <em>${name}</em>?
+                ${msg("Are you sure you want to remove this ")}${this.owner ? msg("owner") : msg("student")}?
             </div>
             <mwc-button @click="${() => {this.owner ? this.handleDeleteOwner(this.itemSelectedToDelete?.uuid) : this.handleDeleteStudent(this.itemSelectedToDelete?.uuid)}}" slot="primaryAction" dialogAction="close">
                 ${msg("Yes")}

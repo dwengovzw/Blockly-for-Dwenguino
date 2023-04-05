@@ -72,7 +72,7 @@ class DeletableListItem extends LitElement {
 
     renderConfirmDialog(){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to delete the item ")}<em>${this.fields.join(" - ")}</em>?
             </div>

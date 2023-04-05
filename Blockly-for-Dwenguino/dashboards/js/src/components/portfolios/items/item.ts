@@ -8,10 +8,11 @@ import { store } from "../../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../../util"
-import { PortfolioItemInfo } from "../../../state/features/portfolio_slice";
+import { deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 
 import "./text_item"
 import "./droptarget"
+import '@vaadin/button';
 
 @customElement("dwengo-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
@@ -69,7 +70,23 @@ class PortfolioItem extends connect(store)(LitElement) {
                     <div class="portfolio_item_content">
                         ${this.mapItemToElement()}
                     </div>
+                    <span>
+                    <vaadin-button 
+                        theme="primary" 
+                        class="delete_button" 
+                        @click="${() => {
+                            if (this.item?.uuid){
+                                store.dispatch(deletePortfolioItem(this.portfolioUUID, this.item?.uuid))
+                            }
+                        }
+                        }">
+                        <span class="material-symbols-outlined">
+                            delete
+                        </span>
+                    </vaadin-button>
+                </span>
                 </div>
+                
             </div>
         `
     }
@@ -77,15 +94,16 @@ class PortfolioItem extends connect(store)(LitElement) {
     static styles?: CSSResultGroup = css`
         .portfolio_item{
             display: flex;
-            align-items: center;
+            align-items: top;
             column-gap: 0.75rem;
-            padding: 0.5rem;
+            padding: 1rem;
             border-radius: 0.5rem;
             margin: 0.5rem;
             background-color: var(--theme-neutralFillRest);
         }
         .portfolio_item_handle {
             cursor: move;
+            margin: 0.5rem;
         }
         .portfolio_item_content {
             display: inline-block;
@@ -95,6 +113,9 @@ class PortfolioItem extends connect(store)(LitElement) {
             visibility: hidden;
             margin-top: -100px;
             transition: margin-top 0.5s;
+        }
+        .detete_button {
+            margin: 0.5rem;
         }
         
         `

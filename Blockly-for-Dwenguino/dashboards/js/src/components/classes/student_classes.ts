@@ -69,7 +69,7 @@ class StudentClasses extends connect(store)(LitElement) {
 
     renderJoinClassGroupDialog(){
         return html`
-        <mwc-dialog open="${this.showJoinClassDialog}">
+        <mwc-dialog open="${this.showJoinClassDialog}" @closed=${_ => this.showJoinClassDialog = false}>
             <div>
                 ${msg("Enter the code your teacher shared with you.")}
             </div>
@@ -92,7 +92,7 @@ class StudentClasses extends connect(store)(LitElement) {
 
     renderConfirmDialog(name: string | undefined, uuid: string | undefined){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to leave this classgroup: ")}<em>${name}</em>?
             </div>

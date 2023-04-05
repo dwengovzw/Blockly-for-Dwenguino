@@ -7,7 +7,10 @@ interface ITextItemExtraFields {
 }
 interface ITextItem extends ISolutionItem, ITextItemExtraFields {}
 const TextItemSchemaFields: Record<keyof ITextItemExtraFields, any> = {
-    mdText: String
+    mdText: {
+        type: String,
+        default: ""
+    }
 }
 const TextItemSchema = SolutionItemSchema(TextItemSchemaFields)
 interface ITextItemModel extends Model<ITextItem>{}

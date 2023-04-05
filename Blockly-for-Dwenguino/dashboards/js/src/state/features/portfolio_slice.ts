@@ -6,10 +6,13 @@ import { createRequestMiddleware } from "../../middleware/fetch"
 import { StudentTeamInfo } from "./student_team_slice"
 import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio.controller"
 
-interface PortfolioItemInfo {
-    uuid: string,
+interface MinimalPortfolioItemInfo {
     name: string,
     __t: string,
+}
+
+interface PortfolioItemInfo extends MinimalPortfolioItemInfo {
+    uuid: string,
 }
 
 interface SolutionItemInfo extends PortfolioItemInfo {
@@ -114,7 +117,20 @@ export const portfolioSlice = createSlice({
     }
 })
 
-const savePortfolioItem = (portfolioUuid: string, item: PortfolioItemInfo) => {
+const deletePortfolioItem = (portfolioUuid: string, itemUuid: string) => {
+    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/deleteItem/${itemUuid}`, "DELETE", (dispatch, getState, json) => {
+        dispatch(getPortfolio(portfolioUuid))
+    }, null, msg("Error while deleting portfolio item"))
+}
+
+const createPortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemInfo) => {
+    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/createItem`, "PUT", (dispatch, getState, json) => {
+        console.log(json)
+        dispatch(updateSelectedPortfolioItem(json))
+    }, item, msg("Error while creating portfolio item"))
+}
+
+const savePortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemInfo) => {
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/saveItem`, "PUT", (dispatch, getState, json) => {
         console.log(json)
         dispatch(updateSelectedPortfolioItem(json))
@@ -147,4 +163,4 @@ const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updat
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem}
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem}

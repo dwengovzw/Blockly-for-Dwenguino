@@ -4,6 +4,7 @@ import { User } from "../models/user.model.js"
 import { Types } from "mongoose"
 import { PipelineStage } from "mongoose";
 import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
+import { TextItem } from "../models/portfolio_items/text_item.model.js";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -178,7 +179,7 @@ class PortfolioController {
     checkIfUserOwnsPortfolio = async (req, res, next) => {
         try {
             if (!req.params.uuid){ // If the portfolio uuid is not specified, skip this middleware => the user is creating a new portfolio
-                next()
+                res.status(404).send({message: "Portfolio not found."})
                 return
             }
             // Get the porfolio for the given uuid
@@ -208,6 +209,30 @@ class PortfolioController {
         }
     }
 
+    createItem = async (req, res) => {
+        try {
+            let portfolio = await Portfolio.findOne({uuid: req.params.uuid})
+            if (!portfolio){
+                res.status(404).send({message: "Portfolio not found."})
+                return
+            }
+            let item
+            // TODO: Add other item types
+            if (req.body.__t === "TextItem"){
+                item = new TextItem()
+            } else {
+                res.status(404).send({message: "Item type not found."})
+            }
+            item = Object.assign(item, req.body)
+            item = await item.save()
+            portfolio.items.push(item)
+            portfolio = await portfolio.save()
+            res.status(200).send(item)
+        } catch (e) {
+            res.status(500).send("Error creating item.")
+        }
+    }
+
     /**
      * Creates a new portfolio
      * @param req
@@ -217,21 +242,38 @@ class PortfolioController {
         */
     saveItem = async (req, res) => {
         try {
-            let item
-            if (!req.body.uuid){
-                item = new PortfolioItem()
-            } else {
-                item = await PortfolioItem.findOne({uuid: req.body.uuid})
-            }
+            let item = await PortfolioItem.findOne({uuid: req.body.uuid})
             if (!item){
                 res.status(404).send({message: "Item not found."})
                 return
             }
             item = Object.assign(item, req.body) 
+            if (!item){
+                res.status(404).send({message: "Error updating item"})
+                return
+            }
             item = await item.save()
             res.status(200).send(item)
         } catch (e) {
             res.status(500).send("Error saving item.")
+        }
+    }
+
+    deleteItem = async (req, res) => {
+        try {
+            let item = await PortfolioItem.findOne({uuid: req.params.itemUUID})
+            if (!item){
+                res.status(404).send({message: "Item not found."})
+                return
+            }
+            await Portfolio.updateMany(
+                {items: {$in: [item._id]}},
+                {$pull: {items: item._id}}
+            )
+            await item.remove()
+            res.status(200).send({message: "Item deleted."})
+        } catch (e) {
+            res.status(500).send("Error deleting item.")
         }
     }
 }

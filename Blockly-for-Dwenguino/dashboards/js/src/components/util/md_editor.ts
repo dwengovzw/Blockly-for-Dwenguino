@@ -105,7 +105,9 @@ class MarkdownEditor extends LitElement {
             font-size: 1.5em;
             font-family: "Roboto", "Noto", sans-serif;
        }
-
+       .md_editor_preview_content {
+            min-height: 2rem;
+       }
     `
 }
 
