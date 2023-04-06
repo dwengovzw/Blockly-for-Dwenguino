@@ -245,6 +245,8 @@ var MSG = {
   serial_monitor_baud_rate_setting: "Baud rate:",
   serial_monitor_send_field_placeholder: "Vul hier de data in die je wil sturen naar de µC",
   change_to_textual_programming_info: "Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.",
+  allChangesSavedInCloud: "Alle wijzigingen werden opgeslagen in je account.",
+  unsavedChangesInCloud: "Er zijn wijzigingen die nog niet opgeslagen zijn in je account.",
 };
 
 MSG.cookieConsent = {

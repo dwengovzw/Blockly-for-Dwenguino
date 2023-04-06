@@ -16,7 +16,58 @@ const mockDatabaseData = async () => {
 
         let textItemData2: ITextItem = {
             name: "Text item",
-            mdText: "#Title \n This is a text based portfolio item."
+            mdText: `# My Random Markdown Text
+
+## Headers
+
+This is a paragraph with a level 2 header above it. Here's a level 3 header:
+
+### This is a level 3 header
+
+## Emphasis
+
+You can make text *italic* or **bold**. You can even combine **_both_**!
+
+## Lists
+
+Here's an unordered list:
+- Item 1
+- Item 2
+- Item 3
+
+And an ordered list:
+1. First item
+2. Second item
+3. Third item
+
+## Links and Images
+
+Here's a [link to Google](https://www.google.com).
+
+Here's an image:
+![A cute cat](https://placekitten.com/200/300)
+
+## Code
+
+You can write code inline with backticks: \`print("Hello, world!")\`.
+
+
+
+Or you can write a code block:
+
+## Blockquotes
+
+> This is a blockquote. You can quote someone famous or just make something up.
+
+## Horizontal Rule
+
+---
+
+That's all for now! Enjoy using Markdown.
+
+`
+
+
         }
         let textItem2 = new TextItem(textItemData2)
         let savedTextItem2 = await textItem2.save();

@@ -39,15 +39,30 @@ let DwenguinoBlockly = {
     compilationPath: "",
     textualEditor: new TextualEditor("db_code_pane"),
     currentProgrammingContext: "blocks", // The current coding context can be blocks or text. 
+    programSavedIntoAccount: true,
+    internalRedirect: false,
 
     initDwenguinoBlockly: function(workspace){
 
+           if (globalSettings.savedProgramUUID && globalSettings.savedProgramUUID !== ""){ 
+            DwenguinoBlockly.setSavedInCloud(true)
+            setInterval(() => {
+              // Save program to cloud every 1 seconds
+              if (!DwenguinoBlockly.programSavedIntoAccount){
+                DwenguinoBlockly.saveFileHandler(false)
+              }
+            }, 5000)
+          } else {
+            $("#db_menu_saved_notification").hide() // Hide the saved notification if we are not editing a saved program
+          }
+      
           /**
            * Show popup when users close the editor
            */
           let leavePageCheck = (e) => {
             if (e) { 
-              if (e.target.activeElement.id === "dwengo_login_menu"){
+              // If program has been saved, don't show popup
+              if (DwenguinoBlockly.programSavedIntoAccount || DwenguinoBlockly.internalRedirect){
                 e.preventDefault()
                 return
               }
@@ -131,6 +146,9 @@ let DwenguinoBlockly = {
           FileIOController.uploadTextFile().then((result) => {
             if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
               DwenguinoBlockly.restoreFromXml(Blockly.Xml.textToDom(result.content));
+              if (globalSettings.savedProgramUUID !== ""){ // If we are editing a saved program and uploaded code, changes are not saved in the cloud yet.
+                DwenguinoBlockly.setSavedInCloud(false)
+              }
             } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
               DwenguinoBlockly.textualEditor.getEditorPane().openTab(result.content, result.filename);
             } else {
@@ -144,7 +162,11 @@ let DwenguinoBlockly = {
         //The following code handles saving of the current program in the users' account
         //If it is run in the browser it shows a modal dialog enabeling them to choose a name:
         $("#db_menu_item_save").on("click", function(){
-          DwenguinoBlockly.showSaveToProfileModal()
+          if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
+            DwenguinoBlockly.saveFileHandler()
+          } else {
+            DwenguinoBlockly.showSaveToProfileModal()
+          }
         });
 
         // This code handles the download of the workspace to a local file.
@@ -283,6 +305,25 @@ let DwenguinoBlockly = {
         });
 
     },
+    setSavedInCloud: function(saved){
+      console.log(`Saved in cloud: ${saved}}`)
+      DwenguinoBlockly.programSavedIntoAccount = saved;
+      if (saved){
+        $("#db_menu_saved_notification").html(`<span 
+          title="${DwenguinoBlocklyLanguageSettings.translate(["allChangesSavedInCloud"])}" 
+          class="material-symbols-outlined"
+          style="color: gray; font-size: 1em; margin-left: 0.5rem">
+            cloud_done
+          </span>`)
+      } else {
+        $("#db_menu_saved_notification").html(`<span 
+          title="${DwenguinoBlocklyLanguageSettings.translate(["unsavedChangesInCloud"])}" 
+          class="material-symbols-outlined"
+          style="color: gray; font-size: 1em; margin-left: 0.5rem">
+            cloud_off
+          </span>`)
+      }
+    },
     downloadFileHandler: function(){
       let data = {};
       if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
@@ -326,7 +367,7 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.logger.recordEvent(event);
     },
 
-    saveFileHandler: async function(){
+    saveFileHandler: async function(notify=true){
       let filename = ""
       let program = ""
       if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
@@ -349,13 +390,23 @@ let DwenguinoBlockly = {
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({
               program: program,
-              name: filename
+              name: filename,
+              uuid: globalSettings.savedProgramUUID
           })
         })
         if (result.status == 200){
-          DwenguinoBlockly.showNotificationModal("Success", "The file has been saved!")
+          DwenguinoBlockly.setSavedInCloud(true)
+          if (notify){
+            DwenguinoBlockly.showNotificationModal("Success", "The file has been saved!")
+          }
+        } else if (result.status === 302){
+          let response = await result.json()
+          DwenguinoBlockly.internalRedirect = true
+          window.location.href = response.redirectUrl
         }else{
-          DwenguinoBlockly.showNotificationModal("Failed", "Unable to save file in your account!")
+          if (notify){
+            DwenguinoBlockly.showNotificationModal("Failed", "Unable to save file in your account!")
+          }
         }
       } catch (e) {
 
@@ -630,6 +681,7 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.prevWorkspaceXml = xmlCode;
           let eventToRecord = this.logger.createEvent(EVENT_NAMES.changedWorkspace, data);
           DwenguinoBlockly.logger.recordEvent(eventToRecord);
+          DwenguinoBlockly.setSavedInCloud(false)
         }
     },
 

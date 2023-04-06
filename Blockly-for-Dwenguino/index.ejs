@@ -117,6 +117,9 @@
                 <span id="switch_to_code">Code</span>
             </span>
         </span>
+        <span id="db_menu_saved_notification">
+            <!-- The application uses this span to show information about the saved status of the program -->
+        </span>
         <span class="db_menu">  <!-- ALERT! Do not put whitespace between these divs or they wil appear under eachother on the page! -->
             <span id="db_menu_item_login_menu" class="db_menu_item" alt="Login menu"><dwengo-login-menu id="dwengo_login_menu" style="display:inline-block"></dwengo-login-menu></span>
             <span id="db_menu_item_simulator" class="db_menu_item fas fa-tachometer-alt" alt="Open or close simulator"></span>
@@ -550,7 +553,8 @@
     <script>
         let globalSettings = {
             basepath: "<%- base_url -%>/dwenguinoblockly/",
-            hostname: "<%- base_url -%>"
+            hostname: "<%- base_url -%>",
+            savedProgramUUID: "<%= (typeof savedProgramUUID !== 'undefined') ? savedProgramUUID : undefined %>",
         }
     </script>
     <script type="text/javascript" src="<%- base_url -%>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>

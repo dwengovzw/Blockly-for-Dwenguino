@@ -8,28 +8,32 @@ class SavedProgramController {
     }
 
     async save(req, res){
-        let userId = req.userId
-        let platform = req.platform
         let reqData = req.body
-        if (userId && platform){
-            try {
-                let user = await User.findOne({
-                    platform: platform,
-                    userId: userId
+        try {
+            let prog
+            if (req.body.uuid){
+                prog = await SavedProgram.findOneAndUpdate({
+                    uuid: req.body.uuid,
+                    user: req.user._id
+                }, {
+                    blocklyXml: reqData.program,
+                    savedAt: new Date(),
+                    //name: reqData.name //TODO: Add field to frontend to change current name
                 })
-                let prog = new SavedProgram({
+                return res.status(200).send({message: "Saved program"})
+            } else {
+                prog = new SavedProgram({
                     blocklyXml: reqData.program,
                     savedAt: new Date(),
                     name: reqData.name,
-                    user: user._id
+                    user: req.user._id
                 })
-                prog.save()
-                return res.status(200).send({message: "Saved program"})
-            } catch (err){
-                return res.status(500).send({message: "Unable to retrieve user"})
+                let savedProg = await prog.save()
+                return res.status(302).send({message: "Saved new program", redirectUrl: `${process.env.SERVER_URL}/savedprograms/open?uuid=${savedProg.uuid}`})
             }
-        } else {
-            return res.status(500).send({message: "Cannot get user info"})
+            
+        } catch (err){
+            return res.status(500).send({message: "Unable to retrieve user"})
         }
     }
 
@@ -77,7 +81,11 @@ class SavedProgramController {
                     userId: userId
                 })
                 let savedProgram = await SavedProgram.findOne({user: user._id, uuid: uuid})
-                processStartBlocks(savedProgram.blocklyXml, res)
+                processStartBlocks({
+                    startblock_xml: savedProgram.blocklyXml,
+                    res: res, 
+                    savedProgramUUID: uuid
+                })
             } catch (e){
                 res.status(500).send({message: "Unable to fetch saved programs"})
             }

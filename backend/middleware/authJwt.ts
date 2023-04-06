@@ -47,22 +47,23 @@ let verifyTokenWithRedirect = (req, res, next, redirectAction) => {
     })
 }
 
-let verifyUserExists = (req, res, next) => {
-    User.findOne({
-        platform: req.platform,
-        userId: req.userId
-    }).exec((err, user) => {
-        if (err) {
-            res.status(500).send({ message: "Error during login" });
-            return
-        }
+let verifyUserExists = async (req, res, next) => {
+    try {
+        let user = await User.findOne({
+            platform: req.platform,
+            userId: req.userId
+        })
         if (!user){
             res.status(401).send({message: "User does not exist!"})
             return
         }
+        req.user = user
         next();
-        return
-    })
+    } catch (err) {
+        res.status(500).send({ message: "Error during login" });
+    }
+    
+
 }
  
 // Returns a middleware function that checks if a user has a specific role.

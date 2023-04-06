@@ -6,40 +6,38 @@ let router = express.Router();
 
 //xml parser
 import parser from "fast-xml-parser"
-//let router = require('express').Router();
 
 //Configure cors middleware for the run route to allow all requests
 import cors from 'cors';
-//let cors = require('cors');
 
 //app.use(cors());
 let corsOptions = {
     origin: "*",
 };
 
-// // Set default API response
-/*router.get('/', function (req, res) {
-    res.json({
-        status: 'The system is working!',
-        message: 'To the moon and back.'
-    });
-});*/
 
-let processStartBlocks = (startblock_xml, res, view="index.ejs") => {
+let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID=""}) => {
     let blocks_xml = querystring.unescape(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
     }
 
     blocks_xml = blocks_xml.trim()  // remove whitespace
-    //let striptagregex = /^<xml xmlns="https:\/\/developers.google.com\/blockly\/xml">(.*)<\/xml>$/
-    //let blocks_xml_stripped = blocks_xml.match(striptagregex)[1]
-    res.render(view, {blocks_xml: blocks_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "/simulator"});
+    res.render(view, {
+        blocks_xml: blocks_xml, 
+        base_url: process.env.SERVER_URL, 
+        form_target: process.env.SERVER_URL + "/simulator",
+        savedProgramUUID: savedProgramUUID
+    });
 }
 
 let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
     if (blocks_xml && blocks_xml !== ""){
-        processStartBlocks(blocks_xml, res, view);
+        processStartBlocks({
+            startblock_xml: blocks_xml, 
+            res: res, 
+            view: view
+        });
     }else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
         res.render(view, {blocks_xml: empty_program_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "/simulator"});

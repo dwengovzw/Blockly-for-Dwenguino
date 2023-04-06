@@ -235,6 +235,8 @@ var MSG_FALLBACK = {
   serial_monitor_baud_rate_setting: "Baud rate:",
   serial_monitor_send_field_placeholder: "Enter the data you want to send to the µC",
   change_to_textual_programming_info: "When changing to the textual editor, you are no longer able to simulate your robot. You can only run your code on the Dwenguino",
+  allChangesSavedInCloud: "All changes have been saved in the cloud",
+  unsavedChangesInCloud: "There are unsaved changes in the cloud. Click the save button to save your changes.",
 };
 
 MSG_FALLBACK.cookieConsent = {
