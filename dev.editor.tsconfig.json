@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "pretty": true,
-      "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
+      "outDir": "./Blockly-for-Dwenguino/editor/js/dist",
       "noImplicitAny": false,
       "module": "es6",
       "target": "es6",
@@ -23,7 +23,8 @@
       ]
     },
     "include": [
-      "./Blockly-for-Dwenguino/dashboards/**/*",
-      "./Blockly-for-Dwenguino/types/*"
+      "./Blockly-for-Dwenguino/types/*",
+      "./Blockly-for-Dwenguino/editor/**/*"
+      
     ]
   }

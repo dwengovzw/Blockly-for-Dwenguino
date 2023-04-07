@@ -44,7 +44,6 @@ class PortfolioItem extends connect(store)(LitElement) {
     }
 
     protected render() {
-        console.log("Rendering....");
         return html`
             <div class="container ${this.hidden ? "hidden" : "shown"}">
                 ${getGoogleMateriaIconsLinkTag()}

@@ -128,5 +128,54 @@ module.exports = [
                   },
             ]
         }
+    },
+    {
+        name: "editor",
+        mode: "development",
+        devtool: "eval-source-map",
+        context: path.resolve(__dirname, "Blockly-for-Dwenguino/editor"),
+        entry: {
+            app: path.resolve(__dirname, "Blockly-for-Dwenguino/editor/js/src/editor.ts"),
+        },
+        output: {
+            path: path.resolve(__dirname, 'Blockly-for-Dwenguino/editor/js/dist/'),
+            filename: 'editor.bundle.js'
+        },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+        },
+        module: {
+            rules: [
+                
+                {
+                    test: /\.css$/i,
+                    use: ['style-loader', 
+                        { loader: "css-modules-typescript-loader"},
+                        {
+                                loader: "css-loader",
+                                options: {
+                                    modules: true,
+                                    sourceMap: true
+                                }
+                        }, 'postcss-loader']
+                },
+                {
+                    test: /\.tsx?$/,
+                    exclude: /node_modules/,
+                    include: [/dashboards/],
+                    use:["babel-loader", 
+                    {
+                        loader: 'ts-loader',
+                        options:{
+                            configFile: "dev.editor.tsconfig.json"
+                        },
+                    }]
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                    type: 'asset',
+                  },
+            ]
+        }
     }
 ];

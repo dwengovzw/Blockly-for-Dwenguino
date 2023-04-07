@@ -81,6 +81,13 @@ router.post("/readonly", function(req, res) {
     handleSimulatorRequest(blocks_xml, res, "readonly.ejs");
 })
 
+router.get("/editor", function(req, res) {
+    res.render("editor.ejs", {
+        base_url: process.env.SERVER_URL, 
+        form_target: process.env.SERVER_URL + "/editor"
+    });
+})
+
 
 // Import contact controller
 
