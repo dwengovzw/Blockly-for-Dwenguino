@@ -5,6 +5,8 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { msg } from '@lit/localize';
+import {fas} from "../../../../dashboards/js/src/styles/fas"
+import "./../../../../dashboards/js/src/components/user/login"
 
 //import "../../../../dashboards/js/dist/dashboards.bundle.js"
 
@@ -82,7 +84,7 @@ class PortfolioItem extends LitElement {
         `
     }
 
-    static styles?: CSSResultGroup = css`
+    static styles?: CSSResultGroup = [css`
     .db_header {
       position: relative;
       height: 55px;
@@ -150,6 +152,6 @@ class PortfolioItem extends LitElement {
   #db_menu_item_language_selection option{
       font-size: 20px;
   }
-        `
+        `, fas]
 
 }

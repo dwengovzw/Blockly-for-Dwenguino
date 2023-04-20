@@ -167,7 +167,7 @@ module.exports = [
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/,
-                    include: [/editor/],
+                    include: [/editor/, /dashboards/],
                     use:["babel-loader", 
                     {
                         loader: 'ts-loader',
