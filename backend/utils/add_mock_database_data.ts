@@ -11,6 +11,7 @@ import { makeSharingCode } from "./utils.js"
 import { Role } from "../models/role.model.js"
 import { BlocklyProgSequenceItem, IBlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model.js"
 import LogItem from "../models/logitem.model.js"
+import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model.js"
 
 const mockDatabaseData = async () => {
 
@@ -88,12 +89,27 @@ That's all for now! Enjoy using Markdown.
         let textItem4 = new TextItem(textItemData4)
         let savedTextItem4 = await textItem4.save();
 
-        
+        let testLogItem = await new LogItem({
+            timestamp: new Date(),
+            eventName: "workspaceChange",
+            data: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="b1?[.uk?~eC%MS;c0sEx" x="95" y="100"><statement name="LOOP"><block type="dwenguino_lcd" id="2pHC=Dwk+bfYac}yUFVN"><value name="text"><block type="text" id="t`w,[RH_ys{jCON,hx|g"><field name="TEXT">Hello portfolio</field></block></value><value name="line_number"><block type="char_type" id="q_Aq_jLq$-RV[N*eg@[."><field name="BITMASK">0</field></block></value><value name="character_number"><block type="char_type" id="ez:fm^NAA2*8Q3S=Oqvj"><field name="BITMASK">0</field></block></value></block></statement></block></xml>'
+        }).save()
+        let blocklyProgSequenceItem1 = await new BlocklyProgSequenceItem({
+            name: "BlocklyProgSequenceItem",
+            eventSequence: [
+                testLogItem
+            ]
+        }).save()
+
+        let socialRobotDesignItem = await new SocialRobotDesignItem({
+            name: "SocialRobotDesignItem",
+            socialRobotDesignXml: `<xml xmlns="http://www.w3.org/1999/xhtml"><Item  Type='background' Class='background1' Id='1'></Item><Item  Type='lcd' Id='1' OffsetLeft='391' OffsetTop='107' Classes='undefined'></Item><Item  Type='servo' Name='servo' Id='1' Width='86' Height='149' OffsetLeft='170' OffsetTop='252' Pins='{"digitalPin":"SERVO_3"}' State='[object Object]' CanvasId='sim_servo_canvas1' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='righthand' X='0' Y='30'></Item><Item  Type='servo' Name='servo' Id='2' Width='86' Height='149' OffsetLeft='629' OffsetTop='215' Pins='{"digitalPin":"SERVO_4"}' State='[object Object]' CanvasId='sim_servo_canvas2' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='lefthand' X='0' Y='30'></Item></xml>`
+        }).save()
 
         let portfolio2Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
-            items: [savedTextItem2._id, savedTextItem3._id, savedTextItem4._id],
+            items: [savedTextItem2._id, savedTextItem3._id, savedTextItem4._id, blocklyProgSequenceItem1._id, socialRobotDesignItem._id],
             lastEdited: new Date(),
             name: "Test Portfolio 2",
         }
@@ -127,19 +143,7 @@ That's all for now! Enjoy using Markdown.
         let admin = new User(adminData)
         let savedAdmin = await admin.save()
 
-        let testLogItem = await new LogItem({
-            timestamp: new Date(),
-            eventName: "workspaceChange",
-            data: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="b1?[.uk?~eC%MS;c0sEx" x="95" y="100"><statement name="LOOP"><block type="dwenguino_lcd" id="2pHC=Dwk+bfYac}yUFVN"><value name="text"><block type="text" id="t`w,[RH_ys{jCON,hx|g"><field name="TEXT">Hello portfolio</field></block></value><value name="line_number"><block type="char_type" id="q_Aq_jLq$-RV[N*eg@[."><field name="BITMASK">0</field></block></value><value name="character_number"><block type="char_type" id="ez:fm^NAA2*8Q3S=Oqvj"><field name="BITMASK">0</field></block></value></block></statement></block></xml>'
-        }).save()
-        let blocklyProgSequenceItem1 = await new BlocklyProgSequenceItem({
-            name: "BlocklyProgSequenceItem",
-            eventSequence: [
-                testLogItem
-            ]
-        }).save()
-        savedPortfolio2.items.push(blocklyProgSequenceItem1)
-        await savedPortfolio2.save()
+        
 
         let teacher1Data: IUser = {
             platform: db.PLATFORMS.test,

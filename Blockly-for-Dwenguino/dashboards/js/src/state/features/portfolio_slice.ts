@@ -164,4 +164,4 @@ const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updat
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem, BlocklyProgSequenceItemInfo}
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem, BlocklyProgSequenceItemInfo, SocialRobotDesignItemInfo}

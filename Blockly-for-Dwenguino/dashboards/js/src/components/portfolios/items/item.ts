@@ -12,6 +12,7 @@ import { deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/
 
 import "./text_item"
 import "./blockly_item"
+import "./socialrobot_design_item"
 import "./droptarget"
 import '@vaadin/button';
 
@@ -33,9 +34,10 @@ class PortfolioItem extends connect(store)(LitElement) {
         switch(itemType){
             case "TextItem":
                 return html`<dwengo-portfolio-text-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
-            
             case "BlocklyProgSequenceItem":
                 return html`<dwengo-portfolio-blockly-code-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-blockly-code-item>`
+            case "SocialRobotDesignItem":
+                return html`<dwengo-portfolio-socialrobot-design-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-socialrobot-design-item>`
             default:    
                 return html`${msg("Unknown item type")}`
         }
