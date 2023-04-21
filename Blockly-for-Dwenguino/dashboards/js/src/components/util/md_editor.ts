@@ -18,6 +18,7 @@ class MarkdownEditor extends LitElement {
     @property({type: Boolean}) disabled: boolean = false
     @property({type: Boolean}) readonly: boolean = false
     @property({type: Boolean}) autofocus: boolean = false
+    @property({type: Boolean}) editable: boolean = true
 
     @state() editing: boolean = false
     valueChanged: boolean = false
@@ -75,8 +76,10 @@ class MarkdownEditor extends LitElement {
                         <div 
                             class="md_editor_preview_content"
                             tabindex="0"
-                            @focusin=${ _ => {
-                                this.editing = true; 
+                            @dblclick=${ _ => {
+                                if (this.editable){
+                                    this.editing = true; 
+                                }
                             }
                             }>
                             ${unsafeHTML(DOMPurify.sanitize(marked.parse(this.value)))}

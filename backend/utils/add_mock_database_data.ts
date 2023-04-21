@@ -9,6 +9,8 @@ import { TextItem, ITextItem } from "../models/portfolio_items/text_item.model.j
 import db from "../config/db.config.js"
 import { makeSharingCode } from "./utils.js"
 import { Role } from "../models/role.model.js"
+import { BlocklyProgSequenceItem, IBlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model.js"
+import LogItem from "../models/logitem.model.js"
 
 const mockDatabaseData = async () => {
 
@@ -86,6 +88,8 @@ That's all for now! Enjoy using Markdown.
         let textItem4 = new TextItem(textItemData4)
         let savedTextItem4 = await textItem4.save();
 
+        
+
         let portfolio2Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
@@ -121,6 +125,21 @@ That's all for now! Enjoy using Markdown.
             roles: [db.ROLES.user, db.ROLES.teacher, db.ROLES.student, db.ROLES.admin].map(role => new Role({name: role})),
         }
         let admin = new User(adminData)
+        let savedAdmin = await admin.save()
+
+        let testLogItem = await new LogItem({
+            timestamp: new Date(),
+            eventName: "workspaceChange",
+            data: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="b1?[.uk?~eC%MS;c0sEx" x="95" y="100"><statement name="LOOP"><block type="dwenguino_lcd" id="2pHC=Dwk+bfYac}yUFVN"><value name="text"><block type="text" id="t`w,[RH_ys{jCON,hx|g"><field name="TEXT">Hello portfolio</field></block></value><value name="line_number"><block type="char_type" id="q_Aq_jLq$-RV[N*eg@[."><field name="BITMASK">0</field></block></value><value name="character_number"><block type="char_type" id="ez:fm^NAA2*8Q3S=Oqvj"><field name="BITMASK">0</field></block></value></block></statement></block></xml>'
+        }).save()
+        let blocklyProgSequenceItem1 = await new BlocklyProgSequenceItem({
+            name: "BlocklyProgSequenceItem",
+            eventSequence: [
+                testLogItem
+            ]
+        }).save()
+        savedPortfolio2.items.push(blocklyProgSequenceItem1)
+        await savedPortfolio2.save()
 
         let teacher1Data: IUser = {
             platform: db.PLATFORMS.test,
@@ -188,7 +207,7 @@ That's all for now! Enjoy using Markdown.
         let student5 = new User(student5Data)
 
 
-        let savedAdmin = await admin.save()
+        
         let savedTeacher1 = await teacher1.save()
         let savedTeacher2 = await teacher2.save()
         let savedStudent1 = await student1.save()

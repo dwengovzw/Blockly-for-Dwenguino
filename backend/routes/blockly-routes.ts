@@ -16,7 +16,7 @@ let corsOptions = {
 };
 
 
-let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID=""}) => {
+let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false}) => {
     let blocks_xml = querystring.unescape(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
@@ -27,20 +27,27 @@ let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUU
         blocks_xml: blocks_xml, 
         base_url: process.env.SERVER_URL, 
         form_target: process.env.SERVER_URL + "/simulator",
-        savedProgramUUID: savedProgramUUID
+        savedProgramUUID: savedProgramUUID,
+        hidebutton: hidebutton
     });
 }
 
-let handleSimulatorRequest = (blocks_xml, res, view="index.ejs") => {
+let handleSimulatorRequest = (blocks_xml, res, view="index.ejs", hidebutton=false) => {
     if (blocks_xml && blocks_xml !== ""){
         processStartBlocks({
             startblock_xml: blocks_xml, 
             res: res, 
-            view: view
+            view: view,
+            hidebutton: hidebutton
         });
     }else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
-        res.render(view, {blocks_xml: empty_program_xml, base_url: process.env.SERVER_URL, form_target: process.env.SERVER_URL + "/simulator"});
+        res.render(view, {
+            blocks_xml: empty_program_xml, 
+            base_url: process.env.SERVER_URL, 
+            form_target: process.env.SERVER_URL + "/simulator",
+            hidebutton: hidebutton
+        });
     }
 }
 
@@ -80,6 +87,20 @@ router.post("/readonly", function(req, res) {
     let blocks_xml = req.body.xml;
     handleSimulatorRequest(blocks_xml, res, "readonly.ejs");
 })
+
+// load the application
+router.get("/portfolioitem", function(req, res) {
+    let blocks_xml = req.query.xml;
+    handleSimulatorRequest(blocks_xml, res,"readonly.ejs", true);
+})
+
+// load the application with a program from xml
+router.post("/portfolioitem", function(req, res) {
+    let blocks_xml = req.body.xml;
+    handleSimulatorRequest(blocks_xml, res, "readonly.ejs", true);
+})
+
+
 
 router.get("/editor", function(req, res) {
     res.render("editor.ejs", {

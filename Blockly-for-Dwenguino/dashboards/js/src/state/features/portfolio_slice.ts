@@ -5,6 +5,7 @@ import { MinimalUserInfo } from "./user_slice"
 import { createRequestMiddleware } from "../../middleware/fetch"
 import { StudentTeamInfo } from "./student_team_slice"
 import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio.controller"
+import { LogItemInfo } from "./log_item_slice"
 
 interface MinimalPortfolioItemInfo {
     name: string,
@@ -28,7 +29,7 @@ interface AnnotatedDrawingItemInfo extends SolutionItemInfo {
 }
 
 interface BlocklyProgSequenceItemInfo extends SolutionItemInfo {
-    eventSequence: string[] // TODO: replace type with LogItemInfo[]
+    eventSequence: LogItemInfo[] // TODO: replace type with LogItemInfo[]
 }
 
 interface TextItemInfo extends SolutionItemInfo {
@@ -163,4 +164,4 @@ const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updat
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem}
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem, BlocklyProgSequenceItemInfo}

@@ -11,6 +11,7 @@ import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 
 import "./text_item"
+import "./blockly_item"
 import "./droptarget"
 import '@vaadin/button';
 
@@ -32,7 +33,9 @@ class PortfolioItem extends connect(store)(LitElement) {
         switch(itemType){
             case "TextItem":
                 return html`<dwengo-portfolio-text-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
-            // TODO: add other item types
+            
+            case "BlocklyProgSequenceItem":
+                return html`<dwengo-portfolio-blockly-code-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-blockly-code-item>`
             default:    
                 return html`${msg("Unknown item type")}`
         }

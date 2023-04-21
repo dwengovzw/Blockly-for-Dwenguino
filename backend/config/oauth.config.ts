@@ -25,6 +25,6 @@ oauthConfig.queryStringMap[db.PLATFORMS.beACM] = (code => {
 
 oauthConfig.logoutUrlMap[db.PLATFORMS.github] = `${process.env.GITHUB_OAUTH_LOGOUT_URL}?client_id=${process.env.GITHUB_OAUTH_CLIENT_ID}&post_logout_redirect_uri=${encodeURIComponent(process.env.OAUTH_POST_LOGOUT_REDIRECT)}`
 oauthConfig.logoutUrlMap[db.PLATFORMS.leerId] = `${process.env.LEERID_OAUTH_LOGOUT_URL}?client_id=${process.env.LEERID_OAUTH_CLIENT_ID}&post_logout_redirect_uri=${encodeURIComponent(process.env.OAUTH_POST_LOGOUT_REDIRECT)}`
-oauthConfig.logoutUrlMap[db.PLATFORMS.beACM] = `${process.env.ACM_OAUTH_LOGOUT_URL}?client_id=${process.env.ACM_OAUTH_CLIENT_ID}&post_logout_redirect_uri=${encodeURIComponent(process.env.OAUTH_POST_LOGOUT_REDIRECT)}`
+oauthConfig.logoutUrlMap[db.PLATFORMS.beACM] =  `${process.env.ACM_OAUTH_LOGOUT_URL}?client_id=${process.env.ACM_OAUTH_CLIENT_ID}&post_logout_redirect_uri=${encodeURIComponent(process.env.OAUTH_POST_LOGOUT_REDIRECT)}`
 
 export default oauthConfig;
