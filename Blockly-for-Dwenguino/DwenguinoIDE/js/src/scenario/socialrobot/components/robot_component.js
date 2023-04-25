@@ -6,8 +6,11 @@ import BindMethods from "../../../utils/bindmethods.js"
 export { RobotComponent }
 
 class RobotComponent extends AbstractRobotComponent {
-    constructor() {
-        super();
+
+    compontent_container = null
+
+    constructor(simulation_container=null) {
+        super(simulation_container);
         BindMethods(this);
     }
 
@@ -88,8 +91,38 @@ class RobotComponent extends AbstractRobotComponent {
     }
     
     insertHtml(optionsLabel = "options") {
-        
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() 
+        this.component_container = $("<div id='sim_" + this.getType() + this.getId() 
+        + "' class='sim_element sim_element_" 
+        + this.getType() 
+        + " draggable'></div>")
+        this.component_container.append("<div><span id='component_title_" + this.getType() + "_" + this.getId() + "'></span></div>");
+        this.component_container.css('top', 0 + 'px');
+        this.component_container.css('left', 0 + 'px');
+        this.component_container.css(
+            'transform',
+            "translate(" + this.getOffset()['left'] + "px, " +  this.getOffset()['top'] + "px)"
+            )
+        this.component_container.attr("data-x", this.getOffset()['left']);
+        this.component_container.attr("data-y", this.getOffset()['top']);
+        this.component_container.append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+        this.simulation_container.append(this.component_container);
+
+        if (this.component_container){
+            this.component_container.on('mouseup', (event) => {
+                let offset = {
+                    "left": event.currentTarget.getAttribute("data-x"),
+                    "top": event.currentTarget.getAttribute("data-y")
+                    };
+                this.setOffset(offset);
+            });
+            this.component_container.on("dblclick", (event) => {
+                this.createComponentOptionsModalDialog(optionsLabel);
+                this.showDialog();
+            });
+        }
+        this.setComponentName()
+
+        /*$('#sim_container').append("<div id='sim_" + this.getType() + this.getId() 
             + "' class='sim_element sim_element_" 
             + this.getType() 
             + " draggable'><div>" 
@@ -127,18 +160,21 @@ class RobotComponent extends AbstractRobotComponent {
         }
        
 
-        this.setComponentName();
+        this.setComponentName();*/
     }
 
     removeHtml() {
-        $('#sim_' + this.getType() + this.getId()).remove();
+        this.component_container.remove();
+        //$('#sim_' + this.getType() + this.getId()).remove();
     }
 
     toggleVisibility(visible) {
         if (visible) {
-            $('#sim_' + this.getType() + this.getId()).css('visibility', 'visible');
+            this.component_container.css('visibility', 'visible');
+            //$('#sim_' + this.getType() + this.getId()).css('visibility', 'visible');
         } else {
-            $('#sim_' + this.getType() + this.getId()).css('visibility', 'hidden');
+            this.component_container.css('visibility', 'hidden');
+            //$('#sim_' + this.getType() + this.getId()).css('visibility', 'hidden');
         }
     }
 

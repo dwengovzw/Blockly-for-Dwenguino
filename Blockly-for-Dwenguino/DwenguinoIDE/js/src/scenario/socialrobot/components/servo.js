@@ -12,8 +12,8 @@ export { SocialRobotServo}
 class SocialRobotServo extends BaseSocialRobotServo{
     static pinNames = BaseSocialRobotServo.pinNames;
 
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
         this._angle = 0;
         this._prevAngle = 0;

@@ -15,8 +15,8 @@ class SocialRobotButton extends BinaryInputRobotComponent{
     static pinNames = {
         digitalPin: "digitalPin"
     }
-    constructor(){
-        super(0, 1);
+    constructor(simulation_container=null){
+        super(0, 1, simulation_container);
         BindMethods(this);
     }
 

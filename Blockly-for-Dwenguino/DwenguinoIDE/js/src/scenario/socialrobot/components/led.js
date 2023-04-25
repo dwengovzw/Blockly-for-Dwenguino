@@ -23,8 +23,8 @@ class SocialRobotLed extends RobotComponent{
         digitalPin: "digitalPin"
     }
 
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
         this._imageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/led.png`;
         this._borderColor = "#000000";  // Default border color = black

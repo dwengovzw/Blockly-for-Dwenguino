@@ -15,8 +15,8 @@ class SocialRobotRgbLed extends RobotComponent{
         bluePin: "bluePin"
     }
 
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
 
         this._state = [0, 0, 0];

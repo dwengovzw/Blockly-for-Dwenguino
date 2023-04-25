@@ -241,7 +241,7 @@ body{
 }
 
 #db_simulator_top_pane{
-    height: 50%;
+    height: 25%;
     min-height: 180px;
     width: 100%;
     position: relative;
@@ -298,6 +298,7 @@ body{
   flex: 10;
   position: relative;
   width: 100%;
+  height: 75%;
   border-top: solid #8bab42 5px;
 }
 

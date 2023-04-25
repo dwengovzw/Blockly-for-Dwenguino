@@ -26,8 +26,8 @@ class BaseSocialRobotServo extends RobotComponent{
         digitalPin: "digitalPin"
     }
 
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
 
         this._images = {

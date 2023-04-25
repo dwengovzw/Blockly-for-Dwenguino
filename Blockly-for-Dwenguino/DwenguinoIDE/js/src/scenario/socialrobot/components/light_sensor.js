@@ -15,8 +15,8 @@ class SocialRobotLightSensor extends BinaryInputRobotComponent{
         digitalPin: "digitalPin"
     }
 
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(1, 0, simulation_container);
         BindMethods(this);
         this._activeImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/light_sensor.png`;
         this._inactiveImageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/light_sensor.png`;

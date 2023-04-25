@@ -13,7 +13,14 @@ export { AbstractRobotComponent }
 
 class AbstractRobotComponent{
     _isSimulationRunning = true;
-    constructor(){};
+    simulation_container = null
+    constructor(simulation_container=null){
+      if (simulation_container == null){
+        this.simulation_container = $('#sim_container')
+      } else {
+        this.simulation_container = simulation_container;
+      }
+    };
 
 
     initComponent(eventBus, htmlClasses) {
