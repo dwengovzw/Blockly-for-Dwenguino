@@ -5,6 +5,7 @@ import { Types } from "mongoose"
 import { PipelineStage } from "mongoose";
 import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
 import { TextItem } from "../models/portfolio_items/text_item.model.js";
+import { AssignmentGroup } from "../models/assignment_group.model.js";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -159,6 +160,68 @@ class PortfolioController {
         } catch (e) {
             res.status(500).send("Error requesting portfolios.")
         }
+    }
+
+    students = async (req, res) => {
+        let user = req.user
+        const sharedPortfolios = await Portfolio.find({sharedWith: {$in: [user._id]}})
+        // Aggregation query to find all portfolios that are attacht to a portfolio associated with a class group that the user owns
+        const classGroupPortfolios = await AssignmentGroup.aggregate([
+            {
+              $graphLookup: {
+                from: "classgroups",
+                startWith: "$inClassGroup",
+                connectFromField: "inClassGroup",
+                connectToField: "_id",
+                as: "inClassGroup",
+                restrictSearchWithMatch: {
+                  ownedBy: {
+                    $in: [
+                      user._id,
+                    ],
+                  },
+                },
+              },
+            },
+            {
+              $match: {
+                "inClassGroup.0": {
+                  $exists: true,
+                },
+              },
+            },
+            {
+              $graphLookup: {
+                from: "studentteams",
+                startWith: "$studentTeams",
+                connectFromField: "studentTeams",
+                connectToField: "_id",
+                as: "studentTeams",
+                maxDepth: 1,
+              },
+            },
+            {
+              $unwind: "$studentTeams",
+            },
+            {
+              $graphLookup: {
+                from: "portfolios",
+                startWith: "$studentTeams.portfolio",
+                connectFromField: "studentTeams.portfolio",
+                connectToField: "_id",
+                as: "studentTeams.portfolio",
+              },
+            },
+            {
+              $unwind: "$studentTeams.portfolio"
+            },
+            {
+              $project: {
+                portfolio: "$studentTeams.portfolio"
+              }
+            }
+          ]
+        )
     }
 
     // TODO remove _id and __v from the response

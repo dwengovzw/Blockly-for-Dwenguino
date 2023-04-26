@@ -152,6 +152,13 @@ const getMyPortfolios = () => {
     }, null, msg("Error while fetching portfolios"))
 }
 
+const getMyStudentPortfolios = () => {
+    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/students`, "GET", (dispatch, getState, json) => {
+        console.log(json)
+        dispatch(setPortfolioList(json))
+    }, null, msg("Error while fetching portfolios"))
+}
+
 const getPortfolio = (uuid: string) => {
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${uuid}`, "GET", (dispatch, getState, json) => {
         console.log(json)
@@ -164,4 +171,4 @@ const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updat
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem, BlocklyProgSequenceItemInfo, SocialRobotDesignItemInfo}
+export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem, BlocklyProgSequenceItemInfo, SocialRobotDesignItemInfo, getMyStudentPortfolios}

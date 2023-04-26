@@ -9,6 +9,7 @@ const portfolioRouter = express.Router();
 
 portfolioRouter.post("/filter", [verifyTokenAjax, verifyUserExists], portfolioController.filter);
 portfolioRouter.get("/mine", [verifyTokenAjax, verifyUserExists], portfolioController.mine);
+portfolioRouter.get("/students", [verifyTokenAjax, verifyUserExists], portfolioController.students);
 portfolioRouter.put("/:uuid/saveItem", [verifyTokenAjax, verifyUserExists, portfolioController.checkIfUserOwnsPortfolio], portfolioController.saveItem)
 portfolioRouter.put("/:uuid/createItem", [verifyTokenAjax, verifyUserExists, portfolioController.checkIfUserOwnsPortfolio], portfolioController.createItem)
 portfolioRouter.delete("/:uuid/deleteItem/:itemUUID", [verifyTokenAjax, verifyUserExists, portfolioController.checkIfUserOwnsPortfolio], portfolioController.deleteItem)

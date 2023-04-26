@@ -268,6 +268,28 @@ That's all for now! Enjoy using Markdown.
         let savedAssignmentGroup1 = assignmentGroup1.save()
 
 
+
+        let cg2Data: IClassGroup = {
+            name: "classgroup 2",
+            description: "This is the second classgroup",
+            sharingCode: makeSharingCode(),
+            awaitingStudents: [],
+            students: [savedStudent1._id],
+            ownedBy: [savedTeacher2._id],
+        }
+        let cg2 = new ClassGroup(cg2Data)
+        let savedCg2 = await cg2.save()
+
+        let assignmentGroup2Data: IAssignmentGroup = {
+            inClassGroup: savedCg2._id,
+            name: `Assignment group for class ${savedCg2.name}`,
+            description: `Assignment group for class ${savedCg2.name} without teams`,
+            studentTeams: []
+        }
+        let assignmentGroup2 = new AssignmentGroup(assignmentGroup2Data)
+        let savedAssignmentGroup2 = assignmentGroup2.save()
+
+
         
 
     } catch (err) {
