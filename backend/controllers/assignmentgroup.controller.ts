@@ -37,7 +37,7 @@ class AssignmentGroupController {
         }
     }
 
-    updateStudentTeams = async (currentTeams: IStudentTeam[], newTeams: IStudentTeam[], teacher: IUserDoc): Promise<Types.ObjectId[]> => {
+    updateStudentTeams = async (currentTeams: IStudentTeam[], newTeams: IStudentTeam[], teacher: IUserDoc, assignmentName: string): Promise<Types.ObjectId[]> => {
         // Find the student teams that no longer exist = their uuid is not in the newTeams list
         let teamsToRemove = currentTeams.filter(team => {
             return !newTeams.map(newTeam => newTeam.uuid).includes(team.uuid)
@@ -57,7 +57,7 @@ class AssignmentGroupController {
             if (!newTeamToSave){ // If team was new = no uuid, or not found => create new team
                 newTeamToSave = new StudentTeam()
                 let portfolioForTeam = await new Portfolio({
-                    name: "New portfolio",
+                    name: `${assignmentName}`,
                     sharedWith: teacher._id
                 }).save() // Create new portfolio for this team
                 newTeamToSave.portfolio = portfolioForTeam
@@ -92,7 +92,7 @@ class AssignmentGroupController {
                 assignment = await new AssignmentGroup()
             }
             assignment.inClassGroup = classGroup._id
-            assignment.studentTeams = await this.updateStudentTeams(assignment.studentTeams as IStudentTeam[], req.body.studentTeams, teacher)
+            assignment.studentTeams = await this.updateStudentTeams(assignment.studentTeams as IStudentTeam[], req.body.studentTeams, teacher, req.body.name)
             assignment.name = req.body.name
             assignment.description = req.body.description
             assignment.starred = req.body.starred

@@ -55,6 +55,7 @@ class PortfolioController {
             let sharedPortfolios = studentTeams.map(team => {
                 return {
                     shared: true,
+                    ownedBy: [`${user.firstname} ${user.lastname}`],
                     created: (team.portfolio as IPortfolio).created,
                     lastEdited: (team.portfolio as IPortfolio).lastEdited,
                     isPublic: (team.portfolio as IPortfolio).isPublic,
