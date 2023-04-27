@@ -153,7 +153,7 @@ const getMyPortfolios = () => {
 }
 
 const getMyStudentPortfolios = () => {
-    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/students`, "GET", (dispatch, getState, json) => {
+    return createRequestMiddleware(`${globalSettings.hostname}/portfolio/sharedWithMe`, "GET", (dispatch, getState, json) => {
         console.log(json)
         dispatch(setPortfolioList(json))
     }, null, msg("Error while fetching portfolios"))

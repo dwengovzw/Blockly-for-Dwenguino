@@ -6,6 +6,7 @@ import { PipelineStage } from "mongoose";
 import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
 import { TextItem } from "../models/portfolio_items/text_item.model.js";
 import { AssignmentGroup } from "../models/assignment_group.model.js";
+import { getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation.js";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -23,99 +24,7 @@ class PortfolioController {
         try {
             let filter: PortfolioFilter = req.body
             // Get the users that match the sharedWithUUIDs
-            let sharedWithUsersIds = (await User.find({uuid: {$in: filter.sharedWithUUID ?? []}})).map(user => user._id)
-            let pipeline = [
-                {
-                    "$match": {
-                        uuid: filter.uuid ?? {$exists: true}, // If uuid is not specified, match all portfolios
-                        isPublic: filter.isPublic ?? {$exists: true}, // If isPublic is not specified, match all portfolios
-                        lastEdited: {$gte: filter.startDate ?? new Date(0), $lte: filter.endDate ?? new Date()}, // If startDate or endDate are not specified, match all portfolios
-                        sharedWith: sharedWithUsersIds.length > 0 ? { $in: sharedWithUsersIds } : {$exists: true} , // If sharedWithUUIDs is not specified, match all portfolios
-                    },
-                }, {
-                    "$lookup": {    // Get the owner of the portfolio
-                        from: "users",
-                        let: {portfolioId: "$_id"},
-                        pipeline: [
-                            {
-                                "$match": {
-                                    "$expr": {
-                                        "$in": ["$$portfolioId", "$portfolios"]
-                                    }
-                                }
-                            }
-                        ],
-                        as: "userOwners"
-                    }
-                }, {
-                    "$lookup": {    // Get the student teams that have this portfolio       
-                        from: "studentteams",
-                        localField: "_id",
-                        foreignField: "portfolio",
-                        as: "teamOwners"
-                    }
-                },{
-                    //convert array of objects to array of ids
-                    $addFields: {
-                        userOwnerUUIDs: {
-                            $map: {
-                                input: '$userOwners',
-                                as: 'obj',
-                                in: '$$obj.uuid',
-                            },
-                        },
-                        teamOwnerUUIDs: {
-                            $map: {
-                                input: '$teamOwners',
-                                as: 'obj',
-                                in: '$$obj.uuid',
-                            }
-                        }
-                    },
-                },
-                {
-                    $unwind: {
-                        path: "$userOwnerUUIDs",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $unwind: {
-                        path: "$teamOwnerUUIDs",
-                        preserveNullAndEmptyArrays: true
-                    }
-                },
-                {
-                    $match: filter.ofStudentsUUID || filter.ofStudentTeamsUUID ?
-                        {
-                            $or: [
-                                {userOwnerUUIDs: {$in: filter.ofStudentsUUID ?? []}},
-                                {teamOwnerUUIDs: {$in: filter.ofStudentTeamsUUID ?? []}}
-                            ]
-                        } : 
-                        {uuid: {$exists: true}}
-                },
-                {
-                    "$group": {
-                        "_id": "$_id",
-                        "name": { "$first": "$name" },
-                        "description": { "$first": "$description" },
-                        "created": { "$first": "$created" },
-                        "isPublic": { "$first": "$isPublic" },
-                        "items": { "$first": "$items" },
-                        "lastEdited": { "$first": "$lastEdited" },
-                        "sharedWith": { "$first": "$sharedWith" },
-                        "teamOwners": { "$first": "$teamOwners" },
-                        "userOwners": { "$first": "$userOwners" },
-                        "uuid": { "$first": "$uuid" },
-                    }
-                },
-                {
-                    $unset: ["_id"]
-                }
-
-            ]
-            let portfolios = await Portfolio.aggregate(pipeline);
+            const portfolios = await getPortfoliosForFilter(filter)
             res.status(200).send(portfolios)
         } catch (e) {
             res.status(500).send("Error filtering portfolios.")
@@ -162,66 +71,14 @@ class PortfolioController {
         }
     }
 
-    students = async (req, res) => {
-        let user = req.user
-        const sharedPortfolios = await Portfolio.find({sharedWith: {$in: [user._id]}})
-        // Aggregation query to find all portfolios that are attacht to a portfolio associated with a class group that the user owns
-        const classGroupPortfolios = await AssignmentGroup.aggregate([
-            {
-              $graphLookup: {
-                from: "classgroups",
-                startWith: "$inClassGroup",
-                connectFromField: "inClassGroup",
-                connectToField: "_id",
-                as: "inClassGroup",
-                restrictSearchWithMatch: {
-                  ownedBy: {
-                    $in: [
-                      user._id,
-                    ],
-                  },
-                },
-              },
-            },
-            {
-              $match: {
-                "inClassGroup.0": {
-                  $exists: true,
-                },
-              },
-            },
-            {
-              $graphLookup: {
-                from: "studentteams",
-                startWith: "$studentTeams",
-                connectFromField: "studentTeams",
-                connectToField: "_id",
-                as: "studentTeams",
-                maxDepth: 1,
-              },
-            },
-            {
-              $unwind: "$studentTeams",
-            },
-            {
-              $graphLookup: {
-                from: "portfolios",
-                startWith: "$studentTeams.portfolio",
-                connectFromField: "studentTeams.portfolio",
-                connectToField: "_id",
-                as: "studentTeams.portfolio",
-              },
-            },
-            {
-              $unwind: "$studentTeams.portfolio"
-            },
-            {
-              $project: {
-                portfolio: "$studentTeams.portfolio"
-              }
-            }
-          ]
-        )
+    sharedWithMe = async (req, res) => {
+        try {
+            let user = req.user
+            const portfolios = await getAllPortfoliosSharedWithUser(user._id)
+            res.status(200).send(portfolios)
+        } catch (e) {
+            res.status(500).send("Error requesting portfolios.")
+        }
     }
 
     // TODO remove _id and __v from the response

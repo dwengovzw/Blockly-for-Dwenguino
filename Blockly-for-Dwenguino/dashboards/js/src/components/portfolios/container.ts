@@ -5,13 +5,29 @@ import {customElement } from 'lit/decorators.js';
 import { Routes } from "@lit-labs/router";
 
 import "./edit"
+import { getMyPortfolios, getMyStudentPortfolios } from "../../state/features/portfolio_slice";
 
 @customElement("dwengo-dashboard-page-container")
 class DashboardPageContainer extends connect(store)(LitElement){
 
 
     private _routes = new Routes(this, [
-        {path: '/mine', render: () => html`<dwengo-portfolios-list></dwengo-portfolios-list>`},
+        {
+            path: '/mine', 
+            enter: async (params) => {
+                store.dispatch(getMyPortfolios())
+                return true
+            }, 
+            render: () => html`<dwengo-portfolios-list></dwengo-portfolios-list>`
+        },
+        {
+            path: '/sharedWithMe', 
+            enter: async (params) => {
+                store.dispatch(getMyStudentPortfolios())
+                return true
+            }, 
+            render: () => html`<dwengo-portfolios-list></dwengo-portfolios-list>`
+        },
         {path: '/edit/:uuid', render: ({uuid}) => html`<dwengo-edit-dashboard uuid=${uuid}></dwengo-edit-dashboard>`},
     ]);
     

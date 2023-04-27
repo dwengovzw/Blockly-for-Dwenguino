@@ -45,6 +45,7 @@ class Menu extends connect(store)(LitElement){
         ],
         "teacher": [
             {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
+            {id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe`, icon: "menu_book", external: false},
         ],
         "admin": []
     }

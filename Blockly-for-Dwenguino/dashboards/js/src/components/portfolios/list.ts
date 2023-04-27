@@ -24,7 +24,6 @@ class DwengoPortfoliosList extends connect(store)(LitElement) {
 
     connectedCallback(): void {
         super.connectedCallback()
-        store.dispatch(getMyPortfolios())
     }
 
     protected render() {
