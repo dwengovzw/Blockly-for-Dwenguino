@@ -69,7 +69,8 @@ interface PortfolioInfo {
     folder?: string,
     items: PortfolioItemInfo[],
     sharedWith: MinimalUserInfo[],
-    shared?: boolean
+    shared?: boolean,
+    ownedBy?: String[]
 }
 
 const selectedPortfolio: PortfolioInfo = {

@@ -97,7 +97,21 @@ const getAllPortfoliosSharedWithUserOld = async (userId: string) => {
 
 
 const getAllPortfoliosSharedWithUser = async (userId: string) => {
-    const sharedPortfolios = await Portfolio.find({sharedWith: {$in: [userId]}})
+    const sharedPortfolios = await Portfolio.aggregate([
+      {
+        $match: {
+          sharedWith: { $in: [userId] },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: "_id",
+          foreignField: "portfolios",
+          as: "owner"
+        }
+      }
+    ])
         // Aggregation query to find all portfolios that are attacht to a portfolio associated with a class group that the user owns
     const classGroupPortfolios = await AssignmentGroup.aggregate([
         {
@@ -170,21 +184,14 @@ const getAllPortfoliosSharedWithUser = async (userId: string) => {
         
       ]
     )
-    //TODO get owners of portfolio
-    let portfolios = [...sharedPortfolios, ...classGroupPortfolios.map(portfolio => portfolio.portfolio)]
-    portfolios = portfolios.map(portfolio => {
-        return {
-            shared: true,
-            created: portfolio.created,
-            lastEdited: portfolio.lastEdited,
-            isPublic: portfolio.isPublic,
-            uuid: portfolio.uuid,
-            name: portfolio.name, 
-            description: portfolio.description,
-            items: portfolio.items,
-            sharedWith: portfolio.sharedWith,
-        }
+    const propNames = ['created', 'lastEdited', 'isPublic', 'uuid', 'name', 'description', 'items', 'sharedWith']
+    const portfoliosSharedWithMe = sharedPortfolios.map(portfolio => {
+      return Object.assign({}, ...propNames.map(prop => ({[prop]: portfolio[prop]})), {shared: true, ownedBy: portfolio.owner.map(o => `${o?.firstname || ""} ${o.lastname || ""}`) })
     })
+    const portfoliosInMyClassGroups = classGroupPortfolios.map(portfolio => {
+      return Object.assign({}, ...propNames.map(prop => ({[prop]: portfolio.portfolio[prop]})), {shared: true, ownedBy: portfolio.portfolio.ownedBy.map(o => `${o?.firstname || ""} ${o.lastname || ""}`)})
+    })
+    let portfolios = [...portfoliosSharedWithMe, ...portfoliosInMyClassGroups]
     return portfolios
 }
 

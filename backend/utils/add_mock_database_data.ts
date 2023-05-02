@@ -106,23 +106,14 @@ That's all for now! Enjoy using Markdown.
             socialRobotDesignXml: `<xml xmlns="http://www.w3.org/1999/xhtml"><Item  Type='background' Class='background1' Id='1'></Item><Item  Type='lcd' Id='1' OffsetLeft='391' OffsetTop='107' Classes='undefined'></Item><Item  Type='servo' Name='servo' Id='1' Width='86' Height='149' OffsetLeft='170' OffsetTop='252' Pins='{"digitalPin":"SERVO_3"}' State='[object Object]' CanvasId='sim_servo_canvas1' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='righthand' X='0' Y='30'></Item><Item  Type='servo' Name='servo' Id='2' Width='86' Height='149' OffsetLeft='629' OffsetTop='215' Pins='{"digitalPin":"SERVO_4"}' State='[object Object]' CanvasId='sim_servo_canvas2' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='lefthand' X='0' Y='30'></Item></xml>`
         }).save()
 
-        let portfolio2Data: INewPortfolio = {
-            created: new Date(),
-            isPublic: false,
-            items: [savedTextItem2._id, savedTextItem3._id, savedTextItem4._id, blocklyProgSequenceItem1._id, socialRobotDesignItem._id],
-            lastEdited: new Date(),
-            name: "Test Portfolio 2",
-        }
-
-        let portfolio2 = new Portfolio(portfolio2Data)
-        let savedPortfolio2 = await portfolio2.save();
+        
 
         let portfolio3Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
             items: [savedTextItem2._id],
             lastEdited: new Date(),
-            name: "Test Portfolio 3",
+            name: "A portfolio owned by the admin, not shared with anyone.",
         }
 
         let portfolio3 = new Portfolio(portfolio3Data)
@@ -133,7 +124,7 @@ That's all for now! Enjoy using Markdown.
         let adminData: IUser = {
             platform: db.PLATFORMS.test,
             userId: "admin",
-            portfolios: [savedPortfolio2._id, savedPortfolio3._id],
+            portfolios: [savedPortfolio3._id],
             birthdate: new Date(1990, 6, 20),
             email: "tom@dwengo.org",
             firstname: "Tom",
@@ -165,11 +156,23 @@ That's all for now! Enjoy using Markdown.
         }
         let teacher2 = new User(teacher2Data)
 
+        let portfolio2Data: INewPortfolio = {
+            created: new Date(),
+            isPublic: false,
+            items: [savedTextItem2._id, savedTextItem3._id, savedTextItem4._id, blocklyProgSequenceItem1._id, socialRobotDesignItem._id],
+            lastEdited: new Date(),
+            name: "Raf his portfolio shared with admin",
+            sharedWith: [savedAdmin._id]
+        }
+
+        let portfolio2 = new Portfolio(portfolio2Data)
+        let savedPortfolio2 = await portfolio2.save();
+
         let student1Data: IUser = {
             platform: db.PLATFORMS.test,
             userId: "student1",
             firstname: "Raf",
-            portfolios: [],
+            portfolios: [savedPortfolio2],
             roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
         }
         let student1 = new User(student1Data)
@@ -234,7 +237,7 @@ That's all for now! Enjoy using Markdown.
             isPublic: false,
             items: [savedTextItem1._id],
             lastEdited: new Date(),
-            name: "Test Portfolio",
+            name: "A portfolio owned by student team 1, in classgroup 1, owned by admin and teacher 1.",
         }
 
         let portfolio1 = new Portfolio(portfolio1Data)

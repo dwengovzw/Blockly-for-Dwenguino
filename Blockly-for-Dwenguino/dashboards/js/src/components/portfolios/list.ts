@@ -39,9 +39,21 @@ class DwengoPortfoliosList extends connect(store)(LitElement) {
                             <span class="material-symbols-outlined portfolio_icon">
                                 ${portfolio.shared ? html`group` : html`menu_book`}
                             </span>
-                            <span>${portfolio.name}</span> 
+                            <span title="${portfolio.name}">${portfolio.name}</span> 
                         </span>`,
                             
+                        []
+                    )}
+                    >
+                </vaadin-grid-sort-column>
+                <vaadin-grid-sort-column
+                    path="name"
+                    header="${msg("Owners")}"
+                    ${columnBodyRenderer(
+                        (portfolio: PortfolioInfo) => {
+                            const owners = portfolio.ownedBy?.map(owner => `${owner}`).join(", ")
+                            return html`<span title="${owners}">${owners}</span>`
+                        },
                         []
                     )}
                     >

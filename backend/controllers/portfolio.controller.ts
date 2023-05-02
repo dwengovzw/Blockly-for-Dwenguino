@@ -1,6 +1,6 @@
 import { IPortfolio, Portfolio } from "../models/portfolio.model.js"
 import { StudentTeam } from "../models/student_team.model.js"
-import { User } from "../models/user.model.js"
+import { IUser, User } from "../models/user.model.js"
 import { Types } from "mongoose"
 import { PipelineStage } from "mongoose";
 import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
@@ -38,10 +38,11 @@ class PortfolioController {
                 res.status(403).send({message: "User not found."})
                 return
             }
-            let studentTeams = await StudentTeam.find({students: {$in: [user._id]}}).populate<IPortfolio>("portfolio")
+            let studentTeams = await StudentTeam.find({students: {$in: [user._id]}}).populate<IPortfolio>("portfolio").populate<IUser>("students")
             let ownPortfolios = user.portfolios.map(portfolio => { 
                 return {
                     shared: false,
+                    ownedBy: [`${user?.firstname} ${user?.lastname}`],
                     created: portfolio.created,
                     lastEdited: portfolio.lastEdited,
                     isPublic: portfolio.isPublic,
@@ -55,7 +56,7 @@ class PortfolioController {
             let sharedPortfolios = studentTeams.map(team => {
                 return {
                     shared: true,
-                    ownedBy: [`${user.firstname} ${user.lastname}`],
+                    ownedBy: team.students.map(student => `${(student as IUser)?.firstname || ""} ${(student as IUser)?.lastname || ""}`),
                     created: (team.portfolio as IPortfolio).created,
                     lastEdited: (team.portfolio as IPortfolio).lastEdited,
                     isPublic: (team.portfolio as IPortfolio).isPublic,
