@@ -1,99 +1,43 @@
 import { PortfolioFilter } from "../controllers/portfolio.controller.js"
 import { AssignmentGroup } from "../models/assignment_group.model.js"
-import { Portfolio } from "../models/portfolio.model.js"
-import { User } from "../models/user.model.js"
+import { IPortfolio, Portfolio } from "../models/portfolio.model.js"
+import { StudentTeam } from "../models/student_team.model.js"
+import { IUser, User } from "../models/user.model.js"
 
-
-const getAllPortfoliosSharedWithUserOld = async (userId: string) => {
-    const sharedPortfolios = await Portfolio.find({sharedWith: {$in: [userId]}})
-        // Aggregation query to find all portfolios that are attacht to a portfolio associated with a class group that the user owns
-    const classGroupPortfolios = await AssignmentGroup.aggregate([
-        {
-          $graphLookup: {
-            from: "classgroups",
-            startWith: "$inClassGroup",
-            connectFromField: "inClassGroup",
-            connectToField: "_id",
-            as: "inClassGroup",
-            restrictSearchWithMatch: {
-              ownedBy: {
-                $in: [
-                  userId,
-                ],
-              },
-            },
-          },
-        },
-        {
-          $match: {
-            "inClassGroup.0": {
-              $exists: true,
-            },
-          },
-        },
-        {
-          $graphLookup: {
-            from: "studentteams",
-            startWith: "$studentTeams",
-            connectFromField: "studentTeams",
-            connectToField: "_id",
-            as: "studentTeams",
-            maxDepth: 1,
-          },
-        },
-         {
-          $unwind: "$studentTeams",
-        },
-        {
-          $graphLookup: {
-            from: "portfolios",
-            startWith: "$studentTeams.portfolio",
-            connectFromField: "studentTeams.portfolio",
-            connectToField: "_id",
-            as: "portfolio",
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            portfolio: { $arrayElemAt: ["$portfolio", 0] },
-            students: "$studentTeams.students"
-          },
-        },
-          {
-          $graphLookup: {
-            from: 'users',
-            startWith: "$students",
-            connectFromField: 'students',
-            connectToField: '_id',
-            as: 'portfolio.ownedBy'
-          }
-        },
-        {
-          $project: {
-            _id: 0,
-            portfolio: "$portfolio"
-          }
-        }
-        
-      ]
-    )
-    let portfolios = [...sharedPortfolios, ...classGroupPortfolios]
-    portfolios = portfolios.map(portfolio => {
-        return {
-            shared: true,
-            created: portfolio.created,
-            lastEdited: portfolio.lastEdited,
-            isPublic: portfolio.isPublic,
-            uuid: portfolio.uuid,
-            name: portfolio.name, 
-            description: portfolio.description,
-            items: portfolio.items,
-            sharedWith: portfolio.sharedWith,
-        }
-    })
-    return portfolios
+const getAllPortfoliosOwnedByUser = async (userId: string) => {
+  let user = await User.findOne({_id: userId}).populate<IPortfolio[]>("portfolios")
+  let studentTeams = await StudentTeam.find({students: {$in: [user._id]}}).populate<IPortfolio>("portfolio").populate<IUser>("students")
+  let ownPortfolios = user.portfolios.map(portfolio => { 
+      return {
+          shared: false,
+          ownedBy: [`${user?.firstname} ${user?.lastname}`],
+          created: portfolio.created,
+          lastEdited: portfolio.lastEdited,
+          isPublic: portfolio.isPublic,
+          uuid: portfolio.uuid,
+          name: portfolio.name,
+          description: portfolio.description,
+          items: portfolio.items,
+          sharedWith: portfolio.sharedWith,
+      }
+  })
+  let sharedPortfolios = studentTeams.map(team => {
+      return {
+          shared: true,
+          ownedBy: team.students.map(student => `${(student as IUser)?.firstname || ""} ${(student as IUser)?.lastname || ""}`),
+          created: (team.portfolio as IPortfolio).created,
+          lastEdited: (team.portfolio as IPortfolio).lastEdited,
+          isPublic: (team.portfolio as IPortfolio).isPublic,
+          uuid: (team.portfolio as IPortfolio).uuid,
+          name: (team.portfolio as IPortfolio).name, 
+          description: (team.portfolio as IPortfolio).description,
+          items: (team.portfolio as IPortfolio).items,
+          sharedWith: (team.portfolio as IPortfolio).sharedWith,}
+      })
+  let portfolios = [...ownPortfolios, ...sharedPortfolios]
+  return portfolios
 }
+
 
 
 const getAllPortfoliosSharedWithUser = async (userId: string) => {
@@ -297,5 +241,6 @@ const getPortfoliosForFilter = async (filter: PortfolioFilter) => {
 
 export { 
     getAllPortfoliosSharedWithUser, 
-    getPortfoliosForFilter 
+    getPortfoliosForFilter,
+    getAllPortfoliosOwnedByUser
 }

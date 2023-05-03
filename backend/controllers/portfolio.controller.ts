@@ -6,7 +6,7 @@ import { PipelineStage } from "mongoose";
 import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
 import { TextItem } from "../models/portfolio_items/text_item.model.js";
 import { AssignmentGroup } from "../models/assignment_group.model.js";
-import { getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation.js";
+import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation.js";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -33,40 +33,7 @@ class PortfolioController {
 
     mine = async (req, res) => {
         try{
-            let user = await User.findOne({userId: req.userId, platform: req.platform}).populate<IPortfolio[]>("portfolios")
-            if (!user){
-                res.status(403).send({message: "User not found."})
-                return
-            }
-            let studentTeams = await StudentTeam.find({students: {$in: [user._id]}}).populate<IPortfolio>("portfolio").populate<IUser>("students")
-            let ownPortfolios = user.portfolios.map(portfolio => { 
-                return {
-                    shared: false,
-                    ownedBy: [`${user?.firstname} ${user?.lastname}`],
-                    created: portfolio.created,
-                    lastEdited: portfolio.lastEdited,
-                    isPublic: portfolio.isPublic,
-                    uuid: portfolio.uuid,
-                    name: portfolio.name,
-                    description: portfolio.description,
-                    items: portfolio.items,
-                    sharedWith: portfolio.sharedWith,
-                }
-            })
-            let sharedPortfolios = studentTeams.map(team => {
-                return {
-                    shared: true,
-                    ownedBy: team.students.map(student => `${(student as IUser)?.firstname || ""} ${(student as IUser)?.lastname || ""}`),
-                    created: (team.portfolio as IPortfolio).created,
-                    lastEdited: (team.portfolio as IPortfolio).lastEdited,
-                    isPublic: (team.portfolio as IPortfolio).isPublic,
-                    uuid: (team.portfolio as IPortfolio).uuid,
-                    name: (team.portfolio as IPortfolio).name, 
-                    description: (team.portfolio as IPortfolio).description,
-                    items: (team.portfolio as IPortfolio).items,
-                    sharedWith: (team.portfolio as IPortfolio).sharedWith,}
-                })
-            let portfolios = [...ownPortfolios, ...sharedPortfolios]
+            const portfolios = await getAllPortfoliosOwnedByUser(req.user._id)
             res.status(200).send(portfolios)
         } catch (e) {
             res.status(500).send("Error requesting portfolios.")
@@ -98,7 +65,7 @@ class PortfolioController {
         }
     }
 
-    checkIfUserOwnsPortfolio = async (req, res, next) => {
+    checkIfUserHasAccessToPortfolio = async (req, res, next) => {
         try {
             if (!req.params.uuid){ // If the portfolio uuid is not specified, skip this middleware => the user is creating a new portfolio
                 res.status(404).send({message: "Portfolio not found."})
@@ -110,19 +77,11 @@ class PortfolioController {
                 res.status(404).send({message: "Portfolio not found."})
                 return
             }
-            // Check if the user owns the portfolio
-            let user = await User.findOne({userId: req.userId, platform: req.platform}).populate<IPortfolio[]>("portfolios")
-            if (!user){ // If the user does not exist, return an error
-                res.status(403).send({message: "User not found."})
-                return
-            }
-            let pIndex = user.portfolios.findIndex(item => (item as IPortfolio).uuid === portfolio?.uuid) // Check if the user owns the portfolio
-            if (pIndex === -1){ // If the user does not own the portfolio, check if the user is a member of a team that owns the portfolio
-                let studentTeams = await StudentTeam.find({students: {$in: [user._id]}}).populate<IPortfolio>("portfolio")
-                pIndex = studentTeams.findIndex(item => (item.portfolio as IPortfolio).uuid === portfolio?.uuid) // Check if the user is a member of a team that owns the portfolio
-            }
-            if (pIndex === -1){ // If the user does not own the portfolio, return an error
-                res.status(403).send({message: "User does not own the portfolio."})
+            // Check if the user owns the portfolio or if the portfolio is shared with the user
+            const portfoliosOwnedByUser = (await getAllPortfoliosOwnedByUser(req.user._id)).filter(portfolio => portfolio.uuid === req.params.uuid)
+            const portfoliosSharedWithUser = (await getAllPortfoliosSharedWithUser(req.user._id)).filter(portfolio => portfolio.uuid === req.params.uuid)
+            if (portfoliosOwnedByUser.length === 0 && portfoliosSharedWithUser.length === 0){ // If the user does not own the portfolio and the portfolio is not shared with the user, return an error
+                res.status(403).send({message: "User does not have access to the portfolio."})
                 return
             }
             next() // If the user owns the portfolio, continue
