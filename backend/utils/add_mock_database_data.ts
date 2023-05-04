@@ -68,23 +68,17 @@ Or you can write a code block:
 
 That's all for now! Enjoy using Markdown.
 
-`
+`,
+            children: []
 
 
         }
-        let textItem2 = new TextItem(textItemData2)
-        let savedTextItem2 = await textItem2.save();
 
-        let textItemData3: ITextItem = {
-            name: "Text item 3",
-            mdText: "#Title \n This is a text based portfolio item."
-        }
-        let textItem3 = new TextItem(textItemData3)
-        let savedTextItem3 = await textItem3.save();
 
         let textItemData4: ITextItem = {
             name: "Text item 4",
-            mdText: "#Title \n This is a text based portfolio item."
+            mdText: "#Title \n This is a text based portfolio item.",
+            children: []
         }
         let textItem4 = new TextItem(textItemData4)
         let savedTextItem4 = await textItem4.save();
@@ -98,15 +92,29 @@ That's all for now! Enjoy using Markdown.
             name: "BlocklyProgSequenceItem",
             eventSequence: [
                 testLogItem
-            ]
+            ],
+            children: [savedTextItem4._id]
         }).save()
 
         let socialRobotDesignItem = await new SocialRobotDesignItem({
             name: "SocialRobotDesignItem",
-            socialRobotDesignXml: `<xml xmlns="http://www.w3.org/1999/xhtml"><Item  Type='background' Class='background1' Id='1'></Item><Item  Type='lcd' Id='1' OffsetLeft='391' OffsetTop='107' Classes='undefined'></Item><Item  Type='servo' Name='servo' Id='1' Width='86' Height='149' OffsetLeft='170' OffsetTop='252' Pins='{"digitalPin":"SERVO_3"}' State='[object Object]' CanvasId='sim_servo_canvas1' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='righthand' X='0' Y='30'></Item><Item  Type='servo' Name='servo' Id='2' Width='86' Height='149' OffsetLeft='629' OffsetTop='215' Pins='{"digitalPin":"SERVO_4"}' State='[object Object]' CanvasId='sim_servo_canvas2' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='lefthand' X='0' Y='30'></Item></xml>`
+            socialRobotDesignXml: `<xml xmlns="http://www.w3.org/1999/xhtml"><Item  Type='background' Class='background1' Id='1'></Item><Item  Type='lcd' Id='1' OffsetLeft='391' OffsetTop='107' Classes='undefined'></Item><Item  Type='servo' Name='servo' Id='1' Width='86' Height='149' OffsetLeft='170' OffsetTop='252' Pins='{"digitalPin":"SERVO_3"}' State='[object Object]' CanvasId='sim_servo_canvas1' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='righthand' X='0' Y='30'></Item><Item  Type='servo' Name='servo' Id='2' Width='86' Height='149' OffsetLeft='629' OffsetTop='215' Pins='{"digitalPin":"SERVO_4"}' State='[object Object]' CanvasId='sim_servo_canvas2' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='lefthand' X='0' Y='30'></Item></xml>`,
+            children: []
         }).save()
 
+        let textItem2 = new TextItem(textItemData2)
+        let savedTextItem2 = await textItem2.save();
+
+        let textItemData3: ITextItem = {
+            name: "Text item 3",
+            mdText: "#Title \n This is a text based portfolio item.", 
+            children: [blocklyProgSequenceItem1._id, socialRobotDesignItem._id]
+        }
+        let textItem3 = new TextItem(textItemData3)
+        let savedTextItem3 = await textItem3.save();
+
         
+ 
 
         let portfolio3Data: INewPortfolio = {
             created: new Date(),
@@ -225,7 +233,8 @@ That's all for now! Enjoy using Markdown.
 
         let textItemData: ITextItem = {
             name: "Text item 1",
-            mdText: "#Title \n This is a text based portfolio item."
+            mdText: "#Title \n This is a text based portfolio item.",
+            children: []
         }
         let textItem1 = new TextItem(textItemData)
         let savedTextItem1 = await textItem1.save();

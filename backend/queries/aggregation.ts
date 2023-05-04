@@ -6,8 +6,11 @@ import { IUser, User } from "../models/user.model.js"
 
 const getAllPortfoliosOwnedByUser = async (userId: string) => {
   let user = await User.findOne({_id: userId}).populate<IPortfolio[]>("portfolios")
+  if (!user){
+    return []
+  }
   let studentTeams = await StudentTeam.find({students: {$in: [user._id]}}).populate<IPortfolio>("portfolio").populate<IUser>("students")
-  let ownPortfolios = user.portfolios.map(portfolio => { 
+  let ownPortfolios = user?.portfolios.map(portfolio => { 
       return {
           shared: false,
           ownedBy: [`${user?.firstname} ${user?.lastname}`],

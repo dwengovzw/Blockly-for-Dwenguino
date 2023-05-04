@@ -98,7 +98,7 @@ class Menu extends connect(store)(LitElement){
 
     static override styles = css`
         .main_page {
-            margin: 1rem auto;
+            margin: 0rem auto;
             width: 90%;
             max-width: 1366px;
         }
