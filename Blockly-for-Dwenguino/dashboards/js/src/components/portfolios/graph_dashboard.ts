@@ -52,12 +52,14 @@ class GraphDashboard extends connect(store)(LitElement){
 
     render() {
         return html`
-            <lit-infinite-viewer class="root">
+            <lit-infinite-viewer class="root viewer">
+                <div class="viewport">
                     ${this.portfolio?.items.map(item => {
                         return html`
                             ${this.renderPortfolioItem(item)}
                         `
                     })}
+                </div>
             </lit-infinite-viewer>
         `
     }
