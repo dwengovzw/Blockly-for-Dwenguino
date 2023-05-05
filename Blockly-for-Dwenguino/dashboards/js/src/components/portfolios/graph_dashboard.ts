@@ -7,6 +7,7 @@ import { createPortfolioItem, getPortfolio, MinimalPortfolioItemInfo, PortfolioI
 import { msg } from "@lit/localize";
 
 import { LitMoveable } from "lit-moveable";
+import { LitInfiniteViewer } from "lit-infinite-viewer";
 
 @customElement("dwengo-graph-dashboard")
 class GraphDashboard extends connect(store)(LitElement){
@@ -15,6 +16,20 @@ class GraphDashboard extends connect(store)(LitElement){
 
     numberOfItems: number = 0
     itemTargets: Map<String, HTMLElement> = new Map()
+
+    @query(".root") 
+    containerRef!: LitInfiniteViewer
+
+    scrollOptions: any = {
+        container: () => this.containerRef,
+        threshold: 20,
+        getScrollPosition: () => {
+            return [
+                this.containerRef?.scrollLeft,
+                this.containerRef?.scrollTop,
+            ];
+        }
+    };
 
     constructor(){
         super()
@@ -37,15 +52,13 @@ class GraphDashboard extends connect(store)(LitElement){
 
     render() {
         return html`
-            <div class="root">
-                <div class="container">
+            <lit-infinite-viewer class="root">
                     ${this.portfolio?.items.map(item => {
                         return html`
                             ${this.renderPortfolioItem(item)}
                         `
                     })}
-                </div>
-            </div>
+            </lit-infinite-viewer>
         `
     }
 
@@ -65,27 +78,32 @@ class GraphDashboard extends connect(store)(LitElement){
                     }
                 })
             }
-            style=${`display:inline-block;width:100px;height:200px;transform: translate(100px, 250px)`}   >
+            style=${`display:inline-block;
+                     width:${item.displayInformation.width}px;
+                     height:${item.displayInformation.height}px;
+                     transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px)`}   >
                 ${item.name}
         </div>
         <lit-moveable
+            .scrollable=${true}
+            .scrollOptions=${this.scrollOptions}
             .target=${this.itemTargets.get(item.uuid)}
             .litDraggable=${false}
             .resizable=${true}
             .edgeDraggable=${true}
             .zoom=${0.5}
-            @litDrag=${this.onDrag}
-            @litResize=${this.onResize}
+            @litDrag=${(e) => { this.onDrag(e, item)}}
+            @litResize=${(e) => { this.onResize(e, item)}}
             .renderDirections=${["sw","se"]}
         ></lit-moveable>
         `
     }
 
-    onDrag(e) {
+    onDrag(e, item: PortfolioItemInfo) {
         e.detail.target.style.transform = e.detail.transform;
     }
 
-    onResize(e) {
+    onResize(e, item: PortfolioItemInfo) {
         e.detail.target.style.width = `${e.detail.width}px`
         e.detail.target.style.height = `${e.detail.height}px`
         e.detail.target.style.transform = e.detail.drag.transform
@@ -93,16 +111,20 @@ class GraphDashboard extends connect(store)(LitElement){
 
     static styles: CSSResultGroup = css`
      .root {
-        position: absolute;
+        position: relative;
         width: 100%;
-        bottom: 100vh;
+        height: calc(100vh - 112px);
+        display: inline-block;
      }
      .container {
         position: absolute;
-        width: 100%;
-        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
         display: inline-block;
         border: 1px solid rgb(204, 204, 204);
+        overflow: hidden;
      }
      .target {
         position: absolute;

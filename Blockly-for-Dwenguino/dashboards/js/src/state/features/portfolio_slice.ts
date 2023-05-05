@@ -6,6 +6,7 @@ import { createRequestMiddleware } from "../../middleware/fetch"
 import { StudentTeamInfo } from "./student_team_slice"
 import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio.controller"
 import { LogItemInfo } from "./log_item_slice"
+import {IPortfolioItemDisplayInformation} from "../../../../../../backend/models/portfolio_items/portfolio_item.model"
 
 interface MinimalPortfolioItemInfo {
     name: string,
@@ -14,6 +15,7 @@ interface MinimalPortfolioItemInfo {
 
 interface PortfolioItemInfo extends MinimalPortfolioItemInfo {
     uuid: string,
+    displayInformation: IPortfolioItemDisplayInformation
 }
 
 interface SolutionItemInfo extends PortfolioItemInfo {
@@ -70,7 +72,8 @@ interface PortfolioInfo {
     items: PortfolioItemInfo[],
     sharedWith: MinimalUserInfo[],
     shared?: boolean,
-    ownedBy?: String[]
+    ownedBy?: String[],
+    
 }
 
 const selectedPortfolio: PortfolioInfo = {
@@ -82,7 +85,7 @@ const selectedPortfolio: PortfolioInfo = {
     isPublic: false,
     items: [],
     sharedWith: [],
-    shared: false
+    shared: false,
 }
 const portfolioList: PortfolioInfo[] = []
 

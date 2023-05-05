@@ -105,6 +105,7 @@
     "jquery-ui-bundle": "^1.12.1-migrate",
     "jsonwebtoken": "^9.0.0",
     "lit": "^2.6.1",
+    "lit-infinite-viewer": "^0.23.1",
     "lit-moveable": "^0.24.2",
     "marked": "^4.3.0",
     "material-components-web": "^14.0.0",

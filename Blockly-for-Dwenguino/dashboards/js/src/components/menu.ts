@@ -89,7 +89,9 @@ class Menu extends connect(store)(LitElement){
                 })}
             </vaadin-tabs>
             <div class="main_page">
-                <slot></slot>
+                <div class="content_container">
+                    <slot></slot>
+                </div>
             </div>
           </vaadin-app-layout>
         `;
@@ -99,8 +101,14 @@ class Menu extends connect(store)(LitElement){
     static override styles = css`
         .main_page {
             margin: 0rem auto;
-            width: 90%;
+            width: 100%;
             max-width: 1366px;
+            display: flex;
+            flex-flow: column;
+            min-height: 100%;
+        }
+        .content_container {
+            flex: 1 1 auto;
         }
 
         h1 {
