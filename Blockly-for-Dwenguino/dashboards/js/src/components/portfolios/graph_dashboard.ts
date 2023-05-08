@@ -9,6 +9,10 @@ import { msg } from "@lit/localize";
 import { LitMoveable } from "lit-moveable";
 import { LitInfiniteViewer } from "lit-infinite-viewer";
 
+import "./items/text_item"
+import "./items/blockly_item"
+import "./items/socialrobot_design_item"
+
 @customElement("dwengo-graph-dashboard")
 class GraphDashboard extends connect(store)(LitElement){
     @property() uuid: string = ""
@@ -109,7 +113,7 @@ class GraphDashboard extends connect(store)(LitElement){
                      width:${item.displayInformation.width}px;
                      height:${item.displayInformation.height}px;
                      transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px)`}   >
-                ${item.name}
+                ${this.mapItemToElement(item)}
         </div>
         <lit-moveable
             .scrollable=${true}
@@ -121,9 +125,25 @@ class GraphDashboard extends connect(store)(LitElement){
             .zoom=${0.5}
             @litDrag=${(e) => { this.onDrag(e, item)}}
             @litResize=${(e) => { this.onResize(e, item)}}
+            @litResizeEnd=${(e) => { this.onResizeEnd(e, item)}}
             .renderDirections=${["sw","se"]}
         ></lit-moveable>
         `
+    }
+
+    // TODO: Rethink this approach
+    mapItemToElement(item){
+        const itemType: string = item?.__t || ""
+        switch(itemType){
+            case "TextItem":
+                return html`<dwengo-portfolio-text-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-portfolio-text-item>`
+            case "BlocklyProgSequenceItem":
+                return html`<dwengo-portfolio-blockly-code-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-portfolio-blockly-code-item>`
+            case "SocialRobotDesignItem":
+                return html`<dwengo-portfolio-socialrobot-design-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-portfolio-socialrobot-design-item>`
+            default:    
+                return html`${msg("Unknown item type")}`
+        }
     }
 
     onDrag(e, item: PortfolioItemInfo) {
@@ -131,6 +151,15 @@ class GraphDashboard extends connect(store)(LitElement){
         // Update item position
         item.displayInformation.x = e.detail.translate[0]
         item.displayInformation.y = e.detail.translate[1]
+        this.requestUpdate()
+    }
+
+    onResizeEnd(e, item: PortfolioItemInfo) {
+        // Update item size and position
+        item.displayInformation.width = e.detail.lastEvent.width
+        item.displayInformation.height = e.detail.lastEvent.height
+        item.displayInformation.x = e.detail.lastEvent.drag.translate[0]
+        item.displayInformation.y = e.detail.lastEvent.drag.translate[1]
         this.requestUpdate()
     }
 
