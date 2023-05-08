@@ -54,7 +54,8 @@ class PortfolioController {
     get = async (req, res) => {
         try {
             let portfolio = await Portfolio.findOne({uuid: req.params.uuid})
-                .populate("items sharedWith")
+                .populate({path: "items", populate: {path: "children"}, select: "name uuid displayInformation"})
+                .populate("sharedWith")
             if (!portfolio){
                 res.status(404).send({message: "Portfolio not found."})
                 return

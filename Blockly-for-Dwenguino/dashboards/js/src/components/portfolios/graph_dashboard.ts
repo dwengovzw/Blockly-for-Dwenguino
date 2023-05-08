@@ -59,6 +59,31 @@ class GraphDashboard extends connect(store)(LitElement){
                             ${this.renderPortfolioItem(item)}
                         `
                     })}
+                    ${this.portfolio?.items.map(item => {
+                        return html`${item.children.map(child => {
+                            return html`
+                                <svg class="line" style="transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px);left:0;right:0">
+                                    <path 
+                                        id="line_${item.uuid}_${child.uuid}	" 
+                                        d="M ${item.displayInformation.width/2} ${item.displayInformation.height/2} L ${(child.displayInformation.x - item.displayInformation.x)+child.displayInformation.width/2} ${(child.displayInformation.y - item.displayInformation.y)+child.displayInformation.height/2} Z"
+                                        stroke="black"
+                                </svg>
+                            `
+                        })}
+                        `
+                    })}
+                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                        <defs>
+                            <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+                                <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.25"/>
+                            </pattern>
+                            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                                <rect width="80" height="80" fill="url(#smallGrid)"/>
+                                <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </svg>
                 </div>
             </lit-infinite-viewer>
         `
@@ -102,13 +127,23 @@ class GraphDashboard extends connect(store)(LitElement){
     }
 
     onDrag(e, item: PortfolioItemInfo) {
-        e.detail.target.style.transform = e.detail.transform;
+        //e.detail.target.style.transform = e.detail.transform;
+        // Update item position
+        item.displayInformation.x = e.detail.translate[0]
+        item.displayInformation.y = e.detail.translate[1]
+        this.requestUpdate()
     }
 
     onResize(e, item: PortfolioItemInfo) {
         e.detail.target.style.width = `${e.detail.width}px`
         e.detail.target.style.height = `${e.detail.height}px`
         e.detail.target.style.transform = e.detail.drag.transform
+        // Update item size and position
+        //item.displayInformation.width = e.detail.width
+        //item.displayInformation.height = e.detail.height
+        //item.displayInformation.x = e.detail.translate[0]
+        //item.displayInformation.y = e.detail.translate[1]
+        this.requestUpdate()
     }
 
     static styles: CSSResultGroup = css`
@@ -134,7 +169,20 @@ class GraphDashboard extends connect(store)(LitElement){
         box-sizing: border-box;
         overflow: hidden;
         padding: 5px;
-        margin: 5px;
+        background-color: white;
+        z-index: 1;
+    }
+    .line {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+    }
+    .viewport {
+        width: 100%;
+        height: 100%;
     }
 
     .moveable-control.moveable-origin {

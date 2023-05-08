@@ -15,7 +15,8 @@ interface MinimalPortfolioItemInfo {
 
 interface PortfolioItemInfo extends MinimalPortfolioItemInfo {
     uuid: string,
-    displayInformation: IPortfolioItemDisplayInformation
+    displayInformation: IPortfolioItemDisplayInformation,
+    children: PortfolioItemInfo[],
 }
 
 interface SolutionItemInfo extends PortfolioItemInfo {
@@ -102,10 +103,21 @@ export const portfolioSlice = createSlice({
             state.portfolioList = action.payload
         },
         setSelectedPortfolio: (state, action) => {
+            // Map children references to items in the portfolio.
+            action.payload.items = action.payload.items.map(item => {
+                item.children = item.children.map(childItem => {
+                    return action.payload.items.find(item => item.uuid === childItem.uuid)
+                })
+                return item
+            })
             state.selectedPortfolio = action.payload
         },
         setSelectedPortfolioItems: (state, action) => {
             if (state.selectedPortfolio){
+                // Map children to items in the portfolio.
+                action.payload.children = action.payload.children.map(childItem => {
+                    return action.payload.find(item => item.uuid === childItem.uuid)
+                })
                 (state.selectedPortfolio as PortfolioInfo).items = action.payload
             }
         },

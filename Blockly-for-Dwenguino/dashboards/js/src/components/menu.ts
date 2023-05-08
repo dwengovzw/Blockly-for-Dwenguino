@@ -102,7 +102,7 @@ class Menu extends connect(store)(LitElement){
         .main_page {
             margin: 0rem auto;
             width: 100%;
-            max-width: 1366px;
+            max-width: 1361px;
             display: flex;
             flex-flow: column;
             min-height: 100%;
