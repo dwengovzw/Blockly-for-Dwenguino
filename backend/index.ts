@@ -1,6 +1,5 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { Role } from "./models/role.model.js"
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 

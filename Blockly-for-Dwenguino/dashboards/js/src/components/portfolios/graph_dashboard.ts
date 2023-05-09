@@ -131,10 +131,8 @@ class GraphDashboard extends connect(store)(LitElement){
     renderPortfolioItem(item: PortfolioItemInfo){
         return html`
         <div 
-            @mousedown=${(e) => {this.onMouseDown(e, item)}}
-            @mouseup=${(e) => {this.onMouseUp(e, item)}}
-            @touchstart=${(e) => {this.onMouseDown(e, item)}}
-            @touchend=${(e) => {this.onMouseUp(e, item)}}
+            @dragHandlerMouseDown=${(e) => {this.onMouseDown(e, item)}}
+            @dragHandlerMouseUp=${(e) => {this.onMouseUp(e, item)}}
             class="target"
             style=${`display:inline-block;
                      width:${item.displayInformation.width}px;
@@ -146,15 +144,15 @@ class GraphDashboard extends connect(store)(LitElement){
         `
     }
 
-    onMouseDown(e: MouseEvent, item: PortfolioItemInfo){
+    onMouseDown(e: CustomEvent, item: PortfolioItemInfo){
         this.movingItemClickOffset = {
-            x: e.offsetX,
-            y: e.offsetY
+            x: e.detail.offsetX,
+            y: e.detail.offsetY
         }
         this.movingItem = item
         
     }
-    onMouseUp(e: MouseEvent, item: PortfolioItemInfo){
+    onMouseUp(e: CustomEvent, item: PortfolioItemInfo){
         this.movingItem = null
     }
 
