@@ -5,6 +5,7 @@ import { connect } from "pwa-helpers"
 import {customElement, property, state, query} from 'lit/decorators.js';
 import { createPortfolioItem, getPortfolio, MinimalPortfolioItemInfo, PortfolioInfo, PortfolioItemInfo, savePortfolioItem, setSelectedPortfolioItems } from "../../state/features/portfolio_slice";
 import { msg } from "@lit/localize";
+import { MouseController } from "../util/mouse_controller";
 
 import { LitMoveable } from "lit-moveable";
 import { LitInfiniteViewer } from "lit-infinite-viewer";
@@ -12,14 +13,25 @@ import { LitInfiniteViewer } from "lit-infinite-viewer";
 import "./items/text_item"
 import "./items/blockly_item"
 import "./items/socialrobot_design_item"
+import "./items/graph_item"
 
 @customElement("dwengo-graph-dashboard")
 class GraphDashboard extends connect(store)(LitElement){
     @property() uuid: string = ""
     @state() portfolio: PortfolioInfo | null = null
 
+    movingItem: PortfolioItemInfo | null = null
+    movingItemClickOffset = {
+        x: 0,
+        y: 0
+    }
+    private mouse: MouseController = new MouseController(this)
+
     numberOfItems: number = 0
     itemTargets: Map<String, HTMLElement> = new Map()
+
+    @query(".viewport")
+    viewportRef!: HTMLElement
 
     @query(".root") 
     containerRef!: LitInfiniteViewer
@@ -53,6 +65,17 @@ class GraphDashboard extends connect(store)(LitElement){
         store.dispatch(getPortfolio(this.uuid))
     }
 
+    requestUpdate(){
+        if (this.movingItem){
+            const mousePosInViewPort = {
+                x: this.mouse.pos.x - this.viewportRef.getBoundingClientRect().x,
+                y: this.mouse.pos.y - this.viewportRef.getBoundingClientRect().y
+            }
+            this.movingItem.displayInformation.x = mousePosInViewPort.x - this.movingItemClickOffset.x
+            this.movingItem.displayInformation.y = mousePosInViewPort.y - this.movingItemClickOffset.y
+        }
+        super.requestUpdate()
+    }
 
     render() {
         return html`
@@ -63,73 +86,79 @@ class GraphDashboard extends connect(store)(LitElement){
                             ${this.renderPortfolioItem(item)}
                         `
                     })}
-                    ${this.portfolio?.items.map(item => {
-                        return html`${item.children.map(child => {
-                            return html`
-                                <svg class="line" style="transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px);left:0;right:0">
-                                    <path 
-                                        id="line_${item.uuid}_${child.uuid}	" 
-                                        d="M ${item.displayInformation.width/2} ${item.displayInformation.height/2} L ${(child.displayInformation.x - item.displayInformation.x)+child.displayInformation.width/2} ${(child.displayInformation.y - item.displayInformation.y)+child.displayInformation.height/2} Z"
-                                        stroke="black"
-                                </svg>
-                            `
-                        })}
-                        `
-                    })}
-                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
-                        <defs>
-                            <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
-                                <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.25"/>
-                            </pattern>
-                            <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
-                                <rect width="80" height="80" fill="url(#smallGrid)"/>
-                                <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
-                            </pattern>
-                        </defs>
-                        <rect width="100%" height="100%" fill="url(#grid)" />
-                    </svg>
+                    ${this.renderConnectionLines(this.portfolio?.items || [])}
+                    ${this.renderSvgGrid()}
                 </div>
             </lit-infinite-viewer>
+        `
+    }
+
+    renderConnectionLines(items){
+        return html`
+        ${items.map(item => {
+            return html`${item.children.map(child => {
+                return html`
+                    <svg class="line" style="transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px);left:0;right:0">
+                        <path 
+                            id="line_${item.uuid}_${child.uuid}	" 
+                            d="M ${item.displayInformation.width/2} ${item.displayInformation.height/2} L ${(child.displayInformation.x - item.displayInformation.x)+child.displayInformation.width/2} ${(child.displayInformation.y - item.displayInformation.y)+child.displayInformation.height/2} Z"
+                            stroke="black"
+                    </svg>
+                `
+            })}
+            `
+        })}`
+    }
+
+    renderSvgGrid() {
+        return html`
+            <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0;">
+                <defs>
+                    <pattern id="smallGrid" width="8" height="8" patternUnits="userSpaceOnUse">
+                        <path d="M 8 0 L 0 0 0 8" fill="none" stroke="gray" stroke-width="0.25"/>
+                    </pattern>
+                    <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+                        <rect width="80" height="80" fill="url(#smallGrid)"/>
+                        <path d="M 80 0 L 0 0 0 80" fill="none" stroke="gray" stroke-width="1"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)" />
+            </svg>
         `
     }
 
     // TODO: set item size and position based on portfolio item info
     renderPortfolioItem(item: PortfolioItemInfo){
         return html`
-        <div class="target"
-            ${ref((el: Element | undefined) => {
-                    if (this.numberOfItems !== this.itemTargets.size){ //Only add if not all items are added yet
-                        if (el) { // Only add if element is not undefined
-                            this.itemTargets.set(item.uuid, el as HTMLElement)
-                            if (this.numberOfItems == this.itemTargets.size){ // If all items are added, rerender to update moveable
-                                // Rerender
-                                this.requestUpdate()
-                            }
-                        }
-                    }
-                })
-            }
+        <div 
+            @mousedown=${(e) => {this.onMouseDown(e, item)}}
+            @mouseup=${(e) => {this.onMouseUp(e, item)}}
+            @touchstart=${(e) => {this.onMouseDown(e, item)}}
+            @touchend=${(e) => {this.onMouseUp(e, item)}}
+            class="target"
             style=${`display:inline-block;
                      width:${item.displayInformation.width}px;
                      height:${item.displayInformation.height}px;
                      transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px)`}   >
-                ${this.mapItemToElement(item)}
+                     <dwengo-graph-portfolio-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-graph-portfolio-item>
         </div>
-        <lit-moveable
-            .scrollable=${true}
-            .scrollOptions=${this.scrollOptions}
-            .target=${this.itemTargets.get(item.uuid)}
-            .litDraggable=${false}
-            .resizable=${true}
-            .edgeDraggable=${true}
-            .zoom=${0.5}
-            @litDrag=${(e) => { this.onDrag(e, item)}}
-            @litResize=${(e) => { this.onResize(e, item)}}
-            @litResizeEnd=${(e) => { this.onResizeEnd(e, item)}}
-            .renderDirections=${["sw","se"]}
-        ></lit-moveable>
+       
         `
     }
+
+    onMouseDown(e: MouseEvent, item: PortfolioItemInfo){
+        this.movingItemClickOffset = {
+            x: e.offsetX,
+            y: e.offsetY
+        }
+        this.movingItem = item
+        
+    }
+    onMouseUp(e: MouseEvent, item: PortfolioItemInfo){
+        this.movingItem = null
+    }
+
+
 
     // TODO: Rethink this approach
     mapItemToElement(item){
@@ -144,35 +173,6 @@ class GraphDashboard extends connect(store)(LitElement){
             default:    
                 return html`${msg("Unknown item type")}`
         }
-    }
-
-    onDrag(e, item: PortfolioItemInfo) {
-        //e.detail.target.style.transform = e.detail.transform;
-        // Update item position
-        item.displayInformation.x = e.detail.translate[0]
-        item.displayInformation.y = e.detail.translate[1]
-        this.requestUpdate()
-    }
-
-    onResizeEnd(e, item: PortfolioItemInfo) {
-        // Update item size and position
-        item.displayInformation.width = e.detail.lastEvent.width
-        item.displayInformation.height = e.detail.lastEvent.height
-        item.displayInformation.x = e.detail.lastEvent.drag.translate[0]
-        item.displayInformation.y = e.detail.lastEvent.drag.translate[1]
-        this.requestUpdate()
-    }
-
-    onResize(e, item: PortfolioItemInfo) {
-        e.detail.target.style.width = `${e.detail.width}px`
-        e.detail.target.style.height = `${e.detail.height}px`
-        e.detail.target.style.transform = e.detail.drag.transform
-        // Update item size and position
-        //item.displayInformation.width = e.detail.width
-        //item.displayInformation.height = e.detail.height
-        //item.displayInformation.x = e.detail.translate[0]
-        //item.displayInformation.y = e.detail.translate[1]
-        this.requestUpdate()
     }
 
     static styles: CSSResultGroup = css`
@@ -212,6 +212,7 @@ class GraphDashboard extends connect(store)(LitElement){
     .viewport {
         width: 100%;
         height: 100%;
+        position: absolute;
     }
 
     .moveable-control.moveable-origin {
