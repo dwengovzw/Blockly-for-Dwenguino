@@ -34,7 +34,8 @@ const PortfolioItemFields: Record<keyof IPortfolioItem, any> = {
     children: [{
         type: Schema.Types.ObjectId,
         ref: 'PortfolioItem',
-        default: []
+        default: [],
+        required: true
     }],
     displayInformation: {
         type: PortfolioItemDisplayInformationSchema,

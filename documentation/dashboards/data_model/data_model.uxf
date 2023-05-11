@@ -71,10 +71,7 @@ m2=0..n
 has &gt;</panel_attributes><additional_attributes>10;120;90;120;90;20;470;20</additional_attributes></element><element><id>Relation</id><coordinates><x>558</x><y>360</y><w>477</w><h>90</h></coordinates><panel_attributes>lt=-
 m1=1..n
 m2=0..n
-&lt; ownedBy</panel_attributes><additional_attributes>10;10;110;10;110;70;490;70;490;60</additional_attributes></element><element><id>Relation</id><coordinates><x>1080</x><y>180</y><w>603</w><h>189</h></coordinates><panel_attributes>lt=-
-m1=0..1
-m2=0..n
-&lt; isAnswerTo</panel_attributes><additional_attributes>10;190;10;160;510;160;510;10;650;10</additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>567</y><w>126</w><h>45</h></coordinates><panel_attributes>lt=-
+&lt; ownedBy</panel_attributes><additional_attributes>10;10;110;10;110;70;490;70;490;60</additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>567</y><w>126</w><h>45</h></coordinates><panel_attributes>lt=-
 m1=0..n
 m2=1
 isLinkedTo &gt;</panel_attributes><additional_attributes>10;20;120;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1953</x><y>504</y><w>126</w><h>63</h></coordinates><panel_attributes>_SocialRobotDesign_

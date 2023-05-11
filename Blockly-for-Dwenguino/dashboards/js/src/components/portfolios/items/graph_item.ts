@@ -11,6 +11,10 @@ import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { noselect } from "../../../styles/shared";
 import { deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 import { buttonStyles, iconStyle } from "../../../styles/shared";
+import { UserInfo, initialUserState } from "../../../state/features/user_slice";
+import { ClassGroups } from "../../../state/features/class_group_slice";
+import { SavedProgramInfo } from "../../../state/features/saved_programs_slice";
+import { StudentClassGroupInfo } from "../../../state/features/student_class_group_slice";
 
 @customElement("dwengo-graph-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
@@ -18,7 +22,8 @@ class PortfolioItem extends connect(store)(LitElement) {
     item: PortfolioItemInfo | null = null 
     @property({type: String})
     portfolioUUID = ""
-
+    @state()
+    userInfo: UserInfo = initialUserState
     @query(".item_detail_modal")
     itemDetailModal!: HTMLDialogElement
 
@@ -29,12 +34,31 @@ class PortfolioItem extends connect(store)(LitElement) {
         "default": "unknown_med"
     }
 
+    private itemToTitleMap = {
+        "TextItem": msg("Markdown text"),
+        "BlocklyProgSequenceItem": msg("Blockly code"),
+        "SocialRobotDesignItem": msg("Social robot design"),
+        "default": msg("Portfolio item")
+    }
+
+    stateChanged(state) {
+        this.userInfo = state.user   
+    }
+
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         super.firstUpdated(_changedProperties);
         this.itemDetailModal.addEventListener("click", (e) => {
             if(e.target === this.itemDetailModal){
                 this.itemDetailModal.close()
             }
+        })
+        this.itemDetailModal.addEventListener("touchstart", (e) => {
+            if(e.target === this.itemDetailModal){
+                this.itemDetailModal.close()
+            }
+        })
+        window.addEventListener("touchend", (e) => {
+            this.onMouseUp(e)
         })
         window.addEventListener("mouseup", (e) => {
             this.onMouseUp(e)
@@ -62,23 +86,35 @@ class PortfolioItem extends connect(store)(LitElement) {
                 ${getGoogleMateriaIconsLinkTag()}
                 <div class="item_header">
                     <span class="material-symbols-outlined portfolio_item_handle"
-                        @mousedown=${this.onMouseDown}
-                    >
+                        @touchstart=${e => {
+                            e.preventDefault()
+                            console.log("touched drag handle")
+                            this.onMouseDown(e)
+                        }}
+                        @touchend=${e => {
+                            e.preventDefault()
+                            console.log("stopped touching drag handle")
+                            this.onMouseUp(e)
+                        }}
+                        @mousedown=${this.onMouseDown}>
                         drag_indicator
                     </span>
-                    <span class="material-symbols-outlined dwengo-icon">
-                        ${this.itemToIconMap[this.item?.__t || "default"]}
+                    <span 
+                        title="${this.itemToTitleMap[this.item?.__t || "default"]}"
+                        class="material-symbols-outlined dwengo-icon dwengo-clickable-icon"
+                        @touchstart=${this.handleItemDetailClick}
+                        @click=${this.handleItemDetailClick}>
+                            ${this.itemToIconMap[this.item?.__t || "default"]}
+                    </span>
+                    <span
+                        title="${msg("Add feedback")}"
+                        class="material-symbols-outlined dwengo-icon dwengo-clickable-icon">
+                            rate_review
                     </span>
                     <span 
-                        class="material-symbols-outlined dwengo-icon"
-                        @click=${this.handleItemDetailClick}>
-                            info
-                    </span>
-                    <span class="material-symbols-outlined dwengo-icon">
-                        rate_review
-                    </span>
-                    <span class="material-symbols-outlined  dwengo-icon">
-                        adjust
+                        title="${msg("Drag to connect")}"
+                        class="material-symbols-outlined dwengo-icon drag-target">
+                            adjust
                     </span>
                 </div>
             </div>
@@ -110,7 +146,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                 <div class="dialog_content_container">
                     <div class="dialog_header">
                         <form method="dialog">
-                            <button type="submit" autofocus class="dwengo-button">
+                            <button type="submit" @touchend=${_ => this.itemDetailModal.close()} autofocus class="dwengo-button">
                                 <span class="dwengo-button-icon material-symbols-outlined">
                                     close
                                 </span>
@@ -170,6 +206,9 @@ class PortfolioItem extends connect(store)(LitElement) {
             justify-content: flex-end;
             width: calc(100% - 2rem);
             height: 35px;
+        }
+        .drag-target {
+            cursor: crosshair;
         }
         `, noselect, buttonStyles, iconStyle]
 

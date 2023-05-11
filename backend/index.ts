@@ -17,6 +17,7 @@ mongoose.Promise = global.Promise;
 
 let dev_db_url = 'mongodb://localhost/dwenguinoblockly_test_users';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
+mongoose.set("strictQuery", true)
 mongoose.connect(mongoDB/*, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

@@ -20,6 +20,7 @@ export const noselect = css`
         justify-content: center;
         align-items: center;
         border: none;
+        cursor: pointer;
     }
     .dwengo-button-icon {
         display: flex;
@@ -35,4 +36,7 @@ export const noselect = css`
             padding: 2.5px;  
             color: white;
             font-weight: 300;
+        }
+        .dwengo-clickable-icon:hover {
+            cursor: pointer;
         }`
