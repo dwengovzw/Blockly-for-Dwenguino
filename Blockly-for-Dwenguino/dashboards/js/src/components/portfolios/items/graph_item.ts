@@ -41,6 +41,9 @@ class PortfolioItem extends connect(store)(LitElement) {
         "default": msg("Portfolio item")
     }
 
+    @state()
+    over: Boolean = false;
+
     stateChanged(state) {
         this.userInfo = state.user   
     }
@@ -59,9 +62,14 @@ class PortfolioItem extends connect(store)(LitElement) {
         })
         window.addEventListener("touchend", (e) => {
             this.onMouseUp(e)
+            this.onConnectionDragStop(e)
         })
         window.addEventListener("mouseup", (e) => {
             this.onMouseUp(e)
+        })
+
+        window.addEventListener("dragend", (e) => {
+            this.onConnectionDragStop(e)
         })
     }
 
@@ -111,15 +119,40 @@ class PortfolioItem extends connect(store)(LitElement) {
                         class="material-symbols-outlined dwengo-icon dwengo-clickable-icon">
                             rate_review
                     </span>
-                    <span 
-                        title="${msg("Drag to connect")}"
-                        class="material-symbols-outlined dwengo-icon drag-target">
-                            adjust
-                    </span>
+                   ${this.renderConnectionTarget()}
                 </div>
             </div>
             ${this.renderItemDetailModal()}
             
+        `
+    }
+
+    renderConnectionTarget() {
+        return html`
+            <span 
+                title="${msg("Drag to connect")}"
+                draggable="true"
+                @dragstart=${this.onConnectionDragStart}
+                @dragend=${ _ => { this.draggable = false; this.hidden = false }}
+                @dragover=${ e => {
+                    e.preventDefault();
+                    return false
+                }}
+                @drag=${e => {
+                    this.onConnectionDrag(e)
+                }}
+                @dragleave=${e => {
+                    this.over = false
+                    console.log("Leave");
+                }}
+                @dragenter=${e => {
+                    this.over = true
+                    console.log("Enter");
+                }}
+                @drop=${this.onConnectionDragEnd}
+                class="material-symbols-outlined dwengo-icon drag-target ${this.over ? "over" : ""}">
+                    adjust
+            </span>
         `
     }
 
@@ -160,6 +193,66 @@ class PortfolioItem extends connect(store)(LitElement) {
                 
                 
             </dialog>`
+    }
+
+    onConnectionDragStart(e){
+        e.dataTransfer.effectAllowed = "link";
+        e.dataTransfer.setData("text/plain", JSON.stringify(this.item?.uuid));
+        this.dispatchEvent(
+            new CustomEvent(
+                "connectionDragStarted", 
+                {
+                    bubbles: true,
+                    composed: true,
+                    detail: { dragStartX: e.clientX, dragStartY: e.clientY}
+                }
+            )
+        )
+    }
+
+    onConnectionDrag(e){
+        this.dispatchEvent(
+            new CustomEvent(
+                "connectionDragging",
+                {
+                    bubbles: true,
+                    composed: true,
+                    detail: { dragX: e.clientX, dragY: e.clientY }
+                }
+            )
+        )
+    }
+
+    onConnectionDragStop(e) {
+        this.dispatchEvent(
+            new CustomEvent(
+                "connectionDragStopped",
+                {
+                    bubbles: true,
+                    composed: true,
+                    detail: { dragStopX: e.clientX, dragStopY: e.clientY }
+                }
+            )
+        )
+    }
+
+    onConnectionDragEnd(e) {
+        e.preventDefault()
+        e.stopPropagation()
+        let fromItemUUID = JSON.parse(e.dataTransfer.getData("text/plain"))
+        console.log("From UUID: " + fromItemUUID)
+        this.over = false;
+        this.dispatchEvent(
+            new CustomEvent(
+                "connectionDragEnded",
+                {
+                    bubbles: true,
+                    composed: true,
+                    detail: { fromItemUUID: fromItemUUID, dragEndX: e.clientX, dragEndY: e.clientY }
+                }
+            )
+        )
+        return false
     }
 
     onMouseDown(e){
@@ -209,6 +302,11 @@ class PortfolioItem extends connect(store)(LitElement) {
         }
         .drag-target {
             cursor: crosshair;
+            z-index: 10;
+            position: relative;
+        }
+        .over {
+            color: red !important;
         }
         `, noselect, buttonStyles, iconStyle]
 

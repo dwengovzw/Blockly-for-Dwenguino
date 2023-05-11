@@ -36,6 +36,20 @@ class GraphDashboard extends connect(store)(LitElement){
     @query(".root") 
     containerRef!: LitInfiniteViewer
 
+    @state()
+    connectionDragInfo = {
+        dragging: false,
+        start: {
+            x: 0,
+            y: 0
+        },
+        end: {
+            x: 0,
+            y: 0
+        }
+    }
+
+
     scrollOptions: any = {
         container: () => this.containerRef,
         threshold: 20,
@@ -88,21 +102,59 @@ class GraphDashboard extends connect(store)(LitElement){
                     })}
                     ${this.renderConnectionLines(this.portfolio?.items || [])}
                     ${this.renderSvgGrid()}
+                    ${this.renderConnectionLine()}
                 </div>
             </lit-infinite-viewer>
         `
     }
 
+    renderConnectionLine() {
+        if (this.connectionDragInfo.dragging){
+            console.log(this.connectionDragInfo)
+            const xEnd = this.connectionDragInfo.end.x - this.connectionDragInfo.start.x
+            const yEnd = this.connectionDragInfo.end.y - this.connectionDragInfo.start.y
+            return html`
+                <svg class="line drag_line" style="transform: translate(${this.connectionDragInfo.start.x}px, ${this.connectionDragInfo.start.y}px);left:0;right:0">
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#6DA037" stroke="#6DA037" />
+                        </marker>
+                    </defs>
+                    <line x1="0" y1="0" x2="${xEnd/2}" y2="${yEnd/2}" stroke="#6DA037" stroke-width="1" marker-end="url(#arrowhead)" />
+                    <line x1="${xEnd/2}" y1="${yEnd/2}" x2="${xEnd}" y2="${yEnd}" stroke="#6DA037" stroke-width="1" />
+                </svg>
+            `
+        } else { 
+            return html``
+        }
+    }
+
     renderConnectionLines(items){
         return html`
         ${items.map(item => {
+            let startPoint = {
+                x: item.displayInformation.width/2,
+                y: item.displayInformation.height/2
+            }
             return html`${item.children.map(child => {
+                let endPoint = {
+                    x: (child.displayInformation.x - item.displayInformation.x)+child.displayInformation.width/2,
+                    y: (child.displayInformation.y - item.displayInformation.y)+child.displayInformation.height/2
+                }
+                let midPoint = {
+                    x: startPoint.x + (endPoint.x - startPoint.x) / 2,
+                    y: startPoint.y + (endPoint.y - startPoint.y) / 2
+                }
+                console.log(startPoint, endPoint, midPoint)
                 return html`
                     <svg class="line" style="transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px);left:0;right:0">
-                        <path 
-                            id="line_${item.uuid}_${child.uuid}	" 
-                            d="M ${item.displayInformation.width/2} ${item.displayInformation.height/2} L ${(child.displayInformation.x - item.displayInformation.x)+child.displayInformation.width/2} ${(child.displayInformation.y - item.displayInformation.y)+child.displayInformation.height/2} Z"
-                            stroke="black"
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" />
+                            </marker>
+                        </defs>
+                        <line x1="${startPoint.x}" y1="${startPoint.y}" x2="${midPoint.x}" y2="${midPoint.y}" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
+                        <line x1="${midPoint.x}" y1="${midPoint.y}" x2="${endPoint.x}" y2="${endPoint.y}" stroke="black" stroke-width="1" />
                     </svg>
                 `
             })}
@@ -133,6 +185,10 @@ class GraphDashboard extends connect(store)(LitElement){
         <div 
             @dragHandlerMouseDown=${(e) => {this.onMouseDown(e, item)}}
             @dragHandlerMouseUp=${(e) => {this.onMouseUp(e, item)}}
+            @connectionDragStarted=${(e) => {this.onConnectionDragStarted(e, item)}}
+            @connectionDragStopped=${(e) => {this.onConnectionDragStopped(e, item)}}
+            @connectionDragEnded=${(e) => {this.onConnectionDragEnded(e, item)}}
+            @connectionDragging=${(e) => {this.onConnectionDragging(e, item)}}
             class="target"
             style=${`display:inline-block;
                      width:${item.displayInformation.width}px;
@@ -143,6 +199,47 @@ class GraphDashboard extends connect(store)(LitElement){
        
         `
     }
+
+    onConnectionDragStarted(e: any, item: PortfolioItemInfo) {
+        console.log("Drag start");
+        console.log(`clientX: ${e.detail.dragStartX}, clientY: ${e.detail.dragStartY}`);
+        console.log(`clientX: ${this.viewportRef.getBoundingClientRect().x}, offsetY: ${this.viewportRef.getBoundingClientRect().y}`)
+        let curentPosition = {
+            x: e.detail.dragStartX - this.viewportRef.getBoundingClientRect().x,
+            y: e.detail.dragStartY - this.viewportRef.getBoundingClientRect().y
+        }
+        this.connectionDragInfo = {
+            dragging: true,
+            start: curentPosition,
+            end: curentPosition
+        }
+    }
+
+    onConnectionDragging(e: any, item: PortfolioItemInfo) {
+        console.log("Dragging");
+        console.log(`clientX: ${e.detail.dragX}, clientY: ${e.detail.dragY}`);
+        console.log(`clientX: ${this.viewportRef.getBoundingClientRect().x}, offsetY: ${this.viewportRef.getBoundingClientRect().y}`)
+        let curentPosition = {
+            x: e.detail.dragX - this.viewportRef.getBoundingClientRect().x,
+            y: e.detail.dragY - this.viewportRef.getBoundingClientRect().y
+        }
+        this.connectionDragInfo.end = curentPosition
+        this.connectionDragInfo = { ...this.connectionDragInfo }
+    }
+
+    onConnectionDragStopped(e: any, item: PortfolioItemInfo) {
+        this.connectionDragInfo.dragging = false
+        this.connectionDragInfo = { ...this.connectionDragInfo }
+    }
+
+    onConnectionDragEnded(e: any, item: PortfolioItemInfo) {
+        console.log("Drag end");
+        console.log(`clientX: ${e.detail.dragEndX}, clientY: ${e.detail.dragEndY}`);
+        console.log(`clientX: ${this.viewportRef.getBoundingClientRect().x}, offsetY: ${this.viewportRef.getBoundingClientRect().y}`)
+        this.connectionDragInfo.dragging = false
+        this.connectionDragInfo = { ...this.connectionDragInfo }
+    }
+
 
     onMouseDown(e: CustomEvent, item: PortfolioItemInfo){
         this.movingItemClickOffset = {
@@ -206,6 +303,9 @@ class GraphDashboard extends connect(store)(LitElement){
         width: 100%;
         height: 100%;
         overflow: visible;
+    }
+    .drag_line {
+        color: var(--theme-accentFillSelected);
     }
     .viewport {
         width: 100%;
