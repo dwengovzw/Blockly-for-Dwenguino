@@ -123,12 +123,34 @@ export const portfolioSlice = createSlice({
         },
         updateSelectedPortfolioItem: (state, action) => {
             if (state.selectedPortfolio){
-                let index = (state.selectedPortfolio as PortfolioInfo).items.findIndex(item => item.uuid === action.payload.uuid)
+                let updatedItem = action.payload
+                // Map children to items in the portfolio.
+                updatedItem.children = updatedItem.children.map(childItem => {
+                    if (state.selectedPortfolio){
+                        let item = (state.selectedPortfolio as PortfolioInfo).items.find(item => item.uuid === childItem.uuid)
+                        if (item){
+                            return item
+                        } else {
+                            return childItem
+                        }
+                    }
+                })
+                // Find and replace the item in the portfolio.
+                let index = (state.selectedPortfolio as PortfolioInfo).items.findIndex(item => item.uuid === updatedItem.uuid)
                 if (index >= 0){
-                    (state.selectedPortfolio as PortfolioInfo).items[index] = action.payload
+                    (state.selectedPortfolio as PortfolioInfo).items[index] = updatedItem
                 } else {
-                    (state.selectedPortfolio as PortfolioInfo).items.push(action.payload)
+                    (state.selectedPortfolio as PortfolioInfo).items.push(updatedItem)
                 }
+                // Search for items that have the updated item as a child and replace the child with the updated item.
+                (state.selectedPortfolio as PortfolioInfo).items.forEach(item => {
+                    item.children.forEach((child, index) => {
+                        if (child.uuid === updatedItem.uuid){
+                            item.children[index] = updatedItem
+                        }
+                    })
+                }
+                )
             }
         }
     }
@@ -182,9 +204,39 @@ const getPortfolio = (uuid: string) => {
     }, null, msg("Error while fetching portfolio"))
 }
 
+const connectPortfolioItemsInCurrentPortfolio = (parentUUID: string, childUUID: string) => {
+    return async (dispatch, getState) => {
+        let portfolio = getState().portfolio.selectedPortfolio
+        if (portfolio){
+            let parent = portfolio.items.find(item => item.uuid === parentUUID)
+            let child = portfolio.items.find(item => item.uuid === childUUID)
+            if (parent && child){
+                let updateParent = {...parent, children: [...parent.children, child]} 
+                await dispatch(savePortfolioItem(portfolio.uuid, updateParent))
+            }
+        }
+    }
+}
+
 
 const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updateSelectedPortfolioItem } = portfolioSlice.actions
 
 const portfolioReducer = portfolioSlice.reducer
 
-export { getPortfolios, getMyPortfolios, getPortfolio, PortfolioItemInfo, MinimalPortfolioItemInfo, portfolioReducer, PortfolioInfo, TextItemInfo, setSelectedPortfolioItems, savePortfolioItem, createPortfolioItem, deletePortfolioItem, BlocklyProgSequenceItemInfo, SocialRobotDesignItemInfo, getMyStudentPortfolios}
+export { 
+    getPortfolios, 
+    getMyPortfolios, 
+    getPortfolio, 
+    PortfolioItemInfo, 
+    MinimalPortfolioItemInfo, 
+    portfolioReducer, 
+    PortfolioInfo, 
+    TextItemInfo, 
+    setSelectedPortfolioItems, 
+    savePortfolioItem, 
+    createPortfolioItem, 
+    deletePortfolioItem, 
+    BlocklyProgSequenceItemInfo, 
+    SocialRobotDesignItemInfo, 
+    getMyStudentPortfolios,
+    connectPortfolioItemsInCurrentPortfolio}

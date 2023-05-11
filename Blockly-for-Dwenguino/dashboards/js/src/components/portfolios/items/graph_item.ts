@@ -9,12 +9,13 @@ import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { noselect } from "../../../styles/shared";
-import { deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
+import { connectPortfolioItemsInCurrentPortfolio, deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 import { buttonStyles, iconStyle } from "../../../styles/shared";
 import { UserInfo, initialUserState } from "../../../state/features/user_slice";
 import { ClassGroups } from "../../../state/features/class_group_slice";
 import { SavedProgramInfo } from "../../../state/features/saved_programs_slice";
 import { StudentClassGroupInfo } from "../../../state/features/student_class_group_slice";
+import { NotificationMessageType, setNotificationMessage } from "../../../state/features/notification_slice";
 
 @customElement("dwengo-graph-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
@@ -68,9 +69,9 @@ class PortfolioItem extends connect(store)(LitElement) {
             this.onMouseUp(e)
         })
 
-        window.addEventListener("dragend", (e) => {
-            this.onConnectionDragStop(e)
-        })
+        // window.addEventListener("dragend", (e) => {
+        //     this.onConnectionDragStop(e)
+        // })
     }
 
 
@@ -133,7 +134,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                 title="${msg("Drag to connect")}"
                 draggable="true"
                 @dragstart=${this.onConnectionDragStart}
-                @dragend=${ _ => { this.draggable = false; this.hidden = false }}
+                @dragend=${this.onConnectionDragStop}
                 @dragover=${ e => {
                     e.preventDefault();
                     return false
@@ -149,7 +150,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                     this.over = true
                     console.log("Enter");
                 }}
-                @drop=${this.onConnectionDragEnd}
+                @drop=${this.onConnectionDragDrop}
                 class="material-symbols-outlined dwengo-icon drag-target ${this.over ? "over" : ""}">
                     adjust
             </span>
@@ -236,22 +237,22 @@ class PortfolioItem extends connect(store)(LitElement) {
         )
     }
 
-    onConnectionDragEnd(e) {
+    onConnectionDragDrop(e) {
         e.preventDefault()
         e.stopPropagation()
         let fromItemUUID = JSON.parse(e.dataTransfer.getData("text/plain"))
         console.log("From UUID: " + fromItemUUID)
+        console.log("To UUID: " + this.item?.uuid)
         this.over = false;
-        this.dispatchEvent(
-            new CustomEvent(
-                "connectionDragEnded",
-                {
-                    bubbles: true,
-                    composed: true,
-                    detail: { fromItemUUID: fromItemUUID, dragEndX: e.clientX, dragEndY: e.clientY }
-                }
-            )
-        )
+        // Check if item is not dropped on itself
+        if (!this.item?.uuid) {
+            store.dispatch(setNotificationMessage(msg("Error connecting items."),NotificationMessageType.ERROR, 5000))
+        } else if (fromItemUUID === this.item?.uuid) {
+            store.dispatch(setNotificationMessage(msg("Cannot connect item to itself."),NotificationMessageType.MESSAGE, 2000))
+        } else {
+            store.dispatch(connectPortfolioItemsInCurrentPortfolio(fromItemUUID, this.item?.uuid))
+        }
+        
         return false
     }
 

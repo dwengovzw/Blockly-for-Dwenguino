@@ -107,6 +107,7 @@ class PortfolioController {
             }
             item = Object.assign(item, req.body)
             item = await item.save()
+            item = await item.populate({path: "children"})
             portfolio.items.push(item)
             portfolio = await portfolio.save()
             res.status(200).send(item)
@@ -135,6 +136,7 @@ class PortfolioController {
                 return
             }
             item = await item.save()
+            item = await item.populate({path: "children"})
             res.status(200).send(item)
         } catch (e) {
             res.status(500).send("Error saving item.")

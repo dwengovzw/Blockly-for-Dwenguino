@@ -110,7 +110,6 @@ class GraphDashboard extends connect(store)(LitElement){
 
     renderConnectionLine() {
         if (this.connectionDragInfo.dragging){
-            console.log(this.connectionDragInfo)
             const xEnd = this.connectionDragInfo.end.x - this.connectionDragInfo.start.x
             const yEnd = this.connectionDragInfo.end.y - this.connectionDragInfo.start.y
             return html`
@@ -145,7 +144,6 @@ class GraphDashboard extends connect(store)(LitElement){
                     x: startPoint.x + (endPoint.x - startPoint.x) / 2,
                     y: startPoint.y + (endPoint.y - startPoint.y) / 2
                 }
-                console.log(startPoint, endPoint, midPoint)
                 return html`
                     <svg class="line" style="transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px);left:0;right:0">
                         <defs>
@@ -187,7 +185,6 @@ class GraphDashboard extends connect(store)(LitElement){
             @dragHandlerMouseUp=${(e) => {this.onMouseUp(e, item)}}
             @connectionDragStarted=${(e) => {this.onConnectionDragStarted(e, item)}}
             @connectionDragStopped=${(e) => {this.onConnectionDragStopped(e, item)}}
-            @connectionDragEnded=${(e) => {this.onConnectionDragEnded(e, item)}}
             @connectionDragging=${(e) => {this.onConnectionDragging(e, item)}}
             class="target"
             style=${`display:inline-block;
@@ -201,9 +198,6 @@ class GraphDashboard extends connect(store)(LitElement){
     }
 
     onConnectionDragStarted(e: any, item: PortfolioItemInfo) {
-        console.log("Drag start");
-        console.log(`clientX: ${e.detail.dragStartX}, clientY: ${e.detail.dragStartY}`);
-        console.log(`clientX: ${this.viewportRef.getBoundingClientRect().x}, offsetY: ${this.viewportRef.getBoundingClientRect().y}`)
         let curentPosition = {
             x: e.detail.dragStartX - this.viewportRef.getBoundingClientRect().x,
             y: e.detail.dragStartY - this.viewportRef.getBoundingClientRect().y
@@ -216,9 +210,6 @@ class GraphDashboard extends connect(store)(LitElement){
     }
 
     onConnectionDragging(e: any, item: PortfolioItemInfo) {
-        console.log("Dragging");
-        console.log(`clientX: ${e.detail.dragX}, clientY: ${e.detail.dragY}`);
-        console.log(`clientX: ${this.viewportRef.getBoundingClientRect().x}, offsetY: ${this.viewportRef.getBoundingClientRect().y}`)
         let curentPosition = {
             x: e.detail.dragX - this.viewportRef.getBoundingClientRect().x,
             y: e.detail.dragY - this.viewportRef.getBoundingClientRect().y
@@ -228,14 +219,6 @@ class GraphDashboard extends connect(store)(LitElement){
     }
 
     onConnectionDragStopped(e: any, item: PortfolioItemInfo) {
-        this.connectionDragInfo.dragging = false
-        this.connectionDragInfo = { ...this.connectionDragInfo }
-    }
-
-    onConnectionDragEnded(e: any, item: PortfolioItemInfo) {
-        console.log("Drag end");
-        console.log(`clientX: ${e.detail.dragEndX}, clientY: ${e.detail.dragEndY}`);
-        console.log(`clientX: ${this.viewportRef.getBoundingClientRect().x}, offsetY: ${this.viewportRef.getBoundingClientRect().y}`)
         this.connectionDragInfo.dragging = false
         this.connectionDragInfo = { ...this.connectionDragInfo }
     }

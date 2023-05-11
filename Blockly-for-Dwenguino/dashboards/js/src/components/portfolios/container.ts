@@ -5,7 +5,7 @@ import {customElement } from 'lit/decorators.js';
 import { Routes } from "@lit-labs/router";
 
 import "./edit"
-import "./graph_dashboard"
+import "./graph_portfolio"
 import { getMyPortfolios, getMyStudentPortfolios } from "../../state/features/portfolio_slice";
 
 @customElement("dwengo-dashboard-page-container")
