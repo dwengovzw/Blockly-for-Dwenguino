@@ -61,17 +61,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                 this.itemDetailModal.close()
             }
         })
-        window.addEventListener("touchend", (e) => {
-            this.onMouseUp(e)
-            this.onConnectionDragStop(e)
-        })
-        window.addEventListener("mouseup", (e) => {
-            this.onMouseUp(e)
-        })
-
-        // window.addEventListener("dragend", (e) => {
-        //     this.onConnectionDragStop(e)
-        // })
+    
     }
 
 
@@ -91,7 +81,7 @@ class PortfolioItem extends connect(store)(LitElement) {
 
     protected render() {
         return html`
-            <div class="container noselect">
+            <div class="item_container noselect">
                 ${getGoogleMateriaIconsLinkTag()}
                 <div class="item_header">
                     <span class="material-symbols-outlined portfolio_item_handle"
@@ -108,19 +98,21 @@ class PortfolioItem extends connect(store)(LitElement) {
                         @mousedown=${this.onMouseDown}>
                         drag_indicator
                     </span>
-                    <span 
-                        title="${this.itemToTitleMap[this.item?.__t || "default"]}"
-                        class="material-symbols-outlined dwengo-icon dwengo-clickable-icon"
-                        @touchstart=${this.handleItemDetailClick}
-                        @click=${this.handleItemDetailClick}>
-                            ${this.itemToIconMap[this.item?.__t || "default"]}
-                    </span>
                     <span
                         title="${msg("Add feedback")}"
                         class="material-symbols-outlined dwengo-icon dwengo-clickable-icon">
                             rate_review
                     </span>
                    ${this.renderConnectionTarget()}
+                </div>
+                <div class="item_content">
+                    <span 
+                        title="${this.itemToTitleMap[this.item?.__t || "default"]}"
+                        class="material-symbols-outlined dwengo-icon dwengo-clickable-icon overview_icon"
+                        @touchstart=${this.handleItemDetailClick}
+                        @click=${this.handleItemDetailClick}>
+                            ${this.itemToIconMap[this.item?.__t || "default"]}
+                    </span>
                 </div>
             </div>
             ${this.renderItemDetailModal()}
@@ -156,8 +148,6 @@ class PortfolioItem extends connect(store)(LitElement) {
             </span>
         `
     }
-
-
 
     handleItemDetailClick(e){
         const itemType: string = this.item?.__t || ""
@@ -284,6 +274,11 @@ class PortfolioItem extends connect(store)(LitElement) {
 
     static styles: CSSResultGroup = [css`
 
+        .item_container {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
         .item_detail_modal {
             padding: 0;
         }
@@ -305,6 +300,19 @@ class PortfolioItem extends connect(store)(LitElement) {
             cursor: crosshair;
             z-index: 10;
             position: relative;
+        }
+        .item_content {
+            display: flex;
+            flex-grow: 1;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .overview_icon {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 70px;
         }
         .over {
             color: red !important;

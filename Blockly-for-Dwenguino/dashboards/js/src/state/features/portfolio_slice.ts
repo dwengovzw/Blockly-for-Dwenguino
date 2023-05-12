@@ -128,11 +128,7 @@ export const portfolioSlice = createSlice({
                 updatedItem.children = updatedItem.children.map(childItem => {
                     if (state.selectedPortfolio){
                         let item = (state.selectedPortfolio as PortfolioInfo).items.find(item => item.uuid === childItem.uuid)
-                        if (item){
-                            return item
-                        } else {
-                            return childItem
-                        }
+                        return item ? item : childItem
                     }
                 })
                 // Find and replace the item in the portfolio.
@@ -203,6 +199,7 @@ const getPortfolio = (uuid: string) => {
         dispatch(setSelectedPortfolio(json))
     }, null, msg("Error while fetching portfolio"))
 }
+
 
 const connectPortfolioItemsInCurrentPortfolio = (parentUUID: string, childUUID: string) => {
     return async (dispatch, getState) => {

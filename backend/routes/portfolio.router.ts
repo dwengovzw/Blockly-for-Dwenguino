@@ -15,4 +15,5 @@ portfolioRouter.put("/:uuid/createItem", [verifyTokenAjax, verifyUserExists, por
 portfolioRouter.delete("/:uuid/deleteItem/:itemUUID", [verifyTokenAjax, verifyUserExists, portfolioController.checkIfUserHasAccessToPortfolio], portfolioController.deleteItem)
 portfolioRouter.get("/:uuid", [verifyTokenAjax, verifyUserExists,portfolioController.checkIfUserHasAccessToPortfolio], portfolioController.get);
 
+
 export { portfolioRouter }

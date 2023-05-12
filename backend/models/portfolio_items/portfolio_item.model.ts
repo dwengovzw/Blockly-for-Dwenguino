@@ -2,18 +2,26 @@ import { Document, PopulatedDoc, Schema, model } from "mongoose"
 import  v4 from "uuid/v4.js"
 
 
-interface IPortfolioItemDisplayInformation {
+interface IMinimalPortfolioItemDisplayInformation {
     x: number,
     y: number,
-    width: number,
-    height: number,
+}
+interface IPortfolioItemDisplayInformation extends IMinimalPortfolioItemDisplayInformation{
+    width?: number,
+    height?: number,
 }
 
 const PortfolioItemDisplayInformationFields: Record<keyof IPortfolioItemDisplayInformation, any> = {
     x: Number,
     y: Number,
-    width: Number,
-    height: Number,
+    width: {
+        type: Number,
+        default: 100
+    },
+    height: {
+        type: Number,
+        default: 130
+    },
 }
 const PortfolioItemDisplayInformationSchema = new Schema<IPortfolioItemDisplayInformation>(PortfolioItemDisplayInformationFields)
 

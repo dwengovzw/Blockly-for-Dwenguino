@@ -68,6 +68,15 @@ class GraphDashboard extends connect(store)(LitElement){
         }
     }
 
+    firstUpdated() {
+        window.addEventListener("touchend", (e) => {
+            this.onMouseUp()
+        })
+        window.addEventListener("mouseup", (e) => {
+            this.onMouseUp()
+        })
+    }
+
     stateChanged(state: any): void{
         this.portfolio = structuredClone(state.portfolio.selectedPortfolio)
         this.numberOfItems = this.portfolio?.items.length || 0
@@ -182,7 +191,7 @@ class GraphDashboard extends connect(store)(LitElement){
         return html`
         <div 
             @dragHandlerMouseDown=${(e) => {this.onMouseDown(e, item)}}
-            @dragHandlerMouseUp=${(e) => {this.onMouseUp(e, item)}}
+            @dragHandlerMouseUp=${(e) => {this.onMouseUp()}}
             @connectionDragStarted=${(e) => {this.onConnectionDragStarted(e, item)}}
             @connectionDragStopped=${(e) => {this.onConnectionDragStopped(e, item)}}
             @connectionDragging=${(e) => {this.onConnectionDragging(e, item)}}
@@ -232,7 +241,10 @@ class GraphDashboard extends connect(store)(LitElement){
         this.movingItem = item
         
     }
-    onMouseUp(e: CustomEvent, item: PortfolioItemInfo){
+    onMouseUp(){
+        if (this.movingItem){
+            store.dispatch(savePortfolioItem(this.uuid, this.movingItem))
+        }
         this.movingItem = null
     }
 
@@ -275,9 +287,9 @@ class GraphDashboard extends connect(store)(LitElement){
         border: 1px solid var(--theme-accentFillSelected);
         box-sizing: border-box;
         overflow: hidden;
-        padding: 5px;
         background-color: white;
         z-index: 1;
+        padding: 4.25px;
     }
     .line {
         position: absolute;

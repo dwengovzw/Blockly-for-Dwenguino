@@ -21,8 +21,6 @@ const mockDatabaseData = async () => {
             displayInformation: {
                 x: 400,
                 y: 100,
-                width: 200,
-                height: 100,
             },
             name: "Text item",
             mdText: `# My Random Markdown Text
@@ -88,8 +86,6 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 600,
                 y: 400,
-                width: 200,
-                height: 100,
             }
         }
         let textItem4 = new TextItem(textItemData4)
@@ -115,8 +111,6 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 100,
                 y: 250,
-                width: 100,
-                height: 100,
             }
         }).save()
 
@@ -130,8 +124,6 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 80,
                 y: 150,
-                width: 50,
-                height: 50,
             }
         }
         let textItem3 = new TextItem(textItemData3)
@@ -262,8 +254,6 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 100,
                 y: 50,
-                width: 200,
-                height: 100,
             } 
         }
         let textItem1 = new TextItem(textItemData)

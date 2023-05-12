@@ -68,19 +68,20 @@ class PortfolioController {
 
     checkIfUserHasAccessToPortfolio = async (req, res, next) => {
         try {
-            if (!req.params.uuid){ // If the portfolio uuid is not specified, skip this middleware => the user is creating a new portfolio
+            const uuid = req.params.uuid || req.body.uuid
+            if (!uuid){ // If the portfolio uuid is not specified, skip this middleware => the user is creating a new portfolio
                 res.status(404).send({message: "Portfolio not found."})
                 return
             }
             // Get the porfolio for the given uuid
-            let portfolio = await Portfolio.findOne({uuid: req.params.uuid}).populate<IPortfolio>("items")
+            let portfolio = await Portfolio.findOne({uuid: uuid}).populate<IPortfolio>("items")
             if (!portfolio){ // If the portfolio does not exist, return an error
                 res.status(404).send({message: "Portfolio not found."})
                 return
             }
             // Check if the user owns the portfolio or if the portfolio is shared with the user
-            const portfoliosOwnedByUser = (await getAllPortfoliosOwnedByUser(req.user._id)).filter(portfolio => portfolio.uuid === req.params.uuid)
-            const portfoliosSharedWithUser = (await getAllPortfoliosSharedWithUser(req.user._id)).filter(portfolio => portfolio.uuid === req.params.uuid)
+            const portfoliosOwnedByUser = (await getAllPortfoliosOwnedByUser(req.user._id)).filter(portfolio => portfolio.uuid === uuid)
+            const portfoliosSharedWithUser = (await getAllPortfoliosSharedWithUser(req.user._id)).filter(portfolio => portfolio.uuid === uuid)
             if (portfoliosOwnedByUser.length === 0 && portfoliosSharedWithUser.length === 0){ // If the user does not own the portfolio and the portfolio is not shared with the user, return an error
                 res.status(403).send({message: "User does not have access to the portfolio."})
                 return
