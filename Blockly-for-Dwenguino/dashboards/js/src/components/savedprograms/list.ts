@@ -1,5 +1,5 @@
 import { LitElement, css, html, CSSResultGroup, unsafeCSS } from "lit";
-import { customElement, state } from "lit/decorators.js"; // needs .js to transpile
+import { customElement, state, property } from "lit/decorators.js"; // needs .js to transpile
 import { Router } from "@lit-labs/router"
 import { store } from  "../../state/store"
 import { connect } from "pwa-helpers"
@@ -22,16 +22,9 @@ class SavedProgramsList extends connect(store)(LitElement){
         store.dispatch(getAllSavedPrograms())
     }
 
-    @state() savedPrograms: SavedProgramInfo[] = []
+    @property({type: Object}) savedPrograms: SavedProgramInfo[] = []
     @state() showConfirmDialog: boolean = false
     @state() itemSelectedToDelete: SavedProgramInfo | null = null
-
-    stateChanged(state: any): void {
-        if (state.savedPrograms){
-            this.savedPrograms = structuredClone(state.savedPrograms.programs)
-        }
-        
-    }
 
     handleOpenSavedProgram(uuid: string){
         window.open(`${globalSettings.hostname}/savedprograms/open?uuid=${uuid}`, "_blank")

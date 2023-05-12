@@ -1,4 +1,4 @@
-import { css, CSSResultGroup, html, LitElement, PropertyValueMap } from "lit";
+import { css, CSSResultGroup, html, LitElement, PropertyValueMap, PropertyValues } from "lit";
 import { ref, Ref, createRef } from 'lit/directives/ref.js';
 import { store } from "../../state/store"
 import { connect } from "pwa-helpers"
@@ -14,10 +14,15 @@ import "./items/text_item"
 import "./items/blockly_item"
 import "./items/socialrobot_design_item"
 import "./items/graph_item"
+import { UserInfo } from "../../state/features/user_slice";
 
-@customElement("dwengo-graph-dashboard")
+@customElement("dwengo-graph-portfolio")
 class GraphDashboard extends connect(store)(LitElement){
-    @property() uuid: string = ""
+    
+    @property({type: Object}) 
+    userInfo: UserInfo | null = store.getState().user
+    @property({type: Object}) 
+    portfolioProp: PortfolioInfo | null = store.getState().portfolio.selectedPortfolio
     @state() portfolio: PortfolioInfo | null = null
 
     movingItem: PortfolioItemInfo | null = null
@@ -61,6 +66,25 @@ class GraphDashboard extends connect(store)(LitElement){
         }
     };
 
+    protected willUpdate(changedProperties: PropertyValueMap<this>) {
+        console.log(`WILL UPDATE: `, changedProperties);
+        if (changedProperties.has("portfolioProp")){
+            this.numberOfItems = this.portfolio?.items.length || 0
+            this.portfolio = structuredClone(this.portfolioProp)
+        }
+        if (changedProperties.has("movingItem")){
+            if (this.movingItem){
+                const mousePosInViewPort = {
+                    x: this.mouse.pos.x - this.viewportRef.getBoundingClientRect().x,
+                    y: this.mouse.pos.y - this.viewportRef.getBoundingClientRect().y
+                }
+                this.movingItem.displayInformation.x = mousePosInViewPort.x - this.movingItemClickOffset.x
+                this.movingItem.displayInformation.y = mousePosInViewPort.y - this.movingItemClickOffset.y
+            }
+        }
+        this.itemTargets = new Map()
+    }
+
     constructor(){
         super()
         if (customElements.get("lit-moveable") == undefined){
@@ -68,7 +92,8 @@ class GraphDashboard extends connect(store)(LitElement){
         }
     }
 
-    firstUpdated() {
+    firstUpdated(_changedProperties: PropertyValueMap<this>) {  
+        super.firstUpdated(_changedProperties);
         window.addEventListener("touchend", (e) => {
             this.onMouseUp()
         })
@@ -77,28 +102,17 @@ class GraphDashboard extends connect(store)(LitElement){
         })
     }
 
-    stateChanged(state: any): void{
-        this.portfolio = structuredClone(state.portfolio.selectedPortfolio)
-        this.numberOfItems = this.portfolio?.items.length || 0
-        this.itemTargets = new Map()
-    }
-
-    connectedCallback(): void {
-        super.connectedCallback()
-        store.dispatch(getPortfolio(this.uuid))
-    }
-
-    requestUpdate(){
-        if (this.movingItem){
-            const mousePosInViewPort = {
-                x: this.mouse.pos.x - this.viewportRef.getBoundingClientRect().x,
-                y: this.mouse.pos.y - this.viewportRef.getBoundingClientRect().y
-            }
-            this.movingItem.displayInformation.x = mousePosInViewPort.x - this.movingItemClickOffset.x
-            this.movingItem.displayInformation.y = mousePosInViewPort.y - this.movingItemClickOffset.y
-        }
-        super.requestUpdate()
-    }
+    // requestUpdate(attrName, attrValue) {
+    //     if (this.movingItem){
+    //         const mousePosInViewPort = {
+    //             x: this.mouse.pos.x - this.viewportRef.getBoundingClientRect().x,
+    //             y: this.mouse.pos.y - this.viewportRef.getBoundingClientRect().y
+    //         }
+    //         this.movingItem.displayInformation.x = mousePosInViewPort.x - this.movingItemClickOffset.x
+    //         this.movingItem.displayInformation.y = mousePosInViewPort.y - this.movingItemClickOffset.y
+    //     }
+    //     super.requestUpdate(attrName, attrValue);
+    // }
 
     render() {
         return html`
@@ -200,7 +214,7 @@ class GraphDashboard extends connect(store)(LitElement){
                      width:${item.displayInformation.width}px;
                      height:${item.displayInformation.height}px;
                      transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px)`}   >
-                     <dwengo-graph-portfolio-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-graph-portfolio-item>
+                     <dwengo-graph-portfolio-item .userInfo=${this.userInfo} .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-graph-portfolio-item>
         </div>
        
         `
@@ -242,8 +256,8 @@ class GraphDashboard extends connect(store)(LitElement){
         
     }
     onMouseUp(){
-        if (this.movingItem){
-            store.dispatch(savePortfolioItem(this.uuid, this.movingItem))
+        if (this.movingItem && this.portfolio?.uuid){
+            store.dispatch(savePortfolioItem(this.portfolio?.uuid, this.movingItem))
         }
         this.movingItem = null
     }
@@ -255,11 +269,11 @@ class GraphDashboard extends connect(store)(LitElement){
         const itemType: string = item?.__t || ""
         switch(itemType){
             case "TextItem":
-                return html`<dwengo-portfolio-text-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-portfolio-text-item>`
+                return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-portfolio-text-item>`
             case "BlocklyProgSequenceItem":
-                return html`<dwengo-portfolio-blockly-code-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-portfolio-blockly-code-item>`
+                return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-portfolio-blockly-code-item>`
             case "SocialRobotDesignItem":
-                return html`<dwengo-portfolio-socialrobot-design-item portfolioUUID=${this.portfolio?.uuid} item=${JSON.stringify(item)}></dwengo-portfolio-socialrobot-design-item>`
+                return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-portfolio-socialrobot-design-item>`
             default:    
                 return html`${msg("Unknown item type")}`
         }

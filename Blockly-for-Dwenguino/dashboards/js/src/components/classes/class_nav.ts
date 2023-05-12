@@ -15,12 +15,31 @@ import { Routes } from "@lit-labs/router"
 import '@vaadin/tabs'
 import "./class"
 import "../assignments/assignments"
+import Class from "./class";
+import { getAllAssignmentGroups } from "../../state/features/assignment_group_slice";
 
 @customElement("dwengo-class-nav")
 class ClassNav extends connect(store)(LitElement) {
+    @property({type: Object}) 
+    classGroup: ClassGroupInfo | null = store.getState().classGroup.currentGroup
+    @property({type: Object})
+    assignmentGroups: any = store.getState().assignments.groups
+
     private _routes = new Routes(this, [
-        {path: '/:uuid/info*', name: "info", render: ({uuid}) => this.renderDetails(uuid)},
-        {path: '/:uuid/assignments*', name: "assignments", render: ({uuid}) => this.renderAssignments(uuid)}
+        {path: 'info*', name: "info", render: () => this.renderDetails()},
+        {
+            path: 'assignments*', 
+            name: "assignments", 
+            enter: () => {
+                if (!this.classGroup?.uuid){
+                    return false
+                }
+                store.dispatch(getAllAssignmentGroups(this.classGroup.uuid))
+                return true
+            },
+            render: () => this.renderAssignments()
+        },
+        {path: 'insights*', name: "insights", render: () => html`No insights yet`}
     ])
 
     renderTabs(selectedIndex: number, uuid: string) {
@@ -44,21 +63,21 @@ class ClassNav extends connect(store)(LitElement) {
                 </vaadin-tab>
             </vaadin-tabs>`
     }
-    renderDetails(uuid: string | undefined){
-        if (!uuid){
+    renderDetails(){
+        if (!this.classGroup?.uuid){
             return ""
         }
         return html`
-            ${this.renderTabs(0, uuid)}
-            <dwengo-class-page uuid="${uuid}"></dwengo-class-page>`
+            ${this.renderTabs(0, this.classGroup?.uuid)}
+            <dwengo-class-page .classGroup=${this.classGroup}></dwengo-class-page>`
     }
-    renderAssignments(uuid: string | undefined){
-        if (!uuid){
+    renderAssignments(){
+        if (!this.classGroup?.uuid){
             return ""
         }
         return html`
-            ${this.renderTabs(1, uuid)}
-            <dwengo-assignment-list classGroupUUID=${uuid}></dwengo-assignment-list>`
+            ${this.renderTabs(1, this.classGroup?.uuid)}
+            <dwengo-assignment-list .classGroupProp=${this.classGroup} .assignmentGroupsProp=${this.assignmentGroups}></dwengo-assignment-list>`
     }
 
     protected render(){

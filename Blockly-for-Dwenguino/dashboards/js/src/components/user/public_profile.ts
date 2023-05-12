@@ -20,17 +20,6 @@ class PublicProfile extends connect(store)(LitElement) {
         this.name = state.publicProfile.name
     }
 
-    constructor(){
-        super();
-    }
-
-    connectedCallback() {
-        super.connectedCallback()
-        if (this.uuid){
-            store.dispatch(fetchPublicProfile(this.uuid))
-        }
-    }
-
     protected render() {
         return html`
             ${getGoogleMateriaIconsLinkTag()}

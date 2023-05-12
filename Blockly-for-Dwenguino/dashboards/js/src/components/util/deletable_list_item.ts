@@ -19,14 +19,6 @@ class DeletableListItem extends LitElement {
 
     @state() showConfirmDialog: boolean = false;
 
-    constructor(){
-        super()
-    }
-
-    stateChanged(state: any) {
-
-    }
-
     handleDelete(){
         this.showConfirmDialog = true;
     }

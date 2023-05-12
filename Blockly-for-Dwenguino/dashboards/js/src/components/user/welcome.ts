@@ -3,7 +3,7 @@
  */
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
@@ -17,16 +17,8 @@ import "../menu"
 @customElement("dwengo-welcome-page")
 class WelcomePage extends connect(store)(LitElement) {
     
-    @state() userInfo: UserInfo | null = null
-
-    stateChanged(state: any): void {
-        this.userInfo = state.user
-    }
-
-    constructor(){
-        super();
-    }
-
+    @property({type: Object}) 
+    userInfo: UserInfo | null = store.getState().user
     
     protected render() {
         return html`

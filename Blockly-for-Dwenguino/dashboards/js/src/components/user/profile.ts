@@ -3,7 +3,7 @@
  */
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, state, property} from 'lit/decorators.js';
 import { store } from "../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
@@ -25,17 +25,10 @@ import '@vaadin/email-field';
 
 @customElement("dwengo-profile-page")
 class Profile extends connect(store)(LitElement) {
-    @state() userInfo: UserInfo = initialUserState
+    @property({type: Object}) 
+    userInfo: UserInfo = store.getState().user
 
     @state() checkboxFocussed: boolean = false;
-
-    stateChanged(state: any): void {
-        this.userInfo = structuredClone(state.user)
-    }
-
-    constructor(){
-        super();
-    }
 
     handleSave(){
         console.log(this.userInfo)

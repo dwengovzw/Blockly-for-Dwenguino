@@ -1,4 +1,4 @@
-import { LitElement, css, html, CSSResultGroup } from "lit";
+import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import { customElement, state, property } from "lit/decorators.js"; // needs .js to transpile
 import { store } from "../state/store"
 import { msg } from '@lit/localize';
@@ -24,12 +24,12 @@ interface MenuItem {
 @customElement("dwengo-menu")
 class Menu extends connect(store)(LitElement){
     @state() menuItems:MenuItem[] = []
-    @state() visible: boolean = false
-    @state() loading: boolean = false
 
+    @property() loading: boolean = false
     @property() selectedId: string = "home"
+    @property({type: Object})
+    userInfo: UserInfo = store.getState().user
 
-    userInfo: UserInfo = initialUserState
     menuItemOptions: Record<string, MenuItem[]> = {
         "all": [
             {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
@@ -54,15 +54,16 @@ class Menu extends connect(store)(LitElement){
         super()
     }
 
-    stateChanged(state: any): void {
-        this.userInfo = state.user
+    protected willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        if (!this.userInfo){
+            return;
+        }
         let newMenuItems: MenuItem[] = []
         newMenuItems.push(...this.menuItemOptions["all"]) // Add items you can see without being logged in.
         for (let role of this.userInfo?.roles){
             newMenuItems.push(...this.menuItemOptions[role])
         }
         this.menuItems = newMenuItems
-        this.loading = state.notification.loading
     }
 
     protected override render() {

@@ -104,16 +104,16 @@ class EditDashboard extends connect(store)(LitElement){
                 >
                 ${this.portfolio?.items.map( (item, index) => html`
                     <dwengo-portfolio-item 
-                        portfolioUUID=${this.portfolio?.uuid}
-                        index=${index}
-                        item="${JSON.stringify(item)}"
+                        .portfolioUUID=${this.portfolio?.uuid}
+                        .index=${index}
+                        .item="${JSON.stringify(item)}"
                         @orderchanged=${e => {
                             this.updateOrder(e.detail.fromIndex, e.detail.toIndex)
                             return false
                         }}>
                     </dwengo-portfolio-item>`)}
                     <dwengo-drop-target 
-                        index=${this.portfolio?.items.length}
+                        .index=${this.portfolio?.items.length}
                         @orderchanged=${e => {
                             this.updateOrder(e.detail.fromIndex, e.detail.toIndex)
                             return false

@@ -23,8 +23,8 @@ class PortfolioItem extends connect(store)(LitElement) {
     item: PortfolioItemInfo | null = null 
     @property({type: String})
     portfolioUUID = ""
-    @state()
-    userInfo: UserInfo = initialUserState
+    @property()
+    userInfo: UserInfo = store.getState().user
     @query(".item_detail_modal")
     itemDetailModal!: HTMLDialogElement
 
@@ -44,10 +44,6 @@ class PortfolioItem extends connect(store)(LitElement) {
 
     @state()
     over: Boolean = false;
-
-    stateChanged(state) {
-        this.userInfo = state.user   
-    }
 
     protected firstUpdated(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
         super.firstUpdated(_changedProperties);
@@ -69,11 +65,11 @@ class PortfolioItem extends connect(store)(LitElement) {
         const itemType: string = this.item?.__t || ""
         switch(itemType){
             case "TextItem":
-                return html`<dwengo-portfolio-text-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
+                return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolioUUID} .item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
             case "BlocklyProgSequenceItem":
-                return html`<dwengo-portfolio-blockly-code-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-blockly-code-item>`
+                return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolioUUID} .item=${JSON.stringify(this.item)}></dwengo-portfolio-blockly-code-item>`
             case "SocialRobotDesignItem":
-                return html`<dwengo-portfolio-socialrobot-design-item portfolioUUID=${this.portfolioUUID} item=${JSON.stringify(this.item)}></dwengo-portfolio-socialrobot-design-item>`
+                return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolioUUID} .item=${JSON.stringify(this.item)}></dwengo-portfolio-socialrobot-design-item>`
             default:    
                 return html`${msg("Unknown item type")}`
         }

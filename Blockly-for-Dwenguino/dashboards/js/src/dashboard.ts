@@ -19,6 +19,8 @@ import "./components/portfolios/container"
 
 // Polyfill URLPattern
 import {URLPattern} from "urlpattern-polyfill";
+import { getAllClassGroups } from "./state/features/class_group_slice";
+import { getAllStudentClassGroups } from "./state/features/student_class_group_slice";
 // @ts-ignore: Property 'UrlPattern' does not exist 
 globalThis.URLPattern = URLPattern
 
@@ -30,31 +32,96 @@ class Dashboard extends connect(store)(LitElement) {
 
     @state() selectedId: string = "home"
 
+    @state() globalState: any = store.getState()
+
     private router = new Router(this, [
-        {path: `${this.urlPrefix}/dashboard`, enter: async () => {this.selectedId = "home"; return true}, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
-        {path: `${this.urlPrefix}/dashboard/home`, enter: async () => {this.selectedId = "home"; return true}, render: () => html`<dwengo-welcome-page></dwengo-welcome-page>`},
-        {path: `${this.urlPrefix}/dashboard/profile`, enter: async () => {this.selectedId ="profile"; return true}, render: () => html`<dwengo-profile-page></dwengo-profile-page>`},
-        {path: `${this.urlPrefix}/dashboard/classes*`, enter: async () => {this.selectedId = "classgroups"; return true}, render: () => html`<dwengo-classes-page></dwengo-classes-page>`},
-        {path: `${this.urlPrefix}/dashboard/studentclasses`, enter: async () => {this.selectedId = "studentclassgroups"; return true}, render: () => html`<dwengo-student-classes-page></dwengo-student-classes-page>`},
-        //{path: `${this.urlPrefix}/dashboard/class/:uuid`, render: ({uuid}) => html`<dwengo-class-page uuid="${uuid}"></dwengo-class-page>`},
-        {path: `${this.urlPrefix}/dashboard/savedprograms`, enter: async () => {this.selectedId = "savedprograms"; return true}, render: ({uuid}) => html`<dwengo-saved-programs-list></dwengo-saved-programs-list>`},
-        {path: `${this.urlPrefix}/dashboard/portfolios*`, enter: async () => {this.selectedId = "portfolios"; return true}, render: ({uuid}) => html`<dwengo-dashboard-page-container></dwengo-dashboard-page-container>`},
+        {
+            path: `${this.urlPrefix}/dashboard`, 
+            enter: async () => {
+                this.selectedId = "home"; 
+                return true
+            }, 
+            render: () => html`<dwengo-welcome-page .userInfo=${this.globalState.user}></dwengo-welcome-page>`
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/home`, 
+            enter: async () => {this.selectedId = "home"; return true}, 
+            render: () => html`<dwengo-welcome-page .userInfo=${this.globalState.user}></dwengo-welcome-page>`
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/profile`, 
+            render: () => html`<dwengo-profile-page .userInfo=${this.globalState.user}></dwengo-profile-page>`,
+            enter: async () => {
+                this.selectedId ="profile"; 
+                return true
+            }, 
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/classes*`, 
+            enter: async () => {
+                this.selectedId = "classgroups"; 
+                store.dispatch(getAllClassGroups()); 
+                return true
+            }, 
+            render: () => html`<dwengo-classes-page
+                                    .groups=${this.globalState.classGroup.groups}
+                                    .currentGroup=${this.globalState.classGroup.currentGroup}
+                                    .assignmentGroups=${this.globalState.assignments.groups}></dwengo-classes-page>`
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/studentclasses`, 
+            enter: async () => {
+                this.selectedId = "studentclassgroups"; 
+                store.dispatch(getAllStudentClassGroups()); 
+                return true
+            }, 
+            render: () => html`
+                <dwengo-student-classes-page 
+                    .groups=${this.globalState.studentClassGroup.groups} 
+                    .pending=${this.globalState.studentClassGroup.pending}>
+                </dwengo-student-classes-page>`
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/savedprograms`, 
+            enter: async () => {
+                this.selectedId = "savedprograms"; 
+                return true
+            }, 
+            render: ({uuid}) => html`<dwengo-saved-programs-list
+                    .savedPrograms=${this.globalState.savedPrograms.programs}>
+                </dwengo-saved-programs-list>`
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/portfolios*`, 
+            enter: async () => {
+                this.selectedId = "portfolios"; 
+                return true
+            }, 
+            render: ({uuid}) => html`
+                <dwengo-dashboard-page-container
+                    .userInfo=${this.globalState.user}
+                    .portfolioState=${this.globalState.portfolio}>
+                </dwengo-dashboard-page-container>`
+        },
     ]);
 
     createRenderRoot() {
         return this; // turn off shadow dom to access external styles
       }
 
-    @state() loggedIn: boolean = false;
 
     stateChanged(state: any): void {
-        this.loggedIn = state.user.loggedIn
+        this.globalState = state
     }
 
     protected render() {
-        return html`<dwengo-notify></dwengo-notify>
-                    <dwengo-menu selectedId="${this.selectedId}">
-                        ${this.loggedIn ? html`${this.router.outlet()}` : html`<dwengo-intro-page></dwengo-intro-page>`}
+        console.log(this.globalState.notification);
+        return html`<dwengo-notify .notificationState=${this.globalState.notification}></dwengo-notify>
+                    <dwengo-menu 
+                        .userInfo=${this.globalState.user}
+                        .loading=${this.globalState.notification.loading}
+                        .selectedId="${this.selectedId}">
+                        ${this.globalState.user.loggedIn ? html`${this.router.outlet()}` : html`<dwengo-intro-page></dwengo-intro-page>`}
                     </dwengo-menu>`
                     
     }

@@ -42,11 +42,6 @@ class Header extends connect(store)(LitElement) {
         }
     `
 
-
-    stateChanged(state: any): void {
-        
-    }
-
     constructor(){
         super();
         
