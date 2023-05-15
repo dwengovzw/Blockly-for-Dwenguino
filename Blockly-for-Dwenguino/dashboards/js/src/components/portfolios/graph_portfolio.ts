@@ -5,9 +5,7 @@ import { connect } from "pwa-helpers"
 import {customElement, property, state, query} from 'lit/decorators.js';
 import { createPortfolioItem, getPortfolio, MinimalPortfolioItemInfo, PortfolioInfo, PortfolioItemInfo, savePortfolioItem, setSelectedPortfolioItems } from "../../state/features/portfolio_slice";
 import { msg } from "@lit/localize";
-import { MouseController } from "../util/mouse_controller";
 
-import { LitMoveable } from "lit-moveable";
 import { LitInfiniteViewer } from "lit-infinite-viewer";
 
 import "./items/text_item"
@@ -25,15 +23,14 @@ class GraphDashboard extends connect(store)(LitElement){
     portfolioProp: PortfolioInfo | null = store.getState().portfolio.selectedPortfolio
     @state() portfolio: PortfolioInfo | null = null
 
+    @state()
     movingItem: PortfolioItemInfo | null = null
     movingItemClickOffset = {
         x: 0,
         y: 0
     }
-    private mouse: MouseController = new MouseController(this)
 
     numberOfItems: number = 0
-    itemTargets: Map<String, HTMLElement> = new Map()
 
     @query(".viewport")
     viewportRef!: HTMLElement
@@ -67,31 +64,10 @@ class GraphDashboard extends connect(store)(LitElement){
     };
 
     protected willUpdate(changedProperties: PropertyValueMap<this>) {
-        console.log(`WILL UPDATE: `, changedProperties);
         if (changedProperties.has("portfolioProp")){
-            this.numberOfItems = this.portfolio?.items.length || 0
             this.portfolio = structuredClone(this.portfolioProp)
         }
-        if (changedProperties.has("movingItem")){
-            if (this.movingItem){
-                const mousePosInViewPort = {
-                    x: this.mouse.pos.x - this.viewportRef.getBoundingClientRect().x,
-                    y: this.mouse.pos.y - this.viewportRef.getBoundingClientRect().y
-                }
-                this.movingItem.displayInformation.x = mousePosInViewPort.x - this.movingItemClickOffset.x
-                this.movingItem.displayInformation.y = mousePosInViewPort.y - this.movingItemClickOffset.y
-            }
-        }
-        this.itemTargets = new Map()
     }
-
-    constructor(){
-        super()
-        if (customElements.get("lit-moveable") == undefined){
-            customElements.define("lit-moveable", LitMoveable)
-        }
-    }
-
     firstUpdated(_changedProperties: PropertyValueMap<this>) {  
         super.firstUpdated(_changedProperties);
         window.addEventListener("touchend", (e) => {
@@ -100,19 +76,20 @@ class GraphDashboard extends connect(store)(LitElement){
         window.addEventListener("mouseup", (e) => {
             this.onMouseUp()
         })
+        window.addEventListener('mousemove', (e) => this.onMouseMove(e));
     }
 
-    // requestUpdate(attrName, attrValue) {
-    //     if (this.movingItem){
-    //         const mousePosInViewPort = {
-    //             x: this.mouse.pos.x - this.viewportRef.getBoundingClientRect().x,
-    //             y: this.mouse.pos.y - this.viewportRef.getBoundingClientRect().y
-    //         }
-    //         this.movingItem.displayInformation.x = mousePosInViewPort.x - this.movingItemClickOffset.x
-    //         this.movingItem.displayInformation.y = mousePosInViewPort.y - this.movingItemClickOffset.y
-    //     }
-    //     super.requestUpdate(attrName, attrValue);
-    // }
+    disconnectedCallback() {
+        window.removeEventListener("touchend", (e) => {
+            this.onMouseUp()
+        })
+        window.removeEventListener("mouseup", (e) => {
+            this.onMouseUp()
+        })
+        window.removeEventListener('mousemove', this.onMouseMove);
+        super.disconnectedCallback();
+    }
+
 
     render() {
         return html`
@@ -159,6 +136,7 @@ class GraphDashboard extends connect(store)(LitElement){
                 y: item.displayInformation.height/2
             }
             return html`${item.children.map(child => {
+                if (!child) return html``
                 let endPoint = {
                     x: (child.displayInformation.x - item.displayInformation.x)+child.displayInformation.width/2,
                     y: (child.displayInformation.y - item.displayInformation.y)+child.displayInformation.height/2
@@ -254,6 +232,19 @@ class GraphDashboard extends connect(store)(LitElement){
         }
         this.movingItem = item
         
+    }
+    onMouseMove(e: MouseEvent){
+        console.log(e)
+        console.log(this.movingItem);
+        if (this.movingItem){
+            let newPosition = {
+                x: e.clientX - this.viewportRef.getBoundingClientRect().x - this.movingItemClickOffset.x,
+                y: e.clientY - this.viewportRef.getBoundingClientRect().y - this.movingItemClickOffset.y
+            }
+            this.movingItem.displayInformation.x = newPosition.x
+            this.movingItem.displayInformation.y = newPosition.y
+            this.movingItem = { ...this.movingItem }
+        }
     }
     onMouseUp(){
         if (this.movingItem && this.portfolio?.uuid){
