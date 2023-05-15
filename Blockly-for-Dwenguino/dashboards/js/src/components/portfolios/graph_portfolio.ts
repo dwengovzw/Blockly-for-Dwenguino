@@ -129,7 +129,9 @@ class GraphDashboard extends connect(store)(LitElement){
             </lit-infinite-viewer>
         `
     }
+ 
 
+    // TODO: make items shown dynamic based on the role of the user
     renderAddItemContextMenu() {
         if (this.addItemContextMenuInfo.show){
             return html`
@@ -144,16 +146,16 @@ class GraphDashboard extends connect(store)(LitElement){
                         </button>
                     </div>
                     <div class="add_item_context_menu_content">
-                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("text")}>
+                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("text")}>
                             ${msg("TEXT")}
                         </div>
-                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("blockly")}>
+                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("blockly")}>
                             ${msg("BLOCKLY")}
                         </div>
-                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("socialrobot_design")}>
+                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("socialrobot_design")}>
                             ${msg("SOCIAL_ROBOT_DESIGN")}
                         </div>
-                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("graph")}>
+                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("graph")}>
                             ${msg("FEEDBACK")}
                         </div>
                     </div>
@@ -451,9 +453,21 @@ class GraphDashboard extends connect(store)(LitElement){
     }
     .add_item_context_menu {
         position: absolute;
+        background-color: var(--theme-white);
+        border-color: var(--theme-accentFillSelected);
+        border-style: solid;
+        border-width: 1px;
+        border-radius: 5px;
+        padding: 2px;
+        min-width: 200px;
+        box-shadow: 0px 0px 10px var(--theme-accentFillSelected);
     }
-    .add_item_context_menu_close_button {
-        float: right;
+    .add_item_context_menu_header{
+        display: flex;
+        flex-direction: row-reverse;
+    }
+    .add_item_context_menu_item {
+        padding: 2.5px 5px;
     }
      `, buttonStyles]
 }
