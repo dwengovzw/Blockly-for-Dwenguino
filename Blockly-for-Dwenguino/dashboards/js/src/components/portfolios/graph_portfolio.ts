@@ -13,6 +13,8 @@ import "./items/blockly_item"
 import "./items/socialrobot_design_item"
 import "./items/graph_item"
 import { UserInfo } from "../../state/features/user_slice";
+import { buttonStyles } from "../../styles/shared";
+import { getGoogleMateriaIconsLinkTag } from "../../util";
 
 @customElement("dwengo-graph-portfolio")
 class GraphDashboard extends connect(store)(LitElement){
@@ -29,7 +31,12 @@ class GraphDashboard extends connect(store)(LitElement){
         x: 0,
         y: 0
     }
-
+    @state()
+    addItemContextMenuInfo = {
+        show: false,
+        x: 0,
+        y: 0
+    }
     numberOfItems: number = 0
 
     @query(".viewport")
@@ -51,6 +58,7 @@ class GraphDashboard extends connect(store)(LitElement){
         }
     }
 
+    droppedOnViewport = false
 
     scrollOptions: any = {
         container: () => this.containerRef,
@@ -93,19 +101,85 @@ class GraphDashboard extends connect(store)(LitElement){
 
     render() {
         return html`
+            ${getGoogleMateriaIconsLinkTag()}
             <lit-infinite-viewer class="root viewer">
-                <div class="viewport">
-                    ${this.portfolio?.items.map(item => {
-                        return html`
-                            ${this.renderPortfolioItem(item)}
-                        `
-                    })}
-                    ${this.renderConnectionLines(this.portfolio?.items || [])}
-                    ${this.renderSvgGrid()}
-                    ${this.renderConnectionLine()}
+                <div 
+                    class="viewport"
+                    @dragover=${(e: DragEvent) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                    }}
+                    @dragenter=${(e: DragEvent) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                    }}
+                    @drop=${(e) => {
+                        this.onViewPortDrop(e)
+                    }}>
+                        ${this.portfolio?.items.map(item => {
+                            return html`
+                                ${this.renderPortfolioItem(item)}
+                            `
+                        })}
+                        ${this.renderConnectionLines(this.portfolio?.items || [])}
+                        ${this.renderSvgGrid()}
+                        ${this.renderConnectionLine()}
+                        ${this.renderAddItemContextMenu()}
                 </div>
             </lit-infinite-viewer>
         `
+    }
+
+    renderAddItemContextMenu() {
+        if (this.addItemContextMenuInfo.show){
+            return html`
+                <div class="add_item_context_menu" style="left:${this.addItemContextMenuInfo.x}px;top:${this.addItemContextMenuInfo.y}px">
+                    <div class="add_item_context_menu_header">
+                        <button class="add_item_context_menu_close_button dwengo-button" @click=${() => {
+                            this.closeAddItemContextMenu()
+                        }}>
+                            <span class="dwengo-button-icon material-symbols-outlined">
+                                close
+                            </span>
+                        </button>
+                    </div>
+                    <div class="add_item_context_menu_content">
+                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("text")}>
+                            ${msg("TEXT")}
+                        </div>
+                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("blockly")}>
+                            ${msg("BLOCKLY")}
+                        </div>
+                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("socialrobot_design")}>
+                            ${msg("SOCIAL_ROBOT_DESIGN")}
+                        </div>
+                        <div class="add_item_context_menu_item" @click=${() => this.onAddItemContextMenuClick("graph")}>
+                            ${msg("FEEDBACK")}
+                        </div>
+                    </div>
+                    <div class="add_item_context_menu_footer></div>
+                </div>
+            `
+        } else {
+            return ""
+        }
+    }
+
+    onAddItemContextMenuClick(type: string) {
+        console.log("adding item ", type);
+        this.closeAddItemContextMenu()
+        // const item = createPortfolioItem(type)
+        // this.portfolio?.items.push(item)
+        // this.portfolio = structuredClone(this.portfolio)
+        // this.numberOfItems++
+        // this.requestUpdate()
+    }
+
+    closeAddItemContextMenu() {
+        this.addItemContextMenuInfo.show = false
+        this.addItemContextMenuInfo = structuredClone(this.addItemContextMenuInfo)
+        this.connectionDragInfo.dragging = false
+        this.connectionDragInfo = { ...this.connectionDragInfo }
     }
 
     renderConnectionLine() {
@@ -152,8 +226,21 @@ class GraphDashboard extends connect(store)(LitElement){
                                 <polygon points="0 0, 10 3.5, 0 7" />
                             </marker>
                         </defs>
-                        <line x1="${startPoint.x}" y1="${startPoint.y}" x2="${midPoint.x}" y2="${midPoint.y}" stroke="black" stroke-width="1" marker-end="url(#arrowhead)" />
-                        <line x1="${midPoint.x}" y1="${midPoint.y}" x2="${endPoint.x}" y2="${endPoint.y}" stroke="black" stroke-width="1" />
+                        <line 
+                            x1="${startPoint.x}" 
+                            y1="${startPoint.y}" 
+                            x2="${midPoint.x}" 
+                            y2="${midPoint.y}" 
+                            stroke="black" 
+                            stroke-width="1"
+                            marker-end="url(#arrowhead)" />
+                        <line 
+                            x1="${midPoint.x}" 
+                            y1="${midPoint.y}" 
+                            x2="${endPoint.x}" 
+                            y2="${endPoint.y}" 
+                            stroke="black" 
+                            stroke-width="1" />
                     </svg>
                 `
             })}
@@ -187,12 +274,13 @@ class GraphDashboard extends connect(store)(LitElement){
             @connectionDragStarted=${(e) => {this.onConnectionDragStarted(e, item)}}
             @connectionDragStopped=${(e) => {this.onConnectionDragStopped(e, item)}}
             @connectionDragging=${(e) => {this.onConnectionDragging(e, item)}}
+            @connectionDragDrop=${(e) => {this.onConnectionDragDrop(e, item)}}
             class="target"
             style=${`display:inline-block;
                      width:${item.displayInformation.width}px;
                      height:${item.displayInformation.height}px;
                      transform: translate(${item.displayInformation.x}px, ${item.displayInformation.y}px)`}   >
-                     <dwengo-graph-portfolio-item .userInfo=${this.userInfo} .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-graph-portfolio-item>
+                     <dwengo-graph-portfolio-item .userInfo=${this.userInfo} .portfolioUUID=${this.portfolio?.uuid} .item=${item}></dwengo-graph-portfolio-item>
         </div>
        
         `
@@ -203,6 +291,7 @@ class GraphDashboard extends connect(store)(LitElement){
             x: e.detail.dragStartX - this.viewportRef.getBoundingClientRect().x,
             y: e.detail.dragStartY - this.viewportRef.getBoundingClientRect().y
         }
+        this.droppedOnViewport = false
         this.connectionDragInfo = {
             dragging: true,
             start: curentPosition,
@@ -220,10 +309,33 @@ class GraphDashboard extends connect(store)(LitElement){
     }
 
     onConnectionDragStopped(e: any, item: PortfolioItemInfo) {
-        this.connectionDragInfo.dragging = false
-        this.connectionDragInfo = { ...this.connectionDragInfo }
+        if (!this.droppedOnViewport) {
+            this.closeAddItemContextMenu()
+        }
     }
 
+    onConnectionDragDrop(e: any, item: PortfolioItemInfo) {
+        this.connectionDragInfo.dragging = false;
+        let startItem = this.portfolio?.items.find(i => i.uuid === e.detail.fromItemUUID)
+        let endItem = this.portfolio?.items.find(i => i.uuid === e.detail.toItemUUID)
+        if (startItem && endItem) {
+            startItem.children.push(endItem)
+            startItem = { ...startItem }
+        }
+        this.connectionDragInfo = { ...this.connectionDragInfo }
+    }
+    onViewPortDrop(e: DragEvent) {
+        this.droppedOnViewport = true
+        console.log("Drop on viewport")
+        console.log(e);
+        this.addItemContextMenuInfo = {
+            x: e.clientX - this.viewportRef.getBoundingClientRect().x,
+            y: e.clientY - this.viewportRef.getBoundingClientRect().y,
+            show: true
+        }
+        e.preventDefault()
+        e.stopPropagation()
+    }
 
     onMouseDown(e: CustomEvent, item: PortfolioItemInfo){
         this.movingItemClickOffset = {
@@ -234,8 +346,6 @@ class GraphDashboard extends connect(store)(LitElement){
         
     }
     onMouseMove(e: MouseEvent){
-        console.log(e)
-        console.log(this.movingItem);
         if (this.movingItem){
             let newPosition = {
                 x: e.clientX - this.viewportRef.getBoundingClientRect().x - this.movingItemClickOffset.x,
@@ -260,17 +370,17 @@ class GraphDashboard extends connect(store)(LitElement){
         const itemType: string = item?.__t || ""
         switch(itemType){
             case "TextItem":
-                return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-portfolio-text-item>`
+                return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolio?.uuid} .item=${item}></dwengo-portfolio-text-item>`
             case "BlocklyProgSequenceItem":
-                return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-portfolio-blockly-code-item>`
+                return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolio?.uuid} .item=${item}></dwengo-portfolio-blockly-code-item>`
             case "SocialRobotDesignItem":
-                return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolio?.uuid} .item=${JSON.stringify(item)}></dwengo-portfolio-socialrobot-design-item>`
+                return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolio?.uuid} .item=${item}></dwengo-portfolio-socialrobot-design-item>`
             default:    
                 return html`${msg("Unknown item type")}`
         }
     }
 
-    static styles: CSSResultGroup = css`
+    static styles: CSSResultGroup = [css`
      .root {
         position: relative;
         width: 100%;
@@ -294,7 +404,7 @@ class GraphDashboard extends connect(store)(LitElement){
         overflow: hidden;
         background-color: white;
         z-index: 1;
-        padding: 4.25px;
+        padding: 4px;
     }
     .line {
         position: absolute;
@@ -339,5 +449,11 @@ class GraphDashboard extends connect(store)(LitElement){
         border-top-left-radius: 5px;
         border-top: 20px solid var(--theme-accentFillSelected);
     }
-     `
+    .add_item_context_menu {
+        position: absolute;
+    }
+    .add_item_context_menu_close_button {
+        float: right;
+    }
+     `, buttonStyles]
 }

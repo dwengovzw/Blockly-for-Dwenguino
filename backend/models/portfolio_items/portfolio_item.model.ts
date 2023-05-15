@@ -12,15 +12,21 @@ interface IPortfolioItemDisplayInformation extends IMinimalPortfolioItemDisplayI
 }
 
 const PortfolioItemDisplayInformationFields: Record<keyof IPortfolioItemDisplayInformation, any> = {
-    x: Number,
-    y: Number,
+    x: {
+        type: Number,
+        default: 0
+    },
+    y: {
+        type: Number,
+        default: 0
+    },
     width: {
         type: Number,
-        default: 100
+        default: 68
     },
     height: {
         type: Number,
-        default: 130
+        default: 98
     },
 }
 const PortfolioItemDisplayInformationSchema = new Schema<IPortfolioItemDisplayInformation>(PortfolioItemDisplayInformationFields)
@@ -47,12 +53,7 @@ const PortfolioItemFields: Record<keyof IPortfolioItem, any> = {
     }],
     displayInformation: {
         type: PortfolioItemDisplayInformationSchema,
-        default: {
-            x: 0,
-            y: 0,
-            width: 100,
-            height: 50,
-        }
+        default: () => ({})
     }
 }
 const PortfolioItemSchema = new Schema<IPortfolioItem>(PortfolioItemFields)

@@ -57,19 +57,17 @@ class PortfolioItem extends connect(store)(LitElement) {
                 this.itemDetailModal.close()
             }
         })
-    
     }
-
 
     mapItemToElement(){
         const itemType: string = this.item?.__t || ""
         switch(itemType){
             case "TextItem":
-                return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolioUUID} .item=${JSON.stringify(this.item)}></dwengo-portfolio-text-item>`
+                return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolioUUID} .item=${this.item}></dwengo-portfolio-text-item>`
             case "BlocklyProgSequenceItem":
-                return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolioUUID} .item=${JSON.stringify(this.item)}></dwengo-portfolio-blockly-code-item>`
+                return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolioUUID} .item=${this.item}></dwengo-portfolio-blockly-code-item>`
             case "SocialRobotDesignItem":
-                return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolioUUID} .item=${JSON.stringify(this.item)}></dwengo-portfolio-socialrobot-design-item>`
+                return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolioUUID} .item=${this.item}></dwengo-portfolio-socialrobot-design-item>`
             default:    
                 return html`${msg("Unknown item type")}`
         }
@@ -93,11 +91,6 @@ class PortfolioItem extends connect(store)(LitElement) {
                         }}
                         @mousedown=${this.onMouseDown}>
                         drag_indicator
-                    </span>
-                    <span
-                        title="${msg("Add feedback")}"
-                        class="material-symbols-outlined dwengo-icon dwengo-clickable-icon">
-                            rate_review
                     </span>
                    ${this.renderConnectionTarget()}
                 </div>
@@ -232,13 +225,22 @@ class PortfolioItem extends connect(store)(LitElement) {
         this.over = false;
         // Check if item is not dropped on itself
         if (!this.item?.uuid) {
-            store.dispatch(setNotificationMessage(msg("Error connecting items."),NotificationMessageType.ERROR, 5000))
+            store.dispatch(setNotificationMessage(msg("Error connecting items."), NotificationMessageType.ERROR, 5000))
         } else if (fromItemUUID === this.item?.uuid) {
             store.dispatch(setNotificationMessage(msg("Cannot connect item to itself."),NotificationMessageType.MESSAGE, 2000))
         } else {
+            this.dispatchEvent(
+                new CustomEvent(
+                    "connectionDragDrop",
+                    {
+                        bubbles: true,
+                        composed: true,
+                        detail: { fromItemUUID: fromItemUUID, toItemUUID: this.item?.uuid }
+                    }
+                )
+            )
             store.dispatch(connectPortfolioItemsInCurrentPortfolio(fromItemUUID, this.item?.uuid))
         }
-        
         return false
     }
 
@@ -274,6 +276,7 @@ class PortfolioItem extends connect(store)(LitElement) {
             height: 100%;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
         .item_detail_modal {
             padding: 0;
@@ -287,7 +290,6 @@ class PortfolioItem extends connect(store)(LitElement) {
         }
         .dialog_header {
             display: flex;
-            position: absolute;
             justify-content: flex-end;
             width: calc(100% - 2rem);
             height: 35px;
@@ -308,7 +310,7 @@ class PortfolioItem extends connect(store)(LitElement) {
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 70px;
+            font-size: 52px;
         }
         .over {
             color: red !important;
