@@ -117,29 +117,12 @@ export const portfolioSlice = createSlice({
         updateSelectedPortfolioItem: (state, action) => {
             if (state.selectedPortfolio){
                 let updatedItem = action.payload
-                // Map children to items in the portfolio.
-                updatedItem.children = updatedItem.children.map(childItem => {
-                    if (state.selectedPortfolio){
-                        let item = (state.selectedPortfolio as PortfolioInfo).items.find(item => item.uuid === childItem.uuid)
-                        return item ? item : childItem
-                    }
-                })
-                // Find and replace the item in the portfolio.
                 let index = (state.selectedPortfolio as PortfolioInfo).items.findIndex(item => item.uuid === updatedItem.uuid)
                 if (index >= 0){
                     (state.selectedPortfolio as PortfolioInfo).items[index] = updatedItem
                 } else {
                     (state.selectedPortfolio as PortfolioInfo).items.push(updatedItem)
                 }
-                // Search for items that have the updated item as a child and replace the child with the updated item.
-                (state.selectedPortfolio as PortfolioInfo).items.forEach(item => {
-                    item.children.forEach((child, index) => {
-                        if (child.uuid === updatedItem.uuid){
-                            item.children[index] = updatedItem
-                        }
-                    })
-                }
-                )
             }
         }
     }
