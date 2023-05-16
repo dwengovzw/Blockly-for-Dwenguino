@@ -125,11 +125,11 @@ class GraphDashboard extends connect(store)(LitElement){
                                 ${this.renderPortfolioItem(item)}
                             `
                         })}
+                        ${this.renderAddItemContextMenu()}
+                        ${this.renderDeleteConnectionLineContextMenu()}
                         ${this.renderSvgGrid()}
                         ${this.renderConnectionLines(this.portfolio?.items || [])}
                         ${this.renderConnectionLine()}
-                        ${this.renderAddItemContextMenu()}
-                        ${this.renderDeleteConnectionLineContextMenu()}
                 </div>
             </lit-infinite-viewer>
         `
@@ -467,13 +467,17 @@ class GraphDashboard extends connect(store)(LitElement){
         width: 100%;
         height: 100%;
         overflow: visible;
-        pointer-events: all;
     }
     .portfolio-connection-line{
         cursor: pointer;
+        z-index: 500;
+        pointer-events: painted;
     }
     .drag_line {
         color: var(--theme-accentFillSelected);
+    }
+    svg {
+        pointer-events: none;
     }
     .viewport {
         width: 100%;
