@@ -1,4 +1,4 @@
-import { LitElement, css, html, CSSResultGroup, unsafeCSS } from "lit";
+import { LitElement, css, html, CSSResultGroup } from "lit";
 import { customElement, state } from "lit/decorators.js"; // needs .js to transpile
 import { Router } from "@lit-labs/router"
 import { store } from "./state/store"

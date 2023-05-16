@@ -11,12 +11,12 @@ import {IPortfolioItemDisplayInformation} from "../../../../../../backend/models
 interface MinimalPortfolioItemInfo {
     name: string,
     __t: string,
+    children: PortfolioItemInfo[],
 }
 
 interface PortfolioItemInfo extends MinimalPortfolioItemInfo {
     uuid: string,
     displayInformation: IPortfolioItemDisplayInformation,
-    children: PortfolioItemInfo[],
 }
 
 interface SolutionItemInfo extends PortfolioItemInfo {
@@ -103,13 +103,6 @@ export const portfolioSlice = createSlice({
             state.portfolioList = action.payload
         },
         setSelectedPortfolio: (state, action) => {
-            // Map children references to items in the portfolio.
-            action.payload.items = action.payload.items.map(item => {
-                item.children = item.children.map(childItem => {
-                    return action.payload.items.find(item => item.uuid === childItem.uuid)
-                })
-                return item
-            })
             state.selectedPortfolio = action.payload
         },
         setSelectedPortfolioItems: (state, action) => {
@@ -152,6 +145,17 @@ export const portfolioSlice = createSlice({
     }
 })
 
+const removeCircularDependenciesFromPortfolioItem = (item: MinimalPortfolioItemInfo) => {
+    // To prevent circular references in the item, remove the child references of children of this item
+    item.children = item.children.map(child => {
+        const { children, ...rest } = child
+        return { ...rest, children: [] }
+    })
+    // Remove the item itself from the children of the item
+    item.children = item.children.filter(child => child !== item)
+    return item
+}
+
 const deletePortfolioItem = (portfolioUuid: string, itemUuid: string) => {
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/deleteItem/${itemUuid}`, "DELETE", (dispatch, getState, json) => {
         dispatch(getPortfolio(portfolioUuid))
@@ -159,6 +163,7 @@ const deletePortfolioItem = (portfolioUuid: string, itemUuid: string) => {
 }
 
 const createPortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemInfo) => {
+    item = removeCircularDependenciesFromPortfolioItem(item)
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/createItem`, "PUT", (dispatch, getState, json) => {
         console.log(json)
         dispatch(updateSelectedPortfolioItem(json))
@@ -166,6 +171,8 @@ const createPortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemIn
 }
 
 const savePortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemInfo) => {
+    // Map children in items to new objects to avoid circular references
+    item = removeCircularDependenciesFromPortfolioItem(item)
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/saveItem`, "PUT", (dispatch, getState, json) => {
         console.log(json)
         dispatch(updateSelectedPortfolioItem(json))

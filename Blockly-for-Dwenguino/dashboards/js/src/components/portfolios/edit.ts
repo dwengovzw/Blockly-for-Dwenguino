@@ -65,6 +65,7 @@ class EditDashboard extends connect(store)(LitElement){
         let newItem: MinimalPortfolioItemInfo = {
             __t: this.selectedItemType,
             name: "New item",
+            children: [],
         }
         store.dispatch(createPortfolioItem(this.uuid, newItem))
         this.showAddItem = false

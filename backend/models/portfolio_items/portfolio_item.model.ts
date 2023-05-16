@@ -36,6 +36,8 @@ interface IPortfolioItem {
     name: string,
     children: PopulatedDoc<IPortfolioItem>[] | IPortfolioItem[],
     displayInformation: IPortfolioItemDisplayInformation,
+    needsTeacherAttention: boolean,
+    needsStudentAttention: boolean,
 }
 
 const PortfolioItemFields: Record<keyof IPortfolioItem, any> = {
@@ -54,7 +56,15 @@ const PortfolioItemFields: Record<keyof IPortfolioItem, any> = {
     displayInformation: {
         type: PortfolioItemDisplayInformationSchema,
         default: () => ({})
-    }
+    },
+    needsTeacherAttention: {
+        type: Boolean,
+        default: false
+    },
+    needsStudentAttention: {
+        type: Boolean,
+        default: false
+    },
 }
 const PortfolioItemSchema = new Schema<IPortfolioItem>(PortfolioItemFields)
 const PortfolioItem = model<IPortfolioItem>('PortfolioItem', PortfolioItemSchema)

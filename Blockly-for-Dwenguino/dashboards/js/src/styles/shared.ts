@@ -40,3 +40,13 @@ export const noselect = css`
         .dwengo-clickable-icon:hover {
             cursor: pointer;
         }`
+
+    export const borderStyle = css`
+        .dwengo-border {
+            border: 1px solid var(--theme-accentFillSelected);
+            border-radius: 5px;
+        }
+        .dwengo-border-highlight {
+            box-shadow: 0 0 10px 0 var(--theme-accentFillSelected);
+            border-width: 2px;
+        }`

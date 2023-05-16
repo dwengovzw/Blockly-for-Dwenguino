@@ -8,7 +8,7 @@ import { store } from "../../../state/store"
 import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../../util"
-import { noselect } from "../../../styles/shared";
+import { borderStyle, noselect } from "../../../styles/shared";
 import { connectPortfolioItemsInCurrentPortfolio, deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 import { buttonStyles, iconStyle } from "../../../styles/shared";
 import { UserInfo, initialUserState } from "../../../state/features/user_slice";
@@ -155,7 +155,7 @@ class PortfolioItem extends connect(store)(LitElement) {
 
     renderItemDetailModal(){
         return html`
-            <dialog class="item_detail_modal">
+            <dialog class="item_detail_modal dwengo-border dwengo-border-highlight">
                 <div class="dialog_content_container">
                     <div class="dialog_header">
                         <form method="dialog">
@@ -291,7 +291,7 @@ class PortfolioItem extends connect(store)(LitElement) {
         .dialog_header {
             display: flex;
             justify-content: flex-end;
-            width: calc(100% - 2rem);
+            width: 100%;
             height: 35px;
         }
         .drag-target {
@@ -315,7 +315,7 @@ class PortfolioItem extends connect(store)(LitElement) {
         .over {
             color: red !important;
         }
-        `, noselect, buttonStyles, iconStyle]
+        `, noselect, buttonStyles, iconStyle, borderStyle]
 
 }
 

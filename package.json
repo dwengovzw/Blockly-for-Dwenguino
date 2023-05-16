@@ -126,6 +126,7 @@
     "regenerator": "^0.14.4",
     "simplemde": "^1.11.2",
     "ts-node": "^10.9.1",
+    "undo-manager": "^1.0.5",
     "urlpattern-polyfill": "^6.0.2",
     "uuid": "^3.4.0",
     "uuid4": "^2.0.3",
