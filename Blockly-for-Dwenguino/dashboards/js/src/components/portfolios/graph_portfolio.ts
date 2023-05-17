@@ -293,7 +293,7 @@ class GraphDashboard extends connect(store)(LitElement){
             @connectionDragStopped=${(e) => {this.onConnectionDragStopped(e, item)}}
             @connectionDragging=${(e) => {this.onConnectionDragging(e, item)}}
             @connectionDragDrop=${(e) => {this.onConnectionDragDrop(e, item)}}
-            class="target dwengo-border"
+            class="target dwengo-border ${(this.userInfo?.roles.includes("teacher") && item.needsTeacherAttention) || (this.userInfo?.roles.includes("student") && item.needsStudentAttention) ? "needs_attention" : ""}"
             style=${`display:inline-block;
                      width:${item.displayInformation.width}px;
                      height:${item.displayInformation.height}px;
@@ -459,6 +459,10 @@ class GraphDashboard extends connect(store)(LitElement){
         background-color: white;
         z-index: 1;
         padding: 4px;
+    }
+    .needs_attention {
+        border-color: var(--theme-accentForegroundHighlight) !important;
+        box-shadow: 0px 0px 20px var(--theme-accentFillSelected) !important;
     }
     .line {
         position: absolute;

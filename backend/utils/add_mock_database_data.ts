@@ -73,9 +73,9 @@ Or you can write a code block:
 That's all for now! Enjoy using Markdown.
 
 `,
-            children: []
-
-
+            children: [],
+            needsTeacherAttention: true,
+            needsStudentAttention: false
         }
 
 
@@ -86,7 +86,9 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 600,
                 y: 400,
-            }
+            },
+            needsTeacherAttention: true,
+            needsStudentAttention: false
         }
         let textItem4 = new TextItem(textItemData4)
         let savedTextItem4 = await textItem4.save();
@@ -124,7 +126,9 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 80,
                 y: 150,
-            }
+            },
+            needsTeacherAttention: true,
+            needsStudentAttention: false
         }
         let textItem3 = new TextItem(textItemData3)
         let savedTextItem3 = await textItem3.save();
@@ -254,7 +258,9 @@ That's all for now! Enjoy using Markdown.
             displayInformation: {
                 x: 100,
                 y: 50,
-            } 
+            },
+            needsTeacherAttention: false,
+            needsStudentAttention: false
         }
         let textItem1 = new TextItem(textItemData)
         let savedTextItem1 = await textItem1.save();

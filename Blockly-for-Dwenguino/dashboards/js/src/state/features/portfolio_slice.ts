@@ -17,6 +17,8 @@ interface MinimalPortfolioItemInfo {
 interface PortfolioItemInfo extends MinimalPortfolioItemInfo {
     uuid: string,
     displayInformation: IPortfolioItemDisplayInformation,
+    needsTeacherAttention: boolean,
+    needsStudentAttention: boolean,
 }
 
 interface SolutionItemInfo extends PortfolioItemInfo {
