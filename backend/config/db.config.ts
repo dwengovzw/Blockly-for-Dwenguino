@@ -9,7 +9,7 @@ if (process.env.NODE_ENV == "debug"){
     PLATFORMS["test"] = "test"
 }
 
-const ROLES = {
+export const ROLES = {
     user: "user",
     student: "student", 
     teacher: "teacher", 

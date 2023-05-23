@@ -7,6 +7,10 @@ import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js
 import { TextItem } from "../models/portfolio_items/text_item.model.js";
 import { AssignmentGroup } from "../models/assignment_group.model.js";
 import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation.js";
+import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../config/itemtypes.config.js";
+import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model.js";
+import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model.js";
+import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model.js";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -92,6 +96,19 @@ class PortfolioController {
         }
     }
 
+    checkIfUserCanCreateItemType = async (req, res, next) => {
+        try {
+            const allowedItemTypes = getAllowedItemsForRoles(req.user.roles)
+            if (!allowedItemTypes.includes(req.body.__t)){
+                res.status(403).send({message: "User does not have access to create this item."})
+                return
+            }
+            next()
+        } catch (e) {
+            res.status(500).send("Error checking if user can create item.")
+        }
+    }
+
     createItem = async (req, res) => {
         try {
             let portfolio = await Portfolio.findOne({uuid: req.params.uuid})
@@ -101,8 +118,12 @@ class PortfolioController {
             }
             let item
             // TODO: Add other item types
-            if (req.body.__t === "TextItem"){
+            if (req.body.__t === ITEMTYPES.AnnotatedDrawing){
                 item = new TextItem()
+            } else if (req.body.__t === ITEMTYPES.SocialRobotDesignItem){
+                item = new SocialRobotDesignItem()
+            } else if (req.body.__t === ITEMTYPES.BlocklyProgSequenceItem) {
+                item = new BlocklyProgSequenceItem()
             } else {
                 res.status(404).send({message: "Item type not found."})
             }

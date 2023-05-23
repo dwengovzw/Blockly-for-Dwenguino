@@ -1,10 +1,11 @@
 {
     "compilerOptions": {
-      "target": "ESNext",                          
+      "target": "es6",                          
       "module": "NodeNext",  
-      "moduleResolution": "NodeNext",      
+      "moduleResolution": "node",      
       "typeRoots": ["../node_modules/@types"],     
       "experimentalDecorators": true,
+      "allowSyntheticDefaultImports": true,
       "lib": ["es6"],                     
       "allowJs": true,
       "checkJs": false,

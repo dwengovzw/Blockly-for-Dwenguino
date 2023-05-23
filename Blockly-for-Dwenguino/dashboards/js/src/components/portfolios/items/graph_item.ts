@@ -16,6 +16,7 @@ import { ClassGroups } from "../../../state/features/class_group_slice";
 import { SavedProgramInfo } from "../../../state/features/saved_programs_slice";
 import { StudentClassGroupInfo } from "../../../state/features/student_class_group_slice";
 import { NotificationMessageType, setNotificationMessage } from "../../../state/features/notification_slice";
+import { ITEMTYPES } from "../../../../../../../backend/config/itemtypes.config";
 
 @customElement("dwengo-graph-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
@@ -62,11 +63,11 @@ class PortfolioItem extends connect(store)(LitElement) {
     mapItemToElement(){
         const itemType: string = this.item?.__t || ""
         switch(itemType){
-            case "TextItem":
+            case ITEMTYPES.TextItem:
                 return html`<dwengo-portfolio-text-item .portfolioUUID=${this.portfolioUUID} .item=${this.item}></dwengo-portfolio-text-item>`
-            case "BlocklyProgSequenceItem":
+            case ITEMTYPES.BlocklyProgSequenceItem:
                 return html`<dwengo-portfolio-blockly-code-item .portfolioUUID=${this.portfolioUUID} .item=${this.item}></dwengo-portfolio-blockly-code-item>`
-            case "SocialRobotDesignItem":
+            case ITEMTYPES.SocialRobotDesignItem:
                 return html`<dwengo-portfolio-socialrobot-design-item .portfolioUUID=${this.portfolioUUID} .item=${this.item}></dwengo-portfolio-socialrobot-design-item>`
             default:    
                 return html`${msg("Unknown item type")}`
@@ -133,7 +134,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                 }}
                 @drop=${this.onConnectionDragDrop}
                 class="material-symbols-outlined dwengo-icon drag-target ${this.over ? "over" : ""}">
-                    adjust
+                    drag_click
             </span>
         `
     }

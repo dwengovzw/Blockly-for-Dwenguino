@@ -1,6 +1,7 @@
 import { Schema, Model } from "mongoose"
 import { PortfolioItem } from "./portfolio_item.model.js"
 import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js"
+import { ITEMTYPES } from "../../config/itemtypes.config.js"
 
 interface IMCAnswerItemExtraFields {
     selectedAnswer: number
@@ -14,7 +15,7 @@ const MCAnswerItemSchemaFields: Record<keyof IMCAnswerItemExtraFields, any> = {
 }
 const MCAnswerItemSchema = SolutionItemSchema(MCAnswerItemSchemaFields)
 interface IMCAnswerItemModel extends Model<IMCAnswerItem>{}
-const MCAnswerItem = PortfolioItem.discriminator<IMCAnswerItem, IMCAnswerItemModel>('MCAnswerItem', MCAnswerItemSchema)
+const MCAnswerItem = PortfolioItem.discriminator<IMCAnswerItem, IMCAnswerItemModel>(ITEMTYPES.MCAnswerItem, MCAnswerItemSchema)
 
 export {
     IMCAnswerItem,

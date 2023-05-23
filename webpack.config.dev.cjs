@@ -98,7 +98,7 @@ module.exports = [
             filename: 'dashboards.bundle.js'
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+            extensions: ['.ts', '.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx'] 
         },
         module: {
             rules: [

@@ -1,5 +1,6 @@
 import { Document, PopulatedDoc, Schema, model } from "mongoose"
 import  v4 from "uuid/v4.js"
+import { ITEMTYPES } from "../../config/itemtypes.config.js"
 
 
 interface IMinimalPortfolioItemDisplayInformation {
@@ -67,7 +68,7 @@ const PortfolioItemFields: Record<keyof IPortfolioItem, any> = {
     },
 }
 const PortfolioItemSchema = new Schema<IPortfolioItem>(PortfolioItemFields)
-const PortfolioItem = model<IPortfolioItem>('PortfolioItem', PortfolioItemSchema)
+const PortfolioItem = model<IPortfolioItem>(ITEMTYPES.PortfolioItem, PortfolioItemSchema)
 
 export {
     IPortfolioItem,

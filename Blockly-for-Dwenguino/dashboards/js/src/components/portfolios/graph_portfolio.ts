@@ -15,6 +15,7 @@ import "./items/graph_item"
 import { UserInfo } from "../../state/features/user_slice";
 import { borderStyle, buttonStyles } from "../../styles/shared";
 import { getGoogleMateriaIconsLinkTag } from "../../util";
+import { getAllowedItemsForRoles } from "../../../../../../backend/config/itemtypes.config";
 
 @customElement("dwengo-graph-portfolio")
 class GraphDashboard extends connect(store)(LitElement){
@@ -175,18 +176,13 @@ class GraphDashboard extends connect(store)(LitElement){
                         </button>
                     </div>
                     <div class="add_item_context_menu_content">
-                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("text")}>
-                            ${msg("TEXT")}
-                        </div>
-                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("blockly")}>
-                            ${msg("BLOCKLY")}
-                        </div>
-                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("socialrobot_design")}>
-                            ${msg("SOCIAL_ROBOT_DESIGN")}
-                        </div>
-                        <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick("graph")}>
-                            ${msg("FEEDBACK")}
-                        </div>
+                    ${getAllowedItemsForRoles(this.userInfo?.roles || []).map(itemType => {
+                        return html`
+                            <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick(itemType)}>
+                                ${msg(itemType)}
+                            </div>
+                        `
+                    })}
                     </div>
                     <div class="add_item_context_menu_footer></div>
                 </div>
@@ -322,6 +318,7 @@ class GraphDashboard extends connect(store)(LitElement){
     onAddItemContextMenuClick(type: string) {
         console.log("adding item ", type);
         this.closeAddItemContextMenu()
+        console.log(`User info: ${JSON.stringify(this.userInfo)}`);
         // const item = createPortfolioItem(type)
         // this.portfolio?.items.push(item)
         // this.portfolio = structuredClone(this.portfolio)
@@ -392,6 +389,7 @@ class GraphDashboard extends connect(store)(LitElement){
         }
         this.connectionDragInfo = { ...this.connectionDragInfo }
     }
+    
     onViewPortDrop(e: DragEvent) {
         this.droppedOnViewport = true
         console.log("Drop on viewport")

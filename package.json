@@ -23,7 +23,7 @@
     "build-frontend": "webpack --mode production --progress --config webpack.config.cjs",
     "build-backend": "tsc --project backend/tsconfig.json",
     "devstart": "npm run build-dev-backend && npm run start",
-    "start": "node --experimental-vm-modules -r dotenv/config backend/dist/index.js"
+    "start": "node --experimental-specifier-resolution=node --loader ts-node/esm --experimental-vm-modules -r dotenv/config backend/dist/index.js"
   },
   "keywords": [
     "logging",
