@@ -2,7 +2,7 @@ const PLATFORMS = {
     github: "github",
     leerId: "leerId",
     beACM: "beACM",
-    test: null
+    test: ""
 }
 
 // only support test platform in dev mode
