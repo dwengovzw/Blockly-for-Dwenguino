@@ -1,4 +1,4 @@
-import ROLES from "./db.config.js"
+import { ROLES } from "./db.config"
 
 export const ITEMTYPES = {
     AnnotatedDrawing: "AnnotatedDrawing",

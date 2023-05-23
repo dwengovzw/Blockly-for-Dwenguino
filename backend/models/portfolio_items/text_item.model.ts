@@ -1,7 +1,7 @@
 import { Document, Schema, Model } from "mongoose"
-import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js"
-import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model.js"
-import { ITEMTYPES } from "../../config/itemtypes.config.js"
+import { ISolutionItem, SolutionItemSchema } from "./solution_item.model"
+import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model"
+import { ITEMTYPES } from "../../config/itemtypes.config"
 
 interface ITextItemExtraFields {
     mdText: string

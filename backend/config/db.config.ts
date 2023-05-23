@@ -2,6 +2,7 @@ const PLATFORMS = {
     github: "github",
     leerId: "leerId",
     beACM: "beACM",
+    test: null
 }
 
 // only support test platform in dev mode
@@ -16,11 +17,10 @@ export const ROLES = {
     admin: "admin",
 };
 
-type dbSettings = {
-    [key: string]: any;
+
+const db = {
+    PLATFORMS: PLATFORMS,
+    ROLES: ROLES,
 }
-const db:dbSettings = {}
-db.PLATFORMS = PLATFORMS;
-db.ROLES = ROLES;
 
 export default db

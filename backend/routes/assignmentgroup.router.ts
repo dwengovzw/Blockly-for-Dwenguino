@@ -1,6 +1,6 @@
 import express from 'express';
-import { verifyTokenAjax, roleCheck, verifyUserExists } from "../middleware/middleware.js"
-import { AssignmentGroupController } from "../controllers/assignmentgroup.controller.js"
+import { verifyTokenAjax, roleCheck, verifyUserExists } from "../middleware/middleware"
+import { AssignmentGroupController } from "../controllers/assignmentgroup.controller"
 
 const assignmentGroupController = new AssignmentGroupController();
 

@@ -1,7 +1,6 @@
-import { Document, Schema, model } from "mongoose"
-import { ID } from "./modelutils.js"
-import { IUser } from "./user.model.js"
-import  v4 from "uuid/v4.js"
+import { Schema, model } from "mongoose"
+import { IUser } from "./user.model"
+import  v4 from "uuid/v4"
 import { PopulatedDoc } from 'mongoose';
 
 interface ISavedProgram {

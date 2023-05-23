@@ -1,9 +1,9 @@
 import { Types } from "mongoose"
-import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model.js"
-import { ClassGroup } from "../models/class_group.model.js"
-import { Portfolio } from "../models/portfolio.model.js"
-import { IStudentTeam, StudentTeam } from "../models/student_team.model.js"
-import { User, IUser, IUserDoc } from "../models/user.model.js"
+import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model"
+import { ClassGroup } from "../models/class_group.model"
+import { Portfolio } from "../models/portfolio.model"
+import { IStudentTeam, StudentTeam } from "../models/student_team.model"
+import { User, IUser, IUserDoc } from "../models/user.model"
 
 class AssignmentGroupController {
     constructor() {

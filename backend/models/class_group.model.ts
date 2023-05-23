@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, model } from "mongoose"
-import { IUser } from "./user.model.js"
-import  v4 from "uuid/v4.js"
+import { IUser } from "./user.model"
+import  v4 from "uuid/v4"
 import { PopulatedDoc } from 'mongoose';
 
 interface IClassGroup {

@@ -1,8 +1,8 @@
-import { PortfolioFilter } from "../controllers/portfolio.controller.js"
-import { AssignmentGroup } from "../models/assignment_group.model.js"
-import { IPortfolio, Portfolio } from "../models/portfolio.model.js"
-import { StudentTeam } from "../models/student_team.model.js"
-import { IUser, User } from "../models/user.model.js"
+import { PortfolioFilter } from "../controllers/portfolio.controller"
+import { AssignmentGroup } from "../models/assignment_group.model"
+import { IPortfolio, Portfolio } from "../models/portfolio.model"
+import { StudentTeam } from "../models/student_team.model"
+import { IUser, User } from "../models/user.model"
 
 const getAllPortfoliosOwnedByUser = async (userId: string) => {
   let user = await User.findOne({_id: userId}).populate<IPortfolio[]>("portfolios")

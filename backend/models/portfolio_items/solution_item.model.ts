@@ -1,7 +1,5 @@
 import { Document, Schema, Model } from "mongoose"
-import { ID } from "../modelutils.js"
-import { IAssignmentItem } from "./assignment_item.model.js"
-import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model.js"
+import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model"
 
 interface ISolutionItemExtraFields {
 }

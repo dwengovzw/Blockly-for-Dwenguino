@@ -1,8 +1,7 @@
-import { Document, Schema, model } from "mongoose"
-import { ID } from "./modelutils.js"
-import { IStudentTeam, StudentTeam } from "./student_team.model.js"
-import { IClassGroup } from "./class_group.model.js"
-import  v4 from "uuid/v4.js"
+import { Schema, model } from "mongoose"
+import { IStudentTeam, StudentTeam } from "./student_team.model"
+import { IClassGroup } from "./class_group.model"
+import  v4 from "uuid/v4"
 import { PopulatedDoc } from 'mongoose';
 
 interface IAssignmentGroup {

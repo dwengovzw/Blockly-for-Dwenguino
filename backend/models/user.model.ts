@@ -1,12 +1,11 @@
 import mongoose from "mongoose"
 import { PopulatedDoc } from 'mongoose';
 import { Document, Schema, model } from "mongoose"
-import db from "../config/db.config.js"
-//import { isEmail } from 'validator/es/index.js'
-import { IRole, RoleSchema } from './role.model.js'
-import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
-import  v4 from "uuid/v4.js"
-import { IPortfolio } from "./portfolio.model.js"
+import db from "../config/db.config"
+import { IRole, RoleSchema } from './role.model'
+import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model"
+import  v4 from "uuid/v4"
+import { IPortfolio } from "./portfolio.model"
 
 
 interface IUserShared {

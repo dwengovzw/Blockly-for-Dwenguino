@@ -1,4 +1,4 @@
-import db from "./db.config.js"
+import db from "./db.config"
 import crypto from "crypto"
 
 const oauthConfig = {

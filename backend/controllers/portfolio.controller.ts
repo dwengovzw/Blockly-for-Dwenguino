@@ -1,16 +1,10 @@
-import { IPortfolio, Portfolio } from "../models/portfolio.model.js"
-import { StudentTeam } from "../models/student_team.model.js"
-import { IUser, User } from "../models/user.model.js"
-import { Types } from "mongoose"
-import { PipelineStage } from "mongoose";
-import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
-import { TextItem } from "../models/portfolio_items/text_item.model.js";
-import { AssignmentGroup } from "../models/assignment_group.model.js";
-import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation.js";
-import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../config/itemtypes.config.js";
-import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model.js";
-import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model.js";
-import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model.js";
+import { IPortfolio, Portfolio } from "../models/portfolio.model"
+import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model";
+import { TextItem } from "../models/portfolio_items/text_item.model";
+import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation";
+import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../config/itemtypes.config";
+import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model";
+import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {

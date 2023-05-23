@@ -1,6 +1,6 @@
-import { User } from "../models/user.model.js"
-import { SavedProgram } from "../models/saved_program.model.js"
-import { processStartBlocks } from "../routes/blockly-routes.js"
+import { User } from "../models/user.model"
+import { SavedProgram } from "../models/saved_program.model"
+import { processStartBlocks } from "../routes/blockly-routes"
 
 class SavedProgramController {
     constructor(){

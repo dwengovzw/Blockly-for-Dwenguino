@@ -1,6 +1,6 @@
 import express from 'express';
-import { OAuthController } from "../controllers/oauth.controller.js"
-import { verifyToken } from "../middleware/middleware.js"
+import { OAuthController } from "../controllers/oauth.controller"
+import { verifyToken } from "../middleware/middleware"
 
 let oauthRouter = express.Router();
 const oauthController = new OAuthController();

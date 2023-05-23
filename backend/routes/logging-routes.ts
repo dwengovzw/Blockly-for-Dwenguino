@@ -1,5 +1,5 @@
 import express from 'express';
-import { newSessionId, event } from '../controllers/log.controller.js';
+import { newSessionId, event } from '../controllers/log.controller';
 
 let loggingRouter = express.Router();
 

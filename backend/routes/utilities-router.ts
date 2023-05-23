@@ -1,6 +1,5 @@
 import express from 'express';
-import UtilController from '../controllers/util.controller.js';
-import cors from 'cors';
+import UtilController from '../controllers/util.controller';
 
 let utilitiesRouter = express.Router();
 

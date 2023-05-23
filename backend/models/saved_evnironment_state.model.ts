@@ -1,5 +1,5 @@
 import { Schema } from "mongoose"
-import  v4 from "uuid/v4.js"
+import  v4 from "uuid/v4"
 
 interface ISavedEnvironmentState {
     uuid?: string,

@@ -1,9 +1,8 @@
-import { User, IUser } from "../models/user.model.js";
-import AbstractOAuthController from "./abstract.oauth.controller.js";
-import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
-import db from "../config/db.config.js"
+import { User, IUser } from "../models/user.model";
+import AbstractOAuthController from "./abstract.oauth.controller";
+import db from "../config/db.config"
 import jwt from "jsonwebtoken"
-import jwt_settings from "../config/jwt.config.js";
+import jwt_settings from "../config/jwt.config";
 
 class MockAuthController extends AbstractOAuthController{
     constructor(){

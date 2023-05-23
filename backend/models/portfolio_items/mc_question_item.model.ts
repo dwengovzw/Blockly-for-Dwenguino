@@ -1,7 +1,7 @@
 import { Schema, Model } from "mongoose"
-import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model.js"
-import { PortfolioItem } from "./portfolio_item.model.js"
-import { ITEMTYPES } from "../../config/itemtypes.config.js"
+import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model"
+import { PortfolioItem } from "./portfolio_item.model"
+import { ITEMTYPES } from "../../config/itemtypes.config"
 
 interface IMCQuestionItemExtraFields {
     questionText: string,

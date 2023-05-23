@@ -1,9 +1,9 @@
 import axios from "axios";
 import { Octokit } from 'octokit'
-import AbstractOAuthController from "./abstract.oauth.controller.js";
-import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
-import db from "../config/db.config.js"
-import oauthConfig from "../config/oauth.config.js";
+import AbstractOAuthController from "./abstract.oauth.controller";
+import MinimalUserInfo from "../datatypes/minimalUserInfo";
+import db from "../config/db.config"
+import oauthConfig from "../config/oauth.config";
 
 
 

@@ -1,7 +1,6 @@
 import express from 'express';
-import { allAccess, teacherBoard, studentBoard } from "../controllers/test_auth.controller.js"
-import { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists, checkRolesExisted, checkDuplicateUsernameOrEmail } from "../middleware/middleware.js"
-import { PortfolioController } from '../controllers/portfolio.controller.js';
+import { verifyTokenAjax, verifyUserExists } from "../middleware/middleware"
+import { PortfolioController } from '../controllers/portfolio.controller';
 
 const portfolioController = new PortfolioController();
 

@@ -1,6 +1,6 @@
-import { ClassGroup, IClassGroup } from "../models/class_group.model.js";
-import { User } from "../models/user.model.js"
-import { makeSharingCode } from "../utils/utils.js";
+import { ClassGroup, IClassGroup } from "../models/class_group.model";
+import { User } from "../models/user.model"
+import { makeSharingCode } from "../utils/utils"
 
 
 
