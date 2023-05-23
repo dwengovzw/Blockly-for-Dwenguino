@@ -11,7 +11,7 @@ class TabInfo{
     _editorContainerId:string = ""
     _code:string = ""
     _editor:monaco.editor.IStandaloneCodeEditor;
-    _saved:boolean = true;
+    _saved:boolean = false;
     _onSaveStateChangedListeners:OnSaveStateChangedListener[] = [];
 
     static $_FALLBACKUUID = 0;
