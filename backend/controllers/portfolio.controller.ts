@@ -5,6 +5,7 @@ import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfol
 import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../config/itemtypes.config";
 import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model";
 import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model";
+import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -92,7 +93,7 @@ class PortfolioController {
 
     checkIfUserCanCreateItemType = async (req, res, next) => {
         try {
-            const allowedItemTypes = getAllowedItemsForRoles(req.user.roles)
+            const allowedItemTypes = getAllowedItemsForRoles(req.user.roles.map(role => role.name))
             if (!allowedItemTypes.includes(req.body.__t)){
                 res.status(403).send({message: "User does not have access to create this item."})
                 return
@@ -113,6 +114,8 @@ class PortfolioController {
             let item
             // TODO: Add other item types
             if (req.body.__t === ITEMTYPES.AnnotatedDrawing){
+                item = new AnnotatedDrawingItem()
+            } else if (req.body.__t === ITEMTYPES.TextItem) {
                 item = new TextItem()
             } else if (req.body.__t === ITEMTYPES.SocialRobotDesignItem){
                 item = new SocialRobotDesignItem()

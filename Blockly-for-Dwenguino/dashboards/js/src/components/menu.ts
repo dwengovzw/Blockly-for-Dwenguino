@@ -110,6 +110,7 @@ class Menu extends connect(store)(LitElement){
         }
         .content_container {
             flex: 1 1 auto;
+            margin: 0 1rem;
         }
 
         h1 {

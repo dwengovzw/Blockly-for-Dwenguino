@@ -17,6 +17,7 @@ export const ALLOWEDITEMS = {
     [ROLES.user]: [ITEMTYPES.TextItem],
     [ROLES.student]: [ITEMTYPES.MCAnswerItem, ITEMTYPES.SocialRobotDesignItem, ITEMTYPES.AnnotatedDrawing, ITEMTYPES.BlocklyProgSequenceItem],
     [ROLES.teacher]: [ITEMTYPES.MCQuestionItem, ITEMTYPES.OpenQuestion, ITEMTYPES.BlocklyQuestion],
+    [ROLES.admin]: [],
 }
 
 export const getAllowedItemsForRoles = (roles) => {

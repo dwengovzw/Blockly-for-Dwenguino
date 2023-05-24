@@ -1,9 +1,8 @@
 import { css, CSSResultGroup, html, LitElement, PropertyValueMap, svg } from "lit";
-import { ref, Ref, createRef } from 'lit/directives/ref.js';
 import { store } from "../../state/store"
 import { connect } from "pwa-helpers"
 import {customElement, property, state, query} from 'lit/decorators.js';
-import { createPortfolioItem, getPortfolio, MinimalPortfolioItemInfo, PortfolioInfo, PortfolioItemInfo, savePortfolioItem, setSelectedPortfolioItems } from "../../state/features/portfolio_slice";
+import { createPortfolioItem, MinimalDisplayedPortfolioItemInfo, MinimalPortfolioItemInfo, PortfolioInfo, PortfolioItemInfo, savePortfolioItem, setSelectedPortfolioItems, TextItemInfo } from "../../state/features/portfolio_slice";
 import { msg } from "@lit/localize";
 
 import { LitInfiniteViewer } from "lit-infinite-viewer";
@@ -15,7 +14,8 @@ import "./items/graph_item"
 import { UserInfo } from "../../state/features/user_slice";
 import { borderStyle, buttonStyles } from "../../styles/shared";
 import { getGoogleMateriaIconsLinkTag } from "../../util";
-import { getAllowedItemsForRoles } from "../../../../../../backend/config/itemtypes.config";
+import { getAllowedItemsForRoles, ITEMTYPES } from "../../../../../../backend/config/itemtypes.config";
+import { NotificationMessageType, setNotificationMessage } from "../../state/features/notification_slice";
 
 @customElement("dwengo-graph-portfolio")
 class GraphDashboard extends connect(store)(LitElement){
@@ -36,7 +36,8 @@ class GraphDashboard extends connect(store)(LitElement){
     addItemContextMenuInfo = {
         show: false,
         x: 0,
-        y: 0
+        y: 0, 
+        sourceItemUUID: null
     }
     @state()
     deleteConnectionLineContextMenuInfo = {
@@ -178,7 +179,7 @@ class GraphDashboard extends connect(store)(LitElement){
                     <div class="add_item_context_menu_content">
                     ${getAllowedItemsForRoles(this.userInfo?.roles || []).map(itemType => {
                         return html`
-                            <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${() => this.onAddItemContextMenuClick(itemType)}>
+                            <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${(e) => this.onAddItemContextMenuClick(e, itemType)}>
                                 ${msg(itemType)}
                             </div>
                         `
@@ -315,18 +316,34 @@ class GraphDashboard extends connect(store)(LitElement){
         }
     }
 
-    onAddItemContextMenuClick(type: string) {
-        console.log("adding item ", type);
+    onAddItemContextMenuClick(e: MouseEvent, type: string) {
+        let sourceItem = this.portfolio?.items.filter(item => item.uuid === this.addItemContextMenuInfo.sourceItemUUID)[0]
+        switch(type){
+            case ITEMTYPES.TextItem:
+                const newItem: MinimalDisplayedPortfolioItemInfo = {
+                    __t: ITEMTYPES.TextItem,
+                    name: msg("New text item"),
+                    children: [],
+                    displayInformation: {
+                        x: this.addItemContextMenuInfo.x,
+                        y: this.addItemContextMenuInfo.y,
+                    },
+                }
+                // sourceItem?.children.push(newItem)
+                // this.requestUpdate()
+                if (this.portfolio){
+                    store.dispatch(createPortfolioItem(this.portfolio?.uuid, newItem, sourceItem))
+                }
+                break
+            default:
+                console.log(`Item type ${type} not implemented yet.`)
+        }
         this.closeAddItemContextMenu()
-        console.log(`User info: ${JSON.stringify(this.userInfo)}`);
-        // const item = createPortfolioItem(type)
-        // this.portfolio?.items.push(item)
-        // this.portfolio = structuredClone(this.portfolio)
-        // this.requestUpdate()
     }
 
     closeAddItemContextMenu() {
         this.addItemContextMenuInfo.show = false
+        this.addItemContextMenuInfo.sourceItemUUID = null
         this.addItemContextMenuInfo = structuredClone(this.addItemContextMenuInfo)
         this.connectionDragInfo.dragging = false
         this.connectionDragInfo = { ...this.connectionDragInfo }
@@ -391,13 +408,19 @@ class GraphDashboard extends connect(store)(LitElement){
     }
     
     onViewPortDrop(e: DragEvent) {
+        if (!e.dataTransfer){
+            store.dispatch(setNotificationMessage(msg("No data transfer found"), NotificationMessageType.ERROR, 3000))
+            return
+        }
+        let fromItemUUID = JSON.parse(e.dataTransfer.getData("text/plain"))
         this.droppedOnViewport = true
         console.log("Drop on viewport")
         console.log(e);
         this.addItemContextMenuInfo = {
             x: e.clientX - this.viewportRef.getBoundingClientRect().x,
             y: e.clientY - this.viewportRef.getBoundingClientRect().y,
-            show: true
+            show: true,
+            sourceItemUUID: fromItemUUID
         }
         e.preventDefault()
         e.stopPropagation()

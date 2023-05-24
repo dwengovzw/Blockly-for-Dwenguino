@@ -14,9 +14,12 @@ interface MinimalPortfolioItemInfo {
     children: PortfolioItemInfo[],
 }
 
-interface PortfolioItemInfo extends MinimalPortfolioItemInfo {
-    uuid: string,
+interface MinimalDisplayedPortfolioItemInfo extends MinimalPortfolioItemInfo {
     displayInformation: IPortfolioItemDisplayInformation,
+}
+
+interface PortfolioItemInfo extends MinimalDisplayedPortfolioItemInfo {
+    uuid: string,
     needsTeacherAttention: boolean,
     needsStudentAttention: boolean,
 }
@@ -126,7 +129,23 @@ export const portfolioSlice = createSlice({
                     (state.selectedPortfolio as PortfolioInfo).items.push(updatedItem)
                 }
             }
-        }
+        },
+        addNewPortfolioItem: (state, action) => {
+            if (state.selectedPortfolio){
+                (state.selectedPortfolio as PortfolioInfo).items.push(action.payload)
+            }
+        },
+        attachChildItemToParent: (state, action) => {
+            const { parentUUID, childUUID } = action.payload
+            if (state.selectedPortfolio){
+                let portfolio = state.selectedPortfolio as PortfolioInfo
+                let parent = portfolio.items.find(item => item.uuid === parentUUID)
+                let child = portfolio.items.find(item => item.uuid === childUUID)
+                if (parent && child){
+                    parent.children.push(child)
+                }
+            }
+        },
     }
 })
 
@@ -147,11 +166,15 @@ const deletePortfolioItem = (portfolioUuid: string, itemUuid: string) => {
     }, null, msg("Error while deleting portfolio item"))
 }
 
-const createPortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemInfo) => {
+const createPortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemInfo, parentItem?: MinimalPortfolioItemInfo) => {
     item = removeCircularDependenciesFromPortfolioItem(item)
     return createRequestMiddleware(`${globalSettings.hostname}/portfolio/${portfolioUuid}/createItem`, "PUT", (dispatch, getState, json) => {
         console.log(json)
-        dispatch(updateSelectedPortfolioItem(json))
+        dispatch(addNewPortfolioItem(json))
+        if (parentItem){
+            parentItem.children.push(json)
+            dispatch(updateSelectedPortfolioItem(parentItem))
+        }
     }, item, msg("Error while creating portfolio item"))
 }
 
@@ -208,7 +231,7 @@ const connectPortfolioItemsInCurrentPortfolio = (parentUUID: string, childUUID: 
 }
 
 
-const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updateSelectedPortfolioItem } = portfolioSlice.actions
+const { setPortfolioList, setSelectedPortfolio, setSelectedPortfolioItems, updateSelectedPortfolioItem, addNewPortfolioItem, attachChildItemToParent } = portfolioSlice.actions
 
 const portfolioReducer = portfolioSlice.reducer
 
@@ -217,6 +240,7 @@ export {
     getMyPortfolios, 
     getPortfolio, 
     PortfolioItemInfo, 
+    MinimalDisplayedPortfolioItemInfo,
     MinimalPortfolioItemInfo, 
     portfolioReducer, 
     PortfolioInfo, 
