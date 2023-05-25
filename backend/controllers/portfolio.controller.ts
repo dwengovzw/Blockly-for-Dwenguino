@@ -169,10 +169,17 @@ class PortfolioController {
                 res.status(404).send({message: "Item not found."})
                 return
             }
+            // Remove the item from the items array of all portfolios that have this item
             await Portfolio.updateMany(
                 {items: {$in: [item._id]}},
                 {$pull: {items: item._id}}
             )
+            // Remove the item from the children array of all items that have this item as a child
+            await PortfolioItem.updateMany(
+                {children: {$in: [item._id]}},
+                {$pull: {children: item._id}}
+            )
+            // Remove the item from the database
             await item.remove()
             res.status(200).send({message: "Item deleted."})
         } catch (e) {

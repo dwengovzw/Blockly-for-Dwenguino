@@ -28,6 +28,8 @@ class PortfolioItem extends connect(store)(LitElement) {
     userInfo: UserInfo = store.getState().user
     @query(".item_detail_modal")
     itemDetailModal!: HTMLDialogElement
+    @query(".delete_item_confirm_dialog")
+    deletItemConfirmDialog!: HTMLDialogElement
 
     private itemToIconMap = {
         "TextItem": "text_fields",
@@ -170,11 +172,36 @@ class PortfolioItem extends connect(store)(LitElement) {
                     <div class="dialog_content">
                         ${this.mapItemToElement()}
                     </div>
+                    <div class="dialog_footer">
+                        <button @click=${_ => this.deletItemConfirmDialog.showModal()} class="dwengo-button dwengo-warning-button">    
+                            ${msg("Delete this item")}
+                        </button>
+                        <dialog class="delete_item_confirm_dialog dwengo-border">
+                            ${msg("Are you sure you want to delete this item?")}
+                            <div class="delete_confirm_dialog_content">
+                                <button @click=${_ => this.deletItemConfirmDialog.close()} class="dwengo-button">
+                                    ${msg("Cancel")}
+                                </button>
+                                <button @click=${_ => {
+                                        this.deleteItem()
+                                        this.deletItemConfirmDialog.close()
+                                    }} class="dwengo-button">
+                                    ${msg("Yes")}
+                                </button>
+                            </div>
+                        </dialog>
+                    </div> 
                 </div>
                 
                 
             </dialog>`
     }
+
+    deleteItem(){
+        if (!this.item) return
+        store.dispatch(deletePortfolioItem(this.portfolioUUID, this.item.uuid))
+    }
+
 
     onConnectionDragStart(e){
         e.dataTransfer.effectAllowed = "link";
@@ -315,6 +342,11 @@ class PortfolioItem extends connect(store)(LitElement) {
         }
         .over {
             color: red !important;
+        }
+        .delete_confirm_dialog_content {
+            display: flex;
+            justify-content: space-evenly;
+            margin-top: 1rem;
         }
         `, noselect, buttonStyles, iconStyle, borderStyle]
 

@@ -21,12 +21,18 @@ export const noselect = css`
         align-items: center;
         border: none;
         cursor: pointer;
+        color: var(--theme-white);
     }
     .dwengo-button-icon {
         display: flex;
         justify-content: center;
         align-items: center;
         color: var(--theme-white);
+    }
+    .dwengo-warning-button {
+        background-color: var(--theme-danger-color);
+        color: var(--theme-white);
+        padding: 2.5px;
     }`
 
     export const iconStyle = css`
