@@ -14,7 +14,7 @@ import * as DOMPurify from 'dompurify';
 @customElement("dwengo-md-editor")
 class MarkdownEditor extends LitElement {
     @property({type: String}) value: string = ""
-    @property({type: String}) placeholder: string = ""
+    @property({type: String}) placeholder: string = msg("Double click and type your markdown text here!")
     @property({type: Boolean}) disabled: boolean = false
     @property({type: Boolean}) readonly: boolean = false
     @property({type: Boolean}) autofocus: boolean = false
@@ -74,6 +74,7 @@ class MarkdownEditor extends LitElement {
                 : html`
                     <div class="md_editor_preview">
                         <div 
+                            placeholder=${this.placeholder}
                             class="md_editor_preview_content"
                             tabindex="0"
                             @dblclick=${ _ => {
@@ -82,7 +83,7 @@ class MarkdownEditor extends LitElement {
                                 }
                             }
                             }>
-                            ${unsafeHTML(DOMPurify.sanitize(marked.parse(this.value)))}
+                            ${ this.value ? unsafeHTML(DOMPurify.sanitize(marked.parse(this.value))) : msg("Double click and type your markdown text here!")}
                         </div>
                     </div>
                 `}

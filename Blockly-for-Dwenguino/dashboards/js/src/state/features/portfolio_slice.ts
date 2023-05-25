@@ -173,7 +173,7 @@ const createPortfolioItem = (portfolioUuid: string, item: MinimalPortfolioItemIn
         dispatch(addNewPortfolioItem(json))
         if (parentItem){
             parentItem.children.push(json)
-            dispatch(updateSelectedPortfolioItem(parentItem))
+            dispatch(savePortfolioItem(portfolioUuid, parentItem))
         }
     }, item, msg("Error while creating portfolio item"))
 }

@@ -185,6 +185,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                                 <button @click=${_ => {
                                         this.deleteItem()
                                         this.deletItemConfirmDialog.close()
+                                        this.itemDetailModal.close()
                                     }} class="dwengo-button">
                                     ${msg("Yes")}
                                 </button>
