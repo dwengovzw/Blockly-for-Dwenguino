@@ -58,7 +58,11 @@ class PortfolioController {
             let portfolio = await Portfolio.findOne({uuid: req.params.uuid})
                 .populate({path: "items", populate: [
                     {path: "children"},
-                    {path: "savedProgram"},
+                    {
+                        path: "savedProgram",
+                        strictPopulate: false,
+                        match: { savedProgram: { $exists: true } }, // Filter items without savedProgram
+                    }
                 ]})
                 .populate("sharedWith")
             if (!portfolio){
@@ -175,7 +179,13 @@ class PortfolioController {
                 return
             }
             item = await item.save()
-            item = await item.populate({path: "children"})
+            item = await item.populate([
+                {path: "children"},
+                {
+                    path: "savedProgram",
+                    strictPopulate: false,
+                    match: { savedProgram: { $exists: true } }, // Filter items without savedProgram
+                }])
             res.status(200).send(item)
         } catch (e) {
             res.status(500).send("Error saving item.")

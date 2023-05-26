@@ -1,4 +1,4 @@
-import mongoose, { Model, Schema } from "mongoose";
+import mongoose, { CallbackError, Model, Schema } from "mongoose";
 import { ISavedProgram, SavedProgram } from "../saved_program.model";
 import { ISolutionItem, SolutionItemSchema } from "./solution_item.model";
 import { PortfolioItem } from "./portfolio_item.model";
@@ -29,8 +29,8 @@ BlocklyProgamItemSchema.pre('remove', {document:true, query: false}, async funct
             await SavedProgram.findByIdAndRemove(savedProgramId)
         }
         next()
-    } catch (err) {
-        next(err)
+    } catch (err: any) {
+        next(err as CallbackError)
     }
 })
 
