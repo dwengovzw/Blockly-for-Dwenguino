@@ -59,7 +59,7 @@ const getAllPortfoliosSharedWithUser = async (userId: string) => {
         }
       }
     ])
-        // Aggregation query to find all portfolios that are attacht to a portfolio associated with a class group that the user owns
+        // Aggregation query to find all portfolios that are attached to a portfolio associated with a class group that the user owns
     const classGroupPortfolios = await AssignmentGroup.aggregate([
         {
           $graphLookup: {

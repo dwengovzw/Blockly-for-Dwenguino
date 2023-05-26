@@ -10,6 +10,7 @@ import { msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { marked } from "marked";
 import * as DOMPurify from 'dompurify';
+import { githubMarkdownStyle } from "../../styles/github_md";
 
 @customElement("dwengo-md-editor")
 class MarkdownEditor extends LitElement {
@@ -43,7 +44,7 @@ class MarkdownEditor extends LitElement {
 
     protected render(){
         return html`
-            <div class="md_editor">
+            <div class="md_editor markdown-body">
                 ${this.editing ? html`
                     <textarea
                         ${ref(this.editorRef)}
@@ -98,7 +99,7 @@ class MarkdownEditor extends LitElement {
         }
     }
 
-    static styles?: CSSResultGroup = css`
+    static styles?: CSSResultGroup = [css`
        .md_editor_textarea {
             width: 90%;
             height: auto;
@@ -112,7 +113,8 @@ class MarkdownEditor extends LitElement {
        .md_editor_preview_content {
             min-height: 2rem;
        }
-    `
+    `, 
+    githubMarkdownStyle]
 }
 
 export { MarkdownEditor }

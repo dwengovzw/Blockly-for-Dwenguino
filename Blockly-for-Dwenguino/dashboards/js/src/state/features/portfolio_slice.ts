@@ -7,6 +7,7 @@ import { StudentTeamInfo } from "./student_team_slice"
 import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio.controller"
 import { LogItemInfo } from "./log_item_slice"
 import {IPortfolioItemDisplayInformation} from "../../../../../../backend/models/portfolio_items/portfolio_item.model"
+import { SavedProgramInfo } from "./saved_programs_slice"
 
 interface MinimalPortfolioItemInfo {
     name: string,
@@ -38,6 +39,10 @@ interface AnnotatedDrawingItemInfo extends SolutionItemInfo {
 
 interface BlocklyProgSequenceItemInfo extends SolutionItemInfo {
     eventSequence: LogItemInfo[] // TODO: replace type with LogItemInfo[]
+}
+
+interface BlocklyProgramItemInfo extends SolutionItemInfo {
+    savedProgram: SavedProgramInfo
 }
 
 interface TextItemInfo extends SolutionItemInfo {
@@ -250,6 +255,7 @@ export {
     createPortfolioItem, 
     deletePortfolioItem, 
     BlocklyProgSequenceItemInfo, 
+    BlocklyProgramItemInfo,
     SocialRobotDesignItemInfo, 
     getMyStudentPortfolios,
     connectPortfolioItemsInCurrentPortfolio}

@@ -14,7 +14,7 @@ import "./items/graph_item"
 import { UserInfo } from "../../state/features/user_slice";
 import { borderStyle, buttonStyles } from "../../styles/shared";
 import { getGoogleMateriaIconsLinkTag } from "../../util";
-import { getAllowedItemsForRoles, ITEMTYPES } from "../../../../../../backend/config/itemtypes.config";
+import { getAllowedItemsForRoles, getAllowedItemsForSourceItemType, ITEMTYPES } from "../../../../../../backend/config/itemtypes.config";
 import { NotificationMessageType, setNotificationMessage } from "../../state/features/notification_slice";
 
 @customElement("dwengo-graph-portfolio")
@@ -177,12 +177,14 @@ class GraphDashboard extends connect(store)(LitElement){
                         </button>
                     </div>
                     <div class="add_item_context_menu_content">
-                    ${getAllowedItemsForRoles(this.userInfo?.roles || []).map(itemType => {
-                        return html`
-                            <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${(e) => this.onAddItemContextMenuClick(e, itemType)}>
-                                ${msg(itemType)}
-                            </div>
-                        `
+                    ${getAllowedItemsForRoles(this.userInfo?.roles || [])
+                        .filter(itemType => (getAllowedItemsForSourceItemType(this.portfolio?.items.find(item => item.uuid === this.addItemContextMenuInfo.sourceItemUUID)?.__t) || []).includes(itemType))
+                            .map(itemType => {
+                                return html`
+                                    <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${(e) => this.onAddItemContextMenuClick(e, itemType)}>
+                                        ${msg(itemType)}
+                                    </div>
+                                `
                     })}
                     </div>
                     <div class="add_item_context_menu_footer></div>
@@ -333,6 +335,20 @@ class GraphDashboard extends connect(store)(LitElement){
                 // this.requestUpdate()
                 if (this.portfolio){
                     store.dispatch(createPortfolioItem(this.portfolio?.uuid, newItem, sourceItem))
+                }
+                break
+            case ITEMTYPES.BlocklyProgram:
+                const newBlocklyItem: MinimalDisplayedPortfolioItemInfo = {
+                    __t: ITEMTYPES.BlocklyProgram,
+                    name: msg("New text item"),
+                    children: [],
+                    displayInformation: {
+                        x: this.addItemContextMenuInfo.x,
+                        y: this.addItemContextMenuInfo.y,
+                    },
+                }
+                if (this.portfolio){
+                    store.dispatch(createPortfolioItem(this.portfolio?.uuid, newBlocklyItem, sourceItem))
                 }
                 break
             default:

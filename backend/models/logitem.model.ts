@@ -9,6 +9,7 @@ interface ILogItem {
     activityId?: number,
     eventName: string,
     data?: string,
+    forSavedProgramUUID?: string,
     functionalVector?: [],
 }
 const LogSchemaFields: Record<keyof ILogItem, any> = {
@@ -34,6 +35,10 @@ const LogSchemaFields: Record<keyof ILogItem, any> = {
         required: true
     },
     data: { 
+        type: String,
+        required: false
+    },
+    forSavedProgramUUID: {
         type: String,
         required: false
     },

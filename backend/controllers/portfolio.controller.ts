@@ -6,6 +6,8 @@ import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../config/item
 import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model";
 import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model";
 import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model";
+import { BlocklyProgramItem } from "../models/portfolio_items/blockly_program.model";
+import { SavedProgram, emptyProgramXml } from "../models/saved_program.model";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -19,6 +21,7 @@ interface PortfolioFilter {
 }
 
 class PortfolioController {
+   
     filter = async (req, res) => {
         try {
             let filter: PortfolioFilter = req.body
@@ -53,7 +56,7 @@ class PortfolioController {
     get = async (req, res) => {
         try {
             let portfolio = await Portfolio.findOne({uuid: req.params.uuid})
-                .populate({path: "items", populate: {path: "children"}/*, select: "name uuid displayInformation children"*/})
+                .populate({path: "items", populate: {path: "children savedProgram"}/*, select: "name uuid displayInformation children"*/})
                 .populate("sharedWith")
             if (!portfolio){
                 res.status(404).send({message: "Portfolio not found."})
@@ -121,12 +124,26 @@ class PortfolioController {
                 item = new SocialRobotDesignItem()
             } else if (req.body.__t === ITEMTYPES.BlocklyProgSequenceItem) {
                 item = new BlocklyProgSequenceItem()
+            } else if (req.body.__t === ITEMTYPES.BlocklyProgram) {
+                const newSavedProgram = new SavedProgram()
+                newSavedProgram.name = "New program"
+                newSavedProgram.blocklyXml = emptyProgramXml
+                newSavedProgram.savedAt = new Date()
+                newSavedProgram.user = req.user._id
+                newSavedProgram.inPortfolio = true
+                newSavedProgram.inSavedItemList = false
+                await newSavedProgram.save()
+                item = new BlocklyProgramItem()
+                item.savedProgram = newSavedProgram._id
             } else {
                 res.status(404).send({message: "Item type not found."})
             }
             item = Object.assign(item, req.body)
             item = await item.save()
             item = await item.populate({path: "children"})
+            if (req.body.__t === ITEMTYPES.BlocklyProgram){
+                item = await item.populate({path: "savedProgram"})
+            }
             portfolio.items.push(item)
             portfolio = await portfolio.save()
             res.status(200).send(item)
