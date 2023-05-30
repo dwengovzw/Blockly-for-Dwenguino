@@ -81,21 +81,22 @@ class SavedStateController {
         let uuid = req.query.uuid
         try{
             let user = req.user as IUserDoc
-            let savedProgram = await SavedState.findOne({uuid: uuid}).populate<IUserDoc>({path: "user", model: "User"})
+            let savedState = await SavedState.findOne({uuid: uuid}).populate<IUserDoc>({path: "user", model: "User"})
             const portfoliosOwnedByUser = await getAllPortfoliosOwnedByUser(user._id)
             const portfoliosSharedWithUser = await getAllPortfoliosSharedWithUser(user._id)
             const portfoliosWithAllowedAccess = [...portfoliosOwnedByUser, ...portfoliosSharedWithUser]//.map(p => p.items).flat().map(i => i._id)
             const portfolioItemIdsWithAllowedAccess = portfoliosWithAllowedAccess.map(p => p.items).flat().map(i => i._id)
             const portfolioItemsSavedProgramIdsWithAllowedAccess = (await BlocklyProgramItem.find({_id: {$in: portfolioItemIdsWithAllowedAccess}})
-                .populate<ISavedState>({path: "savedProgram", model: "SavedProgram"}))
+                .populate<ISavedState>({path: "savedState", model: "SavedState"}))
                 .map(i => (i.savedState as ISavedStateDoc).id)
-            if (!((savedProgram.user as IUserDoc).id === user.id || portfolioItemsSavedProgramIdsWithAllowedAccess.includes(savedProgram.id))){
+            if (!((savedState.user as IUserDoc).id === user.id || portfolioItemsSavedProgramIdsWithAllowedAccess.includes(savedState.id))){
                 return res.status(401).send({message: "You do not have access to this program"})
             }
             processStartBlocks({
-                startblock_xml: savedProgram.blocklyXml,
+                startblock_xml: savedState.blocklyXml,
                 res: res, 
-                savedProgramUUID: uuid
+                savedProgramUUID: uuid,
+                editorState: savedState
             })
             
         } catch (e){

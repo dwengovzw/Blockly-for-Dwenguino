@@ -16,7 +16,7 @@ let corsOptions = {
 };
 
 
-let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false}) => {
+let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false, editorState={}}) => {
     let blocks_xml = querystring.unescape(startblock_xml);
     if (!blocks_xml){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
@@ -28,7 +28,8 @@ let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUU
         base_url: process.env.SERVER_URL, 
         form_target: process.env.SERVER_URL + "/simulator",
         savedProgramUUID: savedProgramUUID,
-        hidebutton: hidebutton
+        hidebutton: hidebutton,
+        editorState: JSON.stringify(editorState)
     });
 }
 

@@ -44,6 +44,7 @@ let DwenguinoBlockly = {
     internalRedirect: false,
 
     initDwenguinoBlockly: function(workspace){
+            
 
            if (globalSettings.savedProgramUUID && globalSettings.savedProgramUUID !== ""){ 
             DwenguinoBlockly.setSavedInCloud(true)
@@ -308,6 +309,14 @@ let DwenguinoBlockly = {
             console.debug('Type of event unkown ', event);
           }
         });
+
+        console.log("EDITOR STATE:--------------------------");
+            console.log(globalSettings.editorState);
+            if (globalSettings.editorState && globalSettings.editorState.view === "blocks"){
+              DwenguinoBlockly.switchToBlockly();
+            } else if (globalSettings.editorState && globalSettings.editorState.view === "text"){
+              DwenguinoBlockly.switchToTextualEditor();
+            }
 
     },
     setSavedInCloud: function(saved){
@@ -1031,6 +1040,7 @@ let DwenguinoBlockly = {
     }
     },
 
+    // TODO add param for code to load
     switchToTextualEditor(){
       // Turn off simulator
       if (DwenguinoBlockly.simulatorState !== "off"){
