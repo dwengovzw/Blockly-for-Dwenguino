@@ -16,6 +16,7 @@ class EditorPane{
     $_headerContainer:JQuery<HTMLElement>;
     $_tabsInfo:TabInfo[] = [];
     $_selectedTab:TabInfo|null = null;
+    $_hasBecomeUnsavedEventListeners:Function[] = [];
 
     constructor(containerId:string){
         BindMethods(this);
@@ -68,11 +69,26 @@ class EditorPane{
 
     openTab(code:string = "", title:string|null=null){
         let newTabInfo = new TabInfo(code, title);
+        newTabInfo.addOnSavedStateChangedListener(this.handleTabSavedStateChanged);
         this.$_tabsInfo.push(newTabInfo);
         this.addTabHeader(newTabInfo);
         this.addTabContentPane(newTabInfo);
         this.selectTab(newTabInfo);
         newTabInfo.renderEditor();
+    }
+
+    handleTabSavedStateChanged(saved:boolean){
+        if (!saved){
+            this.$_hasBecomeUnsavedEventListeners.forEach((func) => func());
+        }
+    }
+
+    addOnHasBecomeUnsavedEventListener(func:Function){
+        this.$_hasBecomeUnsavedEventListeners.push(func);
+    }
+
+    removeOnHasBecomeUnsavedEventListener(func:Function){
+        this.$_hasBecomeUnsavedEventListeners = this.$_hasBecomeUnsavedEventListeners.filter((f) => f != func);
     }
 
     closeTabs(){
@@ -183,6 +199,19 @@ class EditorPane{
         if (this.$_selectedTab){ 
             this.$_selectedTab.setSaved(true);
         };
+    }
+
+    saveAllTabs(){
+        this.$_tabsInfo.forEach((tabInfo:TabInfo) => tabInfo.setSaved(true));
+    }
+
+    getCurrentTabData() {
+        return this.$_tabsInfo.map((tabInfo) => {
+            return {
+                code: tabInfo.getCode(),
+                title: tabInfo.getTitle()
+            }
+        })
     }
 
    

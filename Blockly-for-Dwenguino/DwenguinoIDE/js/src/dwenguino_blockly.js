@@ -139,6 +139,10 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.toggleSimulator();
 
 
+        DwenguinoBlockly.textualEditor.getEditorPane().addOnHasBecomeUnsavedEventListener(() => {
+          DwenguinoBlockly.setSavedInCloud(false)
+        })
+
         //The following code handles the upload of a saved file.
         //If it is run in the browser it shows a modal dialog with two upload options:
         //1) Using the upload button.
@@ -377,7 +381,7 @@ let DwenguinoBlockly = {
       if (scenario === "socialrobot"){
         socialRobotXml = DwenguinoBlockly.simulationEnvironment.getCurrentScenario().robotToXml()
       }
-      let cppCode = [] // TODO: get cpp code from textual editor
+      let cppCode = this.textualEditor.getEditorPane().getCurrentTabData() // TODO: get cpp code from textual editor
 
       try {
         let result = await fetch(
@@ -397,6 +401,7 @@ let DwenguinoBlockly = {
         })
         if (result.status == 200){
           DwenguinoBlockly.setSavedInCloud(true)
+          DwenguinoBlockly.textualEditor.getEditorPane().saveAllTabs()
           if (notify){
             DwenguinoBlockly.showNotificationModal("Success", "The file has been saved!")
           }
@@ -1026,6 +1031,33 @@ let DwenguinoBlockly = {
     }
     },
 
+    switchToTextualEditor(){
+      // Turn off simulator
+      if (DwenguinoBlockly.simulatorState !== "off"){
+        DwenguinoBlockly.toggleSimulator();
+        $("#db_menu_item_simulator").css("pointer-events","none");
+      }
+      DwenguinoBlockly.currentProgrammingContext = "text";
+      document.getElementById("blocklyDiv").style.visibility = 'hidden';
+      document.getElementById('db_code_pane').style.visibility = 'visible';
+      let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
+      DwenguinoBlockly.textualEditor.getEditorPane().openTab(code, "blocks.cpp");
+      if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
+        DwenguinoBlockly.saveStateHandler(false)
+      }
+    },
+    switchToBlockly(){
+      DwenguinoBlockly.currentProgrammingContext = "blocks";
+            document.getElementById("blocklyDiv").style.visibility = 'visible';
+            document.getElementById('db_code_pane').style.visibility = 'hidden';
+            DwenguinoBlockly.textualEditor.looseFocus();
+            // Turn simulator on
+            if (DwenguinoBlockly.simulatorState === "off"){
+              DwenguinoBlockly.toggleSimulator();
+              $("#db_menu_item_simulator").css("pointer-events","auto");
+            }
+    },
+
     setupEnvironment: async function(){
         this.checkLoggedIn();
         
@@ -1049,30 +1081,13 @@ let DwenguinoBlockly = {
         codeViewCheckbox.addEventListener('change', function (event) {
           if (codeViewCheckbox.checked) {
             if (confirm("Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.")){
-              // Turn off simulator
-              if (DwenguinoBlockly.simulatorState !== "off"){
-                DwenguinoBlockly.toggleSimulator();
-                $("#db_menu_item_simulator").css("pointer-events","none");
-              }
-              DwenguinoBlockly.currentProgrammingContext = "text";
-              document.getElementById("blocklyDiv").style.visibility = 'hidden';
-              document.getElementById('db_code_pane').style.visibility = 'visible';
-              let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-              DwenguinoBlockly.textualEditor.getEditorPane().openTab(code, "blocks.cpp");
+              DwenguinoBlockly.switchToTextualEditor()
             } else {
               event.target.checked = false;
               return false;
             }
           } else {
-            DwenguinoBlockly.currentProgrammingContext = "blocks";
-            document.getElementById("blocklyDiv").style.visibility = 'visible';
-            document.getElementById('db_code_pane').style.visibility = 'hidden';
-            DwenguinoBlockly.textualEditor.looseFocus();
-            // Turn simulator on
-            if (DwenguinoBlockly.simulatorState === "off"){
-              DwenguinoBlockly.toggleSimulator();
-              $("#db_menu_item_simulator").css("pointer-events","auto");
-            }
+              DwenguinoBlockly.switchToBlockly()
           }
         });
     },
