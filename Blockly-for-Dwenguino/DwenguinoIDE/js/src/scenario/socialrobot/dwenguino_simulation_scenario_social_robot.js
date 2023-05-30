@@ -29,8 +29,8 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * 
    * @param {DwenguinoEventLogger} logger 
    */
-  constructor(logger) {
-    super(logger);
+  constructor(logger, name) {
+    super(logger, name);
 
     // Event listener for saving the robot scenario to local storage
     this._eventBus = new EventBus();

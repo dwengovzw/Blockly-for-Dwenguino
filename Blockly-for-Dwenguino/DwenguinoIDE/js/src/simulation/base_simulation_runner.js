@@ -44,6 +44,10 @@ class BaseSimulationRunner{
         this.initScenario();
     }
 
+    getCurrentScenario(){
+        return this.currentScenario;
+    }
+
     /**
      * Resets and initializes the current scenario by resetting the Dwenguino board state and 
      * the simulation display. Ensures that all events and interactions with the Dwenguino

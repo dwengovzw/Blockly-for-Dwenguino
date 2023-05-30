@@ -14,9 +14,11 @@ class DwenguinoSimulationScenario {
 
     audiocontext = null;
     osc = null;
+    name = ""
 
-    constructor(logger) {
+    constructor(logger, name="") {
         this.logger = logger;
+        this.name = name;
     }
 
     /**

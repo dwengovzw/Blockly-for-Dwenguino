@@ -2,11 +2,11 @@
 // Initialize express router
 import express from 'express';
 import { verifyTokenAjax, verifyUserExists } from "../middleware/middleware"
-import SavedProgramController from "../controllers/saved_program.controller.js"
+import SavedStateController from "../controllers/saved_state.controller.js"
 
 
 let savedProgramsRouter = express.Router()
-const saveProgramController = new SavedProgramController()
+const saveProgramController = new SavedStateController()
 
 savedProgramsRouter.post("/save", [verifyTokenAjax, verifyUserExists], (req, res) => {
     saveProgramController.save(req, res)

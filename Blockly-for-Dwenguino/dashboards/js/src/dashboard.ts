@@ -13,7 +13,7 @@ import "./components/user/profile"
 import "./components/classes/classes"
 import "./components/classes/class"
 import "./components/classes/student_classes"
-import "./components/savedprograms/list"
+import "./components/savedstates/list"
 import "./components/portfolios/list"
 import "./components/portfolios/container"
 
@@ -82,13 +82,13 @@ class Dashboard extends connect(store)(LitElement) {
                 </dwengo-student-classes-page>`
         },
         {
-            path: `${this.urlPrefix}/dashboard/savedprograms`, 
+            path: `${this.urlPrefix}/dashboard/savedstates`, 
             enter: async () => {
-                this.selectedId = "savedprograms"; 
+                this.selectedId = "savedstates"; 
                 return true
             }, 
             render: ({uuid}) => html`<dwengo-saved-programs-list
-                    .savedPrograms=${this.globalState.savedPrograms.programs}>
+                    .savedPrograms=${this.globalState.savedStates.states}>
                 </dwengo-saved-programs-list>`
         },
         {

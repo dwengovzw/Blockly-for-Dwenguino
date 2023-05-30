@@ -4,7 +4,7 @@ import { Router } from "@lit-labs/router"
 import { store } from  "../../state/store"
 import { connect } from "pwa-helpers"
 import { msg } from '@lit/localize';
-import { SavedProgramInfo, getAllSavedPrograms, deleteSavedProgram } from "../../state/features/saved_programs_slice"
+import { SavedStateInfo, getAllSavedStates, deleteSavedState } from "../../state/features/saved_state_slice"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 
 import '@vaadin/button';
@@ -19,19 +19,19 @@ class SavedProgramsList extends connect(store)(LitElement){
 
     constructor(){
         super()
-        store.dispatch(getAllSavedPrograms())
+        store.dispatch(getAllSavedStates())
     }
 
-    @property({type: Object}) savedPrograms: SavedProgramInfo[] = []
+    @property({type: Object}) savedPrograms: SavedStateInfo[] = []
     @state() showConfirmDialog: boolean = false
-    @state() itemSelectedToDelete: SavedProgramInfo | null = null
+    @state() itemSelectedToDelete: SavedStateInfo | null = null
 
     handleOpenSavedProgram(uuid: string){
-        window.open(`${globalSettings.hostname}/savedprograms/open?uuid=${uuid}`, "_blank")
+        window.open(`${globalSettings.hostname}/savedstates/open?uuid=${uuid}`, "_blank")
     }
 
     handleRemoveSavedProgram(uuid: string){
-        store.dispatch(deleteSavedProgram(uuid))
+        store.dispatch(deleteSavedState(uuid))
     }
 
     renderConfirmDialog(name: string, uuid: string){
@@ -69,7 +69,7 @@ class SavedProgramsList extends connect(store)(LitElement){
             auto-width
             flex-grow="0"
             ${columnBodyRenderer(
-                (savedProgram: SavedProgramInfo) => html`
+                (savedProgram: SavedStateInfo) => html`
                     <mwc-button class="item" @click=${() => this.handleOpenSavedProgram(savedProgram.uuid)} raised>
                     <span class="material-symbols-outlined">
                         open_in_new
@@ -83,7 +83,7 @@ class SavedProgramsList extends connect(store)(LitElement){
             auto-width
             flex-grow="0"
             ${columnBodyRenderer(
-                (savedProgram: SavedProgramInfo) => html`
+                (savedProgram: SavedStateInfo) => html`
                     <mwc-button class="item" @click="${() => {this.itemSelectedToDelete = savedProgram; this.showConfirmDialog = true}}" raised>
                     <span class="material-symbols-outlined">
                         delete

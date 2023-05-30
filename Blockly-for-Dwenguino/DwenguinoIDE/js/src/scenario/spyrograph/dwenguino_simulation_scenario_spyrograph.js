@@ -49,8 +49,8 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
 
     scaleFactorForDisplay = 0.8;
     
-    constructor(logger){
-        super(logger);
+    constructor(logger, name){
+        super(logger, name);
         //this.initSimulationState(null);
         this.graphicsLib = new SpyrographGraphicsLib();
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);

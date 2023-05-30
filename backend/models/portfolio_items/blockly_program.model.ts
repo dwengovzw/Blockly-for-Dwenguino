@@ -1,19 +1,19 @@
 import mongoose, { CallbackError, Model, Schema } from "mongoose";
-import { ISavedProgram, SavedProgram } from "../saved_program.model";
+import { ISavedState, SavedState } from "../saved_state.model";
 import { ISolutionItem, SolutionItemSchema } from "./solution_item.model";
 import { PortfolioItem } from "./portfolio_item.model";
 import { ITEMTYPES } from "../../config/itemtypes.config";
 
 interface IBlocklyProgramItemExtraFields {
-    savedProgram: ISavedProgram
+    savedState: ISavedState
 }
 
 interface IBlocklyProgramItem extends ISolutionItem, IBlocklyProgramItemExtraFields {}
 const BlocklyProgramItemSchemaFields: Record<keyof IBlocklyProgramItemExtraFields, any> = {
-    savedProgram: {
+    savedState: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'SavedProgram'
+        ref: 'SavedState'
     }
 }
 
@@ -23,10 +23,10 @@ const BlocklyProgamItemSchema = new Schema<IBlocklyProgramItem>(BlocklyProgramIt
 
 // Recursively delete the saved program when the portfolio item is deleted
 BlocklyProgamItemSchema.pre('remove', {document:true, query: false}, async function(next) {
-    const savedProgramId = this.savedProgram
+    const savedStateId = this.savedState
     try {
-        if (savedProgramId){
-            await SavedProgram.findByIdAndRemove(savedProgramId)
+        if (savedStateId){
+            await SavedState.findByIdAndRemove(savedStateId)
         }
         next()
     } catch (err: any) {

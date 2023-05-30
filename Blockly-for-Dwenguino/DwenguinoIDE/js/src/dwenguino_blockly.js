@@ -9,6 +9,7 @@ import 'jquery-ui-bundle';
 import 'bootstrap';
 import TextualEditor from './textual_editor/textual_editor.ts'
 import { store } from "../../../dashboards/js/src/state/store.ts"
+import { SAVEDPROGRAM_TYPES } from '../../../../backend/models/saved_state.model'
 
 window.$ = window.jQuery = jQuery;
 
@@ -49,7 +50,7 @@ let DwenguinoBlockly = {
             setInterval(() => {
               // Save program to cloud every 1 seconds
               if (!DwenguinoBlockly.programSavedIntoAccount){
-                DwenguinoBlockly.saveFileHandler(false)
+                DwenguinoBlockly.saveStateHandler(false)
               }
             }, 5000)
           } else {
@@ -163,7 +164,7 @@ let DwenguinoBlockly = {
         //If it is run in the browser it shows a modal dialog enabeling them to choose a name:
         $("#db_menu_item_save").on("click", function(){
           if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
-            DwenguinoBlockly.saveFileHandler()
+            DwenguinoBlockly.saveStateHandler()
           } else {
             DwenguinoBlockly.showSaveToProfileModal()
           }
@@ -177,7 +178,7 @@ let DwenguinoBlockly = {
         });
 
         $("#submit_save_modal_dialog_button").on("click", (e) => {
-          DwenguinoBlockly.saveFileHandler();
+          DwenguinoBlockly.saveStateHandler();
         })
 
         document.addEventListener('keydown', e => {
@@ -367,31 +368,31 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.logger.recordEvent(event);
     },
 
-    saveFileHandler: async function(notify=true){
-      let filename = ""
-      let program = ""
-      if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
-        var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-        program = Blockly.Xml.domToText(xml);
-        filename = $('#saveToProfileModal .modal-body #filename').val()
-      } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
-          program = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
-          filename = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
-          DwenguinoBlockly.textualEditor.getEditorPane().saveCurrentTab();
+    saveStateHandler: async function(notify=true){
+      let name = $('#saveToProfileModal .modal-body #filename').val() || "no name"
+      let view = DwenguinoBlockly.currentProgrammingContext
+      let scenario = DwenguinoBlockly.simulationEnvironment.getCurrentScenario().name
+      let blocklyXml = Blockly.Xml.domToText(Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace))
+      let socialRobotXml = ""
+      if (scenario === "socialrobot"){
+        socialRobotXml = DwenguinoBlockly.simulationEnvironment.getCurrentScenario().robotToXml()
       }
-      if (filename == ""){
-        filename = "noname"
-      }
+      let cppCode = [] // TODO: get cpp code from textual editor
+
       try {
         let result = await fetch(
-          `${globalSettings.hostname}/savedprograms/save`, {
+          `${globalSettings.hostname}/savedstates/save`, {
             method: "POST", // *GET, POST, PUT, DELETE, etc.
             cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
             headers: { "Content-Type": "application/json"},
             body: JSON.stringify({
-              program: program,
-              name: filename,
-              uuid: globalSettings.savedProgramUUID
+              blocklyXml: blocklyXml,
+              name: name,
+              uuid: globalSettings.savedProgramUUID,
+              view: view,
+              scenario: scenario,
+              socialRobotXml: socialRobotXml,
+              cppCode: cppCode
           })
         })
         if (result.status == 200){
@@ -413,6 +414,19 @@ let DwenguinoBlockly = {
       } finally {
         $('#saveToProfileModal .modal-body #filename').val("")
       }
+
+
+
+      // if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
+      //   var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
+      //   program = Blockly.Xml.domToText(xml);
+      //   name = 
+      // } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
+      //     program = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
+      //     name = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
+      //     DwenguinoBlockly.textualEditor.getEditorPane().saveCurrentTab();
+      // }
+ 
       
     },
 

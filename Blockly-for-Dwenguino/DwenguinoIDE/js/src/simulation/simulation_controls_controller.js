@@ -27,6 +27,10 @@ class SimulationControlsController {
         
     }
 
+    getCurrentScenario(){
+        return this.simulationRunner.getCurrentScenario();
+    }
+
     initSimulationControlsUI(scenarios) {
         $("#db_simulator_menu").empty();
 

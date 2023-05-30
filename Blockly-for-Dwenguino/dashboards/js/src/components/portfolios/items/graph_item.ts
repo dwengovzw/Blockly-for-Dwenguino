@@ -11,13 +11,9 @@ import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { borderStyle, noselect } from "../../../styles/shared";
 import { BlocklyProgramItemInfo, connectPortfolioItemsInCurrentPortfolio, deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
 import { buttonStyles, iconStyle } from "../../../styles/shared";
-import { UserInfo, initialUserState } from "../../../state/features/user_slice";
-import { ClassGroups } from "../../../state/features/class_group_slice";
-import { SavedProgramInfo } from "../../../state/features/saved_programs_slice";
-import { StudentClassGroupInfo } from "../../../state/features/student_class_group_slice";
+import { UserInfo } from "../../../state/features/user_slice";
 import { NotificationMessageType, setNotificationMessage } from "../../../state/features/notification_slice";
 import { ITEMTYPES } from "../../../../../../../backend/config/itemtypes.config";
-import { BlocklyProgramItem } from "../../../../../../../backend/models/portfolio_items/blockly_program.model";
 
 @customElement("dwengo-graph-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
@@ -156,7 +152,7 @@ class PortfolioItem extends connect(store)(LitElement) {
                 break
             case ITEMTYPES.BlocklyProgram:
                 const savedProgram = (this.item as BlocklyProgramItemInfo).savedProgram
-                window.open(`${globalSettings.hostname}/savedprograms/open?uuid=${savedProgram.uuid}`, "_blank")
+                window.open(`${globalSettings.hostname}/savedstates/open?uuid=${savedProgram.uuid}`, "_blank")
                 break
             default:    
                 return html`${msg("Unknown item type")}`

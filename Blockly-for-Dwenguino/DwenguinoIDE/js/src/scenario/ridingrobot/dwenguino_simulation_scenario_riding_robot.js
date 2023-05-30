@@ -11,8 +11,8 @@ import DwenguinoBoardSimulation from "../dwenguino_board_simulation.js";
 class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario {
 
     dwenguinoBoardSimulation = null;
-    constructor(logger) {
-        super(logger);
+    constructor(logger, name) {
+        super(logger, name);
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
         //this.initSimulationState(null);
     }

@@ -10,9 +10,9 @@ import DwenguinoSimulationScenarioRidingRobot from "./dwenguino_simulation_scena
  */
 class DwenguinoSimulationScenarioRidingRobotWithWall extends DwenguinoSimulationScenarioRidingRobot{
 
-    constructor(logger){
+    constructor(logger, name){
         //call super prototype
-        super(logger);
+        super(logger, name);
         //init robot state
         //this.initSimulationState(null);
 

@@ -7,7 +7,7 @@ import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_progr
 import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model";
 import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model";
 import { BlocklyProgramItem } from "../models/portfolio_items/blockly_program.model";
-import { SavedProgram, emptyProgramXml } from "../models/saved_program.model";
+import { SavedState } from "../models/saved_state.model";
 
 // TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
 interface PortfolioFilter {
@@ -122,7 +122,7 @@ class PortfolioController {
                 return
             }
             let item
-            // TODO: Add other item types
+            // TODO: Add other item types + rethink this. Maybe use a factory pattern?
             if (req.body.__t === ITEMTYPES.AnnotatedDrawing){
                 item = new AnnotatedDrawingItem()
             } else if (req.body.__t === ITEMTYPES.TextItem) {
@@ -132,9 +132,8 @@ class PortfolioController {
             } else if (req.body.__t === ITEMTYPES.BlocklyProgSequenceItem) {
                 item = new BlocklyProgSequenceItem()
             } else if (req.body.__t === ITEMTYPES.BlocklyProgram) {
-                const newSavedProgram = new SavedProgram()
+                const newSavedProgram = new SavedState()
                 newSavedProgram.name = "New program"
-                newSavedProgram.blocklyXml = emptyProgramXml
                 newSavedProgram.savedAt = new Date()
                 newSavedProgram.user = req.user._id
                 newSavedProgram.inPortfolio = true

@@ -7,7 +7,7 @@ import { StudentTeamInfo } from "./student_team_slice"
 import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio.controller"
 import { LogItemInfo } from "./log_item_slice"
 import {IPortfolioItemDisplayInformation} from "../../../../../../backend/models/portfolio_items/portfolio_item.model"
-import { SavedProgramInfo } from "./saved_programs_slice"
+import { SavedStateInfo } from "./saved_state_slice"
 
 interface MinimalPortfolioItemInfo {
     name: string,
@@ -42,7 +42,7 @@ interface BlocklyProgSequenceItemInfo extends SolutionItemInfo {
 }
 
 interface BlocklyProgramItemInfo extends SolutionItemInfo {
-    savedProgram: SavedProgramInfo
+    savedProgram: SavedStateInfo
 }
 
 interface TextItemInfo extends SolutionItemInfo {

@@ -16,7 +16,7 @@ import dashboardRouter from './routes/dashboard-routes'
 import oauthRouter from './routes/oauth-routes'
 import userRouter from "./routes/user.routes"
 import classGroupRouter from './routes/classgroup.router';
-import savedProgramsRouter from "./routes/saved_program.router"
+import savedProgramsRouter from "./routes/saved_state.router"
 
 // Import test router
 //import testRouter from './routes/test_auth.routes.js';
@@ -134,7 +134,7 @@ app.use('/oauth', oauthRouter);
 app.use("/user", userRouter);
 
 // Use saved program routes
-app.use("/savedprograms", savedProgramsRouter)
+app.use("/savedstates", savedProgramsRouter)
 
 // Use classgroup routes
 app.use("/classgroup", classGroupRouter)
