@@ -51,7 +51,9 @@ let DwenguinoBlockly = {
             setInterval(() => {
               // Save program to cloud every 1 seconds
               if (!DwenguinoBlockly.programSavedIntoAccount){
-                DwenguinoBlockly.saveStateHandler(false)
+                setTimeout(() => {
+                  DwenguinoBlockly.saveStateHandler(false);
+                })
               }
             }, 5000)
           } else {
@@ -169,7 +171,9 @@ let DwenguinoBlockly = {
         //If it is run in the browser it shows a modal dialog enabeling them to choose a name:
         $("#db_menu_item_save").on("click", function(){
           if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
-            DwenguinoBlockly.saveStateHandler()
+            setTimeout(() => {
+              DwenguinoBlockly.saveStateHandler();
+            })
           } else {
             DwenguinoBlockly.showSaveToProfileModal()
           }
@@ -183,7 +187,9 @@ let DwenguinoBlockly = {
         });
 
         $("#submit_save_modal_dialog_button").on("click", (e) => {
-          DwenguinoBlockly.saveStateHandler();
+          setTimeout(() => {
+            DwenguinoBlockly.saveStateHandler();
+          })
         })
 
         document.addEventListener('keydown', e => {
@@ -311,12 +317,20 @@ let DwenguinoBlockly = {
         });
 
         console.log("EDITOR STATE:--------------------------");
-            console.log(globalSettings.editorState);
-            if (globalSettings.editorState && globalSettings.editorState.view === "blocks"){
-              DwenguinoBlockly.switchToBlockly();
-            } else if (globalSettings.editorState && globalSettings.editorState.view === "text"){
-              DwenguinoBlockly.switchToTextualEditor();
-            }
+        console.log(globalSettings.editorState);
+        if (globalSettings.editorState && globalSettings.editorState.view === "blocks"){
+          DwenguinoBlockly.switchToBlockly();
+          DwenguinoBlockly.setTextualCodeToggle(false)
+          //DwenguinoBlockly.setWorkspaceBlockFromXml(globalSettings.editorState.blocklyXml);
+        } else if (globalSettings.editorState && globalSettings.editorState.view === "text"){
+          DwenguinoBlockly.switchToTextualEditor();
+          DwenguinoBlockly.setTextualCodeToggle(true)
+          DwenguinoBlockly.textualEditor.closeTabs(false)
+          globalSettings.editorState.cppCode.forEach((codeInfo) => {
+            DwenguinoBlockly.textualEditor.getEditorPane().openTab(codeInfo.cppCode, codeInfo.filename)
+          })
+          
+        }
 
     },
     setSavedInCloud: function(saved){
@@ -1053,7 +1067,9 @@ let DwenguinoBlockly = {
       let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
       DwenguinoBlockly.textualEditor.getEditorPane().openTab(code, "blocks.cpp");
       if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
-        DwenguinoBlockly.saveStateHandler(false)
+        setTimeout(() => {
+          DwenguinoBlockly.saveStateHandler(false);
+        })
       }
     },
     switchToBlockly(){
@@ -1066,6 +1082,10 @@ let DwenguinoBlockly = {
               DwenguinoBlockly.toggleSimulator();
               $("#db_menu_item_simulator").css("pointer-events","auto");
             }
+    },
+    setTextualCodeToggle(on) {
+      const checkbox = document.querySelector('input[id="code_checkbox"]')
+      checkbox.checked = on
     },
 
     setupEnvironment: async function(){

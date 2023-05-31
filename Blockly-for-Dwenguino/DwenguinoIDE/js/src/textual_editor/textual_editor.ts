@@ -67,8 +67,8 @@ class TextualEditor {
         this.populateMenu();
     }
 
-    closeTabs(){
-      this._editorPane.closeTabs();
+    closeTabs(notify=true){
+      this._editorPane.closeTabs(notify);
     }
 
     populateMenu(){

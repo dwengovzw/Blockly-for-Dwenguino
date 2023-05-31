@@ -91,16 +91,18 @@ class EditorPane{
         this.$_hasBecomeUnsavedEventListeners = this.$_hasBecomeUnsavedEventListeners.filter((f) => f != func);
     }
 
-    closeTabs(){
-        this.$_tabsInfo.forEach((tabInfo:TabInfo) => this.closeTab(tabInfo))
+    closeTabs(notify=true){
+        this.$_tabsInfo.forEach((tabInfo:TabInfo) => this.closeTab(tabInfo, notify))
         this.$_tabsInfo = [];
     }
 
-    closeTab(tabInfo:TabInfo){
+    closeTab(tabInfo:TabInfo, notify=true){
         if (!tabInfo.getSaved()){
-            let confirmed = confirm(DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]));
-            if (!confirmed){
-                return;
+            if (notify){
+                let confirmed = confirm(DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]));
+                if (!confirmed){
+                    return;
+                }
             }
         }
         $(`#${tabInfo.getTabId()}`).remove();
