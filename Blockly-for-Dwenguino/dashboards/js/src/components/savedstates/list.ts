@@ -53,7 +53,7 @@ class SavedProgramsList extends connect(store)(LitElement){
     protected render() {
         return html`
         ${getGoogleMateriaIconsLinkTag()}
-        <h1>${msg("Your saved programs")}<h1>
+        <h1>${msg("Your saved projects")}<h1>
         <vaadin-grid .items="${this.savedPrograms}">
             <vaadin-grid-sort-column
                 frozen

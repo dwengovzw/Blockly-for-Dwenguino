@@ -31,6 +31,18 @@ class SimulationControlsController {
         return this.simulationRunner.getCurrentScenario();
     }
 
+    setCurrentScenario(scenarioName){
+        this.translateSimulatorInterface();
+
+        this.handleSimulationStop();
+        this.simulationRunner.setCurrentScenario(this.scenarios[scenarioName]);
+        let data = { 
+            "scenario": scenarioName
+        }
+        this.updateProgrammingBlocks();
+        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedScenario, data));
+    }
+
     initSimulationControlsUI(scenarios) {
         $("#db_simulator_menu").empty();
 
@@ -79,8 +91,9 @@ class SimulationControlsController {
         // Ugly hack..
         let self = this;
         $("input[name=scenario_type]:radio").on("change", (event) => {
-            self.scenarioView = $(event.currentTarget).val();
-            self.translateSimulatorInterface();
+            //self.scenarioView = $(event.currentTarget).val();
+            self.setCurrentScenario($(event.currentTarget).val());
+            /*self.translateSimulatorInterface();
 
             self.handleSimulationStop();
             self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
@@ -88,8 +101,10 @@ class SimulationControlsController {
                 "scenario": self.scenarioView
             }
             self.updateProgrammingBlocks();
-            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, data));
+            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, data));*/
         });
+
+        
 
         // start/stop/pause
         $("#sim_start").on("click", () => {

@@ -116,4 +116,7 @@ const SavedStateFields: Record<keyof ISavedState, any> = {
 const SavedStateSchema = new Schema<ISavedState>(SavedStateFields)
 const SavedState = model<ISavedState>('SavedState', SavedStateSchema)
 
-export { SavedState, ISavedState, ISavedStateDoc, emptyProgramXml, emptySocialRobotDesign, SAVEDPROGRAM_TYPES, SCENARIO, ENVIRONMENT_VIEW }
+const SavedTextualProgramFieldsSchema = new Schema<ISavedTextualProgram>(SavedTextualProgramFields)
+const SavedTextualProgram = model<ISavedTextualProgram>('SavedTextualProgram', SavedTextualProgramFieldsSchema)
+
+export { SavedState, SavedTextualProgram, ISavedState, ISavedStateDoc, emptyProgramXml, emptySocialRobotDesign, SAVEDPROGRAM_TYPES, SCENARIO, ENVIRONMENT_VIEW }

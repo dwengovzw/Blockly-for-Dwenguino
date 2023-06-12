@@ -35,6 +35,10 @@ class DwenguinoSimulation {
     getCurrentScenario(){
         return this.simControlsController.getCurrentScenario();
     }
+
+    setCurrentScenario(scenarioName){
+        this.simControlsController.setCurrentScenario(scenarioName);
+    }
 }
 
 export default DwenguinoSimulation;

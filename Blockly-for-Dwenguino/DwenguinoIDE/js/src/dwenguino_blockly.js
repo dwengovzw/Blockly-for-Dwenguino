@@ -46,7 +46,7 @@ let DwenguinoBlockly = {
     initDwenguinoBlockly: function(workspace){
             
 
-           if (globalSettings.savedProgramUUID && globalSettings.savedProgramUUID !== ""){ 
+           if (DwenguinoBlockly.isUserLoggedIn()){ 
             DwenguinoBlockly.setSavedInCloud(true)
             setInterval(() => {
               // Save program to cloud every 1 seconds
@@ -101,8 +101,6 @@ let DwenguinoBlockly = {
 
 
         this.workspace = workspace;
-
-        //Create device manager responsible for managing the connection to de Dwenguino board
 
         // Create DwenguinoEventLogger instance
         // This instance should be passed to all classes which want to log events.
@@ -170,7 +168,7 @@ let DwenguinoBlockly = {
         //The following code handles saving of the current program in the users' account
         //If it is run in the browser it shows a modal dialog enabeling them to choose a name:
         $("#db_menu_item_save").on("click", function(){
-          if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
+          if (DwenguinoBlockly.isUserLoggedIn()){
             setTimeout(() => {
               DwenguinoBlockly.saveStateHandler();
             })
@@ -316,20 +314,22 @@ let DwenguinoBlockly = {
           }
         });
 
+
+        // Abstract this away into a function that sets the environment state based on the data in globalSettings
         console.log("EDITOR STATE:--------------------------");
         console.log(globalSettings.editorState);
-        if (globalSettings.editorState && globalSettings.editorState.view === "blocks"){
-          DwenguinoBlockly.switchToBlockly();
-          DwenguinoBlockly.setTextualCodeToggle(false)
-          //DwenguinoBlockly.setWorkspaceBlockFromXml(globalSettings.editorState.blocklyXml);
-        } else if (globalSettings.editorState && globalSettings.editorState.view === "text"){
-          DwenguinoBlockly.switchToTextualEditor();
-          DwenguinoBlockly.setTextualCodeToggle(true)
-          DwenguinoBlockly.textualEditor.closeTabs(false)
-          globalSettings.editorState.cppCode.forEach((codeInfo) => {
-            DwenguinoBlockly.textualEditor.getEditorPane().openTab(codeInfo.cppCode, codeInfo.filename)
-          })
-          
+        if (globalSettings.editorState){
+          if (globalSettings.editorState.view === "blocks"){
+            DwenguinoBlockly.switchToBlockly();
+            DwenguinoBlockly.setTextualCodeToggle(false)
+            DwenguinoBlockly.setOpenTextualEditorTabs(globalSettings.editorState.cppCode || [])
+          } else if (globalSettings.editorState.view === "text"){
+            DwenguinoBlockly.switchToTextualEditor(globalSettings.editorState.cppCode, true);
+            DwenguinoBlockly.setTextualCodeToggle(true)          
+          }
+          if (globalSettings.editorState.scenario){
+            DwenguinoBlockly.simulationEnvironment.setCurrentScenario(globalSettings.editorState.scenario);
+          }
         }
 
     },
@@ -404,7 +404,12 @@ let DwenguinoBlockly = {
       if (scenario === "socialrobot"){
         socialRobotXml = DwenguinoBlockly.simulationEnvironment.getCurrentScenario().robotToXml()
       }
-      let cppCode = this.textualEditor.getEditorPane().getCurrentTabData() // TODO: get cpp code from textual editor
+      let cppCode = this.textualEditor.getEditorPane().getCurrentTabData().map(tabInfo => {
+        return {
+          filename: tabInfo.title,
+          cppCode: tabInfo.code
+        }
+      }) // TODO: get cpp code from textual editor
 
       try {
         let result = await fetch(
@@ -426,7 +431,10 @@ let DwenguinoBlockly = {
           DwenguinoBlockly.setSavedInCloud(true)
           DwenguinoBlockly.textualEditor.getEditorPane().saveAllTabs()
           if (notify){
-            DwenguinoBlockly.showNotificationModal("Success", "The file has been saved!")
+            DwenguinoBlockly.showNotificationModal(
+              DwenguinoBlocklyLanguageSettings.translate(['confirmProjectSavedTitle']), 
+              DwenguinoBlocklyLanguageSettings.translate(['confirmProjectSaved'])
+            )
           }
         } else if (result.status === 302){
           let response = await result.json()
@@ -434,28 +442,17 @@ let DwenguinoBlockly = {
           window.location.href = response.redirectUrl
         }else{
           if (notify){
-            DwenguinoBlockly.showNotificationModal("Failed", "Unable to save file in your account!")
+            DwenguinoBlockly.showNotificationModal(
+              DwenguinoBlocklyLanguageSettings.translate(['saveProjectToProfileFailedTitle']), 
+              DwenguinoBlocklyLanguageSettings.translate(['saveProjectToProfileFailed'])
+            )
           }
         }
       } catch (e) {
 
       } finally {
         $('#saveToProfileModal .modal-body #filename').val("")
-      }
-
-
-
-      // if (DwenguinoBlockly.currentProgrammingContext === "blocks"){
-      //   var xml = Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace);
-      //   program = Blockly.Xml.domToText(xml);
-      //   name = 
-      // } else if (DwenguinoBlockly.currentProgrammingContext === "text"){
-      //     program = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentCode();
-      //     name = DwenguinoBlockly.textualEditor.getEditorPane().getCurrentTabName();
-      //     DwenguinoBlockly.textualEditor.getEditorPane().saveCurrentTab();
-      // }
- 
-      
+      }      
     },
 
     restoreFromXml: function(xml){
@@ -637,7 +634,7 @@ let DwenguinoBlockly = {
     showSaveToProfileModal: function(){
       $('#saveToProfileModal .modal-header').html(DwenguinoBlocklyLanguageSettings.translate(['saveToProfile']));
       $('#saveToProfileModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
-      $('#saveToProfileModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['nameFileToSave']));
+      $('#saveToProfileModal .modal-body .message').html(DwenguinoBlocklyLanguageSettings.translate(['nameProjectToSave']));
       $('#saveToProfileModal').modal('show');
     },
 
@@ -965,7 +962,7 @@ let DwenguinoBlockly = {
 
         document.getElementById('db_menu_item_upload').title = DwenguinoBlocklyLanguageSettings.translate(['loadBlocksFileTooltip']);
         document.getElementById('db_menu_item_download').title = DwenguinoBlocklyLanguageSettings.translate(['saveBlocksFileTooltip']);
-        document.getElementById('db_menu_item_save').title = DwenguinoBlocklyLanguageSettings.translate(['saveBlocksToProfileTooltip']);
+        document.getElementById('db_menu_item_save').title = DwenguinoBlocklyLanguageSettings.translate(['saveProjectToProfileTooltip']);
         document.getElementById('db_menu_item_simulator').title = DwenguinoBlocklyLanguageSettings.translate(['toggleSimulator']);
         document.getElementById('db_menu_item_run').title = DwenguinoBlocklyLanguageSettings.translate(['compileAndDownload']);
         document.getElementById('db_menu_item_clear').title = DwenguinoBlocklyLanguageSettings.translate(['compileEmptyProgram']);
@@ -1055,7 +1052,7 @@ let DwenguinoBlockly = {
     },
 
     // TODO add param for code to load
-    switchToTextualEditor(){
+    switchToTextualEditor(openTabsCode = [], closeCurrentTabs = false){
       // Turn off simulator
       if (DwenguinoBlockly.simulatorState !== "off"){
         DwenguinoBlockly.toggleSimulator();
@@ -1064,24 +1061,39 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.currentProgrammingContext = "text";
       document.getElementById("blocklyDiv").style.visibility = 'hidden';
       document.getElementById('db_code_pane').style.visibility = 'visible';
-      let code = Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace);
-      DwenguinoBlockly.textualEditor.getEditorPane().openTab(code, "blocks.cpp");
-      if (globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined){
+      if (closeCurrentTabs){
+        DwenguinoBlockly.textualEditor.getEditorPane().closeTabs(false)
+      }
+      DwenguinoBlockly.setOpenTextualEditorTabs(openTabsCode)
+      DwenguinoBlockly.saveState()
+    },
+    setOpenTextualEditorTabs(openTabsCode = []){
+      openTabsCode.forEach((codeInfo) => {
+        DwenguinoBlockly.textualEditor.getEditorPane().openTab(codeInfo.cppCode, codeInfo.filename)
+      })
+    },
+    switchToBlockly(){
+      DwenguinoBlockly.currentProgrammingContext = "blocks";
+      document.getElementById("blocklyDiv").style.visibility = 'visible';
+      document.getElementById('db_code_pane').style.visibility = 'hidden';
+      DwenguinoBlockly.textualEditor.looseFocus();
+      // Turn simulator on
+      if (DwenguinoBlockly.simulatorState === "off"){
+        DwenguinoBlockly.toggleSimulator();
+        $("#db_menu_item_simulator").css("pointer-events","auto");
+      }
+      DwenguinoBlockly.saveState()
+    },
+    isUserLoggedIn(){
+      return globalSettings && globalSettings.savedProgramUUID !== "" && globalSettings.savedProgramUUID !== undefined
+    },
+    saveState(){
+      // If logged in, save state
+      if (DwenguinoBlockly.isUserLoggedIn()){
         setTimeout(() => {
           DwenguinoBlockly.saveStateHandler(false);
         })
       }
-    },
-    switchToBlockly(){
-      DwenguinoBlockly.currentProgrammingContext = "blocks";
-            document.getElementById("blocklyDiv").style.visibility = 'visible';
-            document.getElementById('db_code_pane').style.visibility = 'hidden';
-            DwenguinoBlockly.textualEditor.looseFocus();
-            // Turn simulator on
-            if (DwenguinoBlockly.simulatorState === "off"){
-              DwenguinoBlockly.toggleSimulator();
-              $("#db_menu_item_simulator").css("pointer-events","auto");
-            }
     },
     setTextualCodeToggle(on) {
       const checkbox = document.querySelector('input[id="code_checkbox"]')
@@ -1111,7 +1123,10 @@ let DwenguinoBlockly = {
         codeViewCheckbox.addEventListener('change', function (event) {
           if (codeViewCheckbox.checked) {
             if (confirm("Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.")){
-              DwenguinoBlockly.switchToTextualEditor()
+              DwenguinoBlockly.switchToTextualEditor([{
+                cppCode: Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace),
+                filename: "blocks.cpp"
+              }])
             } else {
               event.target.checked = false;
               return false;

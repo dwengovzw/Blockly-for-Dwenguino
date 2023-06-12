@@ -1,5 +1,5 @@
 import { IUserDoc, User } from "../models/user.model"
-import { ISavedStateDoc, SavedState, emptyProgramXml, emptySocialRobotDesign } from "../models/saved_state.model"
+import { ISavedStateDoc, SavedState, SavedTextualProgram, emptyProgramXml, emptySocialRobotDesign } from "../models/saved_state.model"
 import { processStartBlocks } from "../routes/blockly-routes"
 import { ISavedState } from "../models/saved_state.model"
 import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model"
@@ -22,7 +22,7 @@ class SavedStateController {
                     user: req.user._id
                 }, {
                     blocklyXml: reqData.blocklyXml || emptyProgramXml,
-                    cppCode: reqData.cppCode,
+                    cppCode: reqData.cppCode.map(codeInfo => new SavedTextualProgram({filename: codeInfo.filename, cppCode: codeInfo.cppCode})),
                     socialRobotXml: reqData.socialRobotXml || emptySocialRobotDesign,
                     view: reqData.view,
                     scenario: reqData.scenario,
@@ -33,7 +33,7 @@ class SavedStateController {
             } else {
                 prog = new SavedState({
                     blocklyXml: reqData.blocklyXml || emptyProgramXml,
-                    cppCode: reqData.cppCode,
+                    cppCode: reqData.cppCode.map(codeInfo => new SavedTextualProgram({filename: codeInfo.filename, cppCode: codeInfo.cppCode})),
                     socialRobotXml: reqData.socialRobotXml || emptySocialRobotDesign,
                     view: reqData.view,
                     scenario: reqData.scenario,

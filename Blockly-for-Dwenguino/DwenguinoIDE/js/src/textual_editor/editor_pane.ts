@@ -75,6 +75,7 @@ class EditorPane{
         this.addTabContentPane(newTabInfo);
         this.selectTab(newTabInfo);
         newTabInfo.renderEditor();
+        this.handleTabSavedStateChanged(false);
     }
 
     handleTabSavedStateChanged(saved:boolean){
@@ -155,6 +156,7 @@ class EditorPane{
                 tabText.text(newText as string);
                 tabText.css({display: "inline"});
                 tabTextEditField.css({display: "none"});
+                this.handleTabSavedStateChanged(false);
             }
             
         }
