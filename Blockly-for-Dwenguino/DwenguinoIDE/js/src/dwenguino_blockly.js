@@ -329,6 +329,9 @@ let DwenguinoBlockly = {
           }
           if (globalSettings.editorState.scenario){
             DwenguinoBlockly.simulationEnvironment.setCurrentScenario(globalSettings.editorState.scenario);
+            if (globalSettings.editorState.scenario === "socialrobot"){
+              DwenguinoBlockly.simulationEnvironment.getCurrentScenario().xmlToRobot(globalSettings.editorState.socialRobotXml);
+            }
           }
         }
 
