@@ -90,7 +90,6 @@ class Class extends connect(store)(LitElement) {
         <vaadin-grid .items="${this.classGroup?.ownedBy}">
                 <vaadin-grid-sort-column frozen header="${msg("Firstname")}" auto-width flex-grow="0" path="firstname"></vaadin-grid-sort-column>
                 <vaadin-grid-sort-column frozen header="${msg("Lastname")}" auto-width flex-grow="0" path="lastname"></vaadin-grid-sort-column>
-                <vaadin-grid-sort-column flex-grow="1" header="${msg("UUID")}" path="uuid" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-column
                     header="${msg("Delete")}"
                     frozen-to-end
@@ -141,7 +140,6 @@ class Class extends connect(store)(LitElement) {
         <vaadin-grid .items="${this.classGroup?.students}">
                 <vaadin-grid-sort-column frozen header="${msg("Firstname")}" auto-width flex-grow="0" path="firstname"></vaadin-grid-sort-column>
                 <vaadin-grid-sort-column frozen header="${msg("Lastname")}" auto-width flex-grow="0" path="lastname"></vaadin-grid-sort-column>
-                <vaadin-grid-sort-column flex-grow="1" header="${msg("UUID")}" path="uuid" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-column
                     header="${msg("Delete")}"
                     frozen-to-end
@@ -194,7 +192,6 @@ class Class extends connect(store)(LitElement) {
         <vaadin-grid .items="${this.classGroup?.awaitingStudents}">
                 <vaadin-grid-sort-column frozen header="${msg("Firstname")}" auto-width flex-grow="0" path="firstname"></vaadin-grid-sort-column>
                 <vaadin-grid-sort-column frozen header="${msg("Lastname")}" auto-width flex-grow="0" path="lastname"></vaadin-grid-sort-column>
-                <vaadin-grid-sort-column flex-grow="1" header="${msg("UUID")}" path="uuid" auto-width></vaadin-grid-sort-column>
                 <vaadin-grid-column
                     header="${msg("Delete")}"
                     frozen-to-end
