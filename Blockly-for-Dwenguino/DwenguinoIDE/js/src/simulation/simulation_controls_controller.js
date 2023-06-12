@@ -32,6 +32,7 @@ class SimulationControlsController {
     }
 
     setCurrentScenario(scenarioName){
+        this.scenarioView = scenarioName;
         this.translateSimulatorInterface();
 
         this.handleSimulationStop();

@@ -133,7 +133,7 @@ class ConveyorDisplayHelper {
 
         //Button to open modal with pin distribution
         let pinDistribution = $("<button>").attr("value", "Pin distribution")
-            .html(MSG.conveyor.pinDistribution)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "pinDistribution"]))
             .css({
                 "margin": "5px auto",
                 "display": "block"
@@ -143,7 +143,7 @@ class ConveyorDisplayHelper {
 
         //Create image picker button
         let imagepicker = $("<button>").attr("value", "Choose image")
-            .html(MSG.conveyor.chooseImage)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "chooseImage"]))
             .css({
                 "margin": "10px auto",
                 "display": "block"
@@ -152,7 +152,7 @@ class ConveyorDisplayHelper {
             });
 
         // Create image preview label
-        let previewLabel = $("<p>").html(MSG.conveyor.preview).css({
+        let previewLabel = $("<p>").html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "preview"])).css({
             "margin": "5px auto 0px",
             "display": "block",
             "text-decoration": "underline"
@@ -266,9 +266,9 @@ class ConveyorDisplayHelper {
     createPinModalContent(parent){
 
         let container = $("<div>").html(`
-            <h3 style="grid-column: 1/span 2; grid-row:1;text-align:center;margin-bottom:30px"> ${MSG.conveyor.pinDistribution} </h3>
-            <p style="grid-column: 1; grid-row:2;text-align:right;margin-right:10px"> ${MSG.conveyor.sensors}: <p>
-            <p style="grid-column: 1; grid-row:4;text-align:right;margin-right:10px"> ${MSG.conveyor.buttons}: <p>
+            <h3 style="grid-column: 1/span 2; grid-row:1;text-align:center;margin-bottom:30px"> ${DwenguinoBlocklyLanguageSettings.translate(["conveyor", "pinDistribution"])} </h3>
+            <p style="grid-column: 1; grid-row:2;text-align:right;margin-right:10px"> ${DwenguinoBlocklyLanguageSettings.translate(["conveyor", "sensors"])}: <p>
+            <p style="grid-column: 1; grid-row:4;text-align:right;margin-right:10px"> ${DwenguinoBlocklyLanguageSettings.translate(["conveyor", "buttons"])}: <p>
         `).css({
             "display": "grid",
             "grid-template-columns": "auto max-content",
@@ -465,7 +465,7 @@ class ConveyorDisplayHelper {
 
         // Create the button to load/import an image
         let importImageButton = $("<button>").attr("value", "Import image")
-            .html(MSG.conveyor.importImage)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "importImage"]))
             .css({
                 "margin-top": "5px",
                 "margin-left": "10px",
@@ -500,10 +500,10 @@ class ConveyorDisplayHelper {
             "float": "left",
         });
         let saveImageButton = $("<button>").attr("value", "Save image")
-            .html(MSG.conveyor.saveImage)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "saveImage"]))
             .click(function () {
                 let downloadLink = document.createElement('a');
-                downloadLink.setAttribute('download', MSG.conveyor.imageDownloadName + ".png");
+                downloadLink.setAttribute('download', DwenguinoBlocklyLanguageSettings.translate(["conveyor", "imageDownloadName"]) + ".png");
                 let canvas = document.getElementById(self.drawingCanvasId);
 
                 var resizedCanvas = document.createElement("canvas");
@@ -534,7 +534,7 @@ class ConveyorDisplayHelper {
 
         // Create the button that clears the drawing-canvas.
         let clearButton = $("<button>").attr("value", "Clear")
-            .html(MSG.conveyor.clear)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "clear"]))
             .css({
                 "margin-top": "5px",
                 "margin-left": "10px",
@@ -548,7 +548,7 @@ class ConveyorDisplayHelper {
 
         // Create the button that cancels all drawing actions since the modal was opened.
         let cancelButton = $("<button>").attr("value", "Cancel")
-            .html(MSG.conveyor.cancel)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "cancel"]))
             .css({
                 "margin-top": "5px",
                 "float": "right",
@@ -572,7 +572,7 @@ class ConveyorDisplayHelper {
 
         // Create the button that sets the new drawingURL and draws the image to all needed canvases.
         let readyButton = $("<button>").attr("value", "Ready")
-            .html(MSG.conveyor.ready)
+            .html(DwenguinoBlocklyLanguageSettings.translate(["conveyor", "ready"]))
             .css({
                 "margin-top": "5px",
                 "margin-left": "10px",
