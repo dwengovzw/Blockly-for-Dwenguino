@@ -50,7 +50,7 @@ class Dashboard extends connect(store)(LitElement) {
         },
         {
             path: `${this.urlPrefix}/dashboard/profile`, 
-            render: () => html`<dwengo-profile-page .userInfo=${this.globalState.user}></dwengo-profile-page>`,
+            render: () => html`<dwengo-profile-page .userInfo=${structuredClone(this.globalState.user)}></dwengo-profile-page>`,
             enter: async () => {
                 this.selectedId ="profile"; 
                 return true
