@@ -93,10 +93,11 @@ class SavedStateController {
                 return res.status(401).send({message: "You do not have access to this program"})
             }
             processStartBlocks({
-                startblock_xml: savedState.blocklyXml,
+                startblock_xml: "", // No start code in editor, this is set using the savedState
                 res: res, 
                 savedProgramUUID: uuid,
-                editorState: savedState
+                editorState: savedState,
+                includeEmptyProgram: false
             })
             
         } catch (e){

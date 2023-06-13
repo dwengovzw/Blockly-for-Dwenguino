@@ -24,6 +24,8 @@
  */
 'use strict';
 
+var machine = "DwenguinoSimulation.";
+
 goog.provide('Blockly.JavaScript.math');
 
 goog.require('Blockly.JavaScript');
@@ -389,19 +391,7 @@ Blockly.JavaScript['math_random_int'] = function(block) {
       Blockly.JavaScript.ORDER_COMMA) || '0';
   var argument1 = Blockly.JavaScript.valueToCode(block, 'TO',
       Blockly.JavaScript.ORDER_COMMA) || '0';
-  var functionName = Blockly.JavaScript.provideFunction_(
-      'mathRandomInt',
-      ['function ' + Blockly.JavaScript.FUNCTION_NAME_PLACEHOLDER_ +
-          '(a, b) {',
-       '  if (a > b) {',
-       '    // Swap a and b to ensure a is smaller.',
-       '    var c = a;',
-       '    a = b;',
-       '    b = c;',
-       '  }',
-       '  return Math.floor(Math.random() * (b - a + 1) + a);',
-       '}']);
-  var code = functionName + '(' + argument0 + ', ' + argument1 + ')';
+  var code = machine + 'mathRandomInt(' + argument0 + ', ' + argument1 + ')';
   return [code, Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 

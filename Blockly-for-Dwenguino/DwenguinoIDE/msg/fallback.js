@@ -242,6 +242,8 @@ var MSG_FALLBACK = {
   change_to_textual_programming_info: "When changing to the textual editor, you are no longer able to simulate your robot. You can only run your code on the Dwenguino",
   allChangesSavedInCloud: "All changes have been saved in the cloud",
   unsavedChangesInCloud: "There are unsaved changes in the cloud. Click the save button to save your changes.",
+  randomNumberBetween: "Random number from %1 to %2",
+  randomNumberBetweenTooltip: "Generate a random number between the two specified limits including the first limit but excluding the second limit.",
 };
 
 MSG_FALLBACK.cookieConsent = {

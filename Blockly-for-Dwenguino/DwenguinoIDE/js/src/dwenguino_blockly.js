@@ -322,6 +322,8 @@ let DwenguinoBlockly = {
           if (globalSettings.editorState.view === "blocks"){
             DwenguinoBlockly.switchToBlockly();
             DwenguinoBlockly.setTextualCodeToggle(false)
+            let xml = Blockly.Xml.textToDom(globalSettings.editorState.blocklyXml);
+            DwenguinoBlockly.restoreFromXml(xml);
             DwenguinoBlockly.setOpenTextualEditorTabs(globalSettings.editorState.cppCode || [])
           } else if (globalSettings.editorState.view === "text"){
             DwenguinoBlockly.switchToTextualEditor(globalSettings.editorState.cppCode, true);
@@ -1114,7 +1116,12 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.initDwenguinoBlockly(workspace);
         DwenguinoBlockly.doTranslation();
 
-        DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
+        //DwenguinoBlockly.loadBlocks(document.getElementById('startBlocks').innerHTML);
+        let startBlocks = document.getElementById('startBlocks').innerHTML;
+        if (startBlocks){
+          DwenguinoBlockly.setWorkspaceBlockFromXml(startBlocks);
+        }
+        
         DwenguinoBlockly.takeSnapshotOfWorkspace();
         $(window).resize(function(){
             DwenguinoBlockly.onresize();

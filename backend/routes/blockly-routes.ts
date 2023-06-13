@@ -16,9 +16,9 @@ let corsOptions = {
 };
 
 
-let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false, editorState=null}) => {
+let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false, editorState=null, includeEmptyProgram=true}) => {
     let blocks_xml = querystring.unescape(startblock_xml);
-    if (!blocks_xml){
+    if (!blocks_xml && includeEmptyProgram){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
     }
 

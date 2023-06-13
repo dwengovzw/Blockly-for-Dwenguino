@@ -51,6 +51,18 @@
     <block type="math_arithmetic">
         <field name="OP">DIVIDE</field>
     </block>
+    <block type="math_random_int">
+        <value name="FROM">
+            <block type="char_type">
+                <field name="BITMASK">0</field>
+            </block>
+        </value>
+        <value name="TO">
+            <block type="char_type">
+                <field name="BITMASK">10</field>
+            </block>
+        </value>
+    </block>
 </category>
 
 <category id="catText" colour="225" name="Text">

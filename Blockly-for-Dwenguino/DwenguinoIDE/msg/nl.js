@@ -252,6 +252,8 @@ var MSG = {
   change_to_textual_programming_info: "Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.",
   allChangesSavedInCloud: "Alle wijzigingen werden opgeslagen in je account.",
   unsavedChangesInCloud: "Er zijn wijzigingen die nog niet opgeslagen zijn in je account.",
+  randomNumberBetween: "Willekeurig getal tussen %1 en %2",
+  randomNumberBetweenTooltip: "Geeft een willekeurig getal tussen de twee opgegeven grenzen inclusief de ondergrens en exclusief de bovengrens.",
 };
 
 MSG.cookieConsent = {
