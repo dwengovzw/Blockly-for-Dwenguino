@@ -78,6 +78,11 @@ Blockly.JavaScript['sonar_sensor'] = function (block) {
 Blockly.JavaScript['dwenguino_servo'] = function (block) {
     var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
     var value_angle = Blockly.JavaScript.valueToCode(block, 'angle', Blockly.JavaScript.ORDER_ATOMIC);
+    if (value_angle > 180){
+      value_angle = 180;
+    } else if (value_angle < 0){
+      value_angle = 0;
+    }
     // Assemble JavaScript into code variable.
     var code = machine + 'servoWithPin(' + value_pin + ', ' + value_angle + ');\n';
     return code;
@@ -87,6 +92,11 @@ Blockly.JavaScript['dwenguino_servo'] = function (block) {
 Blockly.JavaScript['dwenguino_continuous_servo'] = function (block) {
   var value_pin = Blockly.JavaScript.valueToCode(block, 'pin', Blockly.JavaScript.ORDER_ATOMIC);
   var value_speed = Blockly.JavaScript.valueToCode(block, 'speed', Blockly.JavaScript.ORDER_ATOMIC);
+  if (value_speed > 255){
+    value_speed = 255;
+  } else if (value_speed < -255){
+    value_speed = -255;
+  }
   // Assemble JavaScript into code variable.
   var code = machine + 'continuousServoWithPin(' + value_pin + ', ' + value_speed + ');\n';
   return code;
