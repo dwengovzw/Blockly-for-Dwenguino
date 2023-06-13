@@ -132,15 +132,15 @@ class PortfolioController {
             } else if (req.body.__t === ITEMTYPES.BlocklyProgSequenceItem) {
                 item = new BlocklyProgSequenceItem()
             } else if (req.body.__t === ITEMTYPES.BlocklyProgram) {
-                const newSavedProgram = new SavedState()
-                newSavedProgram.name = "New program"
-                newSavedProgram.savedAt = new Date()
-                newSavedProgram.user = req.user._id
-                newSavedProgram.inPortfolio = true
-                newSavedProgram.inSavedItemList = false
-                await newSavedProgram.save()
+                const newSavedState = new SavedState()
+                newSavedState.name = "New program"
+                newSavedState.savedAt = new Date()
+                newSavedState.user = req.user._id
+                newSavedState.inPortfolio = true
+                newSavedState.inSavedItemList = false
+                await newSavedState.save()
                 item = new BlocklyProgramItem()
-                item.savedProgram = newSavedProgram._id
+                item.savedState = newSavedState._id
             } else {
                 res.status(404).send({message: "Item type not found."})
             }
@@ -148,7 +148,7 @@ class PortfolioController {
             item = await item.save()
             item = await item.populate({path: "children"})
             if (req.body.__t === ITEMTYPES.BlocklyProgram){
-                item = await item.populate({path: "savedProgram"})
+                item = await item.populate({path: "savedState", model: "SavedState"})
             }
             portfolio.items.push(item)
             portfolio = await portfolio.save()

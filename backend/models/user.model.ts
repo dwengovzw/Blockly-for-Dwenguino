@@ -3,7 +3,6 @@ import { PopulatedDoc } from 'mongoose';
 import { Document, Schema, model } from "mongoose"
 import db from "../config/db.config"
 import { IRole, RoleSchema } from './role.model'
-import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model"
 import  v4 from "uuid/v4"
 import { IPortfolio } from "./portfolio.model"
 
@@ -17,7 +16,6 @@ interface IUserShared {
     email?: string,
     emailConfirmed?: boolean,
     emailConfirmationCode?: string,
-    savedEnvironmentState?: ISavedEnvironmentState,
     portfolios: PopulatedDoc<IPortfolio>[] | IPortfolio[],
     birthdate?: Date,
     schoolId?: String,
@@ -62,7 +60,6 @@ const UserSchemaFields: Record<keyof IUser, any> =
     },
     emailConfirmed: Boolean,
     emailConfirmationCode: String,
-    savedEnvironmentState: SavedEnvironmentStateSchema,
     portfolios: [
         {
             type: Schema.Types.ObjectId,

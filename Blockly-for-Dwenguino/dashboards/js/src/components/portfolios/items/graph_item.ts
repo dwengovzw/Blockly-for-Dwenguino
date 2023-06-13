@@ -151,8 +151,8 @@ class PortfolioItem extends connect(store)(LitElement) {
                 console.log("Not supported yet")
                 break
             case ITEMTYPES.BlocklyProgram:
-                const savedProgram = (this.item as BlocklyProgramItemInfo).savedProgram
-                window.open(`${globalSettings.hostname}/savedstates/open?uuid=${savedProgram.uuid}`, "_blank")
+                const savedState = (this.item as BlocklyProgramItemInfo).savedState
+                window.open(`${globalSettings.hostname}/savedstates/open?uuid=${savedState.uuid}`, "_blank")
                 break
             default:    
                 return html`${msg("Unknown item type")}`

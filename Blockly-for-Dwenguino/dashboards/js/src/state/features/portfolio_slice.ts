@@ -42,7 +42,7 @@ interface BlocklyProgSequenceItemInfo extends SolutionItemInfo {
 }
 
 interface BlocklyProgramItemInfo extends SolutionItemInfo {
-    savedProgram: SavedStateInfo
+    savedState: SavedStateInfo
 }
 
 interface TextItemInfo extends SolutionItemInfo {

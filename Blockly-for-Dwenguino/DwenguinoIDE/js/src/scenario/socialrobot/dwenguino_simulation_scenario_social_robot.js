@@ -122,7 +122,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     this.setSensorOptions(simulationContainer);
 
     // Load robot components from local storage if they are present
-    this.loadRobot();
+    //this.loadRobot(); // Stop using local storage, use account storage instead
 
   }
 
