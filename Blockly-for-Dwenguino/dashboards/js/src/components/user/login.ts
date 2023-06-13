@@ -28,7 +28,7 @@ class LoginMenu extends connect(store)(LitElement) {
     platformToLabelMap: Record<string, string> = {
         "github": msg("GitHub"),
         "leerId": msg("LeerID Flanders (students only)"),
-        "beACM": msg("Flemish gouvernment")
+        "beACM": msg("Flemish government")
     }
 
     stateChanged(state: any): void {

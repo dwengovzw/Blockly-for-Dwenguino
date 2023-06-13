@@ -319,11 +319,11 @@ let DwenguinoBlockly = {
         console.log("EDITOR STATE:--------------------------");
         console.log(globalSettings.editorState);
         if (globalSettings.editorState){
+            let xml = Blockly.Xml.textToDom(globalSettings.editorState.blocklyXml);
+            DwenguinoBlockly.restoreFromXml(xml);
           if (globalSettings.editorState.view === "blocks"){
             DwenguinoBlockly.switchToBlockly();
             DwenguinoBlockly.setTextualCodeToggle(false)
-            let xml = Blockly.Xml.textToDom(globalSettings.editorState.blocklyXml);
-            DwenguinoBlockly.restoreFromXml(xml);
             DwenguinoBlockly.setOpenTextualEditorTabs(globalSettings.editorState.cppCode || [])
           } else if (globalSettings.editorState.view === "text"){
             DwenguinoBlockly.switchToTextualEditor(globalSettings.editorState.cppCode, true);

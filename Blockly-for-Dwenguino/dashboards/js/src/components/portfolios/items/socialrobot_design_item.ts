@@ -33,10 +33,7 @@ class DwengoPortfolioSocialRobotDesignItem extends connect(store)(LitElement) {
         return html`
         <span>${this.item?.socialRobotDesignXml}</span>
         <div class="portfolio_item portfolio_blockly_code_item">
-            <form ${ref(this.formRef)} action="${globalSettings.hostname}/socialrobotreadonly" id="blockly_form" method="post" target="soc_robot_container">
-                <input name="xml" type="hidden" value='${this.item?.socialRobotDesignXml}'>
-            </form>
-            <iframe class="blockly_iframe" name="soc_robot_container" ${ref(this.targetRef)}></iframe>
+            ${msg("TODO: link to simulator which only shows the social robot editor. Social robot design")}
         </div>
         `       
     }

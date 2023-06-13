@@ -101,6 +101,11 @@ class PortfolioItem extends connect(store)(LitElement) {
                         title="${this.itemToTitleMap[this.item?.__t || "default"]}"
                         class="material-symbols-outlined dwengo-icon dwengo-clickable-icon overview_icon"
                         @touchstart=${this.handleItemDetailClick}
+                        @contextmenu=${(e: MouseEvent) => {
+                            console.log("Right click on item")
+                            e.preventDefault()
+                            e.stopPropagation()
+                        }}
                         @click=${this.handleItemDetailClick}>
                             ${this.itemToIconMap[this.item?.__t || "default"]}
                     </span>
@@ -161,7 +166,11 @@ class PortfolioItem extends connect(store)(LitElement) {
 
     renderItemDetailModal(){
         return html`
-            <dialog class="item_detail_modal dwengo-border dwengo-border-highlight">
+            <dialog 
+                @contextmenu=${(e: MouseEvent) => {
+                    e.stopPropagation()
+                }}
+                class="item_detail_modal dwengo-border dwengo-border-highlight">
                 <div class="dialog_content_container">
                     <div class="dialog_header">
                         <form method="dialog">

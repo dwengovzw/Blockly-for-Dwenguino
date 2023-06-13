@@ -111,6 +111,17 @@ class GraphDashboard extends connect(store)(LitElement){
             <lit-infinite-viewer class="root viewer">
                 <div 
                     class="viewport"
+                    @contextmenu=${(e: MouseEvent) => {
+                        console.log(e)
+                        this.addItemContextMenuInfo = {
+                            show: true,
+                            x: e.clientX - this.viewportRef.getBoundingClientRect().x,
+                            y: e.clientY - this.viewportRef.getBoundingClientRect().y, 
+                            sourceItemUUID: null
+                        }
+                        e.preventDefault()
+                        e.stopPropagation()
+                    }}
                     @dragover=${(e: DragEvent) => {
                         e.preventDefault()
                         e.stopPropagation()
@@ -178,7 +189,7 @@ class GraphDashboard extends connect(store)(LitElement){
                     </div>
                     <div class="add_item_context_menu_content">
                     ${getAllowedItemsForRoles(this.userInfo?.roles || [])
-                        .filter(itemType => (getAllowedItemsForSourceItemType(this.portfolio?.items.find(item => item.uuid === this.addItemContextMenuInfo.sourceItemUUID)?.__t) || []).includes(itemType))
+                        .filter(itemType => (getAllowedItemsForSourceItemType(this.portfolio?.items.find(item => item.uuid === this.addItemContextMenuInfo.sourceItemUUID)?.__t) || ITEMTYPES.None).includes(itemType))
                             .map(itemType => {
                                 return html`
                                     <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${(e) => this.onAddItemContextMenuClick(e, itemType)}>

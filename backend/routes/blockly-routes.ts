@@ -92,32 +92,6 @@ router.post("/readonly", function(req, res) {
 
 
 // load the application
-router.get("/socialrobotreadonly", function(req, res) {
-    let robot_xml = req.query.xml;
-    robot_xml = querystring.unescape(robot_xml as string);
-
-    robot_xml = robot_xml.trim()  // remove whitespace
-    res.render("socialroboteditor.ejs", {
-        robot_xml: robot_xml, 
-        base_url: process.env.SERVER_URL, 
-        form_target: process.env.SERVER_URL + "/simulator"
-    });
-})
-
-// load the application with a program from xml
-router.post("/socialrobotreadonly", function(req, res) {
-    let robot_xml = req.body.xml;
-    robot_xml = querystring.unescape(robot_xml);
-
-    robot_xml = robot_xml.trim()  // remove whitespace
-    res.render("socialroboteditor.ejs", {
-        robot_xml: robot_xml, 
-        base_url: process.env.SERVER_URL, 
-        form_target: process.env.SERVER_URL + "/simulator"
-    });
-})
-
-// load the application
 router.get("/portfolioitem", function(req, res) {
     let blocks_xml = req.query.xml;
     handleSimulatorRequest(blocks_xml, res,"readonly.ejs", true);
