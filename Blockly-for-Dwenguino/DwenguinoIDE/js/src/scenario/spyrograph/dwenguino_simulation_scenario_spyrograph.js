@@ -108,7 +108,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
                 this.canvases[i].height = this.container.height();
             }
             this.loadPreviousImageIfExists(); 
-            this.convertToDisplayAndRender(true);
+            this.convertToDisplayAndRender(false);
         }).observe(document.querySelector(`#${containerId}`));
  
         
