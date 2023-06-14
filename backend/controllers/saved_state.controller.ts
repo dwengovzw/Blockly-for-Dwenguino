@@ -97,7 +97,8 @@ class SavedStateController {
                 res: res, 
                 savedProgramUUID: uuid,
                 editorState: savedState,
-                includeEmptyProgram: false
+                includeEmptyProgram: false,
+                loggedIn: true,
             })
             
         } catch (e){

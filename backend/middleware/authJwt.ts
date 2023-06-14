@@ -44,6 +44,24 @@ let verifyTokenWithRedirect = (req, res, next, redirectAction) => {
     })
 }
 
+let checkIfUserIsLoggedIn = (req, res, next) => {
+    let token  = req.session.token;
+    if (!token) {
+        res.loggedIn = false
+        return next()
+    }
+    jwt.verify(token, jwt_settings.secret, (err, decoded) => {
+        if (err) {
+            res.loggedIn = false
+            return next()
+            
+        }
+        res.loggedIn = true
+        return next();
+    })
+}
+
+
 let verifyUserExists = async (req, res, next) => {
     try {
         let user = await User.findOne({
@@ -90,4 +108,4 @@ let roleCheck = (role) => {
   }
 }
 
-export { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists }
+export { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists, checkIfUserIsLoggedIn }

@@ -16,7 +16,7 @@ let corsOptions = {
 };
 
 
-let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false, editorState=null, includeEmptyProgram=true}) => {
+let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUUID="", hidebutton=false, editorState=null, includeEmptyProgram=false, loggedIn=false}) => {
     let blocks_xml = querystring.unescape(startblock_xml);
     if (!blocks_xml && includeEmptyProgram){
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
@@ -29,19 +29,21 @@ let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUU
         form_target: process.env.SERVER_URL + "/simulator",
         savedProgramUUID: savedProgramUUID,
         hidebutton: hidebutton,
+        loggedIn: loggedIn,
         editorState: editorState ? JSON.stringify(editorState) : "''"
     });
 }
 
-let handleSimulatorRequest = (blocks_xml, res, view="index.ejs", hidebutton=false) => {
-    if (blocks_xml && blocks_xml !== ""){
+let handleSimulatorRequest = ({blocks_xml, res, view="index.ejs", hidebutton=false}) => {
+    //if (blocks_xml && blocks_xml !== ""){
         processStartBlocks({
-            startblock_xml: blocks_xml, 
+            startblock_xml: blocks_xml || "", 
             res: res, 
             view: view,
-            hidebutton: hidebutton
+            hidebutton: hidebutton,
+            loggedIn: res.loggedIn
         });
-    }else{
+    /*}else{
         let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
         res.render(view, {
             blocks_xml: empty_program_xml, 
@@ -50,57 +52,57 @@ let handleSimulatorRequest = (blocks_xml, res, view="index.ejs", hidebutton=fals
             hidebutton: hidebutton,
             editorState: "''"
         });
-    }
+    }*/
 }
 
 // load the application
-router.get("/simulator", function(req, res) {
+router.get("/simulator", [checkIfUserIsLoggedIn], function(req, res) {
     let blocks_xml = req.query.xml;
-    handleSimulatorRequest(blocks_xml, res);
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res});
 })
 
 // load the application with a program from xml
-router.post("/simulator", function(req, res) {
+router.post("/simulator", [checkIfUserIsLoggedIn], function(req, res) {
     let blocks_xml = req.body.xml;
-    handleSimulatorRequest(blocks_xml, res);
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res});
 })
 
 // load the application
-router.get("/", function(req, res) {
+router.get("/", [checkIfUserIsLoggedIn], function(req, res) {
     let blocks_xml = req.query.xml;
-    handleSimulatorRequest(blocks_xml, res);
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res});
 })
 
 // load the application with a program from xml
-router.post("/", function(req, res) {
+router.post("/", [checkIfUserIsLoggedIn], function(req, res) {
     let blocks_xml = req.body.xml;
-    handleSimulatorRequest(blocks_xml, res);
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res});
 })
 
 
 // load the application
 router.get("/readonly", function(req, res) {
     let blocks_xml = req.query.xml;
-    handleSimulatorRequest(blocks_xml, res, "readonly.ejs");
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res, view: "readonly.ejs"});
 })
 
 // load the application with a program from xml
 router.post("/readonly", function(req, res) {
     let blocks_xml = req.body.xml;
-    handleSimulatorRequest(blocks_xml, res, "readonly.ejs");
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res, view: "readonly.ejs"});
 })
 
 
 // load the application
 router.get("/portfolioitem", function(req, res) {
     let blocks_xml = req.query.xml;
-    handleSimulatorRequest(blocks_xml, res,"readonly.ejs", true);
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res, view: "readonly.ejs", hidebutton: true});
 })
 
 // load the application with a program from xml
 router.post("/portfolioitem", function(req, res) {
     let blocks_xml = req.body.xml;
-    handleSimulatorRequest(blocks_xml, res, "readonly.ejs", true);
+    handleSimulatorRequest({blocks_xml: blocks_xml, res: res, view: "readonly.ejs", hidebutton: true});
 })
 
 
@@ -127,6 +129,7 @@ router.use("/logging", loggingRouter);
 
 /* Dwenguino microcontroller */   
 import { utilitiesRouter } from "./utilities-router.js"
+import { checkIfUserIsLoggedIn } from '../middleware/authJwt.js';
 router.use("/utilities", utilitiesRouter);
 
 
