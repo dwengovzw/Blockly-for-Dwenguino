@@ -27,7 +27,7 @@ describe(
     }, timeout);
 
 
-    it(runFRToolboxRecordingWithoutErrors, async () => {
+    it("dummy", async () => {
       expect(true).toBe(true); // Assert that there will not be any errors
     })
 
