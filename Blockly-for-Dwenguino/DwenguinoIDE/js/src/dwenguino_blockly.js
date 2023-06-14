@@ -67,16 +67,23 @@ let DwenguinoBlockly = {
             if (e) { 
               // If program has been saved, don't show popup
               if (DwenguinoBlockly.programSavedIntoAccount || DwenguinoBlockly.internalRedirect){
-                e.preventDefault()
-                return
+                // webkit does not handle this event in the same way as firefox.
+                if(navigator.userAgent.indexOf('AppleWebKit') != -1){
+                  e.preventDefault();
+                  return 
+                }
+                const confirmationMessage = "";
+                // Gecko + IE
+                (e || window.event).returnValue = confirmationMessage;
+                return confirmationMessage
               }
-              e.returnValue = DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]) 
+              (e || window.event).returnValue = DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]) 
             }
             return DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]); 
           }
-          window.addEventListener('onbeforeunload', (e) => {
+          /*window.addEventListener('onbeforeunload', (e) => {
             return leavePageCheck(e);   
-          })
+          })*/
           window.addEventListener('beforeunload', (e) => {
             return leavePageCheck(e);   
           })
@@ -1132,15 +1139,16 @@ let DwenguinoBlockly = {
 
         codeViewCheckbox.addEventListener('change', function (event) {
           if (codeViewCheckbox.checked) {
-            if (confirm("Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.")){
+            // Removed notification for now
+            //if (confirm("Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.")){
               DwenguinoBlockly.switchToTextualEditor([{
                 cppCode: Blockly.Arduino.workspaceToCode(DwenguinoBlockly.workspace),
                 filename: "blocks.cpp"
               }])
-            } else {
+            /*} else {
               event.target.checked = false;
               return false;
-            }
+            }*/
           } else {
               DwenguinoBlockly.switchToBlockly()
           }
