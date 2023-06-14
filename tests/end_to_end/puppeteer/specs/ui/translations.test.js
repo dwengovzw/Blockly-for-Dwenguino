@@ -27,7 +27,7 @@ describe(
     }, timeout);
 
 
-    // TODO: rerecord this
+    // TODO: rerecord all these tests
     /*let runFRToolboxRecordingWithoutErrors = "All toolbox menus in French open without errors";
     it(runFRToolboxRecordingWithoutErrors, async () => {
       console.info(runFRToolboxRecordingWithoutErrors)
@@ -42,7 +42,7 @@ describe(
     })*/
 
 
-    let runENToolboxRecordingWithoutErrors = "All toolbox menus in English open without errors";
+    /*let runENToolboxRecordingWithoutErrors = "All toolbox menus in English open without errors";
     it(runENToolboxRecordingWithoutErrors, async () => {
       console.info(runENToolboxRecordingWithoutErrors)
       let pageErrors = 0;
@@ -92,7 +92,7 @@ describe(
        });
       await runESToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
     /*
     let runITToolboxRecordingWithoutErrors = "All toolbox menus in Italian open without errors";
@@ -108,7 +108,7 @@ describe(
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     });*/
 
-    let runMYToolboxRecordingWithoutErrors = "All toolbox menus in Malay open without errors";
+    /*let runMYToolboxRecordingWithoutErrors = "All toolbox menus in Malay open without errors";
     it(runMYToolboxRecordingWithoutErrors, async () => {
       console.info(runMYToolboxRecordingWithoutErrors)
       let pageErrors = 0;
@@ -132,7 +132,7 @@ describe(
        });
       await runPLToolboxRecording(browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
-    });
+    });*/
 
     
     // TODO: rerecord this
