@@ -2,6 +2,9 @@ let runToolboxRecording = async (lang, browser, page) => {
   const timeout = 10000;
   page.setDefaultTimeout(timeout);
 
+  // This offset originates from blockly which automatically generates the id of the element
+  // Because it is impossible to set the toolbox dynamically on the first call, 
+  // we need to add some default items to the toolbox. This offset is equal to the number of default items.
   let toolbox_item_id_offset = 3
   let toolbox_item_id = 0
   const number_of_toolbox_items = 9

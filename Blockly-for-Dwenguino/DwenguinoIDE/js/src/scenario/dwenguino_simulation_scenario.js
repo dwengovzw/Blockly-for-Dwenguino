@@ -16,9 +16,28 @@ class DwenguinoSimulationScenario {
     osc = null;
     name = ""
 
+    stateChangedListeners = [];
+
     constructor(logger, name="") {
         this.logger = logger;
         this.name = name;
+    }
+
+    /**
+     * Add state changed listener, should fire when state that should be saved in the users account changes.
+     * @param {*} listener 
+     */
+    addStateHasChangedListener(listener){
+        this.stateChangedListeners.push(listener);
+    }
+
+    /**
+     * Fire the state changed event to all listeners.
+     */
+    fireStateChangedEvent(){
+        for (let listener of this.stateChangedListeners){
+            listener();
+        }
     }
 
     /**

@@ -39,6 +39,14 @@ class DwenguinoSimulation {
     setCurrentScenario(scenarioName){
         this.simControlsController.setCurrentScenario(scenarioName);
     }
+
+    addStateHasChangedListener(listener){
+        this.simControlsController.addStateHasChangedListener(listener);
+        // For of loop here breaks webpack
+        for (let key of Object.keys(this.scenarios)){
+            this.scenarios[key].addStateHasChangedListener(listener);
+        }
+    }
 }
 
 export default DwenguinoSimulation;

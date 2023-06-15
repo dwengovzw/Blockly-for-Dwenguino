@@ -155,6 +155,12 @@ let DwenguinoBlockly = {
         DwenguinoBlockly.setSavedInLocalStorage(false);
       });
 
+      DwenguinoBlockly.simulationEnvironment.addStateHasChangedListener(() => {
+        DwenguinoBlockly.setSavedInCloud(false);
+        DwenguinoBlockly.setSavedInLocalStorage(false);
+      });
+
+
     //The following code handles the upload of a saved file.
     //If it is run in the browser it shows a modal dialog with two upload options:
     //1) Using the upload button.

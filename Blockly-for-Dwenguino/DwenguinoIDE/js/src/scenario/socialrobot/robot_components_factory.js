@@ -49,6 +49,7 @@ Object.freeze(TypesEnum);
 class RobotComponentsFactory {
   logger = null;
   simulation_container = null;
+  robotConfigurationChangedListeners = [];
  
   /**
    * 
@@ -69,6 +70,28 @@ class RobotComponentsFactory {
       this._numberOfComponentsOfType[t] = 0;
     }
   }
+
+  /**
+   * Add state changed listener, should fire when state that should be saved in the users account changes.
+   * @param {*} listener 
+   */
+  addRobotConfigurationChangedListener(listener){
+    this.robotConfigurationChangedListeners.push(listener);
+  }
+
+  removeRobotConfigurationChangedListeners(){
+    this.robotConfigurationChangedListeners = [];
+  }
+
+  /**
+  * Fire the state changed event to all listeners.
+  */
+  fireRobotConfigurationChanged(){
+    for (let listener of this.robotConfigurationChangedListeners){
+        listener();
+    }
+  }
+
   /***
    * @param { JQuery<HTMLElement> } simulation_container
    */
@@ -109,6 +132,7 @@ class RobotComponentsFactory {
     for(var i = 0; i < this._robot.length; i++){
       this.removeRobotComponentWithTypeAndId(this._robot[i].getType(), this._robot[i].getId());
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -242,7 +266,7 @@ class RobotComponentsFactory {
         this.decrementNumberOf(type);
       }
     }
-
+    this.fireRobotConfigurationChanged();
   }
   
   /**
@@ -295,6 +319,7 @@ class RobotComponentsFactory {
         this.addBuzzer();
         break;
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -346,6 +371,7 @@ class RobotComponentsFactory {
         this.removeBuzzer();
         break;
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -413,6 +439,7 @@ class RobotComponentsFactory {
       case TypesEnum.BUZZER:
         this.addBuzzerFromXml(data);
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**

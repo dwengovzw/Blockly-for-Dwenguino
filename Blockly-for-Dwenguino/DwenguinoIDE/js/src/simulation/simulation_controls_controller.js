@@ -10,6 +10,8 @@ class SimulationControlsController {
 
     logger = null;
 
+    stateChangedListeners = [];
+
     constructor(logger, workspace, scenarios) {
         this.logger = logger;
         this.scenarios = scenarios;
@@ -21,8 +23,17 @@ class SimulationControlsController {
         // Init the ui controls for the debugger and simulator
         // Has to be done before the simlationRunner is initialized
         this.initSimulationControlsUI(scenarios); 
+ 
+    }
 
-        
+    addStateHasChangedListener(listener){
+        this.stateChangedListeners.push(listener);
+    }
+
+    fireStateChangedEvent(){
+        for (let listener of this.stateChangedListeners){
+            listener();
+        }
     }
 
     getCurrentScenario(){
@@ -41,6 +52,7 @@ class SimulationControlsController {
         this.updateProgrammingBlocks();
         this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedScenario, data));
         this.setCurrentScenarioActiveButton(scenarioName)
+        this.fireStateChangedEvent();
     }
 
     setCurrentScenarioActiveButton(scenarioName){
