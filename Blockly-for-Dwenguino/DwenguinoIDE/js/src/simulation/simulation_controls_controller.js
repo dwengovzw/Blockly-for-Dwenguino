@@ -85,7 +85,7 @@ class SimulationControlsController {
             }
         });
 
-        this.updateProgrammingBlocks();
+        //this.updateProgrammingBlocks();
         this.translateSimulatorInterface();
 
         // change speed of simulation
@@ -273,10 +273,18 @@ class SimulationControlsController {
      * The blocks configuration is loaded from a .xml file.
      */
     updateProgrammingBlocks() {
+        /*fetch(DwenguinoBlockly.basepath + "/DwenguinoIDE/levels/" + this.scenarioView + ".xml")
+        .then(response => response.text())
+        .then((data) => {
+            let xml_data = `<xml id="toolbox">${data}</xml>`
+            DwenguinoBlockly.workspace.updateToolbox(xml_data);
+            DwenguinoBlockly.doTranslation()
+        })*/
+        // This code is weird but it is required for the translation to work.
         $("#toolbox").load(DwenguinoBlockly.basepath + "/DwenguinoIDE/levels/" + this.scenarioView + ".xml", function(){
             DwenguinoBlockly.doTranslation();
             DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
-        });
+        })
     }
 
 

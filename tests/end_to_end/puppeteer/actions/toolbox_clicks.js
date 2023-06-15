@@ -1,110 +1,41 @@
-import puppeteer from 'puppeteer'
+let runToolboxRecording = async (lang, browser, page) => {
+  const timeout = 10000;
+  page.setDefaultTimeout(timeout);
 
-let runDEToolboxRecording = async (browser, page) => {
-    const timeout = 10000;
-    page.setDefaultTimeout(timeout);
+  let toolbox_item_id_offset = 3
+  let toolbox_item_id = 0
+  const number_of_toolbox_items = 9
+  const toolbox_separators = [7]
+  let getCurrentToolboxItemSelector = () => {
+    const id = (toolbox_item_id + toolbox_item_id_offset).toString(36)
+    return `#blockly\\:${id} > div.blocklyTreeRow > span.blocklyTreeLabel`
+  }
 
-    {
-        const targetPage = page;
-        await targetPage.setViewport({"width":1440,"height":787})
-    }
-    {
-        const targetPage = page;
-        const promises = [];
-        promises.push(targetPage.waitForNavigation());
-        await targetPage.goto("http://localhost:12032/simulator?lang=de");
-        await Promise.all(promises);
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:f > div.blocklyTreeRow > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 47,
-            y: 11.234375,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:f > div.blocklyTreeRow.blocklyTreeSelected > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 47,
-            y: 11.234375,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:e > div.blocklyTreeRow"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 68,
-            y: 9,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:d > div.blocklyTreeRow > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 48,
-            y: 14.234375,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:f > div.blocklyTreeRow > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 29,
-            y: 6.234375,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:e > div.blocklyTreeRow > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 29,
-            y: 5.234375,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:d > div.blocklyTreeRow > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 33,
-            y: 12.234375,
-          },
-        });
-    }
-    {
-        const targetPage = page;
-        const element = await waitForSelectors([["#blockly\\:c > div.blocklyTreeRow > span.blocklyTreeLabel"]], targetPage, { timeout, visible: true });
-        await scrollIntoViewIfNeeded(element, timeout);
-        await element.click({
-          offset: {
-            x: 37,
-            y: 9.234375,
-          },
-        });
-    }
+  await page.setViewport({"width":1440,"height":787})
 
-    //await browser.close();
+  const promises = [];
+  promises.push(page.waitForNavigation());
+  await page.goto(`http://localhost:12032?lang=${lang}`);
+  const html = await page.content();
+  await Promise.all(promises);
+
+  for (let i = 0; i < number_of_toolbox_items; i++) {
+    if (toolbox_separators.includes(i)) { // skip separators
+      toolbox_item_id += 1
+      continue
+    }
+    for (let click_count = 0; click_count < 2; click_count++) {
+      const element = await waitForSelectors([[getCurrentToolboxItemSelector()]], page, { timeout, visible: true });
+      await scrollIntoViewIfNeeded(element, timeout);
+      await element.click({
+        offset: {
+          x: 7,
+          y: 13.234375,
+        },
+      });
+    }
+    toolbox_item_id += 1
+  }
 
     async function waitForSelectors(selectors, frame, options) {
       for (const selector of selectors) {
@@ -250,4 +181,4 @@ let runDEToolboxRecording = async (browser, page) => {
     }
 }
 
-export { runDEToolboxRecording }
+export { runToolboxRecording }
