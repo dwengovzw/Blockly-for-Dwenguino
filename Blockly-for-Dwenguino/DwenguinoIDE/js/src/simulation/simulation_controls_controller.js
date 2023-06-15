@@ -14,9 +14,7 @@ class SimulationControlsController {
         this.logger = logger;
         this.scenarios = scenarios;
 
-
         // Create a new runner for the environment
-        
         this.simulationRunner = new SimulationRunner(this.logger, workspace);
         this.simulationRunner.setCurrentScenario(this.scenarios[this.scenarioView]);
         
@@ -42,6 +40,12 @@ class SimulationControlsController {
         }
         this.updateProgrammingBlocks();
         this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedScenario, data));
+        this.setCurrentScenarioActiveButton(scenarioName)
+    }
+
+    setCurrentScenarioActiveButton(scenarioName){
+        $(".sim_scenario_btn").removeClass("active");
+        $("#scenario_label_" + scenarioName).addClass("active");
     }
 
     initSimulationControlsUI(scenarios) {
@@ -92,17 +96,7 @@ class SimulationControlsController {
         // Ugly hack..
         let self = this;
         $("input[name=scenario_type]:radio").on("change", (event) => {
-            //self.scenarioView = $(event.currentTarget).val();
             self.setCurrentScenario($(event.currentTarget).val());
-            /*self.translateSimulatorInterface();
-
-            self.handleSimulationStop();
-            self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
-            let data = { 
-                "scenario": self.scenarioView
-            }
-            self.updateProgrammingBlocks();
-            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, data));*/
         });
 
         
@@ -266,23 +260,6 @@ class SimulationControlsController {
             toggleSimulatorPaneView(this, [$("a[href$='#db_code_pane']")], e);
         });
 
-        /*$("ul.tabs").each(function () {
-            // For each set of tabs, we want to keep track of
-            // which tab is active and its associated content
-            var $active, $content, $links = $(this).find('a');
-
-            // If the location.hash matches one of the links, use that as the active tab.
-            // If no match is found, use the first link as the initial active tab.
-            $active = $($links.filter('[href="' + location.hash + '"]')[0] || $links[0]);
-            $active.addClass('active');
-
-            $content = $($active[0].hash);
-
-            // Hide the remaining content
-            $links.not($active).each(function () {
-                $(this.hash).hide();
-            });
-        });*/
 
         //Select the scenario view by default.
         $("a[href$='#db_robot_pane']").trigger("click");
