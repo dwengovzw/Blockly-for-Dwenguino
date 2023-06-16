@@ -15,7 +15,7 @@ class RobotComponent extends AbstractRobotComponent {
 
     rotatable = true
 
-    scaleable = true
+    scaleable = false
 
     initialContainerDimensions = {
         "width": 100,
