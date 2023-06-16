@@ -34,6 +34,16 @@ class BaseSocialRobotServo extends RobotComponent{
             foreground: new Image(),
             background: new Image()
         }
+        this._costumeDimensions = {
+            [CostumesEnum.PLAIN]: [100, 100],
+            [CostumesEnum.PLAIN_ROTATE_90]: [100, 100],
+            [CostumesEnum.EYE]: [75, 75],
+            [CostumesEnum.LEFTHAND]: [149, 149],
+            [CostumesEnum.RIGHTHAND]: [149, 149],
+            [CostumesEnum.HAT]: [200, 200],
+            [CostumesEnum.FLOWER]: [100, 100],
+            [CostumesEnum.CLOCK_HANDLE]: [100, 100]
+        }
         this._costumeImageSources = {
             foreground: {},
             background: {}
@@ -148,6 +158,10 @@ class BaseSocialRobotServo extends RobotComponent{
 
                 this._eventBus.dispatchEvent(EventsEnum.CLEARCANVAS, this.getCanvasId());
                 let newCostume = costumeButton.getAttribute("name");
+                const currentScale = this.getScale();
+                this.setScale(1)
+                this.setInitialDimensions(this._costumeDimensions[newCostume][0], this._costumeDimensions[newCostume][1])
+                
                 switch (newCostume) {
                     case CostumesEnum.PLAIN:
                         this.setHtmlClasses('sim_canvas servo_canvas');
@@ -214,6 +228,7 @@ class BaseSocialRobotServo extends RobotComponent{
                         this.setY(0);
                         break;
                     }
+                    this.setScale(currentScale);
 
                 document.getElementById(this.getCanvasId()).className = "";
                 document.getElementById(this.getCanvasId()).className = this.getHtmlClasses();

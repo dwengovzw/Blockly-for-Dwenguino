@@ -15,6 +15,13 @@ class RobotComponent extends AbstractRobotComponent {
 
     rotatable = true
 
+    scaleable = true
+
+    initialContainerDimensions = {
+        "width": 100,
+        "height": 100
+    }
+
     constructor(simulation_container=null) {
         super(simulation_container);
         BindMethods(this);
@@ -39,6 +46,7 @@ class RobotComponent extends AbstractRobotComponent {
         this._canvasId = canvasId;
         this._stateUpdated = false;
         this._rotation = 0;
+        this._scale = 1;
         this.insertHtml();
         this.toggleVisibility(visible);
     }
@@ -54,6 +62,7 @@ class RobotComponent extends AbstractRobotComponent {
         let offsetLeft = parseFloat(xml.getAttribute('OffsetLeft'));
         let offsetTop = parseFloat(xml.getAttribute('OffsetTop'));
         this._rotation = parseFloat(xml.getAttribute('Rotation'));
+        this._scale = parseFloat(xml.getAttribute('Scale'));
         this._offset = {
             "left": offsetLeft,
             "top": offsetTop
@@ -157,6 +166,7 @@ class RobotComponent extends AbstractRobotComponent {
         data = data.concat(" Width='", this.getWidth().toString(), "'");
         data = data.concat(" Height='", this.getHeight().toString(), "'");
         data = data.concat("Rotation='", this.getRotation().toString(), "'");
+        data = data.concat(" Scale='", this.getScale().toString(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
@@ -225,6 +235,9 @@ class RobotComponent extends AbstractRobotComponent {
         if (this.rotatable){
             this.createRotationOptionsInModalDialog()
         }
+        if (this.scaleable){
+            this.createScaleOptionsInModalDialog()
+        }
     }
 
     createRotationOptionsInModalDialog(){
@@ -244,6 +257,25 @@ class RobotComponent extends AbstractRobotComponent {
             $('#rotationSliderValue').html(newRotation  + '°');
             this._eventBus.dispatchEvent(EventsEnum.SAVE);
         });        
+    }
+
+    createScaleOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsScale" class="ui-widget row mb-4">');
+        $('#componentOptionsScale').append('<div class="col-md-2">' + DwenguinoBlocklyLanguageSettings.translate(["scale"])+'</div>');
+        $('#componentOptionsScale').append('<div id="scale" class="col-md-10"></div>');
+
+        // Add a slider to the modal dialog to change the scale of the component
+        $('#scale').append('<div id="scaleSlider" class="col-md-10"></div>');
+        $('#scaleSlider').append('<input id="scaleSliderInput" type="range" step="0.1" min="0.5" max="1.5" value="' + this.getScale() + '" class="slider" id="myRange">');
+        $('#scaleSlider').append('<span id="scaleSliderValue" class="col-md-2">' + this.getScale() + 'x </span>');
+
+        // capture change events from the scale slider and update the component scale
+        $('#scaleSliderInput').on('input', () => {
+            let newScale = $('#scaleSliderInput').val();
+            this.setScale(newScale);
+            $('#scaleSliderValue').html('x' + newScale);
+            this._eventBus.dispatchEvent(EventsEnum.SAVE);
+        });
     }
 
     //pinName: digitalPin & analogPin -> keys in the pins object
@@ -367,10 +399,30 @@ class RobotComponent extends AbstractRobotComponent {
     setRotation(rotation) {
         if (this.drawingCanvas && this.getRotation() != rotation){
             this.drawingCanvas.get(0).style.rotate = rotation + "deg";
-            //this.drawingCanvas.css("transform", "rotate:" + -1*this.getRotation() + "deg)");
-            //this.drawingCanvas.css("transform", "rotate:" + rotation + "deg)");
         }
         this._rotation = rotation;
+    }
+
+    getScale() {
+        return this._scale;
+    }
+
+    setScale(scale) {
+        if (scale >= 0.5 && scale <= 1.5){
+            if (this.drawingCanvas && this.getScale() != scale){
+                //this.drawingCanvas.get(0).style.scale = scale;
+                this.drawingCanvas.get(0).style.width = this.initialContainerDimensions.width * scale + "px";
+                this.drawingCanvas.get(0).style.height = this.initialContainerDimensions.height * scale + "px";
+            }
+            this._scale = scale;
+        }
+    }
+
+    setInitialDimensions(width, height){
+        this.initialContainerDimensions.width = width;
+        this.initialContainerDimensions.height = height;
+        this.drawingCanvas.get(0).style.width = width * this.getScale() + "px";
+        this.drawingCanvas.get(0).style.height = height * this.getScale() + "px";
     }
 
     getCanvasId() {

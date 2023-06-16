@@ -255,6 +255,7 @@ var MSG = {
   randomNumberBetween: "Willekeurig getal tussen %1 en %2",
   randomNumberBetweenTooltip: "Geeft een willekeurig getal tussen de twee opgegeven grenzen inclusief de ondergrens en exclusief de bovengrens.",
   rotation: "Rotatie",
+  scale: "Schaal",
 };
 
 MSG.cookieConsent = {
