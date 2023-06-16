@@ -9,6 +9,12 @@ class RobotComponent extends AbstractRobotComponent {
 
     compontent_container = null
 
+    drawingCanvas = null
+
+    possibleRotations = [0, 90, -90, 180]
+
+    rotatable = true
+
     constructor(simulation_container=null) {
         super(simulation_container);
         BindMethods(this);
@@ -32,6 +38,7 @@ class RobotComponent extends AbstractRobotComponent {
         this._image.src = imgSource;
         this._canvasId = canvasId;
         this._stateUpdated = false;
+        this._rotation = 0;
         this.insertHtml();
         this.toggleVisibility(visible);
     }
@@ -46,6 +53,7 @@ class RobotComponent extends AbstractRobotComponent {
         this._height = parseFloat(xml.getAttribute('Height'));
         let offsetLeft = parseFloat(xml.getAttribute('OffsetLeft'));
         let offsetTop = parseFloat(xml.getAttribute('OffsetTop'));
+        this._rotation = parseFloat(xml.getAttribute('Rotation'));
         this._offset = {
             "left": offsetLeft,
             "top": offsetTop
@@ -86,6 +94,7 @@ class RobotComponent extends AbstractRobotComponent {
             pinsTranslationKey = "pins";
         }
         let componentTitleElement = $("#component_title_" + this.getType() + "_" + this.getId());
+        componentTitleElement.attr("class", "component_title")
         componentTitleElement.html(connectedPinNames);
         document.getSelection().removeAllRanges();
     }
@@ -104,7 +113,9 @@ class RobotComponent extends AbstractRobotComponent {
             )
         this.component_container.attr("data-x", this.getOffset()['left']);
         this.component_container.attr("data-y", this.getOffset()['top']);
-        this.component_container.append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+        this.drawingCanvas = $("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+        this.setRotation(this.getRotation());
+        this.component_container.append(this.drawingCanvas);
         this.simulation_container.append(this.component_container);
 
         if (this.component_container){
@@ -122,59 +133,17 @@ class RobotComponent extends AbstractRobotComponent {
         }
         this.setComponentName()
 
-        /*$('#sim_container').append("<div id='sim_" + this.getType() + this.getId() 
-            + "' class='sim_element sim_element_" 
-            + this.getType() 
-            + " draggable'><div>" 
-            + "<span id='component_title_" + this.getType() + "_" + this.getId() + "'>"
-            + "</span>"
-            + "</div></div>");
-        // First add the element at position 0, 0
-        $('#sim_' + this.getType() + this.getId()).css('top', 0 + 'px');
-        $('#sim_' + this.getType() + this.getId()).css('left', 0 + 'px');
-        // Now move the element according to its offset by using css transform
-        $('#sim_' + this.getType() + this.getId()).css(
-            'transform',
-            "translate(" + this.getOffset()['left'] + "px, " +  this.getOffset()['top'] + "px)"
-            )
-        // add the offset to the data-x and data-y attributes to let the draggable system know where the element is now
-        $('#sim_' + this.getType() + this.getId()).attr("data-x", this.getOffset()['left']);
-        $('#sim_' + this.getType() + this.getId()).attr("data-y", this.getOffset()['top']);
-        $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
-    
-        let simSensor = document.getElementById('sim_'+this.getType() + this.getId());
-
-        if (simSensor){
-            simSensor.addEventListener('mouseup', (event) => {
-                let offset = {
-                    "left": event.currentTarget.getAttribute("data-x"),
-                    "top": event.currentTarget.getAttribute("data-y")
-                    };
-                this.setOffset(offset);
-            })
-    
-            simSensor.addEventListener('dblclick', () => { 
-                this.createComponentOptionsModalDialog(optionsLabel);
-                this.showDialog();
-            });
-        }
-       
-
-        this.setComponentName();*/
     }
 
     removeHtml() {
         this.component_container.remove();
-        //$('#sim_' + this.getType() + this.getId()).remove();
     }
 
     toggleVisibility(visible) {
         if (visible) {
             this.component_container.css('visibility', 'visible');
-            //$('#sim_' + this.getType() + this.getId()).css('visibility', 'visible');
         } else {
             this.component_container.css('visibility', 'hidden');
-            //$('#sim_' + this.getType() + this.getId()).css('visibility', 'hidden');
         }
     }
 
@@ -187,6 +156,7 @@ class RobotComponent extends AbstractRobotComponent {
         data = data.concat(" Id='", this.getId().toString(), "'");
         data = data.concat(" Width='", this.getWidth().toString(), "'");
         data = data.concat(" Height='", this.getHeight().toString(), "'");
+        data = data.concat("Rotation='", this.getRotation().toString(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
@@ -252,8 +222,28 @@ class RobotComponent extends AbstractRobotComponent {
         for (let key in this.getPins()){
             this.createPinOptionsInModalDialog(key);
         }
-        
+        if (this.rotatable){
+            this.createRotationOptionsInModalDialog()
+        }
+    }
 
+    createRotationOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsRotation" class="ui-widget row mb-4">');
+        $('#componentOptionsRotation').append('<div class="col-md-2">' + DwenguinoBlocklyLanguageSettings.translate(["rotation"])+'</div>');
+        $('#componentOptionsRotation').append('<div id="rotation" class="col-md-10"></div>');
+
+        // Add a slider to the modal dialog to change the rotation of the component
+        $('#rotation').append('<div id="rotationSlider" class="col-md-10"></div>');
+        $('#rotationSlider').append('<input id="rotationSliderInput" type="range" step="45" min="0" max="360" value="' + this.getRotation() + '" class="slider" id="myRange">');
+        $('#rotationSlider').append('<span id="rotationSliderValue" class="col-md-2">' + this.getRotation() + '° </span>');
+
+        // capture change events from the rotation slider and update the component rotation
+        $('#rotationSliderInput').on('input', () => {
+            let newRotation = $('#rotationSliderInput').val();
+            this.setRotation(newRotation);
+            $('#rotationSliderValue').html(newRotation  + '°');
+            this._eventBus.dispatchEvent(EventsEnum.SAVE);
+        });        
     }
 
     //pinName: digitalPin & analogPin -> keys in the pins object
@@ -368,6 +358,19 @@ class RobotComponent extends AbstractRobotComponent {
 
     isStateUpdated() {
         return this._stateUpdated;
+    }
+
+    getRotation() {
+        return this._rotation;
+    }
+
+    setRotation(rotation) {
+        if (this.drawingCanvas && this.getRotation() != rotation){
+            this.drawingCanvas.get(0).style.rotate = rotation + "deg";
+            //this.drawingCanvas.css("transform", "rotate:" + -1*this.getRotation() + "deg)");
+            //this.drawingCanvas.css("transform", "rotate:" + rotation + "deg)");
+        }
+        this._rotation = rotation;
     }
 
     getCanvasId() {

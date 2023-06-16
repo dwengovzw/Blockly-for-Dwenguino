@@ -970,6 +970,21 @@ background-color: #ffffff;
     padding-bottom: 5px;
 }
 
+.component_title {
+    position: absolute;
+    margin-top: -1.5rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+/* RGB led needs more space to show pins*/
+.sim_element_rgbled > div > span.component_title{
+    margin-top: -4rem;
+}
+
+.sim_element_sonar > div > span.component_title{
+    margin-top: -3rem;
+}
+
 .sim_element{
     color: transparent;
     position: absolute;
@@ -981,57 +996,11 @@ background-color: #ffffff;
     text-transform: uppercase;
 }
 
-.sim_element_led{
-    width: 65px;
-    height: 30px;
-}
-
-.sim_element_rgbled{
-    width: 90px;
-    height: 30px;
-}
-
-
-.sim_element_button{
-    width: 90px;
-    height: 75px;
-}
-
-.sim_element_ledmatrixsegment{
-    width: 110px;
-    height: 100px;
-}
-
-.sim_element_servo{
-    width: 100px;
-    height:150px;
-    top: 5px;
-    left: 5px;
-}
-
-.sim_element_touch{
-    width:140px;
-    height: 60px;
-}
-
-.sim_element_pir{
-    width:120px;
-    height: 60px;
-}
-
-.sim_element_sonar{
-    width: 100px;
-    height: 58px;
-}
-
-.sim_element_sound{
-    width:130px;
-    height: 60px;
-}
-
-.sim_element_light{
-    width:120px;
-    height: 60px;
+.sim_element > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .pir_button {
@@ -1103,36 +1072,42 @@ background-color: #ffffff;
     color: #FFFFFF;
 }
 .servo_canvas{
-    margin-left: 25px;
-    margin-top: 0px;
     width: 100px;
-    height: 120px;
+    height: 100px;
+}
+.servo_canvas.rotate_90_canvas {
+    width: 100px;
+    height: 100px;
 }
 .servo_canvas.hat_canvas {
-    width: 400px;
-    height: 400px;
+    width: 200px;
+    height: 200px;
+}
+.servo_canvas.eye_canvas {
+    width: 75px;
+    height: 75px;
 }
 .continuous_servo_canvas{
-    margin-left: 25px;
-    margin-top: 0px;
     width: 100px;
-    height: 120px;
+    height: 100px;
 }
 
-.hand_canvas{
-    margin-left: 0px;
-    margin-top: 0px;
-    width: 160px;
-    height: 200px;
+.servo_canvas.hand_canvas{
+    height: 149px;
+    width: 149px;
 }
 
 .pir_canvas{
-    width: 100px;
-    height: 80px;
-    margin-top: 10px;
+    width: 73px;
+    height: 68px;
 }
 
 .button_canvas{
+    width: 50px;
+    height:50px;
+}
+
+.buzzer_canvas{
     width: 50px;
     height:50px;
 }
@@ -1148,39 +1123,33 @@ background-color: #ffffff;
 }
 
 .touch_canvas{
-    margin-left: 25px;
     width: 60px;
     height: 60px;
 }
 
 .led_canvas{
-    margin-left: 25px;
     width: 40px;
     height: 40px;
 }
 
 .rgbled_canvas{
-    margin-left: 25px;
     width: 40px;
-    height: 30px;
+    height: 40px;
 }
 
 .sonar_canvas{
     width: 100px;
-    height: 58px;
+    height: 100px;
 }
 
 .sound_canvas{
-    margin-left: 25px;
     width: 100px;
-    height: 60px;
-    margin-top: 10px;
+    height: 100px;
 }
 
 .light_canvas{
     width: 100px;
-    height: 60px;
-    margin-top: 10px;
+    height: 100px;
 }
 
 .ledmatrix_canvas{
@@ -1189,8 +1158,8 @@ background-color: #ffffff;
 }
 
 .ledmatrixsegment_canvas{
-    width: 100px;
-    height: 100px;
+    width: 85px;
+    height: 70px;
 }
 
 .costumeButton:active,
@@ -1384,34 +1353,15 @@ cursor: pointer;
     background-image: url("../img/board/button_pushed.png");
 }
 
+.draggable {
+    border: solid transparent 2px;
+}
 
 .draggable:hover {
     font-weight: bold;
     color: #000000;
+    border: dashed gray 2px;
   }
-
-span.grippy {
-    content: '....';
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    overflow: hidden;
-    line-height: 5px;
-    padding: 3px 4px;
-    cursor: move;
-    vertical-align: middle;
-    margin-top: -.7em;
-    margin-right: .3em;
-    font-size: 0.85rem;
-    font-family: sans-serif;
-    letter-spacing: 2px;
-    color: #cccccc;
-    text-shadow: 1px 0 1px black;
-}
-
-span.grippy::after {
-    content: '.. .. .. ..';
-}
 
 .option_button_disabled {
     background-color: darkgrey;

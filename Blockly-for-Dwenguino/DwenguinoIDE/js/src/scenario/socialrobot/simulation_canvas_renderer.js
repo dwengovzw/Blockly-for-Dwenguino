@@ -606,16 +606,17 @@ class SimulationCanvasRenderer {
      */
     drawSonar(sonar, canvas){
         if (canvas.getContext) {
-
+            const imageX = (canvas.width / 2) - sonar.getWidth() / 2;
+            const imageY = (canvas.height / 2) - sonar.getHeight() / 2;
             // in case the image isn't loaded yet.
             var self = this;
             sonar.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(sonar.getImage(),0,0,sonar.getWidth(), sonar.getHeight()); 
+                ctx.drawImage(sonar.getImage(),imageX,imageY,sonar.getWidth(), sonar.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(sonar.getImage(),0,0,sonar.getWidth(),sonar.getHeight());
+            ctx.drawImage(sonar.getImage(),imageX,imageY,sonar.getWidth(),sonar.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         }
@@ -876,16 +877,17 @@ class SimulationCanvasRenderer {
      */
     drawSoundSensor(soundSensor, canvas){
         if (canvas.getContext) {
-
+            const imageX = (canvas.width / 2) - soundSensor.getWidth() / 2;
+            const imageY = (canvas.height / 2) - soundSensor.getHeight() / 2;
             // in case the image isn't loaded yet.
             var self = this;
             soundSensor.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight()); 
+                ctx.drawImage(soundSensor.getImage(),imageX,imageY,soundSensor.getWidth(),soundSensor.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight());
+            ctx.drawImage(soundSensor.getImage(),imageX,imageY,soundSensor.getWidth(),soundSensor.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         } 
@@ -904,6 +906,8 @@ class SimulationCanvasRenderer {
         }
     }
 
+
+
     /**
      * Draw a pir sensor on the given canvas with the image specified in robot.
      * @param {SocialRobotLightSensor} lightSensor 
@@ -911,16 +915,17 @@ class SimulationCanvasRenderer {
      */
     drawLightSensor(lightSensor, canvas){
         if (canvas.getContext) {
-
+            const imageX = (canvas.width / 2) - lightSensor.getWidth() / 2;
+            const imageY = (canvas.height / 2) - lightSensor.getHeight() / 2;
             // in case the image isn't loaded yet.
             var self = this;
             lightSensor.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(lightSensor.getImage(),0,0,lightSensor.getWidth(),lightSensor.getHeight()); 
+                ctx.drawImage(lightSensor.getImage(),imageX,imageY,lightSensor.getWidth(),lightSensor.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(lightSensor.getImage(),0,0,lightSensor.getWidth(),lightSensor.getHeight());
+            ctx.drawImage(lightSensor.getImage(),imageX,imageY,lightSensor.getWidth(),lightSensor.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         } 
@@ -950,7 +955,7 @@ class SimulationCanvasRenderer {
      * to avoid blurry drawings.
      * @param {HTMLCanvasElement} canvas 
      */
-    configureCanvasDimensions(canvas){
+    async configureCanvasDimensions(canvas){
 
         var dpr = window.devicePixelRatio || 1;
         // Get the size of the canvas in CSS pixels.

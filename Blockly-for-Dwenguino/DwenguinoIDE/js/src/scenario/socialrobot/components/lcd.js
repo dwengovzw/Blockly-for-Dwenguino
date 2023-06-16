@@ -27,7 +27,7 @@ class SocialRobotLcd extends AbstractRobotComponent{
 
     insertHtml(){
         const component_container = $("<div>").attr("id", "sim_lcd" + this.getId()).addClass("sim_element sim_element_lcd draggable").css('top', this.getOffset()['top'] + 'px').css('left', this.getOffset()['left'] + 'px');
-        component_container.append("<div><span class='grippy'></span>"+ DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() +"</div>");
+        component_container.append("<div>"+ DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() +"</div>");
         const lcd_container = $("<div>").attr("id", "sim_element_lcd_img");
         component_container.append(lcd_container);
         lcd_container.append('<div class="lcd" id="sim_lcd_row0"></div>');

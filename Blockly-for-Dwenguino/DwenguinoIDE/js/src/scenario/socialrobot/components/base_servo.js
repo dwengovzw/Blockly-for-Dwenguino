@@ -7,7 +7,7 @@ export { BaseSocialRobotServo, CostumesEnum}
 
 const CostumesEnum = {
     PLAIN: 'plain', 
-    PLAIN_ROTATE_90: 'plainrotate90',
+    //PLAIN_ROTATE_90: 'plainrotate90',
     EYE: 'eye', 
     //MOUTH: 'mouth',
     RIGHTHAND: 'righthand',
@@ -158,18 +158,18 @@ class BaseSocialRobotServo extends RobotComponent{
                         this.setY(0);
                         break;
                     case CostumesEnum.PLAIN_ROTATE_90:
-                        this.setHtmlClasses('sim_canvas servo_canvas');
+                        this.setHtmlClasses('sim_canvas rotate_90_canvas');
                         this.setCostume(newCostume);
                         this.setWidth(100);
                         this.setHeight(100);
                         this.setX(0);
-                        this.setY(15);
+                        this.setY(0);
                         break;
                     case CostumesEnum.EYE:
-                        this.setHtmlClasses('servo_canvas');
+                        this.setHtmlClasses('servo_canvas eye_canvas');  
                         this.setCostume(newCostume);
-                        this.setWidth(35);
-                        this.setHeight(35);
+                        this.setWidth(75);
+                        this.setHeight(75);
                         this.setX(0);
                         this.setY(0);
                         break;

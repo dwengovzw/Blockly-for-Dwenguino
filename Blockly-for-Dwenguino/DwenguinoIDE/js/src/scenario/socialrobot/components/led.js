@@ -28,6 +28,7 @@ class SocialRobotLed extends RobotComponent{
         BindMethods(this);
         this._imageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/led.png`;
         this._borderColor = "#000000";  // Default border color = black
+        this.rotatable = false;
     }
 
     initComponent(onColor, offColor, eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses) {

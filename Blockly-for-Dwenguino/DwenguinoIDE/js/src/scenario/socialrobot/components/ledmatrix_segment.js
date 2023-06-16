@@ -93,7 +93,7 @@ class SocialRobotLedMatrixSegment extends AbstractRobotComponent{
 
     insertHtml(){
         this.component_container = $("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'></div>")
-        this.component_container.append($("<div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div>"))
+        this.component_container.append($("<div></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div>"))
         this.component_container.css('top', this.getOffset()['top'] + 'px');
         this.component_container.css('left', this.getOffset()['left'] + 'px');
         this.component_container.append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");

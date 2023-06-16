@@ -244,6 +244,7 @@ var MSG_FALLBACK = {
   unsavedChangesInCloud: "There are unsaved changes in the cloud. Click the save button to save your changes.",
   randomNumberBetween: "Random number from %1 to %2",
   randomNumberBetweenTooltip: "Generate a random number between the two specified limits including the first limit but excluding the second limit.",
+  rotation: "Rotation",
 };
 
 MSG_FALLBACK.cookieConsent = {

@@ -254,6 +254,7 @@ var MSG = {
   unsavedChangesInCloud: "Er zijn wijzigingen die nog niet opgeslagen zijn in je account.",
   randomNumberBetween: "Willekeurig getal tussen %1 en %2",
   randomNumberBetweenTooltip: "Geeft een willekeurig getal tussen de twee opgegeven grenzen inclusief de ondergrens en exclusief de bovengrens.",
+  rotation: "Rotatie",
 };
 
 MSG.cookieConsent = {
