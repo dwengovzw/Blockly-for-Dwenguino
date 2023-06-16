@@ -975,6 +975,14 @@ background-color: #ffffff;
     margin-top: -1.5rem;
     margin-right: auto;
     margin-left: auto;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome, Edge, Opera and Firefox */
+      
 }
 /* RGB led needs more space to show pins*/
 .sim_element_rgbled > div > span.component_title{
