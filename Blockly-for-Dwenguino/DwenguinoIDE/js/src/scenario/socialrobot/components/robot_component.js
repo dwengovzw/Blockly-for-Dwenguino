@@ -165,7 +165,7 @@ class RobotComponent extends AbstractRobotComponent {
         data = data.concat(" Id='", this.getId().toString(), "'");
         data = data.concat(" Width='", this.getWidth().toString(), "'");
         data = data.concat(" Height='", this.getHeight().toString(), "'");
-        data = data.concat("Rotation='", this.getRotation().toString(), "'");
+        data = data.concat(" Rotation='", this.getRotation().toString(), "'");
         data = data.concat(" Scale='", this.getScale().toString(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();

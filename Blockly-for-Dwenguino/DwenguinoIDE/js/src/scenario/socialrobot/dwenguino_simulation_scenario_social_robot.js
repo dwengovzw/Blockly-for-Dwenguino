@@ -35,7 +35,8 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     // Event listener for saving the robot scenario to local storage
     this._eventBus = new EventBus();
     this._eventBus.registerEvent(EventsEnum.SAVE);
-    //this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.saveRobot()}); // This is now done using the global state
+    this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.saveRobot()});
+    this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.fireStateChangedEvent()}); // This is now done using the global state
 
     this.simulationRobotComponents = new DwenguinoSimulationDraggable(this, this._eventBus);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
@@ -127,7 +128,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     this.setSensorOptions(simulationContainer);
 
     // Load robot components from local storage if they are present
-    //this.loadRobot(); // Stop using local storage, use account storage instead
+    this.loadRobot();
 
   }
 
@@ -424,6 +425,11 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     // Remove existing components
     this.robotComponentsFactory.removeAllSocialRobotComponents();
+    //this.robotComponentsFactory.getRobot().forEach(component => {
+    //  this.simulationComponentsMenu.removeRobotComponent(component.getId())
+    //});t
+    this.simulationComponentsMenu.resetButtons()
+    this.clearRobot();
 
     var childCount = data.childNodes.length;
     for (var i = 0; i < childCount; i++) {
@@ -440,6 +446,53 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
       }
     }
     this.fireStateChangedEvent()
+    this.saveRobot();
+  }
+
+   /**********************
+   *  LOCAL STORAGE     *
+   **********************/
+  /**
+   * Converts the robot to xml and saves it into the local storage of the browser
+   * @param {boolean} permanent 
+   * @param {string} uniqeIdentifier 
+   */
+  saveRobot(permanent = false, uniqeIdentifier = ""){
+    let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c saving robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      let robotXml = this.robotToXml();
+      localStorage.setItem(storageKey, robotXml)
+    }
+  }
+  /**
+   * Check the local storage if an item exists and load the xml
+   * @param {boolean} permanent 
+   * @param {string} uniqeIdentifier 
+   */
+  loadRobot(permanent = false, uniqeIdentifier = ""){
+    let storageKey = permanent ? "permanentDwenguinoSocialRobot" + uniqeIdentifier : "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c loading robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      let robotXml = localStorage.getItem(storageKey);
+      if (robotXml){
+        this.xmlToRobot(robotXml);
+      }
+    }
+  }
+  /**
+   * Removes the localstorage entry for the robot
+   * @param {string} uniqeIdentifier 
+   */
+  clearRobot(uniqeIdentifier = ""){
+    let storageKey = "dwenguinoSocialRobot" + uniqeIdentifier;
+    console.log("%c clearing robot", "color: green");
+    let localStorage = window.localStorage;
+    if (localStorage) {
+      localStorage.removeItem(storageKey);
+    }
   }
 
 }

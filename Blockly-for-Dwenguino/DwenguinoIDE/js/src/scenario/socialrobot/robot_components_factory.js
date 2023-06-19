@@ -129,8 +129,9 @@ class RobotComponentsFactory {
    * Remove all social robot components from the scenario.
    */
   removeAllSocialRobotComponents(){
-    for(var i = 0; i < this._robot.length; i++){
-      this.removeRobotComponentWithTypeAndId(this._robot[i].getType(), this._robot[i].getId());
+    let rbCopy = this._robot.slice();
+    for(var i = 0; i < rbCopy.length; i++){
+      this.removeRobotComponentWithTypeAndId(rbCopy[i].getType(), rbCopy[i].getId());
     }
     this.fireRobotConfigurationChanged();
   }
@@ -260,12 +261,15 @@ class RobotComponentsFactory {
     //component.reset();
     component.removeHtml();
 
+    let remainingComponents = []
     for(let i = 0; i < this._robot.length; i++){
       if(this._robot[i].getType() == type && this._robot[i].getId() == id){
-        this._robot.splice(i, 1);
         this.decrementNumberOf(type);
+      } else {
+        remainingComponents.push(this._robot[i]);
       }
     }
+    this._robot = remainingComponents;
     this.fireRobotConfigurationChanged();
   }
   

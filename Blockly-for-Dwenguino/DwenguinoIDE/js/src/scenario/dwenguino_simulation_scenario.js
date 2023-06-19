@@ -18,6 +18,8 @@ class DwenguinoSimulationScenario {
 
     stateChangedListeners = [];
 
+    editorState = null;
+
     constructor(logger, name="") {
         this.logger = logger;
         this.name = name;
@@ -106,6 +108,14 @@ class DwenguinoSimulationScenario {
      */
     resetScenario(){
 
+    }
+
+    /**
+     * Set the editor state
+     * @param {Object} editorState
+     */
+    setEditorState(editorState){
+        this.editorState = editorState;
     }
 
 }
