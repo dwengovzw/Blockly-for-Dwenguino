@@ -397,7 +397,7 @@ class RobotComponent extends AbstractRobotComponent {
     }
 
     setRotation(rotation) {
-        if (this.drawingCanvas && this.getRotation() != rotation){
+        if (this.drawingCanvas){
             this.drawingCanvas.get(0).style.rotate = rotation + "deg";
         }
         this._rotation = rotation;
