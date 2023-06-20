@@ -551,8 +551,8 @@ background-color: #ffffff;
     position: absolute;
 }
 
-#sim_lcd_row1{
-  margin-top: 10%;
+#sim_lcd_row0{
+    margin-top: 16px;
 }
 
 #sim_lights {
@@ -1059,25 +1059,28 @@ background-color: #ffffff;
     height: 80px;
 }
 
-#sim_element_lcd_img{
+.sim_element > #sim_element_lcd_img{
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     background-image: url("../img/socialrobot/lcd.jpg");
     background-size: contain;
     background-repeat: no-repeat;
+    justify-content: flex-start;
+    position: relative;
 }
 
 .lcd{
-    height: 46%;
     width: 100%;
-    padding: 10%;
     font-size: 69.5%;
     font-family: "Lucida Console", Courier, monospace;
     text-transform: none;
     letter-spacing: 2px;
     word-spacing: 4px;
-    position: absolute;
     color: #FFFFFF;
+    display: flex;
+    justify-content: center;
 }
 .servo_canvas{
     width: 100px;
