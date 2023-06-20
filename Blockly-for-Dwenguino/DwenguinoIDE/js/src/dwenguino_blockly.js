@@ -53,9 +53,9 @@ let DwenguinoBlockly = {
     setInterval(() => {
       // Save program to cloud every 5 seconds if it has not been saved yet.
       if ((!DwenguinoBlockly.programSavedIntoAccount && globalSettings.savedProgramUUID) || (!DwenguinoBlockly.programSavedIntoLocalstorage && !globalSettings.savedProgramUUID)) {
-        setTimeout(() => {
+        //setTimeout(() => {
           DwenguinoBlockly.saveStateHandler(false);
-        });
+        //});
       }
     }, 5000);
 
@@ -118,13 +118,7 @@ let DwenguinoBlockly = {
     var self = this;
 
     this.cookiesInformation = new CookiesInformation();
-    DwenguinoBlockly.displayCookieConsent();
-
-    // Create new simulationenvironment
-    this.simulationEnvironment = new DwenguinoSimulation(
-      this.logger,
-      this.workspace
-    ); // This is weird, workspace should be created in a different place..
+    DwenguinoBlockly.displayCookieConsent();   
 
     //Restore recording after language change
     DwenguinoBlockly.recording = window.sessionStorage.loadOnceRecording || "";
@@ -146,16 +140,11 @@ let DwenguinoBlockly = {
     });
 
     //turn on the simulator by default
-    DwenguinoBlockly.toggleSimulator();
+    //DwenguinoBlockly.toggleSimulator();
 
     DwenguinoBlockly.textualEditor
       .getEditorPane()
       .addOnHasBecomeUnsavedEventListener(() => {
-        DwenguinoBlockly.setSavedInCloud(false);
-        DwenguinoBlockly.setSavedInLocalStorage(false);
-      });
-
-      DwenguinoBlockly.simulationEnvironment.addStateHasChangedListener(() => {
         DwenguinoBlockly.setSavedInCloud(false);
         DwenguinoBlockly.setSavedInLocalStorage(false);
       });
@@ -370,7 +359,25 @@ let DwenguinoBlockly = {
       }
     });
 
+    
+
+    // Create new simulationenvironment
+    this.simulationEnvironment = new DwenguinoSimulation(
+      this.logger,
+      this.workspace
+    ); // This is weird, workspace should be created in a different place..
+
+    // Load any stored state.
     DwenguinoBlockly.loadStateHandler();
+
+    // Listen for changes in the simulator state and log them.
+    DwenguinoBlockly.simulationEnvironment.addStateHasChangedListener(() => {
+      DwenguinoBlockly.setSavedInCloud(false);
+      DwenguinoBlockly.setSavedInLocalStorage(false);
+    });
+
+    //turn on the simulator by default
+   // DwenguinoBlockly.toggleSimulator();
   },
   setSavedInLocalStorage: function (saved) {
     DwenguinoBlockly.programSavedIntoLocalstorage = saved;
@@ -455,6 +462,7 @@ let DwenguinoBlockly = {
     let view = DwenguinoBlockly.currentProgrammingContext;
     let scenario =
       DwenguinoBlockly.simulationEnvironment.getCurrentScenario().name;
+      console.log(`saveStateHandler: ${scenario}`);
     let blocklyXml = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace)
     );
@@ -598,6 +606,7 @@ let DwenguinoBlockly = {
   },
 
   loadStateHandler: function () {
+    console.log("LoadStateHandler");
     // If the user is logged in and has loaded a previously saved program, load it from the cloud.
     if (DwenguinoBlockly.isUserLoggedIn() &&  globalSettings.savedProgramUUID !== "") {
       DwenguinoBlockly.loadStateFromAccount();
