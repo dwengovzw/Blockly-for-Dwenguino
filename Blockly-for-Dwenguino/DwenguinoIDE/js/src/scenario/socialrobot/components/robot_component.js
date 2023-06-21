@@ -139,6 +139,20 @@ class RobotComponent extends AbstractRobotComponent {
                 this.createComponentOptionsModalDialog(optionsLabel);
                 this.showDialog();
             });
+            // Detect double tap
+            this.component_container.on("touchstart", (event) => {
+                if (!this.lastTouchStart) {
+                    this.lastTouchStart = event.timeStamp;
+                    return;
+                }
+                let delta = event.timeStamp - this.lastTouchStart;
+                if (delta < 500 && delta > 0) {
+                    event.preventDefault();
+                    this.createComponentOptionsModalDialog(optionsLabel);
+                    this.showDialog();
+                }
+                this.lastTouchStart = event.timeStamp;
+            })
         }
         this.setComponentName()
 

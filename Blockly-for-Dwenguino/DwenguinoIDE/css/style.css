@@ -551,7 +551,11 @@ background-color: #ffffff;
     position: absolute;
 }
 
-#sim_lcd_row0{
+#sim_lcds > #sim_lcd_row1 {
+    margin-top: 24px;
+}
+
+#sim_element_lcd_img > #sim_lcd_row0{
     margin-top: 16px;
 }
 

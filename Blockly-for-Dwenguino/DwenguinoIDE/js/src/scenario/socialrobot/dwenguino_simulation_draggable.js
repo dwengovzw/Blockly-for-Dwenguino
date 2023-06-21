@@ -64,38 +64,6 @@ class DwenguinoSimulationDraggable {
     })
   }
 
-  // dragMoveListener(event) {
-  //   var target = event.target
-  //   // keep the dragged position in the data-x/data-y attributes
-  //   var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-  //   var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-  //   console.log(event.rect.top, event.rect.left, event.rect.width, event.rect.height);
-
-  //   let xInParent = event.clientX0 - event.currentTarget.parentElement.getBoundingClientRect().left + event.dx;
-  //   let yInParent = event.clientY0 - event.currentTarget.parentElement.getBoundingClientRect().top + event.dy;
-
-  //   console.log(`x: ${xInParent}, y: ${yInParent}`);
-
-  //   const parentWidth = event.currentTarget.parentElement.getBoundingClientRect().width;
-  //   const parentHeight = event.currentTarget.parentElement.getBoundingClientRect().height;
-  
-  //   //console.log(`left: ${x/parentWidth*100}%, top: ${y/parentHeight*100}%`);
-
-  //   // translate the element
-  //   /*target.style.webkitTransform =
-  //     target.style.transform =
-  //       'translate(' + x/parentWidth*100 + '%, ' + y/parentHeight*100 + '%)'*/
-
-  //   target.style.left = event.rect.left - event.currentTarget.parentElement.getBoundingClientRect().left + 'px'
-  //   target.style.top = event.rect.top - event.currentTarget.parentElement.getBoundingClientRect().top + 'px'
-  
-  //   // update the posiion attributes
-  //   target.setAttribute('data-x', x)
-  //   target.setAttribute('data-y', y)
-  // }
-
-
   dragMoveListener(event) {
     var target = event.target
     // keep the dragged position in the data-x/data-y attributes
@@ -103,8 +71,6 @@ class DwenguinoSimulationDraggable {
     const parentHeight = event.currentTarget.parentElement.getBoundingClientRect().height;
     var x = (event.rect.left - event.currentTarget.parentElement.getBoundingClientRect().left)/parentWidth*100
     var y = (event.rect.top - event.currentTarget.parentElement.getBoundingClientRect().top)/parentHeight*100
-
-    console.log(`x: ${x}%, y: ${y}%`);
   
     target.style.left = x + '%'
     target.style.top = y + '%'
