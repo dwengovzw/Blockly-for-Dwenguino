@@ -58,6 +58,8 @@ class SimulationControlsController {
     setCurrentScenarioActiveButton(scenarioName){
         $(".sim_scenario_btn").removeClass("active");
         $("#scenario_label_" + scenarioName).addClass("active");
+        $(".sim_scenario_radio").removeAttr("checked");
+        $("#sim_scenario_" + scenarioName).attr("checked", "checked")
     }
 
     initSimulationControlsUI(scenarios) {

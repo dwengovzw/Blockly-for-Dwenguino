@@ -1313,7 +1313,7 @@ let DwenguinoBlockly = {
         .openTab(codeInfo.cppCode, codeInfo.filename);
     });
   },
-  switchToBlockly({saveState = true}) {
+  switchToBlockly({saveState}) {
     DwenguinoBlockly.currentProgrammingContext = "blocks";
     document.getElementById("blocklyDiv").style.visibility = "visible";
     document.getElementById("db_code_pane").style.visibility = "hidden";
@@ -1375,7 +1375,7 @@ let DwenguinoBlockly = {
           },
         ]});
       } else {
-        DwenguinoBlockly.switchToBlockly();
+        DwenguinoBlockly.switchToBlockly({saveState: true});
       }
     });
   },
