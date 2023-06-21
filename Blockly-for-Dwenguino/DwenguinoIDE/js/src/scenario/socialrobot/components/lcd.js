@@ -74,7 +74,7 @@ class SocialRobotLcd extends AbstractRobotComponent{
     }
 
     reset(){
-        
+        this.setState("", "")
     }
 
     toggleVisibility(visible){
