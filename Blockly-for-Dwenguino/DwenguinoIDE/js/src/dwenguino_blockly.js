@@ -95,7 +95,7 @@ let DwenguinoBlockly = {
      * If local installation is running, generate binary locally.
      * Otherwise generate binary on the server.
      */
-    $.ajax({
+   /* $.ajax({
       url: `${settings.hostname}/utilities/getEnvironment`,
       dataType: "text",
       type: "get",
@@ -107,7 +107,7 @@ let DwenguinoBlockly = {
           settings.hostname + "/utilities/getDwenguinoBinary";
         console.log(errorThrown);
       },
-    });
+    });*/
 
     this.workspace = workspace;
 
@@ -172,11 +172,11 @@ let DwenguinoBlockly = {
               .getEditorPane()
               .openTab(result.content, result.filename);
           } else {
-            console.log("Error uploading file");
+            console.error("Error uploading file");
           }
         },
         (err) => {
-          console.log(err);
+          console.error(err);
         }
       );
     });
@@ -375,15 +375,12 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.setSavedInCloud(false);
       DwenguinoBlockly.setSavedInLocalStorage(false);
     });
-
-    //turn on the simulator by default
-   // DwenguinoBlockly.toggleSimulator();
   },
   setSavedInLocalStorage: function (saved) {
     DwenguinoBlockly.programSavedIntoLocalstorage = saved;
   },
   setSavedInCloud: function (saved) {
-    console.log(`Saved in cloud: ${saved}}`);
+    console.info(`Saved in cloud: ${saved}}`);
     DwenguinoBlockly.programSavedIntoAccount = saved;
     if (saved) {
       $("#db_menu_saved_notification").html(`<span 
@@ -462,7 +459,6 @@ let DwenguinoBlockly = {
     let view = DwenguinoBlockly.currentProgrammingContext;
     let scenario =
       DwenguinoBlockly.simulationEnvironment.getCurrentScenario().name;
-      console.log(`saveStateHandler: ${scenario}`);
     let blocklyXml = Blockly.Xml.domToText(
       Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace)
     );
@@ -554,8 +550,6 @@ let DwenguinoBlockly = {
 
   loadStateFromAccount: async function () {
     // Abstract this away into a function that sets the environment state based on the data in globalSettings
-    console.log("EDITOR STATE:--------------------------");
-    console.log(globalSettings.editorState);
     if (globalSettings.editorState) {
       DwenguinoBlockly.loadState(globalSettings.editorState);
     } else {
@@ -581,16 +575,16 @@ let DwenguinoBlockly = {
     let xml = Blockly.Xml.textToDom(state.blocklyXml);
     DwenguinoBlockly.restoreFromXml(xml);
     if (state.view === "blocks") {
-      DwenguinoBlockly.switchToBlockly();
+      DwenguinoBlockly.switchToBlockly({saveState: false});
       DwenguinoBlockly.setTextualCodeToggle(false);
       DwenguinoBlockly.setOpenTextualEditorTabs(
         state.cppCode || []
       );
     } else if (state.view === "text") {
-      DwenguinoBlockly.switchToTextualEditor(
-        state.cppCode,
-        true
-      );
+      DwenguinoBlockly.switchToTextualEditor({
+        openTabsCode: state.cppCode,
+        closeCurrentTabs: true
+      });
       DwenguinoBlockly.setTextualCodeToggle(true);
     }
     if (state.scenario) {
@@ -606,7 +600,6 @@ let DwenguinoBlockly = {
   },
 
   loadStateHandler: function () {
-    console.log("LoadStateHandler");
     // If the user is logged in and has loaded a previously saved program, load it from the cloud.
     if (DwenguinoBlockly.isUserLoggedIn() &&  globalSettings.savedProgramUUID !== "") {
       DwenguinoBlockly.loadStateFromAccount();
@@ -667,10 +660,10 @@ let DwenguinoBlockly = {
     var newStateArray = [];
     if (this.simButtonStateClicked) {
       newStateArray = ["100%", "off", false];
-      DwenguinoBlockly.simulationEnvironment.stop();
+      DwenguinoBlockly.simulationEnvironment ? DwenguinoBlockly.simulationEnvironment.stop() : null;
     } else {
       newStateArray = ["50%", "on", true];
-      DwenguinoBlockly.simulationEnvironment.open();
+      //DwenguinoBlockly.simulationEnvironment.open();
     }
     $("#db_blockly").width(newStateArray[0]);
     this.simButtonStateClicked = newStateArray[2];
@@ -778,7 +771,7 @@ let DwenguinoBlockly = {
         },
       });
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
   },
 
@@ -1039,7 +1032,7 @@ let DwenguinoBlockly = {
     };
 
     var createVariableCallback = function (btn) {
-      console.log("Creating new variable");
+      //console.log("Creating new variable");
     };
 
     workspace.registerButtonCallback(
@@ -1132,9 +1125,11 @@ let DwenguinoBlockly = {
       url: settings.hostname + "/lang",
       data: JSON.stringify(data),
     })
-      .done(function (data) {})
+      .done(function (data) {
+        console.info(data)
+      })
       .fail(function (response, status) {
-        console.log(status, response);
+        console.error(status, response);
       });
 
     // Sort languages alphabetically.
@@ -1268,7 +1263,7 @@ let DwenguinoBlockly = {
     try {
       var xmlDom = Blockly.Xml.textToDom(xml);
     } catch (e) {
-      console.log("invalid xml");
+      console.error("invalid xml");
       return;
     }
     Blockly.Xml.domToWorkspace(xmlDom, DwenguinoBlockly.workspace);
@@ -1296,7 +1291,7 @@ let DwenguinoBlockly = {
   },
 
   // TODO add param for code to load
-  switchToTextualEditor(openTabsCode = [], closeCurrentTabs = false) {
+  switchToTextualEditor({openTabsCode = [], closeCurrentTabs = false}) {
     // Turn off simulator
     if (DwenguinoBlockly.simulatorState !== "off") {
       DwenguinoBlockly.toggleSimulator();
@@ -1318,7 +1313,7 @@ let DwenguinoBlockly = {
         .openTab(codeInfo.cppCode, codeInfo.filename);
     });
   },
-  switchToBlockly() {
+  switchToBlockly({saveState = true}) {
     DwenguinoBlockly.currentProgrammingContext = "blocks";
     document.getElementById("blocklyDiv").style.visibility = "visible";
     document.getElementById("db_code_pane").style.visibility = "hidden";
@@ -1328,7 +1323,9 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.toggleSimulator();
       $("#db_menu_item_simulator").css("pointer-events", "auto");
     }
-    DwenguinoBlockly.saveState();
+    if (saveState){
+      DwenguinoBlockly.saveState();
+    }
   },
   isUserLoggedIn() {
     return globalSettings.loggedIn === "true"
@@ -1368,18 +1365,15 @@ let DwenguinoBlockly = {
       if (codeViewCheckbox.checked) {
         // Removed notification for now
         //if (confirm("Opgepast! Wanneer je naar tekstuele code overstapt dan kan je je programma niet meer simuleren in de browser. Je kan de code dan enkel nog uitvoeren op het Dwenguino bord.")){
-        DwenguinoBlockly.switchToTextualEditor([
+        DwenguinoBlockly.switchToTextualEditor({
+          openTabsCode: [
           {
             cppCode: Blockly.Arduino.workspaceToCode(
               DwenguinoBlockly.workspace
             ),
             filename: "blocks.cpp",
           },
-        ]);
-        /*} else {
-              event.target.checked = false;
-              return false;
-            }*/
+        ]});
       } else {
         DwenguinoBlockly.switchToBlockly();
       }
