@@ -561,7 +561,7 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.loadState(JSON.parse(window.localStorage.editorState));
     } else {
       DwenguinoBlockly.loadState({
-        blocklyXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="{qm%,~{T;Qd1nDUTjZWn" x="10" y="10"/></xml>',
+        blocklyXml: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="{qm%,~{T;Qd1nDUTjZWn" x="100" y="100"/></xml>',
         name: "",
         uuid: "",
         view: "blocks",
