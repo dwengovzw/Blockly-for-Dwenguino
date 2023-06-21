@@ -114,12 +114,12 @@ class RobotComponent extends AbstractRobotComponent {
         + this.getType() 
         + " draggable'></div>")
         this.component_container.append("<div><span id='component_title_" + this.getType() + "_" + this.getId() + "'></span></div>");
-        this.component_container.css('top', 0 + 'px');
-        this.component_container.css('left', 0 + 'px');
-        this.component_container.css(
+        this.component_container.css('top', this.getOffset()['top'] + '%');
+        this.component_container.css('left', this.getOffset()['left'] + '%');
+        /*this.component_container.css(
             'transform',
             "translate(" + this.getOffset()['left'] + "px, " +  this.getOffset()['top'] + "px)"
-            )
+            )*/
         this.component_container.attr("data-x", this.getOffset()['left']);
         this.component_container.attr("data-y", this.getOffset()['top']);
         this.drawingCanvas = $("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");

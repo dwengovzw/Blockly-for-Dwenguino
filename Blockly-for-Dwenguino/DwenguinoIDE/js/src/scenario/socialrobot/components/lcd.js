@@ -26,7 +26,7 @@ class SocialRobotLcd extends AbstractRobotComponent{
     }
 
     insertHtml(){
-        const component_container = $("<div>").attr("id", "sim_lcd" + this.getId()).addClass("sim_element sim_element_lcd draggable").css('top', this.getOffset()['top'] + 'px').css('left', this.getOffset()['left'] + 'px');
+        const component_container = $("<div>").attr("id", "sim_lcd" + this.getId()).addClass("sim_element sim_element_lcd draggable").css('top', this.getOffset()['top'] + '%').css('left', this.getOffset()['left'] + '%');
         component_container.append("<div>"+ DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() +"</div>");
         const lcd_container = $("<div>").attr("id", "sim_element_lcd_img");
         component_container.append(lcd_container);
@@ -56,12 +56,12 @@ class SocialRobotLcd extends AbstractRobotComponent{
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
+            data = data.concat(" OffsetLeft='", parseFloat($(simId).attr('data-x')), "'");
         } else {
             data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
         }
         if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
+            data = data.concat(" OffsetTop='", parseFloat($(simId).attr('data-y')), "'");
         } else {
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }

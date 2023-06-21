@@ -94,8 +94,8 @@ class SocialRobotLedMatrixSegment extends AbstractRobotComponent{
     insertHtml(){
         this.component_container = $("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'></div>")
         this.component_container.append($("<div></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div>"))
-        this.component_container.css('top', this.getOffset()['top'] + 'px');
-        this.component_container.css('left', this.getOffset()['left'] + 'px');
+        this.component_container.css('top', this.getOffset()['top'] + '%');
+        this.component_container.css('left', this.getOffset()['left'] + '%');
         this.component_container.append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
 
         this.simulation_container.append(this.component_container);
@@ -131,12 +131,12 @@ class SocialRobotLedMatrixSegment extends AbstractRobotComponent{
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
+            data = data.concat(" OffsetLeft='", parseFloat($(simId).attr('data-x')), "'");
         } else {
             data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
         }
         if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
+            data = data.concat(" OffsetTop='", parseFloat($(simId).attr('data-y')), "'");
         } else {
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }

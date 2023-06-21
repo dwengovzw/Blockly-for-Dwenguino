@@ -726,11 +726,13 @@ background-color: #ffffff;
     margin: 0;
     top: 0;
     left: 0;
+    justify-content: center;
 }
 
 #sim_background_img {
     /*height: inherit;
     width: min-content;*/
+    background-position: center center;
     height:100%;
     margin-left: 10px;
 }
