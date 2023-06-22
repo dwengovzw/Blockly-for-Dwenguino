@@ -143,13 +143,14 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     var scenarioOptions = $("<div>").attr("id", "scenario_options");
     simulation_container.append(scenarioOptions);
-    const load_scenario = $("<div>").attr("id", "load_scenario").attr("alt", "Load");
+
+    const load_scenario = $("<div>").attr("id", "load_scenario").attr("alt", "Load").attr("class", "social_robot_scenario_settings_button");
     load_scenario.append("<span class='fas fa-cloud-upload-alt'></span>");
     scenarioOptions.append(load_scenario);
-    const save_scenario = $("<div>").attr("id", "save_scenario").attr("alt", "Save");
+    const save_scenario = $("<div>").attr("id", "save_scenario").attr("alt", "Save").attr("class", "social_robot_scenario_settings_button");
     save_scenario.append("<span class='fas fa-cloud-download-alt'></span>");
     scenarioOptions.append(save_scenario);
-    const switch_background = $("<div>").attr("id", "switch_background").attr("alt", "Switch background");
+    const switch_background = $("<div>").attr("id", "switch_background").attr("alt", "Switch background").attr("class", "social_robot_scenario_settings_button");
     switch_background.append("<span class='fas fa-sync-alt'></span>");
     scenarioOptions.append(switch_background)
 
@@ -166,6 +167,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     switch_background.click(function () {
       self.switchBackground();
     });
+
   }
 
   /**

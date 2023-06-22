@@ -88,7 +88,7 @@ class Dashboard extends connect(store)(LitElement) {
                 return true
             }, 
             render: ({uuid}) => html`<dwengo-saved-programs-list
-                    .savedPrograms=${this.globalState.savedStates.states}>
+                    .savedPrograms=${structuredClone(this.globalState.savedStates.states)}>
                 </dwengo-saved-programs-list>`
         },
         {

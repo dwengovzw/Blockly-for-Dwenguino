@@ -118,6 +118,17 @@ class DwenguinoSimulationScenario {
         this.editorState = editorState;
     }
 
+    /**
+     * Request create audio context.
+     */
+    initAudioContext(){
+        try {
+            this.audiocontext = new AudioContext();
+        } catch (e) {
+            console.log('Web Audio API is not supported in this browser');
+        }
+    }
+
 }
 
 export default DwenguinoSimulationScenario;

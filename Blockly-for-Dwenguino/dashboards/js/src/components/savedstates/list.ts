@@ -63,7 +63,23 @@ class SavedProgramsList extends connect(store)(LitElement){
                 path="name"
                 >
             </vaadin-grid-sort-column>
-            <vaadin-grid-sort-column flex-grow="0" header="${msg("Saved at")}" path="savedAt" auto-width></vaadin-grid-sort-column>
+            <vaadin-grid-sort-column 
+                flex-grow="0" 
+                header="${msg("Saved at")}" 
+                auto-width
+                ${columnBodyRenderer(
+                    (savedProgram: SavedStateInfo) => html`
+                        ${new Date(Date.parse(savedProgram.savedAt)).toLocaleDateString(undefined, {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: 'numeric',
+                            minute: 'numeric'
+                        })}
+                    `,
+                    []
+                )}
+            ></vaadin-grid-sort-column>
             <vaadin-grid-column
             frozen-to-end
             auto-width
@@ -99,10 +115,17 @@ class SavedProgramsList extends connect(store)(LitElement){
     static styles?: CSSResultGroup = css`
         mwc-button {
             --mdc-theme-primary: var(--theme-accentFillSelected);
-            min-width: 50px;
+            min-width: 40px;
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
         }
         vaadin-grid::part(even-row) {
             background-color: var(--theme-neutralFillRest);
+        }
+
+        vaadin-grid-cell-content {
+            display: flex;
         }
     `
 

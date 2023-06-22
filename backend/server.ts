@@ -136,14 +136,18 @@ app.use("/user", userRouter);
 // Use saved program routes
 app.use("/savedstates", savedProgramsRouter)
 
-// Use classgroup routes
-app.use("/classgroup", classGroupRouter)
+// Disable these routes for next release
+if (process.env.NODE_ENV === 'development') {
+    
+    // Use classgroup routes
+    app.use("/classgroup", classGroupRouter)
 
-// Use assignment group routes
-app.use("/assignment", assignmentGroupRouter)
+    // Use assignment group routes
+    app.use("/assignment", assignmentGroupRouter)
 
-// Use assignment group routes
-app.use("/portfolio", portfolioRouter)
+    // Use assignment group routes
+    app.use("/portfolio", portfolioRouter)
+}
 
 
 // Add default route

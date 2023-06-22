@@ -9,7 +9,7 @@ interface SavedStateInfo {
     blocklyXml: string,
     cppCode: string[],
     socialRobotXml: string,
-    savedAt: Date,
+    savedAt: string,
     name: string,
     view: string,
     scenario: string
@@ -46,6 +46,12 @@ export const savedProgramsSlice = createSlice({
         },
         setPrograms: (state, action) => {
             state.states = action.payload
+            // state.states = action.payload.map((savedProgram:any) => {
+            //     return {
+            //     ...savedProgram,
+            //     savedAt: new Date(Date.parse(savedProgram.savedAt))
+            //     }
+            // })
         }
     }
 })

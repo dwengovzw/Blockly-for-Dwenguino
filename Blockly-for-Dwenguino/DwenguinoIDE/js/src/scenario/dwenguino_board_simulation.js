@@ -8,7 +8,6 @@ import DwenguinoSimulationScenario from "./dwenguino_simulation_scenario.js"
  */
 class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     inputsState = null;
-    audioStarted = false;
     muted = true;
     prevFreq = 0;
     boardDisplayWidth = "80%";
@@ -74,13 +73,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         this.rightSimComponentsPosition = position;
     }
 
-    initAudioContext(){
-        try {
-            this.audiocontext = new AudioContext();
-        } catch (e) {
-            console.log('Web Audio API is not supported in this browser');
-        }
-    }
+    
 
     initSimulationState(boardState){
         this.updateScenarioState(boardState);
