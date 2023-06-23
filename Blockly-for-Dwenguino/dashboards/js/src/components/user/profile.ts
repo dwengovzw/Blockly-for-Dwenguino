@@ -55,25 +55,6 @@ class Profile extends connect(store)(LitElement) {
                 <div><vaadin-text-field @change=${(e) => this.userInfo.lastname = e.target.value } outlined label="${msg("Lastname")}" type="text" value="${this.userInfo?.lastname}"></vaadin-text-field></div>
                 <div><vaadin-email-field @change=${(e) => this.userInfo.email = e.target.value } outlined label="${msg("Email")}" type="email" value="${this.userInfo?.email}"></vaadin-email-field></div>
                 <div><vaadin-date-picker @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" value="${this.userInfo?.birthdate ? `${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}`: ""}"></vaadin-date-picker></div>
-                <div class="checkbox-container ${this.checkboxFocussed ? "highlightborder" : ""}">
-                    <span class="checkbox-label ${this.checkboxFocussed ? "highlightlabel" : ""}">${msg('My roles')}</span>
-                    <mwc-formfield label="${msg("Student")}">
-                        <mwc-checkbox 
-                            @change=${(e) => e.target.checked ? this.addRole("student") : this.removeRole("student") } 
-                            @focusout=${(e)=>{this.checkboxFocussed = false}} 
-                            @focus=${(e)=>{this.checkboxFocussed = true}}
-                            ?checked=${this.userInfo.roles.includes("student")}
-                            disabled="true"></mwc-checkbox>
-                    </mwc-formfield>
-                    <mwc-formfield label="${msg("Teacher")}">
-                        <mwc-checkbox 
-                            @change=${(e) => e.target.checked ? this.addRole("teacher") : this.removeRole("teacher") } 
-                            @focusout=${(e)=>{this.checkboxFocussed = false}} 
-                            @focus=${(e)=>{this.checkboxFocussed = true}} 
-                            ?checked=${this.userInfo.roles.includes("teacher")}
-                            disabled="true"></mwc-checkbox>
-                    </mwc-formfield>
-                </div>
                 <div><mwc-textfield outlined label="${msg("You are logged in with")}" type="text" disabled="true" value= "${this.userInfo?.platform}"></mwc-textfield></div>
                 <mwc-button @click=${this.handleSave} raised>${msg("Save")}</mwc-button>
             </div>

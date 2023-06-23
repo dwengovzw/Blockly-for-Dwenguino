@@ -57,7 +57,7 @@ class SavedProgramsList extends connect(store)(LitElement){
         <vaadin-grid .items="${this.savedPrograms}">
             <vaadin-grid-sort-column
                 frozen
-                header="${msg("Filename")}"
+                header="${msg("Project name")}"
                 auto-width
                 flex-grow="1"
                 path="name"
