@@ -91,6 +91,9 @@ let DwenguinoBlockly = {
       return leavePageCheck(e);
     });
 
+
+    DwenguinoBlockly.compilationPath = settings.hostname + "/utilities/getDwenguinoBinary";
+
     /**
      * If local installation is running, generate binary locally.
      * Otherwise generate binary on the server.
