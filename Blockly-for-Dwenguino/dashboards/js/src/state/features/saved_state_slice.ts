@@ -79,8 +79,14 @@ const deleteSavedState = (uuid: string) => {
     }, null, msg("Error deleting saved program"))
 }
 
+const updateSavedStateName = (savedState: SavedStateInfo) => {
+    return createRequestMiddleware(`${globalSettings.hostname}/savedstates/updateName`, "PUT", (dispatch: any, getState: any, json: any) => {
+        dispatch(getAllSavedStates())
+    }, savedState, msg("Error updating saved program"))
+}
+
 const { addProgram, setPrograms } = savedProgramsSlice.actions
 
 const savedStatesReducer = savedProgramsSlice.reducer
 
-export { savedStatesReducer, getAllSavedStates, SavedStateInfo, deleteSavedState }
+export { savedStatesReducer, getAllSavedStates, updateSavedStateName, SavedStateInfo, deleteSavedState }

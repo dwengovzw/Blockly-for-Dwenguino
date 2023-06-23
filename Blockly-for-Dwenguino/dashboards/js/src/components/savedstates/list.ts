@@ -4,11 +4,12 @@ import { Router } from "@lit-labs/router"
 import { store } from  "../../state/store"
 import { connect } from "pwa-helpers"
 import { msg } from '@lit/localize';
-import { SavedStateInfo, getAllSavedStates, deleteSavedState } from "../../state/features/saved_state_slice"
+import { SavedStateInfo, getAllSavedStates, deleteSavedState, updateSavedStateName } from "../../state/features/saved_state_slice"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 
 import '@vaadin/button';
 import '@vaadin/grid';
+import '@vaadin/text-field';
 import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import "@material/mwc-button"
 import '@vaadin/grid/vaadin-grid-sort-column.js';
@@ -55,14 +56,29 @@ class SavedProgramsList extends connect(store)(LitElement){
         ${getGoogleMateriaIconsLinkTag()}
         <h1>${msg("Your saved projects")}<h1>
         <vaadin-grid .items="${this.savedPrograms}">
-            <vaadin-grid-sort-column
-                frozen
-                header="${msg("Project name")}"
+            <vaadin-grid-sort-column 
+                flex-grow="1" 
+                header="${msg("Project name")}" 
                 auto-width
-                flex-grow="1"
-                path="name"
-                >
-            </vaadin-grid-sort-column>
+                ${columnBodyRenderer(
+                    (savedProgram: SavedStateInfo) => html`
+                    <vaadin-text-field 
+                        class="edit_on_focus" 
+                        value="${savedProgram.name}" 
+                        min-length="1"
+                        @value-changed=${(e)=>{
+                            savedProgram.name = e.detail.value
+                        }}
+                        @focusout=${(e)=>{
+                            store.dispatch(updateSavedStateName(savedProgram))
+                        }}>
+                    </vaadin-text-field>
+                    `,
+                    []
+                )}
+            ></vaadin-grid-sort-column>
+
+
             <vaadin-grid-sort-column 
                 flex-grow="0" 
                 header="${msg("Saved at")}" 
@@ -122,6 +138,16 @@ class SavedProgramsList extends connect(store)(LitElement){
         }
         vaadin-grid::part(even-row) {
             background-color: var(--theme-neutralFillRest);
+        }
+
+        vaadin-text-field::part(input-field) {
+            border: none;
+            background-color: transparent;
+        }
+
+        vaadin-text-field[focused]::part(input-field) {
+            border-radius: var(--vaadin-input-field-border-radius, 0px);
+            background-color: var(--lumo-contrast-10pct);
         }
 
         vaadin-grid-cell-content {

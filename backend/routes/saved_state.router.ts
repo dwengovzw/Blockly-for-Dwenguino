@@ -24,4 +24,8 @@ savedProgramsRouter.get("/open", [verifyTokenAjax, verifyUserExists], (req, res)
     saveProgramController.open(req, res)
 })
 
+savedProgramsRouter.put("/updateName", [verifyTokenAjax, verifyUserExists], (req, res) => {
+    saveProgramController.updateName(req, res)
+})
+
 export default savedProgramsRouter

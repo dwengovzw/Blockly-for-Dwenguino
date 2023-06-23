@@ -52,6 +52,22 @@ class SavedStateController {
         }
     }
 
+    async updateName(req, res){
+        let reqData = req.body
+        try {
+            await SavedState.findOneAndUpdate({
+                uuid: req.body.uuid,
+                user: req.user._id
+            }, {
+                name: reqData.name
+            })
+            return res.status(200).send({message: "Saved program"})
+        } catch (err){
+            return res.status(500).send({message: "Unable to retrieve user"})
+        }
+    }
+
+
     async delete(req, res) {
         try {
             let user = req.user as IUserDoc
