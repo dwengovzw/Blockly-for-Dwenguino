@@ -44,6 +44,8 @@ let DwenguinoBlockly = {
   programSavedIntoLocalstorage: true,
   internalRedirect: false,
 
+  resaveInProgress: false,
+
   initDwenguinoBlockly: function (workspace) {
     if (DwenguinoBlockly.isUserLoggedIn()) {
       DwenguinoBlockly.setSavedInCloud(true);
@@ -93,24 +95,6 @@ let DwenguinoBlockly = {
 
 
     DwenguinoBlockly.compilationPath = settings.hostname + "/utilities/getDwenguinoBinary";
-
-    /**
-     * If local installation is running, generate binary locally.
-     * Otherwise generate binary on the server.
-     */
-   /* $.ajax({
-      url: `${settings.hostname}/utilities/getEnvironment`,
-      dataType: "text",
-      type: "get",
-      success: function (data, textStatus, jQxhr) {
-        DwenguinoBlockly.compilationPath = `${settings.hostname}/utilities/getDwenguinoBinary`;
-      },
-      error: function (jqXhr, textStatus, errorThrown) {
-        DwenguinoBlockly.compilationPath =
-          settings.hostname + "/utilities/getDwenguinoBinary";
-        console.log(errorThrown);
-      },
-    });*/
 
     this.workspace = workspace;
 
@@ -509,6 +493,23 @@ let DwenguinoBlockly = {
         headers: { "Content-Type": "application/json" },
         body: serializedState,
       });
+      // If the program has been deleted from the cloud, save it again?
+      if (result.status == 204){
+        if (DwenguinoBlockly.resaveInProgress){
+          return
+        } 
+        DwenguinoBlockly.resaveInProgress = true;
+        let result = confirm(DwenguinoBlocklyLanguageSettings.translate(["saveProjectNoLongerExists"]))
+        if (result){
+          let state = JSON.parse(serializedState);
+          state.uuid = "";
+          serializedState = JSON.stringify(state);
+          await DwenguinoBlockly.saveStateIntoAccount(serializedState, notify);
+          DwenguinoBlockly.resaveInProgress = false;
+          return;
+        }
+      }
+      // Saved successfully
       if (result.status == 200) {
         DwenguinoBlockly.setSavedInCloud(true);
         DwenguinoBlockly.setSavedInLocalStorage(false);
@@ -522,6 +523,7 @@ let DwenguinoBlockly = {
             DwenguinoBlocklyLanguageSettings.translate(["confirmProjectSaved"])
           );
         }
+      // Saved state did not exist yet, redirect to project url
       } else if (result.status === 302) {
         window.localStorage.removeItem("editorState"); // Saved into account now, so remove from local storage.
         let response = await result.json();
@@ -540,6 +542,15 @@ let DwenguinoBlockly = {
         }
       }
     } catch (e) {
+      DwenguinoBlockly.showNotificationModal(
+        DwenguinoBlocklyLanguageSettings.translate([
+          "saveProjectToProfileFailedTitle",
+        ]),
+        DwenguinoBlocklyLanguageSettings.translate([
+          "saveProjectToProfileFailed",
+        ])
+      );
+      console.log(e);
     } finally {
       $("#saveToProfileModal .modal-body #filename").val("");
     }

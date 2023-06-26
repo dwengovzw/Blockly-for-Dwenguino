@@ -13,6 +13,7 @@ var MSG_FALLBACK = {
   saveProjectToProfileFailedTitle: "Saving failed",
   confirmProjectSaved: "Your project has been saved to your profile.",
   confirmProjectSavedTitle: "Saved to profile",
+  saveProjectNoLongerExists: "This project no longer exists in your account. Did you delete it? Do you want to resave this project into your account?",
   toggleSimulator: "Toggle simulator view.",
   compileAndDownload: "Compile and download the code to transfer it to the Dwenguino.",
   compileEmptyProgram: "Download an empty program.",

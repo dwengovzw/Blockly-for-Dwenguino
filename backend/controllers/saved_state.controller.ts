@@ -29,6 +29,9 @@ class SavedStateController {
                     savedAt: new Date(),
                     //name: reqData.name //TODO: Add field to frontend to change current name
                 })
+                if (!prog){
+                    return res.status(204).send({message: "Saved program not found"})
+                }
                 return res.status(200).send({message: "Saved program"})
             } else {
                 prog = new SavedState({

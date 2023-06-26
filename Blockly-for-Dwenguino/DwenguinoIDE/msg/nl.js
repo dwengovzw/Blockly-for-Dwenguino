@@ -15,6 +15,7 @@ var MSG = {
   saveProjectToProfileFailedTitle: "Opslaan mislukt",
   confirmProjectSaved: "Je project is opgeslagen.",
   confirmProjectSavedTitle: "Opgeslagen",
+  saveProjectNoLongerExists: "Het opslaan van het project is mislukt. Het project bestaat niet meer in je account. Wil je het project opnieuw opslaan in je account?",
   toggleSimulator: "Open of sluit het simulatorvenster.",
   compileAndDownload: "Compileer en download je code om het over te zetten naar de Dwenguino",
   compileEmptyProgram: "Download een leeg programma.",
