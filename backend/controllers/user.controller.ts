@@ -21,7 +21,8 @@ class UserController {
                     email: user.email,
                     birthdate: user.birthdate,
                     roles: user.roles,
-                    platform: user.platform
+                    platform: user.platform,
+                    acceptedTerms: user.acceptedTerms,
                 }
                 return res.status(200).json(userInfo)
             } catch (err){
@@ -47,6 +48,7 @@ class UserController {
                 user.email = info.email
                 user.firstname = info.firstname
                 user.lastname = info.lastname
+                user.acceptedTerms = info.acceptedTerms
                 if (info.birthdate){
                     user.birthdate = new Date(info.birthdate)
                 }
@@ -58,7 +60,8 @@ class UserController {
                     email: user.email,
                     birthdate: user.birthdate,
                     roles: user.roles,
-                    platform: user.platform
+                    platform: user.platform,
+                    acceptedTerms: user.acceptedTerms,
                 }
                 await user.save();
                 return res.status(200).json(userInfo)

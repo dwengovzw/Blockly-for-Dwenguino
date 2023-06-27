@@ -16,6 +16,7 @@ import "./components/classes/student_classes"
 import "./components/savedstates/list"
 import "./components/portfolios/list"
 import "./components/portfolios/container"
+import "./components/util/accept_terms"
 
 // Polyfill URLPattern
 import {URLPattern} from "urlpattern-polyfill";
@@ -117,6 +118,7 @@ class Dashboard extends connect(store)(LitElement) {
     protected render() {
         console.log(this.globalState.notification);
         return html`<dwengo-notify .notificationState=${this.globalState.notification}></dwengo-notify>
+                    ${this.globalState.user.loggedIn && !this.globalState.user.acceptedTerms ? html`<dwengo-accept-terms .userInfo=${this.globalState.user}></dwengo-accept-terms>` : html``}
                     <dwengo-menu 
                         .userInfo=${this.globalState.user}
                         .loading=${this.globalState.notification.loading}

@@ -20,6 +20,7 @@ interface IUserShared {
     birthdate?: Date,
     schoolId?: String,
     grade?: String,
+    acceptedTerms?: boolean,
 }
 
 // only for data associated with the user that is only used in the frontend: nothing for now..
@@ -74,7 +75,12 @@ const UserSchemaFields: Record<keyof IUser, any> =
         }
     ],
     schoolId: String,
-    grade: String
+    grade: String,
+    acceptedTerms: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 }
 const UserSchema = new mongoose.Schema<IUser>(UserSchemaFields)
 const User = mongoose.model<IUser>('User', UserSchema)

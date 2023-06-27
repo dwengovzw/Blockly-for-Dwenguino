@@ -64,7 +64,7 @@ const getAllAssignmentGroups = (classGroupUUID: string) => {
                                     firstname: student.firstname,
                                     lastname: student.lastname,
                                     uuid: student.uuid,
-
+                                    acceptedTerms: student.acceptedTerms
                                 }
                                 return s
                             })

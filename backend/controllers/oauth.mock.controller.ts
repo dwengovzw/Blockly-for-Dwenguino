@@ -41,7 +41,11 @@ class MockAuthController extends AbstractOAuthController{
             })        
             //Save new cookie in session and redirect
             req.session.token = token;
-            res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+            if (user.acceptedTerms) {
+                res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+            } else {
+                res.redirect(`${process.env.SERVER_URL}/dashboard`)
+            }
 
         })
 
