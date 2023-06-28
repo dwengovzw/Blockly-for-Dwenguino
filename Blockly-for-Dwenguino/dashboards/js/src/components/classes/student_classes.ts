@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, state, property} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import { Router, Routes } from "@lit-labs/router"
@@ -29,7 +29,7 @@ import "@material/mwc-button"
 import '@vaadin/grid/vaadin-grid-sort-column.js';
 import "@material/mwc-dialog"
 
-
+@localized()
 @customElement("dwengo-student-classes-page")
 class StudentClasses extends connect(store)(LitElement) {
 

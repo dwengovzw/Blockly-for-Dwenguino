@@ -6,12 +6,12 @@ import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, state} from 'lit/decorators.js';
 import { store } from "../state/store"
 import { Unsubscribe } from "redux";
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 
 import "./user/login"
 
-
+@localized()
 @customElement("dwengo-header")
 class Header extends connect(store)(LitElement) {
     static styles?: CSSResultGroup = css`

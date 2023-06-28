@@ -3,7 +3,7 @@ import { store } from "../../state/store"
 import { connect } from "pwa-helpers"
 import {customElement, property, state, query} from 'lit/decorators.js';
 import { createPortfolioItem, MinimalDisplayedPortfolioItemInfo, MinimalPortfolioItemInfo, PortfolioInfo, PortfolioItemInfo, savePortfolioItem, setSelectedPortfolioItems, TextItemInfo } from "../../state/features/portfolio_slice";
-import { msg } from "@lit/localize";
+import { localized, msg, str } from "@lit/localize";
 
 import { LitInfiniteViewer } from "lit-infinite-viewer";
 
@@ -17,6 +17,7 @@ import { getGoogleMateriaIconsLinkTag } from "../../util";
 import { getAllowedItemsForRoles, getAllowedItemsForSourceItemType, ITEMTYPES } from "../../../../../../backend/config/itemtypes.config";
 import { NotificationMessageType, setNotificationMessage } from "../../state/features/notification_slice";
 
+@localized()
 @customElement("dwengo-graph-portfolio")
 class GraphDashboard extends connect(store)(LitElement){
     
@@ -193,7 +194,7 @@ class GraphDashboard extends connect(store)(LitElement){
                             .map(itemType => {
                                 return html`
                                     <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${(e) => this.onAddItemContextMenuClick(e, itemType)}>
-                                        ${msg(itemType)}
+                                        ${msg(str`Type: ${itemType}`)}
                                     </div>
                                 `
                     })}

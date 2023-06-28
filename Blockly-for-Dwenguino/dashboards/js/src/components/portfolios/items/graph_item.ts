@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import {customElement, property, state, query} from 'lit/decorators.js';
 import { store } from "../../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { borderStyle, noselect } from "../../../styles/shared";
@@ -15,6 +15,7 @@ import { UserInfo } from "../../../state/features/user_slice";
 import { NotificationMessageType, setNotificationMessage } from "../../../state/features/notification_slice";
 import { ITEMTYPES } from "../../../../../../../backend/config/itemtypes.config";
 
+@localized()
 @customElement("dwengo-graph-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
     @property({type: Object}) 

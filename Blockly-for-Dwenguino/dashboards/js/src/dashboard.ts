@@ -22,9 +22,12 @@ import "./components/util/accept_terms"
 import {URLPattern} from "urlpattern-polyfill";
 import { getAllClassGroups } from "./state/features/class_group_slice";
 import { getAllStudentClassGroups } from "./state/features/student_class_group_slice";
+import { localized } from "@lit/localize";
+import {setLocaleFromUrl} from './localization/localization';
 // @ts-ignore: Property 'UrlPattern' does not exist 
 globalThis.URLPattern = URLPattern
 
+@localized()
 @customElement("dwengo-dashboard")
 class Dashboard extends connect(store)(LitElement) {
     private urlPrefixRegex: RegExp = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(\/(.*))$/
@@ -34,6 +37,11 @@ class Dashboard extends connect(store)(LitElement) {
     @state() selectedId: string = "home"
 
     @state() globalState: any = store.getState()
+    
+    constructor() {
+        super()
+        setLocaleFromUrl();
+    }
 
     private router = new Router(this, [
         {

@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { deletePortfolioItem, PortfolioItemInfo } from "../../../state/features/portfolio_slice";
@@ -16,6 +16,7 @@ import "./socialrobot_design_item"
 import "./droptarget"
 import '@vaadin/button';
 
+@localized()
 @customElement("dwengo-portfolio-item")
 class PortfolioItem extends connect(store)(LitElement) {
     @property({type: Object}) 

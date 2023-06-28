@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+<file target-language="de" source-language="en" original="lit-localize-inputs" datatype="plaintext">
+<body>
+<trans-unit id="s7e09a6c58a778e69">
+  <source>You do not have the rights to access this content!</source>
+  <target>Du hast keine Berechtigung, auf diesen Inhalt zuzugreifen!</target>
+</trans-unit>
+<trans-unit id="s0a5573b706e18da7">
+  <source>Unable complete request!</source>
+  <target>Anforderung konnte nicht abgeschlossen werden!</target>
+</trans-unit>
+<trans-unit id="s77e76abbad7d9f96">
+  <source>Error completing request</source>
+  <target>Fehler beim Abschließen der Anfrage</target>
+</trans-unit>
+<trans-unit id="s11ef8a891b21e832">
+  <source>Profile info saved :)</source>
+  <target>Profilinformationen gespeichert :)</target>
+</trans-unit>
+<trans-unit id="s4693d3bde529df71">
+  <source>Error while saving!</source>
+  <target>Fehler beim Speichern!</target>
+</trans-unit>
+<trans-unit id="sc4fce5d5b4273bc9">
+  <source>You are not logged in!</source>
+  <target>Du bist nicht eingeloggt!</target>
+</trans-unit>
+<trans-unit id="s92e6e1ea3d54c4ab">
+  <source>Not allowed to access this route!</source>
+  <target>Keine Berechtigung zum Zugriff auf diese Route!</target>
+</trans-unit>
+<trans-unit id="s1a9bb4f2991a4a11">
+  <source>Unable to login!</source>
+  <target>Anmeldung nicht möglich!</target>
+</trans-unit>
+<trans-unit id="scb7e67bda04b2a4c">
+  <source>en-GB</source>
+  <target>de-DE</target>
+</trans-unit>
+<trans-unit id="s3c9a0910ffe2b551">
+  <source>Error adding classgroup</source>
+  <target>Fehler beim Hinzufügen der Klassengruppe</target>
+</trans-unit>
+<trans-unit id="s0468e6f391850240">
+  <source>Error getting classgroup</source>
+  <target>Fehler beim Abrufen der Klassengruppe</target>
+</trans-unit>
+<trans-unit id="s63b28b9db0cfa722">
+  <source>Error deleting classgroup</source>
+  <target>Fehler beim Löschen der Klassengruppe</target>
+</trans-unit>
+<trans-unit id="s3a56eaffaf05d20c">
+  <source>Error approving student</source>
+  <target>Fehler bei der Genehmigung des Schülers</target>
+</trans-unit>
+<trans-unit id="s894a9d71e7295134">
+  <source>Error deleting student</source>
+  <target>Fehler beim Löschen des Schülers</target>
+</trans-unit>
+<trans-unit id="s1968b59d8bee4f7f">
+  <source>Error getting saved programs</source>
+  <target>Fehler beim Abrufen der gespeicherten Programme</target>
+</trans-unit>
+<trans-unit id="s4a25cdd3dacf968c">
+  <source>Error deleting saved program</source>
+  <target>Fehler beim Löschen des gespeicherten Programms</target>
+</trans-unit>
+<trans-unit id="s086ae6599370059e">
+  <source>Error updating saved program</source>
+  <target>Fehler beim Aktualisieren des gespeicherten Programms</target>
+</trans-unit>
+<trans-unit id="s5f3a07e193b51651">
+  <source>Left classgroup </source>
+  <target>Klassengruppe verlassen </target>
+</trans-unit>
+<trans-unit id="s01b5c786c9279d9c">
+  <source>Error leaving classgroup</source>
+  <target>Fehler beim Verlassen der Klassengruppe</target>
+</trans-unit>
+<trans-unit id="s2a08da4a87567f73">
+  <source>Joined classgroup, awaiting approval by teacher</source>
+  <target>Klassengruppe beigetreten, wartet auf Genehmigung durch den Lehrer</target>
+</trans-unit>
+<trans-unit id="sa870c145bb17f828">
+  <source>Error joining classgroup</source>
+  <target>Fehler beim Beitritt zur Klassengruppe</target>
+</trans-unit>
+<trans-unit id="s19de6a8b8804c50b">
+  <source>Unable to fetch public profile information.</source>
+  <target>Öffentliche Profilinformationen konnten nicht abgerufen werden.</target>
+</trans-unit>
+<trans-unit id="sca0cd731aa8fb777">
+  <source>Error getting assignments</source>
+  <target>Fehler beim Abrufen der Aufgaben</target>
+</trans-unit>
+<trans-unit id="s49821daf907318eb">
+  <source>Error adding assignment</source>
+  <target>Fehler beim Hinzufügen der Aufgabe</target>
+</trans-unit>
+<trans-unit id="s1ff6dc5488489b2c">
+  <source>Error deleting assignment</source>
+  <target>Fehler beim Löschen der Aufgabe</target>
+</trans-unit>
+<trans-unit id="sa17f92278700be6a">
+  <source>Error starring assignment</source>
+  <target>Fehler beim Markieren der Aufgabe</target>
+</trans-unit>
+<trans-unit id="se88d340d8533d76f">
+  <source>Error while deleting portfolio item</source>
+  <target>Fehler beim Löschen des Portfolio-Elements</target>
+</trans-unit>
+<trans-unit id="sfde152778068dcee">
+  <source>Error while creating portfolio item</source>
+  <target>Fehler beim Erstellen des Portfolio-Elements</target>
+</trans-unit>
+<trans-unit id="se642d8b493141861">
+  <source>Error while saving portfolio item</source>
+  <target>Fehler beim Speichern des Portfolio-Elements</target>
+</trans-unit>
+<trans-unit id="s1075d991ae2e5ea5">
+  <source>Error while fetching portfolios</source>
+  <target>Fehler beim Abrufen der Portfolios</target>
+</trans-unit>
+<trans-unit id="s125420b46aeb8234">
+  <source>Error while fetching portfolio</source>
+  <target>Fehler beim Abrufen des Portfolios</target>
+</trans-unit>
+<trans-unit id="sa8c3b80277455232">
+  <source>GitHub</source>
+  <target>GitHub</target>
+</trans-unit>
+<trans-unit id="s3825ed65e2a7ee30">
+  <source>LeerID Flanders (students only)</source>
+  <target>LeerID Flandern (nur für Schüler)</target>
+</trans-unit>
+<trans-unit id="sa14168bf302b64c2">
+  <source>Flemish government</source>
+  <target>Flämische Regierung</target>
+</trans-unit>
+<trans-unit id="scdb1bac161852c73">
+  <source>Welcome</source>
+  <target>Willkommen</target>
+</trans-unit>
+<trans-unit id="s7fee95b66225e1fb">
+  <source>Dashboard</source>
+  <target>Dashboard</target>
+</trans-unit>
+<trans-unit id="s67749057edb2586b">
+  <source>Logout</source>
+  <target>Ausloggen</target>
+</trans-unit>
+<trans-unit id="s0ba70332c31b1412">
+  <source>Login with</source>
+  <target>Mit anmelden</target>
+</trans-unit>
+<trans-unit id="s6abb1cd87fe0114e">
+  <source>Home</source>
+  <target>Startseite</target>
+</trans-unit>
+<trans-unit id="sb148ee754f728bad">
+  <source>Simulator</source>
+  <target>Simulator</target>
+</trans-unit>
+<trans-unit id="sb061ff5a347a296e">
+  <source>Profile</source>
+  <target>Profil</target>
+</trans-unit>
+<trans-unit id="sd38cfb1ca45ded96">
+  <source>Saved projects</source>
+  <target>Gespeicherte Projekte</target>
+</trans-unit>
+<trans-unit id="s086a4eee4f75ac24">
+  <source>The Dwengo simulator is a powerful graphical programming environment where you can develop your programming skills. With this tool, you can program both graphically and textually.</source>
+  <target>Der Dwengo-Simulator ist eine leistungsstarke grafische Programmierumgebung, in der du deine Programmierkenntnisse entwickeln kannst. Mit diesem Tool kannst du sowohl grafisch als auch textuell programmieren.</target>
+</trans-unit>
+<trans-unit id="saf1e5331d783de2e">
+  <source>Graphical Programming Environment</source>
+  <target>Grafische Programmierumgebung</target>
+</trans-unit>
+<trans-unit id="s06e0bddea9b69f7d">
+  <source>In the graphical environment, you can explore various simulation scenarios. Each scenario simulates a robot that you can control using graphical code. The available scenarios are:</source>
+  <target>In der grafischen Umgebung kannst du verschiedene Simulationsszenarien erkunden. Jedes Szenario simuliert einen Roboter, den du mit grafischem Code steuern kannst. Die verfügbaren Szenarien sind:</target>
+</trans-unit>
+<trans-unit id="sa988ef8db8f90689">
+  <source>Spirograph: Create beautiful geometric patterns with a virtual drawing robot.</source>
+  <target>Spirograph: Erstelle schöne geometrische Muster mit einem virtuellen Zeichenroboter.</target>
+</trans-unit>
+<trans-unit id="s7d34d002d5122424">
+  <source>Moving robot: Program a robot car to move, avoid obstacles, and complete missions.</source>
+  <target>Beweglicher Roboter: Programmiere ein Roboter-Auto, um sich zu bewegen, Hindernissen auszuweichen und Missionen abzuschließen.</target>
+</trans-unit>
+<trans-unit id="sdbed6eadad13c2c9">
+  <source>Social robot: Create human interactions by building and programming a social robot.</source>
+  <target>Sozialer Roboter: Erstelle menschliche Interaktionen, indem du einen sozialen Roboter baust und programmierst.</target>
+</trans-unit>
+<trans-unit id="s5bd4accf9c38c00f">
+  <source>Conveyor belt robot: Build an automated system that can detect objects on the conveyor belt.</source>
+  <target>Förderbandroboter: Baue ein automatisiertes System, das Objekte auf dem Förderband erkennen kann.</target>
+</trans-unit>
+<trans-unit id="s954e6ea0b48ca8d4">
+  <source>Textual Programming Environment</source>
+  <target>Textbasierte Programmierumgebung</target>
+</trans-unit>
+<trans-unit id="s2f78e184e0bcf8e3">
+  <source>In addition to the graphical environment, our simulator also provides a textual programming environment where you can write code in C++. Although you cannot simulate this code directly in the browser, you can compile and download it. You can then transfer the downloaded file to the Dwenguino microcontroller via USB, just like you can do with the graphical code.</source>
+  <target>Zusätzlich zur grafischen Umgebung bietet unser Simulator auch eine textbasierte Programmierumgebung, in der du Code in C++ schreiben kannst. Obwohl du diesen Code nicht direkt im Browser simulieren kannst, kannst du ihn kompilieren und herunterladen. Anschließend kannst du die heruntergeladene Datei wie den grafischen Code über USB auf den Dwenguino-Mikrocontroller übertragen.</target>
+</trans-unit>
+<trans-unit id="s48337916f48720d1">
+  <source>Physical Computing Curriculum</source>
+  <target>Lehrplan für physisches Computing</target>
+</trans-unit>
+<trans-unit id="s4be4666b6966d63c">
+  <source>Do you want to learn more about physical computing and explore the possibilities of the simulator? Visit our website: </source>
+  <target>Möchtest du mehr über physisches Computing erfahren und die Möglichkeiten des Simulators erkunden? Besuche unsere Website:</target>
+</trans-unit>
+<trans-unit id="scefc6873f2e3f24e">
+  <source>https://dwengo.org/en/physical_computing/</source>
+  <target>https://dwengo.org/de/physical_computing/</target>
+</trans-unit>
+<trans-unit id="s201e6dd95e1a1cd3">
+  <source>Important Information</source>
+  <target>Wichtige Informationen</target>
+</trans-unit>
+<trans-unit id="sccc152a1fd3103be">
+  <source>Please note that this simulator is currently in beta phase. This means that some features may change or be removed as we continue to develop and make improvements. We are working hard to provide an optimal programming experience and appreciate your understanding during this process.</source>
+  <target>Bitte beachte, dass dieser Simulator sich derzeit in der Beta-Phase befindet. Dies bedeutet, dass einige Funktionen sich ändern oder entfernt werden können, während wir weiterhin entwickeln und Verbesserungen vornehmen. Wir arbeiten hart daran, ein optimales Programmiererlebnis zu bieten, und danken dir für dein Verständnis während dieses Prozesses.</target>
+</trans-unit>
+<trans-unit id="s60a27112c2c1fad8">
+  <source>Disclaimer:</source>
+  <target>Haftungsausschluss:</target>
+</trans-unit>
+<trans-unit id="s0118dbcabc5e60a6">
+  <source>This application is provided "as is" without any warranty, express or implied. The use of this application is at your own risk. We disclaim any warranties, including but not limited to, the implied warranties of merchantability and fitness for a particular purpose. We shall not be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in connection with the use or performance of this application.</source>
+  <target>Diese Anwendung wird "wie sie ist" ohne jegliche Garantie, ausdrücklich oder stillschweigend, bereitgestellt. Die Nutzung dieser Anwendung erfolgt auf eigene Gefahr. Wir lehnen jegliche Garantien ab, einschließlich, aber nicht beschränkt auf, die stillschweigenden Garantien der Marktgängigkeit und Eignung für einen bestimmten Zweck. Wir haften nicht für direkte, indirekte, zufällige, Folge- oder besondere Schäden, die sich aus der Nutzung oder Leistung dieser Anwendung ergeben.</target>
+</trans-unit>
+<trans-unit id="s93cd12c8e2e9ec71">
+  <source>Privacy Notice</source>
+  <target>Datenschutzerklärung</target>
+</trans-unit>
+<trans-unit id="s4cc5c1ce102c85d6">
+  <source>If you want a detailed description of how we use your data, you can read our </source>
+  <target>Wenn du eine detaillierte Beschreibung wünschst, wie wir deine Daten verwenden, kannst du unsere</target>
+</trans-unit>
+<trans-unit id="s32fffcc89c7cca58">
+  <source>https://dwengo.org/assets/files/privacy/privacy_notice_simulator_en.pdf</source>
+  <target>https://dwengo.org/assets/files/privacy/privacy_notice_simulator_de.pdf</target>
+</trans-unit>
+<trans-unit id="sc68a41f54a2af45a">
+  <source>Firstname</source>
+  <target>Vorname</target>
+</trans-unit>
+<trans-unit id="s25a24c4bb22a0792">
+  <source>Lastname</source>
+  <target>Nachname</target>
+</trans-unit>
+<trans-unit id="sd1f44f1a8bc20e67">
+  <source>Email</source>
+  <target>E-Mail</target>
+</trans-unit>
+<trans-unit id="sc920a5eb6791620a">
+  <source>Birthdate</source>
+  <target>Geburtsdatum</target>
+</trans-unit>
+<trans-unit id="sabf41cf68d30983d">
+  <source>You are logged in with</source>
+  <target>Du bist angemeldet mit</target>
+</trans-unit>
+<trans-unit id="s33f85f24c0f5f008">
+  <source>Save</source>
+  <target>Speichern</target>
+</trans-unit>
+<trans-unit id="s098489ac0ab7994c">
+  <source>Are you sure you want to delete the item </source>
+  <target>Bist du sicher, dass du den Eintrag löschen möchtest?</target>
+</trans-unit>
+<trans-unit id="scb489a1a173ac3f0">
+  <source>Yes</source>
+  <target>Ja</target>
+</trans-unit>
+<trans-unit id="s2ceb11be2290bb1b">
+  <source>Cancel</source>
+  <target>Abbrechen</target>
+</trans-unit>
+<trans-unit id="s90a1219355fa17cb">
+  <source>The uuid of this classgroup is unknown.</source>
+  <target>Die UUID dieser Klassengruppe ist unbekannt.</target>
+</trans-unit>
+<trans-unit id="s3ccc0c8245557355">
+  <source>Cannot remove last owner.</source>
+  <target>Der letzte Besitzer kann nicht entfernt werden.</target>
+</trans-unit>
+<trans-unit id="sdc673e73b5c13aea">
+  <source>Delete</source>
+  <target>Löschen</target>
+</trans-unit>
+<trans-unit id="s2063a9d17c280fe5">
+  <source>Info</source>
+  <target>Info</target>
+</trans-unit>
+<trans-unit id="se5d01bef737e2e3a">
+  <source>Approve</source>
+  <target>Genehmigen</target>
+</trans-unit>
+<trans-unit id="sf98094b10cb007d1">
+  <source>Are you sure you want to remove this </source>
+  <target>Bist du sicher, dass du dies entfernen möchtest?</target>
+</trans-unit>
+<trans-unit id="sa692f75ab08b8cf4">
+  <source>owner</source>
+  <target>Besitzer</target>
+</trans-unit>
+<trans-unit id="s320b4985f9fbd640">
+  <source>student</source>
+  <target>Schüler</target>
+</trans-unit>
+<trans-unit id="s5130c8fcf0106260">
+  <source>Sharing code</source>
+  <target>Code teilen</target>
+</trans-unit>
+<trans-unit id="sdb88a0d2b99ff345">
+  <source>Owners</source>
+  <target>Besitzer</target>
+</trans-unit>
+<trans-unit id="s0ab63eca4a407589">
+  <source>Students</source>
+  <target>Schüler</target>
+</trans-unit>
+<trans-unit id="s16f9b746125bc05d">
+  <source>Awaiting students</source>
+  <target>Wartende Schüler</target>
+</trans-unit>
+<trans-unit id="se41cbb08fee192f9">
+  <source>Assignments</source>
+  <target>Aufgaben</target>
+</trans-unit>
+<trans-unit id="sf1fa5130a809d2de">
+  <source>Create assignment</source>
+  <target>Aufgabe erstellen</target>
+</trans-unit>
+<trans-unit id="sf0da70669353fe28">
+  <source>Are you sure you want to remove this classgroup: </source>
+  <target>Bist du sicher, dass du diese Klassengruppe entfernen möchtest:</target>
+</trans-unit>
+<trans-unit id="s9ae7f90b15e0e483">
+  <source>An assignment name is required</source>
+  <target>Ein Aufgabenname ist erforderlich</target>
+</trans-unit>
+<trans-unit id="s16577e73d0137762">
+  <source>An error occured, please try again</source>
+  <target>Ein Fehler ist aufgetreten. Bitte versuche es erneut</target>
+</trans-unit>
+<trans-unit id="s24b1dafb1b20370c">
+  <source>Team</source>
+  <target>Team</target>
+</trans-unit>
+<trans-unit id="sef49aec68fd1dc66">
+  <source>Name</source>
+  <target>Name</target>
+</trans-unit>
+<trans-unit id="s63d894b1ddb06289">
+  <source>Description</source>
+  <target>Beschreibung</target>
+</trans-unit>
+<trans-unit id="sccdc445505b97876">
+  <source>Create team</source>
+  <target>Team erstellen</target>
+</trans-unit>
+<trans-unit id="s0d8f605d8f4dcb5a">
+  <source>Edit assignment</source>
+  <target>Aufgabe bearbeiten</target>
+</trans-unit>
+<trans-unit id="s355b21b89ce5d9c5">
+  <source>Details</source>
+  <target>Details</target>
+</trans-unit>
+<trans-unit id="s45615e2718064d48">
+  <source>Insights</source>
+  <target>Einblicke</target>
+</trans-unit>
+<trans-unit id="s4f961467edf595f6">
+  <source>Your classes</source>
+  <target>Deine Klassen</target>
+</trans-unit>
+<trans-unit id="sb41b2cfbbc52565b">
+  <source>Created</source>
+  <target>Erstellt</target>
+</trans-unit>
+<trans-unit id="s382a2aa3984474dd">
+  <source>Create</source>
+  <target>Erstellen</target>
+</trans-unit>
+<trans-unit id="s0b89472889530702">
+  <source>Enter the code your teacher shared with you.</source>
+  <target>Gib den Code ein, den dein Lehrer mit dir geteilt hat.</target>
+</trans-unit>
+<trans-unit id="s6c6bf3ea2ad3d219">
+  <source>Join</source>
+  <target>Beitreten</target>
+</trans-unit>
+<trans-unit id="s425a741bf9580eb1">
+  <source>Are you sure you want to leave this classgroup: </source>
+  <target>Bist du sicher, dass du diese Klassengruppe verlassen möchtest:</target>
+</trans-unit>
+<trans-unit id="s5c922889327dc44d">
+  <source>Join class</source>
+  <target>Klasse beitreten</target>
+</trans-unit>
+<trans-unit id="sf385cbd3d77b55f2">
+  <source>Classes awaiting approval</source>
+  <target>Klassen warten auf Genehmigung</target>
+</trans-unit>
+<trans-unit id="se11175a518ed2775">
+  <source>Your saved projects</source>
+  <target>Deine gespeicherten Projekte</target>
+</trans-unit>
+<trans-unit id="s446c46bc623ccce1">
+  <source>Project name</source>
+  <target>Projektname</target>
+</trans-unit>
+<trans-unit id="s194ad89593974279">
+  <source>Saved at</source>
+  <target>Gespeichert am</target>
+</trans-unit>
+<trans-unit id="sa739a7980cbb46a8">
+  <source>Edited</source>
+  <target>Bearbeitet</target>
+</trans-unit>
+<trans-unit id="s3c622dbc0b299d1f">
+  <source>Double click and type your markdown text here!</source>
+  <target>Doppelklicken und Markdown-Text hier eingeben!</target>
+</trans-unit>
+<trans-unit id="sed899027cb2cab47">
+  <source>Type your text here</source>
+  <target>Gib hier deinen Text ein</target>
+</trans-unit>
+<trans-unit id="sdfc998333ae7533b">
+  <source>TODO: link to simulator which only shows the social robot editor. Social robot design</source>
+  <target>TODO: Verlinkung zum Simulator, der nur den Social Robot Editor anzeigt. Social Robot Design</target>
+</trans-unit>
+<trans-unit id="s109379996be8507c">
+  <source>Unknown item type</source>
+  <target>Unbekannter Elementtyp</target>
+</trans-unit>
+<trans-unit id="sa25501c08c36e991">
+  <source>Text item</source>
+  <target>Textelement</target>
+</trans-unit>
+<trans-unit id="se2d075855889496d">
+  <source>Image item</source>
+  <target>Bildelement</target>
+</trans-unit>
+<trans-unit id="sf9aee319a006c9b4">
+  <source>Add</source>
+  <target>Hinzufügen</target>
+</trans-unit>
+<trans-unit id="se8e6a39f5369c253">
+  <source>Add item</source>
+  <target>Element hinzufügen</target>
+</trans-unit>
+<trans-unit id="s73bf3fa2e4f6e993">
+  <source>Markdown text</source>
+  <target>Markdown-Text</target>
+</trans-unit>
+<trans-unit id="sc242d654a7a398b2">
+  <source>Blockly code</source>
+  <target>Blockly-Code</target>
+</trans-unit>
+<trans-unit id="sf198f9554f74b870">
+  <source>Social robot design</source>
+  <target>Social Robot Design</target>
+</trans-unit>
+<trans-unit id="s310ddea10edf8152">
+  <source>Portfolio item</source>
+  <target>Portfolio-Element</target>
+</trans-unit>
+<trans-unit id="sa4a4b82a8481b8ce">
+  <source>Drag to connect</source>
+  <target>Zum Verbinden ziehen</target>
+</trans-unit>
+<trans-unit id="s676e0c1fbd110289">
+  <source>Delete this item</source>
+  <target>Dieses Element löschen</target>
+</trans-unit>
+<trans-unit id="sb5ceccad457e8cae">
+  <source>Are you sure you want to delete this item?</source>
+  <target>Bist du sicher, dass du dieses Element löschen möchtest?</target>
+</trans-unit>
+<trans-unit id="s56a1953345399391">
+  <source>Error connecting items.</source>
+  <target>Fehler beim Verbinden von Elementen.</target>
+</trans-unit>
+<trans-unit id="sc0ffff81817e0f73">
+  <source>Cannot connect item to itself.</source>
+  <target>Element kann nicht mit sich selbst verbunden werden.</target>
+</trans-unit>
+<trans-unit id="s5cd15819e278608a">
+  <source>DELETE</source>
+  <target>LÖSCHEN</target>
+</trans-unit>
+<trans-unit id="s90b99a0d4fb57523">
+  <source>New text item</source>
+  <target>Neues Textelement</target>
+</trans-unit>
+<trans-unit id="sbd9111b273c493f5">
+  <source>No data transfer found</source>
+  <target>Kein Datentransfer gefunden</target>
+</trans-unit>
+<trans-unit id="s82722b313e9cbb21">
+  <source>Terms and conditions</source>
+  <target>Allgemeine Geschäftsbedingungen</target>
+</trans-unit>
+<trans-unit id="s7c35e5dcbd255251">
+  <source>Privacy notice</source>
+  <target>Datenschutzerklärung</target>
+</trans-unit>
+<trans-unit id="s894d13c8326cd34f">
+  <source>As a provider of a digital learning system, we place great importance on protecting your personal data and ensuring the confidentiality of your information. In this message, we would like to inform you about what data we collect from you, how we process it, and which other institutions we share it with.
+                Firstly, all data we collect is stored on servers located in Europe. This ensures that your data is subject to European legislation and that your privacy and security are safeguarded.
+                We record every modification and execution of a program, as well as interactions in our simulation environment (such as pausing, starting, stepping through the code, and adjusting the speed). This allows us to track your learning progress and provide you with accurate feedback.
+                Additionally, we store information about your tutorial progress, including the steps you go through and when you stop the tutorial. This enables us to improve and adapt our tutorials to better meet your learning needs.
+                If you use our robot simulator, we keep track of which components you add or remove when building a robot. This information allows us to improve our simulation environment and add new features to meet your needs.
+                When you sign up for our digital learning system, you use an external identity provider. To identify you as a unique user, we keep track of which identity provider you used to sign up and the unique ID you have with that provider. We also ask for your name through this provider.
+                In addition to this data, you have the option to provide your email address and date of birth. It is important to note that your personally identifiable data, such as your name, email address, and date of birth, are only used within our application. You, as the user, have the option to decide with which other users you want to share your data. For example, a student must actively participate in a class group before their name becomes visible to the administrator of that group.
+                In addition to personally identifiable data, we also keep track of the activities of logged-in users. This includes information about the programs users save, the portfolios they create, the items they add to their portfolios, the feedback linked to a portfolio, the class groups they are in, the student teams they are in, and the assignments they receive.
+                It is possible that we share non-personally identifiable data with research institutions. This research aims to provide users of our system with better insights into the learning process of their students and to provide better feedback as a result. We use aggregated data for this purpose, so that individual users cannot be identified.
+                Finally, as a user, you have the right to request the data we collect about you, as long as you can identify yourself. This can be done, for example, by providing a copy of your identity card or via the KopieID app.
+                We hope that this message has sufficiently informed you about our policy regarding the collection, processing, and sharing of your data. If you have any further questions or comments, please do not hesitate to contact us at dpo@dwengo.org.
+                </source>
+  <target>Als Anbieter eines digitalen Lernsystems legen wir großen Wert auf den Schutz Ihrer persönlichen Daten und die Vertraulichkeit Ihrer Informationen. In dieser Nachricht möchten wir Sie darüber informieren, welche Daten wir von Ihnen erheben, wie wir sie verarbeiten und mit welchen anderen Institutionen wir sie teilen. Zunächst einmal werden alle von uns erhobenen Daten auf in Europa befindlichen Servern gespeichert. Dadurch unterliegen Ihre Daten europäischen Gesetzen und Ihre Privatsphäre und Sicherheit sind gewährleistet. Wir erfassen jede Änderung und Ausführung eines Programms sowie Interaktionen in unserer Simulationsumgebung (wie Pause, Start, Schritt-für-Schritt-Durchführung des Codes und Anpassung der Geschwindigkeit). Dies ermöglicht es uns, Ihren Lernfortschritt nachzuverfolgen und Ihnen genaues Feedback zu geben. Darüber hinaus speichern wir Informationen über Ihren Tutorial-Fortschritt, einschließlich der Schritte, die Sie durchlaufen, und wann Sie das Tutorial beenden. Dies ermöglicht es uns, unsere Tutorials zu verbessern und an Ihre Lernbedürfnisse anzupassen. Wenn Sie unseren Roboter-Simulator verwenden, verfolgen wir, welche Komponenten Sie beim Bau eines Roboters hinzufügen oder entfernen. Diese Informationen ermöglichen es uns, unsere Simulationsumgebung zu verbessern und neue Funktionen hinzuzufügen, um Ihren Bedürfnissen gerecht zu werden. Wenn Sie sich für unser digitales Lernsystem anmelden, verwenden Sie einen externen Identitätsanbieter. Um Sie als eindeutigen Benutzer zu identifizieren, verfolgen wir, welchen Identitätsanbieter Sie zur Anmeldung verwendet haben, und die eindeutige ID, die Sie bei diesem Anbieter haben. Wir bitten Sie auch über diesen Anbieter um Ihren Namen. Zusätzlich zu diesen Daten haben Sie die Möglichkeit, Ihre E-Mail-Adresse und Ihr Geburtsdatum anzugeben. Es ist wichtig zu beachten, dass Ihre personenbezogenen Daten wie Ihr Name, Ihre E-Mail-Adresse und Ihr Geburtsdatum nur innerhalb unserer Anwendung verwendet werden. Als Benutzer haben Sie die Möglichkeit zu entscheiden, mit welchen anderen Benutzern Sie Ihre Daten teilen möchten. Zum Beispiel muss ein Schüler aktiv an einer Klassengruppe teilnehmen, bevor sein Name für den Administrator dieser Gruppe sichtbar wird. Neben personenbezogenen Daten erfassen wir auch die Aktivitäten eingeloggter Benutzer. Dazu gehören Informationen über die von Benutzern gespeicherten Programme, die von ihnen erstellten Portfolios, die von ihnen zu ihren Portfolios hinzugefügten Elemente, das mit einem Portfolio verknüpfte Feedback, die Klassengruppen, denen sie angehören, die Schülerteams, denen sie angehören, und die Aufgaben, die sie erhalten. Es ist möglich, dass wir nicht personenbezogene Daten mit Forschungseinrichtungen teilen. Diese Forschung zielt darauf ab, den Benutzern unseres Systems bessere Einblicke in den Lernprozess ihrer Schülerinnen und Schüler zu bieten und als Ergebnis besseres Feedback zu geben. Hierfür verwenden wir aggregierte Daten, sodass einzelne Benutzer nicht identifiziert werden können. Schließlich haben Sie als Benutzer das Recht, die von uns über Sie erhobenen Daten anzufordern, solange Sie sich identifizieren können. Dies kann beispielsweise durch Vorlage einer Kopie Ihres Personalausweises oder über die KopieID-App erfolgen. Wir hoffen, dass diese Nachricht Sie ausreichend über unsere Richtlinien zur Erhebung, Verarbeitung und Weitergabe Ihrer Daten informiert hat. Wenn Sie weitere Fragen oder Kommentare haben, zögern Sie bitte nicht, uns unter dpo@dwengo.org zu kontaktieren.
+  </target>
+</trans-unit>
+<trans-unit id="s3bfd76244485e117">
+  <source>By accepting our terms of service you agree to the collection of the data listed in the privacy notice.</source>
+  <target>Durch die Annahme unserer Nutzungsbedingungen stimmen Sie der Erhebung der in der Datenschutzerklärung aufgeführten Daten zu.</target>
+</trans-unit>
+<trans-unit id="s1926218acaa4a2dd">
+  <source>Waranty</source>
+  <target>Gewährleistung</target>
+</trans-unit>
+<trans-unit id="s7ff3d934739dd456">
+  <source>By accepting our terms of service you agree to the warranty.</source>
+  <target>Durch die Annahme unserer Nutzungsbedingungen stimmen Sie der Gewährleistung zu.</target>
+</trans-unit>
+<trans-unit id="s5622e430e4904389">
+  <source>I accept the terms and conditions</source>
+  <target>Ich akzeptiere die Geschäftsbedingungen</target>
+</trans-unit>
+<trans-unit id="sb85774dc5d18ff0f">
+  <source>Confirm</source>
+  <target>Bestätigen</target>
+</trans-unit>
+<trans-unit id="s56f373497ddf0503">
+  <source>Type: <x id="0" equiv-text="${itemType}"/></source>
+  <target>Type: <x id="0" equiv-text="${itemType}"/></target>
+</trans-unit>
+<trans-unit id="s4caed5b7a7e5d89b">
+  <source>English</source>
+  <target>Englisch</target>
+</trans-unit>
+<trans-unit id="s95d56e58f816d211">
+  <source>Dutch</source>
+  <target>Niederländisch</target>
+</trans-unit>
+<trans-unit id="s75a27f43413e02c5">
+  <source>French</source>
+  <target>Französisch</target>
+</trans-unit>
+<trans-unit id="s63e71d20d1eaca93">
+  <source>German</source>
+  <target>Deutsch</target>
+</trans-unit>
+<trans-unit id="sefcf950b3cc4fc3b">
+  <source>Language</source>
+  <target>Sprache</target>
+</trans-unit>
+</body>
+</file>
+</xliff>

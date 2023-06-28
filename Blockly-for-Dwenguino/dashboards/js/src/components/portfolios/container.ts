@@ -7,7 +7,9 @@ import { Routes } from "@lit-labs/router";
 import "./edit"
 import "./graph_portfolio"
 import { getMyPortfolios, getMyStudentPortfolios, getPortfolio } from "../../state/features/portfolio_slice";
+import { localized } from "@lit/localize";
 
+@localized()
 @customElement("dwengo-dashboard-page-container")
 class DashboardPageContainer extends connect(store)(LitElement){
 

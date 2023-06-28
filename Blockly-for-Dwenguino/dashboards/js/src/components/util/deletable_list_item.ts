@@ -4,12 +4,13 @@
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 
 import "@material/mwc-button"
 import "@material/mwc-dialog"
 
+@localized()
 @customElement("dwengo-deletable-list-element")
 class DeletableListItem extends LitElement {
     @property({type: Array}) fields: string[] = [];

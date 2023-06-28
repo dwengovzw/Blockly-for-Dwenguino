@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import { PortfolioInfo, getMyPortfolios, getPortfolios } from "../../state/features/portfolio_slice";
@@ -14,6 +14,7 @@ import { PortfolioInfo, getMyPortfolios, getPortfolios } from "../../state/featu
 import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import '@vaadin/grid';
 
+@localized()
 @customElement('dwengo-portfolios-list')
 class DwengoPortfoliosList extends connect(store)(LitElement) {
     @state() portfolios: PortfolioInfo[] = []

@@ -5,13 +5,14 @@
 import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../../util"
 import { savePortfolioItem, TextItemInfo } from "../../../state/features/portfolio_slice";
 
 import "../../util/md_editor"
 
+@localized()
 @customElement("dwengo-portfolio-text-item")
 class PortfolioTextItem extends connect(store)(LitElement) {
     @property({type: Object}) 

@@ -2,7 +2,9 @@ import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import { customElement, property, state } from "lit/decorators.js"; // needs .js to transpile
 import { connect } from "pwa-helpers"
 import { store } from "../state/store"
+import { localized } from "@lit/localize";
 
+@localized()
 @customElement("dwengo-notify")
 class Notify extends connect(store)(LitElement) {
 

@@ -1,7 +1,7 @@
 import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import { customElement, state, property } from "lit/decorators.js"; // needs .js to transpile
 import { store } from "../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { UserInfo, initialUserState } from "../state/features/user_slice"
 import { getGoogleMateriaIconsLinkTag } from "../util"
@@ -12,6 +12,7 @@ import '@vaadin/icon';
 import '@vaadin/icons';
 import '@vaadin/tabs';
 import '@vaadin/progress-bar';
+import "../localization/locale-picker"
 
 interface MenuItem {
     id: string,
@@ -21,6 +22,7 @@ interface MenuItem {
     external: boolean
 }
 
+@localized()
 @customElement("dwengo-menu")
 class Menu extends connect(store)(LitElement){
     @state() menuItems:MenuItem[] = []
@@ -30,31 +32,37 @@ class Menu extends connect(store)(LitElement){
     @property({type: Object})
     userInfo: UserInfo = store.getState().user
 
-    menuItemOptions: Record<string, MenuItem[]> = {
-        "all": [
-            {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
-            {id: "simulator", label: msg("Simulator"), href: `${globalSettings.hostname}`, icon: "code", external: true},
-        ],
-        "user": [
-            {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
-            {id: "savedstates", label: msg("Saved projects"), href: `${globalSettings.hostname}/dashboard/savedstates`, icon: "folder_open", external: false},
-//            {id: "portfolios", label: msg("My Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/mine`, icon: "menu_book", external: false},
-        ],
-        "student": [
-//            {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
-        ],
-        "teacher": [
-//            {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
-//            {id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe`, icon: "menu_book", external: false},
-        ],
-        "admin": []
+    menuItemOptions: Record<string, MenuItem[]> = {}
+
+    intitMenuItemOptions(){
+        this.menuItemOptions = {
+            "all": [
+                {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
+                {id: "simulator", label: msg("Simulator"), href: `${globalSettings.hostname}`, icon: "code", external: true},
+            ],
+            "user": [
+                {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
+                {id: "savedstates", label: msg("Saved projects"), href: `${globalSettings.hostname}/dashboard/savedstates`, icon: "folder_open", external: false},
+    //            {id: "portfolios", label: msg("My Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/mine`, icon: "menu_book", external: false},
+            ],
+            "student": [
+    //            {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
+            ],
+            "teacher": [
+    //            {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
+    //            {id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe`, icon: "menu_book", external: false},
+            ],
+            "admin": []
+        }
     }
     
     constructor(){
         super()
+        this.intitMenuItemOptions()
     }
 
     protected willUpdate(_changedProperties: PropertyValueMap<any> | Map<PropertyKey, unknown>): void {
+        this.intitMenuItemOptions() // Hack to make translation work
         if (!this.userInfo){
             return;
         }
@@ -77,7 +85,7 @@ class Menu extends connect(store)(LitElement){
                 ${this.loading ? html`<vaadin-progress-bar indeterminate></vaadin-progress-bar>` : ""}
             </h1>
             
-            <vaadin-tabs slot="drawer" orientation="vertical" selected=${this.menuItems.map(item => item.id).indexOf(this.selectedId)}>
+            <vaadin-tabs class="grow" slot="drawer" orientation="vertical" selected=${this.menuItems.map(item => item.id).indexOf(this.selectedId)}>
                 ${this.menuItems.map(item => {
                     return html`
                     <vaadin-tab>
@@ -88,6 +96,9 @@ class Menu extends connect(store)(LitElement){
                     </vaadin-tab>
                     `
                 })}
+                <vaadin-tab>
+                    <locale-picker></locale-picker>
+                </vaadin-tab>
             </vaadin-tabs>
             <div class="main_page">
                 <div class="content_container">
@@ -132,6 +143,11 @@ class Menu extends connect(store)(LitElement){
 
         vaadin-tab[selected] {
             color: var(--theme-accentFillSelected);
+        }
+
+        vaadin-tabs.grow {
+            display: flex;
+            flex-grow: 1;
         }
 
         dwengo-login-menu {

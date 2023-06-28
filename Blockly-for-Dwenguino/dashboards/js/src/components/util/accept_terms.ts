@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, query, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 
@@ -15,6 +15,7 @@ import '@vaadin/button';
 import { putUserInfo } from "../../state/features/user_slice";
 import { borderStyle, buttonStyles } from "../../styles/shared";
 
+@localized()
 @customElement("dwengo-accept-terms")
 class AcceptTerms extends connect(store)(LitElement) {
     @state() accepted: boolean = false;

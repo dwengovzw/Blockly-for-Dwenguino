@@ -6,12 +6,13 @@ import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import {createRef, Ref, ref} from 'lit/directives/ref.js';
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { marked } from "marked";
 import * as DOMPurify from 'dompurify';
 import { githubMarkdownStyle } from "../../styles/github_md";
 
+@localized()
 @customElement("dwengo-md-editor")
 class MarkdownEditor extends LitElement {
     @property({type: String}) value: string = ""

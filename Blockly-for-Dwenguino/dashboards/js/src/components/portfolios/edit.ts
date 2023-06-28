@@ -3,12 +3,14 @@ import { store } from "../../state/store"
 import { connect } from "pwa-helpers"
 import {customElement, property, state} from 'lit/decorators.js';
 import { createPortfolioItem, getPortfolio, MinimalPortfolioItemInfo, PortfolioInfo, PortfolioItemInfo, savePortfolioItem, setSelectedPortfolioItems } from "../../state/features/portfolio_slice";
-import { msg } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 
 import "./items/item"
 import "./items/droptarget"
 import '@vaadin/button';
 
+
+@localized()
 @customElement("dwengo-edit-dashboard")
 class EditDashboard extends connect(store)(LitElement){
 

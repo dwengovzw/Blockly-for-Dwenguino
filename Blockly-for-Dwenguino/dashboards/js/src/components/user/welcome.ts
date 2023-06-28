@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import { UserInfo } from "../../state/features/user_slice"
@@ -13,7 +13,7 @@ import { UserInfo } from "../../state/features/user_slice"
 import "../menu"
 
 
-
+@localized()
 @customElement("dwengo-welcome-page")
 class WelcomePage extends connect(store)(LitElement) {
     

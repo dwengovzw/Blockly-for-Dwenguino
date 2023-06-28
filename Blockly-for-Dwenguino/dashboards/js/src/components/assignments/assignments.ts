@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
 import {customElement, state, property} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import {ClassGroupInfo, getClassGroup} from "../../state/features/class_group_slice"
@@ -25,6 +25,7 @@ import { AssignmentGroupInfo, saveAssignmentGroup, deleteAssignmentGroup, getAll
 import { StudentTeamInfo } from "../../state/features/student_team_slice";
 import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice";
 
+@localized()
 @customElement("dwengo-assignment-list")
 class AssignmentList extends connect(store)(LitElement){
     @property({type: Object}) 

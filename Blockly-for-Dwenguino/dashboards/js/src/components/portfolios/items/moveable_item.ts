@@ -5,10 +5,11 @@
 import { css, CSSResultGroup, html, LitElement, PropertyValueMap } from "lit";
 import { ref, Ref, createRef } from 'lit/directives/ref.js';
 import {customElement, property, state, query} from 'lit/decorators.js';
-import { msg } from "@lit/localize";
+import { localized, msg } from "@lit/localize";
 
 import { LitMoveable } from "lit-moveable";
 
+@localized()
 @customElement("dwengo-moveable-item")
 class MoveableItem extends LitElement {
     @property({type: Number}) x = 10

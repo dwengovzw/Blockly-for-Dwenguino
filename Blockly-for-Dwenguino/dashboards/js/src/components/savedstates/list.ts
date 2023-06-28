@@ -3,7 +3,7 @@ import { customElement, state, property } from "lit/decorators.js"; // needs .js
 import { Router } from "@lit-labs/router"
 import { store } from  "../../state/store"
 import { connect } from "pwa-helpers"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { SavedStateInfo, getAllSavedStates, deleteSavedState, updateSavedStateName } from "../../state/features/saved_state_slice"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 
@@ -15,6 +15,7 @@ import "@material/mwc-button"
 import '@vaadin/grid/vaadin-grid-sort-column.js';
 import "@material/mwc-dialog"
 
+@localized()
 @customElement("dwengo-saved-programs-list")
 class SavedProgramsList extends connect(store)(LitElement){
 

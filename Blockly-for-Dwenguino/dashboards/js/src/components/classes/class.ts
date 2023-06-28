@@ -5,7 +5,7 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import {getClassGroup, ClassGroupInfo, getAllClassGroups, approveStudent, deleteStudent} from "../../state/features/class_group_slice"
@@ -24,7 +24,7 @@ import "../user/public_profile"
 import { fetchPublicProfile } from "../../state/features/public_profile_slice";
 
 
-
+@localized()
 @customElement("dwengo-class-page")
 class Class extends connect(store)(LitElement) {
     @property({type: Object}) 
