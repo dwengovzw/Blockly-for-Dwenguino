@@ -14,6 +14,7 @@ import { columnBodyRenderer } from '@vaadin/grid/lit.js';
 import "@material/mwc-button"
 import '@vaadin/grid/vaadin-grid-sort-column.js';
 import "@material/mwc-dialog"
+import { getLocale } from "../../localization/localization";
 
 @localized()
 @customElement("dwengo-saved-programs-list")
@@ -29,7 +30,7 @@ class SavedProgramsList extends connect(store)(LitElement){
     @state() itemSelectedToDelete: SavedStateInfo | null = null
 
     handleOpenSavedProgram(uuid: string){
-        window.open(`${globalSettings.hostname}/savedstates/open?uuid=${uuid}`, "_blank")
+        window.open(`${globalSettings.hostname}/savedstates/open?uuid=${uuid}&lang=${getLocale()}`, "_blank")
     }
 
     handleRemoveSavedProgram(uuid: string){
@@ -103,7 +104,7 @@ class SavedProgramsList extends connect(store)(LitElement){
             flex-grow="0"
             ${columnBodyRenderer(
                 (savedProgram: SavedStateInfo) => html`
-                    <mwc-button class="item" @click=${() => this.handleOpenSavedProgram(savedProgram.uuid)} raised>
+                    <mwc-button title=${msg("Open")} class="item" @click=${() => this.handleOpenSavedProgram(savedProgram.uuid)} raised>
                     <span class="material-symbols-outlined">
                         open_in_new
                     </span>
@@ -117,7 +118,7 @@ class SavedProgramsList extends connect(store)(LitElement){
             flex-grow="0"
             ${columnBodyRenderer(
                 (savedProgram: SavedStateInfo) => html`
-                    <mwc-button class="item" @click="${() => {this.itemSelectedToDelete = savedProgram; this.showConfirmDialog = true}}" raised>
+                    <mwc-button title=${msg("Delete")} class="item" @click="${() => {this.itemSelectedToDelete = savedProgram; this.showConfirmDialog = true}}" raised>
                     <span class="material-symbols-outlined">
                         delete
                     </span>
@@ -136,6 +137,7 @@ class SavedProgramsList extends connect(store)(LitElement){
             display: flex;
             flex-direction: row;
             justify-content: center;
+            margin: 0.5rem;
         }
         vaadin-grid::part(even-row) {
             background-color: var(--theme-neutralFillRest);

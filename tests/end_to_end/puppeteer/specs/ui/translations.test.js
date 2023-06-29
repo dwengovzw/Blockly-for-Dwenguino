@@ -16,7 +16,7 @@ describe(
         await startServer();
         // Set a definite size for the page viewport so view is consistent across browsers
         //page = await globalThis.__BROWSER_GLOBAL__.newPage();
-        browser = await puppeteer.launch({ headless: true, dumpio: false, args: ['--no-sandbox', '--disable-setuid-sandbox']});
+        browser = await puppeteer.launch({ headless: "new", dumpio: false, args: ['--no-sandbox', '--disable-setuid-sandbox']});
         page = await browser.newPage();    
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays    
     }, timeout);

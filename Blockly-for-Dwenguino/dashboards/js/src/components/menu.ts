@@ -13,6 +13,7 @@ import '@vaadin/icons';
 import '@vaadin/tabs';
 import '@vaadin/progress-bar';
 import "../localization/locale-picker"
+import { getLocale } from "../localization/localization";
 
 interface MenuItem {
     id: string,
@@ -37,20 +38,20 @@ class Menu extends connect(store)(LitElement){
     intitMenuItemOptions(){
         this.menuItemOptions = {
             "all": [
-                {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home`, icon: "home", external: false},
-                {id: "simulator", label: msg("Simulator"), href: `${globalSettings.hostname}`, icon: "code", external: true},
+                {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home?lang=${getLocale()}`, icon: "home", external: false},
+                {id: "simulator", label: msg("Simulator"), href: `${globalSettings.hostname}?lang=${getLocale()}`, icon: "code", external: true},
             ],
             "user": [
-                {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile`, icon: "person", external: false},
-                {id: "savedstates", label: msg("Saved projects"), href: `${globalSettings.hostname}/dashboard/savedstates`, icon: "folder_open", external: false},
-    //            {id: "portfolios", label: msg("My Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/mine`, icon: "menu_book", external: false},
+                {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile?lang=${getLocale()}`, icon: "person", external: false},
+                {id: "savedstates", label: msg("Saved projects"), href: `${globalSettings.hostname}/dashboard/savedstates?lang=${getLocale()}`, icon: "folder_open", external: false},
+    //            {id: "portfolios", label: msg("My Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/mine?lang=${getLocale()}`, icon: "menu_book", external: false},
             ],
             "student": [
-    //            {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses`, icon: "groups", external: false},
+    //            {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses?lang=${getLocale()}`, icon: "groups", external: false},
             ],
             "teacher": [
-    //            {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes`, icon: "groups", external: false},
-    //            {id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe`, icon: "menu_book", external: false},
+    //            {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes?lang=${getLocale()}`, icon: "groups", external: false},
+    //            {id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe?lang=${getLocale()}`, icon: "menu_book", external: false},
             ],
             "admin": []
         }
@@ -96,6 +97,7 @@ class Menu extends connect(store)(LitElement){
                     </vaadin-tab>
                     `
                 })}
+                <div class="grow"></div>
                 <vaadin-tab>
                     <locale-picker></locale-picker>
                 </vaadin-tab>
@@ -123,6 +125,9 @@ class Menu extends connect(store)(LitElement){
             flex: 1 1 auto;
             margin: 0 1rem;
         }
+        .grow {
+            flex-grow: 1;
+        }
 
         h1 {
         font-size: var(--lumo-font-size-l);
@@ -148,6 +153,11 @@ class Menu extends connect(store)(LitElement){
         vaadin-tabs.grow {
             display: flex;
             flex-grow: 1;
+        }
+
+        vaadin-tab:last-of-type { 
+            position: absolute;
+            bottom: 1rem;
         }
 
         dwengo-login-menu {

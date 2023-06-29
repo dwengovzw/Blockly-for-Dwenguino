@@ -23,41 +23,24 @@ export class LocalePicker extends LitElement {
 
 
   @state()
-  locales =  [
-    {
-      label: msg('English'),
-      value: 'en',
-    },
-    {
-      label: msg('Dutch'),
-      value: 'nl',
-    },
-    {
-      label: msg('French'),
-      value: 'fr',
-    },
-    {
-      label: msg('German'),
-      value: 'de',
-    },
-  ];
+  locales:any[] = [];
 
   initLocales() {
     this.locales = [
       {
-        label: msg('English'),
+        label: 'English',
         value: 'en',
       },
       {
-        label: msg('Dutch'),
+        label: 'Nederlands',
         value: 'nl',
       },
       {
-        label: msg('French'),
+        label: 'Français',
         value: 'fr',
       },
       {
-        label: msg('German'),
+        label: 'Deutsch',
         value: 'de',
       },
     ];

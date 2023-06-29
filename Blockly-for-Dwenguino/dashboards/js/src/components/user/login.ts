@@ -12,7 +12,7 @@ import { fetchUserInfo } from "../../state/features/user_slice";
 import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../../util"
 
 import '@vaadin/avatar';
-import { setLocaleFromUrl } from "../../localization/localization";
+import { getLocale, setLocaleFromUrl } from "../../localization/localization";
 
 @localized()
 @customElement("dwengo-login-menu")
@@ -77,7 +77,7 @@ class LoginMenu extends connect(store)(LitElement) {
     renderLoginMenuLoggedIn(){
         return html`<div>
                 <span class='loggedin-item login-title'>${msg("Welcome")} ${this.name}</span>
-                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/home'>${msg("Dashboard")}</a></span>
+                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/home?lang=${getLocale()}'>${msg("Dashboard")}</a></span>
                 <span class='loggedin-item'><a rel="external" href='${globalSettings.hostname}/oauth/logout'>${msg("Logout")}</a></span>
             </div>` 
     }

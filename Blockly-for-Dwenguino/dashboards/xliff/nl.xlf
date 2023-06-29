@@ -184,7 +184,7 @@
 </trans-unit>
 <trans-unit id="sa988ef8db8f90689">
   <source>Spirograph: Create beautiful geometric patterns with a virtual drawing robot.</source>
-  <target>Spirograaf: Maak mooie geometrische patronen met een virtuele tekentool voor robots.</target>
+  <target>Spirograaf: Maak mooie geometrische patronen met een virtuele tekenrobot.</target>
 </trans-unit>
 <trans-unit id="s7d34d002d5122424">
   <source>Moving robot: Program a robot car to move, avoid obstacles, and complete missions.</source>
@@ -208,7 +208,7 @@
 </trans-unit>
 <trans-unit id="s48337916f48720d1">
   <source>Physical Computing Curriculum</source>
-  <target>Curriculum voor Fysisch Rekenen</target>
+  <target>Curriculum Physical Computing</target>
 </trans-unit>
 <trans-unit id="s4be4666b6966d63c">
   <source>Do you want to learn more about physical computing and explore the possibilities of the simulator? Visit our website: </source>

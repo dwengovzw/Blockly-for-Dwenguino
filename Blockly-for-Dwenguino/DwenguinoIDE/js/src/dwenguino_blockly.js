@@ -473,6 +473,7 @@ let DwenguinoBlockly = {
       scenario: scenario,
       socialRobotXml: socialRobotXml,
       cppCode: cppCode,
+      lang: DwenguinoBlocklyLanguageSettings.getLang(),
     });
     // If the user is logged in, save the program in the cloud.
     if (DwenguinoBlockly.isUserLoggedIn()) {

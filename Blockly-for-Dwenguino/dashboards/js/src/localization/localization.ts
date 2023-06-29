@@ -15,6 +15,11 @@ export const {getLocale, setLocale} = configureLocalization({
 
 export const setLocaleFromUrl = async () => {
   const url = new URL(window.location.href);
-  const locale = url.searchParams.get('lang') || targetLocales[2]; // default to nl-BE
-  await setLocale(locale);
+  const locale = url.searchParams.get('lang') || targetLocales[2]; // default to nl
+  // Only switch when language is supported. Otherwise, switch to english.
+  if ((targetLocales as readonly string[]).includes(locale)) {
+    await setLocale(locale);
+  } else {
+    await setLocale(sourceLocale);
+  }
 };

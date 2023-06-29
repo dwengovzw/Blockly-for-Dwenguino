@@ -47,7 +47,8 @@ class SavedStateController {
                     inSavedItemList: true
                 })
                 let savedProg = await prog.save()
-                return res.status(302).send({message: "Saved new program", redirectUrl: `${process.env.SERVER_URL}/savedstates/open?uuid=${savedProg.uuid}`})
+                const langParam = req.body.lang ? `&lang=${req.body.lang}` : ""
+                return res.status(302).send({message: "Saved new program", redirectUrl: `${process.env.SERVER_URL}/savedstates/open?uuid=${savedProg.uuid}${langParam}`})
             }
             
         } catch (err){

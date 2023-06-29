@@ -52,7 +52,7 @@ class WelcomePage extends connect(store)(LitElement) {
             <p><strong>${msg('Disclaimer:')}</strong> ${msg('This application is provided "as is" without any warranty, express or implied. The use of this application is at your own risk. We disclaim any warranties, including but not limited to, the implied warranties of merchantability and fitness for a particular purpose. We shall not be liable for any direct, indirect, incidental, consequential, or special damages arising out of or in connection with the use or performance of this application.')}</p>
 
             <h2>${msg("Privacy Notice")}</h2>
-            <p>${msg("If you want a detailed description of how we use your data, you can read our ")}<a target="_blank" href="${msg("https://dwengo.org/assets/files/privacy/privacy_notice_simulator_en.pdf")}">${msg("Privacy Notice")}</a>.</p>
+            <p>${msg("If you want a detailed description of how we use your data, you can read our ")} <a target="_blank" href="${msg("https://dwengo.org/assets/files/privacy/privacy_notice_simulator_en.pdf")}">${msg("Privacy Notice")}</a>.</p>
            
             </div>
         `
