@@ -208,11 +208,11 @@
 </trans-unit>
 <trans-unit id="s48337916f48720d1">
   <source>Physical Computing Curriculum</source>
-  <target>Curriculum Physical Computing</target>
+  <target>Physical Computing Curriculum</target>
 </trans-unit>
 <trans-unit id="s4be4666b6966d63c">
   <source>Do you want to learn more about physical computing and explore the possibilities of the simulator? Visit our website: </source>
-  <target>Wil je meer weten over fysisch rekenen en de mogelijkheden van de simulator verkennen? Bezoek onze website:</target>
+  <target>Wil je meer weten over physical computing en de mogelijkheden van de simulator verkennen? Bezoek onze website:</target>
 </trans-unit>
 <trans-unit id="scefc6873f2e3f24e">
   <source>https://dwengo.org/en/physical_computing/</source>
@@ -224,7 +224,7 @@
 </trans-unit>
 <trans-unit id="sccc152a1fd3103be">
   <source>Please note that this simulator is currently in beta phase. This means that some features may change or be removed as we continue to develop and make improvements. We are working hard to provide an optimal programming experience and appreciate your understanding during this process.</source>
-  <target>Houd er rekening mee dat deze simulator zich momenteel in de bètafase bevindt. Dit betekent dat sommige functies kunnen veranderen of worden verwijderd terwijl we blijven ontwikkelen en verbeteringen doorvoeren. We werken hard om een optimale programmeerervaring te bieden en waarderen je begrip tijdens dit proces.</target>
+  <target>Houd er rekening mee dat deze simulator zich momenteel in de bètafase bevindt. Dit betekent dat sommige functies kunnen veranderen of verdwijnen terwijl we blijven ontwikkelen en verbeteringen doorvoeren. We werken hard om een optimale programmeerervaring te bieden en waarderen je begrip tijdens dit proces.</target>
 </trans-unit>
 <trans-unit id="s60a27112c2c1fad8">
   <source>Disclaimer:</source>
@@ -555,25 +555,13 @@
   <source>Confirm</source>
   <target>Bevestigen</target>
 </trans-unit>
-<trans-unit id="s4caed5b7a7e5d89b">
-  <source>English</source>
-  <target>Engels</target>
-</trans-unit>
-<trans-unit id="s95d56e58f816d211">
-  <source>Dutch</source>
-  <target>Nederlands</target>
-</trans-unit>
-<trans-unit id="s75a27f43413e02c5">
-  <source>French</source>
-  <target>Frans</target>
-</trans-unit>
-<trans-unit id="s63e71d20d1eaca93">
-  <source>German</source>
-  <target>Duits</target>
-</trans-unit>
 <trans-unit id="sefcf950b3cc4fc3b">
   <source>Language</source>
   <target>Taal</target>
+</trans-unit>
+<trans-unit id="s1f7698c061c208c9">
+  <source>Open</source>
+  <target>Openen</target>
 </trans-unit>
 </body>
 </file>

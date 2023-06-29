@@ -336,6 +336,7 @@
 </trans-unit>
 <trans-unit id="sf1fa5130a809d2de">
   <source>Create assignment</source>
+  <target>Créer un devoir</target>
 </trans-unit>
 <trans-unit id="sf0da70669353fe28">
   <source>Are you sure you want to remove this classgroup: </source>
@@ -554,25 +555,13 @@
   <source>Type: <x id="0" equiv-text="${itemType}"/></source>
   <target>Type: <x id="0" equiv-text="${itemType}"/></target>
 </trans-unit>
-<trans-unit id="s4caed5b7a7e5d89b">
-  <source>English</source>
-  <target>Anglais</target>
-</trans-unit>
-<trans-unit id="s95d56e58f816d211">
-  <source>Dutch</source>
-  <target>Néerlandais</target>
-</trans-unit>
-<trans-unit id="s75a27f43413e02c5">
-  <source>French</source>
-  <target>français</target>
-</trans-unit>
-<trans-unit id="s63e71d20d1eaca93">
-  <source>German</source>
-  <target>Allemand</target>
-</trans-unit>
 <trans-unit id="sefcf950b3cc4fc3b">
   <source>Language</source>
   <target>Langue</target>
+</trans-unit>
+<trans-unit id="s1f7698c061c208c9">
+  <source>Open</source>
+  <target>Ouvrir</target>
 </trans-unit>
 </body>
 </file>

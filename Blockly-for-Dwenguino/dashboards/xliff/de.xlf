@@ -554,25 +554,13 @@
   <source>Type: <x id="0" equiv-text="${itemType}"/></source>
   <target>Type: <x id="0" equiv-text="${itemType}"/></target>
 </trans-unit>
-<trans-unit id="s4caed5b7a7e5d89b">
-  <source>English</source>
-  <target>Englisch</target>
-</trans-unit>
-<trans-unit id="s95d56e58f816d211">
-  <source>Dutch</source>
-  <target>Niederländisch</target>
-</trans-unit>
-<trans-unit id="s75a27f43413e02c5">
-  <source>French</source>
-  <target>Französisch</target>
-</trans-unit>
-<trans-unit id="s63e71d20d1eaca93">
-  <source>German</source>
-  <target>Deutsch</target>
-</trans-unit>
 <trans-unit id="sefcf950b3cc4fc3b">
   <source>Language</source>
   <target>Sprache</target>
+</trans-unit>
+<trans-unit id="s1f7698c061c208c9">
+  <source>Open</source>
+  <target>Öffnen</target>
 </trans-unit>
 </body>
 </file>
