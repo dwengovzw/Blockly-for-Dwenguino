@@ -1,9 +1,8 @@
 import axios from "axios";
-import AbstractOAuthController from "./abstract.oauth.controller.js";
-import db from "../config/db.config.js"
-import oauthConfig from "../config/oauth.config.js";
-import crypto from "crypto"
-import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
+import AbstractOAuthController from "./abstract.oauth.controller";
+import db from "../config/db.config"
+import oauthConfig from "../config/oauth.config";
+import MinimalUserInfo from "../datatypes/minimalUserInfo";
 
 
 class LeerIdOAuthController extends AbstractOAuthController{
@@ -72,7 +71,7 @@ class LeerIdOAuthController extends AbstractOAuthController{
     }
 
     logout(req, res){
-        res.status(200).send({message: "Logout successful"})  
+        res.redirect(oauthConfig.logoutUrlMap[this.platform]) 
     }
 }
 

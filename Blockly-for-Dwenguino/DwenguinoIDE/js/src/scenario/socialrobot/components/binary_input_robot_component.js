@@ -6,8 +6,8 @@ import BindMethods from "../../../utils/bindmethods.js"
 export { BinaryInputRobotComponent };
 
 class BinaryInputRobotComponent extends RobotComponent {
-    constructor(activeValue = 1, inactiveValue = 0){
-        super();
+    constructor(activeValue = 1, inactiveValue = 0, simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
         this.activeValue = activeValue;
         this.inactiveValue = inactiveValue;

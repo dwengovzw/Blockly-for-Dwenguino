@@ -1,10 +1,9 @@
-import { Document, Schema, model, Types } from "mongoose"
-import { ID } from "./modelutils.js"
-import { IUser, User } from "./user.model.js"
-import { IPortfolio } from "./portfolio.model.js"
-import  v4 from "uuid/v4.js"
+import { Schema, model, Types } from "mongoose"
+import { IUser, User } from "./user.model"
+import { IPortfolio } from "./portfolio.model"
+import  v4 from "uuid/v4"
 import { PopulatedDoc } from 'mongoose';
-import { Portfolio } from "./portfolio.model.js"
+import { Portfolio } from "./portfolio.model"
 
 interface IStudentTeam {
     uuid?: string,

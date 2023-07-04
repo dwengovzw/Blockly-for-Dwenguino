@@ -1,7 +1,8 @@
 import { Schema, Model } from "mongoose"
-import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js"
-import { ILogItem, LogItemSchema } from '../logitem.model.js'
-import { PortfolioItem } from "./portfolio_item.model.js"
+import { ISolutionItem, SolutionItemSchema } from "./solution_item.model"
+import { ILogItem, LogItemSchema } from '../logitem.model'
+import { PortfolioItem } from "./portfolio_item.model"
+import { ITEMTYPES } from "../../config/itemtypes.config"
 
 interface IBlocklyProgSequenceItemExtraFields {
     eventSequence: [ILogItem],
@@ -13,7 +14,7 @@ const BlocklyProgSequenceItemSchemaFields: Record<keyof IBlocklyProgSequenceItem
 }
 const BlocklyProgSequenceItemSchema = SolutionItemSchema(BlocklyProgSequenceItemSchemaFields)
 interface IBlocklyProgSequenceItemModel extends Model<IBlocklyProgSequenceItem>{}
-const BlocklyProgSequenceItem = PortfolioItem.discriminator<IBlocklyProgSequenceItem, IBlocklyProgSequenceItemModel>('BlocklyProgSequenceItem', BlocklyProgSequenceItemSchema)
+const BlocklyProgSequenceItem = PortfolioItem.discriminator<IBlocklyProgSequenceItem, IBlocklyProgSequenceItemModel>(ITEMTYPES.BlocklyProgSequenceItem, BlocklyProgSequenceItemSchema)
 
 export {
     IBlocklyProgSequenceItem,

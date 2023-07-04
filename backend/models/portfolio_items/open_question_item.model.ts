@@ -1,6 +1,7 @@
 import { Schema, Model } from "mongoose"
-import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model.js"
-import { PortfolioItem } from "./portfolio_item.model.js"
+import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model"
+import { PortfolioItem } from "./portfolio_item.model"
+import { ITEMTYPES } from "../../config/itemtypes.config"
 
 interface IOpenQuestionItemExtraFields {
     questionText: string
@@ -11,7 +12,7 @@ const OpenQuestionSchemaFields: Record<keyof IOpenQuestionItemExtraFields, any> 
 }
 const OpenQuestionItemSchema = AssignmentItemSchema(OpenQuestionSchemaFields)
 interface IOpenQuestionItemModel extends Model<IOpenQuestionItem>{}
-const OpenQuestionItem = PortfolioItem.discriminator<IOpenQuestionItem, IOpenQuestionItemModel>('OpenQuestion', OpenQuestionItemSchema)
+const OpenQuestionItem = PortfolioItem.discriminator<IOpenQuestionItem, IOpenQuestionItemModel>(ITEMTYPES.OpenQuestion, OpenQuestionItemSchema)
 
 export {
     IOpenQuestionItem,

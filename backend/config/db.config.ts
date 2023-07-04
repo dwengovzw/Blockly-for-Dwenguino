@@ -2,6 +2,7 @@ const PLATFORMS = {
     github: "github",
     leerId: "leerId",
     beACM: "beACM",
+    test: ""
 }
 
 // only support test platform in dev mode
@@ -9,18 +10,17 @@ if (process.env.NODE_ENV == "debug"){
     PLATFORMS["test"] = "test"
 }
 
-const ROLES = {
+export const ROLES = {
     user: "user",
     student: "student", 
     teacher: "teacher", 
     admin: "admin",
 };
 
-type dbSettings = {
-    [key: string]: any;
+
+const db = {
+    PLATFORMS: PLATFORMS,
+    ROLES: ROLES,
 }
-const db:dbSettings = {}
-db.PLATFORMS = PLATFORMS;
-db.ROLES = ROLES;
 
 export default db

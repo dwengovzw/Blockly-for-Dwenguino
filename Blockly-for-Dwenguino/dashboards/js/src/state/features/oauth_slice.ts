@@ -4,7 +4,6 @@ export const oauthSlice = createSlice({
     name: "oauth",
     initialState: {
         platforms: ["none"],
-        loggedIn: false
     }, 
     /* In these functions you can use mutating logic since the createSlice
     function uses Immer to make sure the logic your write will be immutable.*/

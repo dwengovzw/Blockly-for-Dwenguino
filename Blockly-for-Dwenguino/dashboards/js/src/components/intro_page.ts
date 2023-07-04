@@ -1,6 +1,8 @@
+import { localized } from "@lit/localize";
 import { LitElement, css, html } from "lit";
 import { customElement } from "lit/decorators.js"; // needs .js to transpile
 
+@localized()
 @customElement("dwengo-intro-page")
 class IntroPage extends LitElement {
 

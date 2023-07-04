@@ -5,15 +5,16 @@
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { fetchPlatforms } from "../../state/features/oauth_slice";
 import { fetchUserInfo } from "../../state/features/user_slice";
 import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../../util"
 
 import '@vaadin/avatar';
+import { getLocale, setLocaleFromUrl } from "../../localization/localization";
 
-
+@localized()
 @customElement("dwengo-login-menu")
 class LoginMenu extends connect(store)(LitElement) {
     
@@ -25,11 +26,8 @@ class LoginMenu extends connect(store)(LitElement) {
     @state() platforms: string[] = []
     @state() menuIsOpen: boolean;
 
-    platformToLabelMap: Record<string, string> = {
-        "github": msg("GitHub"),
-        "leerId": msg("LeerID Flanders (students only)"),
-        "beACM": msg("Flemish gouvernment")
-    }
+    @state()
+    platformToLabelMap: Record<string, string>
 
     stateChanged(state: any): void {
         this.platforms = state.oauth.platforms
@@ -39,6 +37,20 @@ class LoginMenu extends connect(store)(LitElement) {
 
     constructor(){
         super();
+        // Hack to make translations work
+        setLocaleFromUrl().then(() => {
+            this.platformToLabelMap = {
+                "github": msg("GitHub"),
+                "leerId": msg("LeerID Flanders (students only)"),
+                "beACM": msg("Flemish government")
+            }
+            this.requestUpdate()
+        });
+        this.platformToLabelMap = {
+            "github": msg("GitHub"),
+            "leerId": msg("LeerID Flanders (students only)"),
+            "beACM": msg("Flemish government")
+        }
         this.menuIsOpen = false;
         const params:URLSearchParams = new URLSearchParams(window.location.search);
         let reqInfo:string = params.get("originalRequestInfo")?.toString() as string;
@@ -65,7 +77,7 @@ class LoginMenu extends connect(store)(LitElement) {
     renderLoginMenuLoggedIn(){
         return html`<div>
                 <span class='loggedin-item login-title'>${msg("Welcome")} ${this.name}</span>
-                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/home'>${msg("Dashboard")}</a></span>
+                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/home?lang=${getLocale()}'>${msg("Dashboard")}</a></span>
                 <span class='loggedin-item'><a rel="external" href='${globalSettings.hostname}/oauth/logout'>${msg("Logout")}</a></span>
             </div>` 
     }

@@ -3,9 +3,9 @@
  */
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, state, property} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import { UserInfo, initialUserState, putUserInfo } from "../../state/features/user_slice"
@@ -22,20 +22,13 @@ import '@vaadin/text-field';
 import '@vaadin/email-field';
 
 
-
+@localized()
 @customElement("dwengo-profile-page")
 class Profile extends connect(store)(LitElement) {
-    @state() userInfo: UserInfo = initialUserState
+    @property({type: Object}) 
+    userInfo: UserInfo = store.getState().user
 
     @state() checkboxFocussed: boolean = false;
-
-    stateChanged(state: any): void {
-        this.userInfo = structuredClone(state.user)
-    }
-
-    constructor(){
-        super();
-    }
 
     handleSave(){
         console.log(this.userInfo)
@@ -62,25 +55,6 @@ class Profile extends connect(store)(LitElement) {
                 <div><vaadin-text-field @change=${(e) => this.userInfo.lastname = e.target.value } outlined label="${msg("Lastname")}" type="text" value="${this.userInfo?.lastname}"></vaadin-text-field></div>
                 <div><vaadin-email-field @change=${(e) => this.userInfo.email = e.target.value } outlined label="${msg("Email")}" type="email" value="${this.userInfo?.email}"></vaadin-email-field></div>
                 <div><vaadin-date-picker @change=${(e) => this.userInfo.birthdate = new Date(e.target.value).toISOString()} outlined label="${msg("Birthdate")}" value="${this.userInfo?.birthdate ? `${new Date(this.userInfo?.birthdate as string).toISOString().split('T')[0]}`: ""}"></vaadin-date-picker></div>
-                <div class="checkbox-container ${this.checkboxFocussed ? "highlightborder" : ""}">
-                    <span class="checkbox-label ${this.checkboxFocussed ? "highlightlabel" : ""}">${msg('My roles')}</span>
-                    <mwc-formfield label="${msg("Student")}">
-                        <mwc-checkbox 
-                            @change=${(e) => e.target.checked ? this.addRole("student") : this.removeRole("student") } 
-                            @focusout=${(e)=>{this.checkboxFocussed = false}} 
-                            @focus=${(e)=>{this.checkboxFocussed = true}}
-                            ?checked=${this.userInfo.roles.includes("student")}
-                            disabled="true"></mwc-checkbox>
-                    </mwc-formfield>
-                    <mwc-formfield label="${msg("Teacher")}">
-                        <mwc-checkbox 
-                            @change=${(e) => e.target.checked ? this.addRole("teacher") : this.removeRole("teacher") } 
-                            @focusout=${(e)=>{this.checkboxFocussed = false}} 
-                            @focus=${(e)=>{this.checkboxFocussed = true}} 
-                            ?checked=${this.userInfo.roles.includes("teacher")}
-                            disabled="true"></mwc-checkbox>
-                    </mwc-formfield>
-                </div>
                 <div><mwc-textfield outlined label="${msg("You are logged in with")}" type="text" disabled="true" value= "${this.userInfo?.platform}"></mwc-textfield></div>
                 <mwc-button @click=${this.handleSave} raised>${msg("Save")}</mwc-button>
             </div>

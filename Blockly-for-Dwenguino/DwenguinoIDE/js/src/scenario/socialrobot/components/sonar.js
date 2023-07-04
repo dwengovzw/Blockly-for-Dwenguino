@@ -15,8 +15,8 @@ class SocialRobotSonar extends RobotComponent{
         triggerPin: "triggerPin",
         echoPin: "echoPin"
     }
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
     }
 

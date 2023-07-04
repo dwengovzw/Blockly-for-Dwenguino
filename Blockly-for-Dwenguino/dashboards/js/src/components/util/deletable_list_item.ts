@@ -4,12 +4,13 @@
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property, state} from 'lit/decorators.js';
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 
 import "@material/mwc-button"
 import "@material/mwc-dialog"
 
+@localized()
 @customElement("dwengo-deletable-list-element")
 class DeletableListItem extends LitElement {
     @property({type: Array}) fields: string[] = [];
@@ -18,14 +19,6 @@ class DeletableListItem extends LitElement {
     @property({type: Boolean}) header: boolean = false
 
     @state() showConfirmDialog: boolean = false;
-
-    constructor(){
-        super()
-    }
-
-    stateChanged(state: any) {
-
-    }
 
     handleDelete(){
         this.showConfirmDialog = true;
@@ -72,7 +65,7 @@ class DeletableListItem extends LitElement {
 
     renderConfirmDialog(){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to delete the item ")}<em>${this.fields.join(" - ")}</em>?
             </div>

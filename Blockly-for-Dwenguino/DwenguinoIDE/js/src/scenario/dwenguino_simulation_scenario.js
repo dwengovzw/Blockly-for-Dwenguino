@@ -14,9 +14,32 @@ class DwenguinoSimulationScenario {
 
     audiocontext = null;
     osc = null;
+    name = ""
 
-    constructor(logger) {
+    stateChangedListeners = [];
+
+    editorState = null;
+
+    constructor(logger, name="") {
         this.logger = logger;
+        this.name = name;
+    }
+
+    /**
+     * Add state changed listener, should fire when state that should be saved in the users account changes.
+     * @param {*} listener 
+     */
+    addStateHasChangedListener(listener){
+        this.stateChangedListeners.push(listener);
+    }
+
+    /**
+     * Fire the state changed event to all listeners.
+     */
+    fireStateChangedEvent(){
+        for (let listener of this.stateChangedListeners){
+            listener();
+        }
     }
 
     /**
@@ -85,6 +108,25 @@ class DwenguinoSimulationScenario {
      */
     resetScenario(){
 
+    }
+
+    /**
+     * Set the editor state
+     * @param {Object} editorState
+     */
+    setEditorState(editorState){
+        this.editorState = editorState;
+    }
+
+    /**
+     * Request create audio context.
+     */
+    initAudioContext(){
+        try {
+            this.audiocontext = new AudioContext();
+        } catch (e) {
+            console.log('Web Audio API is not supported in this browser');
+        }
     }
 
 }

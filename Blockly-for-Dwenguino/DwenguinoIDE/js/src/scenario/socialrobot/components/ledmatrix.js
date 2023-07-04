@@ -19,8 +19,8 @@ const DisplayDataTypesEnum = {
  * @extends AbstractRobotComponent
  */
 class SocialRobotLedMatrix extends AbstractRobotComponent{
-    constructor(eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses){
-        super(eventBus, htmlClasses);
+    constructor(eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses, simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
 
         this._id = id;
@@ -91,7 +91,20 @@ class SocialRobotLedMatrix extends AbstractRobotComponent{
     }
 
     insertHtml(){
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
+        this.component_container = $("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'></div>")
+        this.component_container.append($("<div></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div>"))
+        this.component_container.css('top', this.getOffset()['top'] + '%');
+        this.component_container.css('left', this.getOffset()['left'] + '%');
+        this.component_container.append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+
+        this.simulation_container.append(this.component_container);
+
+        this.component_container.on('dblclick', () => { 
+            this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['ledmatrixOptions']));
+            this.showDialog();
+        });
+
+        /*$('#sim_container').append("<div id='sim_" + this.getType() + this.getId() + "' class='sim_element sim_element_" + this.getType() + " draggable'><div><span class='grippy'></span>" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',[this.getType()]) + " " + this.getId() + "</div></div>");
         $('#sim_' + this.getType() + this.getId()).css('top', this.getOffset()['top'] + 'px');
         $('#sim_' + this.getType() + this.getId()).css('left', this.getOffset()['left'] + 'px');
         $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
@@ -101,11 +114,11 @@ class SocialRobotLedMatrix extends AbstractRobotComponent{
         simLedMatrix.addEventListener('dblclick', () => { 
             this.createComponentOptionsModalDialog(DwenguinoBlocklyLanguageSettings.translate(['ledmatrixOptions'])); 
             this.showDialog();
-        });
+        });*/
     }
 
     removeHtml(){
-        $('#sim_' + this.getType() + this.getId()).remove();
+        this.component_container.remove();
     }
 
     toXml(){
@@ -117,12 +130,12 @@ class SocialRobotLedMatrix extends AbstractRobotComponent{
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
-            data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']) + parseFloat($(simId).attr('data-x')), "'");
+            data = data.concat(" OffsetLeft='", parseFloat($(simId).attr('data-x')), "'");
         } else {
             data = data.concat(" OffsetLeft='", parseFloat(this.getOffset()['left']), "'");
         }
         if ($(simId).attr('data-y')) {
-            data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']) + parseFloat($(simId).attr('data-y')), "'");
+            data = data.concat(" OffsetTop='", parseFloat($(simId).attr('data-y')), "'");
         } else {
             data = data.concat(" OffsetTop='", parseFloat(this.getOffset()['top']), "'");
         }

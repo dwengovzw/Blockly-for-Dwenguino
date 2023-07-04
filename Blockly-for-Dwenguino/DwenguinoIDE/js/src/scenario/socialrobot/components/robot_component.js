@@ -6,8 +6,24 @@ import BindMethods from "../../../utils/bindmethods.js"
 export { RobotComponent }
 
 class RobotComponent extends AbstractRobotComponent {
-    constructor() {
-        super();
+
+    compontent_container = null
+
+    drawingCanvas = null
+
+    possibleRotations = [0, 90, -90, 180]
+
+    rotatable = true
+
+    scaleable = false
+
+    initialContainerDimensions = {
+        "width": 100,
+        "height": 100
+    }
+
+    constructor(simulation_container=null) {
+        super(simulation_container);
         BindMethods(this);
     }
 
@@ -29,6 +45,8 @@ class RobotComponent extends AbstractRobotComponent {
         this._image.src = imgSource;
         this._canvasId = canvasId;
         this._stateUpdated = false;
+        this._rotation = 0;
+        this._scale = 1;
         this.insertHtml();
         this.toggleVisibility(visible);
     }
@@ -43,6 +61,8 @@ class RobotComponent extends AbstractRobotComponent {
         this._height = parseFloat(xml.getAttribute('Height'));
         let offsetLeft = parseFloat(xml.getAttribute('OffsetLeft'));
         let offsetTop = parseFloat(xml.getAttribute('OffsetTop'));
+        this._rotation = parseFloat(xml.getAttribute('Rotation'));
+        this._scale = parseFloat(xml.getAttribute('Scale'));
         this._offset = {
             "left": offsetLeft,
             "top": offsetTop
@@ -83,62 +103,70 @@ class RobotComponent extends AbstractRobotComponent {
             pinsTranslationKey = "pins";
         }
         let componentTitleElement = $("#component_title_" + this.getType() + "_" + this.getId());
+        componentTitleElement.attr("class", "component_title")
         componentTitleElement.html(connectedPinNames);
         document.getSelection().removeAllRanges();
     }
     
     insertHtml(optionsLabel = "options") {
-        
-        $('#sim_container').append("<div id='sim_" + this.getType() + this.getId() 
-            + "' class='sim_element sim_element_" 
-            + this.getType() 
-            + " draggable'><div>" 
-            + "<span id='component_title_" + this.getType() + "_" + this.getId() + "'>"
-            + "</span>"
-            + "</div></div>");
-        // First add the element at position 0, 0
-        $('#sim_' + this.getType() + this.getId()).css('top', 0 + 'px');
-        $('#sim_' + this.getType() + this.getId()).css('left', 0 + 'px');
-        // Now move the element according to its offset by using css transform
-        $('#sim_' + this.getType() + this.getId()).css(
+        this.component_container = $("<div id='sim_" + this.getType() + this.getId() 
+        + "' class='sim_element sim_element_" 
+        + this.getType() 
+        + " draggable'></div>")
+        this.component_container.append("<div><span id='component_title_" + this.getType() + "_" + this.getId() + "'></span></div>");
+        this.component_container.css('top', this.getOffset()['top'] + '%');
+        this.component_container.css('left', this.getOffset()['left'] + '%');
+        /*this.component_container.css(
             'transform',
             "translate(" + this.getOffset()['left'] + "px, " +  this.getOffset()['top'] + "px)"
-            )
-        // add the offset to the data-x and data-y attributes to let the draggable system know where the element is now
-        $('#sim_' + this.getType() + this.getId()).attr("data-x", this.getOffset()['left']);
-        $('#sim_' + this.getType() + this.getId()).attr("data-y", this.getOffset()['top']);
-        $('#sim_' + this.getType() + this.getId()).append("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
-    
-        let simSensor = document.getElementById('sim_'+this.getType() + this.getId());
+            )*/
+        this.component_container.attr("data-x", this.getOffset()['left']);
+        this.component_container.attr("data-y", this.getOffset()['top']);
+        this.drawingCanvas = $("<canvas id='" + this.getCanvasId() + "' class='" + this.getHtmlClasses() + "'></canvas>");
+        this.setRotation(this.getRotation());
+        this.component_container.append(this.drawingCanvas);
+        this.simulation_container.append(this.component_container);
 
-        if (simSensor){
-            simSensor.addEventListener('mouseup', (event) => {
+        if (this.component_container){
+            this.component_container.on('mouseup', (event) => {
                 let offset = {
                     "left": event.currentTarget.getAttribute("data-x"),
                     "top": event.currentTarget.getAttribute("data-y")
                     };
                 this.setOffset(offset);
-            })
-    
-            simSensor.addEventListener('dblclick', () => { 
+            });
+            this.component_container.on("dblclick", (event) => {
                 this.createComponentOptionsModalDialog(optionsLabel);
                 this.showDialog();
             });
+            // Detect double tap
+            this.component_container.on("touchstart", (event) => {
+                if (!this.lastTouchStart) {
+                    this.lastTouchStart = event.timeStamp;
+                    return;
+                }
+                let delta = event.timeStamp - this.lastTouchStart;
+                if (delta < 500 && delta > 0) {
+                    event.preventDefault();
+                    this.createComponentOptionsModalDialog(optionsLabel);
+                    this.showDialog();
+                }
+                this.lastTouchStart = event.timeStamp;
+            })
         }
-       
+        this.setComponentName()
 
-        this.setComponentName();
     }
 
     removeHtml() {
-        $('#sim_' + this.getType() + this.getId()).remove();
+        this.component_container.remove();
     }
 
     toggleVisibility(visible) {
         if (visible) {
-            $('#sim_' + this.getType() + this.getId()).css('visibility', 'visible');
+            this.component_container.css('visibility', 'visible');
         } else {
-            $('#sim_' + this.getType() + this.getId()).css('visibility', 'hidden');
+            this.component_container.css('visibility', 'hidden');
         }
     }
 
@@ -151,6 +179,8 @@ class RobotComponent extends AbstractRobotComponent {
         data = data.concat(" Id='", this.getId().toString(), "'");
         data = data.concat(" Width='", this.getWidth().toString(), "'");
         data = data.concat(" Height='", this.getHeight().toString(), "'");
+        data = data.concat(" Rotation='", this.getRotation().toString(), "'");
+        data = data.concat(" Scale='", this.getScale().toString(), "'");
 
         let simId = '#sim_' + this.getType() + this.getId();
         if ($(simId).attr('data-x')) {
@@ -216,8 +246,50 @@ class RobotComponent extends AbstractRobotComponent {
         for (let key in this.getPins()){
             this.createPinOptionsInModalDialog(key);
         }
-        
+        if (this.rotatable){
+            this.createRotationOptionsInModalDialog()
+        }
+        if (this.scaleable){
+            this.createScaleOptionsInModalDialog()
+        }
+    }
 
+    createRotationOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsRotation" class="ui-widget row mb-4">');
+        $('#componentOptionsRotation').append('<div class="col-md-2">' + DwenguinoBlocklyLanguageSettings.translate(["rotation"])+'</div>');
+        $('#componentOptionsRotation').append('<div id="rotation" class="col-md-10"></div>');
+
+        // Add a slider to the modal dialog to change the rotation of the component
+        $('#rotation').append('<div id="rotationSlider" class="col-md-10"></div>');
+        $('#rotationSlider').append('<input id="rotationSliderInput" type="range" step="45" min="0" max="360" value="' + this.getRotation() + '" class="slider" id="myRange">');
+        $('#rotationSlider').append('<span id="rotationSliderValue" class="col-md-2">' + this.getRotation() + '° </span>');
+
+        // capture change events from the rotation slider and update the component rotation
+        $('#rotationSliderInput').on('input', () => {
+            let newRotation = $('#rotationSliderInput').val();
+            this.setRotation(newRotation);
+            $('#rotationSliderValue').html(newRotation  + '°');
+            this._eventBus.dispatchEvent(EventsEnum.SAVE);
+        });        
+    }
+
+    createScaleOptionsInModalDialog(){
+        $('#componentOptionsModalBody').append('<div id="componentOptionsScale" class="ui-widget row mb-4">');
+        $('#componentOptionsScale').append('<div class="col-md-2">' + DwenguinoBlocklyLanguageSettings.translate(["scale"])+'</div>');
+        $('#componentOptionsScale').append('<div id="scale" class="col-md-10"></div>');
+
+        // Add a slider to the modal dialog to change the scale of the component
+        $('#scale').append('<div id="scaleSlider" class="col-md-10"></div>');
+        $('#scaleSlider').append('<input id="scaleSliderInput" type="range" step="0.1" min="0.5" max="1.5" value="' + this.getScale() + '" class="slider" id="myRange">');
+        $('#scaleSlider').append('<span id="scaleSliderValue" class="col-md-2">' + this.getScale() + 'x </span>');
+
+        // capture change events from the scale slider and update the component scale
+        $('#scaleSliderInput').on('input', () => {
+            let newScale = $('#scaleSliderInput').val();
+            this.setScale(newScale);
+            $('#scaleSliderValue').html('x' + newScale);
+            this._eventBus.dispatchEvent(EventsEnum.SAVE);
+        });
     }
 
     //pinName: digitalPin & analogPin -> keys in the pins object
@@ -332,6 +404,39 @@ class RobotComponent extends AbstractRobotComponent {
 
     isStateUpdated() {
         return this._stateUpdated;
+    }
+
+    getRotation() {
+        return this._rotation;
+    }
+
+    setRotation(rotation) {
+        if (this.drawingCanvas){
+            this.drawingCanvas.get(0).style.rotate = rotation + "deg";
+        }
+        this._rotation = rotation;
+    }
+
+    getScale() {
+        return this._scale;
+    }
+
+    setScale(scale) {
+        if (scale >= 0.5 && scale <= 1.5){
+            if (this.drawingCanvas && this.getScale() != scale){
+                //this.drawingCanvas.get(0).style.scale = scale;
+                this.drawingCanvas.get(0).style.width = this.initialContainerDimensions.width * scale + "px";
+                this.drawingCanvas.get(0).style.height = this.initialContainerDimensions.height * scale + "px";
+            }
+            this._scale = scale;
+        }
+    }
+
+    setInitialDimensions(width, height){
+        this.initialContainerDimensions.width = width;
+        this.initialContainerDimensions.height = height;
+        this.drawingCanvas.get(0).style.width = width * this.getScale() + "px";
+        this.drawingCanvas.get(0).style.height = height * this.getScale() + "px";
     }
 
     getCanvasId() {

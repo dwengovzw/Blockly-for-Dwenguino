@@ -48,6 +48,8 @@ Object.freeze(TypesEnum);
  */
 class RobotComponentsFactory {
   logger = null;
+  simulation_container = null;
+  robotConfigurationChangedListeners = [];
  
   /**
    * 
@@ -67,6 +69,34 @@ class RobotComponentsFactory {
     for (const [type, t] of Object.entries(TypesEnum)) {
       this._numberOfComponentsOfType[t] = 0;
     }
+  }
+
+  /**
+   * Add state changed listener, should fire when state that should be saved in the users account changes.
+   * @param {*} listener 
+   */
+  addRobotConfigurationChangedListener(listener){
+    this.robotConfigurationChangedListeners.push(listener);
+  }
+
+  removeRobotConfigurationChangedListeners(){
+    this.robotConfigurationChangedListeners = [];
+  }
+
+  /**
+  * Fire the state changed event to all listeners.
+  */
+  fireRobotConfigurationChanged(){
+    for (let listener of this.robotConfigurationChangedListeners){
+        listener();
+    }
+  }
+
+  /***
+   * @param { JQuery<HTMLElement> } simulation_container
+   */
+  setSimulationContainer(simulation_container){
+    this.simulation_container = simulation_container;
   }
 /**
  * Sets the state of the simulation
@@ -99,9 +129,11 @@ class RobotComponentsFactory {
    * Remove all social robot components from the scenario.
    */
   removeAllSocialRobotComponents(){
-    for(var i = 0; i < this._robot.length; i++){
-      this.removeRobotComponentWithTypeAndId(this._robot[i].getType(), this._robot[i].getId());
+    let rbCopy = this._robot.slice();
+    for(var i = 0; i < rbCopy.length; i++){
+      this.removeRobotComponentWithTypeAndId(rbCopy[i].getType(), rbCopy[i].getId());
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -229,13 +261,16 @@ class RobotComponentsFactory {
     //component.reset();
     component.removeHtml();
 
+    let remainingComponents = []
     for(let i = 0; i < this._robot.length; i++){
       if(this._robot[i].getType() == type && this._robot[i].getId() == id){
-        this._robot.splice(i, 1);
         this.decrementNumberOf(type);
+      } else {
+        remainingComponents.push(this._robot[i]);
       }
     }
-
+    this._robot = remainingComponents;
+    this.fireRobotConfigurationChanged();
   }
   
   /**
@@ -288,6 +323,7 @@ class RobotComponentsFactory {
         this.addBuzzer();
         break;
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -339,6 +375,7 @@ class RobotComponentsFactory {
         this.removeBuzzer();
         break;
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -406,6 +443,7 @@ class RobotComponentsFactory {
       case TypesEnum.BUZZER:
         this.addBuzzerFromXml(data);
     }
+    this.fireRobotConfigurationChanged();
   }
 
   /**
@@ -435,7 +473,7 @@ class RobotComponentsFactory {
       pins[SocialRobotServo.pinNames.digitalPin] = 20 - id;
     }
     
-    let servo = new SocialRobotServo();
+    let servo = new SocialRobotServo(this.simulation_container);
     servo.initComponent(this._eventBus, id, pins, costume, angle, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(servo);
 
@@ -447,7 +485,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SERVO);
     let id = this._numberOfComponentsOfType[TypesEnum.SERVO];
 
-    let servo = new SocialRobotServo();
+    let servo = new SocialRobotServo(this.simulation_container);
     servo.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(servo);
 
@@ -492,7 +530,7 @@ class RobotComponentsFactory {
         pins[SocialRobotContinuousServo.pinNames.digitalPin] = 20 - id;
       }
   
-      let servo = new SocialRobotContinuousServo();
+      let servo = new SocialRobotContinuousServo(this.simulation_container);
       servo.initComponent(this._eventBus, id, pins, costume, speed, visible, width, height, offsetLeft, offsetTop, htmlClasses);
       this._robot.push(servo);
   
@@ -504,7 +542,7 @@ class RobotComponentsFactory {
       this.incrementNumberOf(TypesEnum.CONTINUOUSSERVO);
       let id = this._numberOfComponentsOfType[TypesEnum.CONTINUOUSSERVO];
   
-      let servo = new SocialRobotContinuousServo();
+      let servo = new SocialRobotContinuousServo(this.simulation_container);
       servo.initComponentFromXml(this._eventBus, id, xml);
       this._robot.push(servo);
   
@@ -549,7 +587,7 @@ class RobotComponentsFactory {
     let pins = {};
     pins[SocialRobotLed.pinNames.digitalPin] = pinName;
 
-    let led = new SocialRobotLed();
+    let led = new SocialRobotLed(this.simulation_container);
     led.initComponent(onColor, offColor, this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(led);
 
@@ -561,7 +599,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LED);
     let id = this._numberOfComponentsOfType[TypesEnum.LED];
 
-    let led = new SocialRobotLed();
+    let led = new SocialRobotLed(this.simulation_container);
     led.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(led);
 
@@ -617,7 +655,7 @@ class RobotComponentsFactory {
     pins[SocialRobotRgbLed.pinNames.greenPin] = rgbPins.green;
     pins[SocialRobotRgbLed.pinNames.bluePin] = rgbPins.blue;
 
-    let rgbled = new SocialRobotRgbLed();
+    let rgbled = new SocialRobotRgbLed(this.simulation_container);
     rgbled.initComponent(this._eventBus, id, pins, state, visible, radius, offsetLeft, offsetTop, htmlClasses);
     
     this._robot.push(rgbled);
@@ -630,7 +668,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.RGBLED);
     let id = this._numberOfComponentsOfType[TypesEnum.RGBLED];
 
-    let led = new SocialRobotRgbLed();
+    let led = new SocialRobotRgbLed(this.simulation_container);
     led.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(led);
 
@@ -652,7 +690,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LEDMATRIX);
     let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIX];
 
-    let ledmatrix = new SocialRobotLedMatrix(this._eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses);
+    let ledmatrix = new SocialRobotLedMatrix(this._eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses, this.simulation_container, this.simulation_container);
     this._robot.push(ledmatrix);
 
     this.renderer.initializeCanvas(this._robot, ledmatrix);
@@ -670,7 +708,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LEDMATRIXSEGMENT);
     let id = this._numberOfComponentsOfType[TypesEnum.LEDMATRIXSEGMENT];
 
-    let ledmatrix = new SocialRobotLedMatrixSegment(this._eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses);
+    let ledmatrix = new SocialRobotLedMatrixSegment(this._eventBus, id, dataPin, csPin, clkPin, visible, x, y, offsetLeft, offsetTop, htmlClasses, this.simulation_container);
     this._robot.push(ledmatrix);
 
     this.renderer.initializeCanvas(this._robot, ledmatrix);
@@ -702,7 +740,7 @@ class RobotComponentsFactory {
     let pins = {};
     pins[SocialRobotTouchSensor.pinNames.digitalPin] = pin + id - 1;
 
-    let touchSensor = new SocialRobotTouchSensor();
+    let touchSensor = new SocialRobotTouchSensor(this.simulation_container);
     touchSensor.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(touchSensor);
 
@@ -714,7 +752,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.TOUCH);
     let id = this._numberOfComponentsOfType[TypesEnum.TOUCH];
 
-    let touchSensor = new SocialRobotTouchSensor();
+    let touchSensor = new SocialRobotTouchSensor(this.simulation_container);
     touchSensor.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(touchSensor);
 
@@ -762,7 +800,7 @@ class RobotComponentsFactory {
     }
     
 
-    let button = new SocialRobotButton();
+    let button = new SocialRobotButton(this.simulation_container);
     button.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(button);
 
@@ -774,7 +812,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.BUTTON);
     let id = this._numberOfComponentsOfType[TypesEnum.BUTTON];
 
-    let button = new SocialRobotButton();
+    let button = new SocialRobotButton(this.simulation_container);
     button.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(button);
 
@@ -802,7 +840,7 @@ class RobotComponentsFactory {
    * @param {int} offsetTop 
    * @param {string} htmlClasses 
    */
-  addPir(pin=12, state=0, visible=true, width=75, height=75, offsetLeft=5, offsetTop=5, htmlClasses='sim_canvas pir_canvas'){
+  addPir(pin=12, state=0, visible=true, width=75, height=75, offsetLeft=0, offsetTop=0, htmlClasses='sim_canvas pir_canvas'){
     this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.addRobotComponent, TypesEnum.PIR));
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
@@ -810,7 +848,7 @@ class RobotComponentsFactory {
     let pins = {};
     pins[SocialRobotPir.pinNames.digitalPin] = pin + id - 1;
 
-    let pir = new SocialRobotPir();
+    let pir = new SocialRobotPir(this.simulation_container);
     pir.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(pir);
 
@@ -822,7 +860,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.PIR);
     let id = this._numberOfComponentsOfType[TypesEnum.PIR];
 
-    let pir = new SocialRobotPir();
+    let pir = new SocialRobotPir(this.simulation_container);
     pir.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(pir);
 
@@ -867,7 +905,7 @@ class RobotComponentsFactory {
       pins[SocialRobotSonar.pinNames.echoPin] = "SONAR_2_ECHO";
     }
 
-    let sonar = new SocialRobotSonar();
+    let sonar = new SocialRobotSonar(this.simulation_container);
     sonar.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(sonar);
 
@@ -879,7 +917,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SONAR);
     let id = this._numberOfComponentsOfType[TypesEnum.SONAR];
 
-    let sonar = new SocialRobotSonar();
+    let sonar = new SocialRobotSonar(this.simulation_container);
     sonar.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(sonar);
 
@@ -908,7 +946,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LCD);
     let id = this._numberOfComponentsOfType[TypesEnum.LCD];
 
-    let lcd = new SocialRobotLcd(this._eventBus, id, visible, offsetLeft, offsetTop, htmlClasses);
+    let lcd = new SocialRobotLcd(this._eventBus, id, visible, offsetLeft, offsetTop, htmlClasses, this.simulation_container);
     this._robot.push(lcd);
   }
   
@@ -945,7 +983,7 @@ class RobotComponentsFactory {
     }else{
       pins[SocialRobotSoundSensor.pinNames.digitalPin] = id;
     }
-    let soundSensor = new SocialRobotSoundSensor();
+    let soundSensor = new SocialRobotSoundSensor(this.simulation_container);
     soundSensor.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(soundSensor);
 
@@ -957,7 +995,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.SOUND);
     let id = this._numberOfComponentsOfType[TypesEnum.SOUND];
     
-    let soundSensor = new SocialRobotSoundSensor();
+    let soundSensor = new SocialRobotSoundSensor(this.simulation_container);
     soundSensor.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(soundSensor);
 
@@ -993,7 +1031,7 @@ class RobotComponentsFactory {
     let pins = {};
     pins[SocialRobotLightSensor.pinNames.digitalPin] = pin + id;
 
-    let lightSensor = new SocialRobotLightSensor();
+    let lightSensor = new SocialRobotLightSensor(this.simulation_container);
     lightSensor.initComponent(this._eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(lightSensor);
 
@@ -1005,7 +1043,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.LIGHT);
     let id = this._numberOfComponentsOfType[TypesEnum.LIGHT];
     
-    let lightSensor = new SocialRobotLightSensor();
+    let lightSensor = new SocialRobotLightSensor(this.simulation_container);
     lightSensor.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(lightSensor);
 
@@ -1036,7 +1074,7 @@ class RobotComponentsFactory {
     pins[SocialRobotBuzzer.pinNames.digitalPin] = "BUZZER";
     let state = 0; // no tone
     
-    let buzzer = new SocialRobotBuzzer();
+    let buzzer = new SocialRobotBuzzer(this.simulation_container);
     buzzer.initComponent(this._eventBus, id, pins, state, true, radius, offsetLeft, offsetTop, htmlClasses);
     this._robot.push(buzzer);
 
@@ -1048,7 +1086,7 @@ class RobotComponentsFactory {
     this.incrementNumberOf(TypesEnum.BUZZER);
     let id = this._numberOfComponentsOfType[TypesEnum.BUZZER];
 
-    let buzzer = new SocialRobotBuzzer();
+    let buzzer = new SocialRobotBuzzer(this.simulation_container);
     buzzer.initComponentFromXml(this._eventBus, id, xml);
     this._robot.push(buzzer);
 

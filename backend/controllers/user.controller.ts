@@ -1,8 +1,4 @@
-import { User } from "../models/user.model.js"
-import jwt from "jsonwebtoken"
-import jwt_settings from "../config/jwt.config.js";
-import { UserInfo } from "os";
-import { Role } from "../models/role.model.js"
+import { User } from "../models/user.model"
 
 class UserController {
     constructor(){
@@ -25,7 +21,8 @@ class UserController {
                     email: user.email,
                     birthdate: user.birthdate,
                     roles: user.roles,
-                    platform: user.platform
+                    platform: user.platform,
+                    acceptedTerms: user.acceptedTerms,
                 }
                 return res.status(200).json(userInfo)
             } catch (err){
@@ -51,6 +48,7 @@ class UserController {
                 user.email = info.email
                 user.firstname = info.firstname
                 user.lastname = info.lastname
+                user.acceptedTerms = info.acceptedTerms
                 if (info.birthdate){
                     user.birthdate = new Date(info.birthdate)
                 }
@@ -62,7 +60,8 @@ class UserController {
                     email: user.email,
                     birthdate: user.birthdate,
                     roles: user.roles,
-                    platform: user.platform
+                    platform: user.platform,
+                    acceptedTerms: user.acceptedTerms,
                 }
                 await user.save();
                 return res.status(200).json(userInfo)

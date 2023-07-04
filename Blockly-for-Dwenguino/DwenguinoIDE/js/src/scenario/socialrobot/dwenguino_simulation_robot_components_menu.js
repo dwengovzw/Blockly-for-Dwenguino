@@ -72,7 +72,7 @@ class DwenguinoSimulationRobotComponentsMenu {
    * has to be called when the social robot scenario is created.
    * @param {DwenguinoSimulationScenarioSocialRobot} socialRobotScenario - The social robot scenario to which the social robot components are added.
    */
-  setupEnvironment(socialRobotScenario) {
+  setupEnvironment(socialRobotScenario, panes=null) {
     this.socialRobotScenario = socialRobotScenario;
     console.debug('setupEnvironment');
     /**
@@ -80,7 +80,7 @@ class DwenguinoSimulationRobotComponentsMenu {
      * display the current number of robot components of each type. 
      * // should actually already be handled by the socialrobotscenario which is used here.
      */
-    this.initMenu();
+    this.initMenu(panes);
     this.translateRobotComponents();
 
   }
@@ -88,15 +88,23 @@ class DwenguinoSimulationRobotComponentsMenu {
   /**
    * Load the robot components html menu into the simulator top pane.
    */
-  initMenu() {
-    $('#db_simulator_top_pane').append('<div id="robot_components_menu" class="scrolling-wrapper-flexbox"></div>');
+  initMenu(panes) {
+    let top_pane
+    if (!panes || !panes.top_pane){
+      top_pane = $('#db_simulator_top_pane');
+    } else {
+      top_pane = panes.top_pane;
+    }
+    const components_menu = $("<div>").attr("id", "robot_components_menu").addClass("scrolling-wrapper-flexbox");
+    top_pane.append(components_menu);
 
     this._components.forEach(function (component) {
-      $('#robot_components_menu').append('<div id="rc_' + component.type + '" class="robot_components_item bg-c-4 card"></div>');
-      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_tag" class="rc_tag text-center"></div>');
-      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_img" class="rc_img"></div>');
-      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_value"></div>');
-      $('#rc_' + component.type).append('<div id="rc_' + component.type + '_options" class="rc_options"></div>');
+      const componentElement = $("<div>").attr("id", "rc_" + component.type).addClass("robot_components_item bg-c-4 card");
+      components_menu.append(componentElement);
+      componentElement.append('<div id="rc_' + component.type + '_tag" class="rc_tag text-center"></div>');
+      componentElement.append('<div id="rc_' + component.type + '_img" class="rc_img"></div>');
+      componentElement.append('<div id="rc_' + component.type + '_value"></div>');
+      componentElement.append('<div id="rc_' + component.type + '_options" class="rc_options"></div>');
     });
 
     this.initButtons();

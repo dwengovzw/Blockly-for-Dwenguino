@@ -10,21 +10,56 @@ class SimulationControlsController {
 
     logger = null;
 
+    stateChangedListeners = [];
+
     constructor(logger, workspace, scenarios) {
         this.logger = logger;
         this.scenarios = scenarios;
 
-
         // Create a new runner for the environment
-        
         this.simulationRunner = new SimulationRunner(this.logger, workspace);
         this.simulationRunner.setCurrentScenario(this.scenarios[this.scenarioView]);
         
         // Init the ui controls for the debugger and simulator
         // Has to be done before the simlationRunner is initialized
         this.initSimulationControlsUI(scenarios); 
+ 
+    }
 
-        
+    addStateHasChangedListener(listener){
+        this.stateChangedListeners.push(listener);
+    }
+
+    fireStateChangedEvent(){
+        for (let listener of this.stateChangedListeners){
+            listener();
+        }
+    }
+
+    getCurrentScenario(){
+        return this.simulationRunner.getCurrentScenario();
+    }
+
+    setCurrentScenario(scenarioName){
+        this.scenarioView = scenarioName;
+        this.translateSimulatorInterface();
+
+        this.handleSimulationStop();
+        this.simulationRunner.setCurrentScenario(this.scenarios[scenarioName]);
+        let data = { 
+            "scenario": scenarioName
+        }
+        this.updateProgrammingBlocks();
+        this.logger.recordEvent(this.logger.createEvent(EVENT_NAMES.changedScenario, data));
+        this.setCurrentScenarioActiveButton(scenarioName)
+        this.fireStateChangedEvent();
+    }
+
+    setCurrentScenarioActiveButton(scenarioName){
+        $(".sim_scenario_btn").removeClass("active");
+        $("#scenario_label_" + scenarioName).addClass("active");
+        $(".sim_scenario_radio").removeAttr("checked");
+        $("#sim_scenario_" + scenarioName).attr("checked", "checked")
     }
 
     initSimulationControlsUI(scenarios) {
@@ -64,7 +99,7 @@ class SimulationControlsController {
             }
         });
 
-        this.updateProgrammingBlocks();
+        //this.updateProgrammingBlocks();
         this.translateSimulatorInterface();
 
         // change speed of simulation
@@ -75,17 +110,10 @@ class SimulationControlsController {
         // Ugly hack..
         let self = this;
         $("input[name=scenario_type]:radio").on("change", (event) => {
-            self.scenarioView = $(event.currentTarget).val();
-            self.translateSimulatorInterface();
-
-            self.handleSimulationStop();
-            self.simulationRunner.setCurrentScenario(self.scenarios[self.scenarioView]);
-            let data = { 
-                "scenario": self.scenarioView
-            }
-            self.updateProgrammingBlocks();
-            self.logger.recordEvent(self.logger.createEvent(EVENT_NAMES.changedScenario, data));
+            self.setCurrentScenario($(event.currentTarget).val());
         });
+
+        
 
         // start/stop/pause
         $("#sim_start").on("click", () => {
@@ -246,23 +274,6 @@ class SimulationControlsController {
             toggleSimulatorPaneView(this, [$("a[href$='#db_code_pane']")], e);
         });
 
-        /*$("ul.tabs").each(function () {
-            // For each set of tabs, we want to keep track of
-            // which tab is active and its associated content
-            var $active, $content, $links = $(this).find('a');
-
-            // If the location.hash matches one of the links, use that as the active tab.
-            // If no match is found, use the first link as the initial active tab.
-            $active = $($links.filter('[href="' + location.hash + '"]')[0] || $links[0]);
-            $active.addClass('active');
-
-            $content = $($active[0].hash);
-
-            // Hide the remaining content
-            $links.not($active).each(function () {
-                $(this.hash).hide();
-            });
-        });*/
 
         //Select the scenario view by default.
         $("a[href$='#db_robot_pane']").trigger("click");
@@ -276,10 +287,18 @@ class SimulationControlsController {
      * The blocks configuration is loaded from a .xml file.
      */
     updateProgrammingBlocks() {
+        /*fetch(DwenguinoBlockly.basepath + "/DwenguinoIDE/levels/" + this.scenarioView + ".xml")
+        .then(response => response.text())
+        .then((data) => {
+            let xml_data = `<xml id="toolbox">${data}</xml>`
+            DwenguinoBlockly.workspace.updateToolbox(xml_data);
+            DwenguinoBlockly.doTranslation()
+        })*/
+        // This code is weird but it is required for the translation to work.
         $("#toolbox").load(DwenguinoBlockly.basepath + "/DwenguinoIDE/levels/" + this.scenarioView + ".xml", function(){
             DwenguinoBlockly.doTranslation();
             DwenguinoBlockly.workspace.updateToolbox(document.getElementById("toolbox"));
-        });
+        })
     }
 
 

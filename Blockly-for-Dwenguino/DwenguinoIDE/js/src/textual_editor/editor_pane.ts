@@ -16,6 +16,7 @@ class EditorPane{
     $_headerContainer:JQuery<HTMLElement>;
     $_tabsInfo:TabInfo[] = [];
     $_selectedTab:TabInfo|null = null;
+    $_hasBecomeUnsavedEventListeners:Function[] = [];
 
     constructor(containerId:string){
         BindMethods(this);
@@ -68,23 +69,41 @@ class EditorPane{
 
     openTab(code:string = "", title:string|null=null){
         let newTabInfo = new TabInfo(code, title);
+        newTabInfo.addOnSavedStateChangedListener(this.handleTabSavedStateChanged);
         this.$_tabsInfo.push(newTabInfo);
         this.addTabHeader(newTabInfo);
         this.addTabContentPane(newTabInfo);
         this.selectTab(newTabInfo);
         newTabInfo.renderEditor();
+        this.handleTabSavedStateChanged(false);
     }
 
-    closeTabs(){
-        this.$_tabsInfo.forEach((tabInfo:TabInfo) => this.closeTab(tabInfo))
+    handleTabSavedStateChanged(saved:boolean){
+        if (!saved){
+            this.$_hasBecomeUnsavedEventListeners.forEach((func) => func());
+        }
+    }
+
+    addOnHasBecomeUnsavedEventListener(func:Function){
+        this.$_hasBecomeUnsavedEventListeners.push(func);
+    }
+
+    removeOnHasBecomeUnsavedEventListener(func:Function){
+        this.$_hasBecomeUnsavedEventListeners = this.$_hasBecomeUnsavedEventListeners.filter((f) => f != func);
+    }
+
+    closeTabs(notify=true){
+        this.$_tabsInfo.forEach((tabInfo:TabInfo) => this.closeTab(tabInfo, notify))
         this.$_tabsInfo = [];
     }
 
-    closeTab(tabInfo:TabInfo){
+    closeTab(tabInfo:TabInfo, notify=true){
         if (!tabInfo.getSaved()){
-            let confirmed = confirm(DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]));
-            if (!confirmed){
-                return;
+            if (notify){
+                let confirmed = confirm(DwenguinoBlocklyLanguageSettings.translate(["confirm_close"]));
+                if (!confirmed){
+                    return;
+                }
             }
         }
         $(`#${tabInfo.getTabId()}`).remove();
@@ -137,6 +156,7 @@ class EditorPane{
                 tabText.text(newText as string);
                 tabText.css({display: "inline"});
                 tabTextEditField.css({display: "none"});
+                this.handleTabSavedStateChanged(false);
             }
             
         }
@@ -183,6 +203,19 @@ class EditorPane{
         if (this.$_selectedTab){ 
             this.$_selectedTab.setSaved(true);
         };
+    }
+
+    saveAllTabs(){
+        this.$_tabsInfo.forEach((tabInfo:TabInfo) => tabInfo.setSaved(true));
+    }
+
+    getCurrentTabData() {
+        return this.$_tabsInfo.map((tabInfo) => {
+            return {
+                code: tabInfo.getCode(),
+                title: tabInfo.getTitle()
+            }
+        })
     }
 
    

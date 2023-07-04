@@ -3,9 +3,9 @@
  */
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, state, property} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
 import { Router, Routes } from "@lit-labs/router"
@@ -29,30 +29,17 @@ import "@material/mwc-button"
 import '@vaadin/grid/vaadin-grid-sort-column.js';
 import "@material/mwc-dialog"
 
-
+@localized()
 @customElement("dwengo-student-classes-page")
 class StudentClasses extends connect(store)(LitElement) {
 
-    @state() groups: StudentClassGroupInfo[] = []
-    @state() pending: StudentClassGroupInfo[] = []
+    @property({type: Object}) groups: StudentClassGroupInfo[] = []
+    @property({type: Object}) pending: StudentClassGroupInfo[] = []
     @state() showJoinClassDialog: boolean = false
     @state() showConfirmDialog: boolean = false
     @state() itemSelectedToDelete: StudentClassGroupInfo | null = null
     
     private enteredSharingCode: string = ""
-
-    private router = new Routes(this, []);
-
-    stateChanged(state: any): void {
-        console.log(state)
-        this.groups = structuredClone(state.studentClassGroup.groups)
-        this.pending = structuredClone(state.studentClassGroup.pending)
-    }
-
-    constructor(){
-        super()
-        store.dispatch(getAllStudentClassGroups())
-    }
 
     handleJoinClassGroup(){
         store.dispatch(joinClassGroup(this.enteredSharingCode))
@@ -69,7 +56,7 @@ class StudentClasses extends connect(store)(LitElement) {
 
     renderJoinClassGroupDialog(){
         return html`
-        <mwc-dialog open="${this.showJoinClassDialog}">
+        <mwc-dialog open="${this.showJoinClassDialog}" @closed=${_ => this.showJoinClassDialog = false}>
             <div>
                 ${msg("Enter the code your teacher shared with you.")}
             </div>
@@ -92,7 +79,7 @@ class StudentClasses extends connect(store)(LitElement) {
 
     renderConfirmDialog(name: string | undefined, uuid: string | undefined){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to leave this classgroup: ")}<em>${name}</em>?
             </div>

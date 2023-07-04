@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import db from "../config/db.config.js"
+import db from "../config/db.config"
 
 
 

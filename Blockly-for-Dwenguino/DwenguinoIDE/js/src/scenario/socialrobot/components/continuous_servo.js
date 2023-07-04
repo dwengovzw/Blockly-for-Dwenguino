@@ -12,8 +12,8 @@ export { SocialRobotContinuousServo}
  */
 class SocialRobotContinuousServo extends SocialRobotServo{
     static pinNames = SocialRobotServo.pinNames;
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
 
         // Change default background costume

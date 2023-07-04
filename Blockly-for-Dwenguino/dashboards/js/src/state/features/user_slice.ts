@@ -8,7 +8,8 @@ import { LoadableState } from "../../util"
 interface MinimalUserInfo {
     firstname: string,
     lastname: string,
-    uuid: string
+    uuid: string,
+    acceptedTerms: boolean
 }
 
 interface MiniamLoggedInUserInfo extends MinimalUserInfo {
@@ -30,7 +31,8 @@ const initialUserState: UserInfo = {
     platform: "unknown",
     birthdate: null,
     roles: [],
-    uuid: ""
+    uuid: "",
+    acceptedTerms: false
 }
 
 export const userSlice = createSlice({
@@ -54,6 +56,7 @@ export const userSlice = createSlice({
             state.roles = action.payload.roles.map((role) => role.name)
             state.platform = action.payload.platform
             state.uuid = action.payload.uuid
+            state.acceptedTerms = action.payload.acceptedTerms
         }
     }
 })

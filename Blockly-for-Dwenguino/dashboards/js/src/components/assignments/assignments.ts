@@ -2,13 +2,13 @@
  * @author Tom Neutens <tomneutens@gmail.com>
  */
 
-import { LitElement, css, html, CSSResultGroup } from "lit";
-import {customElement, property, state} from 'lit/decorators.js';
+import { LitElement, css, html, CSSResultGroup, PropertyValueMap } from "lit";
+import {customElement, state, property} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import {getClassGroup} from "../../state/features/class_group_slice"
+import {ClassGroupInfo, getClassGroup} from "../../state/features/class_group_slice"
 
 
 import '@vaadin/dialog';
@@ -25,9 +25,13 @@ import { AssignmentGroupInfo, saveAssignmentGroup, deleteAssignmentGroup, getAll
 import { StudentTeamInfo } from "../../state/features/student_team_slice";
 import { setNotificationMessage, NotificationMessageType } from "../../state/features/notification_slice";
 
+@localized()
 @customElement("dwengo-assignment-list")
 class AssignmentList extends connect(store)(LitElement){
-    @property() classGroupUUID: string= ""
+    @property({type: Object}) 
+    classGroupProp: ClassGroupInfo | null = null
+    @state()
+    classGroup: ClassGroupInfo | null = null
 
     @state() showEditDialog: boolean = false
 
@@ -36,16 +40,29 @@ class AssignmentList extends connect(store)(LitElement){
         description: "",
         starred: false,
         studentTeams: [],
-        inClassGroupUUID: this.classGroupUUID
+        inClassGroupUUID: this.classGroup?.uuid || ""
     }
 
-    @state() assignmentGroups: AssignmentGroupInfo[] = []
+    @property({type: Object}) 
+    assignmentGroupsProp: AssignmentGroupInfo[] = []
+    @state()
+    assignmentGroups: AssignmentGroupInfo[] = []
+
     @state() itemSelectedToDelete: AssignmentGroupInfo | null = null
     @state() showConfirmDialog: boolean = false
-
-    @state() students: UserInfo[] = []
     @state() draggedItem?: UserInfo
     @state() studentTeams: StudentTeamInfo[] = []
+
+
+    protected willUpdate(_changedProperties: PropertyValueMap<this>) {
+        super.willUpdate(_changedProperties);
+        if (_changedProperties.has("classGroupProp")){
+            this.classGroup = structuredClone(this.classGroupProp)
+        }
+        if (_changedProperties.has("assignmentGroupsProp")){
+            this.assignmentGroups = structuredClone(this.assignmentGroupsProp)
+        }
+    }
 
     // Using -1 as null value since null and 0 conflict
     private draggedItemSourceIndex: number = -1
@@ -55,33 +72,21 @@ class AssignmentList extends connect(store)(LitElement){
      * Used to render the dialog for creating new assignment.
      */
     private resetEditDialog(){
-        this.studentTeams = [
-            {
-                students: [...this.students]
+        if (this.classGroup && this.classGroup.students && this.classGroup.uuid){
+            this.studentTeams = [
+                {
+                    students: [...this.classGroup?.students]
+                }
+            ]
+            this.editedAssignmentGroupInfo = {
+                name: "",
+                description: "",
+                starred: false,
+                studentTeams: [],
+                inClassGroupUUID: this.classGroup?.uuid
             }
-        ]
-        this.editedAssignmentGroupInfo = {
-            name: "",
-            description: "",
-            starred: false,
-            studentTeams: [],
-            inClassGroupUUID: this.classGroupUUID
         }
-    }
-
-    stateChanged(state: any): void {
-        if (state.classGroup?.currentGroup?.students){
-            this.students = structuredClone(state.classGroup.currentGroup.students)
-        }
-        this.assignmentGroups = structuredClone(state.assignments.groups)
-    }
-
-    connectedCallback() {
-        super.connectedCallback()
-        if (this.classGroupUUID){
-            store.dispatch(getClassGroup(this.classGroupUUID))
-            store.dispatch(getAllAssignmentGroups(this.classGroupUUID))
-        }
+       
     }
 
     private createTeam(name) {
@@ -92,8 +97,8 @@ class AssignmentList extends connect(store)(LitElement){
     }
 
     private handleDeleteAssignment(uuid: string | undefined) {
-        if (this.classGroupUUID && uuid){
-            store.dispatch(deleteAssignmentGroup(this.classGroupUUID, uuid))
+        if (this.classGroup?.uuid && uuid){
+            store.dispatch(deleteAssignmentGroup(this.classGroup?.uuid, uuid))
         }
         this.showConfirmDialog = false
     }
@@ -108,7 +113,7 @@ class AssignmentList extends connect(store)(LitElement){
             }, [])
             // Filter out the students that have not been teamed up
             let remainingStudents: StudentTeamInfo = {
-                students: this.students.filter(student => {return student.uuid ? !teamedUpStudents.includes(student.uuid) : false})
+                students: this.classGroup?.students?.filter(student => {return student.uuid ? !teamedUpStudents.includes(student.uuid) : false}) || []
             }
             // Create student teams array with the first item containing the remaining students
             this.studentTeams = [remainingStudents, ...assignmentGroup.studentTeams]
@@ -136,7 +141,7 @@ class AssignmentList extends connect(store)(LitElement){
 
     renderConfirmDialog(name: string | undefined, uuid: string | undefined){
         return html`
-        <mwc-dialog open="${this.showConfirmDialog}">
+        <mwc-dialog open="${this.showConfirmDialog}" @closed=${_ => this.showConfirmDialog = false}>
             <div>
                 ${msg("Are you sure you want to remove this classgroup: ")}<em>${name}</em>?
             </div>
@@ -160,7 +165,7 @@ class AssignmentList extends connect(store)(LitElement){
             <vaadin-grid .items="${this.assignmentGroups}">
             
                 <vaadin-grid-column path="name"></vaadin-grid-column>
-                <vaadin-grid-column path="description"></vaadin-grid-column>
+                <vaadin-grid-column flex-grow="10" path="description"></vaadin-grid-column>
                 <vaadin-grid-column 
                     path="starred"
                     ${columnBodyRenderer(
@@ -169,10 +174,10 @@ class AssignmentList extends connect(store)(LitElement){
                                 .checked=${assignmentGroup.starred}
                                 @click=${
                                     (e)=>{
-                                        if (assignmentGroup.uuid) {
+                                        if (assignmentGroup.uuid && this.classGroup?.uuid) {
                                             store.dispatch(
                                                 favortieAssignmentGroup(
-                                                    this.classGroupUUID, 
+                                                    this.classGroup?.uuid, 
                                                     assignmentGroup.uuid, 
                                                     e.target.checked))}}}>
                             </star-checkbox>`,
@@ -222,8 +227,12 @@ class AssignmentList extends connect(store)(LitElement){
             store.dispatch(setNotificationMessage(msg("An assignment name is required"), NotificationMessageType.ERROR, 2500))
             return
         }
+        if (!this.classGroup?.uuid){
+            store.dispatch(setNotificationMessage(msg("An error occured, please try again"), NotificationMessageType.ERROR, 2500))
+            return
+        }
         this.editedAssignmentGroupInfo.studentTeams = this.studentTeams.filter((element, i) => {return (i > 0 ? true : false)})
-        this.editedAssignmentGroupInfo.inClassGroupUUID = this.classGroupUUID
+        this.editedAssignmentGroupInfo.inClassGroupUUID = this.classGroup?.uuid
         store.dispatch(saveAssignmentGroup(this.editedAssignmentGroupInfo))
         this.showEditDialog = false;
     }
@@ -396,7 +405,7 @@ class AssignmentList extends connect(store)(LitElement){
                 this.showEditDialog = event.detail.value;
                 
             }}"
-            ${dialogRenderer(this.renderDialogContent, [this.students, this.studentTeams])}
+            ${dialogRenderer(this.renderDialogContent, [this.classGroup?.students, this.studentTeams])}
             ${dialogFooterRenderer(this.renderDialogFooter, [])}
         ></vaadin-dialog>
         `

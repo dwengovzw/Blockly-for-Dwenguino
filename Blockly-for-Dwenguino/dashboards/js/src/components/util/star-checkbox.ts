@@ -2,9 +2,11 @@
  * @author Tom Neutens <tomneutens@gmail.com>
  */
 
+import { localized } from "@lit/localize";
 import { LitElement, css, html, CSSResultGroup } from "lit";
 import {customElement, property } from 'lit/decorators.js';
 
+@localized()
 @customElement('star-checkbox')
 class StarCheckbox extends LitElement{
     @property({type: Boolean})

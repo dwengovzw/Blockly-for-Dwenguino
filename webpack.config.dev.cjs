@@ -89,7 +89,7 @@ module.exports = [
         name: "dashboards",
         mode: "development",
         devtool: "eval-source-map",
-        context: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards"),
+        context: path.resolve(__dirname, "Blockly-for-Dwenguino"),
         entry: {
             app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts"),
         },
@@ -98,7 +98,7 @@ module.exports = [
             filename: 'dashboards.bundle.js'
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+            extensions: ['.ts', '.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx'] 
         },
         module: {
             rules: [
@@ -124,6 +124,55 @@ module.exports = [
                         loader: 'ts-loader',
                         options:{
                             configFile: "dev.dashboards.tsconfig.json"
+                        },
+                    }]
+                },
+                {
+                    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
+                    type: 'asset',
+                  },
+            ]
+        }
+    },
+    {
+        name: "editor",
+        mode: "development",
+        devtool: "eval-source-map",
+        context: path.resolve(__dirname, "Blockly-for-Dwenguino"),
+        entry: {
+            app: path.resolve(__dirname, "Blockly-for-Dwenguino/editor/js/src/editor.ts"),
+        },
+        output: {
+            path: path.resolve(__dirname, 'Blockly-for-Dwenguino/editor/js/dist/'),
+            filename: 'editor.bundle.js'
+        },
+        resolve:{
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+        },
+        module: {
+            rules: [
+                
+                {
+                    test: /\.css$/i,
+                    use: ['style-loader', 
+                        { loader: "css-modules-typescript-loader"},
+                        {
+                                loader: "css-loader",
+                                options: {
+                                    modules: true,
+                                    sourceMap: true
+                                }
+                        }, 'postcss-loader']
+                },
+                {
+                    test: /\.tsx?$/,
+                    exclude: /node_modules/,
+                    include: [/editor/, /dashboards/],
+                    use:["babel-loader", 
+                    {
+                        loader: 'ts-loader',
+                        options:{
+                            configFile: "dev.editor.tsconfig.json"
                         },
                     }]
                 },

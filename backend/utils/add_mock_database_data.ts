@@ -1,43 +1,145 @@
-import { User, IUser, IUserDoc } from "../models/user.model.js"
-import { StudentTeam, IStudentTeam } from "../models/student_team.model.js"
-import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model.js"
-import { ClassGroup, IClassGroup } from "../models/class_group.model.js"
-import { Portfolio, INewPortfolio, IPortfolio } from "../models/portfolio.model.js"
-import { PortfolioItem, IPortfolioItem } from "../models/portfolio_items/portfolio_item.model.js"
-import { OpenQuestionItem, IOpenQuestionItem } from "../models/portfolio_items/open_question_item.model.js"
-import { TextItem, ITextItem } from "../models/portfolio_items/text_item.model.js"
-import db from "../config/db.config.js"
-import { makeSharingCode } from "./utils.js"
-import { Role } from "../models/role.model.js"
+import { User, IUser, IUserDoc } from "../models/user.model"
+import { StudentTeam, IStudentTeam } from "../models/student_team.model"
+import { AssignmentGroup, IAssignmentGroup } from "../models/assignment_group.model"
+import { ClassGroup, IClassGroup } from "../models/class_group.model"
+import { Portfolio, INewPortfolio, IPortfolio } from "../models/portfolio.model"
+import { TextItem, ITextItem } from "../models/portfolio_items/text_item.model"
+import db from "../config/db.config"
+import { makeSharingCode } from "./utils"
+import { Role } from "../models/role.model"
+import { BlocklyProgSequenceItem, IBlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model"
+import LogItem from "../models/logitem.model"
+import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model"
 
 const mockDatabaseData = async () => {
 
     try {
 
         let textItemData2: ITextItem = {
+            displayInformation: {
+                x: 400,
+                y: 100,
+            },
             name: "Text item",
-            mdText: "#Title \n This is a text based portfolio item."
+            mdText: `# My Random Markdown Text
+
+## Headers
+
+This is a paragraph with a level 2 header above it. Here's a level 3 header:
+
+### This is a level 3 header
+
+## Emphasis
+
+You can make text *italic* or **bold**. You can even combine **_both_**!
+
+## Lists
+
+Here's an unordered list:
+- Item 1
+- Item 2
+- Item 3
+
+And an ordered list:
+1. First item
+2. Second item
+3. Third item
+
+## Links and Images
+
+Here's a [link to Google](https://www.google.com).
+
+Here's an image:
+![A cute cat](https://placekitten.com/200/300)
+
+## Code
+
+You can write code inline with backticks: \`print("Hello, world!")\`.
+
+
+
+Or you can write a code block:
+
+## Blockquotes
+
+> This is a blockquote. You can quote someone famous or just make something up.
+
+## Horizontal Rule
+
+---
+
+That's all for now! Enjoy using Markdown.
+
+`,
+            children: [],
+            needsTeacherAttention: true,
+            needsStudentAttention: false
         }
+
+
+        let textItemData4: ITextItem = {
+            name: "Text item 4",
+            mdText: "#Title \n This is a text based portfolio item.",
+            children: [],
+            displayInformation: {
+                x: 600,
+                y: 400,
+            },
+            needsTeacherAttention: true,
+            needsStudentAttention: false
+        }
+        let textItem4 = new TextItem(textItemData4)
+        let savedTextItem4 = await textItem4.save();
+
+        let testLogItem = await new LogItem({
+            timestamp: new Date(),
+            eventName: "workspaceChange",
+            data: '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="b1?[.uk?~eC%MS;c0sEx" x="95" y="100"><statement name="LOOP"><block type="dwenguino_lcd" id="2pHC=Dwk+bfYac}yUFVN"><value name="text"><block type="text" id="t`w,[RH_ys{jCON,hx|g"><field name="TEXT">Hello portfolio</field></block></value><value name="line_number"><block type="char_type" id="q_Aq_jLq$-RV[N*eg@[."><field name="BITMASK">0</field></block></value><value name="character_number"><block type="char_type" id="ez:fm^NAA2*8Q3S=Oqvj"><field name="BITMASK">0</field></block></value></block></statement></block></xml>'
+        }).save()
+        let blocklyProgSequenceItem1 = await new BlocklyProgSequenceItem({
+            name: "BlocklyProgSequenceItem",
+            eventSequence: [
+                testLogItem
+            ],
+            children: [savedTextItem4._id]
+        }).save()
+
+        let socialRobotDesignItem = await new SocialRobotDesignItem({
+            name: "SocialRobotDesignItem",
+            socialRobotDesignXml: `<xml xmlns="http://www.w3.org/1999/xhtml"><Item  Type='background' Class='background1' Id='1'></Item><Item  Type='lcd' Id='1' OffsetLeft='391' OffsetTop='107' Classes='undefined'></Item><Item  Type='servo' Name='servo' Id='1' Width='86' Height='149' OffsetLeft='170' OffsetTop='252' Pins='{"digitalPin":"SERVO_3"}' State='[object Object]' CanvasId='sim_servo_canvas1' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='righthand' X='0' Y='30'></Item><Item  Type='servo' Name='servo' Id='2' Width='86' Height='149' OffsetLeft='629' OffsetTop='215' Pins='{"digitalPin":"SERVO_4"}' State='[object Object]' CanvasId='sim_servo_canvas2' Classes='servo_canvas hand_canvas' Angle='0' PrevAngle='0' Costume='lefthand' X='0' Y='30'></Item></xml>`,
+            children: [],
+            displayInformation: {
+                x: 100,
+                y: 250,
+            }
+        }).save()
+
         let textItem2 = new TextItem(textItemData2)
         let savedTextItem2 = await textItem2.save();
 
-        let portfolio2Data: INewPortfolio = {
-            created: new Date(),
-            isPublic: false,
-            items: [savedTextItem2._id],
-            lastEdited: new Date(),
-            name: "Test Portfolio 2",
+        let textItemData3: ITextItem = {
+            name: "Text item 3",
+            mdText: "#Title \n This is a text based portfolio item.", 
+            children: [blocklyProgSequenceItem1._id, socialRobotDesignItem._id],
+            displayInformation: {
+                x: 80,
+                y: 150,
+            },
+            needsTeacherAttention: true,
+            needsStudentAttention: false
         }
+        let textItem3 = new TextItem(textItemData3)
+        let savedTextItem3 = await textItem3.save();
 
-        let portfolio2 = new Portfolio(portfolio2Data)
-        let savedPortfolio2 = await portfolio2.save();
+        
+ 
 
         let portfolio3Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
             items: [savedTextItem2._id],
             lastEdited: new Date(),
-            name: "Test Portfolio 3",
+            name: "A portfolio owned by the admin, not shared with anyone.",
         }
 
         let portfolio3 = new Portfolio(portfolio3Data)
@@ -48,7 +150,7 @@ const mockDatabaseData = async () => {
         let adminData: IUser = {
             platform: db.PLATFORMS.test,
             userId: "admin",
-            portfolios: [savedPortfolio2._id, savedPortfolio3._id],
+            portfolios: [savedPortfolio3._id],
             birthdate: new Date(1990, 6, 20),
             email: "tom@dwengo.org",
             firstname: "Tom",
@@ -56,6 +158,9 @@ const mockDatabaseData = async () => {
             roles: [db.ROLES.user, db.ROLES.teacher, db.ROLES.student, db.ROLES.admin].map(role => new Role({name: role})),
         }
         let admin = new User(adminData)
+        let savedAdmin = await admin.save()
+
+        
 
         let teacher1Data: IUser = {
             platform: db.PLATFORMS.test,
@@ -77,11 +182,23 @@ const mockDatabaseData = async () => {
         }
         let teacher2 = new User(teacher2Data)
 
+        let portfolio2Data: INewPortfolio = {
+            created: new Date(),
+            isPublic: false,
+            items: [savedTextItem2._id, savedTextItem3._id, savedTextItem4._id, blocklyProgSequenceItem1._id, socialRobotDesignItem._id],
+            lastEdited: new Date(),
+            name: "Raf his portfolio shared with admin",
+            sharedWith: [savedAdmin._id]
+        }
+
+        let portfolio2 = new Portfolio(portfolio2Data)
+        let savedPortfolio2 = await portfolio2.save();
+
         let student1Data: IUser = {
             platform: db.PLATFORMS.test,
             userId: "student1",
             firstname: "Raf",
-            portfolios: [],
+            portfolios: [savedPortfolio2],
             roles: [db.ROLES.user, db.ROLES.student].map(role => new Role({name: role})),
         }
         let student1 = new User(student1Data)
@@ -123,7 +240,7 @@ const mockDatabaseData = async () => {
         let student5 = new User(student5Data)
 
 
-        let savedAdmin = await admin.save()
+        
         let savedTeacher1 = await teacher1.save()
         let savedTeacher2 = await teacher2.save()
         let savedStudent1 = await student1.save()
@@ -133,18 +250,27 @@ const mockDatabaseData = async () => {
         let savedStudent5 = await student5.save()
 
         let textItemData: ITextItem = {
-            name: "Text item",
-            mdText: "#Title \n This is a text based portfolio item."
+            name: "Text item 1",
+            mdText: "#Title \n This is a text based portfolio item.",
+            children: [],
+            displayInformation: {
+                x: 100,
+                y: 50,
+            },
+            needsTeacherAttention: false,
+            needsStudentAttention: false
         }
         let textItem1 = new TextItem(textItemData)
         let savedTextItem1 = await textItem1.save();
+
+        
 
         let portfolio1Data: INewPortfolio = {
             created: new Date(),
             isPublic: false,
             items: [savedTextItem1._id],
             lastEdited: new Date(),
-            name: "Test Portfolio",
+            name: "A portfolio owned by student team 1, in classgroup 1, owned by admin and teacher 1.",
         }
 
         let portfolio1 = new Portfolio(portfolio1Data)
@@ -176,6 +302,28 @@ const mockDatabaseData = async () => {
         }
         let assignmentGroup1 = new AssignmentGroup(assignmentGroup1Data)
         let savedAssignmentGroup1 = assignmentGroup1.save()
+
+
+
+        let cg2Data: IClassGroup = {
+            name: "classgroup 2",
+            description: "This is the second classgroup",
+            sharingCode: makeSharingCode(),
+            awaitingStudents: [],
+            students: [savedStudent1._id],
+            ownedBy: [savedTeacher2._id],
+        }
+        let cg2 = new ClassGroup(cg2Data)
+        let savedCg2 = await cg2.save()
+
+        let assignmentGroup2Data: IAssignmentGroup = {
+            inClassGroup: savedCg2._id,
+            name: `Assignment group for class ${savedCg2.name}`,
+            description: `Assignment group for class ${savedCg2.name} without teams`,
+            studentTeams: []
+        }
+        let assignmentGroup2 = new AssignmentGroup(assignmentGroup2Data)
+        let savedAssignmentGroup2 = assignmentGroup2.save()
 
 
         

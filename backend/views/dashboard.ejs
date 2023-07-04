@@ -4,25 +4,6 @@
         <title>
             Dwengo dashboard
         </title>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <style>
-            .material-symbols-outlined {
-              font-variation-settings:
-              'FILL' 0,
-              'wght' 400,
-              'GRAD' 0,
-              'opsz' 48
-            }
-            </style>
-        <script>
-            let globalSettings = {
-                basepath: "<%- base_url %>/dwenguinoblockly/",
-                hostname: "<%- base_url %>"
-            }
-        </script>
-        <script type="text/javascript" src="<%- base_url %>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>
         <style>
             html {
                 width: 100vw;
@@ -33,6 +14,7 @@
                 --theme-accentFillActive: #96CC5C;
                 --theme-accentFillSelected: #6DA037;
                 --theme-accentForegroundCut: #000000;
+                --theme-accentForegroundHighlight: yellow;
                 --theme-neutralFocusInnerAccent: #F6FBF1;
                 --theme-neutralFocus: #7D8873;
                 --theme-neutralFillRest: #E4E9DF;
@@ -63,6 +45,7 @@
                 --theme-notification-error-border-color: #E5C1C1;
                 --theme-notification-error-background-color: #ECD4D4;
                 --theme-notification-error-color: #561414;
+                --theme-danger-color: #dc3545;
 
                 --theme-main-page-margin: 2rem;
                 --theme-base-font-size: 1rem;
@@ -72,9 +55,21 @@
                 font-size: var(--theme-base-font-size);
 
                 --lumo-primary-color: var(--theme-accentFillSelected);
+                --lumo-primary-color-10pct: lighten(var(--lumo-primary-color), 10%);
+                --lumo-primary-color-50pct: lighten(var(--lumo-primary-color), 50%);
+                --lumo-primary-contrast-color: white;
+                --lumo-contrast-5pct: lighten(var(--lumo-primary-contrast-color), 5%);
+                --lumo-primary-text-color: var(--theme-accentForegroundCut);
                 --lumo-font-family: 'Roboto';
+                --lumo-size-m: 2.5rem;
+                --lumo-space-xs: 0.25rem;
+                --lumo-space-m: 0.5rem;
 
-                
+                --lumo-error-text-color: rgb(220, 53, 69);
+                --lumo-error-color-50pct: rgba(220, 53, 69, 0.5);
+                --lumo-error-color-10pct: rgba(220, 53, 69, 0.1);
+                --lumo-error-color: #dc3545;
+
             }
             body {
                 margin: 0;
@@ -101,6 +96,133 @@
                 
             }
         </style>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+        <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <style>
+            .material-symbols-outlined {
+              font-variation-settings:
+              'FILL' 0,
+              'wght' 400,
+              'GRAD' 0,
+              'opsz' 48
+            }
+            </style>
+        <script>
+            let globalSettings = {
+                basepath: "<%- base_url %>/dwenguinoblockly/",
+                hostname: "<%- base_url %>"
+            }
+            let settings = globalSettings // Mismatch between global settings var in dashboard and dwenguinoIDE
+            // Define blockly as a global dummy to make translations play nice with dashboards
+            let Blockly = {
+                Msg: {}
+            }
+        </script>
+        <!-- Import translation fallback file, needs to be loaded before Blockly and DwenguinoBlockly -->
+        <script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/msg/fallback.js"></script>
+        
+        <script>
+            var DwenguinoBlocklyLanguageSettings = {}
+
+            DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
+                'en': 'English',
+                'nl': 'Nederlands',
+                'es': 'Español',
+                'fr': 'français',
+                'it': 'Italiano',   
+                'de': 'Deutsch',
+                'my': 'Malay',
+                'pl': 'Polski',
+                'el': 'Ελληνικά',
+                'ar': 'عربى'
+            };
+
+            //Set default language setting
+            DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'nl';
+
+            DwenguinoBlocklyLanguageSettings.translate = function(translationKey){
+            let translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG);
+            if (translation){
+                return translation;
+            }else{
+                translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK);
+                if (translation){
+                return translation;
+                }else{
+                return "No translation";
+                }
+            }
+            };
+
+            DwenguinoBlocklyLanguageSettings.translateFrom = function(subdevision, translationKey){
+            let translation;
+            if (MSG[subdevision]){
+                translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG[subdevision]);
+            }
+            if (translation){
+                return translation;
+            }else{
+                translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK[subdevision]);
+                if (translation){
+                return translation;
+                }else{
+                return "No translation";
+                }
+            }
+            };
+
+            /**
+             * @Brief returns the value for a translation key
+             * @Param translationKey an array containing the the keys of the subsequent subobjects
+             */
+            DwenguinoBlocklyLanguageSettings.findValueForTranslationKey = function(translationKey, translationObject){
+            let i = 0;
+            while (translationObject[translationKey[i]]){
+                translationObject = translationObject[translationKey[i]];
+                i++;
+            }
+            if (typeof translationObject === 'string'){
+                return translationObject;
+            }else{ 
+                return undefined;
+            }
+            };
+
+            /**
+            * Extracts a parameter from the URL.
+            * If the parameter is absent default_value is returned.
+            * @param {string} name The name of the parameter.
+            * @param {string} defaultValue Value to return if paramater not found.
+            * @return {string} The parameter value or the default value if not found.
+            */
+            DwenguinoBlocklyLanguageSettings.getStringParamFromUrl = function(name, defaultValue) {
+            var val = location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
+            return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
+            };
+
+            /**
+             * Get the language of this user from the URL.
+             * @return {string} User's language.
+             */
+            DwenguinoBlocklyLanguageSettings.getLang = function() {
+            var lang = DwenguinoBlocklyLanguageSettings.getStringParamFromUrl('lang', '');
+            if (DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME[lang] === undefined) {
+                // Default to English.
+                lang = DwenguinoBlocklyLanguageSettings.DEFAULT_LANG;
+            }
+            return lang;
+            };
+
+            // Load the Code demo's language strings.
+            let scriptCloseTag = "</" + "script" + ">"
+            document.write(`<script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/msg/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
+            // Load Blockly's language strings.
+            document.write(`<script src="<%- base_url -%>/dwenguinoblockly/blockly/msg/js/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
+        </script>
+        <script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/js/lib/ResizeSensor.js"></script>
+        <script type="text/javascript" src="<%- base_url %>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>
+        
     </head>
     <body>
         <dwengo-dashboard></dwengo-dashboard>

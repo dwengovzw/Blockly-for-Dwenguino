@@ -1,16 +1,15 @@
 import * as dotenv from 'dotenv';
 import * as path from 'path';
-import { Role } from "./models/role.model.js"
 let __dirname = path.resolve();
 console.log(`dirname: ${__dirname}`);
 
 // Load environment variables
 dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
 
-import { app, port } from "./server.js";
+import { app, port } from "./server";
 import * as http from 'http';
 import mongoose from 'mongoose';
-import { mockDatabaseData } from './utils/add_mock_database_data.js';
+import { mockDatabaseData } from './utils/add_mock_database_data';
 
 const httpServer = http.createServer(app);
 
@@ -18,6 +17,7 @@ mongoose.Promise = global.Promise;
 
 let dev_db_url = 'mongodb://localhost/dwenguinoblockly_test_users';
 let mongoDB = process.env.MONGODB_URI || dev_db_url;
+mongoose.set("strictQuery", true)
 mongoose.connect(mongoDB/*, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

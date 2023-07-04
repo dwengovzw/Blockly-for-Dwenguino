@@ -3,12 +3,12 @@
  */
 
 import { LitElement, css, html, CSSResultGroup } from "lit";
-import {customElement, state} from 'lit/decorators.js';
+import {customElement, property, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
-import { msg } from '@lit/localize';
+import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { getGoogleMateriaIconsLinkTag } from "../../util"
-import {addClassGroup, ClassGroupInfo, getAllClassGroups, deleteClassGroup} from "../../state/features/class_group_slice"
+import {addClassGroup, ClassGroupInfo, getAllClassGroups, deleteClassGroup, getClassGroup} from "../../state/features/class_group_slice"
 import { Routes } from "@lit-labs/router"
 
 import "@material/mwc-textfield"
@@ -28,12 +28,16 @@ import "@material/mwc-button"
 import '@vaadin/grid/vaadin-grid-sort-column.js';
 import "@material/mwc-dialog"
 
-
+@localized()
 @customElement("dwengo-classes-page")
 class Classes extends connect(store)(LitElement) {
 
-    @state() groups: ClassGroupInfo[] = []
-    @state() loading: boolean = false;
+    @property({type: Object}) 
+    groups: ClassGroupInfo[] = []
+    @property({type: Object})
+    currentGroup: ClassGroupInfo | null = null
+    @property({type: Object})
+    assignmentGroups: any = store.getState().assignments.groups
 
     @state() newClassName: string = ""
     @state() newClassDescription: string = ""
@@ -43,19 +47,22 @@ class Classes extends connect(store)(LitElement) {
 
     private _routes = new Routes(this, [
         {path: '', render: () => this.renderClassesList()},
-        {path: '/class*', render: ({uuid}) => html`<dwengo-class-nav></dwengo-class-nav>`},
+        {
+            path: '/class/:uuid/*', 
+            enter: ({uuid}) => {
+                if (!uuid){
+                    return false
+                }
+                store.dispatch(getClassGroup(uuid))
+                return true
+            },
+            render: () => html`
+                <dwengo-class-nav 
+                    .classGroup=${this.currentGroup}
+                    .assignmentGroups=${this.assignmentGroups}>
+                </dwengo-class-nav>
+            `},
       ]);
-
-    stateChanged(state: any): void {
-        console.log(state)
-        this.groups = structuredClone(state.classGroup.groups)
-        this.loading = state.loading
-    }
-
-    constructor(){
-        super()
-        store.dispatch(getAllClassGroups())
-    }
 
     addClassGroup(){
         let info: ClassGroupInfo = {

@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken"
-import jwt_settings from "../config/jwt.config.js";
-import { User, IUser } from "../models/user.model.js"
-import { IRole, Role } from "../models/role.model.js"
-import oauthConfig from "../config/oauth.config.js";
+import jwt_settings from "../config/jwt.config";
+import { User, IUser } from "../models/user.model"
+import { IRole, Role } from "../models/role.model"
+import oauthConfig from "../config/oauth.config";
 import crypto from "crypto"
 
 
@@ -80,7 +80,11 @@ class AbstractOAuthController {
     
             req.session.token = token;
             //res.send(`<h1>Test</h1><p><a href="http://${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}">Return to original page</a></p>`)
-            res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+            if (user.acceptedTerms) {
+                res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+            } else {
+                res.redirect(`${process.env.SERVER_URL}/dashboard`)
+            }
             //Save new cookie in session and redirect
         })
     }

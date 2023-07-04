@@ -1,9 +1,9 @@
 // Filename: api-routes.js
 // Initialize express router
 import express from 'express';
-import { allAccess, teacherBoard, studentBoard } from "../controllers/test_auth.controller.js"
-import { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists, checkRolesExisted, checkDuplicateUsernameOrEmail } from "../middleware/middleware.js"
-import UserController from "../controllers/user.controller.js"
+import { allAccess, studentBoard } from "../controllers/test_auth.controller"
+import { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists } from "../middleware/middleware"
+import UserController from "../controllers/user.controller"
 
 let userRouter = express.Router();
 const userController =  new UserController();

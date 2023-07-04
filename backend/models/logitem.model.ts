@@ -1,6 +1,5 @@
 import { Document, Schema, model } from "mongoose"
-import { ID } from "./modelutils.js"
-import { IUser } from "./user.model.js";
+import { IUser } from "./user.model";
 import { PopulatedDoc } from 'mongoose';
 
 interface ILogItem {
@@ -10,6 +9,7 @@ interface ILogItem {
     activityId?: number,
     eventName: string,
     data?: string,
+    forSavedProgramUUID?: string,
     functionalVector?: [],
 }
 const LogSchemaFields: Record<keyof ILogItem, any> = {
@@ -35,6 +35,10 @@ const LogSchemaFields: Record<keyof ILogItem, any> = {
         required: true
     },
     data: { 
+        type: String,
+        required: false
+    },
+    forSavedProgramUUID: {
         type: String,
         required: false
     },

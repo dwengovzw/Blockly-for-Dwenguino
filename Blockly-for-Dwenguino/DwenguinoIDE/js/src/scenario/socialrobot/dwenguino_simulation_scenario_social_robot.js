@@ -29,18 +29,20 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    * 
    * @param {DwenguinoEventLogger} logger 
    */
-  constructor(logger) {
-    super(logger);
+  constructor(logger, name) {
+    super(logger, name);
 
     // Event listener for saving the robot scenario to local storage
     this._eventBus = new EventBus();
     this._eventBus.registerEvent(EventsEnum.SAVE);
     this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.saveRobot()});
+    this._eventBus.addEventListener(EventsEnum.SAVE, ()=>{ this.fireStateChangedEvent()}); // This is now done using the global state
 
     this.simulationRobotComponents = new DwenguinoSimulationDraggable(this, this._eventBus);
     this.simulationComponentsMenu = new DwenguinoSimulationRobotComponentsMenu(this._eventBus);
 
     this.initAudioContext();
+    
   }
 
   setIsSimulationRunning(isSimulationRunning){
@@ -77,8 +79,12 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     if (this.robotComponentsFactory){
       this.robotComponentsFactory.removeAllSocialRobotComponents();
+      this.robotComponentsFactory.removeRobotConfigurationChangedListeners();
     }
     this.robotComponentsFactory = new RobotComponentsFactory(this.scenarioUtils, this.logger, this._eventBus);
+    this.robotComponentsFactory.addRobotConfigurationChangedListener(() => {
+      this.fireStateChangedEvent();
+    });
 
     this._eventBus.registerEvent(EventsEnum.CLEARCANVAS);
     this._eventBus.addEventListener(EventsEnum.CLEARCANVAS, (canvasId)=>{ this.renderer.clearCanvas(canvasId)});
@@ -90,7 +96,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
   /**
    * Initializes the simulator social robot display.
-   * @param {string} containerIdSelector - The jquery selector of the conainer to put the robot display.
+   * @param {string | HTMLElement} containerIdSelector - The jquery selector of the conainer to put the robot display.
    *
    */
   initSimulationDisplay(containerIdSelector) {
@@ -98,23 +104,28 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     super.initSimulationDisplay();
 
     // Clear the container and create top and bottom panes
-
-    var container = $(`#${containerIdSelector}`);
+    let container;
+    if (typeof containerIdSelector === "string") {
+      container = $(`#${containerIdSelector}`);
+    } else {
+      container = $(containerIdSelector);
+    }
     container.empty();
     let top_pane = $("<div>").attr("id", "db_simulator_top_pane");
     let bottom_pane = $("<div>").attr("id", "db_simulator_bottom_pane");
     container.append(top_pane).append(bottom_pane);
 
     // Setup the components menu
-    this.simulationComponentsMenu.setupEnvironment(this);
+    this.simulationComponentsMenu.setupEnvironment(this, {top_pane: top_pane, bottom_pane: bottom_pane});
 
-    this.initSimulation(containerIdSelector);
+    const simulationContainer = this.initSimulation(containerIdSelector);
+    this.robotComponentsFactory.setSimulationContainer(simulationContainer);
     
-    this.setBackground();
+    this.setBackground(simulationContainer);
 
-    this.initScenarioOptions();
+    this.initScenarioOptions(simulationContainer);
 
-    this.setSensorOptions();
+    this.setSensorOptions(simulationContainer);
 
     // Load robot components from local storage if they are present
     this.loadRobot();
@@ -122,40 +133,55 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   }
 
   /**
-   * 
+   * @param { JQuery<HTMLElement> | null } simulationContainer
    */
-  initScenarioOptions() {
+  initScenarioOptions(simulation_container=null) {
+    if (simulation_container === null) {
+      simulation_container = $("#sim_container");
+    }
     var self = this;
 
     var scenarioOptions = $("<div>").attr("id", "scenario_options");
-    $('#sim_container').append(scenarioOptions);
-    scenarioOptions.append("<div id='load_scenario' class='' alt='Load'><span class='fas fa-cloud-upload-alt'></span></div>");
-    scenarioOptions.append("<div id='save_scenario' class='fas fa-cloud-download-alt' alt='Save'></div>");
-    scenarioOptions.append("<div id='switch_background' class='fas fa-sync-alt'></div>")
+    simulation_container.append(scenarioOptions);
 
-    $("#load_scenario").click(function () {
+    const load_scenario = $("<div>").attr("id", "load_scenario").attr("alt", "Load").attr("class", "social_robot_scenario_settings_button");
+    load_scenario.append("<span class='fas fa-cloud-upload-alt'></span>");
+    scenarioOptions.append(load_scenario);
+    const save_scenario = $("<div>").attr("id", "save_scenario").attr("alt", "Save").attr("class", "social_robot_scenario_settings_button");
+    save_scenario.append("<span class='fas fa-cloud-download-alt'></span>");
+    scenarioOptions.append(save_scenario);
+    const switch_background = $("<div>").attr("id", "switch_background").attr("alt", "Switch background").attr("class", "social_robot_scenario_settings_button");
+    switch_background.append("<span class='fas fa-sync-alt'></span>");
+    scenarioOptions.append(switch_background)
+
+    load_scenario.click(function () {
       self.removeSocialRobotComponents();
       self.scenarioUtils.loadScenario();
     });
 
-    $("#save_scenario").click(function () {
+    save_scenario.click(function () {
       var data = self.loadToXml();
       self.scenarioUtils.saveScenario(data);
     });
 
-    let switchBackground = document.getElementById('switch_background');
-    switchBackground.addEventListener('click', () => {
-      this.switchBackground();
+    switch_background.click(function () {
+      self.switchBackground();
     });
+
   }
 
   /**
    * 
-   * @param {string} containerIdSelector 
+   * @param {string | HTMLElement} containerIdSelector 
    */
   initSimulation(containerIdSelector) {
 
-    let container = $(`#${containerIdSelector}`);
+    let container;
+    if (typeof containerIdSelector === "string") {
+      container = $(`#${containerIdSelector}`);
+    } else {
+      container = $(containerIdSelector);
+    }
 
     // Make the bottom pane larger
     $('#db_simulator_top_pane').css('height', '25%');
@@ -172,6 +198,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     });
 
     container.append(simulationContainer);
+    return simulationContainer;
   }
 
 
@@ -245,21 +272,28 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   }
 
   /**
-   * 
+   * @param {JQuery<HTMLElement> | null} simulation_container
    */
-  setSensorOptions() {
+  setSensorOptions(simulation_container=null) {
+    if (simulation_container == null) {
+      simulation_container = $('#sim_container');
+    }
     if (!document.getElementById('sensor_options')) {
       var sensorOptions = $("<div>").attr("id", "sensor_options");
-      $('#sim_container').append(sensorOptions);
+      simulation_container.append(sensorOptions);
     }
   }
 
   /**
-   * 
+   * @param {JQuery<HTMLElement> | null} simulation_container
    */
-  setBackground() {
-    $('#sim_container').append("<div id='sim_background' class='sim_element row'></div>");
-    $('#sim_background').append("<div id='sim_background_img' class='background1'></div>");
+  setBackground(simulation_container=null) {
+    if (simulation_container == null) {
+      simulation_container = $('#sim_container');
+    }
+    const sim_background = $("<div>").attr("id", "sim_background").attr("class", "sim_element row");
+    simulation_container.append(sim_background);
+    sim_background.append("<div id='sim_background_img' class='background1'></div>");
     this.backgroundClassName = "background1";
     this._background = 1;
     var sensorOptionswidth = $('#sensor_options').width();
@@ -268,7 +302,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     var offSet = (parentWidth - width) / 2;
     $('#sim_background_img').css('top', 0 + 'px');
     $('#sim_background_img').css('margin-left', offSet + 'px');
-
+    this.fireStateChangedEvent()
   };
 
   /**
@@ -285,6 +319,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     document.getElementById('sim_background_img').className = 'background' + this._background;
     this.backgroundClassName = 'background' + this._background;
     this._eventBus.dispatchEvent(EventsEnum.SAVE);
+    this.fireStateChangedEvent()
   }
 
   /**
@@ -308,10 +343,12 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    */
   resetSocialRobot(containerIdSelector) {
     this.robotComponentsFactory.resetSocialRobot();
+    this.fireStateChangedEvent()
   };
 
   removeSocialRobotComponents(){
     this.robotComponentsFactory.removeAllSocialRobotComponents();
+    this.fireStateChangedEvent()
   }
 
   /**
@@ -320,6 +357,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
    */
   addRobotComponent(type) {
     this.robotComponentsFactory.addRobotComponent(type);
+    this.fireStateChangedEvent()
   };
 
   /**
@@ -330,6 +368,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
   removeRobotComponent(type) {
     this.robotComponentsFactory.removeRobotComponent(type);
     this.renderer.render(this.robotComponentsFactory.getRobot());
+    this.fireStateChangedEvent()
   };
 
   /**
@@ -343,6 +382,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     if(led !== undefined){
       led.setOnColor(color);
     }
+    this.fireStateChangedEvent()
   }
 
   /*********************
@@ -387,6 +427,11 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
 
     // Remove existing components
     this.robotComponentsFactory.removeAllSocialRobotComponents();
+    //this.robotComponentsFactory.getRobot().forEach(component => {
+    //  this.simulationComponentsMenu.removeRobotComponent(component.getId())
+    //});t
+    this.simulationComponentsMenu.resetButtons()
+    this.clearRobot();
 
     var childCount = data.childNodes.length;
     for (var i = 0; i < childCount; i++) {
@@ -397,15 +442,18 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
         this.simulationComponentsMenu.changeValue(type, 1);
       } else {
         this._background = parseInt(xmlChild.getAttribute('Id'));
-        document.getElementById('sim_background_img').className = xmlChild.getAttribute('Class');
+        $('#sim_background_img').removeClass();
+        $('#sim_background_img').addClass(xmlChild.getAttribute('Class'));
+        //document.getElementById('sim_background_img').className = xmlChild.getAttribute('Class');
       }
     }
+    this.fireStateChangedEvent()
+    this.saveRobot();
   }
 
-  /**********************
+   /**********************
    *  LOCAL STORAGE     *
    **********************/
-
   /**
    * Converts the robot to xml and saves it into the local storage of the browser
    * @param {boolean} permanent 
@@ -420,7 +468,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
       localStorage.setItem(storageKey, robotXml)
     }
   }
-
   /**
    * Check the local storage if an item exists and load the xml
    * @param {boolean} permanent 
@@ -437,7 +484,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
       }
     }
   }
-
   /**
    * Removes the localstorage entry for the robot
    * @param {string} uniqeIdentifier 
@@ -450,6 +496,7 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
       localStorage.removeItem(storageKey);
     }
   }
+
 }
 
 export default DwenguinoSimulationScenarioSocialRobot;

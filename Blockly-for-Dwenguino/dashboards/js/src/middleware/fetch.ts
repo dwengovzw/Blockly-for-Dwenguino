@@ -16,6 +16,9 @@ const fetchAuth = async (resource: RequestInfo | URL, options: RequestInit = {})
     } else if (response.status === 403) { // Forbidden
         store.dispatch(setNotificationMessage(msg("You do not have the rights to access this content!"), NotificationMessageType.ERROR, 2500))
         throw new Error("Forbidden");
+    } else if (response.status === 302 || response.status === 301) { // Redirect
+        window.location.href = response.url;
+        return response;
     } else { // Other error
         store.dispatch(setNotificationMessage(msg("Unable complete request!"), NotificationMessageType.ERROR, 2500))
         throw new Error("Unable to complete");

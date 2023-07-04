@@ -397,10 +397,10 @@ class SimulationCanvasRenderer {
                     case CostumesEnum.HAT:
                     case CostumesEnum.FLOWER:
                     case CostumesEnum.CLOCK_HANDLE:
-                        self.drawServoBackground(ctx, servo);
+                        self.drawServoBackground(ctx, canvas, servo);
                         break;
                     case 'plainrotate90':
-                        self.drawServoBackground(ctx, servo, 90);
+                        self.drawServoBackground(ctx, canvas, servo, 90);
                         break;
                     case 'eye':
                         break;
@@ -427,19 +427,19 @@ class SimulationCanvasRenderer {
                         case CostumesEnum.HAT:
                         case CostumesEnum.FLOWER:
                         case CostumesEnum.CLOCK_HANDLE:
-                            self.drawRotatedServohead(ctx, servo);
+                            self.drawRotatedServohead(ctx, canvas, servo, 0);
                             break;
                         case 'plainrotate90':
-                            self.drawRotatedServohead(ctx, servo, 90);
+                            self.drawRotatedServohead(ctx, canvas, servo, 90);
                             break;
                         case 'eye':
                             self.drawEye(ctx,servo, canvas);
                             break;
                         case 'righthand':
-                            self.drawHand(ctx,servo, 0);
+                            self.drawHand(ctx, canvas ,servo, 0);
                             break;
                         case 'lefthand':
-                            self.drawHand(ctx,servo, -360);
+                            self.drawHand(ctx, canvas ,servo, -360);
                             break;
                     }
                 }
@@ -454,21 +454,21 @@ class SimulationCanvasRenderer {
                 case CostumesEnum.HAT:
                 case CostumesEnum.FLOWER:
                 case CostumesEnum.CLOCK_HANDLE:
-                    self.drawServoBackground(ctx, servo);
-                    self.drawRotatedServohead(ctx, servo);
+                    self.drawServoBackground(ctx, canvas, servo, 0);
+                    self.drawRotatedServohead(ctx, canvas, servo, 0);
                     break;
                 case 'plainrotate90':
-                    self.drawServoBackground(ctx, servo, 90);
-                    self.drawRotatedServohead(ctx, servo, 90);
+                    self.drawServoBackground(ctx, canvas, servo, 90);
+                    self.drawRotatedServohead(ctx, canvas, servo, 90);
                     break;
                 case 'eye':
                     self.drawEye(ctx,servo, canvas);
                     break;
                 case 'righthand':
-                    self.drawHand(ctx,servo, 0);
+                    self.drawHand(ctx, canvas,servo, 0);
                     break;
                 case 'lefthand':
-                    self.drawHand(ctx,servo, -360);
+                    self.drawHand(ctx, canvas ,servo, -360);
                     break;
             }
         } else {
@@ -606,16 +606,17 @@ class SimulationCanvasRenderer {
      */
     drawSonar(sonar, canvas){
         if (canvas.getContext) {
-
+            const imageX = (canvas.width / 2) - sonar.getWidth() / 2;
+            const imageY = (canvas.height / 2) - sonar.getHeight() / 2;
             // in case the image isn't loaded yet.
             var self = this;
             sonar.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(sonar.getImage(),0,0,sonar.getWidth(), sonar.getHeight()); 
+                ctx.drawImage(sonar.getImage(),imageX,imageY,sonar.getWidth(), sonar.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(sonar.getImage(),0,0,sonar.getWidth(),sonar.getHeight());
+            ctx.drawImage(sonar.getImage(),imageX,imageY,sonar.getWidth(),sonar.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         }
@@ -627,19 +628,26 @@ class SimulationCanvasRenderer {
      * @param {SocialRobotServo} servo 
      * @param {int} angle
      */
-    drawServoBackground(ctx, myservo, angle=0){
+    drawServoBackground(ctx, canvas, myservo, angle=0){
         let servo = myservo;
-        /*let background = servo.getServoBackground();
-        if(angle != 0){
-            background = servo.getServoBackgroundRotated();
-        }*/
+        let w, h;
+        if (servo.getWidth() > servo.getHeight()){
+            w = canvas.width
+            h = servo.getHeight() * (canvas.width / servo.getWidth());
+        } else {
+            h = canvas.height
+            w = servo.getWidth() * (canvas.height / servo.getHeight());
+        }
+
+        const imageX = (canvas.width / 2) - w / 2;
+        const imageY = (canvas.height / 2) - h / 2
 
         this.drawRotatedImageOnCanvasAroundCenter(
             ctx, 
-            servo.getX(), 
-            servo.getY(), 
-            servo.getWidth(), 
-            servo.getHeight(), 
+            imageX, 
+            imageY, 
+            w, 
+            h, 
             angle, 
             servo.getServoBackground());
 
@@ -678,11 +686,21 @@ class SimulationCanvasRenderer {
      * @param {SocialRobotServo} servo 
      * @param {int} degrees
      */
-    drawRotatedServohead(ctx, myservo, degrees=0){
-        let servo = myservo; 
+    drawRotatedServohead(ctx, canvas, myservo, degrees=0){
+        let servo = myservo;
+        let w, h;
+        if (servo.getWidth() > servo.getHeight()){
+            w = canvas.width
+            h = servo.getHeight() * (canvas.width / servo.getWidth());
+        } else {
+            h = canvas.height
+            w = servo.getWidth() * (canvas.height / servo.getHeight());
+        }
+        const imageX = (canvas.width / 2) - w / 2;
+        const imageY = (canvas.height / 2) - h / 2
         let prevAngle =  this.calculateServoAngleStepwise(servo.getPrevAngle(), servo.getAngle());
         servo.setPrevAngle(prevAngle);
-        this.drawRotatedImageOnCanvasAroundCenter(ctx, servo.getX(), servo.getY(), servo.getWidth(), servo.getHeight(), degrees+prevAngle, servo.getImage("foreground"));
+        this.drawRotatedImageOnCanvasAroundCenter(ctx, imageX, imageY, w, h, degrees+prevAngle, servo.getImage("foreground"));
     }
 
    
@@ -783,23 +801,43 @@ class SimulationCanvasRenderer {
      * @param {RenderingContext} ctx 
      * @param {SocialRobotServo} servo 
      */
-    drawHand(ctx, servo, startAngle = 0){
+    drawHand(ctx, canvas, servo, startAngle = 0){
+
+        let w, h, aX, aY, aW, aH;
+        if (servo.getWidth() > servo.getHeight()){
+            w = canvas.width
+            h = servo.getHeight() * (canvas.width / servo.getWidth());
+            aX = 25 * (canvas.width / servo.getWidth());
+            aY = 0 * (canvas.width / servo.getWidth());
+            aW = 32 * (canvas.width / servo.getWidth());
+            aH = 76 * (canvas.width / servo.getWidth());
+        } else {
+            h = canvas.height
+            w = servo.getWidth() * (canvas.height / servo.getHeight());
+            aX = 25 * (canvas.height / servo.getHeight());
+            aY = 0 * (canvas.height / servo.getHeight());
+            aW = 32 * (canvas.height / servo.getHeight());
+            aH = 76 * (canvas.height / servo.getHeight());
+        }
+        const imageX = (canvas.width / 2) - w / 2;
+        const imageY = (canvas.height / 2) - h / 2
+
         let newAngle = this.calculateServoAngleStepwise(servo.getPrevAngle(), servo.getAngle());
         let offsetAngle = startAngle; // rotate hand down by default
         let offsetLeft = 35;
         servo.setPrevAngle(newAngle);
         let armShape = {
-            x: 27,
-            y: 0,
-            width: 32,
-            height: 76
+            x: aX,
+            y: aY,
+            width: aW,
+            height: aH
         }
         /*ctx.fillRect(offsetLeft + armShape.x, armShape.y, armShape.width, armShape.height); // These numbers were calculated based on the png image offset*/
         ctx.beginPath();
         ctx.arc(offsetLeft + armShape.x + armShape.width/2, armShape.height, armShape.width/2, 0, 2 * Math.PI);
         ctx.fillStyle = "#8bab42";
         ctx.fill();
-        this.drawRotatedImageOnCanvasAroundCenter(ctx, offsetLeft, 0, servo.getWidth(), servo.getHeight(), offsetAngle + newAngle, servo.getImage("background"));
+        this.drawRotatedImageOnCanvasAroundCenter(ctx, imageX, imageY, w, h, offsetAngle + newAngle, servo.getImage("background"));
     }
 
     /**
@@ -876,16 +914,17 @@ class SimulationCanvasRenderer {
      */
     drawSoundSensor(soundSensor, canvas){
         if (canvas.getContext) {
-
+            const imageX = (canvas.width / 2) - soundSensor.getWidth() / 2;
+            const imageY = (canvas.height / 2) - soundSensor.getHeight() / 2;
             // in case the image isn't loaded yet.
             var self = this;
             soundSensor.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight()); 
+                ctx.drawImage(soundSensor.getImage(),imageX,imageY,soundSensor.getWidth(),soundSensor.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(soundSensor.getImage(),0,0,soundSensor.getWidth(),soundSensor.getHeight());
+            ctx.drawImage(soundSensor.getImage(),imageX,imageY,soundSensor.getWidth(),soundSensor.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         } 
@@ -904,6 +943,8 @@ class SimulationCanvasRenderer {
         }
     }
 
+
+
     /**
      * Draw a pir sensor on the given canvas with the image specified in robot.
      * @param {SocialRobotLightSensor} lightSensor 
@@ -911,16 +952,17 @@ class SimulationCanvasRenderer {
      */
     drawLightSensor(lightSensor, canvas){
         if (canvas.getContext) {
-
+            const imageX = (canvas.width / 2) - lightSensor.getWidth() / 2;
+            const imageY = (canvas.height / 2) - lightSensor.getHeight() / 2;
             // in case the image isn't loaded yet.
             var self = this;
             lightSensor.getImage().onload = function() {
                 var ctx = canvas.getContext('2d');
-                ctx.drawImage(lightSensor.getImage(),0,0,lightSensor.getWidth(),lightSensor.getHeight()); 
+                ctx.drawImage(lightSensor.getImage(),imageX,imageY,lightSensor.getWidth(),lightSensor.getHeight()); 
             }
 
             var ctx = canvas.getContext('2d');
-            ctx.drawImage(lightSensor.getImage(),0,0,lightSensor.getWidth(),lightSensor.getHeight());
+            ctx.drawImage(lightSensor.getImage(),imageX,imageY,lightSensor.getWidth(),lightSensor.getHeight());
         } else {
             console.log(canvas, "This canvas has no context");
         } 
@@ -950,9 +992,10 @@ class SimulationCanvasRenderer {
      * to avoid blurry drawings.
      * @param {HTMLCanvasElement} canvas 
      */
-    configureCanvasDimensions(canvas){
+    async configureCanvasDimensions(canvas){
 
-        var dpr = window.devicePixelRatio || 1;
+        // Don't scale, just set the correct dimensions
+        var dpr = 1 //  window.devicePixelRatio || 1;
         // Get the size of the canvas in CSS pixels.
         var rect = canvas.getBoundingClientRect();
         
@@ -964,7 +1007,7 @@ class SimulationCanvasRenderer {
         var ctx = canvas.getContext('2d');
         // Scale all drawing operations by the dpr, so you
         // don't have to worry about the difference.
-        ctx.scale(dpr, dpr);
+        //ctx.scale(dpr, dpr);
         }
     };
 

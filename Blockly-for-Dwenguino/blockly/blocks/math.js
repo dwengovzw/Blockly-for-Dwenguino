@@ -59,6 +59,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
     "extensions": ["parent_tooltip_when_inline"]
   },
+  // Block for random numeric value.
+ /* {
+    "type": "math_random_int",
+    "message0": DwenguinoBlocklyLanguageSettings.translate(['randomNumberBetween']),
+    "args0": [{
+      "type": "field_number",
+      "name": "NUM",
+      "value": 0
+    },
+    {
+      "type": "field_number",
+      "name": "NUM",
+      "value": 10
+    }],
+    "output": "Number",
+    "colour": Blockly.Msg.MATH_HUE,
+    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['randomNumberBetweenTooltip']),
+  },*/
 
   // Block for basic arithmetic operator.
   {

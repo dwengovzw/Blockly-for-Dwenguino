@@ -3,7 +3,7 @@
       "pretty": true,
       "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
       "noImplicitAny": false,
-      "module": "es6",
+      "module": "esnext",
       "target": "es6",
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
@@ -23,6 +23,7 @@
       ]
     },
     "include": [
-      "./Blockly-for-Dwenguino/dashboards/**/*"
+      "./Blockly-for-Dwenguino/dashboards/**/*",
+      "./Blockly-for-Dwenguino/types/*"
     ]
   }

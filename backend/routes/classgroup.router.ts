@@ -1,6 +1,5 @@
 import express from 'express';
-import { allAccess, teacherBoard, studentBoard } from "../controllers/test_auth.controller.js"
-import { verifyToken, verifyTokenAjax, roleCheck, verifyUserExists, checkRolesExisted, checkDuplicateUsernameOrEmail } from "../middleware/middleware.js"
+import { verifyTokenAjax, roleCheck, verifyUserExists } from "../middleware/middleware"
 import { ClassGroupController } from "../controllers/classgroup.controller.js"
 
 const classGroupController = new ClassGroupController();

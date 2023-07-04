@@ -1,7 +1,6 @@
-import db from "../config/db.config.js"
+/*import db from "../config/db.config"
 
 const ROLES = db.ROLES;
-const User = db.user;
 
 // These middleware functions check if the user can be created. However, we will not need this initially since we will work with oauth tokens
 // For oauth, we should check if the user is known in our db (probably using an e-mailadress). If they are known, we update their information if needed using OpenID.
@@ -47,7 +46,7 @@ let checkDuplicateUsernameOrEmail = (req, res, next) => {
   let checkRolesExisted = (req, res, next) => {
     if (req.body.roles) {
       for (let i = 0; i < req.body.roles.length; i++) {
-        if (!ROLES.includes(req.body.roles[i])) {
+        if (!db.ROLES.includes(req.body.roles[i])) {
           res.status(400).send({
             message: `Failed! Role ${req.body.roles[i]} does not exist!`
           });
@@ -59,4 +58,4 @@ let checkDuplicateUsernameOrEmail = (req, res, next) => {
     next();
   };
 
-  export { checkRolesExisted, checkDuplicateUsernameOrEmail }
+  export { checkRolesExisted, checkDuplicateUsernameOrEmail }*/

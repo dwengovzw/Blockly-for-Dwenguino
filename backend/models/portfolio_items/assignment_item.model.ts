@@ -1,7 +1,7 @@
 import { Document, Schema, Model } from "mongoose"
-import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model.js"
+import { IPortfolioItem, PortfolioItem } from "./portfolio_item.model"
 import { PopulatedDoc } from 'mongoose';
-import { IUser } from "../user.model.js";
+import { IUser } from "../user.model";
 
 interface IAssignmentItemExtraFields {
     ownedBy: PopulatedDoc<IUser>

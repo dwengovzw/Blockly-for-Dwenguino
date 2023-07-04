@@ -1,9 +1,9 @@
 // Import contact model
-import Logitem from '../models/logitem.model.js';
-import uuidv4 from 'uuid/v4.js';
-import { EVENT_NAMES } from '../utils/event_names.js';
+import Logitem from '../models/logitem.model';
+import uuidv4 from 'uuid/v4';
+import { EVENT_NAMES } from '../utils/event_names';
 import mongoose from 'mongoose';
-import Validator from '../utils/validator.js';
+import Validator from '../utils/validator';
 
 import { Worker, isMainThread, parentPort } from 'worker_threads';
 

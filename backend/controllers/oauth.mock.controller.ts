@@ -1,9 +1,8 @@
-import { User, IUser } from "../models/user.model.js";
-import AbstractOAuthController from "./abstract.oauth.controller.js";
-import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
-import db from "../config/db.config.js"
+import { User, IUser } from "../models/user.model";
+import AbstractOAuthController from "./abstract.oauth.controller";
+import db from "../config/db.config"
 import jwt from "jsonwebtoken"
-import jwt_settings from "../config/jwt.config.js";
+import jwt_settings from "../config/jwt.config";
 
 class MockAuthController extends AbstractOAuthController{
     constructor(){
@@ -42,7 +41,11 @@ class MockAuthController extends AbstractOAuthController{
             })        
             //Save new cookie in session and redirect
             req.session.token = token;
-            res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+            if (user.acceptedTerms) {
+                res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+            } else {
+                res.redirect(`${process.env.SERVER_URL}/dashboard`)
+            }
 
         })
 
@@ -61,7 +64,7 @@ class MockAuthController extends AbstractOAuthController{
     }
 
     logout(req, res){
-        res.status(200).send({message: "Logout successful"})  
+        res.redirect(`${process.env.SERVER_URL}`)
     }
 }
 

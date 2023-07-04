@@ -1,8 +1,8 @@
-
+import { IDwenguinoEventLogger } from "./i_dwenguino_event_logger.js";
 /**
  * 
  */
-class DwenguinoEventLogger {
+class DwenguinoEventLogger extends IDwenguinoEventLogger{
     sessionId = null;
     tutorialId = null;
     
@@ -14,6 +14,7 @@ class DwenguinoEventLogger {
      * @constructs
      */
     constructor(){
+        super()
     }
 
     init(){

@@ -46,7 +46,7 @@ class FileIOController {
                 var processFile = function (file) {
                     var textType = /text.*/;
 
-                    if (file.type.match(textType)) {
+                    if (file.type.match(textType) || file.name.endsWith(".cpp")) {
                         var reader = new FileReader();
 
                         reader.onload = function (e) {

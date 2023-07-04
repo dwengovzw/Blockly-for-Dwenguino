@@ -9,8 +9,8 @@ class SocialRobotBuzzer extends RobotComponent {
     static pinNames = {
         digitalPin: "digitalPin"
     }
-    constructor(){
-        super();
+    constructor(simulation_container=null){
+        super(simulation_container);
         BindMethods(this);
         this._image = new Image();
         this._imageUrl = `${settings.basepath}DwenguinoIDE/img/socialrobot/buzzer.png`;

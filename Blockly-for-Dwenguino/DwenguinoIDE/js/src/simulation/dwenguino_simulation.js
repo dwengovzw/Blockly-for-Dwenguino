@@ -5,6 +5,7 @@ import DwenguinoSimulationScenarioRidingRobotWithWall from "../scenario/ridingro
 import DwenguinoSimulationScenarioSpyrograph from "../scenario/spyrograph/dwenguino_simulation_scenario_spyrograph.js"
 import DwenguinoSimulationScenarioPlotter from "../scenario/plotter/dwenguino_simulation_scenario_plotter.js";
 import DwenguinoSimulationScenarioConveyor from "../scenario/conveyor/dwenguino_simulation_scenario_conveyor.js";
+import SCENARIO from "../../../../../backend/models/saved_state.model"
 
 class DwenguinoSimulation {
     logger = null;
@@ -13,11 +14,11 @@ class DwenguinoSimulation {
 
     constructor(logger, workspace) {
         this.scenarios = {
-            "spyrograph": new DwenguinoSimulationScenarioSpyrograph(logger),
-            "moving": new DwenguinoSimulationScenarioRidingRobot(logger),
-            "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger),
-            "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger),
-            "conveyor": new DwenguinoSimulationScenarioConveyor(logger)
+            "spyrograph": new DwenguinoSimulationScenarioSpyrograph(logger, "spyrograph"),
+            "moving": new DwenguinoSimulationScenarioRidingRobot(logger, "moving"),
+            "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger, "wall"),
+            "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger, "socialrobot"),
+            "conveyor": new DwenguinoSimulationScenarioConveyor(logger, "conveyor"),
         };
         this.logger = logger;
         this.workspace = workspace;
@@ -29,6 +30,22 @@ class DwenguinoSimulation {
     }
     stop() {
         this.simControlsController.handleSimulationStop();
+    }
+
+    getCurrentScenario(){
+        return this.simControlsController.getCurrentScenario();
+    }
+
+    setCurrentScenario(scenarioName){
+        this.simControlsController.setCurrentScenario(scenarioName);
+    }
+
+    addStateHasChangedListener(listener){
+        this.simControlsController.addStateHasChangedListener(listener);
+        // For of loop here breaks webpack
+        for (let key of Object.keys(this.scenarios)){
+            this.scenarios[key].addStateHasChangedListener(listener);
+        }
     }
 }
 

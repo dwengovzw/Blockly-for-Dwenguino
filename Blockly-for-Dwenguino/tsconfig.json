@@ -7,6 +7,7 @@
       "target": "es6",
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
+      "skipLibCheck": true,
       "noEmit": false, // this option will solve the issue
       "importHelpers": false,
       "jsx": "react",

@@ -11,13 +11,12 @@ import i18n from 'i18n-x';
 import axios from 'axios';
 
 // Import routers
-import blocklyRoutes from './routes/blockly-routes.js';
-import statsRoutes from './routes/stats-routes.js'
-import dashboardRouter from './routes/dashboard-routes.js'
-import oauthRouter from './routes/oauth-routes.js'
-import userRouter from "./routes/user.routes.js"
-import classGroupRouter from './routes/classgroup.router.js';
-import savedProgramsRouter from "./routes/saved_program.router.js"
+import blocklyRoutes from './routes/blockly-routes'
+import dashboardRouter from './routes/dashboard-routes'
+import oauthRouter from './routes/oauth-routes'
+import userRouter from "./routes/user.routes"
+import classGroupRouter from './routes/classgroup.router';
+import savedProgramsRouter from "./routes/saved_state.router"
 
 // Import test router
 //import testRouter from './routes/test_auth.routes.js';
@@ -34,8 +33,8 @@ import cookieSession from "cookie-session"
 
 //Configure cors middleware for the run route to allow all requests
 import cors from 'cors';
-import assignmentGroupRouter from './routes/assignmentgroup.router.js';
-import { portfolioRouter } from './routes/portfolio.router.js';
+import assignmentGroupRouter from './routes/assignmentgroup.router';
+import { portfolioRouter } from './routes/portfolio.router';
 
 let corsOptions = {
     origin: process.env.CORS_ORIGIN,
@@ -135,16 +134,21 @@ app.use('/oauth', oauthRouter);
 app.use("/user", userRouter);
 
 // Use saved program routes
-app.use("/savedprograms", savedProgramsRouter)
+app.use("/savedstates", savedProgramsRouter)
 
-// Use classgroup routes
-app.use("/classgroup", classGroupRouter)
+// Disable these routes for next release
+if (process.env.NODE_ENV === 'development') {
+    
+    // Use classgroup routes
+    app.use("/classgroup", classGroupRouter)
 
-// Use assignment group routes
-app.use("/assignment", assignmentGroupRouter)
+    // Use assignment group routes
+    app.use("/assignment", assignmentGroupRouter)
 
-// Use assignment group routes
-app.use("/portfolio", portfolioRouter)
+    // Use assignment group routes
+    app.use("/portfolio", portfolioRouter)
+}
+
 
 // Add default route
 app.get("/", (req, res) => res.send('Welcome to blockly'));

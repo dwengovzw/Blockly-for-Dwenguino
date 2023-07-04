@@ -1,12 +1,10 @@
 import mongoose from "mongoose"
 import { PopulatedDoc } from 'mongoose';
 import { Document, Schema, model } from "mongoose"
-import db from "../config/db.config.js"
-//import { isEmail } from 'validator/es/index.js'
-import { IRole, RoleSchema } from './role.model.js'
-import { ISavedEnvironmentState, SavedEnvironmentStateSchema } from "./saved_evnironment_state.model.js"
-import  v4 from "uuid/v4.js"
-import { IPortfolio } from "./portfolio.model.js"
+import db from "../config/db.config"
+import { IRole, RoleSchema } from './role.model'
+import  v4 from "uuid/v4"
+import { IPortfolio } from "./portfolio.model"
 
 
 interface IUserShared {
@@ -18,11 +16,11 @@ interface IUserShared {
     email?: string,
     emailConfirmed?: boolean,
     emailConfirmationCode?: string,
-    savedEnvironmentState?: ISavedEnvironmentState,
     portfolios: PopulatedDoc<IPortfolio>[] | IPortfolio[],
     birthdate?: Date,
     schoolId?: String,
     grade?: String,
+    acceptedTerms?: boolean,
 }
 
 // only for data associated with the user that is only used in the frontend: nothing for now..
@@ -63,7 +61,6 @@ const UserSchemaFields: Record<keyof IUser, any> =
     },
     emailConfirmed: Boolean,
     emailConfirmationCode: String,
-    savedEnvironmentState: SavedEnvironmentStateSchema,
     portfolios: [
         {
             type: Schema.Types.ObjectId,
@@ -78,7 +75,12 @@ const UserSchemaFields: Record<keyof IUser, any> =
         }
     ],
     schoolId: String,
-    grade: String
+    grade: String,
+    acceptedTerms: {
+        type: Boolean,
+        required: true,
+        default: false
+    }
 }
 const UserSchema = new mongoose.Schema<IUser>(UserSchemaFields)
 const User = mongoose.model<IUser>('User', UserSchema)

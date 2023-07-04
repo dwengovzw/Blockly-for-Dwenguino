@@ -1,6 +1,7 @@
 import { Schema, Model } from "mongoose"
-import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model.js"
-import { PortfolioItem } from "./portfolio_item.model.js"
+import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model"
+import { PortfolioItem } from "./portfolio_item.model"
+import { ITEMTYPES } from "../../config/itemtypes.config"
 
 interface IBlocklyQuestionItemExtraFields {
     questionText: string
@@ -11,7 +12,7 @@ const BlocklyQuestionSchemaFields: Record<keyof IBlocklyQuestionItemExtraFields,
 }
 const BlocklyQuestionItemSchema = AssignmentItemSchema(BlocklyQuestionSchemaFields)
 interface IBlocklyQuestionItemModel extends Model<IBlocklyQuestionItem>{}
-const BlocklyQuestionItem = PortfolioItem.discriminator<IBlocklyQuestionItem, IBlocklyQuestionItemModel>('BlocklyQuestion', BlocklyQuestionItemSchema)
+const BlocklyQuestionItem = PortfolioItem.discriminator<IBlocklyQuestionItem, IBlocklyQuestionItemModel>(ITEMTYPES.BlocklyQuestion, BlocklyQuestionItemSchema)
 
 export {
     IBlocklyQuestionItem,

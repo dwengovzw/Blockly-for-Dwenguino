@@ -49,8 +49,8 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
 
     scaleFactorForDisplay = 0.8;
     
-    constructor(logger){
-        super(logger);
+    constructor(logger, name){
+        super(logger, name);
         //this.initSimulationState(null);
         this.graphicsLib = new SpyrographGraphicsLib();
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
@@ -108,7 +108,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
                 this.canvases[i].height = this.container.height();
             }
             this.loadPreviousImageIfExists(); 
-            this.convertToDisplayAndRender(true);
+            this.convertToDisplayAndRender(false);
         }).observe(document.querySelector(`#${containerId}`));
  
         

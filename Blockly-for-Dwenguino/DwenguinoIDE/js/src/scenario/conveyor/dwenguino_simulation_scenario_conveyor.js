@@ -18,8 +18,8 @@ class DwenguinoSimulationScenarioConveyor extends DwenguinoSimulationScenario {
     buttonPins = [5, 6, 7, 8, 9];
 
 
-    constructor(logger) {
-        super(logger);
+    constructor(logger, name) {
+        super(logger, name);
         this.dwenguinoBoardSimulation = new DwenguinoBoardSimulation(logger);
 
         let conveyorWidth = 310;    //height image conveyor belt

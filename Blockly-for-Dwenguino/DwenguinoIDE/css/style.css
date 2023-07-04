@@ -241,7 +241,7 @@ body{
 }
 
 #db_simulator_top_pane{
-    height: 50%;
+    height: 25%;
     min-height: 180px;
     width: 100%;
     position: relative;
@@ -298,6 +298,7 @@ body{
   flex: 10;
   position: relative;
   width: 100%;
+  height: 75%;
   border-top: solid #8bab42 5px;
 }
 
@@ -550,8 +551,12 @@ background-color: #ffffff;
     position: absolute;
 }
 
-#sim_lcd_row1{
-  margin-top: 10%;
+#sim_lcds > #sim_lcd_row1 {
+    margin-top: 24px;
+}
+
+#sim_element_lcd_img > #sim_lcd_row0{
+    margin-top: 16px;
 }
 
 #sim_lights {
@@ -725,11 +730,13 @@ background-color: #ffffff;
     margin: 0;
     top: 0;
     left: 0;
+    justify-content: center;
 }
 
 #sim_background_img {
     /*height: inherit;
     width: min-content;*/
+    background-position: center center;
     height:100%;
     margin-left: 10px;
 }
@@ -969,6 +976,29 @@ background-color: #ffffff;
     padding-bottom: 5px;
 }
 
+.component_title {
+    position: absolute;
+    margin-top: -1.5rem;
+    margin-right: auto;
+    margin-left: auto;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                        supported by Chrome, Edge, Opera and Firefox */
+      
+}
+/* RGB led needs more space to show pins*/
+.sim_element_rgbled > div > span.component_title{
+    margin-top: -4rem;
+}
+
+.sim_element_sonar > div > span.component_title{
+    margin-top: -3rem;
+}
+
 .sim_element{
     color: transparent;
     position: absolute;
@@ -980,57 +1010,11 @@ background-color: #ffffff;
     text-transform: uppercase;
 }
 
-.sim_element_led{
-    width: 65px;
-    height: 30px;
-}
-
-.sim_element_rgbled{
-    width: 90px;
-    height: 30px;
-}
-
-
-.sim_element_button{
-    width: 90px;
-    height: 75px;
-}
-
-.sim_element_ledmatrixsegment{
-    width: 110px;
-    height: 100px;
-}
-
-.sim_element_servo{
-    width: 100px;
-    height:150px;
-    top: 5px;
-    left: 5px;
-}
-
-.sim_element_touch{
-    width:140px;
-    height: 60px;
-}
-
-.sim_element_pir{
-    width:120px;
-    height: 60px;
-}
-
-.sim_element_sonar{
-    width: 100px;
-    height: 58px;
-}
-
-.sim_element_sound{
-    width:130px;
-    height: 60px;
-}
-
-.sim_element_light{
-    width:120px;
-    height: 60px;
+.sim_element > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .pir_button {
@@ -1081,57 +1065,66 @@ background-color: #ffffff;
     height: 80px;
 }
 
-#sim_element_lcd_img{
+.sim_element > #sim_element_lcd_img{
     width: 100%;
     height: 100%;
+    display: flex;
+    flex-direction: column;
     background-image: url("../img/socialrobot/lcd.jpg");
     background-size: contain;
     background-repeat: no-repeat;
+    justify-content: flex-start;
+    position: relative;
 }
 
 .lcd{
-    height: 46%;
     width: 100%;
-    padding: 10%;
     font-size: 69.5%;
     font-family: "Lucida Console", Courier, monospace;
     text-transform: none;
     letter-spacing: 2px;
     word-spacing: 4px;
-    position: absolute;
     color: #FFFFFF;
+    display: flex;
+    justify-content: center;
 }
 .servo_canvas{
-    margin-left: 25px;
-    margin-top: 0px;
     width: 100px;
-    height: 120px;
+    height: 100px;
+}
+.servo_canvas.rotate_90_canvas {
+    width: 100px;
+    height: 100px;
 }
 .servo_canvas.hat_canvas {
-    width: 400px;
-    height: 400px;
+    width: 200px;
+    height: 200px;
+}
+.servo_canvas.eye_canvas {
+    width: 75px;
+    height: 75px;
 }
 .continuous_servo_canvas{
-    margin-left: 25px;
-    margin-top: 0px;
     width: 100px;
-    height: 120px;
+    height: 100px;
 }
 
-.hand_canvas{
-    margin-left: 0px;
-    margin-top: 0px;
-    width: 160px;
-    height: 200px;
+.servo_canvas.hand_canvas{
+    height: 149px;
+    width: 149px;
 }
 
 .pir_canvas{
-    width: 100px;
-    height: 80px;
-    margin-top: 10px;
+    width: 73px;
+    height: 68px;
 }
 
 .button_canvas{
+    width: 50px;
+    height:50px;
+}
+
+.buzzer_canvas{
     width: 50px;
     height:50px;
 }
@@ -1147,39 +1140,33 @@ background-color: #ffffff;
 }
 
 .touch_canvas{
-    margin-left: 25px;
     width: 60px;
     height: 60px;
 }
 
 .led_canvas{
-    margin-left: 25px;
     width: 40px;
     height: 40px;
 }
 
 .rgbled_canvas{
-    margin-left: 25px;
     width: 40px;
-    height: 30px;
+    height: 40px;
 }
 
 .sonar_canvas{
     width: 100px;
-    height: 58px;
+    height: 100px;
 }
 
 .sound_canvas{
-    margin-left: 25px;
     width: 100px;
-    height: 60px;
-    margin-top: 10px;
+    height: 100px;
 }
 
 .light_canvas{
     width: 100px;
-    height: 60px;
-    margin-top: 10px;
+    height: 100px;
 }
 
 .ledmatrix_canvas{
@@ -1188,8 +1175,8 @@ background-color: #ffffff;
 }
 
 .ledmatrixsegment_canvas{
-    width: 100px;
-    height: 100px;
+    width: 85px;
+    height: 70px;
 }
 
 .costumeButton:active,
@@ -1237,43 +1224,22 @@ background-color: #ffffff;
 }
 
 #scenario_options{
-    float: bottom;
     width: 50px;
-    height: 120px;
+    height: 150px;
     position: absolute;
     bottom: 0;
     right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
 }
 
-#save_scenario{
-    float: top;
-    width: 100%;
-    height: 33%;
+.social_robot_scenario_settings_button {
     font-size: 20px;
 }
 
-#save_scenario:hover{
-    color: #8bab42;
-}
-
-#load_scenario{
-    float: bottom;
-    height: 33%;
-    width: 100%;
-    font-size: 20px;
-}
-
-#load_scenario:hover{
-    color: #8bab42;
-}
-
-#switch_background{
-    height: 33%;
-    width: 100%;
-    font-size: 20px;
-}
-
-#switch_background:hover{
+.social_robot_scenario_settings_button:hover {
     color: #8bab42;
 }
 
@@ -1383,34 +1349,15 @@ cursor: pointer;
     background-image: url("../img/board/button_pushed.png");
 }
 
+.draggable {
+    border: solid transparent 2px;
+}
 
 .draggable:hover {
     font-weight: bold;
     color: #000000;
+    border: dashed gray 2px;
   }
-
-span.grippy {
-    content: '....';
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    overflow: hidden;
-    line-height: 5px;
-    padding: 3px 4px;
-    cursor: move;
-    vertical-align: middle;
-    margin-top: -.7em;
-    margin-right: .3em;
-    font-size: 0.85rem;
-    font-family: sans-serif;
-    letter-spacing: 2px;
-    color: #cccccc;
-    text-shadow: 1px 0 1px black;
-}
-
-span.grippy::after {
-    content: '.. .. .. ..';
-}
 
 .option_button_disabled {
     background-color: darkgrey;

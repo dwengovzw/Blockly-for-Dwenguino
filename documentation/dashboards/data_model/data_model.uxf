@@ -1,4 +1,4 @@
-<diagram program="umletino" version="15.0.0"><zoom_level>9</zoom_level><element><id>UMLClass</id><coordinates><x>450</x><y>342</y><w>117</w><h>63</h></coordinates><panel_attributes>_Teacher_
+<diagram program="umletino" version="15.1"><zoom_level>9</zoom_level><element><id>UMLClass</id><coordinates><x>450</x><y>342</y><w>117</w><h>63</h></coordinates><panel_attributes>_Teacher_
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>252</x><y>342</y><w>126</w><h>63</h></coordinates><panel_attributes>_Student_
 
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>360</x><y>180</y><w>108</w><h>63</h></coordinates><panel_attributes>_User_
@@ -71,14 +71,14 @@ m2=0..n
 has &gt;</panel_attributes><additional_attributes>10;120;90;120;90;20;470;20</additional_attributes></element><element><id>Relation</id><coordinates><x>558</x><y>360</y><w>477</w><h>90</h></coordinates><panel_attributes>lt=-
 m1=1..n
 m2=0..n
-&lt; ownedBy</panel_attributes><additional_attributes>10;10;110;10;110;70;490;70;490;60</additional_attributes></element><element><id>Relation</id><coordinates><x>1080</x><y>180</y><w>603</w><h>189</h></coordinates><panel_attributes>lt=-
-m1=0..1
-m2=0..n
-&lt; isAnswerTo</panel_attributes><additional_attributes>10;190;10;160;510;160;510;10;650;10</additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>567</y><w>126</w><h>45</h></coordinates><panel_attributes>lt=-
+&lt; ownedBy</panel_attributes><additional_attributes>10;10;110;10;110;70;490;70;490;60</additional_attributes></element><element><id>Relation</id><coordinates><x>603</x><y>567</y><w>126</w><h>45</h></coordinates><panel_attributes>lt=-
 m1=0..n
 m2=1
 isLinkedTo &gt;</panel_attributes><additional_attributes>10;20;120;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1953</x><y>504</y><w>126</w><h>63</h></coordinates><panel_attributes>_SocialRobotDesign_
 
 </panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1755</x><y>216</y><w>279</w><h>306</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;10;110;290;110;290;320</additional_attributes></element><element><id>UMLClass</id><coordinates><x>1665</x><y>162</y><w>126</w><h>63</h></coordinates><panel_attributes>_SolutionItem_
 
-</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1323</x><y>99</y><w>423</w><h>81</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;450;10;450;70</additional_attributes></element></diagram>
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1323</x><y>99</y><w>423</w><h>81</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes><additional_attributes>10;10;450;10;450;70</additional_attributes></element><element><id>Relation</id><coordinates><x>1188</x><y>9</y><w>144</w><h>90</h></coordinates><panel_attributes>lt=-
+m1=0..n
+m2=0..n
+children &gt;</panel_attributes><additional_attributes>10;80;10;20;120;20;120;80</additional_attributes></element></diagram>

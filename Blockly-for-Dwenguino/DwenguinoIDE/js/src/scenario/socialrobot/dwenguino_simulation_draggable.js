@@ -67,13 +67,13 @@ class DwenguinoSimulationDraggable {
   dragMoveListener(event) {
     var target = event.target
     // keep the dragged position in the data-x/data-y attributes
-    var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-    var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+    const parentWidth = event.currentTarget.parentElement.getBoundingClientRect().width;
+    const parentHeight = event.currentTarget.parentElement.getBoundingClientRect().height;
+    var x = (event.rect.left - event.currentTarget.parentElement.getBoundingClientRect().left)/parentWidth*100
+    var y = (event.rect.top - event.currentTarget.parentElement.getBoundingClientRect().top)/parentHeight*100
   
-    // translate the element
-    target.style.webkitTransform =
-      target.style.transform =
-        'translate(' + x + 'px, ' + y + 'px)'
+    target.style.left = x + '%'
+    target.style.top = y + '%'
   
     // update the posiion attributes
     target.setAttribute('data-x', x)

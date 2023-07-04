@@ -1,9 +1,9 @@
-import GithubOAuthController from "./oauth.github.controller.js";
-import OAuthState from "../datatypes/oauthState.js";
-import db from "../config/db.config.js"
-import LeerIdOAuthController from "./oauth.leerid.controller.js";
-import ACMOAuthController from "./oauth.acm.controller.js";
-import MockAuthController from "./oauth.mock.controller.js";
+import GithubOAuthController from "./oauth.github.controller";
+import OAuthState from "../datatypes/oauthState";
+import db from "../config/db.config"
+import LeerIdOAuthController from "./oauth.leerid.controller";
+import ACMOAuthController from "./oauth.acm.controller";
+import MockAuthController from "./oauth.mock.controller";
 
 const oauthControllers = {}
 const githubOAuthController = new GithubOAuthController();
@@ -13,7 +13,10 @@ const mockOAuthController = new MockAuthController();
 oauthControllers[db.PLATFORMS.github] = githubOAuthController;
 oauthControllers[db.PLATFORMS.leerId] = leerIdOAuthController;
 oauthControllers[db.PLATFORMS.beACM] = acmOAuthController;
-oauthControllers[db.PLATFORMS.test] = mockOAuthController;
+if (process.env.NODE_ENV == "debug"){
+    oauthControllers[db.PLATFORMS.test] = mockOAuthController;
+}
+
 
 
 class OAuthController {
@@ -51,8 +54,6 @@ class OAuthController {
      * @param res 
      */
     redirect(req, res) {
-        console.log(req.query.state);
-        console.log(JSON.parse(req.query?.state));
         let state = JSON.parse(req.query?.state)
         if (Object.values(db.PLATFORMS).includes(state.platform)){
             oauthControllers[state.platform].redirect(req, res, state);
@@ -64,9 +65,7 @@ class OAuthController {
     logout(req, res){
         let platform = req.platform
         req.session.token = null;
-        res.redirect(`${process.env.SERVER_URL}`)
-        //oauthControllers[platform].logout(req, res)
-        //res.status(200).send({message: "Logout successful"})
+        oauthControllers[platform].logout(req, res)
     }
 
     getPlatforms(req, res){
