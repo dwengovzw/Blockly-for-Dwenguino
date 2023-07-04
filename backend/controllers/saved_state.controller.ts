@@ -17,7 +17,7 @@ class SavedStateController {
         try {
             let prog
             if (req.body.uuid){
-                prog = await SavedState.findOneAndUpdate({
+                prog = await SavedState.findOneAndUpdate({  // TODO: take into account that a program might not be owned by the user but the user has access to it through a portfolio (cfr. open route)
                     uuid: req.body.uuid,
                     user: req.user._id
                 }, {
@@ -67,7 +67,7 @@ class SavedStateController {
             })
             return res.status(200).send({message: "Saved program"})
         } catch (err){
-            return res.status(500).send({message: "Unable to retrieve user"})
+            return res.status(500).send({message: "Unable to update name"})
         }
     }
 
@@ -96,6 +96,7 @@ class SavedStateController {
             res.status(500).send({message: "Unable to fetch saved programs"})
         }
     }
+
 
     async open(req, res){
         let uuid = req.query.uuid

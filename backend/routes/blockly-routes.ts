@@ -35,24 +35,13 @@ let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUU
 }
 
 let handleSimulatorRequest = ({blocks_xml, res, view="index.ejs", hidebutton=false}) => {
-    //if (blocks_xml && blocks_xml !== ""){
-        processStartBlocks({
-            startblock_xml: blocks_xml || "", 
-            res: res, 
-            view: view,
-            hidebutton: hidebutton,
-            loggedIn: res.loggedIn
-        });
-    /*}else{
-        let empty_program_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>';
-        res.render(view, {
-            blocks_xml: empty_program_xml, 
-            base_url: process.env.SERVER_URL, 
-            form_target: process.env.SERVER_URL + "/simulator",
-            hidebutton: hidebutton,
-            editorState: "''"
-        });
-    }*/
+    processStartBlocks({
+        startblock_xml: blocks_xml || "", 
+        res: res, 
+        view: view,
+        hidebutton: hidebutton,
+        loggedIn: res.loggedIn
+    });
 }
 
 // load the application

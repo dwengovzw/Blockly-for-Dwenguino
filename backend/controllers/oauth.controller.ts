@@ -54,8 +54,6 @@ class OAuthController {
      * @param res 
      */
     redirect(req, res) {
-        console.log(req.query.state);
-        console.log(JSON.parse(req.query?.state));
         let state = JSON.parse(req.query?.state)
         if (Object.values(db.PLATFORMS).includes(state.platform)){
             oauthControllers[state.platform].redirect(req, res, state);
@@ -68,9 +66,6 @@ class OAuthController {
         let platform = req.platform
         req.session.token = null;
         oauthControllers[platform].logout(req, res)
-        //res.redirect(`${process.env.SERVER_URL}`)
-        //oauthControllers[platform].logout(req, res)
-        //res.status(200).send({message: "Logout successful"})
     }
 
     getPlatforms(req, res){
