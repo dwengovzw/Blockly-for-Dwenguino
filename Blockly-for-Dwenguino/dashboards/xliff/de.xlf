@@ -562,6 +562,10 @@
   <source>Open</source>
   <target>Öffnen</target>
 </trans-unit>
+<trans-unit id="sce07f1ad70ec5bba">
+  <source>logo</source>
+  <target>logo</target>
+</trans-unit>
 </body>
 </file>
 </xliff>

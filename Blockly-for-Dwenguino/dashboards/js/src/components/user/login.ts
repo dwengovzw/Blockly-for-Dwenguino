@@ -2,7 +2,7 @@
  * @author Tom Neutens <tomneutens@gmail.com>
  */
 
-import { LitElement, css, html, CSSResultGroup } from "lit";
+import { LitElement, css, html, CSSResultGroup, svg } from "lit";
 import {customElement, state} from 'lit/decorators.js';
 import { store } from "../../state/store"
 import { localized, msg } from '@lit/localize';
@@ -13,6 +13,7 @@ import { getGoogleMateriaIconsLinkTag, escapeRegExp } from "../../util"
 
 import '@vaadin/avatar';
 import { getLocale, setLocaleFromUrl } from "../../localization/localization";
+import { buttonStyles } from "../../styles/shared";
 
 @localized()
 @customElement("dwengo-login-menu")
@@ -28,6 +29,16 @@ class LoginMenu extends connect(store)(LitElement) {
 
     @state()
     platformToLabelMap: Record<string, string>
+    platformToIconMap: Record<string, string> = {
+        "leerId": "LeerID_pos_kl_36x36.svg",
+        "beACM": "vlaanderen.svg",
+        "github": "github-mark.svg",
+    }
+    platformToIconClass: Record<string, string> = {
+        "leerId": "leerId",
+        "beACM": "beACM",
+        "github": "github",
+    }
 
     stateChanged(state: any): void {
         this.platforms = state.oauth.platforms
@@ -87,7 +98,12 @@ class LoginMenu extends connect(store)(LitElement) {
             <span class="login-title">${msg("Login with")}</span>
             <ul>
                 ${this.platforms.map(p => {
-                    return html`<li><a rel="external" href="${this.getLoginURI(p, this.originalRequestInfo)}">${this.platformToLabelMap[p]}</a></li>`
+                    return html`<li class="${this.platformToIconClass[p]}">
+                        <a class="login_link" rel="external" href="${this.getLoginURI(p, this.originalRequestInfo)}">
+                            <img class="login_button_logo" src="${globalSettings.hostname}/dashboard/assets/img/login_logos/${this.platformToIconMap[p]}" alt="${msg("logo")} ${this.platformToLabelMap[p]}">
+                            ${this.platformToLabelMap[p]}
+                        </a>
+                    </li>`
                 })}
                 ${process.env.NODE_ENV === 'development' ? this.renderTestLoginOptions() : html``}
             </ul>
@@ -99,9 +115,9 @@ class LoginMenu extends connect(store)(LitElement) {
      */
     renderTestLoginOptions(){
         return html`
-        <li><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=admin">Login as admin</a></li>
-        <li><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=teacher1">Login as teacher</a></li>
-        <li><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=student1">Login as student</a></li>
+        <li class="dwengo-button dwengo-button-icon"><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=admin">Login as admin</a></li>
+        <li class="dwengo-button dwengo-button-icon"><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=teacher1">Login as teacher</a></li>
+        <li class="dwengo-button dwengo-button-icon"><a rel="external" href="${globalSettings.hostname}/oauth/login?platform=test${this.originalRequestInfo}&userId=student1">Login as student</a></li>
         `
     }
 
@@ -124,10 +140,56 @@ class LoginMenu extends connect(store)(LitElement) {
         `
     }
 
-    static styles?: CSSResultGroup = css`
+    static styles?: CSSResultGroup = [css`
     :host {
         margin: auto 0;
     }
+
+    li.github {
+        border: 0.5px solid black;
+        background: #ececec;
+        background-image: linear-gradient(#f4f4f4, #ececec);
+        color: black;
+        border-radius: 2.5px;
+    }
+
+    li.beACM {
+        border-color: #d4d4d4;
+        background: #FFED00;
+        color: black;
+        border-radius: 2.5px;
+    }
+
+    li.leerId {
+        background-color: rgb(21, 70, 91);
+        color: white;
+        border-radius: 2.5px;
+    }
+
+    li.github a:visited {
+        color: black;
+    }
+
+    li.beACM a:visited {
+        color: black;
+    }
+    
+    li.leerId a:visited {
+        color: white;
+    }
+
+    .login_button_logo {
+        width: 1.5rem;
+        height: 1.5rem;
+        margin-right: 0.5rem;
+    }
+    .login_link {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
     .dwengo-login-menu-icon {
         color: --theme-accentFillSelected;
         font-size: 2rem;
@@ -181,23 +243,18 @@ class LoginMenu extends connect(store)(LitElement) {
         display: inline-block;
         box-sizing: border-box;
         text-decoration: none;
-        padding: 5px 20px;
+        padding: 5px 5px;
         width: 100%;
         text-align: center;
         border: 1px solid transparent;
         border-radius: 0.25rem;
         line-height: 1.5;
-        background-color: var(--theme-accentFillSelected);
-        color: var(--theme-white);
-    }
-    .dwengo-login-menu-dropdown a:visited {
-        color: var(--theme-white);
     }
     .dwengo-login-menu-dropdown .login-title{
         font-size: 2rem;
         color: var(--theme-black);
     }
-    `
+    `, buttonStyles]
 }
 
 export default LoginMenu

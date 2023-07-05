@@ -124,6 +124,7 @@
 'sccc152a1fd3103be': `Veuillez noter que ce simulateur est actuellement en phase bêta. Cela signifie que certaines fonctionnalités peuvent changer ou être supprimées au fur et à mesure que nous continuons à développer et à apporter des améliorations. Nous travaillons dur pour fournir une expérience de programmation optimale et nous apprécions votre compréhension pendant ce processus.`,
 'sccdc445505b97876': `Créer une équipe`,
 'scdb1bac161852c73': `Bienvenue`,
+'sce07f1ad70ec5bba': `logo`,
 'scefc6873f2e3f24e': `https://dwengo.org/fr/physical_computing/`,
 'sd1f44f1a8bc20e67': `Email`,
 'sd38cfb1ca45ded96': `Projets enregistrés`,
