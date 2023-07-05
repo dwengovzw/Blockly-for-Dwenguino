@@ -108,124 +108,124 @@
               'opsz' 48
             }
             </style>
-        <script>
-            let globalSettings = {
-                basepath: "<%- base_url %>/dwenguinoblockly/",
-                hostname: "<%- base_url %>"
-            }
-            let settings = globalSettings // Mismatch between global settings var in dashboard and dwenguinoIDE
-            // Define blockly as a global dummy to make translations play nice with dashboards
-            let Blockly = {
-                Msg: {}
-            }
-        </script>
-        <!-- Import translation fallback file, needs to be loaded before Blockly and DwenguinoBlockly -->
-        <script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/msg/fallback.js"></script>
         
-        <script>
-            var DwenguinoBlocklyLanguageSettings = {}
-
-            DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
-                'en': 'English',
-                'nl': 'Nederlands',
-                'es': 'Español',
-                'fr': 'français',
-                'it': 'Italiano',   
-                'de': 'Deutsch',
-                'my': 'Malay',
-                'pl': 'Polski',
-                'el': 'Ελληνικά',
-                'ar': 'عربى'
-            };
-
-            //Set default language setting
-            DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'nl';
-
-            DwenguinoBlocklyLanguageSettings.translate = function(translationKey){
-            let translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG);
-            if (translation){
-                return translation;
-            }else{
-                translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK);
-                if (translation){
-                return translation;
-                }else{
-                return "No translation";
-                }
-            }
-            };
-
-            DwenguinoBlocklyLanguageSettings.translateFrom = function(subdevision, translationKey){
-            let translation;
-            if (MSG[subdevision]){
-                translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG[subdevision]);
-            }
-            if (translation){
-                return translation;
-            }else{
-                translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK[subdevision]);
-                if (translation){
-                return translation;
-                }else{
-                return "No translation";
-                }
-            }
-            };
-
-            /**
-             * @Brief returns the value for a translation key
-             * @Param translationKey an array containing the the keys of the subsequent subobjects
-             */
-            DwenguinoBlocklyLanguageSettings.findValueForTranslationKey = function(translationKey, translationObject){
-            let i = 0;
-            while (translationObject[translationKey[i]]){
-                translationObject = translationObject[translationKey[i]];
-                i++;
-            }
-            if (typeof translationObject === 'string'){
-                return translationObject;
-            }else{ 
-                return undefined;
-            }
-            };
-
-            /**
-            * Extracts a parameter from the URL.
-            * If the parameter is absent default_value is returned.
-            * @param {string} name The name of the parameter.
-            * @param {string} defaultValue Value to return if paramater not found.
-            * @return {string} The parameter value or the default value if not found.
-            */
-            DwenguinoBlocklyLanguageSettings.getStringParamFromUrl = function(name, defaultValue) {
-            var val = location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
-            return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
-            };
-
-            /**
-             * Get the language of this user from the URL.
-             * @return {string} User's language.
-             */
-            DwenguinoBlocklyLanguageSettings.getLang = function() {
-            var lang = DwenguinoBlocklyLanguageSettings.getStringParamFromUrl('lang', '');
-            if (DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME[lang] === undefined) {
-                // Default to English.
-                lang = DwenguinoBlocklyLanguageSettings.DEFAULT_LANG;
-            }
-            return lang;
-            };
-
-            // Load the Code demo's language strings.
-            let scriptCloseTag = "</" + "script" + ">"
-            document.write(`<script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/msg/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
-            // Load Blockly's language strings.
-            document.write(`<script src="<%- base_url -%>/dwenguinoblockly/blockly/msg/js/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
-        </script>
-        <script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/js/lib/ResizeSensor.js"></script>
-        <script type="text/javascript" src="<%- base_url %>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>
         
     </head>
     <body>
         <dwengo-dashboard></dwengo-dashboard>
     </body>
-        
+    <script>
+        let globalSettings = {
+            basepath: "<%- base_url %>/dwenguinoblockly/",
+            hostname: "<%- base_url %>"
+        }
+        let settings = globalSettings // Mismatch between global settings var in dashboard and dwenguinoIDE
+        // Define blockly as a global dummy to make translations play nice with dashboards
+        let Blockly = {
+            Msg: {}
+        }
+    </script>
+    <!-- Import translation fallback file, needs to be loaded before Blockly and DwenguinoBlockly -->
+    <script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/msg/fallback.js"></script>
+    
+    <script>
+        var DwenguinoBlocklyLanguageSettings = {}
+
+        DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME = {
+            'en': 'English',
+            'nl': 'Nederlands',
+            'es': 'Español',
+            'fr': 'français',
+            'it': 'Italiano',   
+            'de': 'Deutsch',
+            'my': 'Malay',
+            'pl': 'Polski',
+            'el': 'Ελληνικά',
+            'ar': 'عربى'
+        };
+
+        //Set default language setting
+        DwenguinoBlocklyLanguageSettings.DEFAULT_LANG = 'nl';
+
+        DwenguinoBlocklyLanguageSettings.translate = function(translationKey){
+        let translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG);
+        if (translation){
+            return translation;
+        }else{
+            translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK);
+            if (translation){
+            return translation;
+            }else{
+            return "No translation";
+            }
+        }
+        };
+
+        DwenguinoBlocklyLanguageSettings.translateFrom = function(subdevision, translationKey){
+        let translation;
+        if (MSG[subdevision]){
+            translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG[subdevision]);
+        }
+        if (translation){
+            return translation;
+        }else{
+            translation = DwenguinoBlocklyLanguageSettings.findValueForTranslationKey(translationKey, MSG_FALLBACK[subdevision]);
+            if (translation){
+            return translation;
+            }else{
+            return "No translation";
+            }
+        }
+        };
+
+        /**
+         * @Brief returns the value for a translation key
+         * @Param translationKey an array containing the the keys of the subsequent subobjects
+         */
+        DwenguinoBlocklyLanguageSettings.findValueForTranslationKey = function(translationKey, translationObject){
+        let i = 0;
+        while (translationObject[translationKey[i]]){
+            translationObject = translationObject[translationKey[i]];
+            i++;
+        }
+        if (typeof translationObject === 'string'){
+            return translationObject;
+        }else{ 
+            return undefined;
+        }
+        };
+
+        /**
+        * Extracts a parameter from the URL.
+        * If the parameter is absent default_value is returned.
+        * @param {string} name The name of the parameter.
+        * @param {string} defaultValue Value to return if paramater not found.
+        * @return {string} The parameter value or the default value if not found.
+        */
+        DwenguinoBlocklyLanguageSettings.getStringParamFromUrl = function(name, defaultValue) {
+        var val = location.search.match(new RegExp('[?&]' + name + '=([^&]+)'));
+        return val ? decodeURIComponent(val[1].replace(/\+/g, '%20')) : defaultValue;
+        };
+
+        /**
+         * Get the language of this user from the URL.
+         * @return {string} User's language.
+         */
+        DwenguinoBlocklyLanguageSettings.getLang = function() {
+        var lang = DwenguinoBlocklyLanguageSettings.getStringParamFromUrl('lang', '');
+        if (DwenguinoBlocklyLanguageSettings.LANGUAGE_NAME[lang] === undefined) {
+            // Default to English.
+            lang = DwenguinoBlocklyLanguageSettings.DEFAULT_LANG;
+        }
+        return lang;
+        };
+
+        // Load the Code demo's language strings.
+        let scriptCloseTag = "</" + "script" + ">"
+        document.write(`<script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/msg/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
+        // Load Blockly's language strings.
+        document.write(`<script src="<%- base_url -%>/dwenguinoblockly/blockly/msg/js/${DwenguinoBlocklyLanguageSettings.getLang()}.js">${scriptCloseTag}\n`);
+    </script>
+    <script src="<%- base_url -%>/dwenguinoblockly/DwenguinoIDE/js/lib/ResizeSensor.js"></script>
+    <script type="text/javascript" src="<%- base_url %>/dwenguinoblockly/dashboards/js/dist/dashboards.bundle.js"></script>
 </html>
