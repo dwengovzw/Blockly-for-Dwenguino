@@ -1,29 +1,29 @@
 {
-    "compilerOptions": {
-      "pretty": true,
-      "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
-      "noImplicitAny": false,
-      "module": "esnext",
-      "target": "es6",
-      "experimentalDecorators": true,
-      "emitDecoratorMetadata": true,
-      "importHelpers": true,
-      "declaration": true,
-      "declarationMap": true,
-      "sourceMap": false,
-      "noEmitOnError": true,
-      "strict": true,
-      "allowJs": true,
-      "moduleResolution": "node",
-      "types": ["jquery"],
-      "lib": [
-        "DOM",
-        "ES6", 
-        "es2017"
-      ]
-    },
-    "include": [
-      "./Blockly-for-Dwenguino/dashboards/**/*"
+  "compilerOptions": {
+    "pretty": true,
+    "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
+    "noImplicitAny": false,
+    "module": "esnext",
+    "target": "es6",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "importHelpers": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "noEmitOnError": true,
+    "strict": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "types": ["jquery"],
+    "lib": [
+      "DOM",
+      "ES6", 
+      "es2017"
     ]
-  }
-  
+  },
+  "include": [
+    "./Blockly-for-Dwenguino/dashboards/**/*",
+    "./Blockly-for-Dwenguino/types/*"
+  ]
+}

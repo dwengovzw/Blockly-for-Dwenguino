@@ -11,7 +11,8 @@ module.exports = [
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js',
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx', '.ts', ''] 
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx', '.ts', ''],
+            fullySpecified: false,
         },
         output: {
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
@@ -22,6 +23,9 @@ module.exports = [
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/, 
+                    resolve: {
+                        fullySpecified: false,
+                      },
                     use:{
                         loader: 'babel-loader',
                         options: {
@@ -43,7 +47,11 @@ module.exports = [
                     }
                 },
                 {
-                    test: /\.js?$/,
+                    test: /\.m?js$/,
+                    type: "javascript/auto",
+                    resolve: {
+                        fullySpecified: false,
+                      },
                     exclude: /node_modules/, 
                     use:{
                         loader: 'babel-loader',
@@ -58,7 +66,8 @@ module.exports = [
                             ],
                             plugins: ["@babel/plugin-proposal-class-properties",
                                     "@babel/plugin-transform-classes",
-                                    '@babel/plugin-transform-runtime']
+                                    '@babel/plugin-transform-runtime',
+                                    "autobind-class-methods"]
                         }
                     }
                 },
@@ -72,19 +81,40 @@ module.exports = [
                 }
             ]
         },
-        plugins: [new MonacoWebpackPlugin(), new CompressionPlugin()],
+        plugins: [new CompressionPlugin()],
         optimization: {
             minimize: true,
             minimizer: [new TerserPlugin()],
-            chunkIds: "size"
+            chunkIds: "size",
+            splitChunks: {
+                chunks: 'async',
+                minSize: 20000,
+                minRemainingSize: 0,
+                minChunks: 1,
+                maxAsyncRequests: 30,
+                maxInitialRequests: 30,
+                enforceSizeThreshold: 50000,
+                cacheGroups: {
+                  defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    reuseExistingChunk: true,
+                  },
+                  default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                  },
+                },
+              },
         },
         devtool: false,
     },
     {
         name: "dashboards",
-        mode: "development",
+        mode: "production",
         devtool: "eval-source-map",
-        context: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards"),
+        context: path.resolve(__dirname, "Blockly-for-Dwenguino"),
         entry: {
             app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts"),
         },
@@ -93,7 +123,7 @@ module.exports = [
             filename: 'dashboards.bundle.js'
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
+            extensions: ['.ts', '.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx']  
         },
         module: {
             rules: [
@@ -118,7 +148,7 @@ module.exports = [
                     {
                         loader: 'ts-loader',
                         options:{
-                            configFile: "dev.dashboards.tsconfig.json"
+                            configFile: "dashboards.tsconfig.json"
                         },
                     }]
                 },
@@ -127,55 +157,33 @@ module.exports = [
                     type: 'asset',
                   },
             ]
-        }
-    },
-    {
-        name: "editor",
-        mode: "development",
-        devtool: "eval-source-map",
-        context: path.resolve(__dirname, "Blockly-for-Dwenguino/editor"),
-        entry: {
-            app: path.resolve(__dirname, "Blockly-for-Dwenguino/editor/js/src/editor.ts"),
         },
-        output: {
-            path: path.resolve(__dirname, 'Blockly-for-Dwenguino/editor/js/dist/'),
-            filename: 'editor.bundle.js'
-        },
-        resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'] 
-        },
-        module: {
-            rules: [
-                
-                {
-                    test: /\.css$/i,
-                    use: ['style-loader', 
-                        { loader: "css-modules-typescript-loader"},
-                        {
-                                loader: "css-loader",
-                                options: {
-                                    modules: true,
-                                    sourceMap: true
-                                }
-                        }, 'postcss-loader']
-                },
-                {
-                    test: /\.tsx?$/,
-                    exclude: /node_modules/,
-                    include: [/dashboards/],
-                    use:["babel-loader", 
-                    {
-                        loader: 'ts-loader',
-                        options:{
-                            configFile: "dev.editor.tsconfig.json"
-                        },
-                    }]
-                },
-                {
-                    test: /\.(eot|svg|ttf|woff|woff2|png|jpg|gif)$/i,
-                    type: 'asset',
+        plugins: [new CompressionPlugin()],
+        optimization: {
+            minimize: true,
+            minimizer: [new TerserPlugin()],
+            chunkIds: "size",
+            splitChunks: {
+                chunks: 'async',
+                minSize: 20000,
+                minRemainingSize: 0,
+                minChunks: 1,
+                maxAsyncRequests: 30,
+                maxInitialRequests: 30,
+                enforceSizeThreshold: 50000,
+                cacheGroups: {
+                  defaultVendors: {
+                    test: /[\\/]node_modules[\\/]/,
+                    priority: -10,
+                    reuseExistingChunk: true,
                   },
-            ]
+                  default: {
+                    minChunks: 2,
+                    priority: -20,
+                    reuseExistingChunk: true,
+                  },
+                },
+              },
         }
     }
 ];
