@@ -89,7 +89,7 @@ class LoginMenu extends connect(store)(LitElement) {
                 ${this.platforms.map(p => {
                     return html`<li><a rel="external" href="${this.getLoginURI(p, this.originalRequestInfo)}">${this.platformToLabelMap[p]}</a></li>`
                 })}
-                ${process.env.NODE_ENV === 'development' ? html`` : this.renderTestLoginOptions()}
+                ${process.env.NODE_ENV === 'development' ? this.renderTestLoginOptions() : html``}
             </ul>
         </div>`
     }

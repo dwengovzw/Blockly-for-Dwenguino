@@ -23,7 +23,7 @@ class MockAuthController extends AbstractOAuthController{
         }
         User.findOne({
             userId: userId,
-            platform: db.PLATFORMS.test
+            platform: (db.PLATFORMS as Record<string, string>).test
         }).exec(async (err, u) => {
             let user:IUser = u as IUser
             if (err) {

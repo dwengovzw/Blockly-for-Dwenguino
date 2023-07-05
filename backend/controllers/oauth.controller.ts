@@ -13,8 +13,8 @@ const mockOAuthController = new MockAuthController();
 oauthControllers[db.PLATFORMS.github] = githubOAuthController;
 oauthControllers[db.PLATFORMS.leerId] = leerIdOAuthController;
 oauthControllers[db.PLATFORMS.beACM] = acmOAuthController;
-if (process.env.NODE_ENV == "debug"){
-    oauthControllers[db.PLATFORMS.test] = mockOAuthController;
+if (process.env.NODE_ENV == "development" && (db.PLATFORMS as Record<string, string>).test){
+    oauthControllers[(db.PLATFORMS as Record<string, string>).test] = mockOAuthController;
 }
 
 

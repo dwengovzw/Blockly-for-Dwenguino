@@ -26,7 +26,7 @@ mongoose.connect(mongoDB/*, {
         dropDb();
     }
     console.log("Successfully connected to the MongoDb database.");
-    if (process.env.NODE_ENV == "debug"){
+    if (process.env.NODE_ENV == "development"){
         console.log("Creating mock data in debug mode!");
         await initDb();
     }

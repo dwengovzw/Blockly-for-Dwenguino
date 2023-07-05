@@ -148,7 +148,7 @@ That's all for now! Enjoy using Markdown.
 
         // Add default roles 
         let adminData: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "admin",
             portfolios: [savedPortfolio3._id],
             birthdate: new Date(1990, 6, 20),
@@ -163,7 +163,7 @@ That's all for now! Enjoy using Markdown.
         
 
         let teacher1Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "teacher1",
             email: "natacha@dwengo.org",
             firstname: "Natacha",
@@ -173,7 +173,7 @@ That's all for now! Enjoy using Markdown.
         let teacher1 = new User(teacher1Data)
 
         let teacher2Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "teacher2",
             email: "bjarne@dwengo.org",
             firstname: "Bjarne",
@@ -195,7 +195,7 @@ That's all for now! Enjoy using Markdown.
         let savedPortfolio2 = await portfolio2.save();
 
         let student1Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "student1",
             firstname: "Raf",
             portfolios: [savedPortfolio2],
@@ -204,7 +204,7 @@ That's all for now! Enjoy using Markdown.
         let student1 = new User(student1Data)
 
         let student2Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "student2",
             firstname: "Jana",
             portfolios: [],
@@ -213,7 +213,7 @@ That's all for now! Enjoy using Markdown.
         let student2 = new User(student2Data)
 
         let student3Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "student3",
             firstname: "Mat",
             portfolios: [],
@@ -222,7 +222,7 @@ That's all for now! Enjoy using Markdown.
         let student3 = new User(student3Data)
 
         let student4Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "student4",
             firstname: "Lisa",
             portfolios: [],
@@ -231,7 +231,7 @@ That's all for now! Enjoy using Markdown.
         let student4 = new User(student4Data)
 
         let student5Data: IUser = {
-            platform: db.PLATFORMS.test,
+            platform: (db.PLATFORMS as Record<string, string>).test,
             userId: "student5",
             firstname: "Carine",
             portfolios: [],

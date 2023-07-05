@@ -1,12 +1,11 @@
-const PLATFORMS = {
-    github: "github",
-    leerId: "leerId",
-    beACM: "beACM",
-    test: ""
+let PLATFORMS = {
+    "github": "github",
+    "leerId": "leerId",
+    "beACM": "beACM",
 }
 
 // only support test platform in dev mode
-if (process.env.NODE_ENV == "debug"){
+if (process.env.NODE_ENV == "development"){
     PLATFORMS["test"] = "test"
 }
 
