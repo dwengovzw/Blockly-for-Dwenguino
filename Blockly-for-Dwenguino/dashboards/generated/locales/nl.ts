@@ -125,7 +125,7 @@
 'sccdc445505b97876': `Team maken`,
 'scdb1bac161852c73': `Welkom`,
 'sce07f1ad70ec5bba': `logo`,
-'scefc6873f2e3f24e': `https://dwengo.org/nl/physical_computing/`,
+'scefc6873f2e3f24e': `https://dwengo.org/physical_computing/`,
 'sd1f44f1a8bc20e67': `E-mail`,
 'sd38cfb1ca45ded96': `Opgeslagen projecten`,
 'sdb88a0d2b99ff345': `Eigenaren`,
