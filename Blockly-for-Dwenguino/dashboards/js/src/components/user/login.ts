@@ -88,8 +88,8 @@ class LoginMenu extends connect(store)(LitElement) {
     renderLoginMenuLoggedIn(){
         return html`<div>
                 <span class='loggedin-item login-title'>${msg("Welcome")} ${this.name}</span>
-                <span class='loggedin-item'><a href='${globalSettings.hostname}/dashboard/home?lang=${getLocale()}'>${msg("Dashboard")}</a></span>
-                <span class='loggedin-item'><a rel="external" href='${globalSettings.hostname}/oauth/logout'>${msg("Logout")}</a></span>
+                <span class='loggedin-item'><a class="dwengo-button dwengo-button-icon" href='${globalSettings.hostname}/dashboard/home?lang=${getLocale()}'>${msg("Dashboard")}</a></span>
+                <span class='loggedin-item'><a class="dwengo-button dwengo-button-icon" rel="external" href='${globalSettings.hostname}/oauth/logout'>${msg("Logout")}</a></span>
             </div>` 
     }
 
