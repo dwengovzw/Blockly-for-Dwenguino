@@ -2,11 +2,12 @@ import { User, IUser } from "../models/user.model";
 import AbstractOAuthController from "./abstract.oauth.controller";
 import db from "../config/db.config"
 import jwt from "jsonwebtoken"
+import oauthConfig from "../config/oauth.config";
 import jwt_settings from "../config/jwt.config";
 
 class MockAuthController extends AbstractOAuthController{
     constructor(){
-        super(db.PLATFORMS.github);
+        super(db.PLATFORMS.github, oauthConfig);
     }
 
     /**

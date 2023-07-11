@@ -187,6 +187,7 @@ class GraphDashboard extends connect(store)(LitElement){
                                 close
                             </span>
                         </button>
+                        <span class="add_item_context_menu_title">${msg("Add item")}</span>
                     </div>
                     <div class="add_item_context_menu_content">
                     ${getAllowedItemsForRoles(this.userInfo?.roles || [])
@@ -194,7 +195,7 @@ class GraphDashboard extends connect(store)(LitElement){
                             .map(itemType => {
                                 return html`
                                     <div class="add_item_context_menu_item dwengo-button dwengo-button-icon" @click=${(e) => this.onAddItemContextMenuClick(e, itemType)}>
-                                        ${msg(str`Type: ${itemType}`)}
+                                        ${msg(str`${itemType}`)}
                                     </div>
                                 `
                     })}
@@ -580,6 +581,11 @@ class GraphDashboard extends connect(store)(LitElement){
     .add_item_context_menu_header{
         display: flex;
         flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .add_item_context_menu_title {
+        padding: 2.5px 5px;
     }
     .add_item_context_menu_item {
         padding: 2.5px 5px;

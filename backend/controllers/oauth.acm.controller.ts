@@ -6,7 +6,7 @@ import MinimalUserInfo from "../datatypes/minimalUserInfo";
 
 class ACMOAuthController extends AbstractOAuthController {
     constructor() {
-        super(db.PLATFORMS.beACM)
+        super(db.PLATFORMS.beACM, oauthConfig)
     }
 
     /**

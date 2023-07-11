@@ -2,17 +2,18 @@ import jwt from "jsonwebtoken"
 import jwt_settings from "../config/jwt.config";
 import { User, IUser } from "../models/user.model"
 import { IRole, Role } from "../models/role.model"
-import oauthConfig from "../config/oauth.config";
 import crypto from "crypto"
 
 
 class AbstractOAuthController {
     platform: string
-    constructor(platform:string){
+    oauthConfig: any
+    constructor(platform:string, oauthConfig: any){
         if (new.target === AbstractOAuthController) {
             throw new TypeError("Cannot construct Abstract instances directly");
           }
         this.platform = platform
+        this.oauthConfig = oauthConfig
     }
 
      /**
@@ -30,7 +31,7 @@ class AbstractOAuthController {
         req.session.nonce = nonce
         authState.nonce = nonce
         let authorizeUrl = 
-        oauthConfig.authorizeUrlMap[this.platform](JSON.stringify(authState))
+        this.oauthConfig.authorizeUrlMap[this.platform](JSON.stringify(authState))
         res.redirect(authorizeUrl);
     }
 
@@ -38,16 +39,6 @@ class AbstractOAuthController {
         if (authState.platform !== this.platform){
             return res.status(500).send({message: "Internal server error: platform name does not match controller."})
         }
-        let state = JSON.parse(req.query.state)
-        let reqNonce = state.nonce
-        let sessionNonce = req.session.nonce
-        // Check if nonce sent in state matches nonce in session cookie. To avoid replay atacks
-        /*if (!reqNonce || !sessionNonce || reqNonce !== sessionNonce){
-            req.session.nonce = null
-            res.status(401).send({ message: "Authentication failed! Nonce did not match" });
-        } else {
-            req.session.nonce = null
-        }*/
     } 
 
 
@@ -63,13 +54,13 @@ class AbstractOAuthController {
         }).exec(async (err, u) => {
             let user:IUser = u as IUser
             if (err) {
-                res.status(500).send({message: err})
+                return res.status(500).send({message: err})
             }
             // If user does not exist, create it
             if (!user){
                 user = await this.createUser(req, res, minUserInfo) as IUser
                 if (!user){
-                    res.status(500).send({message: "Unable to create user"})            
+                    return res.status(500).send({message: "Unable to create user"})            
                 }
             }
             
@@ -81,11 +72,10 @@ class AbstractOAuthController {
             req.session.token = token;
             //res.send(`<h1>Test</h1><p><a href="http://${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}">Return to original page</a></p>`)
             if (user.acceptedTerms) {
-                res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
+                return res.redirect(`${process.env.SERVER_URL}${authState.originalTarget}${authState.originalQuery !== '' ? "?" + authState.originalQuery : ""}`)
             } else {
-                res.redirect(`${process.env.SERVER_URL}/dashboard`)
+                return res.redirect(`${process.env.SERVER_URL}/dashboard`)
             }
-            //Save new cookie in session and redirect
         })
     }
 

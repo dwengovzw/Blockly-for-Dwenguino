@@ -7,7 +7,7 @@ import MinimalUserInfo from "../datatypes/minimalUserInfo";
 
 class LeerIdOAuthController extends AbstractOAuthController{
     constructor(){
-        super(db.PLATFORMS.leerId);
+        super(db.PLATFORMS.leerId, oauthConfig);
     }
 
     /**

@@ -1,28 +1,11 @@
-import GithubOAuthController from "./oauth.github.controller";
 import OAuthState from "../datatypes/oauthState";
 import db from "../config/db.config"
-import LeerIdOAuthController from "./oauth.leerid.controller";
-import ACMOAuthController from "./oauth.acm.controller";
-import MockAuthController from "./oauth.mock.controller";
-
-const oauthControllers = {}
-const githubOAuthController = new GithubOAuthController();
-const leerIdOAuthController = new LeerIdOAuthController();
-const acmOAuthController = new ACMOAuthController();
-const mockOAuthController = new MockAuthController();
-oauthControllers[db.PLATFORMS.github] = githubOAuthController;
-oauthControllers[db.PLATFORMS.leerId] = leerIdOAuthController;
-oauthControllers[db.PLATFORMS.beACM] = acmOAuthController;
-if (process.env.NODE_ENV == "development" && (db.PLATFORMS as Record<string, string>).test){
-    oauthControllers[(db.PLATFORMS as Record<string, string>).test] = mockOAuthController;
-}
-
 
 
 class OAuthController {
-
-    constructor(){
-
+    oauthControllers = {}
+    constructor(oauthControllers){
+        this.oauthControllers = oauthControllers
     }
 
     /**
@@ -36,7 +19,7 @@ class OAuthController {
         let platform = req.query?.platform;
         let originalRequestInfo = req.query?.originalRequestInfo;
         if (!Object.values(db.PLATFORMS).includes(platform)){
-            res.status(401).send({ message: "Selected platform not supported!" });
+            return res.status(401).send({ message: "Selected platform not supported!" });
         }
         let state;
         if (originalRequestInfo){
@@ -45,7 +28,7 @@ class OAuthController {
         } else {
             state = new OAuthState(db.PLATFORMS[platform]);
         }
-        oauthControllers[state.platform].login(req, res, state);
+        this.oauthControllers[state.platform].login(req, res, state);
     }
 
     /**
@@ -54,9 +37,9 @@ class OAuthController {
      * @param res 
      */
     redirect(req, res) {
-        let state = JSON.parse(req.query?.state)
-        if (Object.values(db.PLATFORMS).includes(state.platform)){
-            oauthControllers[state.platform].redirect(req, res, state);
+        let state = req.query?.state ? JSON.parse(req.query?.state) : {}
+        if (state.platform && Object.values(db.PLATFORMS).includes(state.platform)){
+            this.oauthControllers[state.platform].redirect(req, res, state);
         } else {
             res.status(401).send({ message: "Authentication failed! Unknown OAuth platform" });
         }
@@ -65,7 +48,7 @@ class OAuthController {
     logout(req, res){
         let platform = req.platform
         req.session.token = null;
-        oauthControllers[platform].logout(req, res)
+        this.oauthControllers[platform].logout(req, res)
     }
 
     getPlatforms(req, res){

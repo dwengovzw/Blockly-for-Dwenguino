@@ -9,7 +9,7 @@ import oauthConfig from "../config/oauth.config";
 
 class GithubOAuthController extends AbstractOAuthController{
     constructor(){
-        super(db.PLATFORMS.github);
+        super(db.PLATFORMS.github, oauthConfig);
     }
 
 
