@@ -18,6 +18,8 @@ class OAuthController {
     login(req, res){
         let platform = req.query?.platform;
         let originalRequestInfo = req.query?.originalRequestInfo;
+        console.log("Test test ------------------------------->>>", db.PLATFORMS);
+        console.log("Test test ------------------------------->>>", platform);
         if (!Object.values(db.PLATFORMS).includes(platform)){
             return res.status(401).send({ message: "Selected platform not supported!" });
         }
