@@ -333,30 +333,6 @@ describe('AbstractOAuthController', () => {
       expect(mockRes.redirect).toHaveBeenCalledWith(redirect);
       // Add assertions for other expected behavior
     }
-
-    /*
-    it('should set the token in the session and redirect to the dashboard if user has not accepted terms', async () => {
-      const mockUser = { userId: 'mockUserId', platform: 'mockPlatform', acceptedTerms: false };
-      const mockFindOne = jest.fn().mockImplementation((query: any, callback: any) => {
-        callback(null, mockUser);
-      });
-      const mockCreateUser = jest.fn();
-      const mockJwtSign = jest.fn().mockReturnValue('mockToken');
-      const abstractOAuthController = new AbstractOAuthController('mockPlatform', {});
-      abstractOAuthController.createUser = mockCreateUser;
-      jest.spyOn(User, 'findOne').mockImplementation(mockFindOne);
-      jest.spyOn(jwt, 'sign').mockImplementation(mockJwtSign);
-
-      await abstractOAuthController.signin(mockReq, mockRes, mockMinUserInfo, mockAuthState);
-
-      // Assertions
-      expect(mockReq.session.token).toBe('mockToken');
-      expect(mockRes.redirect).toHaveBeenCalledWith('mockServerUrl/dashboard');
-      // Add assertions for other expected behavior
-    });
-
-    // Add more test cases as needed for other scenarios
-  */
   });
 
 });
