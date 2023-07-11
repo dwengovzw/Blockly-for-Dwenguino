@@ -37,8 +37,8 @@ beforeEach(() => {
 
 describe('OAuthController', () => {
     it('should call the login function of the respective OAuth provider', () => {
-        mockReq.query.platform = "test";
-        const oauthController = new OAuthController({"test": mockOAuthController});
+        mockReq.query.platform = "github";
+        const oauthController = new OAuthController({"github": mockOAuthController});
         oauthController.login(mockReq, mockRes);
 
         // Assertions
@@ -48,7 +48,7 @@ describe('OAuthController', () => {
         .toHaveBeenCalledWith(
             mockReq, 
             mockRes, 
-            new OAuthState("test", "target", "query")
+            new OAuthState("github", "target", "query")
         );
     });
 
@@ -74,8 +74,8 @@ describe('OAuthController', () => {
     });
 
     it('should call redirect on controller for platform when platform exists', () => {
-        mockReq.query.state = '{"platform": "test"}';
-        const oauthController = new OAuthController({"test": mockOAuthController});
+        mockReq.query.state = '{"platform": "github"}';
+        const oauthController = new OAuthController({"github": mockOAuthController});
         oauthController.redirect(mockReq, mockRes);
 
         // Assertions
@@ -83,9 +83,9 @@ describe('OAuthController', () => {
     });
 
     it('redirect should call redirect on mockOAuthController with correct state.', () => {
-        mockReq.query.platform = "test";
-        mockReq.query.state = '{"platform": "test"}';
-        const oauthController = new OAuthController({"test": mockOAuthController});
+        mockReq.query.platform = "github";
+        mockReq.query.state = '{"platform": "github"}';
+        const oauthController = new OAuthController({"github": mockOAuthController});
         oauthController.redirect(mockReq, mockRes);
 
         // Assertions
