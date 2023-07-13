@@ -18,7 +18,8 @@
       "lib": [
         "DOM",
         "ES6", 
-        "es2017"
+        "es2017",
+        "DOM.Iterable"
       ],
     },
     "include": ["./declarations.d.ts"],

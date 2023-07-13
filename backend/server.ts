@@ -136,6 +136,10 @@ app.use("/user", userRouter);
 // Use saved program routes
 app.use("/savedstates", savedProgramsRouter)
 
+app.use("/test", (req, res) => {
+    res.render("componentized_editor.ejs", {base_url: process.env.SERVER_URL});
+});
+
 // Disable these routes for next release
 if (process.env.NODE_ENV === 'development') {
     
