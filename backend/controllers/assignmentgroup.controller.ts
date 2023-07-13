@@ -30,7 +30,6 @@ class AssignmentGroupController {
                     model: "User"
                 }
             })
-            console.log(assignments)
             res.status(200).json(assignments)
         } catch (e) {
             res.status(500).send({message: "Unable to create assignment"})
