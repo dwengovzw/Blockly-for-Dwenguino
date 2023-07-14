@@ -26,18 +26,21 @@ interface ISavedTextualProgram {
     cppCode: string
 }
 
-interface ISavedState {
+interface IBaseSavedState {
     uuid?: string,
     blocklyXml: string,
-    cppCode: string[],
     socialRobotXml: string,
-    savedAt: Date,
+    cppCode: ISavedTextualProgram[],
     name: string,
+    view: string,
+    scenario: string
+}
+
+interface ISavedState extends IBaseSavedState{
+    savedAt: Date,
     user: PopulatedDoc<IUser>,
     inPortfolio: boolean,
     inSavedItemList: boolean,
-    view: string,
-    scenario: string
 }
 
 interface ISavedStateDoc extends ISavedState, Document {}
@@ -119,4 +122,4 @@ const SavedState = model<ISavedState>('SavedState', SavedStateSchema)
 const SavedTextualProgramFieldsSchema = new Schema<ISavedTextualProgram>(SavedTextualProgramFields)
 const SavedTextualProgram = model<ISavedTextualProgram>('SavedTextualProgram', SavedTextualProgramFieldsSchema)
 
-export { SavedState, SavedTextualProgram, ISavedState, ISavedStateDoc, emptyProgramXml, emptySocialRobotDesign, SAVEDPROGRAM_TYPES, SCENARIO, ENVIRONMENT_VIEW }
+export { SavedState, SavedTextualProgram, ISavedState, ISavedStateDoc, IBaseSavedState, ISavedTextualProgram, emptyProgramXml, emptySocialRobotDesign, SAVEDPROGRAM_TYPES, SCENARIO, ENVIRONMENT_VIEW }
