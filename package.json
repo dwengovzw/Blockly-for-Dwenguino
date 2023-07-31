@@ -12,7 +12,7 @@
         "test": "npm run test-frontend && npm run test-backend",
         "test-frontend": "npm run test-frontend-unit && npm run test-puppeteer",
         "test-frontend-unit": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/unit/Blockly-for-Dwenguino/jest.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
-        "test-puppeteer": "node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/end_to_end/puppeteer/jest-puppeteer.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
+        "test-puppeteer": "JEST_PUPPETEER_CONFIG=jest-puppeteer.config.json node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/end_to_end/puppeteer/jest-puppeteer.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
         "test-backend": "npm run test-backend-unit",
         "test-backend-windows": "npm run test-backend-unit-windows",
         "test-backend-unit": "ENV_FILE=environments/test.env node --input-type module --experimental-vm-modules -r dotenv/config node_modules/jest/bin/jest.js --config ./tests/unit/backend/jest.config.json --setupFiles dotenv/config --forceExit --detectOpenHandles",
