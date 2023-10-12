@@ -21,6 +21,10 @@ module.exports = [
         module: {
             rules: [
                 {
+                    test: /\.css$/,
+                    use: ['style-loader', 'css-loader']
+                },
+                {
                     test: /\.tsx?$/,
                     exclude: /node_modules/, 
                     resolve: {
@@ -73,10 +77,7 @@ module.exports = [
                         }
                     }
                 },
-                {
-                    test: /\.css$/,
-                    use: ['style-loader', 'css-loader']
-                },
+                
                 {
                     test: /\.ttf$/,
                     type: "asset/resource"
@@ -105,26 +106,39 @@ module.exports = [
                 
                 {
                     test: /\.css$/i,
-                    use: ['style-loader', 
-                        { loader: "css-modules-typescript-loader"},
-                        {
-                                loader: "css-loader",
-                                options: {
-                                    modules: true,
-                                    sourceMap: true
-                                }
-                        }, 'postcss-loader']
+                    use: ['css-loader']
                 },
                 {
                     test: /\.tsx?$/,
                     exclude: /node_modules/,
                     include: [/dashboards/],
-                    use:["babel-loader", 
+                    use:[
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            presets: [
+                                ["@babel/preset-env",
+                                {
+                                    'targets': {
+                                        'browsers': ['last 4 version']
+                                    }
+                                }],
+                                "@babel/preset-react",
+                                "@babel/preset-typescript",
+                            ],
+                            plugins: ["@babel/plugin-proposal-class-properties",
+                                    "@babel/plugin-transform-classes",
+                                    '@babel/plugin-transform-runtime',
+                                    "autobind-class-methods",
+                                    '@babel/plugin-syntax-import-attributes']
+                        }
+                    },
                     {
                         loader: 'ts-loader',
                         options:{
-                            configFile: "dev.dashboards.tsconfig.json"
+                            configFile: "dev.dashboards.tsconfig.json",
                         },
+                        
                     }]
                 },
                 {

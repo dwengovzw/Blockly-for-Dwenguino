@@ -3,7 +3,8 @@ export {}
 
 interface GlobalSettings {
     basepath:string,
-    hostname:string
+    hostname:string,
+    learningObjectAPIBasePath: string
 }
 
 declare global {

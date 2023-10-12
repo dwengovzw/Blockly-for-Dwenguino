@@ -17,127 +17,168 @@ import "./components/savedstates/list"
 import "./components/portfolios/list"
 import "./components/portfolios/container"
 import "./components/util/accept_terms"
+import "./components/content/overview"
+import "./components/content/learning_path"
 
 // Polyfill URLPattern
 import {URLPattern} from "urlpattern-polyfill";
 import { getAllClassGroups } from "./state/features/class_group_slice";
 import { getAllStudentClassGroups } from "./state/features/student_class_group_slice";
+import { LearningPath, fetchLearningPaths } from './state/features/content_slice';
 import { localized } from "@lit/localize";
-import {setLocaleFromUrl} from './localization/localization';
+import {getLocale, setLocaleFromUrl} from './localization/localization';
+import { fetchLearningPathDetails, setActiveLearningPath } from "./state/features/learning_path_progress_slice";
 // @ts-ignore: Property 'UrlPattern' does not exist 
 globalThis.URLPattern = URLPattern
 
 @localized()
 @customElement("dwengo-dashboard")
 class Dashboard extends connect(store)(LitElement) {
-    private urlPrefixRegex: RegExp = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(\/(.*))$/
-    private urlPrefixArray: RegExpMatchArray | null = globalSettings?.hostname?.match(this.urlPrefixRegex)
-    private urlPrefix: string = this.urlPrefixArray ? this.urlPrefixArray[4] : ""
+    private urlPrefixRegex: RegExp = /^((http[s]?|ftp):\/)?\/?([^:\/\s]+)(\/(.*))$/;
+    private urlPrefixArray: RegExpMatchArray | null = globalSettings?.hostname?.match(this.urlPrefixRegex);
+    private urlPrefix: string = this.urlPrefixArray ? this.urlPrefixArray[4] : "";
 
-    @state() selectedId: string = "home"
+    @state() selectedId: string = "home";
 
-    @state() globalState: any = store.getState()
-    
+    @state() globalState: any = store.getState();
+
     constructor() {
-        super()
+        super();
         setLocaleFromUrl();
     }
 
     private router = new Router(this, [
         {
-            path: `${this.urlPrefix}/dashboard`, 
+            path: `${this.urlPrefix}/dashboard`,
             enter: async () => {
-                this.selectedId = "home"; 
-                return true
-            }, 
-            render: () => html`<dwengo-welcome-page .userInfo=${this.globalState.user}></dwengo-welcome-page>`
+                this.selectedId = "home";
+                return true;
+            },
+            render: () => html`<dwengo-welcome-page .userInfo=${this.globalState.user}></dwengo-welcome-page>`,
         },
         {
-            path: `${this.urlPrefix}/dashboard/home`, 
-            enter: async () => {this.selectedId = "home"; return true}, 
-            render: () => html`<dwengo-welcome-page .userInfo=${this.globalState.user}></dwengo-welcome-page>`
+            path: `${this.urlPrefix}/dashboard/home`,
+            enter: async () => {
+                this.selectedId = "home";
+                return true;
+            },
+            render: () => html`<dwengo-welcome-page .userInfo=${this.globalState.user}></dwengo-welcome-page>`,
         },
         {
-            path: `${this.urlPrefix}/dashboard/profile`, 
-            render: () => html`<dwengo-profile-page .userInfo=${structuredClone(this.globalState.user)}></dwengo-profile-page>`,
+            path: `${this.urlPrefix}/dashboard/profile`,
+            render: () =>
+                html`<dwengo-profile-page .userInfo=${structuredClone(this.globalState.user)}></dwengo-profile-page>`,
             enter: async () => {
-                this.selectedId ="profile"; 
-                return true
-            }, 
+                this.selectedId = "profile";
+                return true;
+            },
         },
         {
-            path: `${this.urlPrefix}/dashboard/classes*`, 
+            path: `${this.urlPrefix}/dashboard/classes*`,
             enter: async () => {
-                this.selectedId = "classgroups"; 
-                store.dispatch(getAllClassGroups()); 
-                return true
-            }, 
+                this.selectedId = "classgroups";
+                store.dispatch(getAllClassGroups());
+                return true;
+            },
             render: () => html`<dwengo-classes-page
-                                    .groups=${this.globalState.classGroup.groups}
-                                    .currentGroup=${this.globalState.classGroup.currentGroup}
-                                    .assignmentGroups=${this.globalState.assignments.groups}></dwengo-classes-page>`
+                .groups=${this.globalState.classGroup.groups}
+                .currentGroup=${this.globalState.classGroup.currentGroup}
+                .assignmentGroups=${this.globalState.assignments.groups}
+            ></dwengo-classes-page>`,
         },
         {
-            path: `${this.urlPrefix}/dashboard/studentclasses`, 
+            path: `${this.urlPrefix}/dashboard/studentclasses`,
             enter: async () => {
-                this.selectedId = "studentclassgroups"; 
-                store.dispatch(getAllStudentClassGroups()); 
-                return true
-            }, 
-            render: () => html`
-                <dwengo-student-classes-page 
-                    .groups=${this.globalState.studentClassGroup.groups} 
-                    .pending=${this.globalState.studentClassGroup.pending}>
-                </dwengo-student-classes-page>`
+                this.selectedId = "studentclassgroups";
+                store.dispatch(getAllStudentClassGroups());
+                return true;
+            },
+            render: () => html` <dwengo-student-classes-page
+                .groups=${this.globalState.studentClassGroup.groups}
+                .pending=${this.globalState.studentClassGroup.pending}
+            >
+            </dwengo-student-classes-page>`,
         },
         {
-            path: `${this.urlPrefix}/dashboard/savedstates`, 
+            path: `${this.urlPrefix}/dashboard/savedstates`,
             enter: async () => {
-                this.selectedId = "savedstates"; 
-                return true
-            }, 
-            render: ({uuid}) => html`<dwengo-saved-programs-list
-                    .savedPrograms=${structuredClone(this.globalState.savedStates.states)}>
-                </dwengo-saved-programs-list>`
+                this.selectedId = "savedstates";
+                return true;
+            },
+            render: ({ uuid }) => html`<dwengo-saved-programs-list
+                .savedPrograms=${structuredClone(this.globalState.savedStates.states)}
+            >
+            </dwengo-saved-programs-list>`,
         },
         {
-            path: `${this.urlPrefix}/dashboard/portfolios*`, 
+            path: `${this.urlPrefix}/dashboard/portfolios*`,
             enter: async () => {
-                this.selectedId = "portfolios"; 
-                return true
-            }, 
-            render: ({uuid}) => html`
-                <dwengo-dashboard-page-container
-                    .userInfo=${this.globalState.user}
-                    .portfolioState=${this.globalState.portfolio}>
-                </dwengo-dashboard-page-container>`
+                this.selectedId = "portfolios";
+                return true;
+            },
+            render: ({ uuid }) => html` <dwengo-dashboard-page-container
+                .userInfo=${this.globalState.user}
+                .portfolioState=${this.globalState.portfolio}
+            >
+            </dwengo-dashboard-page-container>`,
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/content`,
+            enter: async () => {
+                this.selectedId = "content";
+                store.dispatch(fetchLearningPaths("", getLocale(), 0, 50));
+                return true;
+            },
+            render: () => html` <dwengo-content-overview .learningPaths=${this.globalState.content.learningPaths}>
+            </dwengo-content-overview>`,
+        },
+        {
+            path: `${this.urlPrefix}/dashboard/learningpath/:hruid/:lang`,
+            enter: async ({ hruid, lang }) => {
+                this.selectedId = "content";
+                store.dispatch(
+                    fetchLearningPathDetails(
+                        this.globalState.content.learningPaths.find(
+                            (lp: LearningPath) => lp.hruid === hruid && lp.language === lang
+                        )
+                    )
+                );
+                return true;
+            },
+            render: ({ hruid, lang }) => html`
+            <dwengo-learning-path
+                .activeLearningPath=${structuredClone(this.globalState.activeLearningPath.activeLearningPath)}
+            >
+            </dwengo-learning-path>`,
         },
     ]);
 
     createRenderRoot() {
         return this; // turn off shadow dom to access external styles
-      }
-
+    }
 
     stateChanged(state: any): void {
-        this.globalState = state
+        this.globalState = state;
     }
 
     protected render() {
         console.log(this.globalState.notification);
         return html`<dwengo-notify .notificationState=${this.globalState.notification}></dwengo-notify>
-                    ${this.globalState.user.loggedIn && !this.globalState.user.acceptedTerms ? html`<dwengo-accept-terms .userInfo=${this.globalState.user}></dwengo-accept-terms>` : html``}
-                    <dwengo-menu 
-                        .userInfo=${this.globalState.user}
-                        .loading=${this.globalState.notification.loading}
-                        .selectedId="${this.selectedId}">
-                        ${this.globalState.user.loggedIn ? html`${this.router.outlet()}` : html`<dwengo-intro-page></dwengo-intro-page>`}
-                    </dwengo-menu>`
-                    
+            ${this.globalState.user.loggedIn && !this.globalState.user.acceptedTerms
+                ? html`<dwengo-accept-terms .userInfo=${this.globalState.user}></dwengo-accept-terms>`
+                : html``}
+            <dwengo-menu
+                .userInfo=${this.globalState.user}
+                .loading=${this.globalState.notification.loading}
+                .selectedId="${this.selectedId}"
+            >
+                ${this.globalState.user.loggedIn
+                    ? html`${this.router.outlet()}`
+                    : html`<dwengo-intro-page></dwengo-intro-page>`}
+            </dwengo-menu>`;
     }
 
     static styles?: CSSResultGroup = css`
-        
         :host {
             display: flex;
             flex-direction: row;
@@ -155,8 +196,7 @@ class Dashboard extends connect(store)(LitElement) {
         dwengo-class-page {
             flex-grow: 1;
         }
-        
-    `
+    `;
 }
 
 

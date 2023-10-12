@@ -40,6 +40,7 @@ class Menu extends connect(store)(LitElement){
             "all": [
                 {id: "home", label: msg("Home"), href: `${globalSettings.hostname}/dashboard/home?lang=${getLocale()}`, icon: "home", external: false},
                 {id: "simulator", label: msg("Simulator"), href: `${globalSettings.hostname}?lang=${getLocale()}`, icon: "code", external: true},
+                {id: "content", label: msg("Lesmateriaal"), href: `${globalSettings.hostname}/dashboard/content?lang=${getLocale()}`, icon: "menu_book", external: false},
             ],
             "user": [
                 {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile?lang=${getLocale()}`, icon: "person", external: false},

@@ -1,31 +1,3 @@
 {
-    "compilerOptions": {
-      "outDir": "./Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
-      "typeRoots": ["node_modules/@types"],
-      "noImplicitAny": true,
-      "module": "es6",
-      "target": "es6",
-      "experimentalDecorators": true,
-      "esModuleInterop": true,
-      "emitDecoratorMetadata": true,
-      "importHelpers": false,
-      "jsx": "react",
-      "allowJs": true,
-      "moduleResolution": "node",
-      "types": ["jquery"],
-      "lib": [
-        "DOM",
-        "ES6", 
-        "es2017"
-      ],
-    },
-    "exclude": [
-      "**/node_modules/*",
-      "Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
-      "Blockly-for-Dwenguino/dashboards/js/dist",
-      "**/.git/*",
-      "**/dist/*",
-      "Blockly-for-Dwenguino/blockly/*",
-      "Blockly-for-Dwenguino/closure/*",
-    ]
-  }
+  "extends": "./dev.dashboards.tsconfig.json"
+}

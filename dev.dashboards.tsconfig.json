@@ -2,6 +2,7 @@
     "compilerOptions": {
       "pretty": true,
       "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
+      "baseUrl": "./Blockly-for-Dwenguino/dashboards",
       "noImplicitAny": false,
       "module": "esnext",
       "target": "es6",
@@ -11,7 +12,7 @@
       "declaration": true,
       "declarationMap": true,
       "sourceMap": true,
-      "noEmitOnError": true,
+      "noEmitOnError": false,
       "strict": true,
       "allowJs": true,
       "moduleResolution": "node",
@@ -20,10 +21,13 @@
         "DOM",
         "ES6", 
         "es2017"
+      ], 
+      "plugins": [
+        { "name": "typescript-plugin-css-modules" }
       ]
     },
     "include": [
       "./Blockly-for-Dwenguino/dashboards/**/*",
-      "./Blockly-for-Dwenguino/types/*"
+      "./Blockly-for-Dwenguino/dashboards/types/*"
     ]
   }

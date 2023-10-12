@@ -8,6 +8,8 @@ import { studentClassGroupReducer } from "./features/student_class_group_slice"
 import { publicProfileInfoReducer } from './features/public_profile_slice'
 import { assignmentGroupReducer } from "./features/assignment_group_slice"
 import { portfolioReducer } from "./features/portfolio_slice"
+import { contentReducer } from './features/content_slice'
+import { activeLearningPathReducer } from './features/learning_path_progress_slice'
 
 const store = configureStore({
     reducer: {
@@ -19,7 +21,9 @@ const store = configureStore({
         studentClassGroup: studentClassGroupReducer,
         publicProfile: publicProfileInfoReducer, 
         assignments: assignmentGroupReducer,
-        portfolio: portfolioReducer
+        portfolio: portfolioReducer,
+        content: contentReducer,
+        activeLearningPath: activeLearningPathReducer,
     }
 })
 
