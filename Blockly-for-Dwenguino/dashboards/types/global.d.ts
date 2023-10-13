@@ -9,6 +9,7 @@ interface GlobalSettings {
 
 declare global {
     var globalSettings: GlobalSettings
+    let MathJax: any;
 }
 
 

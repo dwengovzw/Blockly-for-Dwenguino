@@ -5,6 +5,8 @@ import { customElement, property, state } from "lit/decorators.js";
 import { LearningPath } from '../../state/features/content_slice';
 import { getLocale } from '../../localization/localization';
 
+import "../util/spinner"
+
 interface RootState {
     // Define the state properties you want to use in the component
 }
@@ -17,36 +19,41 @@ class Overview extends connect(store)(LitElement) {
 
     @property({type: Object})
     learningPaths: LearningPath[] = store.getState().content.learningPaths
+    @property({type: Boolean})
+    loading: boolean = store.getState().content.loading
 
     render() {
         return html`
-            <div class="content_container">
-                ${this.learningPaths.map((learningPath: LearningPath) => {
-                    return html`
-                    <div class="learning_path_card">
-                        <a href="${globalSettings.hostname}/dashboard/learningpath/${learningPath.hruid}/${learningPath.language}" style="text-decoration: none;">
-                            <div class="card_content">
-                                <img class="card-img-top" src="data:image/jpeg;base64, ${learningPath.image}" 
-                                    width="500" 
-                                    height="500" 
-                                    style="filter: grayscale(100%);">
-                                <div class="card-body-container">
-                                    <div class="card-body" style="background-color: ${this.dwengoColors[this.currentColorIndex++ % this.dwengoColors.length]}; color: white;">
-                                        <h5 class="card-title">${learningPath.title}</h5>
-                                        <p class="card-text">${learningPath.description}</p>
+            ${this.loading ? html`<dwengo-spinner></dwengo-spinner>` : html`
+                <div class="content_container">
+                    ${this.learningPaths.map((learningPath: LearningPath) => {
+                        return html`
+                        <div class="learning_path_card">
+                            <a href="${globalSettings.hostname}/dashboard/learningpath/${learningPath.hruid}/${learningPath.language}" style="text-decoration: none;">
+                                <div class="card_content">
+                                    <img class="card-img-top" src="data:image/jpeg;base64, ${learningPath.image}" 
+                                        width="500" 
+                                        height="500" 
+                                        style="filter: grayscale(100%);">
+                                    <div class="card-body-container">
+                                        <div class="card-body" style="background-color: ${this.dwengoColors[this.currentColorIndex++ % this.dwengoColors.length]}; color: white;">
+                                            <h5 class="card-title">${learningPath.title}</h5>
+                                            <p class="card-text">${learningPath.description}</p>
+                                        </div>
                                     </div>
+                                    <span class="age_group_label">
+                                        <img class="age_range_icon" width="100" height="75" src="${globalSettings.hostname}/dashboard/assets/img/components/shared/age_logo.svg">
+                                        <span class="age_range_text">${learningPath.min_age} - ${learningPath.max_age}</span>
+                                    </span>
                                 </div>
-                                <span class="age_group_label">
-                                    <img class="age_range_icon" width="100" height="75" src="${globalSettings.hostname}/dashboard/assets/img/components/shared/age_logo.svg">
-                                    <span class="age_range_text">${learningPath.min_age} - ${learningPath.max_age}</span>
-                                </span>
+                                </a>
                             </div>
-                            </a>
-                        </div>
-                    `
-                })}
-            </div>
+                        `
+                    })}
+                </div>`
+            }
         `
+        
     }
     static styles?: CSSResultGroup = css`
         

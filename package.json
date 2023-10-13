@@ -114,6 +114,7 @@
         "marked": "^4.3.0",
         "material-components-web": "^14.0.0",
         "mathjax": "^3.2.2",
+        "mathjax-full": "^3.2.2",
         "mkdirp": "^0.5.5",
         "monaco-editor": "^0.31.1",
         "monaco-editor-webpack-plugin": "^7.0.1",

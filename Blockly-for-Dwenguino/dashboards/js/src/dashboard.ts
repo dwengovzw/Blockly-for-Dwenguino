@@ -129,19 +129,18 @@ class Dashboard extends connect(store)(LitElement) {
                 store.dispatch(fetchLearningPaths("", getLocale(), 0, 50));
                 return true;
             },
-            render: () => html` <dwengo-content-overview .learningPaths=${this.globalState.content.learningPaths}>
-            </dwengo-content-overview>`,
+            render: () => html`
+                <dwengo-content-overview 
+                    .learningPaths=${this.globalState.content.learningPaths}
+                    .loading=${this.globalState.content.loading}>
+                </dwengo-content-overview>`,
         },
         {
             path: `${this.urlPrefix}/dashboard/learningpath/:hruid/:lang`,
             enter: async ({ hruid, lang }) => {
                 this.selectedId = "content";
                 store.dispatch(
-                    fetchLearningPathDetails(
-                        this.globalState.content.learningPaths.find(
-                            (lp: LearningPath) => lp.hruid === hruid && lp.language === lang
-                        )
-                    )
+                    fetchLearningPathDetails({hruid: hruid, language: lang} as LearningPath)
                 );
                 return true;
             },

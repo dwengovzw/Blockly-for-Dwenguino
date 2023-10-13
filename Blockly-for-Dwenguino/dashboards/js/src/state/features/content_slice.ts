@@ -48,10 +48,14 @@ export const contentSlice = createSlice({
     name: "content",
     initialState: {
         learningPaths: [] as LearningPath[],
+        loading: false,
     },
     reducers: {
         setLearningPaths: (state, action) => {
             state.learningPaths = action.payload
+        },
+        setLoading: (state, action) => {
+            state.loading = action.payload
         },
     }
 })
@@ -92,11 +96,21 @@ const fetchLearningPaths = (filter: string, lang: string, min_age: number, max_a
                                             }
                                         )
                                         dispatch(setLearningPaths(learningPaths))
-                                    }, {}, msg("Error fetching learning paths")
+                                        dispatch(setLoading(false))
+                                    }, {}, msg("Error fetching learning paths"),
+                                    (dispatch, getState) => {
+                                        dispatch(setLoading(true))
+                                        // If learning paths have been loaded once, serve the cached version.
+                                        if (getState().content.learningPaths.length > 0 && getState().content.learningPaths[0].language === lang) {
+                                            dispatch(setLoading(false))
+                                            return false
+                                        }
+                                        return true
+                                    },
     )
 }
 
-const { setLearningPaths } = contentSlice.actions
+const { setLearningPaths, setLoading } = contentSlice.actions
 const contentReducer = contentSlice.reducer
 
 export { areLearningPathNodesEqual, areLearningObjectsEqual, contentReducer, BaseLearningPath, LearningPath, LearningPathNode, LearningPathTransition, LearningObjectId, fetchLearningPaths }

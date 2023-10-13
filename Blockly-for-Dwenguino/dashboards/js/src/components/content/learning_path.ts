@@ -1,6 +1,6 @@
 import { LitElement, html, css, unsafeCSS, PropertyValueMap } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
-import { LearningPath, LearningPathNode, areLearningPathNodesEqual } from '../../state/features/content_slice';
+import { customElement, property, query, state } from 'lit/decorators.js';
+import { LearningPath, LearningPathNode, LearningPathTransition, areLearningPathNodesEqual } from '../../state/features/content_slice';
 import { ActiveLearningPath, emptyActiveLearningPath, fetchLearningObject, setCurrentStep } from '../../state/features/learning_path_progress_slice';
 import { store } from '../../state/store';
 import { unsafeHTML } from 'lit/directives/unsafe-html.js';
@@ -12,8 +12,12 @@ import cssLang from 'highlight.js/lib/languages/css';
 import cpp from 'highlight.js/lib/languages/cpp';
 
 import highlight_base from 'highlight.js/styles/github.min.css';
+import tableStyle from '../../styles/tables.module.css';
+import fontStyle from "../../styles/font.module.css";
 
 import { msg } from '@lit/localize';
+import '@vaadin/button';
+
 
 @customElement('dwengo-learning-path')
 export class LearningPathComponent extends LitElement {
@@ -22,6 +26,9 @@ export class LearningPathComponent extends LitElement {
     @state()
     private loading = false; // Added a loading state
 
+    @query('.content')
+    contentContainer?: HTMLElement;
+
     constructor() {
         super();
         hljs.registerLanguage('javascript', javascript);
@@ -29,7 +36,6 @@ export class LearningPathComponent extends LitElement {
         hljs.registerLanguage('xml', xml);
         hljs.registerLanguage('css', cssLang);
         hljs.registerLanguage('cpp', cpp);
-        console.log(unsafeCSS(highlight_base))
     }
 
     protected highglightCode(html: string | undefined) {
@@ -43,10 +49,12 @@ export class LearningPathComponent extends LitElement {
         })
         return doc.body.innerHTML;
     }
+
     render() {
         return html`
            <div class="container">
                 <div class="list list-scrollable">
+                    <h1>${this.activeLearningPath.path.title}</h1>
                     ${this.activeLearningPath.path.nodes.map((node, index) => html`
                         <div class="list-item 
                             ${areLearningPathNodesEqual(this.activeLearningPath.progress.current_step, node) ? 'selected' : ''}" 
@@ -64,9 +72,50 @@ export class LearningPathComponent extends LitElement {
                     ${this.loading ? 
                         html`${msg("Loading")}...` : 
                         unsafeHTML(this.highglightCode(this.activeLearningPath.progress.current_step.htmlContent))}
+                        <div class="control_buttons">
+                            <vaadin-button 
+                                theme="primary" 
+                                class="paging_control prev_button" 
+                                @click="${
+                                    () => {
+                                        const currentIndex = this.activeLearningPath.path.nodes.findIndex((node) => {
+                                            return areLearningPathNodesEqual(node, this.activeLearningPath.progress.current_step)
+                                        })
+                                        let previousStep = currentIndex > 0 ? this.activeLearningPath.path.nodes[currentIndex - 1] : undefined
+                                        if (previousStep){
+                                            store.dispatch(fetchLearningObject(previousStep))
+                                        }
+                                    }
+                                }">
+                                ${msg("Previous")}
+                            </vaadin-button>
+                            <vaadin-button
+                                theme="primary"
+                                class="paging_control next_button"
+                                @click="${
+                                    () => {
+                                        const next = this.activeLearningPath.progress.current_step.transitions.find(
+                                            (transition: LearningPathTransition) => transition.default
+                                        )?.next
+                                        if (next) {
+                                            store.dispatch(fetchLearningObject(next))
+                                        }
+                                    }
+                                }">
+                                ${msg("Next")}
+                            </vaadin-button>
+                        </div>
                 </div>
             </div>
         `;
+    }
+
+    updated() {
+        if (MathJax) {
+            MathJax.typesetPromise([this.contentContainer]).then(() => {
+                console.log("MathJax typeset complete")
+            }).catch((err) => console.log(err.message))
+        }
     }
 
     static styles = [css`
@@ -74,23 +123,91 @@ export class LearningPathComponent extends LitElement {
             display: flex;
             flex-direction: row;
             height: 100%;
+            width: 100%;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-right: auto;
+            margin-left: auto;
         }
+
+        .control_buttons {
+            margin-top: 30px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .paging_control {
+            flex-grow: 1;
+        }
+
+        .next_button {
+            margin-left: 10px;
+        }
+        .prev_button {
+            margin-right: 10px;
+        }
+
+        @media (min-width: 576px){
+            .container {
+                max-width: 540px;
+            }
+        }
+
+        @media (min-width: 768px){
+            .container {
+                max-width: 720px;
+            }
+        }
+        
+        @media (min-width: 992px){
+            .container {
+                max-width: 960px;
+            }
+        }
+
+        @media (min-width: 1200px){
+            .container {
+                max-width: 1140px;
+            }
+            .content {
+                padding-left: 30px;
+                padding-right: 30px;
+            }
+        }
+
+        
 
         .list {
             width: 30%;
             height: 100%;
             overflow-y: auto;
-            border-right: 1px solid #ccc;
         }
 
         .list-item {
             padding: 10px;
             cursor: pointer;
             border-bottom: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+            border-right: 1px solid #ccc;
         }
 
         .list-item.selected {
             background-color: #eee;
+            border-left: solid black 4px;
+            padding-left: 10px;
+        }
+
+        .list .list-item:first-of-type {
+            border-top: solid #ccc 1px;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+
+        .list .list-item:last-of-type {
+            border-bottom-right-radius: 5px;
+            border-bottom-left-radius: 5px;
         }
 
         .content {
@@ -98,6 +215,8 @@ export class LearningPathComponent extends LitElement {
             height: 100%;
             padding: 10px;
             overflow-y: auto;
+            margin-left: 10px;
+            margin-right: 10px;
         }
 
         .list-scrollable {
@@ -109,5 +228,21 @@ export class LearningPathComponent extends LitElement {
             overflow-y: auto;
             height: calc(100% - 20px);
         }
-    `, unsafeCSS(highlight_base)]
+
+        .content img {
+            max-width: 100%;
+        }
+    
+        .content * img {
+            max-width: 100%;
+        }
+
+        
+
+    `, 
+    unsafeCSS(highlight_base),
+    unsafeCSS(tableStyle),
+    unsafeCSS(fontStyle)]
+
+    
 }

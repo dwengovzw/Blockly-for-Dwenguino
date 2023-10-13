@@ -26,7 +26,7 @@ interface DetailedLearningPathNode extends LearningPathNode{
     target_ages?: number[],
     title?: string,
     updatedAt?: string,
-
+    teacher_exclusive?: boolean,
 }
 
 interface DetailedLearningPath extends BaseLearningPath{
@@ -130,7 +130,10 @@ const fetchLearningPathDetails = (learningPath: LearningPath) => {
                         target_ages: node.target_ages,
                         title: node.title,
                         updatedAt: node.updatedAt,
+                        teacher_exclusive: node.teacher_exclusive,
                     }
+                }).filter((node: DetailedLearningPathNode) => {
+                    return node.teacher_exclusive === false
                 })
 
             }
@@ -173,7 +176,7 @@ const fetchLearningObject = (learningObjectId: LearningObjectId) => {
             };
             const response = await fetch(url, request);
             let html = await response.text();
-            dispatch(setCurrentStep(learningObjectId))
+            dispatch(setCurrentStep(learningObject))
             dispatch(setCurrentStepContent(html))
         } catch (err) {
             dispatch(
