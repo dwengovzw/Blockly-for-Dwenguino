@@ -44,6 +44,8 @@ let handleSimulatorRequest = ({blocks_xml, res, view="index.ejs", hidebutton=fal
     });
 }
 
+
+
 // load the application
 router.get("/simulator", [checkIfUserIsLoggedIn], function(req, res) {
     let blocks_xml = req.query.xml;
@@ -54,6 +56,24 @@ router.get("/simulator", [checkIfUserIsLoggedIn], function(req, res) {
 router.post("/simulator", [checkIfUserIsLoggedIn], function(req, res) {
     let blocks_xml = req.body.xml;
     handleSimulatorRequest({blocks_xml: blocks_xml, res: res});
+})
+
+router.post("/openTextualProgram", function(req, res) {
+    try {
+        let requestBody = JSON.parse(req.body.state);
+        let editorState;
+        if (requestBody.code){
+            editorState = {
+                view: "text",
+                cppCode: [{cppCode: requestBody.code, filename: requestBody.filename || "program.cpp"}],
+                blocklyXml: "",
+            }
+            return processStartBlocks({startblock_xml: "", res: res, editorState: editorState});
+        }
+        return res.status(500).send({message: "No code provided"});
+    } catch (e){
+        return res.status(500).send({message: "Unable to parse request body"});
+    }
 })
 
 // load the application

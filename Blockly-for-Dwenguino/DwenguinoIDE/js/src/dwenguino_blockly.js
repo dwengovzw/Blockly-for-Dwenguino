@@ -10,6 +10,7 @@ import 'bootstrap';
 import TextualEditor from './textual_editor/textual_editor.ts'
 import { store } from "../../../dashboards/js/src/state/store.ts"
 import { SAVEDPROGRAM_TYPES } from '../../../../backend/models/saved_state.model'
+import { ScenarioNames } from './simulation/dwenguino_simulation.js'
 
 window.$ = window.jQuery = jQuery;
 
@@ -450,7 +451,7 @@ let DwenguinoBlockly = {
       Blockly.Xml.workspaceToDom(DwenguinoBlockly.workspace)
     );
     let socialRobotXml = "";
-    if (scenario === "socialrobot") {
+    if (scenario === ScenarioNames.SOCIALROBOT) {
       socialRobotXml = DwenguinoBlockly.simulationEnvironment
         .getCurrentScenario()
         .robotToXml();
@@ -580,14 +581,14 @@ let DwenguinoBlockly = {
         name: "",
         uuid: "",
         view: "blocks",
-        scenario: "spyrograph",
+        scenario: ScenarioNames.SPYROGRAPH,
         socialRobotXml: "",
         cppCode: [],
       })
     }
   },
   loadState: function (state) {
-    let xml = Blockly.Xml.textToDom(state.blocklyXml);
+    let xml = state.blocklyXml ? Blockly.Xml.textToDom(state.blocklyXml) : Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="{qm%,~{T;Qd1nDUTjZWn" x="100" y="100"/></xml>`);
     DwenguinoBlockly.restoreFromXml(xml);
     if (state.view === "blocks") {
       DwenguinoBlockly.switchToBlockly({saveState: false});
@@ -606,18 +607,25 @@ let DwenguinoBlockly = {
       DwenguinoBlockly.simulationEnvironment.setCurrentScenario(
         state.scenario
       );
-      if (state.scenario === "socialrobot") {
+      if (state.scenario === ScenarioNames.SOCIALROBOT) {
         DwenguinoBlockly.simulationEnvironment
           .getCurrentScenario()
           .xmlToRobot(state.socialRobotXml);
       }
+    } else {
+      DwenguinoBlockly.simulationEnvironment.setCurrentScenario(
+        ScenarioNames.SPYROGRAPH
+      );
     }
   },
+
 
   loadStateHandler: function () {
     // If the user is logged in and has loaded a previously saved program, load it from the cloud.
     if (DwenguinoBlockly.isUserLoggedIn() &&  globalSettings.savedProgramUUID !== "") {
       DwenguinoBlockly.loadStateFromAccount();
+    } else if (globalSettings.editorState){
+      DwenguinoBlockly.loadState(globalSettings.editorState);
     } else {
       // Try to load state from local storage if exists.
       DwenguinoBlockly.loadStateFromLocalstorage();

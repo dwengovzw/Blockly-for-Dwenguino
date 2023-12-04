@@ -7,6 +7,15 @@ import DwenguinoSimulationScenarioPlotter from "../scenario/plotter/dwenguino_si
 import DwenguinoSimulationScenarioConveyor from "../scenario/conveyor/dwenguino_simulation_scenario_conveyor.js";
 import SCENARIO from "../../../../../backend/models/saved_state.model"
 
+export const ScenarioNames = {
+    SPYROGRAPH: "spyrograph",
+    RIDINGROBOT: "moving",
+    RIDINGROBOTWITHWALL: "wall",
+    SOCIALROBOT: "socialrobot",
+    PLOTTER: "plotter",
+    CONVEYOR: "conveyor",
+}
+
 class DwenguinoSimulation {
     logger = null;
     workspace = null;
