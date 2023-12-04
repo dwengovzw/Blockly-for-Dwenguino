@@ -17,6 +17,7 @@ import fontStyle from "../../styles/font.module.css";
 
 import { msg } from '@lit/localize';
 import '@vaadin/button';
+import "../util/code_editor";
 
 
 @customElement('dwengo-learning-path')
@@ -38,17 +39,38 @@ export class LearningPathComponent extends LitElement {
         hljs.registerLanguage('cpp', cpp);
     }
 
-    protected highglightCode(html: string | undefined) {
-        if (!html) {
-            return "";
-        }
-        let doc = new DOMParser().parseFromString(html, "text/html")
-        let codeElements = doc.querySelectorAll('code');
-        codeElements.forEach((codeElement: HTMLElement) => {
-            hljs.highlightElement(codeElement as HTMLElement);
-        })
-        return doc.body.innerHTML;
-    }
+   protected highglightCode(html: string | undefined) {
+       if (!html) {
+           return "";
+       }
+       let doc = new DOMParser().parseFromString(html, "text/html")
+       let codeElements = doc.querySelectorAll('code');
+       codeElements.forEach((codeElement: HTMLElement) => {
+           hljs.highlightElement(codeElement as HTMLElement);
+       })
+       return doc.body.innerHTML;
+   }
+
+    // protected highglightCode(html: string | undefined) {
+    //     if (!html) {
+    //         return "";
+    //     }
+    //     let doc = new DOMParser().parseFromString(html, "text/html")
+    //     let codeElements = doc.querySelectorAll('code');
+    //     codeElements.forEach((codeElement) => {
+    //         // Create a new <dwengo-code-mirror-element> element
+    //         let dwengoCodeElement = document.createElement("dwengo-code-mirror-element");
+    //         dwengoCodeElement.setAttribute("code", codeElement.textContent || "");
+          
+    //         // Copy the content of the <code> element to the new element
+    //         dwengoCodeElement.innerHTML = codeElement.innerHTML;
+          
+    //         // Replace the <code> element with the new element
+    //         codeElement.parentNode?.replaceChild(dwengoCodeElement, codeElement);
+    //       });
+
+    //     return doc.body.innerHTML;
+    // }
 
     render() {
         return html`
