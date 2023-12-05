@@ -1,4 +1,5 @@
 import {afterAll, expect, jest, describe, beforeAll} from '@jest/globals'
+jest.useFakeTimers()
 import puppeteer from 'puppeteer'
 import { startServer, endServer } from "../../../../util/start_server.js"
 import { runToolboxRecording } from "../../actions/toolbox_clicks.js"
