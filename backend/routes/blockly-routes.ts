@@ -58,7 +58,7 @@ router.post("/simulator", [checkIfUserIsLoggedIn], function(req, res) {
     handleSimulatorRequest({blocks_xml: blocks_xml, res: res});
 })
 
-router.post("/openTextualProgram", function(req, res) {
+router.post("/openTextualProgram", [checkIfUserIsLoggedIn], function(req, res) {
     try {
         let requestBody = JSON.parse(req.body.state);
         let editorState;
@@ -68,7 +68,13 @@ router.post("/openTextualProgram", function(req, res) {
                 cppCode: [{cppCode: requestBody.code, filename: requestBody.filename || "program.cpp"}],
                 blocklyXml: "",
             }
-            return processStartBlocks({startblock_xml: "", res: res, editorState: editorState});
+            return processStartBlocks({
+                startblock_xml: "", 
+                res: res, 
+                editorState: editorState,
+                loggedIn: res.loggedIn, 
+                includeEmptyProgram: true
+            });
         }
         return res.status(500).send({message: "No code provided"});
     } catch (e){
