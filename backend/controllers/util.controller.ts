@@ -6,9 +6,7 @@ import childProcess from 'child_process';
 const exec = childProcess.exec;
 import fs from 'fs';
 import path from 'path';
-import i18n from 'i18n-x';
-import url from 'url';
-import mkdirp from 'mkdirp';
+import { mkdirp } from 'mkdirp'
 
 class UtilController{
     //prefix = "."; // This is only required for debugging default should be .
@@ -269,11 +267,7 @@ class UtilController{
         let filename =  path.resolve(UtilController.prefix + '/compilation/sketch-' + objid + '/sketch.cpp');
         console.log(filename);
 
-        mkdirp(path.dirname(filename), (err)=>{
-            if (err){
-                errorHandler(err) // Error if unable to create directory structure
-                return
-            } 
+        mkdirp(path.dirname(filename)).then(() => {
             fs.writeFile(filename, code, (error) => {
                 if (error){ 
                     errorHandler(error);
@@ -282,7 +276,12 @@ class UtilController{
                     successHandler();
                 }
             })
-        })
+        }).catch((err)=>{
+            if (err){
+                errorHandler(err) // Error if unable to create directory structure
+                return
+            }
+        });  
     }
 
 

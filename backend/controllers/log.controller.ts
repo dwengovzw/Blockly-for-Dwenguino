@@ -1,6 +1,6 @@
 // Import contact model
 import Logitem from '../models/logitem.model';
-import uuidv4 from 'uuid/v4';
+import { v4 } from 'uuid';
 import { EVENT_NAMES } from '../utils/event_names';
 import mongoose from 'mongoose';
 import Validator from '../utils/validator';
@@ -8,7 +8,7 @@ import Validator from '../utils/validator';
 import { Worker, isMainThread, parentPort } from 'worker_threads';
 
 let newSessionId = function(req, res) {
-    let id = uuidv4();
+    let id = v4();
     console.debug(id);
     res.status(200).send(id);
 };

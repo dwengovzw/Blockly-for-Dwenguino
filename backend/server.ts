@@ -6,7 +6,7 @@ import cookieParser from 'cookie-parser';
 import mongoSanitize from 'express-mongo-sanitize';
 
 //mongoose.set('debug', true);
-import i18n from 'i18n-x';
+//import i18n from 'i18n-x';
 
 import axios from 'axios';
 
@@ -83,15 +83,17 @@ if (process.env.NODE_ENV !== "production"){
 }
 
 app.use(cookieParser());
-app.use(i18n({
-    locales: ['en', 'nl'], 
-    directory: 'msg',
-    jointDir: 'msg',
-    defaultLocale: 'en',
-    queryParameter: 'lang',
-    cookieName: 'lang',
-    order: ['cookie', 'query', 'headers']
-}));
+// app.use(i18n({
+//     locales: ['en', 'nl'], 
+//     directory: 'msg',
+//     jointDir: 'msg',
+//     defaultLocale: 'en',
+//     queryParameter: 'lang',
+//     cookieName: 'lang',
+//     order: ['cookie', 'query', 'headers']
+// }));
+
+
 
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies

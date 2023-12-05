@@ -22,11 +22,11 @@ const BlocklyProgramItemSchemaFields: Record<keyof IBlocklyProgramItemExtraField
 const BlocklyProgamItemSchema = new Schema<IBlocklyProgramItem>(BlocklyProgramItemSchemaFields)
 
 // Recursively delete the saved program when the portfolio item is deleted
-BlocklyProgamItemSchema.pre('remove', {document:true, query: false}, async function(next) {
-    const savedStateId = this.savedState
+BlocklyProgamItemSchema.pre('deleteOne', {document:true, query: false}, async function(next) {
+    const savedStateId: any = this.savedState
     try {
         if (savedStateId){
-            await SavedState.findByIdAndRemove(savedStateId)
+            await SavedState.findOneAndDelete(savedStateId)
         }
         next()
     } catch (err: any) {

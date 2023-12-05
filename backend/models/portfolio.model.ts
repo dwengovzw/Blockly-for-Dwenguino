@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose"
-import  v4 from "uuid/v4"
+import { v4 } from 'uuid';
 import { IPortfolioItem } from "./portfolio_items/portfolio_item.model";
 import { PopulatedDoc } from 'mongoose';
 import { IUser } from "./user.model";

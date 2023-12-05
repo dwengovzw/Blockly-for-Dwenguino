@@ -51,11 +51,9 @@ class AbstractOAuthController {
         User.findOne({
             userId: minUserInfo.getUserId(),
             platform: minUserInfo.getPlatform()
-        }).exec(async (err, u) => {
+        }).then(async (u) => {
             let user:IUser = u as IUser
-            if (err) {
-                return res.status(500).send({message: err})
-            }
+            
             // If user does not exist, create it
             if (!user){
                 user = await this.createUser(req, res, minUserInfo) as IUser
@@ -64,7 +62,6 @@ class AbstractOAuthController {
                 }
             }
             
-
             let token = jwt.sign({id: user?.userId, platform: user?.platform }, jwt_settings.secret as string, {
                 expiresIn: jwt_settings.expiresIn, // 24h
             })        
@@ -76,7 +73,11 @@ class AbstractOAuthController {
             } else {
                 return res.redirect(`${process.env.SERVER_URL}/dashboard`)
             }
-        })
+        }).catch((err) => {
+            if (err) {
+                return res.status(500).send({message: err})
+            }
+        });
     }
 
     async createUser(req, res, minUserInfo){

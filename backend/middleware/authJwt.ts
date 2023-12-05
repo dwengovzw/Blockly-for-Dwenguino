@@ -92,18 +92,23 @@ let roleCheck = (role) => {
         User.findOne({
             userId: req.userId, 
             platform: req.platform})
-        .exec((err, user) => {
-            if (err || !user){
+        .then((user) => {
+            if (!user){
                 res.status(500).send({message: "User does not exist"})
             }
             for (let i = 0; i < user.roles.length; i++) {
                 if (user.roles[i].name === role) {
-                next();
-                return;
+                    next();
+                    return;
                 }
             }
             res.status(403).send({ message: "You do not have the authority to access this route!" });
             return;
+        })
+        .catch((err) => {
+            if (err){
+                res.status(500).send({message: "User does not exist"})
+            }
         });
   }
 }

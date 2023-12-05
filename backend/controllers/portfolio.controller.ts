@@ -209,7 +209,7 @@ class PortfolioController {
                 {$pull: {children: item._id}}
             )
             // Remove the item from the database
-            await item.remove()
+            await item.deleteOne()
             res.status(200).send({message: "Item deleted."})
         } catch (e) {
             res.status(500).send("Error deleting item.")

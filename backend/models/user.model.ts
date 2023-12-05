@@ -3,7 +3,7 @@ import { PopulatedDoc } from 'mongoose';
 import { Document, Schema, model } from "mongoose"
 import db from "../config/db.config"
 import { IRole, RoleSchema } from './role.model'
-import  v4 from "uuid/v4"
+import { v4 } from 'uuid';
 import { IPortfolio } from "./portfolio.model"
 
 

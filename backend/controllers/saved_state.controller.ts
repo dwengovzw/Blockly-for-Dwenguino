@@ -75,7 +75,7 @@ class SavedStateController {
     async delete(req, res) {
         try {
             let user = req.user as IUserDoc
-            await SavedState.findOneAndRemove({
+            await SavedState.findOneAndDelete({
                 user: user._id,
                 uuid: req.params.uuid
             })

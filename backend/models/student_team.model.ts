@@ -1,7 +1,7 @@
 import { Schema, model, Types } from "mongoose"
 import { IUser, User } from "./user.model"
 import { IPortfolio } from "./portfolio.model"
-import  v4 from "uuid/v4"
+import { v4 } from 'uuid';
 import { PopulatedDoc } from 'mongoose';
 import { Portfolio } from "./portfolio.model"
 

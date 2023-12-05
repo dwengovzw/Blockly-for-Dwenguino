@@ -25,12 +25,8 @@ class MockAuthController extends AbstractOAuthController{
         User.findOne({
             userId: userId,
             platform: (db.PLATFORMS as Record<string, string>).test
-        }).exec(async (err, u) => {
+        }).then(async (u) => {
             let user:IUser = u as IUser
-            if (err) {
-                res.status(500).send({message: err})
-                return
-            }
             // If user does not exist, create it
             if (!user){
                 res.send(401).send({message: "User does not exist"})
@@ -47,9 +43,11 @@ class MockAuthController extends AbstractOAuthController{
             } else {
                 res.redirect(`${process.env.SERVER_URL}/dashboard`)
             }
-
-        })
-
+        }).catch((err) => {
+            if (err) {
+                res.status(500).send({message: err})
+            }
+        });
     }
 
 

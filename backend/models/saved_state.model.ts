@@ -1,6 +1,6 @@
 import { Schema, model, Document } from "mongoose"
 import { IUser } from "./user.model"
-import  v4 from "uuid/v4"
+import { v4 } from 'uuid';
 import { PopulatedDoc } from 'mongoose';
 
 const SAVEDPROGRAM_TYPES = {

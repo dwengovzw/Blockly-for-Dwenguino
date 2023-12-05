@@ -30,9 +30,9 @@ class MarkdownEditor extends LitElement {
         marked.setOptions({
             gfm: true,
             breaks: true,
-            sanitize: true,
-            smartLists: true,
-            smartypants: true,
+            //sanitize: true,
+            //smartLists: true,
+            //smartypants: true,
         });
     }
 

@@ -107,7 +107,7 @@ class ClassGroupController {
     async delete(req, res){
         try {
             let user = await User.findOne({userId: req.userId, platform: req.platform})
-            await ClassGroup.findOneAndRemove({
+            await ClassGroup.findOneAndDelete({
                 ownedBy: {
                     $in: [ user._id ]
                 },
