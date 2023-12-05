@@ -7,6 +7,8 @@ const timeout = 5000;
 
 jest.setTimeout(900000) // 15m
 
+
+
 describe(
   '/ (Home Page)',
   () => {
@@ -20,6 +22,10 @@ describe(
         page = await browser.newPage();
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);
+
+    beforeEach(async () => {
+      jest.useFakeTimers();
+    });
 
     /*let testMessage = "Adding and removing each component from the social robot simulation should not result in errors";
     it(testMessage, async () => {

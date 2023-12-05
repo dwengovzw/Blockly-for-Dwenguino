@@ -19,6 +19,10 @@ describe(
         page.on("dialog", (d) => { d.accept(); }); // Accept all dialogs the page displays            
     }, timeout);
 
+    beforeEach(async () => {
+      jest.useFakeTimers();
+    });
+
     let testMessage = "Changing scenario should not result in errors";
     it(testMessage, async () => {
       let pageErrors = 0;
