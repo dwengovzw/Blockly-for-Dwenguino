@@ -62,6 +62,7 @@ app.set('view engine', 'ejs');
 let viewDirs = JSON.parse(process.env.VIEWS_DIR as string).map((elem) => {return __dirname + "/" + elem})
 app.set('views', viewDirs);   // For debug
 
+
 // Optimizations for production
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
@@ -77,7 +78,7 @@ if (process.env.NODE_ENV === 'production') {
         styleSrc: ["'self'", "'unsafe-inline'", process.env.CORS_ORIGIN],
         imgSrc: ["'self'", `${process.env.CORS_ORIGIN}`, "data:"],
         connectSrc: ["'self'", `${process.env.CORS_ORIGIN}`],
-        fontSrc: ["'self'", "fonts.googleapis.com", `${process.env.CORS_ORIGIN}`],
+        fontSrc: ["'self'", "fonts.googleapis.com", `${process.env.CORS_ORIGIN}`, "https:", "data:"],
         objectSrc: ["'none'"],
         mediaSrc: ["'self'"]
     }
