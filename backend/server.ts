@@ -71,11 +71,11 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "'unsafe-inline'", 'example.com'],
-        styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", 'example.com'],
-        connectSrc: ["'self'"],
-        fontSrc: ["'self'"],
+        scriptSrc: ["'self'", "www.googletagmanager.com", "'unsafe-inline'", process.env.CORS_ORIGIN],
+        styleSrc: ["'self'", "'unsafe-inline'", process.env.CORS_ORIGIN],
+        imgSrc: ["'self'", process.env.CORS_ORIGIN],
+        connectSrc: ["'self'", process.env.CORS_ORIGIN],
+        fontSrc: ["'self'", "fonts.googleapis.com", process.env.CORS_ORIGIN],
         objectSrc: ["'none'"],
         mediaSrc: ["'self'"]
     }
