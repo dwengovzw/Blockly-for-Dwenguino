@@ -24,7 +24,7 @@ describe(
     }, timeout);
 
     beforeEach(async () => {
-      jest.useFakeTimers();
+      //jest.useFakeTimers();
     });
 
 

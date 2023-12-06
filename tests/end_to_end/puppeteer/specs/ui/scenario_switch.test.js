@@ -20,7 +20,7 @@ describe(
     }, timeout);
 
     beforeEach(async () => {
-      jest.useFakeTimers();
+      //jest.useFakeTimers();
     });
 
     let testMessage = "Changing scenario should not result in errors";

@@ -24,7 +24,7 @@ describe(
     }, timeout);
 
     beforeEach(async () => {
-      jest.useFakeTimers();
+      //jest.useFakeTimers();
     });
 
     /*let testMessage = "Adding and removing each component from the social robot simulation should not result in errors";
