@@ -62,7 +62,9 @@ module.exports = [
                                     'targets': {
                                         'browsers': ['last 4 version']
                                     }
-                                }]
+                                }],
+                                "@babel/preset-react",
+                                "@babel/preset-typescript",
                             ],
                             plugins: ["@babel/plugin-proposal-class-properties",
                                     "@babel/plugin-transform-classes",
@@ -81,7 +83,7 @@ module.exports = [
                 }
             ]
         },
-        plugins: [new CompressionPlugin()],
+        plugins: [new CompressionPlugin(), new MonacoWebpackPlugin()],
         optimization: {
             minimize: true,
             minimizer: [new TerserPlugin()],

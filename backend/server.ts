@@ -68,6 +68,18 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet({
         frameguard: false // Allow use in iframe
       }));
+    app.use(helmet.contentSecurityPolicy({
+    directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", 'example.com'],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", 'example.com'],
+        connectSrc: ["'self'"],
+        fontSrc: ["'self'"],
+        objectSrc: ["'none'"],
+        mediaSrc: ["'self'"]
+    }
+    }));
 }else{
     app.use(cors({
         origin: '*',

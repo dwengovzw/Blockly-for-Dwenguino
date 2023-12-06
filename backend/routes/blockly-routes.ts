@@ -2,6 +2,7 @@
 // Initialize express router
 import express from 'express';
 import querystring from "querystring"
+import crypto from "crypto"
 let router = express.Router();
 
 //xml parser
@@ -22,6 +23,10 @@ let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUU
         blocks_xml = '<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure"></block></xml>'
     }
 
+    let nonce = crypto.randomBytes(32).toString('hex');
+    // res.set("Content-Security-Policy", `script-src 'nonce-${nonce}'`);
+    // res.set("Content-Security-Policy", "default-src 'self'");
+
     blocks_xml = blocks_xml.trim()  // remove whitespace
     res.render(view, {
         blocks_xml: blocks_xml, 
@@ -30,7 +35,8 @@ let processStartBlocks = ({startblock_xml, res, view="index.ejs", savedProgramUU
         savedProgramUUID: savedProgramUUID,
         hidebutton: hidebutton,
         loggedIn: loggedIn,
-        editorState: editorState ? JSON.stringify(editorState) : "''"
+        editorState: editorState ? JSON.stringify(editorState) : "''",
+        nonce: nonce
     });
 }
 

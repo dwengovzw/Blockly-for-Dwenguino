@@ -1,11 +1,12 @@
 const path = require("path");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
+
+
 module.exports = [
     {
         name: "simulator",
         mode: "development",
-        //context: path.resolve(__dirname, "Blockly-for-Dwenguino/DwenguinoIDE"),
         entry: {
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js'
         },
