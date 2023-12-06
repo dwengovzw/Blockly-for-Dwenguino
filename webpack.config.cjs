@@ -18,7 +18,6 @@ module.exports = [
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
             filename: 'dwenguinoblockly.bundle.js'
         },
-        devtool: 'source-map',
         module: {
             rules: [
                 {
@@ -116,7 +115,6 @@ module.exports = [
     {
         name: "dashboards",
         mode: "production",
-        devtool: "eval-source-map",
         context: path.resolve(__dirname, "Blockly-for-Dwenguino"),
         entry: {
             app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts"),
@@ -139,7 +137,7 @@ module.exports = [
                                 loader: "css-loader",
                                 options: {
                                     modules: true,
-                                    sourceMap: true
+                                    sourceMap: false
                                 }
                         }, 'postcss-loader']
                 },
