@@ -92,7 +92,7 @@ let roleCheck = (role) => {
         User.findOne({
             userId: req.userId, 
             platform: req.platform})
-        .then((user) => {
+        .exec().then((user) => {
             if (!user){
                 res.status(500).send({message: "User does not exist"})
             }

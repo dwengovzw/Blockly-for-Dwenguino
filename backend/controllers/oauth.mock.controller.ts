@@ -25,7 +25,7 @@ class MockAuthController extends AbstractOAuthController{
         User.findOne({
             userId: userId,
             platform: (db.PLATFORMS as Record<string, string>).test
-        }).then(async (u) => {
+        }).exec().then(async (u) => {
             let user:IUser = u as IUser
             // If user does not exist, create it
             if (!user){
