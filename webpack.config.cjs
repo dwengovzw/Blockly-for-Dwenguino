@@ -18,6 +18,7 @@ module.exports = [
             path: path.resolve('./Blockly-for-Dwenguino/DwenguinoIDE/js/dist'),
             filename: 'dwenguinoblockly.bundle.js'
         },
+        devtool: 'source-map',
         module: {
             rules: [
                 {
@@ -138,7 +139,7 @@ module.exports = [
                                 loader: "css-loader",
                                 options: {
                                     modules: true,
-                                    sourceMap: false
+                                    sourceMap: true
                                 }
                         }, 'postcss-loader']
                 },
