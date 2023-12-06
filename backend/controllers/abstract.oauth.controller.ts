@@ -73,10 +73,11 @@ class AbstractOAuthController {
             } else {
                 return res.redirect(`${process.env.SERVER_URL}/dashboard`)
             }
+        }, (err)=>{
+            console.log(`Promise rejected with ${err}`);
+            return res.status(500).send({message: err})
         }).catch((err) => {
-            if (err) {
-                return res.status(500).send({message: err})
-            }
+            return res.status(500).send({message: err})
         });
     }
 
