@@ -71,7 +71,6 @@ if (process.env.NODE_ENV === 'production') {
     app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
-        baseUri: ["'self'", `${process.env.CORS_ORIGIN}`],
         formAction: ["'self'", `${process.env.CORS_ORIGIN}`],
         scriptSrcAttr: ["'self'", `${process.env.CORS_ORIGIN}`],
         scriptSrc: ["'self'", "www.googletagmanager.com", "unsafe-inline", `${process.env.CORS_ORIGIN}`],
