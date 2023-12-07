@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken"
 import jwt_settings from "../config/jwt.config";
 import { User } from "../models/user.model"
+import e from "express";
 
 
 let verifyToken = (req, res, next) => {
@@ -104,7 +105,9 @@ let roleCheck = (role) => {
             }
             res.status(403).send({ message: "You do not have the authority to access this route!" });
             return;
-        })
+        }, (err) => {
+            res.status(500).send({message: "User does not exist"}
+        )})
         .catch((err) => {
             if (err){
                 res.status(500).send({message: "User does not exist"})

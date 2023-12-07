@@ -43,6 +43,8 @@ class MockAuthController extends AbstractOAuthController{
             } else {
                 res.redirect(`${process.env.SERVER_URL}/dashboard`)
             }
+        }, (err) => {
+            res.status(500).send({message: err})
         }).catch((err) => {
             if (err) {
                 res.status(500).send({message: err})
