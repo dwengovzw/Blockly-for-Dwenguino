@@ -16,6 +16,7 @@ class AbstractOAuthController {
         this.oauthConfig = oauthConfig
     }
 
+    
      /**
      * Redirect the user to the OAuth login url of the platform they have chosen
      * @param req express request
