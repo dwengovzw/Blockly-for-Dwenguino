@@ -123,6 +123,10 @@ app.use(
     })
 )
 
+if (process.env.NODE_ENV === 'production') {
+    app.set('trust proxy', true)
+}
+
     // Setup static file serving
 if (process.env.NODE_ENV === 'production') {
     app.use('/dwenguinoblockly', express.static(path.join(__dirname, 'Blockly-for-Dwenguino')));
