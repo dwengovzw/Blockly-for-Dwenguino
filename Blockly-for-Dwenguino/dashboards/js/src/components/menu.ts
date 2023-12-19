@@ -44,14 +44,14 @@ class Menu extends connect(store)(LitElement){
             "user": [
                 {id: "profile", label: msg("Profile"), href: `${globalSettings.hostname}/dashboard/profile?lang=${getLocale()}`, icon: "person", external: false},
                 {id: "savedstates", label: msg("Saved projects"), href: `${globalSettings.hostname}/dashboard/savedstates?lang=${getLocale()}`, icon: "folder_open", external: false},
-                {id: "portfolios", label: msg("My Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/mine?lang=${getLocale()}`, icon: "menu_book", external: false},
+                //{id: "portfolios", label: msg("My Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/mine?lang=${getLocale()}`, icon: "menu_book", external: false},
             ],
             "student": [
-                {id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses?lang=${getLocale()}`, icon: "groups", external: false},
+                //{id: "studentclassgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/studentclasses?lang=${getLocale()}`, icon: "groups", external: false},
             ],
             "teacher": [
-                {id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes?lang=${getLocale()}`, icon: "groups", external: false},
-                {id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe?lang=${getLocale()}`, icon: "menu_book", external: false},
+                //{id: "classgroups", label: msg("Class groups"), href: `${globalSettings.hostname}/dashboard/classes?lang=${getLocale()}`, icon: "groups", external: false},
+                //{id: "portfolios", label: msg("Shared Portfolios"), href: `${globalSettings.hostname}/dashboard/portfolios/sharedWithMe?lang=${getLocale()}`, icon: "menu_book", external: false},
             ],
             "admin": []
         }
