@@ -3461,6 +3461,7 @@
                     },{"./lib/context-browser":20}],20:[function(require,module,exports){
                     function Context(sandbox, parentElement) {
                     this.iframe = document.createElement('iframe');
+                    this.iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms unsafe-eval');
                     this.iframe.style.display = 'none';
                     parentElement = parentElement || document.body;
                     parentElement.appendChild(this.iframe);

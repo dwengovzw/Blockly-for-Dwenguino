@@ -67,21 +67,22 @@ app.set('views', viewDirs);   // For debug
 if (process.env.NODE_ENV === 'production') {
     app.use(compression());
     app.use(helmet({
-        frameguard: false // Allow use in iframe
+        frameguard: false, // Allow use in iframe
+        crossOriginResourcePolicy: { policy: "same-site" }
       }));
     app.use(helmet.contentSecurityPolicy({
     directives: {
         defaultSrc: ["'self'"],
         formAction: ["'self'", `${process.env.CORS_ORIGIN}`],
         scriptSrcAttr: ["'self'", `${process.env.CORS_ORIGIN}`],
-        scriptSrc: ["'self'", "www.googletagmanager.com", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
-        frameSrc: ["'self'", "www.googletagmanager.com", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
+        scriptSrc: ["'self'", "www.googletagmanager.com", "'unsafe-eval'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
+        frameSrc: ["'self'", "www.googletagmanager.com", "'unsafe-eval'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
         styleSrc: ["'self'", "'unsafe-inline'", process.env.CORS_ORIGIN, "fonts.googleapis.com"],
         imgSrc: ["'self'", `${process.env.CORS_ORIGIN}`, "data:"],
         connectSrc: ["'self'", `${process.env.CORS_ORIGIN}`, "*.google-analytics.com"],
         fontSrc: ["'self'", "fonts.googleapis.com", `${process.env.CORS_ORIGIN}`, "https:", "data:"],
         objectSrc: ["'none'"],
-        mediaSrc: ["'self'"]
+        mediaSrc: ["'self'"],
     }
     }));
 }else{
