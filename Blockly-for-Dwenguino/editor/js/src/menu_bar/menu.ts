@@ -152,6 +152,6 @@ class PortfolioItem extends LitElement {
   #db_menu_item_language_selection option{
       font-size: 20px;
   }
-        `, fas]
+        `]
 
 }
