@@ -74,7 +74,7 @@ if (process.env.NODE_ENV === 'production') {
     directives: {
         defaultSrc: ["'self'"],
         formAction: ["'self'", `${process.env.CORS_ORIGIN}`],
-        scriptSrcAttr: ["'self'", `${process.env.CORS_ORIGIN}`],
+        scriptSrcAttr: ["'self'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
         scriptSrc: ["'self'", "www.googletagmanager.com", "'unsafe-eval'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
         frameSrc: ["'self'", "www.googletagmanager.com", "'unsafe-eval'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
         styleSrc: ["'self'", "'unsafe-inline'", process.env.CORS_ORIGIN, "fonts.googleapis.com"],
