@@ -1,8 +1,8 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto);
 @font-face{
  font-family:'lcd-matrix-font';
  src: url('../fonts/repet.ttf');
 }
-@import url(https://fonts.googleapis.com/css?family=Roboto);
 
 body{
     min-height: 100vh;

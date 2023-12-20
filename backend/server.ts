@@ -83,6 +83,7 @@ if (process.env.NODE_ENV === 'production') {
         fontSrc: ["'self'", "fonts.googleapis.com", `${process.env.CORS_ORIGIN}`, "https:", "data:"],
         objectSrc: ["'none'"],
         mediaSrc: ["'self'"],
+        frameAncestors: ["'self'", "https://dwengo.org", "https://www.dwengo.org", `${process.env.CORS_ORIGIN}`],
     }
     }));
 }else{
