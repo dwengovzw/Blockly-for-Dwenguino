@@ -78,7 +78,7 @@ if (process.env.NODE_ENV === 'production') {
         scriptSrc: ["'self'", "www.googletagmanager.com", "'unsafe-eval'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
         frameSrc: ["'self'", "www.googletagmanager.com", "'unsafe-eval'", "'unsafe-inline'", `${process.env.CORS_ORIGIN}`],
         styleSrc: ["'self'", "'unsafe-inline'", process.env.CORS_ORIGIN, "fonts.googleapis.com"],
-        imgSrc: ["'self'", `${process.env.CORS_ORIGIN}`, "data:"],
+        imgSrc: ["'self'", `${process.env.CORS_ORIGIN}`, "data:", "https://blockly-demo.appspot.com"],
         connectSrc: ["'self'", `${process.env.CORS_ORIGIN}`, "*.google-analytics.com"],
         fontSrc: ["'self'", "fonts.googleapis.com", `${process.env.CORS_ORIGIN}`, "https:", "data:"],
         objectSrc: ["'none'"],
