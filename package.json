@@ -109,7 +109,7 @@
         "jquery": "^3.7.1",
         "jquery-ui-bundle": "^1.12.1-migrate",
         "jsonwebtoken": "^9.0.2",
-        "lit": "^2.6.1",
+        "lit": "2.6.1",
         "lit-infinite-viewer": "^0.27.1",
         "lit-moveable": "^0.30.0",
         "marked": "^11.0.0",
