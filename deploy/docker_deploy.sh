@@ -15,10 +15,10 @@ cd /home/node/deploy
 #ls /home/node/deploy
 
 # Give jenkins user write access to the compilation folder to be able to create the required files for compilation
-sudo chown -R node:node /home/node/deploy/backend/compilation
+sudo chown -R node:node /home/node/deploy/backend/compilation > blockly.log 2> blockly_err.log
 
 # go to backend and stop the previous app version and restart the new nodeJS app in back
-npm run start
+npm run start 
 #forever restart backend/index.js -r dotenv/config || forever start backend/index.js -r dotenv/config
 exit
 
