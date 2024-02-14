@@ -43,12 +43,32 @@ Blockly.Arduino.controls_for = function() {
     branch = Blockly.Arduino.INFINITE_LOOP_TRAP.replace(/%1/g,
         '\'' + this.id + '\'') + branch;
   }
-  var code;
-  var up = parseFloat(increment) > 0;
-  code = 'for ( int ' + variable0 + ' = ' + argument0 + ' ; ' +
-        variable0 + (up ? ' <= ' : ' >= ') + argument1 + ' ; ' +
-        variable0 + '+=' + increment + ') {\n' +
-        branch + '}\n';
+
+  let up;
+  let code;
+  let a1 = Number(argument1);
+  let a0 = Number(argument0);
+  let inc = Number(increment);
+  // Not all arguments are numeric. If they are not, we need to check at runtime
+  if (isNaN(a1) || isNaN(a0) || isNaN(inc)){
+    up = true;
+    code = 'for ( int ' + variable0 + ' = ' + argument0 + ' ; ' +
+    variable0 + (up ? ' <= ' : ' >= ') + argument1 + ' ; ' +
+    variable0 + '+=' + "(((" + argument1 + ") - (" + argument0 + ") >= 0" + ") ? abs(" + increment + ") : -1*abs(" + increment + ")" + ')) {\n' +
+    branch + '}\n';
+  } else { // all arguments are numeric, reverse increment when needed
+    up = a1 - a0 > 0;
+    if (up && inc < 0) {
+      inc = -inc;
+    } else if (!up && inc > 0) {
+      inc = -inc;
+    }
+    code = 'for ( int ' + variable0 + ' = ' + argument0 + ' ; ' +
+    variable0 + (up ? ' <= ' : ' >= ') + argument1 + ' ; ' +
+    variable0 + '+=' + inc + ') {\n' +
+    branch + '}\n';
+  }
+
   return code;
 };
 
