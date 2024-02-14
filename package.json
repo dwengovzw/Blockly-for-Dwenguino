@@ -51,7 +51,7 @@
         "@material/web": "^1.0.1",
         "@popperjs/core": "^2.11.8",
         "@reduxjs/toolkit": "^2.0.1",
-        "@tomneutens/serial_monitor": "^1.0.5",
+        "@tomneutens/serial_monitor": "^1.1.0",
         "@types/compression": "^1.7.5",
         "@types/cookie-parser": "^1.4.6",
         "@types/cookie-session": "^2.0.48",
