@@ -241,7 +241,7 @@ class RobotComponent extends AbstractRobotComponent {
         $('#componentOptionsModalContent').append('<div id="componentOptionsModalFooter" class="modal-footer"></div>');
     
         $('#componentOptionsModalHeader').append('<h4 class="modal-title">'+ headerTitle +'</h4>');
-        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal">&times;</button>');
+        $('#componentOptionsModalHeader').append('<button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal">&times;</button>');
 
         for (let key in this.getPins()){
             this.createPinOptionsInModalDialog(key);
