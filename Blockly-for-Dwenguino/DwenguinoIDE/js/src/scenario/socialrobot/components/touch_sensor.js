@@ -13,7 +13,7 @@ class SocialRobotTouchSensor extends BinaryInputRobotComponent{
         digitalPin: "digitalPin"
     }
     constructor(simulation_container=null){
-        super(simulation_container);
+        super(1, 0, simulation_container);
         BindMethods(this);
     }
 
