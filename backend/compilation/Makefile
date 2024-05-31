@@ -1,6 +1,6 @@
 ARDUINO_DIR = ..
 ARDUINO_SKETCHBOOK ?= $(shell pwd)
-ARDUINO_LIBS = Dwenguino Wire SPI LedController LiquidCrystal dht EEPROM LinxDwenguino NewPing Servo SoftwareSerial
+ARDUINO_LIBS = Dwenguino Wire SPI LedController LiquidCrystal dht EEPROM LinxDwenguino NewPing Servo SoftwareSerial DS18B20
 ARDUINO_VERSION = 185
 BOARD_TAG = dwenguino
 MONITOR_PORT = /dev/ttyACM*
