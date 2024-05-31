@@ -60,9 +60,11 @@ class TextualEditor {
         container.append(this.$_menuContainer);
         container.append(this.$_panesContainer);
 
+
         this._errorLog = new ErrorLog(this._logContainerId);
         this._editorPane = new EditorPane(this._editorContainerId);
-        this.$_serialMonitorContainer.html(`<serial-monitor serial-port-filters='[{"usbVendorId":54240}]'></serial-monitor>`)
+        // Dwenguino -> {"usbVendorId":54240}
+        this.$_serialMonitorContainer.html(`<serial-monitor serial-port-filters='[]'></serial-monitor>`)
 
         this.populateMenu();
     }
