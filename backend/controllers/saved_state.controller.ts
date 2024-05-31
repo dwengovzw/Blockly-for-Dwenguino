@@ -103,8 +103,8 @@ class SavedStateController {
         try{
             let user = req.user as IUserDoc
             let savedState = await SavedState.findOne({uuid: uuid}).populate<IUserDoc>({path: "user", model: "User"})
-            const portfoliosOwnedByUser = await getAllPortfoliosOwnedByUser(user._id)
-            const portfoliosSharedWithUser = await getAllPortfoliosSharedWithUser(user._id)
+            const portfoliosOwnedByUser = await getAllPortfoliosOwnedByUser(user._id as string)
+            const portfoliosSharedWithUser = await getAllPortfoliosSharedWithUser(user._id as string)
             const portfoliosWithAllowedAccess = [...portfoliosOwnedByUser, ...portfoliosSharedWithUser]//.map(p => p.items).flat().map(i => i._id)
             const portfolioItemIdsWithAllowedAccess = portfoliosWithAllowedAccess.map(p => p.items).flat().map(i => i._id)
             const portfolioItemsSavedProgramIdsWithAllowedAccess = (await BlocklyProgramItem.find({_id: {$in: portfolioItemIdsWithAllowedAccess}})
