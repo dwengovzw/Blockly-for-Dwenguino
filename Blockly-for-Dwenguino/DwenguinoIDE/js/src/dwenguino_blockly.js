@@ -825,7 +825,7 @@ let DwenguinoBlockly = {
     // Set modal dialog error messages.
     $("#notificationModal .modal-header").html(title);
     $("#notificationModal .modal-header").append(
-      '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+      '<button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal"><span aria-hidden="true">&times;</span></button></div>'
     );
     $("#notificationModal .modal-body .message").html(message);
     $("#notificationModal").modal("show");
@@ -836,7 +836,7 @@ let DwenguinoBlockly = {
       DwenguinoBlocklyLanguageSettings.translate(["saveToProfile"])
     );
     $("#saveToProfileModal .modal-header").append(
-      '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
+      '<button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>'
     );
     $("#saveToProfileModal .modal-body .message").html(
       DwenguinoBlocklyLanguageSettings.translate(["nameProjectToSave"])

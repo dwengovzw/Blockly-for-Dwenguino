@@ -20,7 +20,7 @@ class CookiesInformation {
      */
     loadCookiesInformationDialog(){
         $("#cookiesModal .modal-header").text(DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['whatAreCookiesTitle']));
-        let closeButton = '<button type="button" class="close" data-dismiss="modal" aria-label="'+DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['close'])+'"><span aria-hidden="true">&times;</span></button>';
+        let closeButton = '<button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="'+DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['close'])+'"><span aria-hidden="true">&times;</span></button>';
         $("#cookiesModal .modal-header").append(closeButton);
         $("#cookiesModal .modal-body .message").empty();
         $("#cookiesModal .modal-body .message").append('<p>'+ DwenguinoBlocklyLanguageSettings.translateFrom('cookieConsent',['whatAreCookiesDescription1'])+'</p>');

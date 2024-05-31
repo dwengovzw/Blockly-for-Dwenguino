@@ -32,7 +32,7 @@ class FileIOController {
 
                 $('#dropzoneModal .modal-header').empty();
                 $('#dropzoneModal .modal-header').append('<h4 class="modal-title">Upload</h4>');
-                $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
+                $('#dropzoneModal .modal-header').append('<button type="button" class="close" data-dismiss="modal" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button></div>');
                 $('#dropzoneModal .modal-body .message').empty();
                 $('#dropzoneModal .modal-body .message').append('<p>' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictSelectFile']) + '</p>');
                 $('#dropzoneModal .modal-body .message').append('<label for="fileInput" class="form-label">Choose file </label><input type="file" id="fileInput" class="form-control">');
