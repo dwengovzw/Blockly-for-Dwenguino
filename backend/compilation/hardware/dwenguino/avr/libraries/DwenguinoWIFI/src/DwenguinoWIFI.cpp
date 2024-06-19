@@ -80,7 +80,7 @@ void DwenguinoWIFI::handleHTTPRequest() {
         Serial.println("HTTP request: " + request);
         }
 
-        if (request.indexOf("GET /sensor") != -1) {
+        if (request.indexOf("GET /") != -1) {
             // Save the request route into a string
             String route = request.substring(request.indexOf("GET /") + 5, request.indexOf("HTTP/1.1") - 1);
             if (printDebug) {
