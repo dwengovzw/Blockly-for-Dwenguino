@@ -1,4 +1,5 @@
 #include <string.h>
+#include "RouteHandler.h"
 
 class DwenguinoWIFI {
     public:
@@ -6,6 +7,7 @@ class DwenguinoWIFI {
         void setupESP();
         void respondToClient(String clientID, String response);
         void handleHTTPRequest();
+        RouteManager routeManager;
         DwenguinoWIFI(String ssid, String password, bool pDebug = false);
     
     private:

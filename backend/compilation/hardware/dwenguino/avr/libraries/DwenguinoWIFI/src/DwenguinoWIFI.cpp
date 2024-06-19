@@ -1,6 +1,8 @@
 #include <Dwenguino.h>
 #include "DwenguinoWIFI.h"
 
+#define MAX_RESPONSE_LENGTH 100
+
 DwenguinoWIFI::DwenguinoWIFI(String id, String pw, bool pDebug = false){
     ssid = id;
     password = pw;
@@ -32,7 +34,7 @@ void DwenguinoWIFI::setupESP() {
     if (printDebug) {
         Serial.println("Printing debug: " + String(printDebug));
     }
-    
+
     Serial1.begin(115200);
     delay(1000);
 
@@ -78,22 +80,29 @@ void DwenguinoWIFI::handleHTTPRequest() {
         }
 
         if (request.indexOf("GET /sensor") != -1) {
-        // Collect sensor data (dummy data in this example)
-        String sensorData = "23.5";
+            // Save the request route into a string
+            String route = request.substring(request.indexOf("GET /sensor"), request.indexOf("HTTP/1.1") - 1);
 
-        // Construct HTTP response
-        String response = "HTTP/1.1 200 OK\r\n";
-        response += "Content-Type: text/plain\r\n";
-        response += "Connection: close\r\n\r\n";
-        response += "Sensor Data: " + sensorData;
+            char* responseData = new char[MAX_RESPONSE_LENGTH];
+            routeManager.handleRequest(route.c_str(), responseData);
 
-        // Extract client ID from the request
-        int clientIDStart = request.indexOf("+IPD,") + 5;
-        int clientIDEnd = request.indexOf(",", clientIDStart);
-        String clientID = request.substring(clientIDStart, clientIDEnd);
+            // Collect sensor data (dummy data in this example)
+            String sensorData = "23.5";
 
-        // Respond to the client with the sensor data
-        respondToClient(clientID, response);
+            // Construct HTTP response
+            String response = "HTTP/1.1 200 OK\r\n";
+            response += "Content-Type: text/plain\r\n";
+            response += "Connection: close\r\n\r\n";
+            response += "Sensor Data: " + String(responseData);
+
+
+            // Extract client ID from the request
+            int clientIDStart = request.indexOf("+IPD,") + 5;
+            int clientIDEnd = request.indexOf(",", clientIDStart);
+            String clientID = request.substring(clientIDStart, clientIDEnd);
+
+            // Respond to the client with the sensor data
+            respondToClient(clientID, response);
         }
     }
     }
