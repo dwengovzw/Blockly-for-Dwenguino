@@ -26,21 +26,21 @@ void DwenguinoWIFI::setupESP() {
   delay(1000);
 
   // Test communication with ESP-01
-  sendCommand("AT", 1000, "OK");
+  DwenguinoWIFI::sendCommand("AT", 1000, "OK");
 
   // Set ESP-01 to station mode
-  sendCommand("AT+CWMODE=1", 1000, "OK");
+  DwenguinoWIFI::sendCommand("AT+CWMODE=1", 1000, "OK");
 
   // Connect to Wi-Fi
   String connectWifi = "AT+CWJAP=\"" + String(ssid) + "\",\"" + String(password) + "\"";
-  sendCommand(connectWifi, 20000, "WIFI GOT IP");
+  DwenguinoWIFI::sendCommand(connectWifi, 20000, "WIFI GOT IP");
 
   // Print the IP address assigned by DHCP
-  sendCommand("AT+CIFSR", 5000, "OK");
+  DwenguinoWIFI::sendCommand("AT+CIFSR", 5000, "OK");
 
   // Set up ESP-01 as an HTTP server
-  sendCommand("AT+CIPMUX=1", 1000, "OK");
-  sendCommand("AT+CIPSERVER=1,80", 1000, "OK");
+  DwenguinoWIFI::sendCommand("AT+CIPMUX=1", 1000, "OK");
+  DwenguinoWIFI::sendCommand("AT+CIPSERVER=1,80", 1000, "OK");
 }
 
 void DwenguinoWIFI::respondToClient(String clientID, String response) {
