@@ -8,16 +8,16 @@ public:
     char route[MAX_ROUTE_LENGTH];
     HandlerFunction handler;
     void setRoute(const char* r);
+    void safeStrCopy(char* dest, const char* src, int maxLen);
 };
 
 class RouteManager {
     private:
         RouteHandler handlers[MAX_ROUTES];
-        void safeStrCopy(char* dest, const char* src, int maxLen);
 
     public:
         void addRouteHandler(const char* route, HandlerFunction handler);
         void removeRouteHandler(const char* route);
-        void handleRequest(const char* route);
+        void handleRequest(const char* route, char* result);
         
 };

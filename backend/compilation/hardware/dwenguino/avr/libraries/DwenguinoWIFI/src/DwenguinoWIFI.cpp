@@ -50,7 +50,7 @@ void DwenguinoWIFI::respondToClient(String clientID, String response) {
       DwenguinoWIFI::sendCommand("AT+CIPCLOSE=" + clientID, 20000, "OK");
     };
   } else {
-    Serial.println("Error in sending response");
+    // Should not get to this state
   }
 }
 
@@ -61,7 +61,6 @@ void DwenguinoWIFI::handleHTTPRequest() {
   while ((time + timeout) > millis()) {
     if (Serial1.available()) {
       String request = Serial1.readString();
-      Serial.println("HTTP request: " + request);
 
       if (request.indexOf("GET /sensor") != -1) {
         // Collect sensor data (dummy data in this example)
