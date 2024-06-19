@@ -7,6 +7,7 @@ DwenguinoWIFI::DwenguinoWIFI(String id, String pw, bool pDebug = false){
     ssid = id;
     password = pw;
     printDebug = pDebug;
+    routeManager = RouteManager();
 }
 
 bool DwenguinoWIFI::sendCommand(String command, int timeout, String expectedResponse) {
@@ -81,7 +82,7 @@ void DwenguinoWIFI::handleHTTPRequest() {
 
         if (request.indexOf("GET /sensor") != -1) {
             // Save the request route into a string
-            String route = request.substring(request.indexOf("GET /sensor"), request.indexOf("HTTP/1.1") - 1);
+            String route = request.substring(request.indexOf("GET /sensor") + 5, request.indexOf("HTTP/1.1") - 1);
 
             char* responseData = new char[MAX_RESPONSE_LENGTH];
             routeManager.handleRequest(route.c_str(), responseData);
