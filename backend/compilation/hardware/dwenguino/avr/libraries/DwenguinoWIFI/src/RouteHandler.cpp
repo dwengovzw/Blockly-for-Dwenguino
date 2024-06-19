@@ -53,7 +53,7 @@ void RouteManager::removeRouteHandler(const char* route) {
 void RouteManager::handleRequest(const char* route, char* result) {
     for (int i = 0; i < MAX_ROUTES; ++i) {
         if (handlers[i].handler != nullptr && strcmp(handlers[i].route, route) == 0) {
-            handlers[i].handler(result);
+            handlers[i].handler(route, result);
             return;
         }
     }

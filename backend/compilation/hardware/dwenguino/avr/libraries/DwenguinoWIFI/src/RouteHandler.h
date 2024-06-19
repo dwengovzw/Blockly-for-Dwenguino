@@ -1,7 +1,7 @@
 #define MAX_ROUTES 10
 #define MAX_ROUTE_LENGTH 20
 
-typedef void (*HandlerFunction)(char*);
+typedef void (*HandlerFunction)(const char* route, char* result);
 
 class RouteHandler {
 public:
