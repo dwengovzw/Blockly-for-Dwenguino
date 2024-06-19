@@ -24,6 +24,12 @@ void RouteHandler::safeStrCopy(char* dest, const char* src, int maxLen) {
 };
 
 
+RouteManager::RouteManager() {
+    for (int i = 0; i < MAX_ROUTES; ++i) {
+        handlers[i] = RouteHandler();
+    }
+};
+
 void RouteManager::addRouteHandler(const char* route, HandlerFunction handler) {
     for (int i = 0; i < MAX_ROUTES; ++i) {
         if (handlers[i].handler == nullptr) {
