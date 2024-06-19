@@ -1,24 +1,31 @@
 #include <Dwenguino.h>
 #include "DwenguinoWIFI.h"
 
-DwenguinoWIFI::DwenguinoWIFI(String id, String pw){
+DwenguinoWIFI::DwenguinoWIFI(String id, String pw, bool printDebug = false){
     ssid = id;
     password = pw;
+    printDebug = printDebug;
 }
 
 bool DwenguinoWIFI::sendCommand(String command, int timeout, String expectedResponse) {
-  // Send command to ESP
-  Serial1.println(command);
-  long int time = millis();
-  while ((time + timeout) > millis()) {
-    while (Serial1.available()) {
-      String response = Serial1.readString();
-      if (response.indexOf(expectedResponse) != -1) {
-        return true;
-      }
+    if (printDebug) {
+        Serial.println("Sending command: " + command);
     }
-  }
-  return false;
+    // Send command to ESP
+    Serial1.println(command);
+    long int time = millis();
+    while ((time + timeout) > millis()) {
+        while (Serial1.available()) {
+        String response = Serial1.readString();
+        if (printDebug) {
+            Serial.println("Response: " + response);
+        }
+        if (response.indexOf(expectedResponse) != -1) {
+            return true;
+        }
+        }
+    }
+    return false;
 }
 
 void DwenguinoWIFI::setupESP() {
@@ -61,6 +68,10 @@ void DwenguinoWIFI::handleHTTPRequest() {
   while ((time + timeout) > millis()) {
     if (Serial1.available()) {
       String request = Serial1.readString();
+
+      if (printDebug) {
+        Serial.println("HTTP request: " + request);
+      }
 
       if (request.indexOf("GET /sensor") != -1) {
         // Collect sensor data (dummy data in this example)
