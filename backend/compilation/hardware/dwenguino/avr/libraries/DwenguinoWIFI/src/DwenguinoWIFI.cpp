@@ -82,16 +82,13 @@ void DwenguinoWIFI::handleHTTPRequest() {
 
         if (request.indexOf("GET /sensor") != -1) {
             // Save the request route into a string
-            String route = request.substring(request.indexOf("GET /sensor") + 5, request.indexOf("HTTP/1.1") - 1);
+            String route = request.substring(request.indexOf("GET /") + 5, request.indexOf("HTTP/1.1") - 1);
             if (printDebug) {
                 Serial.println("Route: " + route);
             }
 
             char* responseData = new char[MAX_RESPONSE_LENGTH];
             routeManager.handleRequest(route.c_str(), responseData);
-
-            // Collect sensor data (dummy data in this example)
-            String sensorData = "23.5";
 
             // Construct HTTP response
             String response = "HTTP/1.1 200 OK\r\n";
