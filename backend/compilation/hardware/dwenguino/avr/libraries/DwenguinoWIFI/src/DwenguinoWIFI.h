@@ -6,7 +6,7 @@ class DwenguinoWIFI {
         void setupESP();
         void respondToClient(String clientID, String response);
         void handleHTTPRequest();
-        DwenguinoWIFI(String ssid, String password, bool printDebug = false);
+        DwenguinoWIFI(String ssid, String password, bool pDebug = false);
     
     private:
         String ssid;

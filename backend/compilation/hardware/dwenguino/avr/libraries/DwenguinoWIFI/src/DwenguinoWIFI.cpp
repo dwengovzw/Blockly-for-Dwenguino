@@ -1,13 +1,14 @@
 #include <Dwenguino.h>
 #include "DwenguinoWIFI.h"
 
-DwenguinoWIFI::DwenguinoWIFI(String id, String pw, bool printDebug = false){
+DwenguinoWIFI::DwenguinoWIFI(String id, String pw, bool pDebug = false){
     ssid = id;
     password = pw;
-    printDebug = printDebug;
+    printDebug = pDebug;
 }
 
 bool DwenguinoWIFI::sendCommand(String command, int timeout, String expectedResponse) {
+    Serial.println("Printing debug: " + String(printDebug));
     if (printDebug) {
         Serial.println("Sending command: " + command);
     }
@@ -29,51 +30,51 @@ bool DwenguinoWIFI::sendCommand(String command, int timeout, String expectedResp
 }
 
 void DwenguinoWIFI::setupESP() {
-  Serial1.begin(115200);
-  delay(1000);
+    Serial1.begin(115200);
+    delay(1000);
 
-  // Test communication with ESP-01
-  DwenguinoWIFI::sendCommand("AT", 1000, "OK");
+    // Test communication with ESP-01
+    DwenguinoWIFI::sendCommand("AT", 1000, "OK");
 
-  // Set ESP-01 to station mode
-  DwenguinoWIFI::sendCommand("AT+CWMODE=1", 1000, "OK");
+    // Set ESP-01 to station mode
+    DwenguinoWIFI::sendCommand("AT+CWMODE=1", 1000, "OK");
 
-  // Connect to Wi-Fi
-  String connectWifi = "AT+CWJAP=\"" + String(ssid) + "\",\"" + String(password) + "\"";
-  DwenguinoWIFI::sendCommand(connectWifi, 20000, "WIFI GOT IP");
+    // Connect to Wi-Fi
+    String connectWifi = "AT+CWJAP=\"" + String(ssid) + "\",\"" + String(password) + "\"";
+    DwenguinoWIFI::sendCommand(connectWifi, 20000, "WIFI GOT IP");
 
-  // Print the IP address assigned by DHCP
-  DwenguinoWIFI::sendCommand("AT+CIFSR", 5000, "OK");
+    // Print the IP address assigned by DHCP
+    DwenguinoWIFI::sendCommand("AT+CIFSR", 5000, "OK");
 
-  // Set up ESP-01 as an HTTP server
-  DwenguinoWIFI::sendCommand("AT+CIPMUX=1", 1000, "OK");
-  DwenguinoWIFI::sendCommand("AT+CIPSERVER=1,80", 1000, "OK");
+    // Set up ESP-01 as an HTTP server
+    DwenguinoWIFI::sendCommand("AT+CIPMUX=1", 1000, "OK");
+    DwenguinoWIFI::sendCommand("AT+CIPSERVER=1,80", 1000, "OK");
 }
 
 void DwenguinoWIFI::respondToClient(String clientID, String response) {
-  String sendCommand = "AT+CIPSEND=" + clientID + "," + String(response.length());
-  if (DwenguinoWIFI::sendCommand(sendCommand, 20000, ">")) {
+    String sendCommand = "AT+CIPSEND=" + clientID + "," + String(response.length());
+    if (DwenguinoWIFI::sendCommand(sendCommand, 20000, ">")) {
     if (DwenguinoWIFI::sendCommand(response, 20000, "SEND OK")){
-      DwenguinoWIFI::sendCommand("AT+CIPCLOSE=" + clientID, 20000, "OK");
+        DwenguinoWIFI::sendCommand("AT+CIPCLOSE=" + clientID, 20000, "OK");
     };
-  } else {
+    } else {
     // Should not get to this state
-  }
+    }
 }
 
 void DwenguinoWIFI::handleHTTPRequest() {
-  long int timeout = 500;
-  long int time = millis();
-  // Check for HTTP requests for a specific timeout period.
-  while ((time + timeout) > millis()) {
+    long int timeout = 500;
+    long int time = millis();
+    // Check for HTTP requests for a specific timeout period.
+    while ((time + timeout) > millis()) {
     if (Serial1.available()) {
-      String request = Serial1.readString();
+        String request = Serial1.readString();
 
-      if (printDebug) {
+        if (printDebug) {
         Serial.println("HTTP request: " + request);
-      }
+        }
 
-      if (request.indexOf("GET /sensor") != -1) {
+        if (request.indexOf("GET /sensor") != -1) {
         // Collect sensor data (dummy data in this example)
         String sensorData = "23.5";
 
@@ -90,7 +91,7 @@ void DwenguinoWIFI::handleHTTPRequest() {
 
         // Respond to the client with the sensor data
         respondToClient(clientID, response);
-      }
+        }
     }
-  }
+    }
 }
