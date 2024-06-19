@@ -8,7 +8,6 @@ DwenguinoWIFI::DwenguinoWIFI(String id, String pw, bool pDebug = false){
 }
 
 bool DwenguinoWIFI::sendCommand(String command, int timeout, String expectedResponse) {
-    Serial.println("Printing debug: " + String(printDebug));
     if (printDebug) {
         Serial.println("Sending command: " + command);
     }
@@ -30,6 +29,10 @@ bool DwenguinoWIFI::sendCommand(String command, int timeout, String expectedResp
 }
 
 void DwenguinoWIFI::setupESP() {
+    if (printDebug) {
+        Serial.println("Printing debug: " + String(printDebug));
+    }
+    
     Serial1.begin(115200);
     delay(1000);
 

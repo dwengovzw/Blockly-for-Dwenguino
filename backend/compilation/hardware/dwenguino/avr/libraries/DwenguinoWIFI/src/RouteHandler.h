@@ -1,4 +1,4 @@
-/*#define MAX_ROUTES 10
+#define MAX_ROUTES 10
 #define MAX_ROUTE_LENGTH 20
 
 typedef void (*HandlerFunction)(char*);
@@ -22,4 +22,4 @@ class RouteManager {
         void removeRouteHandler(const char* route);
         void handleRequest(const char* route, char* result);
         
-};*/
+};
