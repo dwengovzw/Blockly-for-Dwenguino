@@ -1,4 +1,4 @@
-#include "RouteHandler.h"
+/*#include "RouteHandler.h"
 
 #include <avr/io.h>
 #include <avr/pgmspace.h>
@@ -53,3 +53,4 @@ void RouteManager::handleRequest(const char* route, char* result) {
     }
     strcpy(result, "404 Not Found");   
 }
+*/
