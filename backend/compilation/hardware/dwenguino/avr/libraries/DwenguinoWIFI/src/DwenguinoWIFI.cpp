@@ -94,7 +94,7 @@ void DwenguinoWIFI::handleHTTPRequest() {
             String response = "HTTP/1.1 200 OK\r\n";
             response += "Content-Type: text/plain\r\n";
             response += "Connection: close\r\n\r\n";
-            response += "Sensor Data: " + String(responseData);
+            response += String(responseData);
 
 
             // Extract client ID from the request
