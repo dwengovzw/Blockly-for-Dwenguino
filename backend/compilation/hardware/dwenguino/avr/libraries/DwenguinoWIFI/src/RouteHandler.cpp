@@ -51,9 +51,20 @@ void RouteManager::removeRouteHandler(const char* route) {
 }
 
 void RouteManager::handleRequest(const char* route, char* result) {
+    // split query from route
+    const char* query = strchr(route, '?'); // find the first occurence of '?'
+    // copy of route to modify
+    char routeCopy[MAX_ROUTE_LENGTH];
+    strcpy(routeCopy, route); 
+    // if query is not null, split route and query
+    if (query != nullptr) {
+        strcpy(routeCopy, route);
+        routeCopy[query - route] = '\0';
+        query++; // skip the '?'
+    }
     for (int i = 0; i < MAX_ROUTES; ++i) {
-        if (handlers[i].handler != nullptr && strcmp(handlers[i].route, route) == 0) {
-            handlers[i].handler(route, result);
+        if (handlers[i].handler != nullptr && strcmp(handlers[i].route, routeCopy) == 0) {
+            handlers[i].handler(query, result);
             return;
         }
     }
