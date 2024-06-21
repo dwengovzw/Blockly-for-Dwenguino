@@ -93,6 +93,9 @@ void DwenguinoWIFI::handleHTTPRequest() {
             // Construct HTTP response
             String response = "HTTP/1.1 200 OK\r\n";
             response += "Content-Type: text/plain\r\n";
+            response += "Access-Control-Allow-Origin: *\r\n";
+            response += "Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS\r\n";
+            response += "Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With\r\n";
             response += "Connection: close\r\n\r\n";
             response += String(responseData);
 
