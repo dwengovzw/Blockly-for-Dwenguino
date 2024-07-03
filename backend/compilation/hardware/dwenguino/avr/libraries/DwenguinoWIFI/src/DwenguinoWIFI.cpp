@@ -76,41 +76,41 @@ void DwenguinoWIFI::handleHTTPRequest() {
     long int time = millis();
     // Check for HTTP requests for a specific timeout period.
     while ((time + timeout) > millis()) {
-    if (Serial1.available()) {
-        String request = Serial1.readString();
+        while (Serial1.available()) {
+            String request = Serial1.readString();
 
-        if (printDebug) {
-        Serial.println("HTTP request: " + request);
-        }
-
-        if (request.indexOf("GET /") != -1) {
-            // Save the request route into a string
-            String route = request.substring(request.indexOf("GET /") + 5, request.indexOf("HTTP/1.1") - 1);
             if (printDebug) {
-                Serial.println("Route: " + route);
+            Serial.println("HTTP request: " + request);
             }
 
-            char* responseData = new char[MAX_RESPONSE_LENGTH];
-            routeManager.handleRequest(route.c_str(), responseData);
+            if (request.indexOf("GET /") != -1) {
+                // Save the request route into a string
+                String route = request.substring(request.indexOf("GET /") + 5, request.indexOf("HTTP/1.1") - 1);
+                if (printDebug) {
+                    Serial.println("Route: " + route);
+                }
 
-            // Construct HTTP response
-            String response = "HTTP/1.1 200 OK\r\n";
-            response += "Content-Type: text/plain\r\n";
-            response += "Access-Control-Allow-Origin: *\r\n";
-            response += "Access-Control-Allow-Methods: GET\r\n";
-            response += "Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With\r\n";
-            response += "Connection: close\r\n\r\n";
-            response += String(responseData);
+                char* responseData = new char[MAX_RESPONSE_LENGTH];
+                routeManager.handleRequest(route.c_str(), responseData);
+
+                // Construct HTTP response
+                String response = "HTTP/1.1 200 OK\r\n";
+                response += "Content-Type: text/plain\r\n";
+                response += "Access-Control-Allow-Origin: *\r\n";
+                response += "Access-Control-Allow-Methods: GET\r\n";
+                response += "Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With\r\n";
+                response += "Connection: close\r\n\r\n";
+                response += String(responseData);
 
 
-            // Extract client ID from the request
-            int clientIDStart = request.indexOf("+IPD,") + 5;
-            int clientIDEnd = request.indexOf(",", clientIDStart);
-            String clientID = request.substring(clientIDStart, clientIDEnd);
+                // Extract client ID from the request
+                int clientIDStart = request.indexOf("+IPD,") + 5;
+                int clientIDEnd = request.indexOf(",", clientIDStart);
+                String clientID = request.substring(clientIDStart, clientIDEnd);
 
-            // Respond to the client with the sensor data
-            respondToClient(clientID, response);
+                // Respond to the client with the sensor data
+                respondToClient(clientID, response);
+            }
         }
-    }
     }
 }
