@@ -39,6 +39,9 @@ void DwenguinoWIFI::setupESP() {
     Serial1.begin(115200);
     delay(1000);
 
+    // Reset the ESP-01
+    DwenguinoWIFI::sendCommand("AT+RST", 1000, "ready");
+
     // Test communication with ESP-01
     DwenguinoWIFI::sendCommand("AT", 1000, "OK");
 
