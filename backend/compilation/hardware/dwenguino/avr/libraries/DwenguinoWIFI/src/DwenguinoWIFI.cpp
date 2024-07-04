@@ -72,7 +72,7 @@ void DwenguinoWIFI::respondToClient(String clientID, String response) {
 }
 
 void DwenguinoWIFI::handleHTTPRequest() {
-    long int timeout = 500;
+    long int timeout = 50;
     long int time = millis();
     // Check for HTTP requests for a specific timeout period.
     while ((time + timeout) > millis()) {
