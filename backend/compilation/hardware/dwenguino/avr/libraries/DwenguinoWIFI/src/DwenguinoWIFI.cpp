@@ -90,7 +90,7 @@ void DwenguinoWIFI::handleHTTPRequest() {
                     Serial.println("Route: " + route);
                 }
 
-                char* responseData = new char[MAX_RESPONSE_LENGTH];
+                char responseData[MAX_RESPONSE_LENGTH];
                 routeManager.handleRequest(route.c_str(), responseData);
 
                 // Construct HTTP response
@@ -110,6 +110,7 @@ void DwenguinoWIFI::handleHTTPRequest() {
 
                 // Respond to the client with the sensor data
                 respondToClient(clientID, response);
+
             }
         }
     }
