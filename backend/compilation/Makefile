@@ -1,6 +1,6 @@
 ARDUINO_DIR = ..
 ARDUINO_SKETCHBOOK ?= $(shell pwd)
-ARDUINO_LIBS = Dwenguino Wire SPI LedController LiquidCrystal dht EEPROM LinxDwenguino NewPing Servo SoftwareSerial DS18B20 OneWire MPU6050 MPL3115A2 AdafruitBusIO SDCustom RTClib PubSubClient DwenguinoWIFI scd4x Sensirion_Core ENS160
+ARDUINO_LIBS = Dwenguino Wire SPI LedController LiquidCrystal dht EEPROM LinxDwenguino NewPing Servo SoftwareSerial DS18B20 OneWire MPU6050 MPL3115A2 AdafruitBusIO SDCustom RTClib PubSubClient DwenguinoWIFI scd4x Sensirion_Core ENS160 DS3231_RTC
 ARDUINO_VERSION = 185
 BOARD_TAG = dwenguino
 MONITOR_PORT = /dev/ttyACM*
