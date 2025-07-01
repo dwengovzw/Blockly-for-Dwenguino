@@ -39,7 +39,7 @@ class FileIOController {
                 $('#dropzoneModal .modal-body .message').append('<div id="filedrag">' + DwenguinoBlocklyLanguageSettings.translateFrom('dropzone',['dictDefaultMessage']) + '</div>');
                 $('#dropzoneModal .modal-body .message').append('<pre id="fileDisplayArea"></pre>');
                 $('#dropzoneModal .modal-footer').empty();
-                $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal">Ok</button>');
+                $('#dropzoneModal .modal-footer').append('<button id="submit_upload_modal_dialog_button" type="button" class="btn btn-default" data-dismiss="modal" data-bs-dismiss="modal">Ok</button>');
 
                 $("#dropzoneModal").modal('show');
 
