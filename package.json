@@ -138,7 +138,9 @@
         "zero-md": "^3.1.7"
     },
     "devDependencies": {
+        "@babel/cli": "^7.28.3",
         "@babel/core": "^7.28.3",
+        "@babel/node": "^7.28.0",
         "@babel/plugin-proposal-class-properties": "^7.10.4",
         "@babel/plugin-proposal-decorators": "^7.28.0",
         "@babel/plugin-transform-classes": "^7.28.3",
@@ -168,7 +170,7 @@
         "babel-jest": "^30.0.5",
         "babel-loader": "^10.0.0",
         "babel-plugin-autobind-class-methods": "^5.0.1",
-        "babel-preset-env": "^1.7.0",
+        "babel-preset-env": "^0.0.0",
         "babel-runtime": "^6.26.0",
         "bent": "^7.3.12",
         "clean-webpack-plugin": "^4.0.0",
