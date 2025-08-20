@@ -37,7 +37,7 @@ type authStateInterface = {
 
 beforeEach(() => {
     jest.clearAllMocks();
-    jest.useFakeTimers();
+    //jest.useFakeTimers();
     //mockDatabaseData();
 });
 

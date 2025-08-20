@@ -182,6 +182,8 @@ let runToolboxRecording = async (lang, browser, page) => {
       }
       throw new Error('Timed out');
     }
+
+    await new Promise(r => setTimeout(r, 50))
 }
 
 export { runToolboxRecording }

@@ -31,6 +31,7 @@ describe(
       if (page) {
         page.removeAllListeners('dialog');
         page.removeAllListeners('pageerror');
+        page.removeAllListeners('console'); // if you added any console listeners
       }
     });
 
@@ -46,6 +47,7 @@ describe(
       await runToolboxRecording(language, browser, page) // run the recording and wait until finished.
       expect(pageErrors).toBe(0); // Assert that there will not be any errors
     }
+
 
     let runFRToolboxRecordingWithoutErrors = "All toolbox menus in French open without errors";
     it(runFRToolboxRecordingWithoutErrors, async () => {
