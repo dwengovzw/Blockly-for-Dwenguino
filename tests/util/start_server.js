@@ -44,9 +44,16 @@ let endServer = async () =>
         // Drop the test database is being dropped.
         await mongoose.connection.dropDatabase();
         // Connection to Mongo killed.
-        await mongoose.disconnect();
+        if (mongoose.connection.readyState !== 0) {
+            await mongoose.disconnect();
+        }
         // Server connection closed.
-        await httpServer.close();
+        await new Promise((resolve, reject) => {
+            httpServer.close((err) => {
+                if (err) reject(err);
+                else resolve();
+            });
+        });
       } catch (error) {
         console.log(`
           You did something wrong dummy!

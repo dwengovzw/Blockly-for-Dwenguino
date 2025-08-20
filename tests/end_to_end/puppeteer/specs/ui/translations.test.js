@@ -24,7 +24,14 @@ describe(
     }, timeout);
 
     beforeEach(async () => {
-       jest.useFakeTimers();
+       //jest.useFakeTimers();
+    });
+
+    afterEach(async () => {
+      if (page) {
+        page.removeAllListeners('dialog');
+        page.removeAllListeners('pageerror');
+      }
     });
 
 
