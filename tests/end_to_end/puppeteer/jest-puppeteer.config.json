@@ -7,8 +7,8 @@
     "globalSetup": "../../util/puppeteer_setup.js",
     "globalTeardown": "../../util/puppeteer_teardown.js",
     "testEnvironment": "../../util/puppeteer_environment.js",
-    "maxWorkers": 1,           // run tests sequentially
-    "resetModules": true,      // reset module registry between tests
+    "maxWorkers": 1,          
+    "resetModules": true,     
     "moduleNameMapper": {
       "^@/(.*)$": "<rootDir>/src/$1"
     },
