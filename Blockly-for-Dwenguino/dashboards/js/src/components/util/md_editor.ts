@@ -9,7 +9,7 @@ import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from '@lit/localize';
 import { connect } from "pwa-helpers"
 import { marked } from "marked";
-import * as DOMPurify from 'dompurify';
+import DOMPurify from 'dompurify';
 import { githubMarkdownStyle } from "../../styles/github_md";
 
 @localized()
@@ -85,7 +85,7 @@ class MarkdownEditor extends LitElement {
                                 }
                             }
                             }>
-                            ${ this.value ? unsafeHTML(DOMPurify.sanitize(marked.parse(this.value))) : msg("Double click and type your markdown text here!")}
+                            ${ this.value ? unsafeHTML(DOMPurify.sanitize(marked.parse(this.value, {async: false}))) : msg("Double click and type your markdown text here!")}
                         </div>
                     </div>
                 `}

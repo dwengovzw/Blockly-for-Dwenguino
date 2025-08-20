@@ -14,14 +14,14 @@
       "allowJs": true,
       "moduleResolution": "node",
       "esModuleInterop": true,
-      "types": ["jquery"],
+      "types": ["jquery", "node"],
       "lib": [
         "DOM",
         "ES6", 
         "es2017"
       ],
     },
-    "include": ["./declarations.d.ts"],
+    "include": ["./declarations.d.ts", "src/**/*"],
     "exclude": [
       "**/node_modules/*",
       "Blockly-for-Dwenguino/DwenguinoIDE/js/dist",

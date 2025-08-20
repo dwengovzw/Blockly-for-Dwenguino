@@ -14,8 +14,10 @@
       "noEmitOnError": true,
       "strict": true,
       "allowJs": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
       "moduleResolution": "node",
-      "types": ["jquery"],
+      "types": ["jquery", "node"],
       "lib": [
         "DOM",
         "ES6", 

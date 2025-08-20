@@ -6,7 +6,7 @@ import crypto from "crypto"
 let router = express.Router();
 
 //xml parser
-import parser from "fast-xml-parser"
+import * as parser from "fast-xml-parser";
 
 //Configure cors middleware for the run route to allow all requests
 import cors from 'cors';

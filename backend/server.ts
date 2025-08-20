@@ -3,7 +3,7 @@ let __dirname = path.resolve();
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import mongoSanitize from 'express-mongo-sanitize';
+import expressMongoSanitize from '@exortek/express-mongo-sanitize';
 
 //mongoose.set('debug', true);
 //import i18n from 'i18n-x';
@@ -115,7 +115,23 @@ app.use(cookieParser());
 
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
-app.use(mongoSanitize()); // Sanitize data in the request body/params/header/query
+//app.use(mongoSanitize({ replaceWith: '_' }));  // Sanitize data in the request body/params/header/query
+// app.use((req, res, next) => {
+//   if (req.body) mongoSanitize.sanitize(req.body);
+//   if (req.params) mongoSanitize.sanitize(req.params);
+
+//   // Do NOT assign to req.query
+//   // Instead, if you need sanitized query values, read them into a new object
+//   const sanitizedQuery = req.query
+//     ? mongoSanitize.sanitize({ ...req.query })
+//     : {};
+
+//   // You can use sanitizedQuery in your route handlers instead of req.query
+//   //req.sanitizedQuery = sanitizedQuery; // attach as a new property
+
+//   next();
+// });
+app.use(expressMongoSanitize());
 
 app.use(
     cookieSession({

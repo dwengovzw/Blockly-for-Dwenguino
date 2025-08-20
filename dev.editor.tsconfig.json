@@ -15,7 +15,7 @@
       "strict": true,
       "allowJs": true,
       "moduleResolution": "node",
-      "types": ["jquery"],
+      "types": ["jquery", "node"],
       "lib": [
         "DOM",
         "ES6", 

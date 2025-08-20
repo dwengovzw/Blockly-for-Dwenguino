@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { Document } from 'mongoose';
 
 type ID = mongoose.Types.ObjectId
 

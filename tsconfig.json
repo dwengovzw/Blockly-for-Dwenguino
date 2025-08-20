@@ -1,7 +1,7 @@
 {
     "compilerOptions": {
       "outDir": "./Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
-      "typeRoots": ["node_modules/@types"],
+      "typeRoots": ["./node_modules/@types"],
       "noImplicitAny": true,
       "module": "es6",
       "target": "es6",
@@ -12,7 +12,7 @@
       "jsx": "react",
       "allowJs": true,
       "moduleResolution": "node",
-      "types": ["jquery"],
+      "types": ["jquery", "node"],
       "lib": [
         "DOM",
         "ES6", 

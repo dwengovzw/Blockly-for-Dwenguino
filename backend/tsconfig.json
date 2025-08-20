@@ -18,6 +18,7 @@
       "skipLibCheck": true,
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
+      "types": ["jquery", "node"],
     },
     "exclude": [
       "compilation",
