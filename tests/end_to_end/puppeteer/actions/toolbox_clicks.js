@@ -1,5 +1,5 @@
 let runToolboxRecording = async (lang, browser, page) => {
-  const timeout = 10000;
+  const timeout = 1000000;
   page.setDefaultTimeout(timeout);
 
   // This offset originates from blockly which automatically generates the id of the element

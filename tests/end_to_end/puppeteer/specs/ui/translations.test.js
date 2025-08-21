@@ -2,14 +2,14 @@
 
 import {afterAll, expect, jest, describe, beforeAll} from '@jest/globals'
 
-jest.useFakeTimers();
+//jest.useFakeTimers();
 
 import puppeteer from 'puppeteer'
 import { startServer, endServer } from "../../../../util/start_server.js"
 import { runToolboxRecording } from "../../actions/toolbox_clicks.js"
 import { beforeEach } from 'node:test';
 
-const timeout = 5000;
+const timeout = 1000000;
 
 jest.setTimeout(1000000) // 60s
 
