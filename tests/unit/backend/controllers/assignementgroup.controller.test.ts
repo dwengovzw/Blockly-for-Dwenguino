@@ -51,6 +51,12 @@ let existingStudentTeam: IStudentTeam = {
   portfolio: null,
 };
 
+beforeEach(() => {
+    jest.clearAllMocks();
+    jest.useFakeTimers();
+    //mockDatabaseData();
+});
+
 describe("AssignmentGroupController", () => {
     let controller: AssignmentGroupController;
     let req: Request;
