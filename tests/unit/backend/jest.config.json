@@ -4,6 +4,7 @@
     "@exmpl/(.*)": "<rootDir>/src/$1"
   },
   "transform": {},
+  "extensionsToTreatAsEsm": [".ts"],
   "verbose": true,
   "preset": "ts-jest/presets/default-esm",
   "testMatch": [
