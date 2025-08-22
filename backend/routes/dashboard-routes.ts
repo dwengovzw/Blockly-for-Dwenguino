@@ -10,7 +10,7 @@ dashboardRouter.use('/assets', express.static(path.resolve("Blockly-for-Dwenguin
 
 
 // Route all other requests to dashboard.ejs => The frontend router handles routing on this page
-dashboardRouter.get('.*', function (req, res) {
+dashboardRouter.get('*splat', function (req, res) {
     res.render("dashboard.ejs", {base_url: process.env.SERVER_URL});
 });
 
