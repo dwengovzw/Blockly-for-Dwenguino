@@ -5,15 +5,15 @@ import DwenguinoSimulationScenarioRidingRobotWithWall from "../scenario/ridingro
 import DwenguinoSimulationScenarioSpyrograph from "../scenario/spyrograph/dwenguino_simulation_scenario_spyrograph.js"
 import DwenguinoSimulationScenarioPlotter from "../scenario/plotter/dwenguino_simulation_scenario_plotter.js";
 import DwenguinoSimulationScenarioConveyor from "../scenario/conveyor/dwenguino_simulation_scenario_conveyor.js";
-import SCENARIO from "../../../../../backend/models/saved_state.model"
+import { SCENARIO } from "../../../../../shared/types/saved_state.types"
 
 export const ScenarioNames = {
-    SPYROGRAPH: "spyrograph",
-    RIDINGROBOT: "moving",
-    RIDINGROBOTWITHWALL: "wall",
-    SOCIALROBOT: "socialrobot",
+    SPYROGRAPH: SCENARIO.SPYROGRAPH,
+    RIDINGROBOT: SCENARIO.moving,
+    RIDINGROBOTWITHWALL: SCENARIO.wall,
+    SOCIALROBOT: SCENARIO.socialrobot,
     PLOTTER: "plotter",
-    CONVEYOR: "conveyor",
+    CONVEYOR: SCENARIO.conveyor,
 }
 
 class DwenguinoSimulation {

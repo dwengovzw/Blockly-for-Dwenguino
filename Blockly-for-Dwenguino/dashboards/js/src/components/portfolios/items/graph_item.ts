@@ -13,7 +13,7 @@ import { BlocklyProgramItemInfo, connectPortfolioItemsInCurrentPortfolio, delete
 import { buttonStyles, iconStyle } from "../../../styles/shared";
 import { UserInfo } from "../../../state/features/user_slice";
 import { NotificationMessageType, setNotificationMessage } from "../../../state/features/notification_slice";
-import { ITEMTYPES } from "../../../../../../../backend/config/itemtypes.config";
+import { ITEMTYPES } from "../../../../../../../shared/constants/itemtypes.config";
 
 @localized()
 @customElement("dwengo-graph-portfolio-item")

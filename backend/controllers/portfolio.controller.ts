@@ -1,24 +1,14 @@
-import { IPortfolio, Portfolio } from "../models/portfolio.model"
-import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model";
-import { TextItem } from "../models/portfolio_items/text_item.model";
-import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation";
-import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../config/itemtypes.config";
-import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model";
-import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model";
-import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model";
-import { BlocklyProgramItem } from "../models/portfolio_items/blockly_program.model";
-import { SavedState } from "../models/saved_state.model";
-
-// TODO: I might need to update this depending on the data we want to request (f.e. startDate, endDate, description keyword, ..)
-interface PortfolioFilter {
-    uuid?: string,
-    isPublic?: boolean,
-    sharedWithUUID?: string[],
-    ofStudentsUUID?: string[],
-    ofStudentTeamsUUID?: string[],
-    startDate?: Date,
-    endDate?: Date
-}
+import { IPortfolio, Portfolio } from "../models/portfolio.model.js"
+import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model.js";
+import { TextItem } from "../models/portfolio_items/text_item.model.js";
+import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser, getPortfoliosForFilter } from "../queries/aggregation.js";
+import { ALLOWEDITEMS, ITEMTYPES, getAllowedItemsForRoles } from "../../shared/constants/itemtypes.config.js";
+import { BlocklyProgSequenceItem } from "../models/portfolio_items/blockly_programming_sequence.model.js";
+import { SocialRobotDesignItem } from "../models/portfolio_items/social_robot_design_item.model.js";
+import { AnnotatedDrawingItem } from "../models/portfolio_items/annotated_drawing.model.js";
+import { BlocklyProgramItem } from "../models/portfolio_items/blockly_program.model.js";
+import { SavedState } from "../models/saved_state.model.js";
+import { PortfolioFilter } from "../../shared/types/portfolio.js";
 
 class PortfolioController {
    

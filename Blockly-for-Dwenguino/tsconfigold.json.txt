@@ -1,0 +1,40 @@
+{
+    "compilerOptions": {
+      "outDir": "./Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
+      "typeRoots": ["../node_modules/@types"],
+      "noImplicitAny": false,
+      "module": "es6",
+      "target": "es6",
+      "experimentalDecorators": true,
+      "emitDecoratorMetadata": true,
+      "skipLibCheck": true,
+      "noEmit": false, // this option will solve the issue
+      "importHelpers": false,
+      "jsx": "react",
+      "allowJs": true,
+      "moduleResolution": "node",
+      "esModuleInterop": true,
+      "types": ["jquery", "node"],
+      "lib": [
+        "DOM",
+        "ES6", 
+        "es2017"
+      ],
+    },
+    "include": [
+      "./declarations.d.ts",
+      "./generated/**/*.ts",
+      "./src/**/*.ts",
+      "../../shared/**/*.ts"
+    ],
+    "exclude": [
+      "**/node_modules/*",
+      "Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
+      "Blockly-for-Dwenguino/dashboards/js/dist",
+      "**/.git/*",
+      "**/dist/*",
+      "Blockly-for-Dwenguino/blockly/*",
+      "Blockly-for-Dwenguino/closure/*",
+      "backend/**/*"
+    ]
+  }

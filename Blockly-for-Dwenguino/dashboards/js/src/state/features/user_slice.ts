@@ -1,39 +1,9 @@
 import { msg } from "@lit/localize"
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { state } from "lit/decorators"
-import { NotificationInfo, setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
-import { LoadableState } from "../../util"
+import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
+import { createRequestMiddleware } from "../../middleware/fetch"
 
-interface MinimalUserInfo {
-    firstname: string,
-    lastname: string,
-    uuid: string,
-    acceptedTerms: boolean
-}
-
-interface MiniamLoggedInUserInfo extends MinimalUserInfo {
-    loggedIn: boolean,
-    platform: string,
-    roles: string[]
-}
-
-interface UserInfo extends MiniamLoggedInUserInfo{
-    email: string,
-    birthdate: string | null,
-}
-
-const initialUserState: UserInfo = {
-    loggedIn: false,
-    firstname: "",
-    lastname: "",
-    email: "",
-    platform: "unknown",
-    birthdate: null,
-    roles: [],
-    uuid: "",
-    acceptedTerms: false
-}
+import { MinimalUserInfo, MiniamLoggedInUserInfo, UserInfo, initialUserState } from "../../../../../../shared/types/user"
 
 export const userSlice = createSlice({
     name: "user",

@@ -1,10 +1,10 @@
-import { IUserDoc, User } from "../models/user.model"
-import { ISavedStateDoc, SavedState, SavedTextualProgram, emptyProgramXml, emptySocialRobotDesign } from "../models/saved_state.model"
-import { processStartBlocks } from "../routes/blockly-routes"
-import { ISavedState } from "../models/saved_state.model"
-import { PortfolioItem } from "../models/portfolio_items/portfolio_item.model"
-import { BlocklyProgramItem } from "../models/portfolio_items/blockly_program.model"
-import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser } from "../queries/aggregation"
+import { IUserDoc, User } from "../models/user.model.js"
+import { ISavedStateDoc, SavedState, SavedTextualProgram } from "../models/saved_state.model.js"
+import { emptySocialRobotDesign } from "../../shared/types/saved_state.types.js"
+import { processStartBlocks } from "../routes/blockly-routes.js"
+import { ISavedState, emptyProgramXml } from "../../shared/types/saved_state.types.js"
+import { BlocklyProgramItem } from "../models/portfolio_items/blockly_program.model.js"
+import { getAllPortfoliosOwnedByUser, getAllPortfoliosSharedWithUser } from "../queries/aggregation.js"
 import { PopulatedDoc } from "mongoose"
 
 class SavedStateController {
@@ -103,14 +103,19 @@ class SavedStateController {
         try{
             let user = req.user as IUserDoc
             let savedState = await SavedState.findOne({uuid: uuid}).populate<IUserDoc>({path: "user", model: "User"})
-            const portfoliosOwnedByUser = await getAllPortfoliosOwnedByUser(user._id as string)
-            const portfoliosSharedWithUser = await getAllPortfoliosSharedWithUser(user._id as string)
+            const portfoliosOwnedByUser = await getAllPortfoliosOwnedByUser(user._id.toString())
+            const portfoliosSharedWithUser = await getAllPortfoliosSharedWithUser(user._id.toString())
             const portfoliosWithAllowedAccess = [...portfoliosOwnedByUser, ...portfoliosSharedWithUser]//.map(p => p.items).flat().map(i => i._id)
             const portfolioItemIdsWithAllowedAccess = portfoliosWithAllowedAccess.map(p => p.items).flat().map(i => i._id)
             const portfolioItemsSavedProgramIdsWithAllowedAccess = (await BlocklyProgramItem.find({_id: {$in: portfolioItemIdsWithAllowedAccess}})
-                .populate<ISavedState>({path: "savedState", model: "SavedState"}))
-                .map(i => (i.savedState as ISavedStateDoc).id)
-            if (!((savedState.user as IUserDoc).id === user.id || portfolioItemsSavedProgramIdsWithAllowedAccess.includes(savedState.id))){
+                .populate<{savedState: ISavedStateDoc}>({path: "savedState", model: "SavedState"}))
+                .map(i => (i.savedState as ISavedStateDoc)._id)
+            
+            const isOwner = (savedState.user as IUserDoc)._id.equals(user._id)
+            const hasPortfolioAccess = portfolioItemsSavedProgramIdsWithAllowedAccess.includes(savedState._id)
+            const hasAccess = isOwner || hasPortfolioAccess
+            
+            if (!hasAccess){
                 return res.status(401).send({message: "You do not have access to this program"})
             }
             processStartBlocks({

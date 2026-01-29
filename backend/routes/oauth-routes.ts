@@ -1,11 +1,11 @@
 import express from 'express';
-import { OAuthController } from "../controllers/oauth.controller"
-import { verifyToken } from "../middleware/middleware"
-import db from '../config/db.config';
-import ACMOAuthController from '../controllers/oauth.acm.controller';
-import GithubOAuthController from '../controllers/oauth.github.controller';
-import LeerIdOAuthController from '../controllers/oauth.leerid.controller';
-import MockAuthController from '../controllers/oauth.mock.controller';
+import { OAuthController } from "../controllers/oauth.controller.js"
+import { verifyToken } from "../middleware/middleware.js"
+import db from '../config/db.config.js';
+import ACMOAuthController from '../controllers/oauth.acm.controller.js';
+import GithubOAuthController from '../controllers/oauth.github.controller.js';
+import LeerIdOAuthController from '../controllers/oauth.leerid.controller.js';
+import MockAuthController from '../controllers/oauth.mock.controller.js';
 
 const oauthControllers = {}
 const githubOAuthController = new GithubOAuthController();

@@ -1,7 +1,7 @@
 // Filename: api-routes.js
 // Initialize express router
 import express from 'express';
-import { verifyTokenAjax, verifyUserExists } from "../middleware/middleware"
+import { verifyTokenAjax, verifyUserExists } from "../middleware/middleware.js"
 import SavedStateController from "../controllers/saved_state.controller.js"
 
 

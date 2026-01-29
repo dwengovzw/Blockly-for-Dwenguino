@@ -1,5 +1,6 @@
 const path = require("path");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const webpack = require("webpack");
 
 
 
@@ -23,7 +24,24 @@ module.exports = [
             rules: [
                 {
                     test: /\.tsx?$/,
-                    exclude: /node_modules/, 
+                    include: [
+                        path.resolve(
+                          "Blockly-for-Dwenguino/DwenguinoIDE"
+                        ),
+                        path.resolve(
+                          "shared/"
+                        )
+                    ],
+            
+                    exclude: [
+                        path.resolve(
+                          "backend/"
+                        ),
+                        path.resolve(
+                          "Blockly-for-Dwenguino/DwenguinoIDE/js/dist"
+                        ),
+                        /node_modules/
+                    ],
                     resolve: {
                         fullySpecified: false,
                       },
@@ -118,8 +136,27 @@ module.exports = [
                 },
                 {
                     test: /\.tsx?$/,
-                    exclude: /node_modules/,
-                    include: [/dashboards/],
+                    // 🔒 STRICT boundaries
+                    include: [
+                        path.resolve(
+                        __dirname,
+                          "Blockly-for-Dwenguino/dashboards/js/src"
+                        ),
+                        path.resolve(
+                          "Blockly-for-Dwenguino/dashboards/generated"
+                        ),
+                        path.resolve(
+                          "shared/"
+                        )
+                    ],
+            
+                    exclude: [
+                        path.resolve(
+                        __dirname,
+                        "backend/"
+                        ),
+                        /node_modules/
+                    ],
                     use:["babel-loader", 
                     {
                         loader: 'ts-loader',
@@ -133,7 +170,12 @@ module.exports = [
                     type: 'asset',
                   },
             ]
-        }
+        },
+        plugins: [
+            new webpack.DefinePlugin({
+              "__DEV__": JSON.stringify(process.env.NODE_ENV || "development"),
+            }) 
+        ]
     },
     
 ];

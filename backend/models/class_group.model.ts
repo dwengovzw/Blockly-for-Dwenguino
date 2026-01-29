@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, model } from "mongoose"
-import { IUser } from "./user.model"
+import { IUser } from "./user.model.js"
 import { v4 } from 'uuid';
 import { PopulatedDoc } from 'mongoose';
 

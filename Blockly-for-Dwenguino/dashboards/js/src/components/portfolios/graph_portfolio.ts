@@ -14,7 +14,7 @@ import "./items/graph_item"
 import { UserInfo } from "../../state/features/user_slice";
 import { borderStyle, buttonStyles } from "../../styles/shared";
 import { getGoogleMateriaIconsLinkTag } from "../../util";
-import { getAllowedItemsForRoles, getAllowedItemsForSourceItemType, ITEMTYPES } from "../../../../../../backend/config/itemtypes.config";
+import { getAllowedItemsForRoles, getAllowedItemsForSourceItemType, ITEMTYPES } from "../../../../../../shared/constants/itemtypes.config";
 import { NotificationMessageType, setNotificationMessage } from "../../state/features/notification_slice";
 
 @localized()

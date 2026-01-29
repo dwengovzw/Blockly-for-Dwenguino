@@ -1,7 +1,7 @@
 import { Schema, Model } from "mongoose"
-import { PortfolioItem } from "./portfolio_item.model"
-import { ISolutionItem, SolutionItemSchema } from "./solution_item.model"
-import { ITEMTYPES } from "../../config/itemtypes.config"
+import { PortfolioItem } from "./portfolio_item.model.js"
+import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js"
+import { ITEMTYPES } from "../../../shared/constants/itemtypes.config.js"
 
 interface IMCAnswerItemExtraFields {
     selectedAnswer: number

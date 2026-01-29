@@ -1,8 +1,8 @@
 import axios from "axios";
-import AbstractOAuthController from "./abstract.oauth.controller";
-import db from "../config/db.config"
-import oauthConfig from "../config/oauth.config";
-import MinimalUserInfo from "../datatypes/minimalUserInfo";
+import AbstractOAuthController from "./abstract.oauth.controller.js";
+import db from "../config/db.config.js"
+import oauthConfig from "../config/oauth.config.js";
+import MinimalUserInfo from "../datatypes/minimalUserInfo.js";
 
 class ACMOAuthController extends AbstractOAuthController {
     constructor() {

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken"
-import jwt_settings from "../config/jwt.config";
-import { User } from "../models/user.model"
+import jwt_settings from "../config/jwt.config.js";
+import { User } from "../models/user.model.js"
 import e from "express";
 
 

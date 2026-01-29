@@ -1,6 +1,6 @@
 import express from 'express';
-import { verifyTokenAjax, verifyUserExists } from "../middleware/middleware"
-import { PortfolioController } from '../controllers/portfolio.controller';
+import { verifyTokenAjax, verifyUserExists } from "../middleware/middleware.js"
+import { PortfolioController } from '../controllers/portfolio.controller.js';
 
 const portfolioController = new PortfolioController();
 
