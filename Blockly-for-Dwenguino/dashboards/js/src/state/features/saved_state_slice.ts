@@ -1,28 +1,7 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
-import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { fetchAuth, createRequestMiddleware } from "../../middleware/fetch"
-import { LoadableState } from "../../util"
-
-interface SavedStateInfo {
-    uuid: string,
-    blocklyXml: string,
-    cppCode: string[],
-    socialRobotXml: string,
-    savedAt: string,
-    name: string,
-    view: string,
-    scenario: string
-}
-
-
-const initialGroups: SavedStateInfo[] = []
-const initialState = 
-    {
-        states: initialGroups,
-        loading: false
-    }
-
+import { createRequestMiddleware } from "../../middleware/fetch"
+import { SavedStateInfo, initialState, initialGroups } from "../../../../../../shared/types/saved_state"
 
 
 export const savedProgramsSlice = createSlice({

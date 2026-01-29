@@ -21,7 +21,12 @@
         "es2017"
       ],
     },
-    "include": ["./declarations.d.ts"],
+    "include": [
+      "./declarations.d.ts",
+      "./generated/**/*.ts",
+      "./src/**/*.ts",
+      "../../shared/**/*.ts"
+    ],
     "exclude": [
       "**/node_modules/*",
       "Blockly-for-Dwenguino/DwenguinoIDE/js/dist",
@@ -30,5 +35,6 @@
       "**/dist/*",
       "Blockly-for-Dwenguino/blockly/*",
       "Blockly-for-Dwenguino/closure/*",
+      "backend/**/*"
     ]
   }

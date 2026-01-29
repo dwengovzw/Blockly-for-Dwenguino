@@ -7,10 +7,10 @@ import {customElement, property, state} from 'lit/decorators.js';
 import {createRef, Ref, ref} from 'lit/directives/ref.js';
 import { unsafeHTML } from "lit/directives/unsafe-html.js";
 import { localized, msg } from '@lit/localize';
-import { connect } from "pwa-helpers"
 import { marked } from "marked";
-import * as DOMPurify from 'dompurify';
+import DOMPurify from "dompurify";
 import { githubMarkdownStyle } from "../../styles/github_md";
+import { until } from "lit/directives/until.js";
 
 @localized()
 @customElement("dwengo-md-editor")
@@ -85,12 +85,21 @@ class MarkdownEditor extends LitElement {
                                 }
                             }
                             }>
-                            ${ this.value ? unsafeHTML(DOMPurify.sanitize(marked.parse(this.value))) : msg("Double click and type your markdown text here!")}
+                            ${ this.value ? until(
+                                this.renderMarkdown(this.value),
+                                msg("Rendering preview…")
+                              )
+                            : msg("Double click and type your markdown text here!")}
                         </div>
                     </div>
                 `}
             </div>`
                     
+    }
+
+    private async renderMarkdown(value: string) {
+        const html = await marked.parse(value);
+        return unsafeHTML(DOMPurify.sanitize(html));
     }
 
     // Set focus on the textarea when the component is updated

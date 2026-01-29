@@ -1,8 +1,8 @@
 import { Schema, model } from "mongoose"
 import { v4 } from 'uuid';
-import { IPortfolioItem } from "./portfolio_items/portfolio_item.model";
+import { IPortfolioItem } from "./portfolio_items/portfolio_item.model.js";
 import { PopulatedDoc } from 'mongoose';
-import { IUser } from "./user.model";
+import { IUser } from "./user.model.js";
 
 interface INewPortfolio {
     created: Date,

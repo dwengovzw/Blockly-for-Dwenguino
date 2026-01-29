@@ -1,5 +1,5 @@
 import { Document, Schema, model } from "mongoose"
-import { IUser } from "./user.model";
+import { IUser } from "./user.model.js";
 import { PopulatedDoc } from 'mongoose';
 
 interface ILogItem {

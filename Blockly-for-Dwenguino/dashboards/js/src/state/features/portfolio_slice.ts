@@ -1,103 +1,22 @@
+// portfolio_slice.ts
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
-import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
-import { MinimalUserInfo } from "./user_slice"
 import { createRequestMiddleware } from "../../middleware/fetch"
-import { StudentTeamInfo } from "./student_team_slice"
-import { PortfolioFilter } from "../../../../../../backend/controllers/portfolio.controller"
-import { LogItemInfo } from "./log_item_slice"
-import {IPortfolioItemDisplayInformation} from "../../../../../../backend/models/portfolio_items/portfolio_item.model"
-import { SavedStateInfo } from "./saved_state_slice"
-
-interface MinimalPortfolioItemInfo {
-    name: string,
-    __t: string,
-    children: PortfolioItemInfo[],
-}
-
-interface MinimalDisplayedPortfolioItemInfo extends MinimalPortfolioItemInfo {
-    displayInformation: IPortfolioItemDisplayInformation,
-}
-
-interface PortfolioItemInfo extends MinimalDisplayedPortfolioItemInfo {
-    uuid: string,
-    needsTeacherAttention: boolean,
-    needsStudentAttention: boolean,
-}
-
-interface SolutionItemInfo extends PortfolioItemInfo {
-    solutionTo: PortfolioItemInfo | string // Contains reference to item itself or the _id of the item
-}
-
-interface AssignmentItemInfo extends PortfolioItemInfo {
-    ownedBy: MinimalUserInfo | string
-}
-
-interface AnnotatedDrawingItemInfo extends SolutionItemInfo {
-    annotations: string[]
-}
-
-interface BlocklyProgSequenceItemInfo extends SolutionItemInfo {
-    eventSequence: LogItemInfo[] // TODO: replace type with LogItemInfo[]
-}
-
-interface BlocklyProgramItemInfo extends SolutionItemInfo {
-    savedState: SavedStateInfo
-}
-
-interface TextItemInfo extends SolutionItemInfo {
-    mdText: string
-}
-
-interface SocialRobotDesignItemInfo extends SolutionItemInfo {
-    socialRobotDesignXml: string
-}
-
-interface OpenQuestionItemInfo extends AssignmentItemInfo {
-    questionText: string
-}
-
-interface MCQuestionItemInfo extends AssignmentItemInfo {
-    questionText: string,
-    answerOptions: string[],
-    correctAnswers: number[]
-}
-
-interface MCAnswerItemInfo extends SolutionItemInfo {
-    selectedAnswer: number
-}
-
-interface BlocklyQuestionItemInfo extends AssignmentItemInfo {
-    questionText: string
-}
 
 
-interface PortfolioInfo {
-    uuid: string,
-    name: string,
-    description: string,
-    created: Date,
-    lastEdited: Date,
-    isPublic: boolean,
-    folder?: string,
-    items: PortfolioItemInfo[],
-    sharedWith: MinimalUserInfo[],
-    shared?: boolean,
-    ownedBy?: String[],
-    
-}
+import { 
+  PortfolioInfo, 
+  PortfolioItemInfo, 
+  MinimalDisplayedPortfolioItemInfo, 
+  MinimalPortfolioItemInfo, 
+  BlocklyProgSequenceItemInfo,
+  BlocklyProgramItemInfo,
+  TextItemInfo,
+  SocialRobotDesignItemInfo,
+  PortfolioFilter
+} from '../../../../../../shared/types/portfolio'
 
-const selectedPortfolio: PortfolioInfo = {
-    uuid: "",
-    name: "",
-    description: "",
-    created: new Date(),
-    lastEdited: new Date(),
-    isPublic: false,
-    items: [],
-    sharedWith: [],
-    shared: false,
-}
+
 const portfolioList: PortfolioInfo[] = []
 
 const initialPortfolioState = {

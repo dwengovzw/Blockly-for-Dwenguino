@@ -1,11 +1,10 @@
 import mongoose from "mongoose"
 import { PopulatedDoc } from 'mongoose';
 import { Document, Schema, model } from "mongoose"
-import db from "../config/db.config"
-import { IRole, RoleSchema } from './role.model'
+import db from "../config/db.config.js"
+import { IRole, RoleSchema } from './role.model.js'
 import { v4 } from 'uuid';
-import { IPortfolio } from "./portfolio.model"
-
+import { IPortfolio } from "./portfolio.model.js"
 
 interface IUserShared {
     uuid?: string,

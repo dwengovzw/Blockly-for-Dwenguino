@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
       "target": "ESNext",                          
-      "module": "ES2022",  
-      "moduleResolution": "node",      
+      "module": "nodenext",  
+      "moduleResolution": "nodenext",      
       "typeRoots": ["../node_modules/@types"],     
       "experimentalDecorators": true,
       "allowSyntheticDefaultImports": true,
@@ -10,7 +10,7 @@
       "allowJs": true,
       "checkJs": false,
       "outDir": "dist",                          
-      "rootDir": ".",
+      "rootDir": "..",
       "strict": false,         
       "noImplicitAny": false,
       "esModuleInterop": true,
@@ -19,10 +19,19 @@
       "sourceMap": true,
       "forceConsistentCasingInFileNames": true,
     },
+    "rootDirs": [
+      "../shared",
+      "."
+    ],
     "exclude": [
       "compilation",
       "security",
       "dist",
-      "../node_modules/**"
+      "../node_modules/**",
+      "../Blockly-for-Dwenguino/DwenguinoIDE/**/*",
+    ],
+    "include": [
+      "./**/*",
+      "../shared/**/*"
     ]
   }

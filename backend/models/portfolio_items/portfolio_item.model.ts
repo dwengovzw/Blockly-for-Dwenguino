@@ -1,6 +1,6 @@
 import { Document, PopulatedDoc, Schema, model } from "mongoose"
 import { v4 } from 'uuid';
-import { ITEMTYPES } from "../../config/itemtypes.config"
+import { ITEMTYPES } from "../../../shared/constants/itemtypes.config.js"
 
 
 interface IMinimalPortfolioItemDisplayInformation {

@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyTokenAjax, roleCheck, verifyUserExists } from "../middleware/middleware"
+import { verifyTokenAjax, roleCheck, verifyUserExists } from "../middleware/middleware.js"
 import { ClassGroupController } from "../controllers/classgroup.controller.js"
 
 const classGroupController = new ClassGroupController();

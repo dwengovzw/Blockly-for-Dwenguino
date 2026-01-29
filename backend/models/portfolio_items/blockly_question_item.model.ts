@@ -1,7 +1,7 @@
 import { Schema, Model } from "mongoose"
-import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model"
-import { PortfolioItem } from "./portfolio_item.model"
-import { ITEMTYPES } from "../../config/itemtypes.config"
+import { AssignmentItemSchema, IAssignmentItem } from "./assignment_item.model.js"
+import { PortfolioItem } from "./portfolio_item.model.js"
+import { ITEMTYPES } from "../../../shared/constants/itemtypes.config.js"
 
 interface IBlocklyQuestionItemExtraFields {
     questionText: string

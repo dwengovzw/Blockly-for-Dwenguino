@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
-import jwt_settings from "../config/jwt.config";
-import { User, IUser } from "../models/user.model"
-import { IRole, Role } from "../models/role.model"
+import jwt_settings from "../config/jwt.config.js";
+import { User, IUser } from "../models/user.model.js"
+import { IRole, Role } from "../models/role.model.js"
 import crypto from "crypto"
 
 

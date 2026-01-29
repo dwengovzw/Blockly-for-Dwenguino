@@ -24,6 +24,7 @@
   },
   "include": [
     "./Blockly-for-Dwenguino/dashboards/**/*",
-    "./Blockly-for-Dwenguino/types/*"
+    "./Blockly-for-Dwenguino/shared/types/*",
+    "./Blockly-for-Dwenguino/shared/**/*"
   ]
 }

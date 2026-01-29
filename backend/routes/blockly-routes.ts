@@ -5,11 +5,6 @@ import querystring from "querystring"
 import crypto from "crypto"
 let router = express.Router();
 
-//xml parser
-import parser from "fast-xml-parser"
-
-//Configure cors middleware for the run route to allow all requests
-import cors from 'cors';
 
 //app.use(cors());
 let corsOptions = {
@@ -146,11 +141,13 @@ router.route('/lang')
 
 /* Data collection */
 import { loggingRouter } from "./logging-routes.js"
+
 router.use("/logging", loggingRouter);
 
 /* Dwenguino microcontroller */   
 import { utilitiesRouter } from "./utilities-router.js"
 import { checkIfUserIsLoggedIn } from '../middleware/authJwt.js';
+
 router.use("/utilities", utilitiesRouter);
 
 

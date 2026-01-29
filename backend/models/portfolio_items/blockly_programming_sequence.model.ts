@@ -1,8 +1,8 @@
 import { Schema, Model } from "mongoose"
-import { ISolutionItem, SolutionItemSchema } from "./solution_item.model"
-import { ILogItem, LogItemSchema } from '../logitem.model'
-import { PortfolioItem } from "./portfolio_item.model"
-import { ITEMTYPES } from "../../config/itemtypes.config"
+import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js"
+import { ILogItem, LogItemSchema } from '../logitem.model.js'
+import { PortfolioItem } from "./portfolio_item.model.js"
+import { ITEMTYPES } from "../../../shared/constants/itemtypes.config.js"
 
 interface IBlocklyProgSequenceItemExtraFields {
     eventSequence: [ILogItem],

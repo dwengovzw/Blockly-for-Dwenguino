@@ -18,12 +18,16 @@ class SimulationControlsController {
 
         // Create a new runner for the environment
         this.simulationRunner = new SimulationRunner(this.logger, workspace);
-        this.simulationRunner.setCurrentScenario(this.scenarios[this.scenarioView]);
         
         // Init the ui controls for the debugger and simulator
         // Has to be done before the simlationRunner is initialized
-        this.initSimulationControlsUI(scenarios); 
- 
+        this.initSimulationControlsUI(scenarios);
+        
+        // Defer setting the initial scenario to avoid race conditions
+        // The scenario and UI must be fully initialized before setting
+        setTimeout(() => {
+            this.simulationRunner.setCurrentScenario(this.scenarios[this.scenarioView]);
+        }, 0);
     }
 
     addStateHasChangedListener(listener){
@@ -44,7 +48,10 @@ class SimulationControlsController {
         this.scenarioView = scenarioName;
         this.translateSimulatorInterface();
 
-        this.handleSimulationStop();
+        // Only stop simulation if a scenario was previously set
+        if (this.simulationRunner.getCurrentScenario()) {
+            this.handleSimulationStop();
+        }
         this.simulationRunner.setCurrentScenario(this.scenarios[scenarioName]);
         let data = { 
             "scenario": scenarioName

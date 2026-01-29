@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose"
-import { IStudentTeam, StudentTeam } from "./student_team.model"
-import { IClassGroup } from "./class_group.model"
+import { IStudentTeam, StudentTeam } from "./student_team.model.js"
+import { IClassGroup } from "./class_group.model.js"
 import { v4 } from 'uuid';
 import { PopulatedDoc } from 'mongoose';
 

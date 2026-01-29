@@ -1,6 +1,5 @@
 import { msg } from "@lit/localize"
 import { createSlice } from "@reduxjs/toolkit"
-import { state } from "lit/decorators"
 import { setNotificationMessage, NotificationMessageType, loading, doneLoading } from "./notification_slice"
 
 interface PublicProfileInfo {

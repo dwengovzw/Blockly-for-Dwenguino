@@ -19,26 +19,18 @@ import { buttonStyles } from "../../styles/shared";
 @customElement("dwengo-login-menu")
 class LoginMenu extends connect(store)(LitElement) {
     
-    @state() loggedIn: boolean = false;
-    @state() name: string= "noname"
-    @state() sessionToken: string = "";
-    @state() username: string = "";
-    @state() originalRequestInfo: string = "";
-    @state() platforms: string[] = []
+    @state() loggedIn: boolean;
+    @state() name: string;
+    @state() sessionToken: string;
+    @state() username: string;
+    @state() originalRequestInfo: string;
+    @state() platforms: string[];
     @state() menuIsOpen: boolean;
 
-    @state()
-    platformToLabelMap: Record<string, string>
-    platformToIconMap: Record<string, string> = {
-        "leerId": "LeerID_pos_kl_36x36.svg",
-        "beACM": "vlaanderen.svg",
-        "github": "github-mark.svg",
-    }
-    platformToIconClass: Record<string, string> = {
-        "leerId": "leerId",
-        "beACM": "beACM",
-        "github": "github",
-    }
+    @state() platformToLabelMap: Record<string, string>
+
+    readonly platformToIconMap: Record<string, string>;
+    readonly platformToIconClass: Record<string, string>;
 
     stateChanged(state: any): void {
         this.platforms = state.oauth.platforms
@@ -48,6 +40,23 @@ class LoginMenu extends connect(store)(LitElement) {
 
     constructor(){
         super();
+        this.loggedIn = false;
+        this.name = "noname";
+        this.sessionToken = "";
+        this.username = "";
+        this.originalRequestInfo = "";
+        this.platforms = [];
+        this.menuIsOpen = false;
+        this.platformToIconMap = {
+        "leerId": "LeerID_pos_kl_36x36.svg",
+        "beACM": "vlaanderen.svg",
+        "github": "github-mark.svg",
+        };
+        this.platformToIconClass = {
+            "leerId": "leerId",
+            "beACM": "beACM",
+            "github": "github",
+        };
         // Hack to make translations work
         setLocaleFromUrl().then(() => {
             this.platformToLabelMap = {
@@ -62,7 +71,6 @@ class LoginMenu extends connect(store)(LitElement) {
             "leerId": msg("LeerID Flanders (students only)"),
             "beACM": msg("Flemish government")
         }
-        this.menuIsOpen = false;
         const params:URLSearchParams = new URLSearchParams(window.location.search);
         let reqInfo:string = params.get("originalRequestInfo")?.toString() as string;
         if (reqInfo){
@@ -105,7 +113,7 @@ class LoginMenu extends connect(store)(LitElement) {
                         </a>
                     </li>`
                 })}
-                ${process.env.NODE_ENV === 'development' ? this.renderTestLoginOptions() : html``}
+                ${__DEV__ === 'development' ? this.renderTestLoginOptions() : html``}
             </ul>
         </div>`
     }

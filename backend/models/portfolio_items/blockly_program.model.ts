@@ -1,8 +1,9 @@
 import mongoose, { CallbackError, Model, Schema } from "mongoose";
-import { ISavedState, SavedState } from "../saved_state.model";
-import { ISolutionItem, SolutionItemSchema } from "./solution_item.model";
-import { PortfolioItem } from "./portfolio_item.model";
-import { ITEMTYPES } from "../../config/itemtypes.config";
+import { SavedState } from "../saved_state.model.js";
+import { ISavedState } from "../../../shared/types/saved_state.types.js";
+import { ISolutionItem, SolutionItemSchema } from "./solution_item.model.js";
+import { PortfolioItem } from "./portfolio_item.model.js";
+import { ITEMTYPES } from "../../../shared/constants/itemtypes.config.js";
 
 interface IBlocklyProgramItemExtraFields {
     savedState: ISavedState
@@ -19,10 +20,10 @@ const BlocklyProgramItemSchemaFields: Record<keyof IBlocklyProgramItemExtraField
 
 //const BlocklyProgamItemSchema = SolutionItemSchema(BlocklyProgramItemSchemaFields)
 
-const BlocklyProgamItemSchema = new Schema<IBlocklyProgramItem>(BlocklyProgramItemSchemaFields)
+const BlocklyProgamItemSchema = new Schema<IBlocklyProgramItem, IBlocklyProgramItemModel>(BlocklyProgramItemSchemaFields)
 
 // Recursively delete the saved program when the portfolio item is deleted
-BlocklyProgamItemSchema.pre('deleteOne', {document:true, query: false}, async function(next) {
+BlocklyProgamItemSchema.pre('deleteOne', {document:true, query: false}, async function(next: any) {
     const savedStateId: any = this.savedState
     try {
         if (savedStateId){

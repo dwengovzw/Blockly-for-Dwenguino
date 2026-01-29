@@ -83,8 +83,10 @@ class BaseSimulationRunner{
      */
     resetScenario(){
          // update the current scenario so it resets its state based on the current board state.
-         this.currentScenario.resetScenario(); 
-         this.currentScenario.updateScenarioDisplay(this.board);
+         if (this.currentScenario) {
+             this.currentScenario.resetScenario(); 
+             this.currentScenario.updateScenarioDisplay(this.board);
+         }
     }
 
     /*
@@ -113,11 +115,24 @@ class BaseSimulationRunner{
         }
 
         // create debugger
+        // Suppress console errors from debugjs about sandbox attribute
+        // (debugjs has a bug where it uses 'unsafe-eval' as a sandbox flag)
+        const originalError = console.error;
+        console.error = function(...args) {
+            if (args[0] && args[0].includes && args[0].includes("'unsafe-eval' is an invalid sandbox flag")) {
+                return; // Suppress this specific error
+            }
+            originalError.apply(console, args);
+        };
+        
         this.debugger.debuggerjs = this.createDebugger({
             iframeParentElement: document.getElementById('debug'),
             // declare context that should be available in debugger
             sandbox: context
         });
+        
+        // Restore original console.error
+        console.error = originalError;
 
         this.debugger.debuggerjs.machine.on('error', function (err) {
             console.log(err);
@@ -225,7 +240,9 @@ class BaseSimulationRunner{
 
     setIsSimulationRunning(isSimulationRunning){
         this.isSimulationRunning = isSimulationRunning;
-        this.currentScenario.setIsSimulationRunning(this.isSimulationRunning);
+        if (this.currentScenario) {
+            this.currentScenario.setIsSimulationRunning(this.isSimulationRunning);
+        }
     }
 
     setIsSimulationPaused(isSimulationPaused){

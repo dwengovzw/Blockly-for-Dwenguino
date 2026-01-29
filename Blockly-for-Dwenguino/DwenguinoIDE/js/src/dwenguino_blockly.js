@@ -3,13 +3,13 @@ import DwenguinoSimulation from './simulation/dwenguino_simulation.js'
 import CookiesInformation from './user/cookies_information.js'
 import FileIOController from './utils/file_io_controller.js'
 import { EVENT_NAMES } from './logging/event_names.js'
-import ServerConfig from './server_config.js'
 import jQuery from "jquery";
-import 'jquery-ui-bundle';
+
+//import 'jquery-ui-bundle';
+//import 'jquery-ui/ui';
+import 'jquery-ui/ui/widgets/resizable';
 import 'bootstrap';
 import TextualEditor from './textual_editor/textual_editor.ts'
-import { store } from "../../../dashboards/js/src/state/store.ts"
-import { SAVEDPROGRAM_TYPES } from '../../../../backend/models/saved_state.model'
 import { ScenarioNames } from './simulation/dwenguino_simulation.js'
 
 window.$ = window.jQuery = jQuery;

@@ -1,11 +1,10 @@
 // Import contact model
-import Logitem from '../models/logitem.model';
+import Logitem from '../models/logitem.model.js';
 import { v4 } from 'uuid';
-import { EVENT_NAMES } from '../utils/event_names';
+import { EVENT_NAMES } from '../utils/event_names.js';
 import mongoose from 'mongoose';
-import Validator from '../utils/validator';
+import Validator from '../utils/validator.js';
 
-import { Worker, isMainThread, parentPort } from 'worker_threads';
 
 let newSessionId = function(req, res) {
     let id = v4();

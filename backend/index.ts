@@ -1,15 +1,7 @@
-import * as dotenv from 'dotenv';
-import * as path from 'path';
-let __dirname = path.resolve();
-console.log(`dirname: ${__dirname}`);
-
-// Load environment variables
-dotenv.config({path: __dirname + '/backend/.env'}); // configure .env location
-
-import { app, port } from "./server";
+import { app, port } from "./server.js";
 import * as http from 'http';
 import mongoose from 'mongoose';
-import { mockDatabaseData } from './utils/add_mock_database_data';
+import { mockDatabaseData } from './utils/add_mock_database_data.js';
 
 const httpServer = http.createServer(app);
 

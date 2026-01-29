@@ -11,13 +11,12 @@ import mongoSanitize from 'express-mongo-sanitize';
 import axios from 'axios';
 
 // Import routers
-import blocklyRoutes from './routes/blockly-routes'
-import dashboardRouter from './routes/dashboard-routes'
-import oauthRouter from './routes/oauth-routes'
-import userRouter from "./routes/user.routes"
-import classGroupRouter from './routes/classgroup.router';
-import savedProgramsRouter from "./routes/saved_state.router"
-
+import blocklyRoutes from './routes/blockly-routes.js'
+import dashboardRouter from './routes/dashboard-routes.js'
+import oauthRouter from './routes/oauth-routes.js'
+import userRouter from "./routes/user.routes.js"
+import classGroupRouter from './routes/classgroup.router.js';
+import savedProgramsRouter from "./routes/saved_state.router.js"
 // Import test router
 //import testRouter from './routes/test_auth.routes.js';
 
@@ -33,14 +32,13 @@ import cookieSession from "cookie-session"
 
 //Configure cors middleware for the run route to allow all requests
 import cors from 'cors';
-import assignmentGroupRouter from './routes/assignmentgroup.router';
-import { portfolioRouter } from './routes/portfolio.router';
+import assignmentGroupRouter from './routes/assignmentgroup.router.js';
+import { portfolioRouter } from './routes/portfolio.router.js';
 
 let corsOptions = {
     origin: process.env.CORS_ORIGIN,
 };
 
-let key, cert, ca = 0;
 let options = {}
 
 // Setup server port
@@ -51,6 +49,10 @@ console.log("Port: " + port);
 let sslPort = process.env.SSLPORT || 443;;
 console.log("SSL port: " + sslPort);
 
+console.log("Starting backend index");
+
+console.log(__dirname);
+
 
 // Initialize the app
 let app = express();
@@ -59,6 +61,7 @@ app.use(cors(corsOptions));
 
 // Set view engine
 app.set('view engine', 'ejs');
+console.log(process.env)
 let viewDirs = JSON.parse(process.env.VIEWS_DIR as string).map((elem) => {return __dirname + "/" + elem})
 app.set('views', viewDirs);   // For debug
 
@@ -101,18 +104,6 @@ if (process.env.NODE_ENV !== "production"){
 }
 
 app.use(cookieParser());
-// app.use(i18n({
-//     locales: ['en', 'nl'], 
-//     directory: 'msg',
-//     jointDir: 'msg',
-//     defaultLocale: 'en',
-//     queryParameter: 'lang',
-//     cookieName: 'lang',
-//     order: ['cookie', 'query', 'headers']
-// }));
-
-
-
 app.use(express.json()); //Used to parse JSON bodies
 app.use(express.urlencoded({extended: true})); //Parse URL-encoded bodies
 app.use(mongoSanitize()); // Sanitize data in the request body/params/header/query

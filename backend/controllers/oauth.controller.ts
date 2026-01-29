@@ -1,5 +1,5 @@
-import OAuthState from "../datatypes/oauthState";
-import db from "../config/db.config"
+import OAuthState from "../datatypes/oauthState.js";
+import db from "../config/db.config.js"
 
 
 class OAuthController {
