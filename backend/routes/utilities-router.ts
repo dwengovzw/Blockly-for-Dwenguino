@@ -3,17 +3,17 @@ import UtilController from '../controllers/util.controller.js';
 
 let utilitiesRouter = express.Router();
 
-utilitiesRouter.route('/clean')
-.get(UtilController.clean);
+// utilitiesRouter.route('/clean')
+// .get(UtilController.clean);
 
-utilitiesRouter.route('/compile')
-.get(UtilController.compile);
+// utilitiesRouter.route('/compile')
+// .get(UtilController.compile);
 
-utilitiesRouter.route('/upload')
-.get(UtilController.upload);
+// utilitiesRouter.route('/upload')
+// .get(UtilController.upload);
 
-utilitiesRouter.route('/run')
-.post(UtilController.run);
+// utilitiesRouter.route('/run')
+// .post(UtilController.run);
 
 
 // Handle get and post of compilation in the same way
@@ -27,6 +27,20 @@ utilitiesRouter.route('/getDwenguinoBinary')
 .post((req, res) => {
     req["data"] = req.body
     UtilController.getDwenguinoBinary(req, res)
+})
+
+// Handle compilation for Halberd board
+
+utilitiesRouter.route('/getHalberdBinary')
+.get((req, res) => {
+    req["data"] = req.query
+    UtilController.getHalberdBinary(req, res)
+})
+
+utilitiesRouter.route('/getHalberdBinary')
+.post((req, res) => {
+    req["data"] = req.body
+    UtilController.getHalberdBinary(req, res)
 })
 
 utilitiesRouter.route('/getEnvironment')

@@ -46,6 +46,14 @@ class SimulationControlsController {
 
     setCurrentScenario(scenarioName){
         this.scenarioView = scenarioName;
+        
+        // Validate that the scenario exists, fallback to default if not
+        if (!this.scenarios[scenarioName]) {
+            console.warn(`Scenario '${scenarioName}' not found, defaulting to 'spyrograph'`);
+            scenarioName = "spyrograph";
+            this.scenarioView = scenarioName;
+        }
+        
         this.translateSimulatorInterface();
 
         // Only stop simulation if a scenario was previously set

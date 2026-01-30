@@ -195,9 +195,11 @@ body{
 
 #db_menu_item_language_selection{
     /* width: 200px; */
-    margin: 10.5px 0;
+    margin: 10.5px 5px;
     background-color: #ffffff;
     border: 1px #8bab42 solid;
+    border-radius: 4px;
+    padding: 4px 8px;
     font-family: Roboto, sans-serif;
     font-weight: 300;
 }
@@ -208,6 +210,21 @@ body{
 
 #db_menu_item_language_selection option{
     font-size: 20px;
+}
+
+#db_menu_item_board {
+    float: right;
+}
+
+#db_menu_item_board_selection {
+    /* width: 200px; */
+    margin: 10.5px 5px;
+    background-color: #ffffff;
+    border: 1px #8bab42 solid;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-family: Roboto, sans-serif;
+    font-weight: 300;
 }
 
 .db_content{

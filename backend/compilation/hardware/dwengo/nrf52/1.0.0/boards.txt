@@ -1,0 +1,67 @@
+menu.softdevice=SoftDevice
+menu.debug=Debug Level
+menu.debug_output=Debug Port
+
+# -----------------------------------
+# Dwengo - IDLab - AIRO: Halberd
+# -----------------------------------
+halberd.name="Halberd nRF52840 (DWENGO)"
+
+# VID/PID for Bootloader, Arduino & CircuitPython
+halberd.vid.0=0xd3e0
+halberd.pid.0=0x0e5b
+halberd.vid.1=0xd3e0
+halberd.pid.1=0xa855
+halberd.vid.2=0xd3e0
+halberd.pid.2=0x2a3b
+halberd.vid.3=0xd3e0
+halberd.pid.3=0x0c17
+
+# Upload
+halberd.bootloader.tool=bootburn
+halberd.upload.tool=nrfutil
+halberd.upload.protocol=nrfutil
+halberd.upload.use_1200bps_touch=true
+halberd.upload.wait_for_upload_port=true
+halberd.upload.maximum_size=815104
+halberd.upload.maximum_data_size=237568
+
+# Build
+halberd.build.mcu=cortex-m4
+halberd.build.f_cpu=64000000
+halberd.build.board=HALBERD_NRF52840
+halberd.build.core=nRF5
+halberd.build.variant=halberd
+halberd.build.usb_manufacturer="Dwengo"
+halberd.build.usb_product="Halberd nRF52840"
+halberd.build.extra_flags=-DNRF52840_XXAA {build.flags.usb}
+halberd.build.ldscript=nrf52840_s140_v6.ld
+halberd.build.openocdscript=scripts/openocd/daplink_nrf52.cfg
+halberd.build.vid=0xd3e0
+halberd.build.pid=0x0e5b
+halberd.build.uf2_family=0xADA52840
+
+# Menu: SoftDevice
+halberd.menu.softdevice.s140v6=S140 6.1.1
+halberd.menu.softdevice.s140v6.build.sd_name=s140
+halberd.menu.softdevice.s140v6.build.sd_version=6.1.1
+halberd.menu.softdevice.s140v6.build.sd_fwid=0x00B6
+
+# Menu: Debug Level
+halberd.menu.debug.l0=Level 0 (Release)
+halberd.menu.debug.l0.build.debug_flags=-DCFG_DEBUG=0
+halberd.menu.debug.l1=Level 1 (Error Message)
+halberd.menu.debug.l1.build.debug_flags=-DCFG_DEBUG=1
+halberd.menu.debug.l2=Level 2 (Full Debug)
+halberd.menu.debug.l2.build.debug_flags=-DCFG_DEBUG=2
+halberd.menu.debug.l3=Level 3 (Segger SystemView)
+halberd.menu.debug.l3.build.debug_flags=-DCFG_DEBUG=3
+halberd.menu.debug.l3.build.sysview_flags=-DCFG_SYSVIEW=1
+
+# Menu: Debug Port
+halberd.menu.debug_output.serial=Serial
+halberd.menu.debug_output.serial.build.logger_flags=-DCFG_LOGGER=0
+halberd.menu.debug_output.serial1=Serial1
+halberd.menu.debug_output.serial1.build.logger_flags=-DCFG_LOGGER=1 -DCFG_TUSB_DEBUG=CFG_DEBUG
+halberd.menu.debug_output.rtt=Segger RTT
+halberd.menu.debug_output.rtt.build.logger_flags=-DCFG_LOGGER=2 -DCFG_TUSB_DEBUG=CFG_DEBUG -DSEGGER_RTT_MODE_DEFAULT=SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL

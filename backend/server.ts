@@ -3,7 +3,6 @@ let __dirname = path.resolve();
 
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import expressMongoSanitize from '@exortek/express-mongo-sanitize';
 
 //mongoose.set('debug', true);
 //import i18n from 'i18n-x';

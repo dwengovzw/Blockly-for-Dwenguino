@@ -39,6 +39,15 @@ let DwenguinoBlockly = {
   cookiesInformation: null,
 
   compilationPath: "",
+  compilationRoutes: {
+    dwenguino: "/utilities/getDwenguinoBinary",
+    halberd: "/utilities/getHalberdBinary",
+  },
+  boards: {
+    "dwenguino": { value: "dwenguino", label: "Dwenguino" },
+    "halberd": { value: "halberd", label: "Halberd" },
+  },
+  currentBoard: "dwenguino",
   textualEditor: new TextualEditor("db_code_pane"),
   currentProgrammingContext: "blocks", // The current coding context can be blocks or text.
   programSavedIntoAccount: true,
@@ -95,7 +104,7 @@ let DwenguinoBlockly = {
     });
 
 
-    DwenguinoBlockly.compilationPath = settings.hostname + "/utilities/getDwenguinoBinary";
+    DwenguinoBlockly.initBoardSelector();
 
     this.workspace = workspace;
 
@@ -390,6 +399,64 @@ let DwenguinoBlockly = {
           </span>`);
     }
   },
+  initBoardSelector: function () {
+    const boardSelect = document.getElementById("db_menu_item_board_selection");
+    if (!boardSelect) {
+      return;
+    }
+
+    boardSelect.innerHTML = "";
+        
+    const boards = DwenguinoBlockly.boards;
+
+    Object.values(boards).forEach((board) => {
+      const option = document.createElement("option");
+      option.value = board.value;
+      option.textContent = board.label;
+      boardSelect.appendChild(option);
+    });
+
+    boardSelect.addEventListener("change", () => {
+      DwenguinoBlockly.setCurrentBoard(boardSelect.value, true);
+    });
+
+    DwenguinoBlockly.restoreBoardSelectionFromLocalStorage();
+  },
+  restoreBoardSelectionFromLocalStorage: function () {
+    const savedBoard = window.localStorage.getItem("dwenguino_board_selection");
+    if (savedBoard) {
+      DwenguinoBlockly.setCurrentBoard(savedBoard, false);
+    } else {
+      DwenguinoBlockly.setCurrentBoard(DwenguinoBlockly.currentBoard, false);
+    }
+  },
+  setCurrentBoard: function (boardKey, persist = true) {
+    if (!DwenguinoBlockly.compilationRoutes[boardKey]) {
+      boardKey = "dwenguino";
+    }
+    DwenguinoBlockly.currentBoard = boardKey;
+    DwenguinoBlockly.compilationPath = settings.hostname + DwenguinoBlockly.compilationRoutes[boardKey];
+
+    const boardSelect = document.getElementById("db_menu_item_board_selection");
+    if (boardSelect) {
+      boardSelect.value = boardKey;
+    }
+
+    const runButton = document.getElementById("db_menu_item_run");
+    if (runButton) {
+      runButton.title = `Compile and download for ${boardKey}`;
+    }
+
+    if (persist && window.localStorage) {
+      window.localStorage.setItem("dwenguino_board_selection", boardKey);
+    }
+  },
+  getCompilationPath: function () {
+    if (!DwenguinoBlockly.compilationPath) {
+      DwenguinoBlockly.setCurrentBoard(DwenguinoBlockly.currentBoard, false);
+    }
+    return DwenguinoBlockly.compilationPath;
+  },
   downloadFileHandler: function () {
     let data = {};
     if (DwenguinoBlockly.currentProgrammingContext === "blocks") {
@@ -472,6 +539,7 @@ let DwenguinoBlockly = {
       uuid: globalSettings.savedProgramUUID,
       view: view,
       scenario: scenario,
+      board: DwenguinoBlockly.currentBoard,
       socialRobotXml: socialRobotXml,
       cppCode: cppCode,
       lang: DwenguinoBlocklyLanguageSettings.getLang(),
@@ -582,12 +650,18 @@ let DwenguinoBlockly = {
         uuid: "",
         view: "blocks",
         scenario: ScenarioNames.SPYROGRAPH,
+        board: "dwenguino",
         socialRobotXml: "",
         cppCode: [],
       })
     }
   },
   loadState: function (state) {
+    if (state.board) {
+      DwenguinoBlockly.setCurrentBoard(state.board, true);
+    } else {
+      DwenguinoBlockly.restoreBoardSelectionFromLocalStorage();
+    }
     let xml = state.blocklyXml ? Blockly.Xml.textToDom(state.blocklyXml) : Blockly.Xml.textToDom(`<xml xmlns="https://developers.google.com/blockly/xml"><block type="setup_loop_structure" id="{qm%,~{T;Qd1nDUTjZWn" x="100" y="100"/></xml>`);
     DwenguinoBlockly.restoreFromXml(xml);
     if (state.view === "blocks") {
@@ -659,8 +733,15 @@ let DwenguinoBlockly = {
   },
 
   getFilenameForCurrentContext: function () {
+    // if halberd set extension to .uf2
+    let compiledFilenameExtension
+    if (DwenguinoBlockly.currentBoard === "halberd") {
+      compiledFilenameExtension = ".uf2";
+    } else {
+      compiledFilenameExtension = ".dw";
+    }
     if (DwenguinoBlockly.currentProgrammingContext === "blocks") {
-      return "program.dw";
+      return "program" + compiledFilenameExtension;
     } else if (DwenguinoBlockly.currentProgrammingContext === "text") {
       let tabname = `${DwenguinoBlockly.textualEditor
         .getEditorPane()
@@ -669,7 +750,7 @@ let DwenguinoBlockly = {
         let extRegex = /^(.*)\.(.*)$/;
         tabname = tabname.match(extRegex)[1];
       }
-      return `${tabname}.dw`;
+      return `${tabname}` + compiledFilenameExtension;
     } else {
       return "";
     }
@@ -757,7 +838,7 @@ let DwenguinoBlockly = {
 
   downloadDwenguinoBinaryHandlerAjax: function (code, localfilename = "") {
     DwenguinoBlockly.disableRunButton();
-    let url = DwenguinoBlockly.compilationPath; // + "?code=" + encodeURIComponent(code);
+    let url = DwenguinoBlockly.getCompilationPath(); // + "?code=" + encodeURIComponent(code);
     let res = "success";
     try {
       $.ajax({
@@ -862,8 +943,12 @@ let DwenguinoBlockly = {
     });
 
     $("#db_menu_item_clear").click(function () {
-      var code =
-        '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("WeGoSTEM ;)"));\n}\n\nvoid loop(){}\n';
+      let emptyProgramCode = {
+        [DwenguinoBlockly.boards.dwenguino.value]: '#include <Wire.h>\n#include <Dwenguino.h>\n#include <LiquidCrystal.h>\n\nvoid setup(){\ninitDwenguino();\ndwenguinoLCD.setCursor(2,0);\ndwenguinoLCD.print(String("Dwenguino ;)"));\n}\n\nvoid loop(){}\n',
+        [DwenguinoBlockly.boards.halberd.value]: 'void setup(){\n\n};\n\nvoid loop() {\n\n}\n',
+      }
+      var code = emptyProgramCode[DwenguinoBlockly.currentBoard] || emptyProgramCode[DwenguinoBlockly.boards.halberd.value]
+  '';
       DwenguinoBlockly.downloadDwenguinoBinaryHandlerAjax(code);
     });
 

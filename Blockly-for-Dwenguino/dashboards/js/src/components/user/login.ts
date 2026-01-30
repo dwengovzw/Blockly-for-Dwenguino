@@ -200,7 +200,7 @@ class LoginMenu extends connect(store)(LitElement) {
 
     .dwengo-login-menu-icon {
         color: --theme-accentFillSelected;
-        font-size: 2rem;
+        font-size: 1.5rem;
         line-height: 1;
     }
     .dwengo-login-menu-icon:hover {
