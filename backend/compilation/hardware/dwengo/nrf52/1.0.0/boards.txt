@@ -34,7 +34,8 @@ halberd.build.core=nRF5
 halberd.build.variant=halberd
 halberd.build.usb_manufacturer="Dwengo"
 halberd.build.usb_product="Halberd nRF52840"
-halberd.build.extra_flags=-DNRF52840_XXAA {build.flags.usb}
+# The -DBOARD_HALBERD_V2 flag set the compile time selection of the code for halberd
+halberd.build.extra_flags=-DNRF52840_XXAA -DBOARD_HALBERD_V2 {build.flags.usb}
 halberd.build.ldscript=nrf52840_s140_v6.ld
 halberd.build.openocdscript=scripts/openocd/daplink_nrf52.cfg
 halberd.build.vid=0xd3e0
@@ -65,3 +66,11 @@ halberd.menu.debug_output.serial1=Serial1
 halberd.menu.debug_output.serial1.build.logger_flags=-DCFG_LOGGER=1 -DCFG_TUSB_DEBUG=CFG_DEBUG
 halberd.menu.debug_output.rtt=Segger RTT
 halberd.menu.debug_output.rtt.build.logger_flags=-DCFG_LOGGER=2 -DCFG_TUSB_DEBUG=CFG_DEBUG -DSEGGER_RTT_MODE_DEFAULT=SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL
+
+
+# TODO: in the future add a configuration for the Dwenguino nrf52 board
+#dwenguino_v2.name=Dwenguino nrf52 v1
+#dwenguino_v2.build.board=DWENGUINO_NRF52_V1
+#dwenguino_v2.build.mcu=nrf52840
+#dwenguino_v2.build.f_cpu=64000000L
+#dwenguino_v2.build.extra_flags=-DBOARD_DWENGUINO_NRF52_V1  

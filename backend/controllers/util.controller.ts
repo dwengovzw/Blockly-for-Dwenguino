@@ -15,30 +15,7 @@ class UtilController{
     static sketchPrefix:string = "sketch-";
     static deployedOS:string = process.env.DEPLOYED_OS || "linux";
 
-    // static handleExternalCommandOld(command: any, res: any, err_msg: string, succes_msg:string){
-    //     let cmd = exec(command, {timeout: 10000}, 
-    //         (error, stdout, stderr) => {
-    //             console.log(stdout);
-    //             console.log(stderr);
-    //             if (error !== null) {
-    //                 res.json({
-    //                     status: "error",
-    //                     info: err_msg,
-    //                     message: error,
-    //                     trace: stderr,
-    //                 });
-    //             }else{
-    //                 res.json({
-    //                     status: "success",
-    //                     info: succes_msg,
-    //                     trace: stdout,
-    //                     data: "TODO: return hex code as binary code decimal"
-    //                 });
-    //             }
-    //         }
-    //     );
-    // }
-
+  
     static handleExternalCommand(command, errorHandler, successHandler){
         console.log(command);
         let cmd = exec(command, {timeout: 10000}, 
@@ -54,31 +31,21 @@ class UtilController{
         );
     }
 
-    // static clean(req, res){
-    //     UtilController.handleExternalCommand('./compilation/bin/make -C ./compilation clean', (error, stderr)=>{
-    //         UtilController.sendErrorMessage(res, "error", "An error occured during clean operation", error, stderr);
-    //     }, (stdout)=>{
-    //         UtilController.sendSuccessMessage(res, "success", "Clean succesful.", stdout, "");
-    //     });
-    // }
-
-    // // Handle compile action
-    // static compile(req, res) {
-    //     UtilController.handleExternalCommand('./compilation/bin/make -C ./compilation', (error, stderr)=>{
-    //         UtilController.sendErrorMessage(res, "error", "An error occured during compilation", error, stderr);
-    //     }, (stdout)=>{
-    //         UtilController.sendSuccessMessage(res, "success", "Code succesfully compiled.", stdout, "");
-    //     });
-    // };
-
-    // // Handle upload action
-    // static upload(req, res) {
-    //     UtilController.handleExternalCommand('./compilation/bin/make -C ./compilation upload', (error, stderr)=>{
-    //         UtilController.sendErrorMessage(res, "error", "An error occured during upload", error, stderr);
-    //     }, (stdout)=>{
-    //         UtilController.sendSuccessMessage(res, "success", "Code succesfully uploaded.", stdout, "");
-    //     });
-    // };
+    static handleExternalCommandWithEnv(command, env, errorHandler, successHandler){
+        console.log(command);
+        console.log("Environment:", env);
+        let cmd = exec(command, {timeout: 10000, env: env}, 
+            (error, stdout, stderr) => {
+                console.log(stdout);
+                console.log(stderr);
+                if (error !== null) {
+                    errorHandler(error, stderr);                
+                }else{
+                    successHandler(stdout);
+                }
+            }
+        );
+    }
 
     // Handle the compilation and translation to file compatible with the usb bootloader.
     static getDwenguinoBinary(req, res) {
@@ -171,8 +138,10 @@ class UtilController{
                 UtilController.sendErrorMessage(res, "error", "An error occured during hardware folder symlink", error, stderr);
             }, 
             (stdout)=>{
-                // First try to compile the code
-                UtilController.handleExternalCommand(compile_command + ' compile --fqbn dwengo:nrf52:halberd ' + command_location +  "/sketch-" + objid + " --build-path " + command_location + "/sketch-" + objid + "/" + objdir, 
+                // First try to compile the code with ARDUINO_DIRECTORIES_USER pointing to our hardware folder
+                let env = Object.assign({}, process.env, { ARDUINO_DIRECTORIES_USER: command_location + "/sketch-" + objid });
+                let compile_cmd = compile_command + ' compile --fqbn dwengo:nrf52:halberd ' + command_location +  "/sketch-" + objid + " --build-path " + command_location + "/sketch-" + objid + "/" + objdir;
+                UtilController.handleExternalCommandWithEnv(compile_cmd, env, 
                     (error, stderr) => {
                         // If compile fails, send error message to client.
                         UtilController.cleanupCompile(objid)
@@ -273,92 +242,7 @@ class UtilController{
         res.end(Buffer.from(response, 'binary'));
     }
 
-    // static sendSuccessMessage = function(res, status, info, trace, data){
-    //     res.json({
-    //         status: status,
-    //         info: info,
-    //         trace: trace,
-    //         data: data
-    //     });
-    // }
 
-
-
-
-    // static handleRun = function(res, objid){
-    //     console.log("handle run");
-    //     let command_path = path.resolve("./compilation/bin/");
-    //     let command_name = command_path + "/make";
-    //     let command_location = path.resolve("./compilation");
-        
-    //     if (process.platform ==  "win32"){
-    //         command_name = "make"
-    //     }
-    //     console.log(command_name);
-    //     let cmd_clean = exec(command_name + ' -C ' + command_location + ' clean', {timeout: 10000}, 
-    //         (error, stdout, stderr) => {
-    //             console.log(stdout);
-    //             console.log(stderr);
-    //             if (error !== null) {
-    //                 console.log("clean failed");
-    //                 res.json({
-    //                     status: "error",
-    //                     info: "Clean failed",
-    //                     message: error,
-    //                     trace: stderr,
-    //                 });
-    //             }else{
-    //                 let cmd_compile = exec(command_name + ' -C ' + command_location, {timeout: 10000}, 
-    //                     (error, stdout, stderr) => {
-    //                         console.log(stdout);
-    //                         console.log(stderr);
-    //                         if (error !== null) {
-    //                             console.log("compile failed");
-    //                             res.json({
-    //                                 status: "error",
-    //                                 info: "Compilation failed",
-    //                                 message: error,
-    //                                 trace: stderr,
-    //                             });
-    //                         }else{
-    //                             let cmd_uplaod = exec(command_name + ' -C ' + command_location + ' upload', {timeout: 10000}, 
-    //                                 (error, stdout, stderr) => {
-    //                                     console.log(stdout);
-    //                                     console.log(stderr);
-    //                                     if (error !== null) {
-    //                                         console.log("upload failed");
-    //                                         res.json({
-    //                                             status: "error",
-    //                                             info: "Upload failed",
-    //                                             message: error,
-    //                                             trace: stderr,
-    //                                         });
-    //                                     }else{
-    //                                         let cmd_compile = 
-    //                                         res.json({
-    //                                             status: "succes",
-    //                                             info: "Succesfully uploaded the program to the board.",
-    //                                             trace: stdout,
-    //                                             data: "TODO: return hex code as binary code decimal"
-    //                                         });
-    //                                     }
-    //                                 }
-    //                             );
-    //                         }
-    //                     }
-    //                 );
-                    
-    //             }
-    //         }
-    //     );
-    // };
-
-  
-
-    // // Handle both compile and upload 
-    // static run(req, res) {
-    //     UtilController.saveFileAndRunNext(req.body.code, res, "", "sketch.cpp", UtilController.handleRun);
-    // };
 
     static getEnvironment(req, res){
         res.setHeader('Access-Control-Allow-Origin', '*');
