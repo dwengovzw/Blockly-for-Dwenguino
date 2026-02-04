@@ -1,4 +1,13 @@
 
+/* ---------------------------------------------------------------------------
+	Dwenguino Compatibility Layer - v1.0.0
+	
+	Created on Feb 3 2026 by Tom Neutens from Dwengo vzw (www.dwengo.org)
+
+
+* --------------------------------------------------------------------------- */
+
+
 #include "../shared/Led_register.h"
 #include "Halberd_v2_nrf52.h"
 

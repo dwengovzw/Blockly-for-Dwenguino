@@ -3,6 +3,8 @@
 
 #include <Arduino.h>
 #include "shared/Led_register.h"
+#include "DwenguinoLCD.h"
+#include "DwenguinoMotor.h"
 
 #define PRESSED 0
 
