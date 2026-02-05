@@ -12,6 +12,20 @@
 
 #include "LedController_template.hpp"
 
+// Temporarily undefine SPI macros
+#ifdef SPI_MOSI
+#pragma push_macro("SPI_MOSI")
+#undef SPI_MOSI
+#endif
+#ifdef SPI_CLK
+#pragma push_macro("SPI_CLK")
+#undef SPI_CLK
+#endif
+#ifdef SPI_CS
+#pragma push_macro("SPI_CS")
+#undef SPI_CS
+#endif
+
 // the opcodes for the MAX7221 and MAX7219
 #define OP_NOOP 0
 #define OP_DIGIT0 1
@@ -49,7 +63,7 @@ void LedController<columns,rows>::spiTransfer(unsigned int segment, byte opcode,
   spidata[row][offset + 1] = opcode;
   spidata[row][offset] = data;
   
-  for(int r = 0; r < rows ;r++){
+  for(unsigned int r = 0; r < rows ;r++){
 
     //enable the line
     auto cs = (conf.virtual_multi_row && conf.SPI_CS != 0) ? conf.SPI_CS : conf.row_SPI_CS[r];
@@ -134,4 +148,15 @@ void LedController<columns,rows>::refreshSegment(unsigned int segmentNumber) {
 
   updateSegment(segmentNumber);
 }
+
+// Restore SPI macros
+#ifdef SPI_CS
+#pragma pop_macro("SPI_CS")
+#endif
+#ifdef SPI_CLK
+#pragma pop_macro("SPI_CLK")
+#endif
+#ifdef SPI_MOSI
+#pragma pop_macro("SPI_MOSI")
+#endif
 

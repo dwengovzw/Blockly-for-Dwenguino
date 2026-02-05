@@ -60,10 +60,16 @@ static const uint8_t SDA = 15;
 static const uint8_t SCL = 14;
 
 // Map SPI port to 'new' pins 
-static const uint8_t SS   = 10;
-static const uint8_t MOSI = 2;
-static const uint8_t MISO = 12;
-static const uint8_t SCK  = 13;
+#define SS   10
+#define MOSI 2
+#define MISO 12
+#define SCK  13
+
+#define PIN_SPI_MISO MISO
+#define PIN_SPI_MOSI MOSI
+#define PIN_SPI_SCK  SCK
+#define PIN_SPI_SS   SS
+
 
 // Mapping of analog pins as digital I/O
 static const uint8_t A0 = 24;
@@ -143,6 +149,34 @@ static const uint8_t D19_INT = 4; // INT4 on PE4 - D19
 
 extern const uint8_t PROGMEM analog_pin_to_channel_PGM[];
 #define analogPinToChannel(P)  ( pgm_read_byte( analog_pin_to_channel_PGM + (P) ) )
+
+#define RGB_1_R 11
+#define RGB_1_G 14
+#define RGB_1_B 15
+
+#define RGB_2_R 30
+#define RGB_2_G 29
+#define RGB_2_B 28
+
+#define RGB_3_R 27
+#define RGB_3_G 26
+#define RGB_3_B 25
+
+#define SERVO_3 19
+#define SERVO_4 18
+#define SERVO_5 17
+#define SERVO_6 16
+
+#define SOUND_1 A4
+#define SONAR_1_TRIG A1
+#define SONAR_1_ECHO A0
+#define SONAR_2_TRIG A3
+#define SONAR_2_ECHO A2
+
+
+// Pin map for Socialrobot expansion board
+
+
 
 #ifdef ARDUINO_MAIN
 

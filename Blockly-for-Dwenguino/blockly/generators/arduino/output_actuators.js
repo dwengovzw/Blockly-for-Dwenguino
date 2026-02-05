@@ -10,33 +10,33 @@
  Blockly.Arduino.output.pinMappings = {
   "RGBLED1": 
       {
-         "red": 11,
-         "green": 14,
-         "blue": 15
+         "red": "RGB_1_R",
+         "green": "RGB_1_G",
+         "blue": "RGB_1_B"
       },
   "SERVO1":
       {
-        "pin": 40
+        "pin": "SERVO_1"
       },
   "SERVO2":
       {
-        "pin": 41
+        "pin": "SERVO_2"
       },
   "SERVO3":
       {
-        "pin": 19
+        "pin": "SERVO_3"
       },
   "SERVO4":
       {
-        "pin": 18
+        "pin": "SERVO_4"
       },
   "SERVO5":
       {
-        "pin": 17
+        "pin": "SERVO_5"
       },
   "SERVO6":
       {
-        "pin": 16
+        "pin": "SERVO_6"
       }
 };
  
@@ -113,9 +113,9 @@ Blockly.Arduino['output_show_ledmatrix_image'] = function(block) {
     
       Blockly.Arduino.setups_['define_ledcontroller_configuration'] = 'auto conf = controller_configuration<4,1>();';
       Blockly.Arduino.setups_['define_ledcontroller_spi'] = 'conf.useHardwareSpi = false;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = 13;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = 2;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = 10;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = PIN_SPI_SCK ;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = PIN_SPI_MOSI;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = PIN_SPI_SS;';
       Blockly.Arduino.setups_['define_ledcontroller_conf_init'] = 'led_matrix.init(conf);';
       Blockly.Arduino.setups_['define_ledcontroller_activate'] = 'led_matrix.activateAllSegments();';
       Blockly.Arduino.setups_['define_ledcontroller_intensity'] = 'led_matrix.setIntensity(8);';
@@ -157,9 +157,9 @@ Blockly.Arduino['output_show_ledmatrix_eye_pattern'] = function(block) {
     
       Blockly.Arduino.setups_['define_ledcontroller_configuration'] = 'auto conf = controller_configuration<4,1>();';
       Blockly.Arduino.setups_['define_ledcontroller_spi'] = 'conf.useHardwareSpi = false;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = 13;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = 2;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = 10;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = PIN_SPI_SCK ;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = PIN_SPI_MOSI;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = PIN_SPI_SS;';
       Blockly.Arduino.setups_['define_ledcontroller_conf_init'] = 'led_matrix.init(conf);';
       Blockly.Arduino.setups_['define_ledcontroller_activate'] = 'led_matrix.activateAllSegments();';
       Blockly.Arduino.setups_['define_ledcontroller_intensity'] = 'led_matrix.setIntensity(8);';
@@ -210,9 +210,9 @@ Blockly.Arduino['output_clear_ledmatrix_segment'] = function(block) {
     
       Blockly.Arduino.setups_['define_ledcontroller_configuration'] = 'auto conf = controller_configuration<4,1>();';
       Blockly.Arduino.setups_['define_ledcontroller_spi'] = 'conf.useHardwareSpi = false;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = 13;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = 2;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = 10;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = PIN_SPI_SCK ;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = PIN_SPI_MOSI;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = PIN_SPI_SS;';
       Blockly.Arduino.setups_['define_ledcontroller_conf_init'] = 'led_matrix.init(conf);';
       Blockly.Arduino.setups_['define_ledcontroller_activate'] = 'led_matrix.activateAllSegments();';
       Blockly.Arduino.setups_['define_ledcontroller_intensity'] = 'led_matrix.setIntensity(8);';
@@ -235,9 +235,9 @@ Blockly.Arduino['output_clear_ledmatrix'] = function(block) {
     
       Blockly.Arduino.setups_['define_ledcontroller_configuration'] = 'auto conf = controller_configuration<4,1>();';
       Blockly.Arduino.setups_['define_ledcontroller_spi'] = 'conf.useHardwareSpi = false;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = 13;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = 2;';
-      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = 10;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_clk'] = 'conf.SPI_CLK = PIN_SPI_SCK ;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_mosi'] = 'conf.SPI_MOSI = PIN_SPI_MOSI;';
+      Blockly.Arduino.setups_['define_ledcontroller_spi_cs'] = 'conf.SPI_CS = PIN_SPI_SS;';
       Blockly.Arduino.setups_['define_ledcontroller_conf_init'] = 'led_matrix.init(conf);';
       Blockly.Arduino.setups_['define_ledcontroller_activate'] = 'led_matrix.activateAllSegments();';
       Blockly.Arduino.setups_['define_ledcontroller_intensity'] = 'led_matrix.setIntensity(8);';

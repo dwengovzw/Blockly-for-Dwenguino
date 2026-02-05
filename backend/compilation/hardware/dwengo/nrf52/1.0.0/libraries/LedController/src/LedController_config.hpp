@@ -16,6 +16,20 @@
 
 #define PRINTLN_IF(condition,x) if(condition){PRINTLN(x);}
 
+// Temporarily undefine SPI macros to allow their use as struct member names
+#ifdef SPI_MOSI
+#pragma push_macro("SPI_MOSI")
+#undef SPI_MOSI
+#endif
+#ifdef SPI_CLK
+#pragma push_macro("SPI_CLK")
+#undef SPI_CLK
+#endif
+#ifdef SPI_CS
+#pragma push_macro("SPI_CS")
+#undef SPI_CS
+#endif
+
 /**
  * @brief This class is ued to handle the configuration of the LedController
  *
@@ -250,4 +264,15 @@ const static byte charTable[] = {
   B00010100, B00110111, B00111011, B01101101, B00110001, B00000110, B00000111,
   B01000000, B00000000
 };
+
+// Restore SPI macros
+#ifdef SPI_CS
+#pragma pop_macro("SPI_CS")
+#endif
+#ifdef SPI_CLK
+#pragma pop_macro("SPI_CLK")
+#endif
+#ifdef SPI_MOSI
+#pragma pop_macro("SPI_MOSI")
+#endif
 

@@ -6,6 +6,20 @@
 #include "LedController_display.hpp"
 #include "LedController_transformation.hpp"
 
+// Temporarily undefine SPI macros
+#ifdef SPI_MOSI
+#pragma push_macro("SPI_MOSI")
+#undef SPI_MOSI
+#endif
+#ifdef SPI_CLK
+#pragma push_macro("SPI_CLK")
+#undef SPI_CLK
+#endif
+#ifdef SPI_CS
+#pragma push_macro("SPI_CS")
+#undef SPI_CS
+#endif
+
 template <size_t columns, size_t rows>
 LedController<columns,rows>::~LedController() {
   initilized = false;
@@ -179,4 +193,15 @@ unsigned int LedController<columns,rows>::getSegmentCount() {
 
 template <size_t columns, size_t rows>
 const controller_configuration<columns,rows>& LedController<columns,rows>::getConfig() { return conf; }
+
+// Restore SPI macros
+#ifdef SPI_CS
+#pragma pop_macro("SPI_CS")
+#endif
+#ifdef SPI_CLK
+#pragma pop_macro("SPI_CLK")
+#endif
+#ifdef SPI_MOSI
+#pragma pop_macro("SPI_MOSI")
+#endif
 

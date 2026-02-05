@@ -12,15 +12,10 @@
 
 #include <LedController_byteblock.hpp>
 
-#if defined(ARDUINO_ARCH_AVR)
-#include <avr/pgmspace.h>
-#define INCLUDED_PGMSPACE
-#else
 #if defined(__has_include)
 #if (__has_include(<pgmspace.h>))
 #include <pgmspace.h>
 #define INCLUDED_PGMSPACE
-#endif
 #endif
 #endif
 
