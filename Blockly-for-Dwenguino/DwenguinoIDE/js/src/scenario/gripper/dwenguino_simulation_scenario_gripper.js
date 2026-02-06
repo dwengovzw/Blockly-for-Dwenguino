@@ -1,0 +1,664 @@
+import * as THREE from "three";
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
+
+/**
+ * Default kinematics descriptor that maps servo angles to 3D model joint rotations.
+ * This descriptor defines:
+ * - Model properties (scale, axis orientation)
+ * - Joint definitions with their rotation axes, angle ranges, and servo mappings
+ * 
+ * The descriptor allows for extensibility - users can upload custom JSON files
+ * to define different gripper configurations and servo mappings.
+ */
+const DEFAULT_KINEMATICS_DESCRIPTOR = {
+    version: 1,
+    model: {
+        upAxis: "Y",
+        scale: 1
+    },
+    joints: [
+        {
+            name: "jaw_left",
+            node: "jaw_left",
+            type: "revolute",
+            axis: [0, 0, -1],
+            minDeg: 0,
+            maxDeg: 180,
+            servo: {
+                index: 1,
+                min: 180,
+                max: 0,
+                invert: false
+            }
+        },
+        {
+            name: "jaw_right",
+            node: "jaw_right",
+            type: "revolute",
+            axis: [0, 0, 1],
+            minDeg: 0,
+            maxDeg: 180,
+            servo: {
+                index: 2,
+                min: 0,
+                max: 180,
+                invert: true
+            }
+        }
+    ]
+};
+
+/**
+ * Gripper simulation scenario that renders a 3D robot gripper controlled by servo motors.
+ * 
+ * Architecture:
+ * - Microcontroller State (BoardState) provides servo angles
+ * - Kinematic Mapping Layer (kinematicsDescriptor) maps servos to joints
+ * - 3D Simulation Engine (Three.js) renders the animated gripper
+ * - Users can upload custom GLB models and JSON kinematic descriptors
+ */
+class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
+    // DOM container element for the simulation
+    container = null;
+    // Three.js WebGL renderer
+    renderer = null;
+    // Three.js scene containing all 3D objects
+    scene = null;
+    // Three.js perspective camera
+    camera = null;
+    // GLTF/GLB model loader
+    gltfLoader = null;
+    // Root node of the loaded 3D model
+    modelRoot = null;
+    // Array of joint bindings (descriptor + Three.js node + base rotation)
+    joints = [];
+    // Current kinematics configuration (deep copy to avoid mutation)
+    kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+    // ResizeObserver to handle container size changes
+    resizeObserver = null;
+    // Track current and target servo angles for smooth transitions
+    currentServoAngles = new Map();
+    targetServoAngles = new Map();
+    // Timestamp of last update for time-based interpolation
+    lastUpdateTimestampMs = null;
+    // Maximum servo speed in degrees per second (tweak for smoother/faster motion)
+    servoSpeedDegPerSec = 120;
+
+    /**
+     * Initialize the gripper simulation scenario.
+     * @param {Object} logger - Logger instance for tracking events
+     * @param {string} name - Name identifier for this scenario
+     */
+    constructor(logger, name) {
+        super(logger, name);
+        // Initialize the GLTF loader for loading 3D models
+        this.gltfLoader = new GLTFLoader();
+    }
+
+    /**
+     * Initialize the simulation state from the board state.
+     * Called when the simulation is reset or first loaded.
+     * @param {BoardState} boardState - The state of the Dwenguino board containing servo positions
+     */
+    initSimulationState(boardState) {
+        super.initSimulationState(boardState);
+        // Apply the current board state to update joint positions
+        this.updateScenarioState(boardState);
+    }
+
+    /**
+     * Initialize the 3D display for the gripper simulation.
+     * Sets up the Three.js scene, camera, lighting, and UI controls.
+     * @param {string} containerId - DOM element ID where the simulation will be rendered
+     */
+    initSimulationDisplay(containerId) {
+        super.initSimulationDisplay(containerId);
+        this.container = $(`#${containerId}`);
+        this.container.css({ position: "relative" });
+
+        // Setup Three.js scene with camera, lights, and grid
+        this.setupThreeScene();
+        // Add control panel for uploading models and kinematics
+        this.setupControlPanel();
+
+        // Load the default procedural gripper model
+        this.loadDefaultModel();
+        // Render the initial frame
+        this.renderScene();
+
+        // Watch for container size changes to update renderer/camera
+        this.resizeObserver = new ResizeObserver(() => {
+            this.handleResize();
+        });
+        this.resizeObserver.observe(document.querySelector(`#${containerId}`));
+    }
+
+    /**
+     * Setup the Three.js scene with camera, renderer, lights, and ground grid.
+     * Creates the 3D environment where the gripper will be displayed.
+     */
+    setupThreeScene() {
+        let width = this.container.width();
+        let height = this.container.height();
+
+        // Create scene with light gray background
+        this.scene = new THREE.Scene();
+        this.scene.background = new THREE.Color(0xf7f7f7);
+
+        // Setup perspective camera with 45° FOV, positioned to view the gripper
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 2000);
+        this.camera.position.set(0, 140, 260);
+        this.camera.lookAt(0, 40, 0);
+
+        // Create WebGL renderer with antialiasing
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setPixelRatio(window.devicePixelRatio || 1);
+        this.renderer.setSize(width, height);
+        this.renderer.domElement.style.position = "absolute";
+        this.renderer.domElement.style.left = "0";
+        this.renderer.domElement.style.top = "0";
+        this.container.append(this.renderer.domElement);
+
+        // Add lighting: ambient light for general illumination + directional for shadows/depth
+        let ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        let directionalLight = new THREE.DirectionalLight(0xffffff, 0.7);
+        directionalLight.position.set(150, 200, 100);
+        this.scene.add(ambientLight, directionalLight);
+
+        // Add ground grid for spatial reference
+        let grid = new THREE.GridHelper(400, 20, 0xcccccc, 0xdddddd);
+        grid.position.y = 0;
+        this.scene.add(grid);
+    }
+
+    /**
+     * Create and setup the control panel UI for uploading custom models and kinematics.
+     * The panel allows users to:
+     * - Upload custom GLB 3D models
+     * - Upload custom JSON kinematic descriptors
+     * - Reset to the default gripper configuration
+     */
+    setupControlPanel() {
+        // Create floating panel in bottom-left corner
+        let panel = $("<div>")
+            .css({
+                "position": "absolute",
+                "left": "10px",
+                "bottom": "10px",
+                "background": "rgba(255,255,255,0.9)",
+                "padding": "10px",
+                "border-radius": "8px",
+                "width": "260px",
+                "box-shadow": "0 2px 6px rgba(0,0,0,0.15)",
+                "font-size": "12px"
+            });
+
+        // GLB model upload input
+        let modelLabel = $("<div>").text("GLB model");
+        let modelInput = $("<input>")
+            .attr("type", "file")
+            .attr("accept", ".glb");
+        modelInput.on("change", (event) => this.handleModelUpload(event));
+
+        // Kinematics JSON upload input
+        let kinematicsLabel = $("<div>").css({ "margin-top": "8px" }).text("Kinematics JSON");
+        let kinematicsInput = $("<input>")
+            .attr("type", "file")
+            .attr("accept", ".json,application/json");
+        kinematicsInput.on("change", (event) => this.handleKinematicsUpload(event));
+
+        // Reset button to restore default configuration
+        let resetButton = $("<button>")
+            .text("Reset mapping")
+            .css({ "margin-top": "8px", "width": "100%" });
+        resetButton.on("click", () => {
+            // Deep copy to avoid reference issues
+            this.kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+            this.applyKinematicsDescriptor();
+            this.renderScene();
+        });
+
+        panel.append(modelLabel);
+        panel.append(modelInput);
+        panel.append(kinematicsLabel);
+        panel.append(kinematicsInput);
+        panel.append(resetButton);
+        this.container.append(panel);
+    }
+
+    /**
+     * Handle user upload of a custom GLB 3D model.
+     * The model should have named nodes that match the kinematics descriptor for proper joint mapping.
+     * @param {Event} event - File input change event
+     */
+    handleModelUpload(event) {
+        let file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+        // Create temporary URL for the file blob
+        let url = URL.createObjectURL(file);
+        this.gltfLoader.load(
+            url,
+            (gltf) => {
+                // Clean up the temporary URL after loading
+                URL.revokeObjectURL(url);
+                // Replace the current model with the loaded one
+                this.setModel(gltf.scene);
+            },
+            undefined,
+            (error) => {
+                console.error("Failed to load GLB model", error);
+                URL.revokeObjectURL(url);
+            }
+        );
+    }
+
+    /**
+     * Handle user upload of a custom JSON kinematics descriptor.
+     * The descriptor defines how servo angles map to 3D joint rotations.
+     * @param {Event} event - File input change event
+     */
+    handleKinematicsUpload(event) {
+        let file = event.target.files[0];
+        if (!file) {
+            return;
+        }
+        let reader = new FileReader();
+        reader.onload = () => {
+            try {
+                // Parse and apply the new kinematics configuration
+                let parsed = JSON.parse(reader.result);
+                this.kinematicsDescriptor = parsed;
+                this.applyKinematicsDescriptor();
+                this.renderScene();
+            } catch (error) {
+                console.error("Invalid kinematics JSON", error);
+            }
+        };
+        reader.readAsText(file);
+    }
+
+    /**
+     * Load the default procedural gripper model.
+     * This ensures the simulation has a working model even without user uploads.
+     */
+    loadDefaultModel() {
+        let defaultModel = this.createDefaultGripperModel();
+        this.setModel(defaultModel);
+    }
+
+    /**
+     * Create a default procedural gripper model using Three.js primitives.
+     * The model consists of:
+     * - A base platform
+     * - Two jaw groups that rotate around pivot points
+     * Each jaw group contains a mesh offset from its pivot for realistic gripper motion.
+     * @returns {THREE.Group} The root group containing the gripper model
+     */
+    createDefaultGripperModel() {
+        // Root group for the entire gripper assembly
+        let group = new THREE.Group();
+        group.name = "gripper_root";
+
+        // Gray material for the base platform
+        let material = new THREE.MeshStandardMaterial({ color: 0x888888, metalness: 0.2, roughness: 0.6 });
+
+        // Create base platform
+        let base = new THREE.Mesh(new THREE.BoxGeometry(120, 20, 60), material);
+        base.position.set(0, 10, 0);
+        base.name = "base";
+        group.add(base);
+
+        // Green material for the gripper jaws
+        let jawMaterial = new THREE.MeshStandardMaterial({ color: 0x4a9234, metalness: 0.2, roughness: 0.5 });
+        let jawGeometry = new THREE.BoxGeometry(50, 10, 20);
+
+        // Left jaw: pivot group rotates, jaw mesh is offset to create gripper motion
+        let leftPivot = new THREE.Group();
+        leftPivot.name = "jaw_left"; // Must match kinematics descriptor
+        leftPivot.position.set(-30, 20, 0);
+        let leftJaw = new THREE.Mesh(jawGeometry, jawMaterial);
+        leftJaw.position.set(-25, 0, 0); // Offset from pivot point
+        leftPivot.add(leftJaw);
+
+        // Right jaw: mirror of left jaw
+        let rightPivot = new THREE.Group();
+        rightPivot.name = "jaw_right"; // Must match kinematics descriptor
+        rightPivot.position.set(30, 20, 0);
+        let rightJaw = new THREE.Mesh(jawGeometry, jawMaterial);
+        rightJaw.position.set(25, 0, 0); // Offset from pivot point
+        rightPivot.add(rightJaw);
+
+        group.add(leftPivot);
+        group.add(rightPivot);
+
+        return group;
+    }
+
+    /**
+     * Replace the current 3D model with a new one.
+     * Removes the old model, applies transforms, and sets up joint mappings.
+     * @param {THREE.Object3D} modelRoot - The root node of the new model
+     */
+    setModel(modelRoot) {
+        // Remove previous model if it exists
+        if (this.modelRoot) {
+            this.scene.remove(this.modelRoot);
+        }
+        this.modelRoot = modelRoot;
+        // Apply scale and axis transformations
+        this.applyModelTransform();
+        // Add to scene
+        this.scene.add(this.modelRoot);
+        // Map joints from kinematics descriptor to model nodes
+        this.applyKinematicsDescriptor();
+    }
+
+    /**
+     * Apply model-level transformations (scale, axis orientation).
+     * Handles different CAD export conventions (Y-up vs Z-up).
+     */
+    applyModelTransform() {
+        if (!this.modelRoot) {
+            return;
+        }
+        // Apply uniform scale from descriptor
+        let scale = this.kinematicsDescriptor?.model?.scale ?? 1;
+        this.modelRoot.scale.set(scale, scale, scale);
+
+        // Handle different CAD coordinate systems
+        // Some CAD tools export with Z-up, Three.js uses Y-up
+        let upAxis = this.kinematicsDescriptor?.model?.upAxis ?? "Y";
+        if (upAxis.toUpperCase() === "Z") {
+            // Rotate -90° around X to convert Z-up to Y-up
+            this.modelRoot.rotation.set(-Math.PI / 2, 0, 0);
+        } else {
+            this.modelRoot.rotation.set(0, 0, 0);
+        }
+    }
+
+    /**
+     * Apply the kinematics descriptor to map joints to model nodes.
+     * This creates the linkage between the kinematic definition and the 3D model.
+     * For each joint in the descriptor:
+     * - Find the corresponding node in the 3D model by name
+     * - Store the joint descriptor, node reference, and base rotation
+     * The base rotation is needed to apply relative rotations during animation.
+     */
+    applyKinematicsDescriptor() {
+        // Clear previous joint mappings
+        this.joints = [];
+        if (!this.modelRoot || !this.kinematicsDescriptor || !this.kinematicsDescriptor.joints) {
+            return;
+        }
+
+        // Ensure model transforms are current
+        this.applyModelTransform();
+
+        // Map each joint descriptor to its corresponding 3D node
+        for (let joint of this.kinematicsDescriptor.joints) {
+            let node = this.modelRoot.getObjectByName(joint.node);
+            if (!node) {
+                console.warn(`Joint node not found: ${joint.node}`);
+                continue;
+            }
+            if (!node.userData.initialQuaternion) {
+                node.userData.initialQuaternion = node.quaternion.clone();
+            }
+            // Store joint binding with base quaternion for relative rotations
+            this.joints.push({
+                descriptor: joint,
+                node: node,
+                baseQuaternion: node.userData.initialQuaternion.clone() // Preserve original rotation
+            });
+        }
+    }
+
+    /**
+     * Main update loop - called periodically during simulation.
+     * Updates both state and display from the board state.
+     * @param {BoardState} boardState - Current state of the Dwenguino board
+     */
+    updateScenario(boardState) {
+        super.updateScenario(boardState);
+        this.updateScenarioState(boardState);
+        this.updateScenarioDisplay(boardState);
+    }
+
+    /**
+     * Update the simulation state from board state.
+     * Reads servo angles and applies them to joints.
+     * @param {BoardState} boardState - Current state of the Dwenguino board
+     */
+    updateScenarioState(boardState) {
+        super.updateScenarioState(boardState);
+        this.updateTargetServoAngles(boardState);
+        this.updateSmoothedServoAngles();
+        this.applyServoState(boardState);
+    }
+
+    /**
+     * Update the visual display.
+     * Triggers a new render of the 3D scene.
+     * @param {BoardState} boardState - Current state of the Dwenguino board
+     */
+    updateScenarioDisplay(boardState) {
+        super.updateScenarioDisplay(boardState);
+        this.renderScene();
+    }
+
+    /**
+     * Apply servo angles from board state to 3D joint rotations.
+     * This is the core of the kinematic mapping:
+     * 1. Read servo angle from board state
+     * 2. Map servo range to joint angle range using linear interpolation
+     * 3. Apply rotation around the joint's rotation axis
+     * 4. Combine with base rotation to get final orientation
+     * @param {BoardState} boardState - Current state of the Dwenguino board
+     */
+    applyServoState(boardState) {
+        if (this.joints.length === 0) {
+            return;
+        }
+
+        for (let jointBinding of this.joints) {
+            let descriptor = jointBinding.descriptor;
+            // Get servo configuration from descriptor
+            let servoIndex = descriptor?.servo?.index ?? 1;
+            let servoMin = descriptor?.servo?.min ?? 0;
+            let servoMax = descriptor?.servo?.max ?? 180;
+            let invert = descriptor?.servo?.invert ?? false;
+
+            // Read current (smoothed) servo angle from the internal state
+            let servoAngle = this.getSmoothedServoAngle(servoIndex, boardState);
+            
+            // Map servo angle [servoMin, servoMax] to normalized range [0, 1]
+            let t = 0;
+            if (servoMax !== servoMin) {
+                t = (servoAngle - servoMin) / (servoMax - servoMin);
+            }
+            t = Math.max(0, Math.min(1, t)); // Clamp to [0, 1]
+            if (invert) {
+                t = 1 - t; // Invert for opposite rotation direction
+            }
+
+            // Map normalized value to joint angle range
+            let minDeg = descriptor?.minDeg ?? 0;
+            let maxDeg = descriptor?.maxDeg ?? 0;
+            let jointAngleDeg = minDeg + t * (maxDeg - minDeg);
+            
+            // Create rotation around the joint's axis
+            let axisValues = descriptor?.axis ?? [0, 0, 1];
+            let axis = new THREE.Vector3(axisValues[0], axisValues[1], axisValues[2]);
+            if (axis.length() === 0) {
+                axis.set(0, 0, 1); // Default to Z-axis
+            }
+            axis.normalize();
+            let rotation = new THREE.Quaternion().setFromAxisAngle(axis, THREE.MathUtils.degToRad(jointAngleDeg));
+            
+            // Apply rotation: base rotation * joint rotation
+            jointBinding.node.quaternion.copy(jointBinding.baseQuaternion).multiply(rotation);
+        }
+    }
+
+    /**
+     * Seed the smoothing maps with initial servo angles when the simulation is reset.
+     * Uses descriptor-defined initial values if provided, otherwise defaults to 0 degrees.
+     */
+    seedServoAnglesFromDescriptor() {
+        if (!this.kinematicsDescriptor || !this.kinematicsDescriptor.joints) {
+            return;
+        }
+        for (let joint of this.kinematicsDescriptor.joints) {
+            let servoIndex = joint?.servo?.index ?? 1;
+            let initialAngle = joint?.servo?.initial ?? 0;
+            this.currentServoAngles.set(servoIndex, initialAngle);
+            this.targetServoAngles.set(servoIndex, initialAngle);
+        }
+    }
+
+    /**
+     * Reset the model joints to their original orientation as loaded.
+     */
+    resetModelPose() {
+        for (let jointBinding of this.joints) {
+            let initialQuaternion = jointBinding.node.userData.initialQuaternion;
+            if (initialQuaternion) {
+                jointBinding.node.quaternion.copy(initialQuaternion);
+                jointBinding.baseQuaternion = initialQuaternion.clone();
+            }
+        }
+    }
+
+    /**
+     * Update the target servo angles from the board state.
+     * @param {BoardState} boardState - Current board state
+     */
+    updateTargetServoAngles(boardState) {
+        if (!boardState) {
+            return;
+        }
+        for (let jointBinding of this.joints) {
+            let servoIndex = jointBinding.descriptor?.servo?.index ?? 1;
+            let targetAngle = this.getServoAngle(boardState, servoIndex);
+            this.targetServoAngles.set(servoIndex, targetAngle);
+
+            if (!this.currentServoAngles.has(servoIndex)) {
+                this.currentServoAngles.set(servoIndex, targetAngle);
+            }
+        }
+    }
+
+    /**
+     * Smoothly update current servo angles toward their targets over time.
+     */
+    updateSmoothedServoAngles() {
+        let nowMs = performance.now();
+        if (this.lastUpdateTimestampMs === null) {
+            this.lastUpdateTimestampMs = nowMs;
+            return;
+        }
+        let deltaSeconds = (nowMs - this.lastUpdateTimestampMs) / 1000;
+        this.lastUpdateTimestampMs = nowMs;
+
+        let maxStep = this.servoSpeedDegPerSec * deltaSeconds;
+
+        for (let [servoIndex, targetAngle] of this.targetServoAngles.entries()) {
+            let currentAngle = this.currentServoAngles.get(servoIndex) ?? targetAngle;
+            let delta = targetAngle - currentAngle;
+            if (Math.abs(delta) <= maxStep) {
+                currentAngle = targetAngle;
+            } else {
+                currentAngle += Math.sign(delta) * maxStep;
+            }
+            this.currentServoAngles.set(servoIndex, currentAngle);
+        }
+    }
+
+    /**
+     * Get the current smoothed servo angle for a servo index.
+     * Falls back to board state if smoothing is not initialized.
+     * @param {number} servoIndex - Servo index to query
+     * @param {BoardState} boardState - Current board state
+     * @returns {number} Smoothed servo angle in degrees
+     */
+    getSmoothedServoAngle(servoIndex, boardState) {
+        if (this.currentServoAngles.has(servoIndex)) {
+            return this.currentServoAngles.get(servoIndex);
+        }
+        return this.getServoAngle(boardState, servoIndex);
+    }
+
+    /**
+     * Safely retrieve servo angle from board state.
+     * Returns 0 if the angle is unavailable or invalid.
+     * @param {BoardState} boardState - Current board state
+     * @param {number} servoIndex - Index of the servo to read
+     * @returns {number} Servo angle in degrees
+     */
+    getServoAngle(boardState, servoIndex) {
+        if (!boardState || typeof boardState.getServoAngle !== "function") {
+            return 0;
+        }
+        let angle = boardState.getServoAngle(servoIndex);
+        if (angle === undefined || angle === null || Number.isNaN(angle)) {
+            return 0;
+        }
+        return angle;
+    }
+
+    /**
+     * Render the current frame of the 3D scene.
+     * Called whenever the scene state changes.
+     */
+    renderScene() {
+        if (!this.renderer || !this.scene || !this.camera) {
+            return;
+        }
+        this.renderer.render(this.scene, this.camera);
+    }
+
+    /**
+     * Handle container resize events.
+     * Updates camera aspect ratio and renderer size to match the new container dimensions.
+     */
+    handleResize() {
+        if (!this.renderer || !this.camera) {
+            return;
+        }
+        let width = this.container.width();
+        let height = this.container.height();
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(width, height);
+        this.renderScene();
+    }
+
+    /**
+     * Reset the scenario to initial state.
+     * Re-applies kinematics and re-renders the scene.
+     */
+    resetScenario() {
+        super.resetScenario();
+        this.currentServoAngles.clear();
+        this.targetServoAngles.clear();
+        this.lastUpdateTimestampMs = null;
+        this.applyKinematicsDescriptor();
+        this.resetModelPose();
+        this.seedServoAnglesFromDescriptor();
+        this.applyServoState(null);
+        this.renderScene();
+    }
+
+    /**
+     * Set whether the simulation is currently running.
+     * @param {boolean} isSimulationRunning - True if simulation is active
+     */
+    setIsSimulationRunning(isSimulationRunning) {
+        this.isSimulationRunning = isSimulationRunning;
+    }
+}
+
+export default DwenguinoSimulationScenarioGripper;

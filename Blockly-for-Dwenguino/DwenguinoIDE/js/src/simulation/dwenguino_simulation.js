@@ -5,6 +5,7 @@ import DwenguinoSimulationScenarioRidingRobotWithWall from "../scenario/ridingro
 import DwenguinoSimulationScenarioSpyrograph from "../scenario/spyrograph/dwenguino_simulation_scenario_spyrograph.js"
 import DwenguinoSimulationScenarioPlotter from "../scenario/plotter/dwenguino_simulation_scenario_plotter.js";
 import DwenguinoSimulationScenarioConveyor from "../scenario/conveyor/dwenguino_simulation_scenario_conveyor.js";
+import DwenguinoSimulationScenarioGripper from "../scenario/gripper/dwenguino_simulation_scenario_gripper.js";
 import { SCENARIO } from "../../../../../shared/types/saved_state.types"
 
 export const ScenarioNames = {
@@ -14,6 +15,7 @@ export const ScenarioNames = {
     SOCIALROBOT: SCENARIO.socialrobot,
     PLOTTER: "plotter",
     CONVEYOR: SCENARIO.conveyor,
+    GRIPPER: SCENARIO.gripper,
 }
 
 class DwenguinoSimulation {
@@ -28,6 +30,7 @@ class DwenguinoSimulation {
             "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger, "wall"),
             "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger, "socialrobot"),
             "conveyor": new DwenguinoSimulationScenarioConveyor(logger, "conveyor"),
+            "gripper": new DwenguinoSimulationScenarioGripper(logger, "gripper"),
         };
         this.logger = logger;
         this.workspace = workspace;

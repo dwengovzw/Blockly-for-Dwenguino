@@ -17,7 +17,8 @@ export const SAVEDPROGRAM_TYPES = {
     moving: "moving",
     wall: "wall",
     socialrobot: "socialrobot",
-    conveyor: "conveyor"
+    conveyor: "conveyor",
+    gripper: "gripper"
   } as const;
   
   /* ---------- pure data types ---------- */
