@@ -56,10 +56,10 @@
 #define LED_7   LED_BUILTIN
 
 // Map DC-motor pins to Halberd pins even though there are no DC-motor connectors on Halberd board.
-#define MOTOR_0_1 A5 // PWM pin to set speed
-#define MOTOR_0_2 D8 // Direction pin
-#define MOTOR_1_1 A6 // PWM pin to set speed
-#define MOTOR_1_2 D7 // Direction pin
+#define MOTOR_0_0 A5 // PWM pin to set speed
+#define MOTOR_0_1 D8 // Direction pin
+#define MOTOR_1_0 A6 // PWM pin to set speed
+#define MOTOR_1_1 D7 // Direction pin
 
 
 // Halberd-specific features

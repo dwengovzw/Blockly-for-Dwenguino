@@ -1,6 +1,6 @@
 
-#ifndef DwenguinoMotor_h
-#define DwenguinoMotor_h
+#ifndef DwenguinoMotor_nrf52_h
+#define DwenguinoMotor_nrf52_h
 
 // Confitionally dispatch to the correct header file based on the board being compiled for. This allows the same code to work on both platforms without modification.
 // Conditional includes for platform-specific features

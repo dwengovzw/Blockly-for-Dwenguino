@@ -1,6 +1,5 @@
 #include "Halberd_v2_nrf52_dc_motor.h"
-#include "../shared/dc_motor.h"
-#include <Arduino.h>
+
 
 DCMotor::DCMotor(uint8_t motor_PWM_pin, uint8_t motor_DIR_pin) 
     : _motor_PWM(motor_PWM_pin), _motor_DIR(motor_DIR_pin), currentSpeed(0) {

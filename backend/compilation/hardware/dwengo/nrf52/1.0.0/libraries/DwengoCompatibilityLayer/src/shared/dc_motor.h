@@ -1,7 +1,7 @@
 
 #ifndef DwenguinoMotor_h
 #define DwenguinoMotor_h
-#include <stdint.h>
+
 // DC Motor Class
 class DCMotor{
 	public:
@@ -13,4 +13,5 @@ class DCMotor{
 		uint8_t _motor_PWM, _motor_DIR;
     int currentSpeed;
 };
+
 #endif

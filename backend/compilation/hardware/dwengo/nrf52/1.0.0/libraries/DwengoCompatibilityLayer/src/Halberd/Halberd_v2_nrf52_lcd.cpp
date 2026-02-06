@@ -102,7 +102,7 @@ void BufferedLCD::createChar(uint8_t location, uint8_t charmap[]) {
 }
 
 void BufferedLCD::setCursor(uint8_t col, uint8_t row) {
-    Serial.println("LCD: setCursor()");
+    Serial.println("LCD: setCursor(" + String(col) + ", " + String(row) + ")");
 }
 
 size_t BufferedLCD::print(const __FlashStringHelper *ifsh) {
@@ -111,47 +111,47 @@ size_t BufferedLCD::print(const __FlashStringHelper *ifsh) {
 }
 
 size_t BufferedLCD::print(const String &s) {
-    Serial.println("LCD: print(String)");
+    Serial.println("LCD: print(" + s + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(const char str[]) {
-    Serial.println("LCD: print(const char[])");
+    Serial.println("LCD: print(" + String(str) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(char c) {
-    Serial.println("LCD: print(char)");
+    Serial.println("LCD: print(" + String(c) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(unsigned char b, int base) {
-    Serial.println("LCD: print(unsigned char)");
+    Serial.println("LCD: print(" + String(b) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(int n, int base) {
-    Serial.println("LCD: print(int)");
+    Serial.println("LCD: print(" + String(n) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(unsigned int n, int base) {
-    Serial.println("LCD: print(unsigned int)");
+    Serial.println("LCD: print(" + String(n) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(long n, int base) {
-    Serial.println("LCD: print(long)");
+    Serial.println("LCD: print(" + String(n) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(unsigned long n, int base) {
-    Serial.println("LCD: print(unsigned long)");
+    Serial.println("LCD: print(" + String(n) + ")");
     return 0;
 }
 
 size_t BufferedLCD::print(double n, int digits) {
-    Serial.println("LCD: print(double)");
+    Serial.println("LCD: print(" + String(n, digits) + ")");
     return 0;
 }
 
@@ -166,47 +166,47 @@ size_t BufferedLCD::println(const __FlashStringHelper *ifsh) {
 }
 
 size_t BufferedLCD::println(const String &s) {
-    Serial.println("LCD: println(String)");
+    Serial.println("LCD: println("  + s + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(const char c[]) {
-    Serial.println("LCD: println(const char[])");
+    Serial.println("LCD: println(" + String(c) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(char c) {
-    Serial.println("LCD: println(char)");
+    Serial.println("LCD: println(" + String(c) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(unsigned char b, int base) {
-    Serial.println("LCD: println(unsigned char)");
+    Serial.println("LCD: println(" + String(b) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(int num, int base) {
-    Serial.println("LCD: println(int)");
+    Serial.println("LCD: println(" + String(num) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(unsigned int num, int base) {
-    Serial.println("LCD: println(unsigned int)");
+    Serial.println("LCD: println(" + String(num) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(long num, int base) {
-    Serial.println("LCD: println(long)");
+    Serial.println("LCD: println(" + String(num) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(unsigned long num, int base) {
-    Serial.println("LCD: println(unsigned long)");
+    Serial.println("LCD: println(" + String(num) + ")");
     return 0;
 }
 
 size_t BufferedLCD::println(double num, int digits) {
-    Serial.println("LCD: println(double)");
+    Serial.println("LCD: println(" + String(num, digits) + ")");
     return 0;
 }
 
