@@ -36,24 +36,32 @@
       }
     }
   ],
+  "constraintSolver": {
+    "maxIterations": 10,
+    "convergenceThreshold": 0.001,
+    "enableConflictDetection": true
+  },
   "constraints": [
     {
       "id": "parallel_jaws",
       "type": "Parallel",
       "entities": ["jaw_left", "jaw_right"],
-      "description": "Keep both jaws parallel during gripper motion"
+      "weight": 1.0,
+      "description": "Keep both jaws parallel during gripper motion (hard constraint)"
     },
     {
       "id": "concentric_pivot",
       "type": "Concentric",
       "entities": ["jaw_left", "jaw_right"],
-      "description": "Both jaws rotate about the same center point"
+      "weight": 0.8,
+      "description": "Both jaws rotate about the same center point (soft constraint)"
     },
     {
       "id": "horizontal_base",
       "type": "Horizontal",
       "entities": ["base"],
-      "description": "Base platform remains horizontal"
+      "weight": 0.5,
+      "description": "Base platform remains horizontal (aesthetic preference)"
     }
   ]
 }

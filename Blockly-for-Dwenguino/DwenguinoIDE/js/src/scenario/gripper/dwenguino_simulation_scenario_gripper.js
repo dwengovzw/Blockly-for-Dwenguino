@@ -50,7 +50,13 @@ const DEFAULT_KINEMATICS_DESCRIPTOR = {
             }
         }
     ],
-    constraints: []
+    constraints: [],
+    // Constraint solver configuration
+    constraintSolver: {
+        maxIterations: 10,              // Maximum solver iterations per frame
+        convergenceThreshold: 0.001,    // Convergence threshold (radians/units)
+        enableConflictDetection: true   // Warn about conflicting constraints
+    }
 };
 
 /**
@@ -81,6 +87,12 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     joints = [];
     // Array of SolidWorks constraints resolved from descriptor
     constraints = [];
+    // Constraint solver configuration
+    maxConstraintIterations = 10;
+    convergenceThreshold = 0.001;
+    enableConflictDetection = true;
+    // Array of detected constraint conflicts
+    constraintConflicts = [];
     // Current kinematics configuration (deep copy to avoid mutation)
     kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
     // ResizeObserver to handle container size changes
@@ -232,27 +244,51 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * 
      * CONSTRAINT DESCRIPTOR FORMAT EXAMPLE:
      * {
+     *   "constraintSolver": {
+     *     "maxIterations": 10,
+     *     "convergenceThreshold": 0.001,
+     *     "enableConflictDetection": true
+     *   },
      *   "constraints": [
      *     {
      *       "id": "parallel_jaws",
      *       "type": "Parallel",
      *       "entities": ["jaw_left", "jaw_right"],
+     *       "weight": 1.0,
      *       "description": "Keep both jaws parallel during motion"
      *     },
      *     {
      *       "id": "coincident_centers",
      *       "type": "Concentric",
      *       "entities": ["jaw_left", "jaw_right"],
-     *       "description": "Jaws rotate about same center point"
+     *       "weight": 0.8,
+     *       "description": "Jaws rotate about same center point (soft constraint)"
      *     },
      *     {
      *       "id": "horizontal_base",
      *       "type": "Horizontal",
      *       "entities": ["base"],
+     *       "weight": 1.0,
      *       "description": "Base platform remains horizontal"
      *     }
      *   ]
      * }
+     * 
+     * CONSTRAINT WEIGHTS:
+     * - weight: 0.0 to 1.0 (default: 1.0 for hard constraints)
+     * - 1.0 = hard constraint (100% enforcement)
+     * - 0.5 = soft constraint (50% enforcement)
+     * - Constraints are sorted by weight (higher weight = higher priority)
+     * 
+     * ITERATIVE SOLVER:
+     * - Applies constraints repeatedly until convergence or max iterations reached
+     * - maxIterations: 1-20 (default: 10) - higher = more accurate but slower
+     * - convergenceThreshold: 0.0001-0.01 (default: 0.001) - smaller = more precise
+     * 
+     * CONFLICT DETECTION:
+     * - Automatically detects contradictory constraints (e.g., parallel + perpendicular)
+     * - Warns about over-constrained entities (more than 3 constraints per entity)
+     * - Check browser console for conflict warnings
      * 
      * SUPPORTED CONSTRAINT TYPES (from SolidWorks):
      * - Horizontal: Edge/plane is horizontal (parallel to XZ plane)
@@ -270,7 +306,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * 2. Note the constraint names and types from the assembly tree
      * 3. Export to GLB format (File > Save As > Save as type: GLTF Binary (.glb))
      * 4. Create JSON descriptor manually mapping SolidWorks constraints to part names
-     * 5. Upload both GLB and descriptor JSON files to the simulator
+     * 5. Assign weights to constraints (1.0 for critical, lower for soft constraints)
+     * 6. Upload both GLB and descriptor JSON files to the simulator
      */
     setupControlPanel() {
         // Create floating panel in bottom-left corner
@@ -514,6 +551,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
     /**
      * Initialize and validate SolidWorks constraints from descriptor.
+     * Parses solver configuration, validates constraint weights, and detects conflicts.
      * Supported constraint types:
      * - Horizontal: Forces edge/plane to be horizontal
      * - Vertical: Forces edge/plane to be vertical
@@ -527,6 +565,16 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     initializeConstraints() {
         this.constraints = [];
+        this.constraintConflicts = [];
+        
+        // Parse solver configuration
+        if (this.kinematicsDescriptor?.constraintSolver) {
+            const config = this.kinematicsDescriptor.constraintSolver;
+            this.maxConstraintIterations = config.maxIterations ?? 10;
+            this.convergenceThreshold = config.convergenceThreshold ?? 0.001;
+            this.enableConflictDetection = config.enableConflictDetection ?? true;
+        }
+        
         if (!this.kinematicsDescriptor?.constraints) {
             return;
         }
@@ -534,7 +582,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         for (let constraintDef of this.kinematicsDescriptor.constraints) {
             // Validate constraint has required fields
             if (!constraintDef.type || !constraintDef.entities) {
-                console.warn(`Invalid constraint definition:`, constraintDef);
+                console.warn(`[Gripper Constraints] Invalid constraint definition:`, constraintDef);
                 continue;
             }
 
@@ -543,15 +591,22 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             for (let entityName of constraintDef.entities) {
                 let entity = this.modelRoot.getObjectByName(entityName);
                 if (!entity) {
-                    console.warn(`Constraint entity not found: ${entityName}`);
+                    console.warn(`[Gripper Constraints] Constraint entity not found: ${entityName}`);
                     continue;
                 }
                 resolvedEntities.push({ name: entityName, node: entity });
             }
 
             if (resolvedEntities.length < (constraintDef.entities?.length || 0)) {
-                console.warn(`Some entities not found for constraint:`, constraintDef);
+                console.warn(`[Gripper Constraints] Some entities not found for constraint:`, constraintDef);
                 continue;
+            }
+
+            // Parse and validate weight (default to 1.0 for hard constraints)
+            let weight = constraintDef.weight ?? 1.0;
+            if (typeof weight !== 'number' || weight < 0 || weight > 1) {
+                console.warn(`[Gripper Constraints] Invalid weight ${weight} for constraint '${constraintDef.id}', using 1.0`);
+                weight = 1.0;
             }
 
             // Store validated constraint
@@ -559,14 +614,109 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 id: constraintDef.id || `constraint_${this.constraints.length}`,
                 type: constraintDef.type,
                 entities: resolvedEntities,
+                weight: weight,
                 value: constraintDef.value,
                 definition: constraintDef
             });
         }
+
+        console.log(`[Gripper Constraints] Initialized ${this.constraints.length} constraints with iterative solver (max ${this.maxConstraintIterations} iterations)`);
+        
+        // Detect conflicts if enabled
+        if (this.enableConflictDetection && this.constraints.length > 1) {
+            this.detectConstraintConflicts();
+            if (this.constraintConflicts.length > 0) {
+                console.warn(`[Gripper Constraints] Detected ${this.constraintConflicts.length} potential conflicts:`);
+                this.constraintConflicts.forEach(conflict => console.warn(`  - ${conflict}`));
+            }
+        }
     }
 
     /**
-     * Apply SolidWorks constraints to modify joint orientations and positions.
+     * Detect potential conflicts between constraints.
+     * Warns about contradictory or over-constrained configurations.
+     */
+    detectConstraintConflicts() {
+        this.constraintConflicts = [];
+
+        // Check for contradictory orientation constraints on same entities
+        for (let i = 0; i < this.constraints.length; i++) {
+            for (let j = i + 1; j < this.constraints.length; j++) {
+                const c1 = this.constraints[i];
+                const c2 = this.constraints[j];
+
+                // Check if constraints share entities
+                const sharedEntities = c1.entities.filter(e1 => 
+                    c2.entities.some(e2 => e2.name === e1.name)
+                );
+
+                if (sharedEntities.length === 0) continue;
+
+                // Detect specific conflicts
+                const conflict = this.checkConstraintPairConflict(c1, c2, sharedEntities);
+                if (conflict) {
+                    this.constraintConflicts.push(
+                        `Constraints '${c1.id}' (${c1.type}) and '${c2.id}' (${c2.type}) conflict on entities: ${sharedEntities.map(e => e.name).join(', ')} - ${conflict}`
+                    );
+                }
+            }
+        }
+
+        // Check for over-constrained entities (too many constraints on single entity)
+        const entityConstraintCount = new Map();
+        this.constraints.forEach(constraint => {
+            constraint.entities.forEach(entity => {
+                const count = entityConstraintCount.get(entity.name) || 0;
+                entityConstraintCount.set(entity.name, count + 1);
+            });
+        });
+
+        entityConstraintCount.forEach((count, entityName) => {
+            if (count > 3) {
+                this.constraintConflicts.push(
+                    `Entity '${entityName}' is over-constrained with ${count} constraints (may cause instability)`
+                );
+            }
+        });
+    }
+
+    /**
+     * Check if two constraints are contradictory.
+     * @returns {string|null} Conflict description or null if no conflict
+     */
+    checkConstraintPairConflict(c1, c2, sharedEntities) {
+        // Parallel + Perpendicular conflict
+        if ((c1.type === 'Parallel' && c2.type === 'Perpendicular') ||
+            (c1.type === 'Perpendicular' && c2.type === 'Parallel')) {
+            return 'Cannot be both parallel and perpendicular';
+        }
+
+        // Horizontal + Vertical conflict
+        if ((c1.type === 'Horizontal' && c2.type === 'Vertical') ||
+            (c1.type === 'Vertical' && c2.type === 'Horizontal')) {
+            return 'Cannot be both horizontal and vertical';
+        }
+
+        // Multiple Coincident/Concentric constraints on same entities
+        if ((c1.type === 'Coincident' && c2.type === 'Concentric') ||
+            (c1.type === 'Concentric' && c2.type === 'Coincident')) {
+            if (sharedEntities.length === c1.entities.length && sharedEntities.length === c2.entities.length) {
+                return 'Redundant positional constraints';
+            }
+        }
+
+        // Collinear + Perpendicular conflict
+        if ((c1.type === 'Collinear' && c2.type === 'Perpendicular') ||
+            (c1.type === 'Perpendicular' && c2.type === 'Collinear')) {
+            return 'Collinear entities cannot be perpendicular';
+        }
+
+        return null;
+    }
+
+    /**
+     * Apply SolidWorks constraints using iterative solver.
+     * Iteratively applies constraints until convergence or max iterations reached.
      * This is called after servo state is applied to enforce mechanical relationships.
      */
     applyConstraints() {
@@ -574,38 +724,124 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             return;
         }
 
-        for (let constraint of this.constraints) {
-            switch (constraint.type.toUpperCase()) {
-                case "HORIZONTAL":
-                    this.applyHorizontalConstraint(constraint);
-                    break;
-                case "VERTICAL":
-                    this.applyVerticalConstraint(constraint);
-                    break;
-                case "COLLINEAR":
-                    this.applyCollinearConstraint(constraint);
-                    break;
-                case "PERPENDICULAR":
-                    this.applyPerpendicularConstraint(constraint);
-                    break;
-                case "PARALLEL":
-                    this.applyParallelConstraint(constraint);
-                    break;
-                case "TANGENT":
-                    this.applyTangentConstraint(constraint);
-                    break;
-                case "CONCENTRIC":
-                    this.applyConcentriConstraint(constraint);
-                    break;
-                case "COINCIDENT":
-                    this.applyCoincidentConstraint(constraint);
-                    break;
-                case "EQUAL":
-                    this.applyEqualConstraint(constraint);
-                    break;
-                default:
-                    console.warn(`Unknown constraint type: ${constraint.type}`);
+        // Sort constraints by weight (highest priority first)
+        const sortedConstraints = [...this.constraints].sort((a, b) => b.weight - a.weight);
+
+        // Store initial state for convergence checking
+        const initialState = this.captureEntityState();
+        let previousState = initialState;
+
+        // Iterative constraint solver
+        for (let iteration = 0; iteration < this.maxConstraintIterations; iteration++) {
+            // Apply all constraints in priority order
+            for (let constraint of sortedConstraints) {
+                this.applyConstraintWithWeight(constraint);
             }
+
+            // Check for convergence
+            const currentState = this.captureEntityState();
+            const maxDelta = this.computeMaxStateDelta(previousState, currentState);
+
+            if (maxDelta < this.convergenceThreshold) {
+                // Converged!
+                if (iteration > 0) {
+                    console.log(`[Gripper Constraints] Converged in ${iteration + 1} iterations (delta: ${maxDelta.toFixed(6)})`);
+                }
+                return;
+            }
+
+            previousState = currentState;
+        }
+
+        // Did not converge - log warning
+        console.warn(`[Gripper Constraints] Did not converge after ${this.maxConstraintIterations} iterations (may have conflicting constraints)`);
+    }
+
+    /**
+     * Capture current state of all constrained entities for convergence checking.
+     * @returns {Map} Map of entity name to {position, quaternion}
+     */
+    captureEntityState() {
+        const state = new Map();
+        const processedEntities = new Set();
+
+        this.constraints.forEach(constraint => {
+            constraint.entities.forEach(entity => {
+                if (!processedEntities.has(entity.name)) {
+                    processedEntities.add(entity.name);
+                    const worldPos = new THREE.Vector3();
+                    const worldQuat = new THREE.Quaternion();
+                    entity.node.getWorldPosition(worldPos);
+                    entity.node.getWorldQuaternion(worldQuat);
+                    state.set(entity.name, {
+                        position: worldPos.clone(),
+                        quaternion: worldQuat.clone()
+                    });
+                }
+            });
+        });
+
+        return state;
+    }
+
+    /**
+     * Compute maximum state change between two entity states.
+     * @returns {number} Maximum delta in radians/units
+     */
+    computeMaxStateDelta(prevState, currentState) {
+        let maxDelta = 0;
+
+        currentState.forEach((current, entityName) => {
+            const prev = prevState.get(entityName);
+            if (!prev) return;
+
+            // Position delta
+            const posDelta = current.position.distanceTo(prev.position);
+            maxDelta = Math.max(maxDelta, posDelta);
+
+            // Rotation delta (angle between quaternions)
+            const rotDelta = current.quaternion.angleTo(prev.quaternion);
+            maxDelta = Math.max(maxDelta, rotDelta);
+        });
+
+        return maxDelta;
+    }
+
+    /**
+     * Apply a single constraint with weight factor.
+     * Weight allows for soft constraints (partial enforcement).
+     */
+    applyConstraintWithWeight(constraint) {
+        switch (constraint.type.toUpperCase()) {
+            case "HORIZONTAL":
+                this.applyHorizontalConstraint(constraint);
+                break;
+            case "VERTICAL":
+                this.applyVerticalConstraint(constraint);
+                break;
+            case "COLLINEAR":
+                this.applyCollinearConstraint(constraint);
+                break;
+            case "PERPENDICULAR":
+                this.applyPerpendicularConstraint(constraint);
+                break;
+            case "PARALLEL":
+                this.applyParallelConstraint(constraint);
+                break;
+            case "TANGENT":
+                this.applyTangentConstraint(constraint);
+                break;
+            case "CONCENTRIC":
+                this.applyConcentriConstraint(constraint);
+                break;
+            case "COINCIDENT":
+                this.applyCoincidentConstraint(constraint);
+                break;
+            case "EQUAL":
+                this.applyEqualConstraint(constraint);
+                break;
+            default:
+                console.warn(`[Gripper Constraints] Unknown constraint type: ${constraint.type}`);
         }
     }
 
@@ -616,6 +852,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     applyHorizontalConstraint(constraint) {
         if (constraint.entities.length < 1) return;
         let entity = constraint.entities[0].node;
+        const weight = constraint.weight ?? 1.0;
 
         // Get entity's local normal (typically Z-axis in local space)
         let localNormal = new THREE.Vector3(0, 0, 1);
@@ -626,6 +863,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (horizontalNormal.lengthSq() > 0.001) {
             horizontalNormal.normalize();
             let rotation = new THREE.Quaternion().setFromUnitVectors(worldNormal.normalize(), horizontalNormal);
+            // Apply weight by lerping between identity and target rotation
+            if (weight < 1.0) {
+                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+            }
             entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
         }
     }
@@ -636,6 +877,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     applyVerticalConstraint(constraint) {
         if (constraint.entities.length < 1) return;
         let entity = constraint.entities[0].node;
+        const weight = constraint.weight ?? 1.0;
 
         let localNormal = new THREE.Vector3(0, 0, 1);
         let worldNormal = localNormal.clone().applyQuaternion(entity.quaternion).normalize();
@@ -645,6 +887,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
         if (Math.abs(worldNormal.y) < 0.99) {
             let rotation = new THREE.Quaternion().setFromUnitVectors(worldNormal, verticalNormal);
+            if (weight < 1.0) {
+                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+            }
             entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
         }
     }
@@ -655,6 +900,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyCollinearConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         let referenceEntity = constraint.entities[0].node;
         let referenceNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(referenceEntity.quaternion).normalize();
@@ -665,6 +911,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
             if (entityNormal.dot(referenceNormal) < 0.99) {
                 let rotation = new THREE.Quaternion().setFromUnitVectors(entityNormal, referenceNormal);
+                if (weight < 1.0) {
+                    rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+                }
                 entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
             }
         }
@@ -676,6 +925,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyPerpendicularConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         let entity1 = constraint.entities[0].node;
         let entity2 = constraint.entities[1].node;
@@ -688,6 +938,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (perpendicular.lengthSq() > 0.001) {
             perpendicular.normalize();
             let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, perpendicular);
+            if (weight < 1.0) {
+                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+            }
             entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
         }
     }
@@ -698,6 +951,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyParallelConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         let entity1 = constraint.entities[0].node;
         let entity2 = constraint.entities[1].node;
@@ -711,6 +965,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
         if (Math.abs(normal2.dot(targetNormal)) < 0.99) {
             let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, targetNormal);
+            if (weight < 1.0) {
+                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+            }
             entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
         }
     }
@@ -721,6 +978,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyTangentConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         let entity1 = constraint.entities[0].node;
         let entity2 = constraint.entities[1].node;
@@ -731,6 +989,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         // For tangent, normals should be aligned
         if (normal1.dot(normal2) < 0.99) {
             let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, normal1);
+            if (weight < 1.0) {
+                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+            }
             entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
         }
     }
@@ -741,6 +1002,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyConcentriConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         // Get world positions of all entities
         let positions = constraint.entities.map(e => {
@@ -760,6 +1022,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         for (let i = 0; i < constraint.entities.length; i++) {
             let entity = constraint.entities[i].node;
             let offset = new THREE.Vector3().subVectors(center, positions[i]);
+            // Apply weight to position offset
+            offset.multiplyScalar(weight);
             entity.position.add(offset);
         }
     }
@@ -770,6 +1034,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyCoincidentConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         // Use first entity as reference
         let referenceEntity = constraint.entities[0].node;
@@ -782,6 +1047,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             let entityPos = new THREE.Vector3();
             entity.getWorldPosition(entityPos);
             let offset = new THREE.Vector3().subVectors(referencePos, entityPos);
+            // Apply weight to position offset
+            offset.multiplyScalar(weight);
             entity.position.add(offset);
         }
     }
@@ -792,6 +1059,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     applyEqualConstraint(constraint) {
         if (constraint.entities.length < 2) return;
+        const weight = constraint.weight ?? 1.0;
 
         let entity1 = constraint.entities[0].node;
         let entity2 = constraint.entities[1].node;
@@ -808,7 +1076,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
         if (scale2 > 0.001) {
             let scaleRatio = scale1 / scale2;
-            entity2.scale.multiplyScalar(scaleRatio);
+            // Apply weight by lerping between current scale (1.0) and target scale
+            let weightedScale = 1.0 + (scaleRatio - 1.0) * weight;
+            entity2.scale.multiplyScalar(weightedScale);
         }
     }
 
