@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "model": {
+    "upAxis": "Y",
+    "scale": 1
+  },
+  "joints": [
+    {
+      "name": "jaw_left",
+      "node": "jaw_left",
+      "type": "revolute",
+      "axis": [0, 0, -1],
+      "minDeg": 0,
+      "maxDeg": 90,
+      "servo": {
+        "index": 1,
+        "min": 0,
+        "max": 180,
+        "invert": false,
+        "initial": 0
+      }
+    },
+    {
+      "name": "jaw_right",
+      "node": "jaw_right",
+      "type": "revolute",
+      "axis": [0, 0, 1],
+      "minDeg": 0,
+      "maxDeg": 90,
+      "servo": {
+        "index": 2,
+        "min": 0,
+        "max": 180,
+        "invert": true,
+        "initial": 0
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "parallel_jaws",
+      "type": "Parallel",
+      "entities": ["jaw_left", "jaw_right"],
+      "description": "Keep both jaws parallel during gripper motion"
+    },
+    {
+      "id": "concentric_pivot",
+      "type": "Concentric",
+      "entities": ["jaw_left", "jaw_right"],
+      "description": "Both jaws rotate about the same center point"
+    },
+    {
+      "id": "horizontal_base",
+      "type": "Horizontal",
+      "entities": ["base"],
+      "description": "Base platform remains horizontal"
+    }
+  ]
+}

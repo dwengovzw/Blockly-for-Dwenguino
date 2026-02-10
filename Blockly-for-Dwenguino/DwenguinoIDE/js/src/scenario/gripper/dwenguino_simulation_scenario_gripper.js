@@ -8,9 +8,11 @@ import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
  * This descriptor defines:
  * - Model properties (scale, axis orientation)
  * - Joint definitions with their rotation axes, angle ranges, and servo mappings
+ * - SolidWorks constraints (Horizontal, Vertical, Collinear, Perpendicular, Parallel, Tangent, Concentric, Coincident, Equal)
  * 
  * The descriptor allows for extensibility - users can upload custom JSON files
- * to define different gripper configurations and servo mappings.
+ * to define different gripper configurations, servo mappings, and mechanical constraints
+ * exported directly from SolidWorks.
  */
 const DEFAULT_KINEMATICS_DESCRIPTOR = {
     version: 1,
@@ -47,7 +49,8 @@ const DEFAULT_KINEMATICS_DESCRIPTOR = {
                 invert: true
             }
         }
-    ]
+    ],
+    constraints: []
 };
 
 /**
@@ -76,6 +79,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     modelRoot = null;
     // Array of joint bindings (descriptor + Three.js node + base rotation)
     joints = [];
+    // Array of SolidWorks constraints resolved from descriptor
+    constraints = [];
     // Current kinematics configuration (deep copy to avoid mutation)
     kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
     // ResizeObserver to handle container size changes
@@ -222,8 +227,50 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * Create and setup the control panel UI for uploading custom models and kinematics.
      * The panel allows users to:
      * - Upload custom GLB 3D models
-     * - Upload custom JSON kinematic descriptors
+     * - Upload custom JSON kinematic descriptors with servo mappings and SolidWorks constraints
      * - Reset to the default gripper configuration
+     * 
+     * CONSTRAINT DESCRIPTOR FORMAT EXAMPLE:
+     * {
+     *   "constraints": [
+     *     {
+     *       "id": "parallel_jaws",
+     *       "type": "Parallel",
+     *       "entities": ["jaw_left", "jaw_right"],
+     *       "description": "Keep both jaws parallel during motion"
+     *     },
+     *     {
+     *       "id": "coincident_centers",
+     *       "type": "Concentric",
+     *       "entities": ["jaw_left", "jaw_right"],
+     *       "description": "Jaws rotate about same center point"
+     *     },
+     *     {
+     *       "id": "horizontal_base",
+     *       "type": "Horizontal",
+     *       "entities": ["base"],
+     *       "description": "Base platform remains horizontal"
+     *     }
+     *   ]
+     * }
+     * 
+     * SUPPORTED CONSTRAINT TYPES (from SolidWorks):
+     * - Horizontal: Edge/plane is horizontal (parallel to XZ plane)
+     * - Vertical: Edge/plane is vertical (parallel to Y-axis)
+     * - Collinear: Multiple edges/points lie on same line
+     * - Perpendicular: Two edges are 90° apart
+     * - Parallel: Two edges/planes have same orientation
+     * - Tangent: Curves/surfaces touch without penetration
+     * - Concentric: Multiple elements share same center point
+     * - Coincident: Points/edges occupy same location
+     * - Equal: Elements have equal dimensions or radii
+     * 
+     * HOW TO EXPORT CONSTRAINTS FROM SOLIDWORKS:
+     * 1. In SolidWorks, create your assembly with constrained parts
+     * 2. Note the constraint names and types from the assembly tree
+     * 3. Export to GLB format (File > Save As > Save as type: GLTF Binary (.glb))
+     * 4. Create JSON descriptor manually mapping SolidWorks constraints to part names
+     * 5. Upload both GLB and descriptor JSON files to the simulator
      */
     setupControlPanel() {
         // Create floating panel in bottom-left corner
@@ -460,6 +507,309 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 baseQuaternion: node.userData.initialQuaternion.clone() // Preserve original rotation
             });
         }
+
+        // Initialize SolidWorks constraints from descriptor
+        this.initializeConstraints();
+    }
+
+    /**
+     * Initialize and validate SolidWorks constraints from descriptor.
+     * Supported constraint types:
+     * - Horizontal: Forces edge/plane to be horizontal
+     * - Vertical: Forces edge/plane to be vertical
+     * - Collinear: Forces edges/points to be on same line
+     * - Perpendicular: Forces elements to be perpendicular (90°)
+     * - Parallel: Forces elements to be parallel
+     * - Tangent: Forces curves/surfaces to be tangent
+     * - Concentric: Forces elements to share same center
+     * - Coincident: Forces points/edges to occupy same location
+     * - Equal: Forces equal dimensions or radii
+     */
+    initializeConstraints() {
+        this.constraints = [];
+        if (!this.kinematicsDescriptor?.constraints) {
+            return;
+        }
+
+        for (let constraintDef of this.kinematicsDescriptor.constraints) {
+            // Validate constraint has required fields
+            if (!constraintDef.type || !constraintDef.entities) {
+                console.warn(`Invalid constraint definition:`, constraintDef);
+                continue;
+            }
+
+            // Resolve entity references to Three.js nodes
+            let resolvedEntities = [];
+            for (let entityName of constraintDef.entities) {
+                let entity = this.modelRoot.getObjectByName(entityName);
+                if (!entity) {
+                    console.warn(`Constraint entity not found: ${entityName}`);
+                    continue;
+                }
+                resolvedEntities.push({ name: entityName, node: entity });
+            }
+
+            if (resolvedEntities.length < (constraintDef.entities?.length || 0)) {
+                console.warn(`Some entities not found for constraint:`, constraintDef);
+                continue;
+            }
+
+            // Store validated constraint
+            this.constraints.push({
+                id: constraintDef.id || `constraint_${this.constraints.length}`,
+                type: constraintDef.type,
+                entities: resolvedEntities,
+                value: constraintDef.value,
+                definition: constraintDef
+            });
+        }
+    }
+
+    /**
+     * Apply SolidWorks constraints to modify joint orientations and positions.
+     * This is called after servo state is applied to enforce mechanical relationships.
+     */
+    applyConstraints() {
+        if (this.constraints.length === 0) {
+            return;
+        }
+
+        for (let constraint of this.constraints) {
+            switch (constraint.type.toUpperCase()) {
+                case "HORIZONTAL":
+                    this.applyHorizontalConstraint(constraint);
+                    break;
+                case "VERTICAL":
+                    this.applyVerticalConstraint(constraint);
+                    break;
+                case "COLLINEAR":
+                    this.applyCollinearConstraint(constraint);
+                    break;
+                case "PERPENDICULAR":
+                    this.applyPerpendicularConstraint(constraint);
+                    break;
+                case "PARALLEL":
+                    this.applyParallelConstraint(constraint);
+                    break;
+                case "TANGENT":
+                    this.applyTangentConstraint(constraint);
+                    break;
+                case "CONCENTRIC":
+                    this.applyConcentriConstraint(constraint);
+                    break;
+                case "COINCIDENT":
+                    this.applyCoincidentConstraint(constraint);
+                    break;
+                case "EQUAL":
+                    this.applyEqualConstraint(constraint);
+                    break;
+                default:
+                    console.warn(`Unknown constraint type: ${constraint.type}`);
+            }
+        }
+    }
+
+    /**
+     * Horizontal Constraint: Forces an edge or plane normal to be horizontal (parallel to XZ plane).
+     * Applied to single entity's normal vector.
+     */
+    applyHorizontalConstraint(constraint) {
+        if (constraint.entities.length < 1) return;
+        let entity = constraint.entities[0].node;
+
+        // Get entity's local normal (typically Z-axis in local space)
+        let localNormal = new THREE.Vector3(0, 0, 1);
+        let worldNormal = localNormal.clone().applyQuaternion(entity.quaternion);
+
+        // If normal is not horizontal, rotate to make it so
+        let horizontalNormal = new THREE.Vector3(worldNormal.x, 0, worldNormal.z);
+        if (horizontalNormal.lengthSq() > 0.001) {
+            horizontalNormal.normalize();
+            let rotation = new THREE.Quaternion().setFromUnitVectors(worldNormal.normalize(), horizontalNormal);
+            entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
+        }
+    }
+
+    /**
+     * Vertical Constraint: Forces an edge or plane normal to be vertical (parallel to Y-axis).
+     */
+    applyVerticalConstraint(constraint) {
+        if (constraint.entities.length < 1) return;
+        let entity = constraint.entities[0].node;
+
+        let localNormal = new THREE.Vector3(0, 0, 1);
+        let worldNormal = localNormal.clone().applyQuaternion(entity.quaternion).normalize();
+
+        // Target is vertical (along Y)
+        let verticalNormal = new THREE.Vector3(0, Math.sign(worldNormal.y) || 1, 0);
+
+        if (Math.abs(worldNormal.y) < 0.99) {
+            let rotation = new THREE.Quaternion().setFromUnitVectors(worldNormal, verticalNormal);
+            entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
+        }
+    }
+
+    /**
+     * Collinear Constraint: Forces multiple edges or points to lie on the same line.
+     * Aligns all entity normals with the first entity's normal.
+     */
+    applyCollinearConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        let referenceEntity = constraint.entities[0].node;
+        let referenceNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(referenceEntity.quaternion).normalize();
+
+        for (let i = 1; i < constraint.entities.length; i++) {
+            let entity = constraint.entities[i].node;
+            let entityNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity.quaternion).normalize();
+
+            if (entityNormal.dot(referenceNormal) < 0.99) {
+                let rotation = new THREE.Quaternion().setFromUnitVectors(entityNormal, referenceNormal);
+                entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
+            }
+        }
+    }
+
+    /**
+     * Perpendicular Constraint: Forces two edges to be perpendicular (90° angle).
+     * Rotates second entity so its normal is perpendicular to first entity's normal.
+     */
+    applyPerpendicularConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        let entity1 = constraint.entities[0].node;
+        let entity2 = constraint.entities[1].node;
+
+        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity1.quaternion).normalize();
+        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity2.quaternion).normalize();
+
+        // Find perpendicular direction
+        let perpendicular = new THREE.Vector3().crossVectors(normal1, normal2);
+        if (perpendicular.lengthSq() > 0.001) {
+            perpendicular.normalize();
+            let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, perpendicular);
+            entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
+        }
+    }
+
+    /**
+     * Parallel Constraint: Forces two edges or planes to be parallel.
+     * Aligns normals of both entities.
+     */
+    applyParallelConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        let entity1 = constraint.entities[0].node;
+        let entity2 = constraint.entities[1].node;
+
+        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity1.quaternion).normalize();
+        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity2.quaternion).normalize();
+
+        // Check both parallel and anti-parallel directions
+        let dot = normal1.dot(normal2);
+        let targetNormal = Math.abs(dot) > 0.99 ? normal1 : (dot > 0 ? normal1.clone() : normal1.clone().negate());
+
+        if (Math.abs(normal2.dot(targetNormal)) < 0.99) {
+            let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, targetNormal);
+            entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
+        }
+    }
+
+    /**
+     * Tangent Constraint: Forces two curves or surfaces to be tangent.
+     * Aligns normals at contact point.
+     */
+    applyTangentConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        let entity1 = constraint.entities[0].node;
+        let entity2 = constraint.entities[1].node;
+
+        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity1.quaternion).normalize();
+        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity2.quaternion).normalize();
+
+        // For tangent, normals should be aligned
+        if (normal1.dot(normal2) < 0.99) {
+            let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, normal1);
+            entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
+        }
+    }
+
+    /**
+     * Concentric Constraint: Forces two or more entities to share the same center point.
+     * Moves entities' positions to align their centers.
+     */
+    applyConcentriConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        // Get world positions of all entities
+        let positions = constraint.entities.map(e => {
+            let pos = new THREE.Vector3();
+            e.node.getWorldPosition(pos);
+            return pos;
+        });
+
+        // Calculate average center
+        let center = new THREE.Vector3();
+        for (let pos of positions) {
+            center.add(pos);
+        }
+        center.divideScalar(positions.length);
+
+        // Move all entities to share the center
+        for (let i = 0; i < constraint.entities.length; i++) {
+            let entity = constraint.entities[i].node;
+            let offset = new THREE.Vector3().subVectors(center, positions[i]);
+            entity.position.add(offset);
+        }
+    }
+
+    /**
+     * Coincident Constraint: Forces points or edges to occupy the same location.
+     * Moves entity positions together.
+     */
+    applyCoincidentConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        // Use first entity as reference
+        let referenceEntity = constraint.entities[0].node;
+        let referencePos = new THREE.Vector3();
+        referenceEntity.getWorldPosition(referencePos);
+
+        // Move all other entities to reference position
+        for (let i = 1; i < constraint.entities.length; i++) {
+            let entity = constraint.entities[i].node;
+            let entityPos = new THREE.Vector3();
+            entity.getWorldPosition(entityPos);
+            let offset = new THREE.Vector3().subVectors(referencePos, entityPos);
+            entity.position.add(offset);
+        }
+    }
+
+    /**
+     * Equal Constraint: Forces entities to have equal dimensions or radii.
+     * Scales entities to match first entity's size.
+     */
+    applyEqualConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        let entity1 = constraint.entities[0].node;
+        let entity2 = constraint.entities[1].node;
+
+        // Get bounding boxes to determine scale
+        let bbox1 = new THREE.Box3().setFromObject(entity1);
+        let bbox2 = new THREE.Box3().setFromObject(entity2);
+        let size1 = bbox1.getSize(new THREE.Vector3());
+        let size2 = bbox2.getSize(new THREE.Vector3());
+
+        // Use average dimension as reference
+        let scale1 = (size1.x + size1.y + size1.z) / 3;
+        let scale2 = (size2.x + size2.y + size2.z) / 3;
+
+        if (scale2 > 0.001) {
+            let scaleRatio = scale1 / scale2;
+            entity2.scale.multiplyScalar(scaleRatio);
+        }
     }
 
     /**
@@ -475,7 +825,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
     /**
      * Update the simulation state from board state.
-     * Reads servo angles and applies them to joints.
+     * Reads servo angles and applies them to joints, then applies constraints.
      * @param {BoardState} boardState - Current state of the Dwenguino board
      */
     updateScenarioState(boardState) {
@@ -483,6 +833,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         this.updateTargetServoAngles(boardState);
         this.updateSmoothedServoAngles();
         this.applyServoState(boardState);
+        this.applyConstraints();
     }
 
     /**
