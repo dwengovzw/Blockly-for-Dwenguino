@@ -129,6 +129,15 @@ class DwenguinoSimulationScenario {
         }
     }
 
+    /**
+     * Cleanup and destroy the scenario.
+     * Called when the user switches away from this scenario.
+     * Subclasses should override this to dispose of resources (event listeners, timers, WebGL resources, etc).
+     */
+    destroy(){
+        // Default implementation - subclasses should override to clean up their resources
+    }
+
 }
 
 export default DwenguinoSimulationScenario;

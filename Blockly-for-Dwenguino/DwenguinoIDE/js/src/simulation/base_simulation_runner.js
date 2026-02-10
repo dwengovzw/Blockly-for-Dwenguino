@@ -36,6 +36,11 @@ class BaseSimulationRunner{
     }
 
     setCurrentScenario(scenario){
+        // Cleanup and destroy the previous scenario if it exists
+        if (this.currentScenario) {
+            this.currentScenario.destroy();
+        }
+        
         scenario.initSimulationState(this.board);
         this.currentScenario = scenario;
         this.simulationSandbox.setCurrentScenario(this.currentScenario);

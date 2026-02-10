@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
 
 /**
@@ -67,6 +68,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     scene = null;
     // Three.js perspective camera
     camera = null;
+    // Orbit controls for mouse-based camera rotation
+    controls = null;
     // GLTF/GLB model loader
     gltfLoader = null;
     // Root node of the loaded 3D model
@@ -84,6 +87,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     lastUpdateTimestampMs = null;
     // Maximum servo speed in degrees per second (tweak for smoother/faster motion)
     servoSpeedDegPerSec = 120;
+    // Animation loop ID for continuous rendering
+    animationLoopId = null;
 
     /**
      * Initialize the gripper simulation scenario.
@@ -132,6 +137,32 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             this.handleResize();
         });
         this.resizeObserver.observe(document.querySelector(`#${containerId}`));
+
+        // Start continuous animation loop for rendering and orbit controls
+        this.startAnimationLoop();
+    }
+
+    /**
+     * Start the continuous animation loop for rendering and orbit controls.
+     * This ensures the 3D view updates smoothly even when the simulation is not running.
+     */
+    startAnimationLoop() {
+        const animationFrame = () => {
+            this.renderScene();
+            this.animationLoopId = requestAnimationFrame(animationFrame);
+        };
+        this.animationLoopId = requestAnimationFrame(animationFrame);
+    }
+
+    /**
+     * Stop the continuous animation loop.
+     * Should be called when the scenario is destroyed or cleaned up.
+     */
+    stopAnimationLoop() {
+        if (this.animationLoopId !== null) {
+            cancelAnimationFrame(this.animationLoopId);
+            this.animationLoopId = null;
+        }
     }
 
     /**
@@ -170,6 +201,21 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         let grid = new THREE.GridHelper(400, 20, 0xcccccc, 0xdddddd);
         grid.position.y = 0;
         this.scene.add(grid);
+
+        // Add axes helper to visualize X (red), Y (green), Z (blue) directions
+        // Size is 200 units, making it visible in the 3D view
+        let axesHelper = new THREE.AxesHelper(200);
+        this.scene.add(axesHelper);
+
+        // Setup orbit controls for mouse-based camera rotation
+        // Drag to rotate, right-click drag or middle-click to pan, scroll to zoom
+        this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+        this.controls.enableDamping = true; // Smooth rotation with inertia
+        this.controls.dampingFactor = 0.05;
+        this.controls.enableZoom = true;
+        this.controls.autoRotate = false; // Can be set to true for automatic rotation
+        this.controls.target.set(0, 40, 0); // Point controls look at (same as camera.lookAt)
+        this.controls.update();
     }
 
     /**
@@ -617,6 +663,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (!this.renderer || !this.scene || !this.camera) {
             return;
         }
+        // Update controls to apply any pending camera movements
+        if (this.controls) {
+            this.controls.update();
+        }
         this.renderer.render(this.scene, this.camera);
     }
 
@@ -658,6 +708,54 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      */
     setIsSimulationRunning(isSimulationRunning) {
         this.isSimulationRunning = isSimulationRunning;
+    }
+
+    /**
+     * Cleanup and destroy the scenario.
+     * Called when the user switches away from this scenario.
+     * Stops the animation loop and disposes of Three.js resources to prevent memory leaks.
+     */
+    destroy() {
+        // Stop the continuous animation loop
+        this.stopAnimationLoop();
+
+        // Stop observing container resize events
+        if (this.resizeObserver) {
+            this.resizeObserver.disconnect();
+            this.resizeObserver = null;
+        }
+
+        // Dispose of Three.js resources
+        if (this.renderer) {
+            this.renderer.dispose();
+            this.renderer.domElement.remove();
+            this.renderer = null;
+        }
+
+        if (this.scene) {
+            this.scene.traverse((object) => {
+                if (object.geometry) {
+                    object.geometry.dispose();
+                }
+                if (object.material) {
+                    if (Array.isArray(object.material)) {
+                        object.material.forEach((material) => material.dispose());
+                    } else {
+                        object.material.dispose();
+                    }
+                }
+            });
+            this.scene = null;
+        }
+
+        if (this.camera) {
+            this.camera = null;
+        }
+
+        if (this.controls) {
+            this.controls.dispose();
+            this.controls = null;
+        }
     }
 }
 
