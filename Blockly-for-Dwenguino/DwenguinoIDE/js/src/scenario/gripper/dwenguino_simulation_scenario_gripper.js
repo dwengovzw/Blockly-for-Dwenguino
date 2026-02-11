@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
 
@@ -233,6 +234,19 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         this.controls.autoRotate = false; // Can be set to true for automatic rotation
         this.controls.target.set(0, 40, 0); // Point controls look at (same as camera.lookAt)
         this.controls.update();
+
+        // Setup DRACOLoader for compressed GLB files from SolidWorks
+        // This allows loading GLB files that use DRACO compression
+        try {
+            const dracoLoader = new DRACOLoader();
+            // Set the decoder path - adjust based on your deployment setup
+            // The draco files are from Three.js library
+            dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.4.3/');
+            this.gltfLoader.setDRACOLoader(dracoLoader);
+            console.log('[Gripper] DRACOLoader configured for compressed GLB files');
+        } catch (error) {
+            console.warn('[Gripper] DRACOLoader not available, compressed GLB files may fail to load:', error);
+        }
     }
 
     /**
@@ -360,6 +374,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     /**
      * Handle user upload of a custom GLB 3D model.
      * The model should have named nodes that match the kinematics descriptor for proper joint mapping.
+     * Supports both uncompressed and DRACO-compressed GLB files from SolidWorks.
      * @param {Event} event - File input change event
      */
     handleModelUpload(event) {
@@ -367,6 +382,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (!file) {
             return;
         }
+        
+        console.log(`[Gripper] Loading GLB model: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
+        
         // Create temporary URL for the file blob
         let url = URL.createObjectURL(file);
         this.gltfLoader.load(
@@ -376,11 +394,33 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 URL.revokeObjectURL(url);
                 // Replace the current model with the loaded one
                 this.setModel(gltf.scene);
+                console.log(`[Gripper] ✓ Successfully loaded GLB model: ${file.name}`);
             },
-            undefined,
+            (progress) => {
+                // Log loading progress
+                const percentComplete = (progress.loaded / progress.total * 100).toFixed(0);
+                console.log(`[Gripper] Loading: ${percentComplete}%`);
+            },
             (error) => {
-                console.error("Failed to load GLB model", error);
+                // Clean up URL on error
                 URL.revokeObjectURL(url);
+                
+                // Provide helpful error messages
+                let errorMessage = `✗ Failed to load GLB model: ${file.name}\n\n`;
+                
+                if (error.message && error.message.includes('DRACOLoader')) {
+                    errorMessage += 'The GLB file appears to be DRACO-compressed. ';
+                    errorMessage += 'DRACOLoader is configured, but decompression may have failed.\n\n';
+                    errorMessage += 'Try re-exporting from SolidWorks without DRACO compression:\n';
+                    errorMessage += '1. File > Save As > GLTF Binary (.glb)\n';
+                    errorMessage += '2. Click Options and disable "DRACO compression"\n';
+                    errorMessage += '3. Save and try uploading again';
+                } else {
+                    errorMessage += 'Error details:\n' + error.message;
+                }
+                
+                console.error(`[Gripper] ${errorMessage}`, error);
+                alert(errorMessage);
             }
         );
     }
@@ -470,6 +510,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     /**
      * Replace the current 3D model with a new one.
      * Removes the old model, applies transforms, and sets up joint mappings.
+     * Automatically adjusts camera to frame the model properly.
      * @param {THREE.Object3D} modelRoot - The root node of the new model
      */
     setModel(modelRoot) {
@@ -484,6 +525,49 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         this.scene.add(this.modelRoot);
         // Map joints from kinematics descriptor to model nodes
         this.applyKinematicsDescriptor();
+        
+        // Auto-fit camera to frame the loaded model
+        this.fitCameraToModel();
+    }
+
+    /**
+     * Automatically adjust camera to frame the entire loaded model.
+     * Calculates bounding box and positions camera appropriately.
+     */
+    fitCameraToModel() {
+        if (!this.modelRoot) return;
+        
+        // Calculate bounding box of the model
+        const box = new THREE.Box3().setFromObject(this.modelRoot);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        
+        // Log model info for debugging
+        console.log(`[Gripper] Model loaded:`, {
+            center: { x: center.x.toFixed(2), y: center.y.toFixed(2), z: center.z.toFixed(2) },
+            size: { x: size.x.toFixed(2), y: size.y.toFixed(2), z: size.z.toFixed(2) },
+            boundingSphere: box.getBoundingSphere(new THREE.Sphere()).radius.toFixed(2)
+        });
+        
+        // Calculate distance needed to view the entire model
+        const maxDim = Math.max(size.x, size.y, size.z);
+        const fov = this.camera.fov * (Math.PI / 180); // Convert to radians
+        let cameraDistance = Math.abs(maxDim / 2 / Math.tan(fov / 2));
+        
+        // Add some padding
+        cameraDistance *= 1.5;
+        
+        // Position camera to view the model
+        const direction = new THREE.Vector3(0, 0.3, 1).normalize();
+        this.camera.position.copy(direction.multiplyScalar(cameraDistance).add(center));
+        this.camera.lookAt(center);
+        
+        // Update orbit controls target
+        this.controls.target.copy(center);
+        this.controls.update();
+        
+        console.log(`[Gripper] Camera auto-fitted to model`);
+        this.renderScene();
     }
 
     /**
