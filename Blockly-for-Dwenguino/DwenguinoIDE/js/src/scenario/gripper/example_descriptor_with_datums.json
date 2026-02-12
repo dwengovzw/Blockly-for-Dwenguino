@@ -1,0 +1,100 @@
+{
+  "version": 1,
+  "model": {
+    "upAxis": "Y",
+    "scale": 10,
+    "comment": "This example demonstrates the Hybrid (Measure & Move) approach with datum-based constraints"
+  },
+  "constraintSolver": {
+    "maxIterations": 10,
+    "convergenceThreshold": 0.001,
+    "enableConflictDetection": true
+  },
+  "joints": [
+    {
+      "name": "jaw_left",
+      "node": "jaw_left",
+      "type": "revolute",
+      "axis": [0, 0, -1],
+      "minDeg": 0,
+      "maxDeg": 90,
+      "servo": {
+        "index": 1,
+        "min": 0,
+        "max": 180,
+        "invert": false
+      }
+    },
+    {
+      "name": "jaw_right",
+      "node": "jaw_right",
+      "type": "revolute",
+      "axis": [0, 0, 1],
+      "minDeg": 0,
+      "maxDeg": 90,
+      "servo": {
+        "index": 2,
+        "min": 0,
+        "max": 180,
+        "invert": true
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "parallel_grip_surfaces",
+      "type": "Parallel",
+      "entities": ["jaw_left", "jaw_right"],
+      "datums": ["jaw_left_grip_plane", "jaw_right_grip_plane"],
+      "weight": 1.0,
+      "description": "Datum planes on inside jaw surfaces - measures at datums, moves parts"
+    },
+    {
+      "id": "concentric_pivot_centers",
+      "type": "Concentric",
+      "entities": ["jaw_left", "jaw_right"],
+      "datums": ["jaw_left_pivot_point", "jaw_right_pivot_point"],
+      "weight": 1.0,
+      "description": "Datum points at pivot centers - ensures perfect alignment, moves parts"
+    },
+    {
+      "id": "horizontal_base_reference",
+      "type": "Horizontal",
+      "entities": ["base"],
+      "datums": ["base_reference_plane"],
+      "weight": 0.7,
+      "description": "Datum plane on base top surface - measures at datum, moves base (soft constraint)"
+    }
+  ],
+  "comment_instructions": [
+    "HYBRID (MEASURE & MOVE) APPROACH:",
+    "- entities: The parts that will be moved/rotated by the constraint",
+    "- datums: Optional datum planes/points for precise measurement",
+    "- When datums specified: constraint measures at datum locations but moves parent parts",
+    "- Datums automatically follow their parent parts via scene graph hierarchy",
+    "",
+    "DATUM ELEMENT NAMING:",
+    "- jaw_left_grip_plane: Datum plane on inside gripping surface of left jaw",
+    "- jaw_right_grip_plane: Datum plane on inside gripping surface of right jaw",
+    "- jaw_left_pivot_point: Datum point at center of left jaw pivot hole",
+    "- jaw_right_pivot_point: Datum point at center of right jaw pivot hole",
+    "- base_reference_plane: Datum plane on top surface of base platform",
+    "",
+    "HOW TO CREATE IN SOLIDWORKS:",
+    "1. Open part in Part Design mode",
+    "2. Insert → Reference Geometry → Plane/Point/Axis",
+    "3. Define using existing faces/edges/vertices",
+    "4. Right-click in tree → Rename with descriptive name (use underscores, no spaces)",
+    "5. Export assembly as GLB with 'Include Reference Geometry' option enabled",
+    "6. Datum elements will export as separate named nodes in GLB file",
+    "",
+    "WHY THIS WORKS:",
+    "- Datums export as child nodes in the scene graph",
+    "- Constraint measures orientation/position at datum node",
+    "- But applies transformation to PARENT part node",
+    "- Since datum is child of part, it automatically follows when part moves",
+    "- Result: Precise sub-element constraint without complex inverse kinematics!",
+    "",
+    "See SOLIDWORKS_DATUM_TUTORIAL.md for detailed step-by-step instructions"
+  ]
+}

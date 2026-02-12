@@ -9,7 +9,7 @@ import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
  * This descriptor defines:
  * - Model properties (scale, axis orientation)
  * - Joint definitions with their rotation axes, angle ranges, and servo mappings
- * - SolidWorks constraints (Horizontal, Vertical, Collinear, Perpendicular, Parallel, Tangent, Concentric, Coincident, Equal)
+ * - SolidWorks constraints (Horizontal, Vertical, Collinear, Perpendicular, Parallel, Tangent, Concentric, Coincident, Equal, Fixed)
  * 
  * The descriptor allows for extensibility - users can upload custom JSON files
  * to define different gripper configurations, servo mappings, and mechanical constraints
@@ -268,15 +268,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      *       "id": "parallel_jaws",
      *       "type": "Parallel",
      *       "entities": ["jaw_left", "jaw_right"],
+     *       "datums": ["jaw_left_grip_plane", "jaw_right_grip_plane"],
      *       "weight": 1.0,
-     *       "description": "Keep both jaws parallel during motion"
+     *       "description": "Keep grip surfaces parallel (measured at datum planes)"
      *     },
      *     {
-     *       "id": "coincident_centers",
+     *       "id": "concentric_pivots",
      *       "type": "Concentric",
      *       "entities": ["jaw_left", "jaw_right"],
+     *       "datums": ["jaw_left_pivot_point", "jaw_right_pivot_point"],
      *       "weight": 0.8,
-     *       "description": "Jaws rotate about same center point (soft constraint)"
+     *       "description": "Align pivot points (moves parts, measures at datums)"
      *     },
      *     {
      *       "id": "horizontal_base",
@@ -287,6 +289,14 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      *     }
      *   ]
      * }
+     * 
+     * DATUM SUPPORT (Hybrid Measure & Move):
+     * - entities: The parts that will be moved/rotated
+     * - datums: Optional datum planes/points for precise measurement
+     * - When datums specified, constraint measures at datum locations but moves parent parts
+     * - Datums follow parts automatically via scene graph hierarchy
+     * - Create datums in SolidWorks (Insert > Reference Geometry), name them, export with GLB
+     * - See SOLIDWORKS_DATUM_TUTORIAL.md for complete workflow
      * 
      * CONSTRAINT WEIGHTS:
      * - weight: 0.0 to 1.0 (default: 1.0 for hard constraints)
@@ -314,6 +324,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * - Concentric: Multiple elements share same center point
      * - Coincident: Points/edges occupy same location
      * - Equal: Elements have equal dimensions or radii
+    * - Fixed: Fixes a part in place (position + orientation)
      * 
      * HOW TO EXPORT CONSTRAINTS FROM SOLIDWORKS:
      * 1. In SolidWorks, create your assembly with constrained parts
@@ -646,6 +657,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * - Concentric: Forces elements to share same center
      * - Coincident: Forces points/edges to occupy same location
      * - Equal: Forces equal dimensions or radii
+    * - Fixed: Fixes a part in place (position + orientation)
      */
     initializeConstraints() {
         this.constraints = [];
@@ -686,6 +698,26 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 continue;
             }
 
+            // Resolve optional datum references (for Hybrid Measure & Move approach)
+            let resolvedDatums = null;
+            if (constraintDef.datums && constraintDef.datums.length > 0) {
+                resolvedDatums = [];
+                for (let datumName of constraintDef.datums) {
+                    let datumNode = this.modelRoot.getObjectByName(datumName);
+                    if (!datumNode) {
+                        console.warn(`[Gripper Constraints] Datum not found: ${datumName}`);
+                        resolvedDatums = null;
+                        break;
+                    }
+                    resolvedDatums.push({ name: datumName, node: datumNode });
+                }
+                // Validate datum count matches entity count
+                if (resolvedDatums && resolvedDatums.length !== resolvedEntities.length) {
+                    console.warn(`[Gripper Constraints] Datum count (${resolvedDatums.length}) doesn't match entity count (${resolvedEntities.length})`);
+                    resolvedDatums = null;
+                }
+            }
+
             // Parse and validate weight (default to 1.0 for hard constraints)
             let weight = constraintDef.weight ?? 1.0;
             if (typeof weight !== 'number' || weight < 0 || weight > 1) {
@@ -698,10 +730,26 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 id: constraintDef.id || `constraint_${this.constraints.length}`,
                 type: constraintDef.type,
                 entities: resolvedEntities,
+                datums: resolvedDatums,  // Null if not specified
                 weight: weight,
                 value: constraintDef.value,
-                definition: constraintDef
+                definition: constraintDef,
+                fixedTargets: null
             });
+
+            // Precompute fixed target transforms (world-space) if constraint is Fixed
+            if (constraintDef.type && constraintDef.type.toUpperCase() === "FIXED") {
+                const fixedTargets = [];
+                for (let i = 0; i < resolvedEntities.length; i++) {
+                    const measureNode = resolvedDatums ? resolvedDatums[i].node : resolvedEntities[i].node;
+                    const worldPos = new THREE.Vector3();
+                    const worldQuat = new THREE.Quaternion();
+                    measureNode.getWorldPosition(worldPos);
+                    measureNode.getWorldQuaternion(worldQuat);
+                    fixedTargets.push({ position: worldPos, quaternion: worldQuat });
+                }
+                this.constraints[this.constraints.length - 1].fixedTargets = fixedTargets;
+            }
         }
 
         console.log(`[Gripper Constraints] Initialized ${this.constraints.length} constraints with iterative solver (max ${this.maxConstraintIterations} iterations)`);
@@ -924,23 +972,58 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             case "EQUAL":
                 this.applyEqualConstraint(constraint);
                 break;
+            case "FIXED":
+                this.applyFixedConstraint(constraint);
+                break;
             default:
                 console.warn(`[Gripper Constraints] Unknown constraint type: ${constraint.type}`);
         }
     }
 
     /**
+     * Apply a world-space transform to a node, converting to local space if needed.
+     * @param {THREE.Object3D} node
+     * @param {THREE.Vector3} targetWorldPos
+     * @param {THREE.Quaternion} targetWorldQuat
+     */
+    applyWorldTransform(node, targetWorldPos, targetWorldQuat) {
+        if (!node) return;
+        if (!node.parent) {
+            node.position.copy(targetWorldPos);
+            node.quaternion.copy(targetWorldQuat);
+            return;
+        }
+
+        const parentQuat = new THREE.Quaternion();
+        node.parent.getWorldQuaternion(parentQuat);
+        const invParentQuat = parentQuat.clone().invert();
+
+        const localPos = targetWorldPos.clone();
+        node.parent.worldToLocal(localPos);
+        const localQuat = invParentQuat.multiply(targetWorldQuat.clone());
+
+        node.position.copy(localPos);
+        node.quaternion.copy(localQuat);
+    }
+
+    /**
      * Horizontal Constraint: Forces an edge or plane normal to be horizontal (parallel to XZ plane).
      * Applied to single entity's normal vector.
+     * If datums specified, measures orientation at datum but applies rotation to part.
      */
     applyHorizontalConstraint(constraint) {
         if (constraint.entities.length < 1) return;
-        let entity = constraint.entities[0].node;
         const weight = constraint.weight ?? 1.0;
 
-        // Get entity's local normal (typically Z-axis in local space)
+        // Use datum for measurement if provided, otherwise use entity
+        let measureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
+        let partNode = constraint.entities[0].node;
+
+        // Get measured normal (typically Z-axis in local space)
         let localNormal = new THREE.Vector3(0, 0, 1);
-        let worldNormal = localNormal.clone().applyQuaternion(entity.quaternion);
+        let measureQuat = new THREE.Quaternion();
+        measureNode.getWorldQuaternion(measureQuat);
+        let worldNormal = localNormal.clone().applyQuaternion(measureQuat);
 
         // If normal is not horizontal, rotate to make it so
         let horizontalNormal = new THREE.Vector3(worldNormal.x, 0, worldNormal.z);
@@ -951,20 +1034,27 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             if (weight < 1.0) {
                 rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
             }
-            entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
+            // Apply to PART node (not datum)
+            partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
         }
     }
 
     /**
      * Vertical Constraint: Forces an edge or plane normal to be vertical (parallel to Y-axis).
+     * If datums specified, measures orientation at datum but applies rotation to part.
      */
     applyVerticalConstraint(constraint) {
         if (constraint.entities.length < 1) return;
-        let entity = constraint.entities[0].node;
         const weight = constraint.weight ?? 1.0;
 
+        // Use datum for measurement if provided, otherwise use entity
+        let measureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
+        let partNode = constraint.entities[0].node;
+
         let localNormal = new THREE.Vector3(0, 0, 1);
-        let worldNormal = localNormal.clone().applyQuaternion(entity.quaternion).normalize();
+        let measureQuat = new THREE.Quaternion();
+        measureNode.getWorldQuaternion(measureQuat);
+        let worldNormal = localNormal.clone().applyQuaternion(measureQuat).normalize();
 
         // Target is vertical (along Y)
         let verticalNormal = new THREE.Vector3(0, Math.sign(worldNormal.y) || 1, 0);
@@ -974,7 +1064,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             if (weight < 1.0) {
                 rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
             }
-            entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
+            // Apply to PART node (not datum)
+            partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
         }
     }
 
@@ -986,19 +1077,25 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        let referenceEntity = constraint.entities[0].node;
-        let referenceNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(referenceEntity.quaternion).normalize();
+        let referenceMeasureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
+        let referenceQuat = new THREE.Quaternion();
+        referenceMeasureNode.getWorldQuaternion(referenceQuat);
+        let referenceNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(referenceQuat).normalize();
 
         for (let i = 1; i < constraint.entities.length; i++) {
-            let entity = constraint.entities[i].node;
-            let entityNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity.quaternion).normalize();
+            let partNode = constraint.entities[i].node;
+            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
+            let measureQuat = new THREE.Quaternion();
+            measureNode.getWorldQuaternion(measureQuat);
+            let entityNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(measureQuat).normalize();
 
             if (entityNormal.dot(referenceNormal) < 0.99) {
                 let rotation = new THREE.Quaternion().setFromUnitVectors(entityNormal, referenceNormal);
                 if (weight < 1.0) {
                     rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
                 }
-                entity.quaternion.multiplyQuaternions(rotation, entity.quaternion);
+                // Apply to PART node (not datum)
+                partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
             }
         }
     }
@@ -1011,11 +1108,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        let entity1 = constraint.entities[0].node;
-        let entity2 = constraint.entities[1].node;
+        let partNode1 = constraint.entities[0].node;
+        let partNode2 = constraint.entities[1].node;
+        let measureNode1 = constraint.datums ? constraint.datums[0].node : partNode1;
+        let measureNode2 = constraint.datums ? constraint.datums[1].node : partNode2;
 
-        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity1.quaternion).normalize();
-        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity2.quaternion).normalize();
+        let quat1 = new THREE.Quaternion();
+        let quat2 = new THREE.Quaternion();
+        measureNode1.getWorldQuaternion(quat1);
+        measureNode2.getWorldQuaternion(quat2);
+        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat1).normalize();
+        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat2).normalize();
 
         // Find perpendicular direction
         let perpendicular = new THREE.Vector3().crossVectors(normal1, normal2);
@@ -1025,34 +1128,46 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             if (weight < 1.0) {
                 rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
             }
-            entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
+            // Apply to PART node (not datum)
+            partNode2.quaternion.multiplyQuaternions(rotation, partNode2.quaternion);
         }
     }
 
     /**
      * Parallel Constraint: Forces two edges or planes to be parallel.
      * Aligns normals of both entities.
+     * If datums specified, measures orientation at datums but applies rotation to parts.
      */
     applyParallelConstraint(constraint) {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        let entity1 = constraint.entities[0].node;
-        let entity2 = constraint.entities[1].node;
+        // Get normal of first entity (reference) - measure at datum if available
+        let firstMeasureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
+        let firstQuat = new THREE.Quaternion();
+        firstMeasureNode.getWorldQuaternion(firstQuat);
+        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(firstQuat).normalize();
 
-        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity1.quaternion).normalize();
-        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity2.quaternion).normalize();
+        // Align all other parts
+        for (let i = 1; i < constraint.entities.length; i++) {
+            let partNode = constraint.entities[i].node;
+            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
+            let measureQuat = new THREE.Quaternion();
+            measureNode.getWorldQuaternion(measureQuat);
+            let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(measureQuat).normalize();
 
-        // Check both parallel and anti-parallel directions
-        let dot = normal1.dot(normal2);
-        let targetNormal = Math.abs(dot) > 0.99 ? normal1 : (dot > 0 ? normal1.clone() : normal1.clone().negate());
+            // Check both parallel and anti-parallel directions
+            let dot = normal1.dot(normal2);
+            let targetNormal = Math.abs(dot) > 0.99 ? normal1 : (dot > 0 ? normal1.clone() : normal1.clone().negate());
 
-        if (Math.abs(normal2.dot(targetNormal)) < 0.99) {
-            let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, targetNormal);
-            if (weight < 1.0) {
-                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+            if (Math.abs(normal2.dot(targetNormal)) < 0.99) {
+                let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, targetNormal);
+                if (weight < 1.0) {
+                    rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
+                }
+                // Apply to PART node (not datum)
+                partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
             }
-            entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
         }
     }
 
@@ -1064,11 +1179,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        let entity1 = constraint.entities[0].node;
-        let entity2 = constraint.entities[1].node;
+        let partNode1 = constraint.entities[0].node;
+        let partNode2 = constraint.entities[1].node;
+        let measureNode1 = constraint.datums ? constraint.datums[0].node : partNode1;
+        let measureNode2 = constraint.datums ? constraint.datums[1].node : partNode2;
 
-        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity1.quaternion).normalize();
-        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(entity2.quaternion).normalize();
+        let quat1 = new THREE.Quaternion();
+        let quat2 = new THREE.Quaternion();
+        measureNode1.getWorldQuaternion(quat1);
+        measureNode2.getWorldQuaternion(quat2);
+        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat1).normalize();
+        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat2).normalize();
 
         // For tangent, normals should be aligned
         if (normal1.dot(normal2) < 0.99) {
@@ -1076,39 +1197,39 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             if (weight < 1.0) {
                 rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
             }
-            entity2.quaternion.multiplyQuaternions(rotation, entity2.quaternion);
+            // Apply to PART node (not datum)
+            partNode2.quaternion.multiplyQuaternions(rotation, partNode2.quaternion);
         }
     }
 
     /**
      * Concentric Constraint: Forces two or more entities to share the same center point.
      * Moves entities' positions to align their centers.
+     * If datums specified, measures position at datums but moves parts.
      */
     applyConcentriConstraint(constraint) {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        // Get world positions of all entities
-        let positions = constraint.entities.map(e => {
-            let pos = new THREE.Vector3();
-            e.node.getWorldPosition(pos);
-            return pos;
-        });
-
-        // Calculate average center
-        let center = new THREE.Vector3();
-        for (let pos of positions) {
-            center.add(pos);
-        }
-        center.divideScalar(positions.length);
-
-        // Move all entities to share the center
+        // Calculate average center - measure at datums if available
+        let avgCenter = new THREE.Vector3();
         for (let i = 0; i < constraint.entities.length; i++) {
-            let entity = constraint.entities[i].node;
-            let offset = new THREE.Vector3().subVectors(center, positions[i]);
-            // Apply weight to position offset
+            let measureNode = constraint.datums ? constraint.datums[i].node : constraint.entities[i].node;
+            let worldPos = new THREE.Vector3();
+            measureNode.getWorldPosition(worldPos);
+            avgCenter.add(worldPos);
+        }
+        avgCenter.divideScalar(constraint.entities.length);
+
+        // Move each PART entity toward center
+        for (let i = 0; i < constraint.entities.length; i++) {
+            let partNode = constraint.entities[i].node;
+            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
+            let datumWorldPos = new THREE.Vector3();
+            measureNode.getWorldPosition(datumWorldPos);
+            let offset = avgCenter.clone().sub(datumWorldPos);
             offset.multiplyScalar(weight);
-            entity.position.add(offset);
+            partNode.position.add(offset);
         }
     }
 
@@ -1120,20 +1241,21 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        // Use first entity as reference
-        let referenceEntity = constraint.entities[0].node;
+        // Use first entity (or datum) as reference
+        let referenceMeasureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
         let referencePos = new THREE.Vector3();
-        referenceEntity.getWorldPosition(referencePos);
+        referenceMeasureNode.getWorldPosition(referencePos);
 
         // Move all other entities to reference position
         for (let i = 1; i < constraint.entities.length; i++) {
-            let entity = constraint.entities[i].node;
+            let partNode = constraint.entities[i].node;
+            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
             let entityPos = new THREE.Vector3();
-            entity.getWorldPosition(entityPos);
+            measureNode.getWorldPosition(entityPos);
             let offset = new THREE.Vector3().subVectors(referencePos, entityPos);
             // Apply weight to position offset
             offset.multiplyScalar(weight);
-            entity.position.add(offset);
+            partNode.position.add(offset);
         }
     }
 
@@ -1145,12 +1267,14 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 2) return;
         const weight = constraint.weight ?? 1.0;
 
-        let entity1 = constraint.entities[0].node;
-        let entity2 = constraint.entities[1].node;
+        let partNode1 = constraint.entities[0].node;
+        let partNode2 = constraint.entities[1].node;
+        let measureNode1 = constraint.datums ? constraint.datums[0].node : partNode1;
+        let measureNode2 = constraint.datums ? constraint.datums[1].node : partNode2;
 
         // Get bounding boxes to determine scale
-        let bbox1 = new THREE.Box3().setFromObject(entity1);
-        let bbox2 = new THREE.Box3().setFromObject(entity2);
+        let bbox1 = new THREE.Box3().setFromObject(measureNode1);
+        let bbox2 = new THREE.Box3().setFromObject(measureNode2);
         let size1 = bbox1.getSize(new THREE.Vector3());
         let size2 = bbox2.getSize(new THREE.Vector3());
 
@@ -1162,7 +1286,40 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             let scaleRatio = scale1 / scale2;
             // Apply weight by lerping between current scale (1.0) and target scale
             let weightedScale = 1.0 + (scaleRatio - 1.0) * weight;
-            entity2.scale.multiplyScalar(weightedScale);
+            partNode2.scale.multiplyScalar(weightedScale);
+        }
+    }
+
+    /**
+     * Fixed Constraint: Fixes one or more entities in place (position + orientation).
+     * If datums specified, fixes the datum transform but moves the parent part.
+     */
+    applyFixedConstraint(constraint) {
+        if (constraint.entities.length < 1) return;
+        const weight = constraint.weight ?? 1.0;
+
+        if (!constraint.fixedTargets || constraint.fixedTargets.length !== constraint.entities.length) {
+            console.warn(`[Gripper Constraints] Fixed constraint is missing target transforms: ${constraint.id}`);
+            return;
+        }
+
+        for (let i = 0; i < constraint.entities.length; i++) {
+            const partNode = constraint.entities[i].node;
+            const target = constraint.fixedTargets[i];
+
+            // Measure current transform (datum or part)
+            const measureNode = constraint.datums ? constraint.datums[i].node : partNode;
+            const currentPos = new THREE.Vector3();
+            const currentQuat = new THREE.Quaternion();
+            measureNode.getWorldPosition(currentPos);
+            measureNode.getWorldQuaternion(currentQuat);
+
+            // Compute weighted target transform
+            const targetPos = currentPos.clone().lerp(target.position, weight);
+            const targetQuat = currentQuat.clone().slerp(target.quaternion, weight);
+
+            // Apply to PART node (not datum)
+            this.applyWorldTransform(partNode, targetPos, targetQuat);
         }
     }
 
