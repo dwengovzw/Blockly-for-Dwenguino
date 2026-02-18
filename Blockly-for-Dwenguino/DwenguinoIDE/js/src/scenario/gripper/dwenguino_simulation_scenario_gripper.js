@@ -8,12 +8,13 @@ import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
  * Default kinematics descriptor that maps servo angles to 3D model joint rotations.
  * This descriptor defines:
  * - Model properties (scale, axis orientation)
+ * - Part definitions with reference geometry (points, planes) in local coordinates
  * - Joint definitions with their rotation axes, angle ranges, and servo mappings
- * - SolidWorks constraints (Horizontal, Vertical, Collinear, Perpendicular, Parallel, Tangent, Concentric, Coincident, Equal, Fixed)
+ * - Constraints between parts using reference geometry (e.g. keep grip faces parallel)
  * 
  * The descriptor allows for extensibility - users can upload custom JSON files
- * to define different gripper configurations, servo mappings, and mechanical constraints
- * exported directly from SolidWorks.
+ * to define different gripper configurations, servo mappings, and mechanical constraints.
+ * Reference points/planes are defined in local coordinates relative to each part.
  */
 const DEFAULT_KINEMATICS_DESCRIPTOR = {
     version: 1,
@@ -21,12 +22,36 @@ const DEFAULT_KINEMATICS_DESCRIPTOR = {
         upAxis: "Y",
         scale: 1
     },
+    parts: [
+        {
+            name: "jaw_left",
+            referencePoints: {
+                pivot: { x: -30, y: 20, z: 0 },
+                gripPoint: { x: -55, y: 20, z: 0 }
+            },
+            referencePlanes: {}
+        },
+        {
+            name: "jaw_right",
+            referencePoints: {
+                pivot: { x: 30, y: 20, z: 0 },
+                gripPoint: { x: 55, y: 20, z: 0 }
+            },
+            referencePlanes: {}
+        },
+        {
+            name: "base",
+            referencePoints: {},
+            referencePlanes: {}
+        }
+    ],
     joints: [
         {
             name: "jaw_left",
             node: "jaw_left",
             type: "revolute",
             axis: [0, 0, -1],
+            axisPoint: "pivot",
             minDeg: 0,
             maxDeg: 180,
             servo: {
@@ -41,6 +66,7 @@ const DEFAULT_KINEMATICS_DESCRIPTOR = {
             node: "jaw_right",
             type: "revolute",
             axis: [0, 0, 1],
+            axisPoint: "pivot",
             minDeg: 0,
             maxDeg: 180,
             servo: {
@@ -107,6 +133,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     servoSpeedDegPerSec = 120;
     // Animation loop ID for continuous rendering
     animationLoopId = null;
+    // Cache of part definitions indexed by name for quick lookup
+    partsCache = new Map();
+    // Cache of reference point world coordinates, keyed as "partName:pointName"
+    referencePointsCache = new Map();
 
     /**
      * Initialize the gripper simulation scenario.
@@ -253,86 +283,84 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * Create and setup the control panel UI for uploading custom models and kinematics.
      * The panel allows users to:
      * - Upload custom GLB 3D models
-     * - Upload custom JSON kinematic descriptors with servo mappings and SolidWorks constraints
+     * - Upload custom JSON kinematic descriptors with servo mappings, reference geometry, and constraints
      * - Reset to the default gripper configuration
      * 
-     * CONSTRAINT DESCRIPTOR FORMAT EXAMPLE:
+     * KINEMATICS DESCRIPTOR FORMAT:
      * {
-     *   "constraintSolver": {
-     *     "maxIterations": 10,
-     *     "convergenceThreshold": 0.001,
-     *     "enableConflictDetection": true
-     *   },
-     *   "constraints": [
+     *   "version": 1,
+     *   "model": { "upAxis": "Y", "scale": 1 },
+     *   "parts": [
      *     {
-     *       "id": "parallel_jaws",
-     *       "type": "Parallel",
-     *       "entities": ["jaw_left", "jaw_right"],
-     *       "datums": ["jaw_left_grip_plane", "jaw_right_grip_plane"],
-     *       "weight": 1.0,
-     *       "description": "Keep grip surfaces parallel (measured at datum planes)"
-     *     },
-     *     {
-     *       "id": "concentric_pivots",
-     *       "type": "Concentric",
-     *       "entities": ["jaw_left", "jaw_right"],
-     *       "datums": ["jaw_left_pivot_point", "jaw_right_pivot_point"],
-     *       "weight": 0.8,
-     *       "description": "Align pivot points (moves parts, measures at datums)"
-     *     },
-     *     {
-     *       "id": "horizontal_base",
-     *       "type": "Horizontal",
-     *       "entities": ["base"],
-     *       "weight": 1.0,
-     *       "description": "Base platform remains horizontal"
+     *       "name": "jaw_left",
+     *       "referencePoints": {
+     *         "pivot": { "x": -30, "y": 20, "z": 0 },
+     *         "gripSurface": { "x": -55, "y": 20, "z": 0 }
+     *       },
+     *       "referencePlanes": {
+     *         "gripFace": { "normal": [0, 1, 0], "point": [-55, 20, 0] }
+     *       }
      *     }
-     *   ]
+     *   ],
+     *   "joints": [
+     *     {
+     *       "name": "jaw_left",
+     *       "node": "jaw_left",
+     *       "axis": [0, 0, -1],
+     *       "axisPoint": "pivot",
+     *       "minDeg": 0,
+     *       "maxDeg": 180,
+     *       "servo": { "index": 1, "min": 180, "max": 0 }
+     *     }
+     *   ],
+     *   "constraints": [...],
+     *   "constraintSolver": { "maxIterations": 10, "convergenceThreshold": 0.001 }
      * }
-     * 
-     * DATUM SUPPORT (Hybrid Measure & Move):
-     * - entities: The parts that will be moved/rotated
-     * - datums: Optional datum planes/points for precise measurement
-     * - When datums specified, constraint measures at datum locations but moves parent parts
-     * - Datums follow parts automatically via scene graph hierarchy
-     * - Create datums in SolidWorks (Insert > Reference Geometry), name them, export with GLB
-     * - See SOLIDWORKS_DATUM_TUTORIAL.md for complete workflow
-     * 
+     *
+     * REFERENCE GEOMETRY (per-part):
+     * - referencePoints: Named points defined in LOCAL coordinates (relative to part node)
+     *   Example: "pivot": { "x": -30, "y": 20, "z": 0 } means 30 units left, 20 up, in part's own frame
+     * - referencePlanes: Named planes with normal vector and point in LOCAL coordinates
+     * - Coordinates are automatically converted to world space during constraint solving
+     * - Parts are matched by GLB node name, reference points must exist on that part
+     *
+     * JOINT DEFINITION WITH ARBITRARY ROTATION AXES:
+     * - axisPoint: Where the rotation axis passes through
+     *   - Can be string reference point name: "axisPoint": "pivot"
+     *   - Can be explicit local coords: "axisPoint": { "x": 0, "y": 5, "z": 0 }
+     *   - Enables rotation around arbitrary points (not just part origin)
+     *   - Part will rotate around this point, not its local origin
+     *
+    * CONSTRAINTS WITH REFERENCE GEOMETRY:
+    * {
+    *   "id": "align_grip_faces",
+    *   "type": "PlaneParallel",
+    *   "entities": ["jaw_left", "jaw_right"],
+    *   "referencePlanes": ["gripFace", "gripFace"],
+    *   "weight": 1.0,
+    *   "description": "Keep grip surfaces parallel"
+    * }
+     * - entities: Part names (GLB node names)
+     * - referencePoints: Which reference point/plane to measure at on each part
+     * - Constraint measures at reference points but moves the actual part nodes
+     * - Reference points follow parts automatically
+     * - If referencePoints omitted, constraint uses part's own position/orientation
+     *
+     * CONSTRAINT TYPES:
+    * - Horizontal: Edge/plane is horizontal (parallel to XZ plane)
+    * - Vertical: Edge/plane is vertical (parallel to Y-axis)
+    * - Fixed: Fixes a part in place (position + orientation)
+     *
      * CONSTRAINT WEIGHTS:
      * - weight: 0.0 to 1.0 (default: 1.0 for hard constraints)
      * - 1.0 = hard constraint (100% enforcement)
      * - 0.5 = soft constraint (50% enforcement)
-     * - Constraints are sorted by weight (higher weight = higher priority)
-     * 
-     * ITERATIVE SOLVER:
-     * - Applies constraints repeatedly until convergence or max iterations reached
-     * - maxIterations: 1-20 (default: 10) - higher = more accurate but slower
-     * - convergenceThreshold: 0.0001-0.01 (default: 0.001) - smaller = more precise
-     * 
-     * CONFLICT DETECTION:
-     * - Automatically detects contradictory constraints (e.g., parallel + perpendicular)
-     * - Warns about over-constrained entities (more than 3 constraints per entity)
-     * - Check browser console for conflict warnings
-     * 
-     * SUPPORTED CONSTRAINT TYPES (from SolidWorks):
-     * - Horizontal: Edge/plane is horizontal (parallel to XZ plane)
-     * - Vertical: Edge/plane is vertical (parallel to Y-axis)
-     * - Collinear: Multiple edges/points lie on same line
-     * - Perpendicular: Two edges are 90° apart
-     * - Parallel: Two edges/planes have same orientation
-     * - Tangent: Curves/surfaces touch without penetration
-     * - Concentric: Multiple elements share same center point
-     * - Coincident: Points/edges occupy same location
-     * - Equal: Elements have equal dimensions or radii
-    * - Fixed: Fixes a part in place (position + orientation)
-     * 
-     * HOW TO EXPORT CONSTRAINTS FROM SOLIDWORKS:
-     * 1. In SolidWorks, create your assembly with constrained parts
-     * 2. Note the constraint names and types from the assembly tree
-     * 3. Export to GLB format (File > Save As > Save as type: GLTF Binary (.glb))
-     * 4. Create JSON descriptor manually mapping SolidWorks constraints to part names
-     * 5. Assign weights to constraints (1.0 for critical, lower for soft constraints)
-     * 6. Upload both GLB and descriptor JSON files to the simulator
+     * - Higher weight = higher priority
+     *
+     * LEGACY DATUM SUPPORT (kept for compatibility):
+     * - "datums": ["jaw_left_datum_node", "jaw_right_datum_node"]
+     * - Datum nodes must exist in GLB file (created in SolidWorks)
+     * - Reference points are preferred over datums (no export required)
      */
     setupControlPanel() {
         // Create floating panel in bottom-left corner
@@ -613,31 +641,104 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * The base rotation is needed to apply relative rotations during animation.
      */
     applyKinematicsDescriptor() {
-        // Clear previous joint mappings
+        // Clear previous caches
         this.joints = [];
-        if (!this.modelRoot || !this.kinematicsDescriptor || !this.kinematicsDescriptor.joints) {
+        this.partsCache.clear();
+        this.referencePointsCache.clear();
+        
+        if (!this.modelRoot || !this.kinematicsDescriptor) {
             return;
+        }
+
+        // Build parts cache from descriptor for quick reference point lookup
+        if (this.kinematicsDescriptor.parts) {
+            for (let partDef of this.kinematicsDescriptor.parts) {
+                this.partsCache.set(partDef.name, partDef);
+            }
         }
 
         // Ensure model transforms are current
         this.applyModelTransform();
 
         // Map each joint descriptor to its corresponding 3D node
-        for (let joint of this.kinematicsDescriptor.joints) {
-            let node = this.modelRoot.getObjectByName(joint.node);
-            if (!node) {
-                console.warn(`Joint node not found: ${joint.node}`);
-                continue;
+        if (this.kinematicsDescriptor.joints) {
+            for (let joint of this.kinematicsDescriptor.joints) {
+                let node = this.modelRoot.getObjectByName(joint.node);
+                if (!node) {
+                    console.warn(`Joint node not found: ${joint.node}`);
+                    continue;
+                }
+                if (!node.userData.initialWorldQuaternion) {
+                    // Store initial world-space transform (never changes)
+                    node.userData.initialWorldQuaternion = new THREE.Quaternion();
+                    node.getWorldQuaternion(node.userData.initialWorldQuaternion);
+                }
+                if (!node.userData.initialWorldPosition) {
+                    // Store initial world-space position (never changes)
+                    node.userData.initialWorldPosition = new THREE.Vector3();
+                    node.getWorldPosition(node.userData.initialWorldPosition);
+                }
+                if (!node.userData.initialLocalQuaternion) {
+                    // Preserve original local coordinates (never modified)
+                    node.userData.initialLocalQuaternion = node.quaternion.clone();
+                }
+                if (!node.userData.initialLocalPosition) {
+                    // Preserve original local coordinates (never modified)
+                    node.userData.initialLocalPosition = node.position.clone();
+                }
+                
+                // Resolve and cache the axis point in the part's own local space (if specified)
+                let axisPointPartLocal = null;
+                const axisPointRef = joint.axisPoint;
+                if (axisPointRef) {
+                    if (typeof axisPointRef === 'string') {
+                        // Named reference point - get it from part definition
+                        const partDef = this.getPartDefinition(joint.node);
+                        if (partDef?.referencePoints?.[axisPointRef]) {
+                            const refPoint = partDef.referencePoints[axisPointRef];
+                            axisPointPartLocal = new THREE.Vector3(
+                                refPoint.x || 0,
+                                refPoint.y || 0,
+                                refPoint.z || 0
+                            );
+                        }
+                    } else if (axisPointRef && typeof axisPointRef === 'object') {
+                        // Explicit coordinates in part's local space
+                        axisPointPartLocal = new THREE.Vector3(
+                            axisPointRef.x || 0,
+                            axisPointRef.y || 0,
+                            axisPointRef.z || 0
+                        );
+                    }
+                }
+
+                // Calculate axis point in world space
+                let axisPointWorld = null;
+                if (axisPointPartLocal) {
+                    // Transform from part's local space to world space
+                    axisPointWorld = axisPointPartLocal.clone();
+                    axisPointWorld.applyQuaternion(node.userData.initialLocalQuaternion);
+                    axisPointWorld.add(node.userData.initialLocalPosition);
+                    if (node.parent) {
+                        const parentWorldPos = new THREE.Vector3();
+                        const parentWorldQuat = new THREE.Quaternion();
+                        node.parent.getWorldPosition(parentWorldPos);
+                        node.parent.getWorldQuaternion(parentWorldQuat);
+                        axisPointWorld.applyQuaternion(parentWorldQuat);
+                        axisPointWorld.add(parentWorldPos);
+                    }
+                }
+
+                // Store joint binding with world-space base transforms
+                this.joints.push({
+                    descriptor: joint,
+                    node: node,
+                    baseWorldQuaternion: node.userData.initialWorldQuaternion.clone(),   // Preserve original world rotation
+                    baseWorldPosition: node.userData.initialWorldPosition.clone(),       // Preserve original world position
+                    axisPointLocal: axisPointPartLocal,                                  // Axis point in part's local coordinates
+                    axisPointWorld: axisPointWorld                                       // Axis point in world coordinates
+                });
             }
-            if (!node.userData.initialQuaternion) {
-                node.userData.initialQuaternion = node.quaternion.clone();
-            }
-            // Store joint binding with base quaternion for relative rotations
-            this.joints.push({
-                descriptor: joint,
-                node: node,
-                baseQuaternion: node.userData.initialQuaternion.clone() // Preserve original rotation
-            });
         }
 
         // Initialize SolidWorks constraints from descriptor
@@ -645,18 +746,130 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     }
 
     /**
+     * Get a part definition from the descriptor by name.
+     * @param {string} partName - Name of the part
+     * @returns {Object|null} Part definition or null if not found
+     */
+    getPartDefinition(partName) {
+        return this.partsCache.get(partName) || null;
+    }
+
+    /**
+     * Resolve a reference point to world coordinates.
+     * Reference points are stored in local coordinates (relative to part node).
+     * @param {string} partName - Name of the part (GLB node name)
+     * @param {string} pointName - Name of the reference point
+     * @returns {THREE.Vector3|null} World position of the reference point, or null if not found
+     */
+    getReferencePointWorldPosition(partName, pointName) {
+        // Check cache first
+        const cacheKey = `${partName}:${pointName}`;
+        if (this.referencePointsCache.has(cacheKey)) {
+            return this.referencePointsCache.get(cacheKey).clone();
+        }
+
+        // Get part node
+        const partNode = this.modelRoot?.getObjectByName(partName);
+        if (!partNode) {
+            console.warn(`[Kinematics] Part node not found: ${partName}`);
+            return null;
+        }
+
+        // Get part definition
+        const partDef = this.getPartDefinition(partName);
+        if (!partDef || !partDef.referencePoints || !partDef.referencePoints[pointName]) {
+            console.warn(`[Kinematics] Reference point not found: ${partName}.${pointName}`);
+            return null;
+        }
+
+        // Get local coordinates
+        const localPoint = partDef.referencePoints[pointName];
+        const worldPos = new THREE.Vector3(localPoint.x || 0, localPoint.y || 0, localPoint.z || 0);
+
+        // Transform to world coordinates
+        worldPos.applyMatrix4(partNode.matrixWorld);
+
+        // Cache the result
+        this.referencePointsCache.set(cacheKey, worldPos.clone());
+
+        return worldPos;
+    }
+
+    /**
+     * Resolve a reference plane to world coordinates.
+     * @param {string} partName - Name of the part (GLB node name)
+     * @param {string} planeName - Name of the reference plane
+     * @returns {Object|null} Plane with {normal: Vector3, point: Vector3} in world coords, or null if not found
+     */
+    getReferencePlaneWorld(partName, planeName) {
+        // Get part node
+        const partNode = this.modelRoot?.getObjectByName(partName);
+        if (!partNode) {
+            console.warn(`[Kinematics] Part node not found: ${partName}`);
+            return null;
+        }
+
+        // Get part definition
+        const partDef = this.getPartDefinition(partName);
+        if (!partDef || !partDef.referencePlanes || !partDef.referencePlanes[planeName]) {
+            console.warn(`[Kinematics] Reference plane not found: ${partName}.${planeName}`);
+            return null;
+        }
+
+        const planeDef = partDef.referencePlanes[planeName];
+        
+        // Transform normal (direction, no translation)
+        const worldNormal = new THREE.Vector3(
+            planeDef.normal[0] || 0,
+            planeDef.normal[1] || 0,
+            planeDef.normal[2] || 0
+        );
+        worldNormal.applyMatrix4(partNode.matrixWorld);
+        worldNormal.sub(partNode.position); // Remove translation component
+        worldNormal.normalize();
+
+        // Transform point (position with translation)
+        const worldPoint = new THREE.Vector3(
+            planeDef.point[0] || 0,
+            planeDef.point[1] || 0,
+            planeDef.point[2] || 0
+        );
+        worldPoint.applyMatrix4(partNode.matrixWorld);
+
+        return { normal: worldNormal, point: worldPoint };
+    }
+
+    /**
+     * Invalidate the reference points cache for a part.
+     * Called when a part moves and reference points need to be recalculated.
+     * @param {string} partName - Name of the part, or null to clear entire cache
+     */
+    invalidateReferencePointCache(partName) {
+        if (!partName) {
+            this.referencePointsCache.clear();
+            return;
+        }
+        // Remove all cache entries for this part
+        const prefix = `${partName}:`;
+        for (const key of this.referencePointsCache.keys()) {
+            if (key.startsWith(prefix)) {
+                this.referencePointsCache.delete(key);
+            }
+        }
+    }
+
+    
+    /**
      * Initialize and validate SolidWorks constraints from descriptor.
      * Parses solver configuration, validates constraint weights, and detects conflicts.
-     * Supported constraint types:
+     * Supported primitive constraints:
+     * - PointPointCoincident: Forces two points to coincide (3 translational DOF)
+     * - PointPlane: Forces a point to lie on a plane (1 translational DOF)
+     * - PlanePlaneParallel: Forces two planes to be parallel (1 rotational DOF)
+     * 
+     * Supported composite constraints (built from primitives):
      * - Horizontal: Forces edge/plane to be horizontal
      * - Vertical: Forces edge/plane to be vertical
-     * - Collinear: Forces edges/points to be on same line
-     * - Perpendicular: Forces elements to be perpendicular (90°)
-     * - Parallel: Forces elements to be parallel
-     * - Tangent: Forces curves/surfaces to be tangent
-     * - Concentric: Forces elements to share same center
-     * - Coincident: Forces points/edges to occupy same location
-     * - Equal: Forces equal dimensions or radii
     * - Fixed: Fixes a part in place (position + orientation)
      */
     initializeConstraints() {
@@ -698,7 +911,41 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 continue;
             }
 
-            // Resolve optional datum references (for Hybrid Measure & Move approach)
+            // Resolve optional reference points (per-part reference geometry)
+            let resolvedReferencePoints = null;
+            if (constraintDef.referencePoints && constraintDef.referencePoints.length > 0) {
+                resolvedReferencePoints = [];
+                for (let i = 0; i < constraintDef.referencePoints.length; i++) {
+                    const refPointName = constraintDef.referencePoints[i];
+                    const entityName = constraintDef.entities[i];
+                    resolvedReferencePoints.push({
+                        name: refPointName,
+                        entityName: entityName
+                    });
+                }
+                // Validate reference point count matches entity count
+                if (resolvedReferencePoints.length !== resolvedEntities.length) {
+                    console.warn(`[Gripper Constraints] Reference point count (${resolvedReferencePoints.length}) doesn't match entity count (${resolvedEntities.length})`);
+                    resolvedReferencePoints = null;
+                }
+            }
+
+            // Resolve optional reference planes (per-part reference geometry for plane constraints)
+            let resolvedReferencePlanes = null;
+            if (constraintDef.referencePlanes && constraintDef.referencePlanes.length > 0) {
+                resolvedReferencePlanes = [];
+                for (let i = 0; i < constraintDef.referencePlanes.length; i++) {
+                    const refPlaneName = constraintDef.referencePlanes[i];
+                    resolvedReferencePlanes.push(refPlaneName);
+                }
+                // Validate reference plane count matches entity count
+                if (resolvedReferencePlanes.length !== resolvedEntities.length) {
+                    console.warn(`[Gripper Constraints] Reference plane count (${resolvedReferencePlanes.length}) doesn't match entity count (${resolvedEntities.length})`);
+                    resolvedReferencePlanes = null;
+                }
+            }
+
+            // Resolve optional datum references (legacy Hybrid Measure & Move approach - kept for compatibility)
             let resolvedDatums = null;
             if (constraintDef.datums && constraintDef.datums.length > 0) {
                 resolvedDatums = [];
@@ -730,7 +977,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 id: constraintDef.id || `constraint_${this.constraints.length}`,
                 type: constraintDef.type,
                 entities: resolvedEntities,
-                datums: resolvedDatums,  // Null if not specified
+                referencePoints: resolvedReferencePoints,  // New: per-part reference geometry (points)
+                referencePlanes: resolvedReferencePlanes,  // New: per-part reference geometry (planes)
+                datums: resolvedDatums,                     // Legacy: datum nodes from scene graph
                 weight: weight,
                 value: constraintDef.value,
                 definition: constraintDef,
@@ -817,30 +1066,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * @returns {string|null} Conflict description or null if no conflict
      */
     checkConstraintPairConflict(c1, c2, sharedEntities) {
-        // Parallel + Perpendicular conflict
-        if ((c1.type === 'Parallel' && c2.type === 'Perpendicular') ||
-            (c1.type === 'Perpendicular' && c2.type === 'Parallel')) {
-            return 'Cannot be both parallel and perpendicular';
-        }
-
         // Horizontal + Vertical conflict
         if ((c1.type === 'Horizontal' && c2.type === 'Vertical') ||
             (c1.type === 'Vertical' && c2.type === 'Horizontal')) {
             return 'Cannot be both horizontal and vertical';
-        }
-
-        // Multiple Coincident/Concentric constraints on same entities
-        if ((c1.type === 'Coincident' && c2.type === 'Concentric') ||
-            (c1.type === 'Concentric' && c2.type === 'Coincident')) {
-            if (sharedEntities.length === c1.entities.length && sharedEntities.length === c2.entities.length) {
-                return 'Redundant positional constraints';
-            }
-        }
-
-        // Collinear + Perpendicular conflict
-        if ((c1.type === 'Collinear' && c2.type === 'Perpendicular') ||
-            (c1.type === 'Perpendicular' && c2.type === 'Collinear')) {
-            return 'Collinear entities cannot be perpendicular';
         }
 
         return null;
@@ -865,6 +1094,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
         // Iterative constraint solver
         for (let iteration = 0; iteration < this.maxConstraintIterations; iteration++) {
+            // Clear reference point cache at start of each iteration
+            // This ensures we read fresh positions after parts have moved
+            this.invalidateReferencePointCache(null);
+
             // Apply all constraints in priority order
             for (let constraint of sortedConstraints) {
                 this.applyConstraintWithWeight(constraint);
@@ -940,37 +1173,57 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     }
 
     /**
+     * Get the measurement node for a constraint entity.
+     * Returns the reference point location or datum node, whichever is specified.
+     * For reference points, returns a world position vector.
+     * For datums, returns the node itself.
+     * Priority: referencePoints > datums
+     * @param {Object} constraint - The constraint object
+     * @param {number} entityIndex - Index of the entity within the constraint
+     * @returns {THREE.Vector3|Object} World position or node to measure from
+     */
+    getMeasurementNodeForConstraint(constraint, entityIndex) {
+        // Try reference points first (new approach)
+        if (constraint.referencePoints && constraint.referencePoints[entityIndex]) {
+            const refPointDef = constraint.referencePoints[entityIndex];
+            const entityName = constraint.entities[entityIndex].name;
+            const worldPos = this.getReferencePointWorldPosition(entityName, refPointDef.name);
+            if (worldPos) {
+                return worldPos;
+            }
+        }
+
+        // Fall back to datums (legacy approach)
+        if (constraint.datums && constraint.datums[entityIndex]) {
+            return constraint.datums[entityIndex].node;
+        }
+
+        // No measurement override - use the entity node itself
+        return constraint.entities[entityIndex].node;
+    }
+
+    /**
      * Apply a single constraint with weight factor.
      * Weight allows for soft constraints (partial enforcement).
      */
     applyConstraintWithWeight(constraint) {
         switch (constraint.type.toUpperCase()) {
+            // Primitive constraints (basis for all others)
+            case "POINTPOINTCOINCIDENT":
+                this.applyPointPointCoincidentConstraint(constraint);
+                break;
+            case "POINTPLANE":
+                this.applyPointPlaneConstraint(constraint);
+                break;
+            case "PLANEPARALLEL":
+                this.applyPlanePlaneParallelConstraint(constraint);
+                break;
+            // Composite constraints
             case "HORIZONTAL":
                 this.applyHorizontalConstraint(constraint);
                 break;
             case "VERTICAL":
                 this.applyVerticalConstraint(constraint);
-                break;
-            case "COLLINEAR":
-                this.applyCollinearConstraint(constraint);
-                break;
-            case "PERPENDICULAR":
-                this.applyPerpendicularConstraint(constraint);
-                break;
-            case "PARALLEL":
-                this.applyParallelConstraint(constraint);
-                break;
-            case "TANGENT":
-                this.applyTangentConstraint(constraint);
-                break;
-            case "CONCENTRIC":
-                this.applyConcentriConstraint(constraint);
-                break;
-            case "COINCIDENT":
-                this.applyCoincidentConstraint(constraint);
-                break;
-            case "EQUAL":
-                this.applyEqualConstraint(constraint);
                 break;
             case "FIXED":
                 this.applyFixedConstraint(constraint);
@@ -1007,6 +1260,384 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     }
 
     /**
+     * Create a virtual reference entity with a given world-space plane normal and point.
+     * Used to build composite constraints from primitives.
+     * @param {THREE.Vector3} normal - Desired plane normal in world space (uses local +Z).
+     * @param {THREE.Vector3} point - Desired plane point in world space.
+     * @param {string} name - Optional name for the virtual entity.
+     * @returns {{name: string, node: THREE.Object3D}}
+     */
+    createVirtualPlaneEntity(normal, point, name = '__virtual_plane__') {
+        const node = new THREE.Object3D();
+        const targetNormal = normal ? normal.clone().normalize() : new THREE.Vector3(0, 0, 1);
+        const rotation = new THREE.Quaternion().setFromUnitVectors(
+            new THREE.Vector3(0, 0, 1),
+            targetNormal
+        );
+        node.quaternion.copy(rotation);
+        node.position.copy(point ?? new THREE.Vector3());
+        return { name, node };
+    }
+
+    /**
+     * PRIMITIVE CONSTRAINT: Point-Point Coincidence (Twist-based)
+     *
+     * Enforces coincidence of two world-space points by applying
+     * a small rigid-body motion (twist = translation + rotation).
+     *
+     * IMPORTANT:
+     * - We do NOT rotate around a chosen pivot
+     * - We compute a twist (Δv, Δω)
+     * - The instantaneous pivot emerges implicitly
+     *
+     * This composes correctly with other constraints.
+     */
+    applyPointPointCoincidentConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        const weight = constraint.weight ?? 1.0;
+        const stiffness = Math.max(0.0, Math.min(1.0, weight));
+
+        // ---------------------------------------------------------
+        // 1. Determine target world-space point (reference)
+        // ---------------------------------------------------------
+        let targetPoint = null;
+
+        if (constraint.referencePoints?.[0]) {
+            const { entityName, name } = constraint.referencePoints[0];
+            targetPoint = this.getReferencePointWorldPosition(entityName, name);
+        }
+
+        if (!targetPoint) {
+            targetPoint = constraint.entities[0].node.getWorldPosition(new THREE.Vector3());
+        }
+
+        // ---------------------------------------------------------
+        // 2. Apply constraint to all other entities
+        // ---------------------------------------------------------
+        for (let i = 1; i < constraint.entities.length; i++) {
+            const entity = constraint.entities[i];
+            const node = entity.node;
+
+            // ---------------------------------------------
+            // 2.1 Get constrained point on this body
+            // ---------------------------------------------
+            let currentPointWorld = null;
+
+            if (constraint.referencePoints?.[i]) {
+                const { entityName, name } = constraint.referencePoints[i];
+                currentPointWorld = this.getReferencePointWorldPosition(entityName, name);
+            }
+
+            if (!currentPointWorld) {
+                currentPointWorld = node.getWorldPosition(new THREE.Vector3());
+            }
+
+            // ---------------------------------------------
+            // 2.2 Compute positional error
+            // ---------------------------------------------
+            const error = targetPoint.clone().sub(currentPointWorld);
+
+            if (error.lengthSq() < 1e-8) continue;
+
+            // ---------------------------------------------
+            // 2.3 Rigid body state
+            // ---------------------------------------------
+            const bodyOrigin = node.getWorldPosition(new THREE.Vector3());
+            const bodyQuat = node.getWorldQuaternion(new THREE.Quaternion());
+
+            // Vector from body origin to constrained point
+            const r = currentPointWorld.clone().sub(bodyOrigin);
+
+            // ---------------------------------------------------------
+            // 3. Compute a TWIST that reduces the error
+            // ---------------------------------------------------------
+            //
+            // We want:
+            //   δp = δv + δω × r ≈ error
+            //
+            // There are infinitely many solutions.
+            // A stable symmetric choice is:
+            //
+            //   δv  = α * error
+            //   δω  = β * (r × error)
+            //
+            // This:
+            // - moves the point directly toward target
+            // - adds rotation only if the point is offset from origin
+            // - produces a natural pivot automatically
+            //
+            // ---------------------------------------------------------
+
+            const translationGain = 0.5 * stiffness;
+            const rotationGain = 0.5 * stiffness;
+
+            // Linear part of the twist
+            const deltaV = error.clone().multiplyScalar(translationGain);
+
+            // Angular part of the twist
+            const deltaOmega = r.clone().cross(error).multiplyScalar(rotationGain);
+
+            // ---------------------------------------------------------
+            // 4. Apply TWIST to the Three.js object
+            // ---------------------------------------------------------
+
+            // 4.1 Apply rotation: exp(δω^) · R
+            const angle = deltaOmega.length();
+            if (angle > 1e-8) {
+                const axis = deltaOmega.clone().normalize();
+                const dq = new THREE.Quaternion().setFromAxisAngle(axis, angle);
+
+                // premultiply = world-space rotation
+                node.quaternion.premultiply(dq);
+            }
+
+            // 4.2 Apply translation: x ← x + δv
+            node.position.add(deltaV);
+
+            // ---------------------------------------------------------
+            // 5. Invalidate reference cache (geometry moved)
+            // ---------------------------------------------------------
+            this.invalidateReferencePointCache(entity.name);
+        }
+    }
+
+    /**
+     * PRIMITIVE CONSTRAINT: Point-Plane (Twist-based)
+     *
+     * Forces a point on one body to lie on a plane defined by another body.
+     * Constrains 1 translational DOF (along plane normal).
+     *
+     * Implemented as a small rigid-body twist (Δv, Δω).
+     * No pivot is chosen explicitly — the instantaneous pivot emerges naturally.
+     */
+    applyPointPlaneConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        const stiffness = Math.max(0.0, Math.min(1.0, constraint.weight ?? 1.0));
+
+        // ---------------------------------------------------------
+        // 1. Get plane definition (world space)
+        // ---------------------------------------------------------
+        let plane = null;
+        const planeEntity = constraint.entities[1];
+
+        if (constraint.referencePlanes?.[1]) {
+            const planeName = constraint.referencePlanes[1].name;
+            plane = this.getReferencePlaneWorld(planeEntity.name, planeName);
+        }
+
+        if (!plane) {
+            // Fallback: entity origin + its local +Z as plane
+            const planeNode = planeEntity.node;
+
+            const planeQuat = planeNode.getWorldQuaternion(new THREE.Quaternion());
+            plane = {
+                normal: new THREE.Vector3(0, 0, 1)
+                    .applyQuaternion(planeQuat)
+                    .normalize(),
+                point: planeNode.getWorldPosition(new THREE.Vector3())
+            };
+        }
+
+        const n = plane.normal;
+
+        // ---------------------------------------------------------
+        // 2. Get constrained point (world space)
+        // ---------------------------------------------------------
+        const pointEntity = constraint.entities[0];
+        let p = null;
+
+        if (constraint.referencePoints?.[0]) {
+            const pointName = constraint.referencePoints[0].name;
+            p = this.getReferencePointWorldPosition(pointEntity.name, pointName);
+        }
+
+        if (!p) {
+            p = pointEntity.node.getWorldPosition(new THREE.Vector3());
+        }
+
+        // ---------------------------------------------------------
+        // 3. Compute constraint error
+        // ---------------------------------------------------------
+        // Signed distance from point to plane
+        const signedDistance = n.dot(p.clone().sub(plane.point));
+
+        if (Math.abs(signedDistance) < 1e-6) return;
+
+        // ---------------------------------------------------------
+        // 4. Rigid body state
+        // ---------------------------------------------------------
+        const node = pointEntity.node;
+        const bodyOrigin = node.getWorldPosition(new THREE.Vector3());
+
+        // Vector from body origin to constrained point
+        const r = p.clone().sub(bodyOrigin);
+
+        // ---------------------------------------------------------
+        // 5. Compute corrective TWIST
+        // ---------------------------------------------------------
+        //
+        // Want:
+        //   n · (δv + δω × r) = -signedDistance
+        //
+        // Choose:
+        //   δv  = -α * signedDistance * n
+        //   δω  = -β * signedDistance * (r × n)
+        //
+        // ---------------------------------------------------------
+
+        const translationGain = 0.6 * stiffness;
+        const rotationGain = 0.6 * stiffness;
+
+        const deltaV = n.clone().multiplyScalar(-signedDistance * translationGain);
+        const deltaOmega = r.clone().cross(n).multiplyScalar(-signedDistance * rotationGain);
+
+        // ---------------------------------------------------------
+        // 6. Apply twist to Three.js node
+        // ---------------------------------------------------------
+
+        // 6.1 Rotation: exp(δω^) · R
+        const angle = deltaOmega.length();
+        if (angle > 1e-8) {
+            const axis = deltaOmega.clone().normalize();
+            const dq = new THREE.Quaternion().setFromAxisAngle(axis, angle);
+            node.quaternion.premultiply(dq); // world-space rotation
+        }
+
+        // 6.2 Translation
+        node.position.add(deltaV);
+
+        // ---------------------------------------------------------
+        // 7. Invalidate reference cache
+        // ---------------------------------------------------------
+        this.invalidateReferencePointCache(pointEntity.name);
+    }
+
+    /**
+     * PRIMITIVE CONSTRAINT: Plane-Plane Parallel (Twist-based)
+     *
+     * Forces plane2 to be parallel to plane1 by aligning normals.
+     * Optionally makes planes coincident.
+     *
+     * Implemented using incremental rigid-body twists (Δv, Δω).
+     */
+    applyPlanePlaneParallelConstraint(constraint) {
+        if (constraint.entities.length < 2) return;
+
+        const stiffness = Math.max(0.0, Math.min(1.0, constraint.weight ?? 1.0));
+        const makeCoincident = constraint.value?.coincident ?? false;
+
+        // ---------------------------------------------------------
+        // 1. Get reference plane (plane1)
+        // ---------------------------------------------------------
+        let plane1 = null;
+        const entity1 = constraint.entities[0];
+
+        if (constraint.referencePlanes?.[0]) {
+            plane1 = this.getReferencePlaneWorld(entity1.name, constraint.referencePlanes[0]);
+        }
+
+        if (!plane1) {
+            const node1 = entity1.node;
+            const q1 = node1.getWorldQuaternion(new THREE.Quaternion());
+            plane1 = {
+                normal: new THREE.Vector3(0, 0, 1).applyQuaternion(q1).normalize(),
+                point: node1.getWorldPosition(new THREE.Vector3())
+            };
+        }
+
+        const n1 = plane1.normal;
+
+        // ---------------------------------------------------------
+        // 2. Process all other planes
+        // ---------------------------------------------------------
+        for (let i = 1; i < constraint.entities.length; i++) {
+            const entity2 = constraint.entities[i];
+            const node2 = entity2.node;
+
+            let plane2 = null;
+
+            if (constraint.referencePlanes?.[i]) {
+                plane2 = this.getReferencePlaneWorld(entity2.name, constraint.referencePlanes[i]);
+            }
+
+            if (!plane2) {
+                const q2 = node2.getWorldQuaternion(new THREE.Quaternion());
+                plane2 = {
+                    normal: new THREE.Vector3(0, 0, 1).applyQuaternion(q2).normalize(),
+                    point: node2.getWorldPosition(new THREE.Vector3())
+                };
+            }
+
+            const n2 = plane2.normal;
+
+            // ---------------------------------------------------------
+            // 3. ROTATIONAL constraint: align normals
+            // ---------------------------------------------------------
+            //
+            // Error direction: n2 × n1
+            // This angular velocity rotates n2 toward n1
+            //
+            const normalError = n2.clone().cross(n1);
+            const normalErrorMag = normalError.length();
+
+            let deltaOmega = new THREE.Vector3();
+
+            if (normalErrorMag > 1e-6) {
+                deltaOmega.copy(normalError)
+                        .multiplyScalar(stiffness);
+            }
+
+            // ---------------------------------------------------------
+            // 4. TRANSLATIONAL constraint (optional coincidence)
+            // ---------------------------------------------------------
+            let deltaV = new THREE.Vector3();
+
+            if (makeCoincident) {
+                // Signed distance between planes
+                const distance = n1.dot(plane2.point.clone().sub(plane1.point));
+
+                if (Math.abs(distance) > 1e-6) {
+                    // Translation along plane normal
+                    deltaV.add(
+                        n1.clone().multiplyScalar(-distance * stiffness)
+                    );
+
+                    // Optional rotational coupling
+                    const bodyOrigin = node2.getWorldPosition(new THREE.Vector3());
+                    const r = plane2.point.clone().sub(bodyOrigin);
+
+                    deltaOmega.add(
+                        r.clone().cross(n1).multiplyScalar(-distance * stiffness)
+                    );
+                }
+            }
+
+            // ---------------------------------------------------------
+            // 5. Apply TWIST to plane2 body
+            // ---------------------------------------------------------
+
+            // 5.1 Apply rotation
+            const angle = deltaOmega.length();
+            if (angle > 1e-8) {
+                const axis = deltaOmega.clone().normalize();
+                const dq = new THREE.Quaternion().setFromAxisAngle(axis, angle);
+                node2.quaternion.premultiply(dq); // world-space rotation
+            }
+
+            // 5.2 Apply translation
+            node2.position.add(deltaV);
+
+            // ---------------------------------------------------------
+            // 6. Invalidate reference cache
+            // ---------------------------------------------------------
+            this.invalidateReferencePointCache(entity2.name);
+        }
+    }
+ 
+
+    /**
      * Horizontal Constraint: Forces an edge or plane normal to be horizontal (parallel to XZ plane).
      * Applied to single entity's normal vector.
      * If datums specified, measures orientation at datum but applies rotation to part.
@@ -1015,28 +1646,24 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 1) return;
         const weight = constraint.weight ?? 1.0;
 
-        // Use datum for measurement if provided, otherwise use entity
-        let measureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
-        let partNode = constraint.entities[0].node;
-
-        // Get measured normal (typically Z-axis in local space)
-        let localNormal = new THREE.Vector3(0, 0, 1);
-        let measureQuat = new THREE.Quaternion();
+        // Compute the closest horizontal normal (projection onto XZ plane)
+        const measureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
+        const measureQuat = new THREE.Quaternion();
         measureNode.getWorldQuaternion(measureQuat);
-        let worldNormal = localNormal.clone().applyQuaternion(measureQuat);
+        const worldNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(measureQuat);
+        const horizontalNormal = new THREE.Vector3(worldNormal.x, 0, worldNormal.z);
 
-        // If normal is not horizontal, rotate to make it so
-        let horizontalNormal = new THREE.Vector3(worldNormal.x, 0, worldNormal.z);
-        if (horizontalNormal.lengthSq() > 0.001) {
-            horizontalNormal.normalize();
-            let rotation = new THREE.Quaternion().setFromUnitVectors(worldNormal.normalize(), horizontalNormal);
-            // Apply weight by lerping between identity and target rotation
-            if (weight < 1.0) {
-                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
-            }
-            // Apply to PART node (not datum)
-            partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
-        }
+        if (horizontalNormal.lengthSq() < 1e-8) return;
+        horizontalNormal.normalize();
+
+        const virtualPlane = this.createVirtualPlaneEntity(horizontalNormal, new THREE.Vector3());
+        const parallelConstraint = {
+            type: 'PlanePlaneParallel',
+            entities: [virtualPlane, constraint.entities[0]],
+            weight: weight
+        };
+
+        this.applyPlanePlaneParallelConstraint(parallelConstraint);
     }
 
     /**
@@ -1047,247 +1674,20 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         if (constraint.entities.length < 1) return;
         const weight = constraint.weight ?? 1.0;
 
-        // Use datum for measurement if provided, otherwise use entity
-        let measureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
-        let partNode = constraint.entities[0].node;
-
-        let localNormal = new THREE.Vector3(0, 0, 1);
-        let measureQuat = new THREE.Quaternion();
+        const measureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
+        const measureQuat = new THREE.Quaternion();
         measureNode.getWorldQuaternion(measureQuat);
-        let worldNormal = localNormal.clone().applyQuaternion(measureQuat).normalize();
+        const worldNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(measureQuat).normalize();
+        const verticalNormal = new THREE.Vector3(0, Math.sign(worldNormal.y) || 1, 0);
 
-        // Target is vertical (along Y)
-        let verticalNormal = new THREE.Vector3(0, Math.sign(worldNormal.y) || 1, 0);
+        const virtualPlane = this.createVirtualPlaneEntity(verticalNormal, new THREE.Vector3());
+        const parallelConstraint = {
+            type: 'PlanePlaneParallel',
+            entities: [virtualPlane, constraint.entities[0]],
+            weight: weight
+        };
 
-        if (Math.abs(worldNormal.y) < 0.99) {
-            let rotation = new THREE.Quaternion().setFromUnitVectors(worldNormal, verticalNormal);
-            if (weight < 1.0) {
-                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
-            }
-            // Apply to PART node (not datum)
-            partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
-        }
-    }
-
-    /**
-     * Collinear Constraint: Forces multiple edges or points to lie on the same line.
-     * Aligns all entity normals with the first entity's normal.
-     */
-    applyCollinearConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        let referenceMeasureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
-        let referenceQuat = new THREE.Quaternion();
-        referenceMeasureNode.getWorldQuaternion(referenceQuat);
-        let referenceNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(referenceQuat).normalize();
-
-        for (let i = 1; i < constraint.entities.length; i++) {
-            let partNode = constraint.entities[i].node;
-            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
-            let measureQuat = new THREE.Quaternion();
-            measureNode.getWorldQuaternion(measureQuat);
-            let entityNormal = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(measureQuat).normalize();
-
-            if (entityNormal.dot(referenceNormal) < 0.99) {
-                let rotation = new THREE.Quaternion().setFromUnitVectors(entityNormal, referenceNormal);
-                if (weight < 1.0) {
-                    rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
-                }
-                // Apply to PART node (not datum)
-                partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
-            }
-        }
-    }
-
-    /**
-     * Perpendicular Constraint: Forces two edges to be perpendicular (90° angle).
-     * Rotates second entity so its normal is perpendicular to first entity's normal.
-     */
-    applyPerpendicularConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        let partNode1 = constraint.entities[0].node;
-        let partNode2 = constraint.entities[1].node;
-        let measureNode1 = constraint.datums ? constraint.datums[0].node : partNode1;
-        let measureNode2 = constraint.datums ? constraint.datums[1].node : partNode2;
-
-        let quat1 = new THREE.Quaternion();
-        let quat2 = new THREE.Quaternion();
-        measureNode1.getWorldQuaternion(quat1);
-        measureNode2.getWorldQuaternion(quat2);
-        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat1).normalize();
-        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat2).normalize();
-
-        // Find perpendicular direction
-        let perpendicular = new THREE.Vector3().crossVectors(normal1, normal2);
-        if (perpendicular.lengthSq() > 0.001) {
-            perpendicular.normalize();
-            let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, perpendicular);
-            if (weight < 1.0) {
-                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
-            }
-            // Apply to PART node (not datum)
-            partNode2.quaternion.multiplyQuaternions(rotation, partNode2.quaternion);
-        }
-    }
-
-    /**
-     * Parallel Constraint: Forces two edges or planes to be parallel.
-     * Aligns normals of both entities.
-     * If datums specified, measures orientation at datums but applies rotation to parts.
-     */
-    applyParallelConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        // Get normal of first entity (reference) - measure at datum if available
-        let firstMeasureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
-        let firstQuat = new THREE.Quaternion();
-        firstMeasureNode.getWorldQuaternion(firstQuat);
-        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(firstQuat).normalize();
-
-        // Align all other parts
-        for (let i = 1; i < constraint.entities.length; i++) {
-            let partNode = constraint.entities[i].node;
-            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
-            let measureQuat = new THREE.Quaternion();
-            measureNode.getWorldQuaternion(measureQuat);
-            let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(measureQuat).normalize();
-
-            // Check both parallel and anti-parallel directions
-            let dot = normal1.dot(normal2);
-            let targetNormal = Math.abs(dot) > 0.99 ? normal1 : (dot > 0 ? normal1.clone() : normal1.clone().negate());
-
-            if (Math.abs(normal2.dot(targetNormal)) < 0.99) {
-                let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, targetNormal);
-                if (weight < 1.0) {
-                    rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
-                }
-                // Apply to PART node (not datum)
-                partNode.quaternion.multiplyQuaternions(rotation, partNode.quaternion);
-            }
-        }
-    }
-
-    /**
-     * Tangent Constraint: Forces two curves or surfaces to be tangent.
-     * Aligns normals at contact point.
-     */
-    applyTangentConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        let partNode1 = constraint.entities[0].node;
-        let partNode2 = constraint.entities[1].node;
-        let measureNode1 = constraint.datums ? constraint.datums[0].node : partNode1;
-        let measureNode2 = constraint.datums ? constraint.datums[1].node : partNode2;
-
-        let quat1 = new THREE.Quaternion();
-        let quat2 = new THREE.Quaternion();
-        measureNode1.getWorldQuaternion(quat1);
-        measureNode2.getWorldQuaternion(quat2);
-        let normal1 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat1).normalize();
-        let normal2 = new THREE.Vector3(0, 0, 1).clone().applyQuaternion(quat2).normalize();
-
-        // For tangent, normals should be aligned
-        if (normal1.dot(normal2) < 0.99) {
-            let rotation = new THREE.Quaternion().setFromUnitVectors(normal2, normal1);
-            if (weight < 1.0) {
-                rotation.slerp(new THREE.Quaternion(), 1.0 - weight);
-            }
-            // Apply to PART node (not datum)
-            partNode2.quaternion.multiplyQuaternions(rotation, partNode2.quaternion);
-        }
-    }
-
-    /**
-     * Concentric Constraint: Forces two or more entities to share the same center point.
-     * Moves entities' positions to align their centers.
-     * If datums specified, measures position at datums but moves parts.
-     */
-    applyConcentriConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        // Calculate average center - measure at datums if available
-        let avgCenter = new THREE.Vector3();
-        for (let i = 0; i < constraint.entities.length; i++) {
-            let measureNode = constraint.datums ? constraint.datums[i].node : constraint.entities[i].node;
-            let worldPos = new THREE.Vector3();
-            measureNode.getWorldPosition(worldPos);
-            avgCenter.add(worldPos);
-        }
-        avgCenter.divideScalar(constraint.entities.length);
-
-        // Move each PART entity toward center
-        for (let i = 0; i < constraint.entities.length; i++) {
-            let partNode = constraint.entities[i].node;
-            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
-            let datumWorldPos = new THREE.Vector3();
-            measureNode.getWorldPosition(datumWorldPos);
-            let offset = avgCenter.clone().sub(datumWorldPos);
-            offset.multiplyScalar(weight);
-            partNode.position.add(offset);
-        }
-    }
-
-    /**
-     * Coincident Constraint: Forces points or edges to occupy the same location.
-     * Moves entity positions together.
-     */
-    applyCoincidentConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        // Use first entity (or datum) as reference
-        let referenceMeasureNode = constraint.datums ? constraint.datums[0].node : constraint.entities[0].node;
-        let referencePos = new THREE.Vector3();
-        referenceMeasureNode.getWorldPosition(referencePos);
-
-        // Move all other entities to reference position
-        for (let i = 1; i < constraint.entities.length; i++) {
-            let partNode = constraint.entities[i].node;
-            let measureNode = constraint.datums ? constraint.datums[i].node : partNode;
-            let entityPos = new THREE.Vector3();
-            measureNode.getWorldPosition(entityPos);
-            let offset = new THREE.Vector3().subVectors(referencePos, entityPos);
-            // Apply weight to position offset
-            offset.multiplyScalar(weight);
-            partNode.position.add(offset);
-        }
-    }
-
-    /**
-     * Equal Constraint: Forces entities to have equal dimensions or radii.
-     * Scales entities to match first entity's size.
-     */
-    applyEqualConstraint(constraint) {
-        if (constraint.entities.length < 2) return;
-        const weight = constraint.weight ?? 1.0;
-
-        let partNode1 = constraint.entities[0].node;
-        let partNode2 = constraint.entities[1].node;
-        let measureNode1 = constraint.datums ? constraint.datums[0].node : partNode1;
-        let measureNode2 = constraint.datums ? constraint.datums[1].node : partNode2;
-
-        // Get bounding boxes to determine scale
-        let bbox1 = new THREE.Box3().setFromObject(measureNode1);
-        let bbox2 = new THREE.Box3().setFromObject(measureNode2);
-        let size1 = bbox1.getSize(new THREE.Vector3());
-        let size2 = bbox2.getSize(new THREE.Vector3());
-
-        // Use average dimension as reference
-        let scale1 = (size1.x + size1.y + size1.z) / 3;
-        let scale2 = (size2.x + size2.y + size2.z) / 3;
-
-        if (scale2 > 0.001) {
-            let scaleRatio = scale1 / scale2;
-            // Apply weight by lerping between current scale (1.0) and target scale
-            let weightedScale = 1.0 + (scaleRatio - 1.0) * weight;
-            partNode2.scale.multiplyScalar(weightedScale);
-        }
+        this.applyPlanePlaneParallelConstraint(parallelConstraint);
     }
 
     /**
@@ -1304,22 +1704,41 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         }
 
         for (let i = 0; i < constraint.entities.length; i++) {
-            const partNode = constraint.entities[i].node;
+            const entity = constraint.entities[i];
             const target = constraint.fixedTargets[i];
 
-            // Measure current transform (datum or part)
-            const measureNode = constraint.datums ? constraint.datums[i].node : partNode;
-            const currentPos = new THREE.Vector3();
-            const currentQuat = new THREE.Quaternion();
-            measureNode.getWorldPosition(currentPos);
-            measureNode.getWorldQuaternion(currentQuat);
+            // Step 1: Position fix via PointPointCoincident
+            const virtualPointNode = new THREE.Object3D();
+            virtualPointNode.position.copy(target.position);
+            const virtualPointEntity = { name: '__virtual_fixed_point__', node: virtualPointNode };
 
-            // Compute weighted target transform
-            const targetPos = currentPos.clone().lerp(target.position, weight);
-            const targetQuat = currentQuat.clone().slerp(target.quaternion, weight);
+            const positionConstraint = {
+                type: 'PointPointCoincident',
+                entities: [virtualPointEntity, entity],
+                weight: weight
+            };
+            this.applyPointPointCoincidentConstraint(positionConstraint);
 
-            // Apply to PART node (not datum)
-            this.applyWorldTransform(partNode, targetPos, targetQuat);
+            // Step 2: Orientation fix via two PlanePlaneParallel constraints (Z and X axes)
+            const targetNormalZ = new THREE.Vector3(0, 0, 1).applyQuaternion(target.quaternion);
+            const targetNormalX = new THREE.Vector3(1, 0, 0).applyQuaternion(target.quaternion);
+
+            const virtualPlaneZ = this.createVirtualPlaneEntity(targetNormalZ, target.position, '__virtual_fixed_plane_z__');
+            const virtualPlaneX = this.createVirtualPlaneEntity(targetNormalX, target.position, '__virtual_fixed_plane_x__');
+
+            const orientationConstraintZ = {
+                type: 'PlanePlaneParallel',
+                entities: [virtualPlaneZ, entity],
+                weight: weight
+            };
+            const orientationConstraintX = {
+                type: 'PlanePlaneParallel',
+                entities: [virtualPlaneX, entity],
+                weight: weight
+            };
+
+            this.applyPlanePlaneParallelConstraint(orientationConstraintZ);
+            this.applyPlanePlaneParallelConstraint(orientationConstraintX);
         }
     }
 
@@ -1362,8 +1781,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * This is the core of the kinematic mapping:
      * 1. Read servo angle from board state
      * 2. Map servo range to joint angle range using linear interpolation
-     * 3. Apply rotation around the joint's rotation axis
-     * 4. Combine with base rotation to get final orientation
+     * 3. Get rotation axis point (from reference point if specified)
+     * 4. Apply rotation around that point
+     * 5. Combine with base rotation to get final orientation
      * @param {BoardState} boardState - Current state of the Dwenguino board
      */
     applyServoState(boardState) {
@@ -1397,17 +1817,43 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             let maxDeg = descriptor?.maxDeg ?? 0;
             let jointAngleDeg = minDeg + t * (maxDeg - minDeg);
             
-            // Create rotation around the joint's axis
+            // Create rotation axis in world space
             let axisValues = descriptor?.axis ?? [0, 0, 1];
             let axis = new THREE.Vector3(axisValues[0], axisValues[1], axisValues[2]);
             if (axis.length() === 0) {
                 axis.set(0, 0, 1); // Default to Z-axis
             }
             axis.normalize();
+            // Transform axis from part's local space to world space
+            axis.applyQuaternion(jointBinding.baseWorldQuaternion);
+            
             let rotation = new THREE.Quaternion().setFromAxisAngle(axis, THREE.MathUtils.degToRad(jointAngleDeg));
             
-            // Apply rotation: base rotation * joint rotation
-            jointBinding.node.quaternion.copy(jointBinding.baseQuaternion).multiply(rotation);
+            // Apply rotation in world space
+            if (jointBinding.axisPointWorld) {
+                // Rotate around arbitrary point in world space
+                // Vector from axis point to part's initial world position
+                const relativePos = jointBinding.baseWorldPosition.clone().sub(jointBinding.axisPointWorld);
+                
+                // Apply rotation to relative position
+                relativePos.applyQuaternion(rotation);
+                
+                // New world position after rotation around axis
+                const newWorldPos = jointBinding.axisPointWorld.clone().add(relativePos);
+                
+                // New world rotation: apply rotation increment to initial rotation
+                const newWorldQuat = jointBinding.baseWorldQuaternion.clone().multiply(rotation);
+                
+                // Apply world transform
+                this.applyWorldTransform(jointBinding.node, newWorldPos, newWorldQuat);
+            } else {
+                // Rotate around part's center point in world space
+                const newWorldQuat = jointBinding.baseWorldQuaternion.clone().multiply(rotation);
+                this.applyWorldTransform(jointBinding.node, jointBinding.baseWorldPosition, newWorldQuat);
+            }
+            
+            // Invalidate reference point cache since this joint moved
+            this.invalidateReferencePointCache(descriptor?.node);
         }
     }
 
@@ -1429,14 +1875,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
     /**
      * Reset the model joints to their original orientation as loaded.
+     * Parts are restored to their initial world-space position and rotation.
+     * Local coordinates remain unchanged.
      */
     resetModelPose() {
         for (let jointBinding of this.joints) {
-            let initialQuaternion = jointBinding.node.userData.initialQuaternion;
-            if (initialQuaternion) {
-                jointBinding.node.quaternion.copy(initialQuaternion);
-                jointBinding.baseQuaternion = initialQuaternion.clone();
-            }
+            // Restore to initial world-space transform
+            this.applyWorldTransform(
+                jointBinding.node,
+                jointBinding.baseWorldPosition,
+                jointBinding.baseWorldQuaternion
+            );
         }
     }
 

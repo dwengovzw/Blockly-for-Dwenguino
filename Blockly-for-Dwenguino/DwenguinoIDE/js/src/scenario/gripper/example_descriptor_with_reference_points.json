@@ -1,0 +1,162 @@
+{
+  "version": 1,
+  "model": {
+    "upAxis": "Y",
+    "scale": 1.0
+  },
+  "parts": [
+    {
+      "name": "jaw_left",
+      "referencePoints": {
+        "pivot": {
+          "x": -30,
+          "y": 20,
+          "z": 0
+        },
+        "gripSurface": {
+          "x": -55,
+          "y": 20,
+          "z": 0
+        },
+        "contactPoint": {
+          "x": -60,
+          "y": 18,
+          "z": 0
+        }
+      },
+      "referencePlanes": {
+        "gripFace": {
+          "normal": [0, 1, 0],
+          "point": [-55, 20, 0]
+        },
+        "contactPlane": {
+          "normal": [1, 0, 0],
+          "point": [-60, 18, 0]
+        }
+      }
+    },
+    {
+      "name": "jaw_right",
+      "referencePoints": {
+        "pivot": {
+          "x": 30,
+          "y": 20,
+          "z": 0
+        },
+        "gripSurface": {
+          "x": 55,
+          "y": 20,
+          "z": 0
+        },
+        "contactPoint": {
+          "x": 60,
+          "y": 18,
+          "z": 0
+        }
+      },
+      "referencePlanes": {
+        "gripFace": {
+          "normal": [0, -1, 0],
+          "point": [55, 20, 0]
+        },
+        "contactPlane": {
+          "normal": [-1, 0, 0],
+          "point": [60, 18, 0]
+        }
+      }
+    },
+    {
+      "name": "base",
+      "referencePoints": {
+        "centerPoint": {
+          "x": 0,
+          "y": 10,
+          "z": 0
+        }
+      },
+      "referencePlanes": {
+        "topSurface": {
+          "normal": [0, 1, 0],
+          "point": [0, 20, 0]
+        }
+      }
+    }
+  ],
+  "joints": [
+    {
+      "name": "jaw_left_joint",
+      "node": "jaw_left",
+      "type": "revolute",
+      "axis": [0, 0, -1],
+      "axisPoint": "pivot",
+      "minDeg": 0,
+      "maxDeg": 90,
+      "servo": {
+        "index": 1,
+        "min": 180,
+        "max": 90,
+        "invert": false
+      }
+    },
+    {
+      "name": "jaw_right_joint",
+      "node": "jaw_right",
+      "type": "revolute",
+      "axis": [0, 0, 1],
+      "axisPoint": "pivot",
+      "minDeg": 0,
+      "maxDeg": 90,
+      "servo": {
+        "index": 2,
+        "min": 0,
+        "max": 90,
+        "invert": true
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "parallel_grip_surfaces",
+      "type": "Parallel",
+      "entities": ["jaw_left", "jaw_right"],
+      "referencePoints": ["gripFace", "gripFace"],
+      "weight": 1.0,
+      "description": "Keep grip surfaces parallel - measured at reference planes, applied to parts"
+    },
+    {
+      "id": "concentric_pivots",
+      "type": "Concentric",
+      "entities": ["jaw_left", "jaw_right"],
+      "referencePoints": ["pivot", "pivot"],
+      "weight": 0.9,
+      "description": "Align pivot points - ensures both jaws rotate around same center"
+    },
+    {
+      "id": "horizontal_base",
+      "type": "Horizontal",
+      "entities": ["base"],
+      "weight": 1.0,
+      "description": "Base platform remains horizontal"
+    },
+    {
+      "id": "contact_symmetry",
+      "type": "Symmetric",
+      "entities": ["jaw_left", "jaw_right"],
+      "referencePoints": ["contactPoint", "contactPoint"],
+      "weight": 0.8,
+      "description": "Keep contact points symmetric about center plane - soft constraint"
+    },
+    {
+      "id": "fixed_base",
+      "type": "Fixed",
+      "entities": ["base"],
+      "weight": 1.0,
+      "description": "Lock base in place"
+    }
+  ],
+  "constraintSolver": {
+    "maxIterations": 15,
+    "convergenceThreshold": 0.0005,
+    "enableConflictDetection": true
+  }
+}
