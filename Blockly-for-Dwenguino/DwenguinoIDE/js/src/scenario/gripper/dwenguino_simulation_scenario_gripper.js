@@ -81,7 +81,9 @@ const DEFAULT_KINEMATICS_DESCRIPTOR = {
     constraintSolver: {
         maxIterations: 10,              // Maximum solver iterations per frame
         convergenceThreshold: 0.001,    // Convergence threshold (radians/units)
-        enableConflictDetection: true   // Warn about conflicting constraints
+        enableConflictDetection: true,  // Warn about conflicting constraints
+        showReferencePoints: false,     // Visualize reference points for debugging
+        referencePointScale: 1.0        // Scale factor for reference point coordinates (e.g., 0.1 if GLB is in cm but descriptors are in mm)
     }
 };
 
@@ -123,6 +125,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     rotationWeight = 1.0;
     maxLinearStep = 0.0;
     maxAngularStep = 0.0;
+    // Scale factor for reference point coordinates
+    referencePointScale = 1.0;
     // Array of detected constraint conflicts
     constraintConflicts = [];
     // Current kinematics configuration (deep copy to avoid mutation)
@@ -142,6 +146,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     partsCache = new Map();
     // Cache of reference point world coordinates, keyed as "partName:pointName"
     referencePointsCache = new Map();
+    // Visualization of reference points (for debugging)
+    referencePointVisualization = null;
+    showReferencePoints = false;
 
     /**
      * Initialize the gripper simulation scenario.
@@ -765,12 +772,22 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                     }
                 }
 
+                // Store parent's initial world quaternion for dynamic axis transformation
+                let parentBaseWorldQuat = new THREE.Quaternion();
+                let parentBaseWorldPos = new THREE.Vector3();
+                if (node.parent) {
+                    node.parent.getWorldQuaternion(parentBaseWorldQuat);
+                    node.parent.getWorldPosition(parentBaseWorldPos);
+                }
+
                 // Store joint binding with world-space base transforms
                 this.joints.push({
                     descriptor: joint,
                     node: node,
                     baseWorldQuaternion: node.userData.initialWorldQuaternion.clone(),   // Preserve original world rotation
                     baseWorldPosition: node.userData.initialWorldPosition.clone(),       // Preserve original world position
+                    parentBaseWorldQuat: parentBaseWorldQuat.clone(),                    // Parent's initial world rotation
+                    parentBaseWorldPos: parentBaseWorldPos.clone(),                      // Parent's initial world position
                     axisPointLocal: axisPointPartLocal,                                  // Axis point in part's local coordinates
                     axisPointWorld: axisPointWorld                                       // Axis point in world coordinates
                 });
@@ -820,7 +837,11 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
         // Get local coordinates
         const localPoint = partDef.referencePoints[pointName];
-        const worldPos = new THREE.Vector3(localPoint.x || 0, localPoint.y || 0, localPoint.z || 0);
+        const worldPos = new THREE.Vector3(
+            (localPoint.x || 0) * this.referencePointScale,
+            (localPoint.y || 0) * this.referencePointScale,
+            (localPoint.z || 0) * this.referencePointScale
+        );
 
         // Transform to world coordinates
         worldPos.applyMatrix4(partNode.matrixWorld);
@@ -894,7 +915,100 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         }
     }
 
-    
+    /**
+     * Visualize all reference points in the Three.js scene.
+     * Creates small spheres with labels for each reference point defined in the descriptor.
+     * This helps debug whether reference points are positioned correctly.
+     */
+    visualizeReferencePoints() {
+        // Remove previous visualization if it exists
+        this.hideReferencePoints();
+
+        // Create a container group for all reference point visuals
+        this.referencePointVisualization = new THREE.Group();
+        this.referencePointVisualization.name = "referencePointVisualization";
+
+        if (!this.kinematicsDescriptor?.parts) {
+            return;
+        }
+
+        // Create visuals for each reference point
+        for (const partDef of this.kinematicsDescriptor.parts) {
+            const partNode = this.modelRoot?.getObjectByName(partDef.name);
+            if (!partNode) {
+                console.warn(`Part not found for visualization: ${partDef.name}`);
+                continue;
+            }
+
+            if (!partDef.referencePoints) {
+                continue;
+            }
+
+            // Create a sphere for each reference point
+            for (const [pointName, pointCoords] of Object.entries(partDef.referencePoints)) {
+                // Get world position of this reference point
+                const worldPos = this.getReferencePointWorldPosition(partDef.name, pointName);
+                if (!worldPos) {
+                    continue;
+                }
+
+                // Scale sphere and label size based on reference point scale
+                const sphereRadius = 2 * this.referencePointScale;
+                const labelWidth = 20 * this.referencePointScale;
+                const labelHeight = 6 * this.referencePointScale;
+                const labelFontSize = Math.max(16, 40 * this.referencePointScale); // Minimum 16px for readability
+
+                // Create a small sphere as a visual marker
+                const geometry = new THREE.SphereGeometry(sphereRadius, 16, 16);
+                const material = new THREE.MeshStandardMaterial({
+                    color: 0xFF6B6B,
+                    emissive: 0xFF6B6B,
+                    metalness: 0.3,
+                    roughness: 0.4
+                });
+                const sphere = new THREE.Mesh(geometry, material);
+                sphere.position.copy(worldPos);
+                sphere.scale.set(1, 1, 1);
+                this.referencePointVisualization.add(sphere);
+
+                // Create a label with the reference point name
+                const canvas = document.createElement('canvas');
+                canvas.width = 256;
+                canvas.height = 64;
+                const ctx = canvas.getContext('2d');
+                ctx.fillStyle = '#FF6B6B';
+                ctx.font = `Bold ${labelFontSize}px Arial`;
+                ctx.textAlign = 'center';
+                ctx.fillText(`${partDef.name}`, 128, 30);
+                ctx.fillText(`${pointName}`, 128, 55);
+
+                const texture = new THREE.CanvasTexture(canvas);
+                const labelGeometry = new THREE.PlaneGeometry(labelWidth, labelHeight);
+                const labelMaterial = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
+                const label = new THREE.Mesh(labelGeometry, labelMaterial);
+                label.position.copy(worldPos);
+                label.position.z += 5 * this.referencePointScale; // Offset slightly in front, scaled
+                this.referencePointVisualization.add(label);
+
+                console.log(`[Visualization] Reference point: ${partDef.name}.${pointName} at (${worldPos.x.toFixed(2)}, ${worldPos.y.toFixed(2)}, ${worldPos.z.toFixed(2)})`);
+            }
+        }
+
+        // Add the visualization to the scene
+        this.scene.add(this.referencePointVisualization);
+        console.log(`[Visualization] ✓ Visualized ${this.referencePointVisualization.children.length / 2} reference points`);
+    }
+
+    /**
+     * Hide the reference point visualization by removing it from the scene.
+     */
+    hideReferencePoints() {
+        if (this.referencePointVisualization) {
+            this.scene.remove(this.referencePointVisualization);
+            this.referencePointVisualization = null;
+        }
+    }
+
     /**
      * Initialize and validate SolidWorks constraints from descriptor.
      * Parses solver configuration, validates constraint weights, and detects conflicts.
@@ -926,6 +1040,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             this.rotationWeight = config.rotationWeight ?? 1.0;
             this.maxLinearStep = config.maxLinearStep ?? 0.0;
             this.maxAngularStep = config.maxAngularStep ?? 0.0;
+            this.referencePointScale = config.referencePointScale ?? 1.0;
+            
+            // Apply reference point visualization setting
+            const shouldShowRefPoints = config.showReferencePoints ?? false;
+            if (shouldShowRefPoints && !this.showReferencePoints) {
+                this.showReferencePoints = true;
+                this.visualizeReferencePoints();
+            } else if (!shouldShowRefPoints && this.showReferencePoints) {
+                this.showReferencePoints = false;
+                this.hideReferencePoints();
+            }
         }
         
         if (!this.kinematicsDescriptor?.constraints) {
@@ -2381,29 +2506,89 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             // Transform axis from part's local space to world space
             axis.applyQuaternion(jointBinding.baseWorldQuaternion);
             
+            // DYNAMIC PARENT ROTATION: If this joint's node has a parent, adjust axis based on parent's current rotation
+            if (jointBinding.node.parent) {
+                const parentCurrentQuat = new THREE.Quaternion();
+                jointBinding.node.parent.getWorldQuaternion(parentCurrentQuat);
+                
+                // Calculate how much the parent has rotated from its initial state
+                const parentRotationDelta = parentCurrentQuat.clone()
+                    .multiply(jointBinding.parentBaseWorldQuat.clone().invert());
+                
+                // Apply parent's rotation delta to the axis vector
+                axis.applyQuaternion(parentRotationDelta);
+            }
+            
             let rotation = new THREE.Quaternion().setFromAxisAngle(axis, THREE.MathUtils.degToRad(jointAngleDeg));
             
+            // For child nodes with a parent, recalculate base position based on parent's current transform
+            let effectiveBaseWorldPos = jointBinding.baseWorldPosition.clone();
+            let effectiveBaseWorldQuat = jointBinding.baseWorldQuaternion.clone();
+            let effectiveAxisPointWorld = jointBinding.axisPointWorld?.clone() || null;
+            
+            if (jointBinding.node.parent) {
+                // Calculate child's local position/rotation relative to parent (using initial transforms)
+                const parentInitialQuat = jointBinding.parentBaseWorldQuat;
+                const parentInitialPos = jointBinding.parentBaseWorldPos;
+                
+                // Child's local position relative to parent (in parent's initial frame)
+                const childLocalPosInParentFrame = jointBinding.baseWorldPosition.clone()
+                    .sub(parentInitialPos)
+                    .applyQuaternion(parentInitialQuat.clone().invert());
+                
+                // Child's local rotation relative to parent (in parent's initial frame)
+                const childLocalQuatInParentFrame = parentInitialQuat.clone()
+                    .invert()
+                    .multiply(jointBinding.baseWorldQuaternion);
+                
+                // Get parent's CURRENT transform
+                const parentCurrentPos = new THREE.Vector3();
+                const parentCurrentQuat = new THREE.Quaternion();
+                jointBinding.node.parent.getWorldPosition(parentCurrentPos);
+                jointBinding.node.parent.getWorldQuaternion(parentCurrentQuat);
+                
+                // Transform child's local coords to parent's CURRENT frame
+                effectiveBaseWorldPos = childLocalPosInParentFrame.clone()
+                    .applyQuaternion(parentCurrentQuat)
+                    .add(parentCurrentPos);
+                
+                effectiveBaseWorldQuat = parentCurrentQuat.clone()
+                    .multiply(childLocalQuatInParentFrame);
+                
+                // Also recalculate axis point if it exists (transform it through parent's current frame)
+                if (jointBinding.axisPointLocal && effectiveAxisPointWorld) {
+                    // Axis point in local coordinates relative to parent
+                    const axisPointLocalInParentFrame = jointBinding.axisPointLocal.clone()
+                        .applyQuaternion(parentInitialQuat.clone().invert());
+                    
+                    // Transform through parent's CURRENT frame
+                    effectiveAxisPointWorld = axisPointLocalInParentFrame.clone()
+                        .applyQuaternion(parentCurrentQuat)
+                        .add(parentCurrentPos);
+                }
+            }
+            
             // Apply rotation in world space
-            if (jointBinding.axisPointWorld) {
+            if (effectiveAxisPointWorld) {
                 // Rotate around arbitrary point in world space
-                // Vector from axis point to part's initial world position
-                const relativePos = jointBinding.baseWorldPosition.clone().sub(jointBinding.axisPointWorld);
+                // Vector from axis point to part's effective world position
+                const relativePos = effectiveBaseWorldPos.clone().sub(effectiveAxisPointWorld);
                 
                 // Apply rotation to relative position
                 relativePos.applyQuaternion(rotation);
                 
                 // New world position after rotation around axis
-                const newWorldPos = jointBinding.axisPointWorld.clone().add(relativePos);
+                const newWorldPos = effectiveAxisPointWorld.clone().add(relativePos);
                 
-                // New world rotation: apply rotation increment to initial rotation
-                const newWorldQuat = jointBinding.baseWorldQuaternion.clone().multiply(rotation);
+                // New world rotation: apply rotation increment to effective rotation
+                const newWorldQuat = effectiveBaseWorldQuat.clone().multiply(rotation);
                 
                 // Apply world transform
                 this.applyWorldTransform(jointBinding.node, newWorldPos, newWorldQuat);
             } else {
                 // Rotate around part's center point in world space
-                const newWorldQuat = jointBinding.baseWorldQuaternion.clone().multiply(rotation);
-                this.applyWorldTransform(jointBinding.node, jointBinding.baseWorldPosition, newWorldQuat);
+                const newWorldQuat = effectiveBaseWorldQuat.clone().multiply(rotation);
+                this.applyWorldTransform(jointBinding.node, effectiveBaseWorldPos, newWorldQuat);
             }
             
             // Invalidate reference point cache since this joint moved
@@ -2440,6 +2625,28 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 jointBinding.baseWorldPosition,
                 jointBinding.baseWorldQuaternion
             );
+        }
+
+        // For child nodes with parents, restore their local coordinates
+        for (let jointBinding of this.joints) {
+            if (jointBinding.node.parent && jointBinding.parentBaseWorldPos && jointBinding.parentBaseWorldQuat) {
+                const parentInitialQuat = jointBinding.parentBaseWorldQuat;
+                const parentInitialPos = jointBinding.parentBaseWorldPos;
+                
+                // Recalculate local position from initial world transforms
+                const localPos = jointBinding.baseWorldPosition.clone()
+                    .sub(parentInitialPos)
+                    .applyQuaternion(parentInitialQuat.clone().invert());
+                
+                // Recalculate local rotation from initial world transforms
+                const localQuat = parentInitialQuat.clone()
+                    .invert()
+                    .multiply(jointBinding.baseWorldQuaternion);
+                
+                // Apply local coordinates
+                jointBinding.node.position.copy(localPos);
+                jointBinding.node.quaternion.copy(localQuat);
+            }
         }
     }
 

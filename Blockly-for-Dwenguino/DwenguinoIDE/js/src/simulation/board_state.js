@@ -37,6 +37,10 @@ class BoardState {
         // Same for servo motors
         this.pinMapping["SERVO_MOTOR_1"] = 40;
         this.pinMapping["SERVO_MOTOR_2"] = 41;
+        this.pinMapping["SERVO_MOTOR_3"] = 19;
+        this.pinMapping["SERVO_MOTOR_4"] = 18;
+        this.pinMapping["SERVO_MOTOR_5"] = 17;
+        this.pinMapping["SERVO_MOTOR_6"] = 16;
         // Same for leds, only save the index of the first LED, rest is after
         for (let i = 0 ; i < 8 ; ++i){
             this.pinMapping["LED" + i] = 32 + i;
