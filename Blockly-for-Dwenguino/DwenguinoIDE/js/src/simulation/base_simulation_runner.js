@@ -87,6 +87,12 @@ class BaseSimulationRunner{
      * Reset the current scenario to the initial state and update it based on the current board state.
      */
     resetScenario(){
+         // Cancel any in-flight delay loop work. A previously scheduled timeout may still fire,
+         // but performDelayLoop will exit early due to the guard below.
+         this.delayStepsTaken = 0;
+         this.delayStepsToTake = 0;
+         this.delayRemainingAfterSteps = 0;
+
          // update the current scenario so it resets its state based on the current board state.
          if (this.currentScenario) {
              this.currentScenario.resetScenario(); 
@@ -200,13 +206,21 @@ class BaseSimulationRunner{
    * @param {boolean} once 
    */
   performDelayLoop(once) {
+        // Important: this loop can still be invoked by an already scheduled timeout after
+        // stop/reset. In that case we must not call updateScenario anymore.
+        if (!this.isDebugging && (this.isSimulationPaused || !this.isSimulationRunning)) {
+            return;
+        }
+
         // Here we want the simulation to keep running but not let the board state update.
         // To do so we execute the updateScenario() function of the current scenario delay/speedDelay times
         // with an interval of speedDelay.
         if (this.delayStepsTaken < this.delayStepsToTake) {
             // Update the scenario View
             // TODO: Do not reassign board, make sure updateScenario just changes the state of board
-            this.currentScenario.updateScenario(this.board);
+            if (this.currentScenario) {
+                this.currentScenario.updateScenario(this.board);
+            }
             //this.simulationController.updateSimulationDisplay(this.board);     // Update the simulator view
             this.delayStepsTaken++;
             setTimeout(() => {

@@ -149,6 +149,22 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     // Visualization of reference points (for debugging)
     referencePointVisualization = null;
     showReferencePoints = false;
+    // Store the currently loaded model (THREE.Group or cloneable object)
+    currentModelRoot = null;
+    // Store the currently loaded descriptor
+    currentDescriptor = null;
+    // Store the currently loaded model file for reloading
+    currentModelFile = null;
+    // Flag to track if using custom or default model
+    isUsingCustomModel = false;
+    // Flag to track if using custom or default descriptor
+    isUsingCustomDescriptor = false;
+    // Flag to prevent state updates while async model reload is in progress
+    isModelReloading = false;
+    // Counter to track simulation updates (used to filter out initialization glitches)
+    updateCounter = 0;
+    // Number of updates to skip before applying servo state (prevents initial zero-angle glitch)
+    initializationSkipCount = 4;
 
     /**
      * Initialize the gripper simulation scenario.
@@ -189,6 +205,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
         // Load the default procedural gripper model
         this.loadDefaultModel();
+        // Seed initial servo angles to prevent glitch when simulation starts
+        this.seedServoAnglesFromDescriptor();
+        // Reset update counter for initial run
+        this.updateCounter = 0;
         // Render the initial frame
         this.renderScene();
 
@@ -445,6 +465,9 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         resetButton.on("click", () => {
             // Deep copy to avoid reference issues
             this.kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+            this.currentDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+            this.isUsingCustomDescriptor = false;
+            this.loadDefaultModel();
             this.applyKinematicsDescriptor();
             this.renderScene();
         });
@@ -460,7 +483,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     /**
      * Handle user upload of a custom GLB 3D model.
      * The model should have named nodes that match the kinematics descriptor for proper joint mapping.
-     * Supports both uncompressed and DRACO-compressed GLB files from SolidWorks.
+     * Supports both uncompressed and DRACO-compressed GLB files.
+     * Stores the file as a Blob for later reloading during reset.
      * @param {Event} event - File input change event
      */
     handleModelUpload(event) {
@@ -471,6 +495,10 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         
         console.log(`[Gripper] Loading GLB model: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)}MB)`);
         
+        // Store the file blob for later reloading
+        this.currentModelFile = file;
+        this.isUsingCustomModel = true;
+        
         // Create temporary URL for the file blob
         let url = URL.createObjectURL(file);
         this.gltfLoader.load(
@@ -478,8 +506,14 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             (gltf) => {
                 // Clean up the temporary URL after loading
                 URL.revokeObjectURL(url);
+                // Store the loaded model for reset purposes
+                this.currentModelRoot = gltf.scene;
                 // Replace the current model with the loaded one
                 this.setModel(gltf.scene);
+                // Seed initial servo angles with the newly loaded model
+                this.seedServoAnglesFromDescriptor();
+                // Reset update counter to prevent glitch
+                this.updateCounter = 0;
                 console.log(`[Gripper] ✓ Successfully loaded GLB model: ${file.name}`);
             },
             (progress) => {
@@ -507,6 +541,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 
                 console.error(`[Gripper] ${errorMessage}`, error);
                 alert(errorMessage);
+                this.isUsingCustomModel = false;
             }
         );
     }
@@ -514,6 +549,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     /**
      * Handle user upload of a custom JSON kinematics descriptor.
      * The descriptor defines how servo angles map to 3D joint rotations.
+     * Stores the descriptor content for later reloading during reset.
      * @param {Event} event - File input change event
      */
     handleKinematicsUpload(event) {
@@ -527,21 +563,32 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 // Parse and apply the new kinematics configuration
                 let parsed = JSON.parse(reader.result);
                 this.kinematicsDescriptor = parsed;
+                // Store the parsed descriptor for later reloading
+                this.currentDescriptor = JSON.parse(JSON.stringify(parsed));
+                this.isUsingCustomDescriptor = true;
                 this.applyKinematicsDescriptor();
+                // Seed initial servo angles with the newly loaded descriptor
+                this.seedServoAnglesFromDescriptor();
+                // Reset update counter to prevent glitch
+                this.updateCounter = 0;
                 this.renderScene();
+                console.log(`[Gripper] ✓ Successfully loaded kinematics descriptor: ${file.name}`);
             } catch (error) {
                 console.error("Invalid kinematics JSON", error);
+                alert(`Failed to parse kinematics JSON: ${error.message}`);
+                this.isUsingCustomDescriptor = false;
             }
         };
         reader.readAsText(file);
     }
-
     /**
      * Load the default procedural gripper model.
      * This ensures the simulation has a working model even without user uploads.
      */
     loadDefaultModel() {
         let defaultModel = this.createDefaultGripperModel();
+        this.currentModelRoot = defaultModel;
+        this.isUsingCustomModel = false;
         this.setModel(defaultModel);
     }
 
@@ -600,9 +647,26 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
      * @param {THREE.Object3D} modelRoot - The root node of the new model
      */
     setModel(modelRoot) {
+        // Guard: if scene is destroyed, bail out silently
+        if (!this.scene) {
+            console.warn('[Gripper] setModel called after scene destroyed, ignoring');
+            return;
+        }
+        
         // Remove previous model if it exists
         if (this.modelRoot) {
             this.scene.remove(this.modelRoot);
+            // Dispose of old model's geometry and materials
+            this.modelRoot.traverse((node) => {
+                if (node.geometry) node.geometry.dispose();
+                if (node.material) {
+                    if (Array.isArray(node.material)) {
+                        node.material.forEach(mat => mat.dispose());
+                    } else {
+                        node.material.dispose();
+                    }
+                }
+            });
         }
         this.modelRoot = modelRoot;
         // Apply scale and axis transformations
@@ -2424,9 +2488,19 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     /**
      * Main update loop - called periodically during simulation.
      * Updates both state and display from the board state.
+     * 
+     * IMPORTANT: Skips entire update (state + display) if model reload is in progress.
+     * This prevents any state changes from being applied while joints are being rebuilt.
+     * 
      * @param {BoardState} boardState - Current state of the Dwenguino board
      */
     updateScenario(boardState) {
+        // Block the entire update cycle during model reload to prevent inconsistent state
+        if (this.isModelReloading) {
+            console.log('[Gripper] Skipping updateScenario during model reload');
+            return;
+        }
+        
         super.updateScenario(boardState);
         this.updateScenarioState(boardState);
         this.updateScenarioDisplay(boardState);
@@ -2435,9 +2509,18 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     /**
      * Update the simulation state from board state.
      * Reads servo angles and applies them to joints, then applies constraints.
+     * 
+     * IMPORTANT: Skips update if model reload is in progress to prevent race conditions.
+     * 
      * @param {BoardState} boardState - Current state of the Dwenguino board
      */
     updateScenarioState(boardState) {
+        // Skip updates while model reload is in progress
+        if (this.isModelReloading) {
+            console.log('[Gripper] Skipping updateScenarioState during model reload');
+            return;
+        }
+        
         super.updateScenarioState(boardState);
         this.updateTargetServoAngles(boardState);
         this.updateSmoothedServoAngles();
@@ -2476,10 +2559,12 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             let servoIndex = descriptor?.servo?.index ?? 1;
             let servoMin = descriptor?.servo?.min ?? 0;
             let servoMax = descriptor?.servo?.max ?? 180;
-            let invert = descriptor?.servo?.invert ?? false;
+            let servoInvert = descriptor?.servo?.invert ?? false;
+            let servoInitialAngle = descriptor?.servo?.initialAngle ?? 0;
 
             // Read current (smoothed) servo angle from the internal state
             let servoAngle = this.getSmoothedServoAngle(servoIndex, boardState);
+
             
             // Map servo angle [servoMin, servoMax] to normalized range [0, 1]
             let t = 0;
@@ -2487,14 +2572,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 t = (servoAngle - servoMin) / (servoMax - servoMin);
             }
             t = Math.max(0, Math.min(1, t)); // Clamp to [0, 1]
-            if (invert) {
-                t = 1 - t; // Invert for opposite rotation direction
+            if (servoInvert) {
+                t = 1 - t; // Invert servo for opposite rotation direction
             }
 
             // Map normalized value to joint angle range
             let minDeg = descriptor?.minDeg ?? 0;
             let maxDeg = descriptor?.maxDeg ?? 0;
             let jointAngleDeg = minDeg + t * (maxDeg - minDeg);
+
+            // Subtract initial angle to get relative rotation from the base pose
+            jointAngleDeg -= servoInitialAngle;
             
             // Create rotation axis in world space
             let axisValues = descriptor?.axis ?? [0, 0, 1];
@@ -2555,16 +2643,13 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
                 effectiveBaseWorldQuat = parentCurrentQuat.clone()
                     .multiply(childLocalQuatInParentFrame);
                 
-                // Also recalculate axis point if it exists (transform it through parent's current frame)
-                if (jointBinding.axisPointLocal && effectiveAxisPointWorld) {
-                    // Axis point in local coordinates relative to parent
-                    const axisPointLocalInParentFrame = jointBinding.axisPointLocal.clone()
-                        .applyQuaternion(parentInitialQuat.clone().invert());
-                    
-                    // Transform through parent's CURRENT frame
-                    effectiveAxisPointWorld = axisPointLocalInParentFrame.clone()
-                        .applyQuaternion(parentCurrentQuat)
-                        .add(parentCurrentPos);
+                // Also recalculate axis point if it exists (transform it through child's current frame)
+                if (jointBinding.axisPointLocal) {
+                    // Axis point is defined in the CHILD node's local coordinates
+                    // Apply the child's CURRENT world transform (after rotation) to the local axis point
+                    effectiveAxisPointWorld = jointBinding.axisPointLocal.clone()
+                        .applyQuaternion(effectiveBaseWorldQuat)
+                        .add(effectiveBaseWorldPos);
                 }
             }
             
@@ -2598,7 +2683,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
     /**
      * Seed the smoothing maps with initial servo angles when the simulation is reset.
-     * Uses descriptor-defined initial values if provided, otherwise defaults to 0 degrees.
+     * Uses descriptor-defined initial values if provided, otherwise defaults to the midpoint
+     * of the servo range (typically 90 degrees for 0-180 servos).
      */
     seedServoAnglesFromDescriptor() {
         if (!this.kinematicsDescriptor || !this.kinematicsDescriptor.joints) {
@@ -2606,7 +2692,13 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         }
         for (let joint of this.kinematicsDescriptor.joints) {
             let servoIndex = joint?.servo?.index ?? 1;
-            let initialAngle = joint?.servo?.initial ?? 0;
+            // Use explicit initial value, or default to midpoint of servo range
+            let initialAngle = joint?.servo?.initial;
+            if (initialAngle === undefined) {
+                let servoMin = joint?.servo?.min ?? 0;
+                let servoMax = joint?.servo?.max ?? 180;
+                initialAngle = (servoMin + servoMax) / 2; // Midpoint default (typically 90°)
+            }
             this.currentServoAngles.set(servoIndex, initialAngle);
             this.targetServoAngles.set(servoIndex, initialAngle);
         }
@@ -2651,13 +2743,100 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     }
 
     /**
+     * Reload the model and descriptor from their stored sources.
+     * This performs a clean reset by reloading from files instead of just rotating joints.
+     * Called by resetScenario to ensure a complete reset to initial state.
+     * 
+     * Uses async/await to ensure servo angles are seeded only AFTER joints are fully initialized.
+     * Sets isModelReloading flag to prevent updateScenarioState from interfering during reload.
+     */
+    async reloadModelAndDescriptor() {
+        this.isModelReloading = true;
+        console.log('[Gripper] Starting model and descriptor reload...');
+        
+        try {
+            if (this.isUsingCustomModel && this.currentModelFile) {
+                // Reload custom model from stored file blob
+                console.log('[Gripper] Reloading custom model');
+                try {
+                    const gltf = await this._loadGLTF(this.currentModelFile);
+                    this.currentModelRoot = gltf.scene;
+                    this.setModel(gltf.scene);
+                    console.log('[Gripper] ✓ Custom model reloaded');
+                } catch (error) {
+                    console.error('[Gripper] Failed to reload custom model:', error);
+                    // Fallback to default model on error
+                    this.loadDefaultModel();
+                }
+            } else {
+                // Reload default model (synchronous)
+                console.log('[Gripper] Reloading default model');
+                this.loadDefaultModel();
+            }
+            
+            // Reload descriptor
+            if (this.isUsingCustomDescriptor && this.currentDescriptor) {
+                console.log('[Gripper] Reloading custom descriptor');
+                this.kinematicsDescriptor = JSON.parse(JSON.stringify(this.currentDescriptor));
+            } else {
+                console.log('[Gripper] Reloading default descriptor');
+                this.kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+                this.currentDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+            }
+            
+            this.applyKinematicsDescriptor();
+            console.log('[Gripper] ✓ Model and descriptor reloaded, seeding angles...');
+            
+            // CRITICAL: Seed angles WHILE flag is still true to prevent updateScenarioState interference
+            this.seedServoAnglesFromDescriptor();
+            console.log('[Gripper] ✓ Servo angles seeded');
+        } finally {
+            // Clear flag only AFTER all initialization is complete
+            this.isModelReloading = false;
+            console.log('[Gripper] Model reload complete, state updates resumed');
+        }
+    }
+
+    /**
+     * Promisify the GLTFLoader to work with async/await.
+     * @param {File} file - The GLB file to load
+     * @returns {Promise} Resolves with loaded GLTF or rejects on error
+     */
+    _loadGLTF(file) {
+        return new Promise((resolve, reject) => {
+            const url = URL.createObjectURL(file);
+            this.gltfLoader.load(
+                url,
+                (gltf) => {
+                    URL.revokeObjectURL(url);
+                    resolve(gltf);
+                },
+                undefined,
+                (error) => {
+                    URL.revokeObjectURL(url);
+                    reject(error);
+                }
+            );
+        });
+    }
+
+    /**
      * Update the target servo angles from the board state.
+     * Skips the first few updates to avoid initialization glitches (transient zero-angle pulses).
      * @param {BoardState} boardState - Current board state
      */
     updateTargetServoAngles(boardState) {
         if (!boardState) {
             return;
         }
+        
+        // Increment counter and skip first few updates to filter out initialization glitches
+        this.updateCounter++;
+        if (this.updateCounter <= this.initializationSkipCount) {
+            console.log(`[Gripper] Skipping update ${this.updateCounter}/${this.initializationSkipCount} (filtering initialization glitches)`);
+            return;
+        }
+        
         for (let jointBinding of this.joints) {
             let servoIndex = jointBinding.descriptor?.servo?.index ?? 1;
             let targetAngle = this.getServoAngle(boardState, servoIndex);
@@ -2767,18 +2946,31 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
 
     /**
      * Reset the scenario to initial state.
-     * Re-applies kinematics and re-renders the scene.
+     * Reloads the model from the GLB file and descriptor from the descriptor file.
+     * This ensures a clean reset, avoiding issues with accumulated constraint violations.
+     * 
+     * IMPORTANT: This method must remain synchronous to honor the interface contract.
+     * The async model reload happens in the background (fire-and-forget pattern).
+     * The isModelReloading flag prevents updateScenarioState from interfering during reload.
      */
     resetScenario() {
         super.resetScenario();
         this.currentServoAngles.clear();
         this.targetServoAngles.clear();
         this.lastUpdateTimestampMs = null;
-        this.applyKinematicsDescriptor();
-        this.resetModelPose();
-        this.seedServoAnglesFromDescriptor();
-        this.applyServoState(null);
-        this.renderScene();
+        this.updateCounter = 0; // Reset counter on scenario reset
+        
+        // Fire off async reload in background (don't await - must remain sync for interface)
+        // Note: Angle seeding now happens inside reloadModelAndDescriptor while flag is still true
+        this.reloadModelAndDescriptor().then(() => {
+            // Render scene after all initialization is complete and flag is cleared
+            this.renderScene();
+            console.log('[Gripper] Reset complete');
+        }).catch(error => {
+            console.error('[Gripper] Error during reset:', error);
+            // On error, still render to show current state
+            this.renderScene();
+        });
     }
 
     /**
