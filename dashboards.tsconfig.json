@@ -1,30 +1,41 @@
 {
   "compilerOptions": {
     "pretty": true,
+
     "outDir": "./Blockly-for-Dwenguino/dashboards/js/dist",
-    "noImplicitAny": false,
-    "module": "esnext",
-    "target": "es6",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "importHelpers": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
     "noEmitOnError": true,
+    "sourceMap": true,
+
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "lib": ["DOM", "ES2022"],
+    "isolatedModules": false,
+    "rootDir": ".",
+
     "strict": true,
+    "noImplicitAny": false,
+
     "allowJs": true,
-    "moduleResolution": "node",
-    "types": ["jquery", "node"],
-    "lib": [
-      "DOM",
-      "ES6", 
-      "es2017"
-    ]
+    "allowSyntheticDefaultImports": true,
+
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "emitDecoratorMetadata": true,
+
+    "skipLibCheck": true,
+    "types": ["jquery"]
   },
+
   "include": [
-    "./Blockly-for-Dwenguino/dashboards/**/*",
-    "./Blockly-for-Dwenguino/shared/types/*",
-    "./Blockly-for-Dwenguino/shared/**/*"
+    "./Blockly-for-Dwenguino/dashboards/js/src/**/*",
+    "./shared/**/*",
+    "./Blockly-for-Dwenguino/dashboards/generated/**/*",
+    "./shared/types/**/*"
+  ],
+
+  "exclude": [
+    "./backend",
+    "./node_modules"
   ]
 }

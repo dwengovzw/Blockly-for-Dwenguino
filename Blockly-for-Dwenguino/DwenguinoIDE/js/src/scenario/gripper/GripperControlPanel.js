@@ -11,6 +11,10 @@ class GripperControlPanel {
      *   - onModelUpload(event): Called when a GLB file is selected
      *   - onKinematicsUpload(event): Called when a JSON file is selected
      *   - onReset(): Called when the reset button is clicked
+     *   - onToggleGraspableObject(visible): Called when graspable object checkbox changes
+     *   - onGraspableShapeChange(shape): Called when shape dropdown changes
+     *   - onGraspableSizeChange(size): Called when size slider changes
+     *   - onResetGraspableObject(): Called when graspable object reset button is clicked
      */
     setup(container, callbacks) {
         let panel = $("<div>")
@@ -51,6 +55,70 @@ class GripperControlPanel {
         panel.append(kinematicsLabel);
         panel.append(kinematicsInput);
         panel.append(resetButton);
+
+        // Graspable object controls (only if callbacks are provided)
+        if (callbacks.onToggleGraspableObject) {
+            let separator = $("<hr>").css({ "margin": "10px 0 8px" });
+            panel.append(separator);
+
+            let objectLabel = $("<div>").css({ "font-weight": "bold" }).text("Graspable Object");
+
+            let toggleRow = $("<div>").css({ "margin-top": "4px" });
+            let toggleCheckbox = $("<input>")
+                .attr("type", "checkbox")
+                .attr("id", "graspable-toggle");
+            let toggleText = $("<label>")
+                .attr("for", "graspable-toggle")
+                .css({ "margin-left": "4px" })
+                .text("Show object");
+            toggleCheckbox.on("change", function () {
+                callbacks.onToggleGraspableObject(this.checked);
+            });
+            toggleRow.append(toggleCheckbox).append(toggleText);
+
+            panel.append(objectLabel);
+            panel.append(toggleRow);
+
+            if (callbacks.onGraspableShapeChange) {
+                let shapeRow = $("<div>").css({ "margin-top": "4px" });
+                let shapeSelect = $("<select>").css({ "width": "100%" });
+                for (const s of ["sphere", "box", "cylinder"]) {
+                    shapeSelect.append($("<option>").val(s).text(s));
+                }
+                shapeSelect.on("change", function () {
+                    callbacks.onGraspableShapeChange(this.value);
+                });
+                shapeRow.append($("<span>").text("Shape: ")).append(shapeSelect);
+                panel.append(shapeRow);
+            }
+
+            if (callbacks.onGraspableSizeChange) {
+                let sizeRow = $("<div>").css({ "margin-top": "4px" });
+                let sizeSlider = $("<input>")
+                    .attr("type", "range")
+                    .attr("min", "5")
+                    .attr("max", "50")
+                    .attr("value", "15")
+                    .css({ "width": "100%" });
+                let sizeLabel = $("<span>").text("Size: 15mm");
+                sizeSlider.on("input", function () {
+                    let sizeVal = parseInt(this.value, 10);
+                    sizeLabel.text(`Size: ${sizeVal}mm`);
+                    callbacks.onGraspableSizeChange(sizeVal / 1000);
+                });
+                sizeRow.append(sizeLabel).append(sizeSlider);
+                panel.append(sizeRow);
+            }
+
+            if (callbacks.onResetGraspableObject) {
+                let resetObjBtn = $("<button>")
+                    .text("Reset object position")
+                    .css({ "margin-top": "6px", "width": "100%" });
+                resetObjBtn.on("click", () => callbacks.onResetGraspableObject());
+                panel.append(resetObjBtn);
+            }
+        }
+
         container.append(panel);
     }
 }

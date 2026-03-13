@@ -6,6 +6,9 @@ import KinematicsEngine from "./KinematicsEngine.js";
 import ThreeSceneManager from "./ThreeSceneManager.js";
 import GripperControlPanel from "./GripperControlPanel.js";
 import ModelLoader from "./ModelLoader.js";
+import TouchSensorManager from "./TouchSensorManager.js";
+import GraspableObject from "./GraspableObject.js";
+import * as THREE from "three";
 
 /**
  * Gripper simulation scenario that renders a 3D robot gripper controlled by servo motors.
@@ -30,6 +33,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     kinematicsEngine = new KinematicsEngine(this.refGeometry);
     controlPanel = new GripperControlPanel();
     modelLoader = new ModelLoader();
+    touchSensorManager = new TouchSensorManager(this.refGeometry);
+    graspableObject = new GraspableObject();
 
     constructor(logger, name) {
         super(logger, name);
@@ -50,7 +55,11 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         this.controlPanel.setup(this.container, {
             onModelUpload: (event) => this._handleModelUpload(event),
             onKinematicsUpload: (event) => this._handleKinematicsUpload(event),
-            onReset: () => this._handleReset()
+            onReset: () => this._handleReset(),
+            onToggleGraspableObject: (visible) => this.graspableObject.setVisible(visible),
+            onGraspableShapeChange: (shape) => this.graspableObject.setShape(shape, this.graspableObject.size),
+            onGraspableSizeChange: (size) => this.graspableObject.setShape(this.graspableObject.shape, size),
+            onResetGraspableObject: () => this.graspableObject.resetPosition()
         });
 
         let defaultModel = this.modelLoader.createDefaultModel();
@@ -102,6 +111,26 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         } else {
             this.refGeometry.hideReferencePoints(this.sceneManager.scene);
         }
+
+        // Initialize touch sensors from descriptor
+        this.touchSensorManager.initialize(
+            this.kinematicsDescriptor, this.modelRoot, this.sceneManager.scene
+        );
+
+        // Initialize graspable object
+        const objDef = this.kinematicsDescriptor?.graspableObject;
+        if (objDef) {
+            const spawnPos = objDef.spawnPosition
+                ? { x: objDef.spawnPosition[0], y: objDef.spawnPosition[1], z: objDef.spawnPosition[2] }
+                : undefined;
+            this.graspableObject.initialize(this.sceneManager.scene, {
+                shape: objDef.shape || "sphere",
+                size: objDef.size || 0.015,
+                spawnPosition: spawnPos
+                    ? new THREE.Vector3(spawnPos.x, spawnPos.y, spawnPos.z)
+                    : undefined
+            });
+        }
     }
 
     _handleModelUpload(event) {
@@ -150,6 +179,14 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         this.kinematicsEngine.updateSmoothedServoAngles();
         this.kinematicsEngine.applyServoState(boardState);
         this.constraintSolver.solve();
+
+        // Update touch sensors after constraints are solved (positions are final)
+        this.touchSensorManager.update(this.graspableObject);
+        this.touchSensorManager.writeToBoard(boardState);
+
+        // Update graspable object physics
+        const contacts = this.touchSensorManager.getContactInfo();
+        this.graspableObject.update(1 / 60, contacts);
     }
 
     updateScenarioDisplay(boardState) {
@@ -180,6 +217,8 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     }
 
     destroy() {
+        this.touchSensorManager.cleanup(this.sceneManager.scene);
+        this.graspableObject.cleanup();
         this.sceneManager.destroy();
     }
 }

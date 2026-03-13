@@ -71,6 +71,12 @@ const DEFAULT_KINEMATICS_DESCRIPTOR = {
         }
     ],
     constraints: [],
+    touchSensors: [],
+    graspableObject: {
+        shape: "sphere",
+        size: 0.015,
+        spawnPosition: [0, 0.1, 0]
+    },
     constraintSolver: {
         maxIterations: 10,
         convergenceThreshold: 0.001,
