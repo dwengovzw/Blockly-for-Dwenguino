@@ -33,16 +33,16 @@ utilitiesRouter.route('/getDwenguinoBinary')
 
 utilitiesRouter.route('/getHalberdBinary')
 .get((req, res) => {
-    console.log("[HalberdBinary] GET request received");
-    req["data"] = req.query
-    UtilController.getHalberdBinary(req, res)
+    res.status(200).send("OK");
+    // req["data"] = req.query
+    // UtilController.getHalberdBinary(req, res)
 })
 
 utilitiesRouter.route('/getHalberdBinary')
 .post((req, res) => {
-    console.log("[HalberdBinary] POST request received");
-    req["data"] = req.body
-    UtilController.getHalberdBinary(req, res)
+    res.status(200).send("OK");
+    // req["data"] = req.body
+    // UtilController.getHalberdBinary(req, res)
 })
 
 utilitiesRouter.route('/getEnvironment')
