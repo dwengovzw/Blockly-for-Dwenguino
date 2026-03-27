@@ -18,9 +18,6 @@ ARDUINO_CLI="/home/node/deploy/backend/compilation/bin/linux/arduino-cli"
 "$ARDUINO_CLI" core update-index
 "$ARDUINO_CLI" core install adafruit:nrf52
 
-echo "installing adafruit-nrfutil"
-pip3 install --break-system-packages adafruit-nrfutil
-
 echo "run application"
 exec npm run start:dev
 # go to backend and stop the previous app version and restart the new nodeJS app in back
