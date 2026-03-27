@@ -33,14 +33,12 @@ utilitiesRouter.route('/getDwenguinoBinary')
 
 utilitiesRouter.route('/getHalberdBinary')
 .get((req, res) => {
-    //res.status(200).send("OK");
     req["data"] = req.query
     UtilController.getHalberdBinary(req, res)
 })
 
 utilitiesRouter.route('/getHalberdBinary')
 .post((req, res) => {
-    res.status(200).send("OK");
     req["data"] = req.body
     UtilController.getHalberdBinary(req, res)
 })
