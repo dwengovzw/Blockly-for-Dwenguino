@@ -393,6 +393,24 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
   },
 
+  // Block for setting the random seed.
+  {
+    "type": "random_seed",
+    "message0": "%{BKY_MATH_RANDOM_SEED}",
+    "args0": [
+      {
+        "type": "input_value",
+        "name": "SEED",
+        "check": "Number"
+      }
+    ],
+    "previousStatement": null,
+    "nextStatement": null,
+    "colour": Blockly.Msg.MATH_HUE,
+    "tooltip": "%{BKY_MATH_RANDOM_SEED_TOOLTIP}",
+    "helpUrl": ""
+  },
+
   // Block for calculating atan2 of [X] and [Y].
   {
     "type": "math_atan2",

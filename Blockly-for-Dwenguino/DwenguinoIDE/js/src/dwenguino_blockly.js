@@ -1152,6 +1152,36 @@ let DwenguinoBlockly = {
       "DWB_VARIABLES",
       variablesFlyoutCallback
     );
+
+    var arraysFlyoutCallback = function () {
+      var variables = workspace.getAllVariables();
+      var block_texts = [];
+      block_texts.push('<block type="array_create"><value name="SIZE"><block type="char_type"><field name="BITMASK">5</field></block></value></block>');
+      block_texts.push('<block type="array_set_index"><value name="INDEX"><block type="char_type"><field name="BITMASK">0</field></block></value></block>');
+      block_texts.push('<block type="array_get_index"><value name="INDEX"><block type="char_type"><field name="BITMASK">0</field></block></value></block>');
+      block_texts.push('<block type="array_length"></block>');
+
+      for (var i = 0; i < variables.length; i++) {
+        if (variables[i]["type"] == "Array") {
+          var blockXml = '<block type="array_get_index"><field name="VAR" id="'
+            + variables[i]["id_"] + '" variabletype="Array">'
+            + variables[i]["name"] + '</field>'
+            + '<value name="INDEX"><block type="char_type"><field name="BITMASK">0</field></block></value></block>';
+          block_texts.push(blockXml);
+        }
+      }
+      var blocks = [];
+      for (var i = 0; i < block_texts.length; i++) {
+        blocks.push(Blockly.Xml.textToDom(block_texts[i]));
+      }
+      return blocks;
+    };
+
+    workspace.registerToolboxCategoryCallback(
+      "DWB_ARRAYS",
+      arraysFlyoutCallback
+    );
+
     return workspace;
   },
 

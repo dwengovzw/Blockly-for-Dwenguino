@@ -63,6 +63,13 @@
             </block>
         </value>
     </block>
+    <block type="random_seed">
+        <value name="SEED">
+            <block type="char_type">
+                <field name="BITMASK">42</field>
+            </block>
+        </value>
+    </block>
 </category>
 
 <category id="catText" colour="225" name="Text">
@@ -71,6 +78,9 @@
 </category>
 
 <category id="catVariables" colour="90" name='Math' custom="DWB_VARIABLES">    
+</category>
+
+<category id="catArrays" colour="260" name='Arrays' custom="DWB_ARRAYS">
 </category>
 
 <category id="catDwenguino" colour="315" name='Dwenguino'>

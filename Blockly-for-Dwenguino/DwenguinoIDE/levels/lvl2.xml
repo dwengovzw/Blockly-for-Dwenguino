@@ -36,6 +36,13 @@
     </block>
     <block type="char_type"></block>
     <block type="math_arithmetic"></block>
+    <block type="random_seed">
+        <value name="SEED">
+            <block type="char_type">
+                <field name="BITMASK">42</field>
+            </block>
+        </value>
+    </block>
 </category>
 <category id="catText" colour="225" name="Text">
     <block type="text"></block>

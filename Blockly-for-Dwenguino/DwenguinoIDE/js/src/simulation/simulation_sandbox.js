@@ -481,6 +481,23 @@ class SimulationSandbox {
     return Math.abs(bA - bB) <= diff && Math.abs(gA - gB) <= diff && Math.abs(rA - rB) <= diff
   }
 
+  /**
+   * Set the seed for the seeded pseudo-random number generator.
+   * Uses a simple mulberry32 algorithm so results are reproducible.
+   * @param {number} seed
+   */
+  setRandomSeed(seed) {
+    this._randomSeed = seed | 0;
+  }
+
+  /** Seeded PRNG (mulberry32). Returns a float in [0, 1). */
+  _seededRandom() {
+    let t = (this._randomSeed += 0x6d2b79f5);
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  }
+
   mathRandomInt(a, b) {
     if (a > b) {
       // Swap a and b to ensure a is smaller.
@@ -488,7 +505,8 @@ class SimulationSandbox {
       a = b;
       b = c;
     }
-    return Math.floor(Math.random() * (b - a + 1) + a);
+    var rand = this._randomSeed !== undefined ? this._seededRandom() : Math.random();
+    return Math.floor(rand * (b - a + 1) + a);
   }
 
 }

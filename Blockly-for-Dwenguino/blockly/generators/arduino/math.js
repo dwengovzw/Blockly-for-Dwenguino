@@ -136,6 +136,12 @@ Blockly.Arduino.math_random_int = function(block){
     return ["random(" + lower + ', ' + upper + ')', Blockly.Arduino.ORDER_NONE];
 };
 
+Blockly.Arduino['random_seed'] = function(block) {
+    var seed = Blockly.Arduino.valueToCode(block, 'SEED',
+        Blockly.Arduino.ORDER_ATOMIC) || '0';
+    return 'randomSeed(' + seed + ');\n';
+};
+
 Blockly.Arduino['char_type'] = function (block) {
     var text_bitmask = block.getFieldValue('BITMASK');
     var code = text_bitmask;

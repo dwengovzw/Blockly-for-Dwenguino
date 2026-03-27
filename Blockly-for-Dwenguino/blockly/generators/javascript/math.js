@@ -400,6 +400,12 @@ Blockly.JavaScript['math_random_float'] = function(block) {
   return ['Math.random()', Blockly.JavaScript.ORDER_FUNCTION_CALL];
 };
 
+Blockly.JavaScript['random_seed'] = function(block) {
+  var seed = Blockly.JavaScript.valueToCode(block, 'SEED',
+      Blockly.JavaScript.ORDER_ATOMIC) || '0';
+  return machine + 'setRandomSeed(' + seed + ');\n';
+};
+
 Blockly.JavaScript['char_type'] = function (block) {
     var text_bitmask = block.getFieldValue('BITMASK');
     if (text_bitmask[1] ==  "b"){
