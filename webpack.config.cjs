@@ -12,7 +12,7 @@ module.exports = [
             app: './Blockly-for-Dwenguino/DwenguinoIDE/js/src/dwenguino_blockly.js',
         },
         resolve:{
-            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '.tsx', '.ts', ''],
+            extensions: ['.js', '.cjs', '.ttf', '.json', '.jsx', '', '.ts', '.tsx'],
             fullySpecified: false,
         },
         output: {
@@ -138,7 +138,7 @@ module.exports = [
             app: path.resolve(__dirname, "Blockly-for-Dwenguino/dashboards/js/src/dashboard.ts"),
         },
         output: {
-            path: path.resolve('./Blockly-for-Dwenguino/dashboards/js/dist/'),
+            path: path.resolve(__dirname, 'Blockly-for-Dwenguino/dashboards/js/dist/'),
             filename: 'dashboards.bundle.js'
         },
         resolve:{
@@ -229,3 +229,5 @@ module.exports = [
         }
     }
 ];
+
+module.exports.parallelism = 1;

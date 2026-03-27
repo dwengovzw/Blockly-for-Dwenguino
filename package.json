@@ -29,7 +29,7 @@
         "build": "npm run build-frontend && npm run build-backend",
         "build-frontend": "webpack --mode production --progress --config webpack.config.cjs",
         "build-backend": "tsc --project backend/tsconfig.json",
-        "devstart": "npm run build-dev-backend && npm run start",
+        "devstart": "npm run build-dev-backend && npm run start:dev",
         "start": "node --experimental-specifier-resolution=node --loader ts-node/esm --experimental-vm-modules -r dotenv/config backend/dist/index.js",
         "start:dev": "node -r dotenv/config backend/dist/backend/index.js dotenv_config_path=backend/.env"
     },
