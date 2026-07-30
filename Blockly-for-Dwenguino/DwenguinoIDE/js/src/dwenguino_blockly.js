@@ -133,6 +133,7 @@ let DwenguinoBlockly = {
         $("#db_robot_pane").css("min-width", `${minSimulatorWidth}px`);
         $("#db_robot_pane").css("flex-shrink", "0");
         $("#db_blockly").css("max-width", `${maxBlocklyWidth}px`);
+        DwenguinoBlockly.simButtonStateClicked = true;
 
         if (ui.size.width > maxBlocklyWidth) {
           ui.size.width = maxBlocklyWidth;
