@@ -21,7 +21,7 @@ window.$ = window.jQuery = jQuery;
 
 
 let DwenguinoBlockly = {
-  simulatorMinWidthFraction: 0.2,
+  simulatorMinWidthFraction: 0.25,
   basepath: settings.basepath,
   simButtonStateClicked: false,
 
@@ -779,8 +779,11 @@ let DwenguinoBlockly = {
     if (this.simButtonStateClicked) {
       newStateArray = ["100%", "off", false];
       DwenguinoBlockly.simulationEnvironment ? DwenguinoBlockly.simulationEnvironment.stop() : null;
+      $("#db_robot_pane").hide();
+      $("#db_blockly").css("max-width", "");
     } else {
       newStateArray = ["50%", "on", true];
+      $("#db_robot_pane").show();
       //DwenguinoBlockly.simulationEnvironment.open();
     }
     $("#db_blockly").width(newStateArray[0]);
