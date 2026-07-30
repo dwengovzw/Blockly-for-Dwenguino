@@ -21,6 +21,7 @@ window.$ = window.jQuery = jQuery;
 
 
 let DwenguinoBlockly = {
+  simulatorMinWidthFraction: 0.2,
   basepath: settings.basepath,
   simButtonStateClicked: false,
 
@@ -124,6 +125,19 @@ let DwenguinoBlockly = {
     //init resizable panels
     $("#db_blockly").resizable({
       handles: "e",
+      resize: function (event, ui) {
+        const totalWidth = $("#db_body").width();
+        const minSimulatorWidth = totalWidth * DwenguinoBlockly.simulatorMinWidthFraction;
+        const maxBlocklyWidth = totalWidth - minSimulatorWidth;
+
+        $("#db_robot_pane").css("min-width", `${minSimulatorWidth}px`);
+        $("#db_robot_pane").css("flex-shrink", "0");
+        $("#db_blockly").css("max-width", `${maxBlocklyWidth}px`);
+
+        if (ui.size.width > maxBlocklyWidth) {
+          ui.size.width = maxBlocklyWidth;
+        }
+      },
     });
 
     $("#db_blockly").resize(function () {

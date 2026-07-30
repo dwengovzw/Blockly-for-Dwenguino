@@ -1,7 +1,12 @@
 import { app, port } from "./server.js";
 import * as http from 'http';
+import { webcrypto } from 'node:crypto';
 import mongoose from 'mongoose';
 import { mockDatabaseData } from './utils/add_mock_database_data.js';
+
+if (!globalThis.crypto) {
+    globalThis.crypto = webcrypto as Crypto;
+}
 
 const httpServer = http.createServer(app);
 
@@ -44,4 +49,3 @@ let launch = () => {
     console.log("Running HTTP server on port " + port);
 });
 }
-
