@@ -32,9 +32,11 @@ BufferedLCD::BufferedLCD(uint8_t rs, uint8_t rw, uint8_t enable,
 
 void BufferedLCD::setCursor(uint8_t col, uint8_t row)
 {
-  int row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
-  if ( row >= _numlines ) {
-    row = _numlines-1;    // we count rows starting w/0
+  const uint8_t row_offsets[] = { 0x00, 0x40, 0x14, 0x54 };
+  const uint8_t max_supported_row = MAX_LCD_ROWS - 1;
+
+  if (row > max_supported_row) {
+    row = max_supported_row;
   }
   
   command(LCD_SETDDRAMADDR | (col + row_offsets[row]));

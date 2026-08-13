@@ -14,11 +14,16 @@ class UtilController{
     static compilationFolder:string = "compilation";
     static sketchPrefix:string = "sketch-";
     static deployedOS:string = process.env.DEPLOYED_OS || "linux";
+    static externalCommandTimeoutMs:number = parseInt(process.env.EXTERNAL_COMMAND_TIMEOUT_MS || "180000", 10);
+    static externalCommandMaxBuffer:number = parseInt(process.env.EXTERNAL_COMMAND_MAX_BUFFER || String(20 * 1024 * 1024), 10);
 
   
     static handleExternalCommand(command, errorHandler, successHandler){
         console.log(command);
-        let cmd = exec(command, {timeout: 10000}, 
+        let cmd = exec(command, {
+                timeout: UtilController.externalCommandTimeoutMs,
+                maxBuffer: UtilController.externalCommandMaxBuffer
+            }, 
             (error, stdout, stderr) => {
                 console.log(stdout);
                 console.log(stderr);
@@ -34,7 +39,11 @@ class UtilController{
     static handleExternalCommandWithEnv(command, env, errorHandler, successHandler){
         console.log(command);
         console.log("Environment:", env);
-        let cmd = exec(command, {timeout: 10000, env: env}, 
+        let cmd = exec(command, {
+                timeout: UtilController.externalCommandTimeoutMs,
+                maxBuffer: UtilController.externalCommandMaxBuffer,
+                env: env
+            }, 
             (error, stdout, stderr) => {
                 console.log(stdout);
                 console.log(stderr);
@@ -219,12 +228,14 @@ class UtilController{
     }
 
     static cleanupCompile(objid){
-        UtilController.handleExternalCommand("rm -Rf " + UtilController.prefix + "/" + UtilController.compilationFolder + "/sketch-" + objid, 
-            (error, stderr)=>{
-                console.log("Was unable to remove the build directory");
-            }, (stdout)=>{
-                console.log("Build directory successfully removed.");
-            });
+        let sketchDir = path.resolve(UtilController.prefix + "/" + UtilController.compilationFolder + "/sketch-" + objid);
+        try {
+            fs.rmSync(sketchDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+            console.log("Build directory successfully removed.");
+        } catch (error) {
+            console.log("Was unable to remove the build directory");
+            console.log(error);
+        }
     }
 
     static sendErrorMessage(res, status, info, error, stderr){

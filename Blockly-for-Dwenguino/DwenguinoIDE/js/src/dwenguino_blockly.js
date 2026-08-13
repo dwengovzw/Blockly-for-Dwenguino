@@ -801,25 +801,29 @@ let DwenguinoBlockly = {
     } else {
       var URL = window.URL || window.webkitURL;
       var downloadUrl = URL.createObjectURL(blob);
+      var downloadLink = null;
 
       if (filename) {
         // use HTML5 a[download] attribute to specify filename
-        var a = document.createElement("a");
+        downloadLink = document.createElement("a");
         // safari doesn't support this yet
-        if (typeof a.download === "undefined") {
+        if (typeof downloadLink.download === "undefined") {
           window.location.href = downloadUrl;
         } else {
-          a.href = downloadUrl;
-          a.download = filename;
-          document.body.appendChild(a);
-          a.click();
+          downloadLink.href = downloadUrl;
+          downloadLink.download = filename;
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
         }
       } else {
         window.location.href = downloadUrl;
       }
       setTimeout(function () {
+        if (downloadLink && downloadLink.parentNode) {
+          downloadLink.parentNode.removeChild(downloadLink);
+        }
         URL.revokeObjectURL(downloadUrl);
-      }, 100); // cleanup
+      }, 2000); // cleanup after the browser has time to start the download
     }
   },
 

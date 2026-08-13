@@ -39,12 +39,14 @@ public:
     * \brief Clears the LCD display
     */
 	void clear();
+    void setCursor(uint8_t col, uint8_t row);
     void backlightOn(void);
     void backlightOff(void);
 	virtual size_t write(uint8_t);
 	void command(uint8_t);
 
 private:
+    static const uint8_t MAX_LCD_ROWS = 2;
 	volatile uint8_t* _dataPort; 
 };
 extern BufferedLCD dwenguinoLCD;
