@@ -21,6 +21,7 @@ window.$ = window.jQuery = jQuery;
 
 
 let DwenguinoBlockly = {
+  simulatorMinWidthFraction: 0.25,
   basepath: settings.basepath,
   simButtonStateClicked: false,
 
@@ -124,6 +125,20 @@ let DwenguinoBlockly = {
     //init resizable panels
     $("#db_blockly").resizable({
       handles: "e",
+      resize: function (event, ui) {
+        const totalWidth = $("#db_body").width();
+        const minSimulatorWidth = totalWidth * DwenguinoBlockly.simulatorMinWidthFraction;
+        const maxBlocklyWidth = totalWidth - minSimulatorWidth;
+
+        $("#db_robot_pane").css("min-width", `${minSimulatorWidth}px`);
+        $("#db_robot_pane").css("flex-shrink", "0");
+        $("#db_blockly").css("max-width", `${maxBlocklyWidth}px`);
+        DwenguinoBlockly.simButtonStateClicked = true;
+
+        if (ui.size.width > maxBlocklyWidth) {
+          ui.size.width = maxBlocklyWidth;
+        }
+      },
     });
 
     $("#db_blockly").resize(function () {
@@ -765,8 +780,11 @@ let DwenguinoBlockly = {
     if (this.simButtonStateClicked) {
       newStateArray = ["100%", "off", false];
       DwenguinoBlockly.simulationEnvironment ? DwenguinoBlockly.simulationEnvironment.stop() : null;
+      $("#db_robot_pane").hide();
+      $("#db_blockly").css("max-width", "");
     } else {
       newStateArray = ["50%", "on", true];
+      $("#db_robot_pane").show();
       //DwenguinoBlockly.simulationEnvironment.open();
     }
     $("#db_blockly").width(newStateArray[0]);
@@ -1434,11 +1452,11 @@ let DwenguinoBlockly = {
 
   // TODO add param for code to load
   switchToTextualEditor({openTabsCode = [], closeCurrentTabs = false}) {
-    // Turn off simulator
+    // Ensure simulator is turned off and disable toggle while in textual editor
     if (DwenguinoBlockly.simulatorState !== "off") {
       DwenguinoBlockly.toggleSimulator();
-      $("#db_menu_item_simulator").css("pointer-events", "none");
     }
+    $("#db_menu_item_simulator").css("pointer-events", "none");
     DwenguinoBlockly.currentProgrammingContext = "text";
     document.getElementById("blocklyDiv").style.visibility = "hidden";
     document.getElementById("db_code_pane").style.visibility = "visible";
@@ -1460,11 +1478,11 @@ let DwenguinoBlockly = {
     document.getElementById("blocklyDiv").style.visibility = "visible";
     document.getElementById("db_code_pane").style.visibility = "hidden";
     DwenguinoBlockly.textualEditor.looseFocus();
-    // Turn simulator on
+    // Ensure simulator is enabled for blockly view
     if (DwenguinoBlockly.simulatorState === "off") {
       DwenguinoBlockly.toggleSimulator();
-      $("#db_menu_item_simulator").css("pointer-events", "auto");
     }
+    $("#db_menu_item_simulator").css("pointer-events", "auto");
     if (saveState){
       DwenguinoBlockly.saveState();
     }
