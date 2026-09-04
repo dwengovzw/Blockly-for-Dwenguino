@@ -38,9 +38,9 @@ test("UpdateValueLabel without prefix and suffix", () =>{
     '</div>';
 
     let slider = new Slider('1', 'parent', 0, 200, 0, 'Slider 1');
-    expect(document.getElementById(slider.getSliderValueId()).innerHTML).toBe('0');
+    expect(document.getElementById(slider.getSliderValueId()).value).toBe('0');
     slider.updateValueLabel(75);
-    expect(document.getElementById(slider.getSliderValueId()).innerHTML).toBe('75');
+    expect(document.getElementById(slider.getSliderValueId()).value).toBe('75');
 
     slider.remove(); 
 });
@@ -51,11 +51,34 @@ test("UpdateValueLabel with prefix and suffix", () =>{
     '</div>';
 
     let slider = new Slider('1', 'parent', 0, 200, 0, 'Slider 1', 'prefix ', ' cm');
-    expect(document.getElementById(slider.getSliderValueId()).innerHTML).toBe('prefix 0 cm');
+    expect(document.getElementById(slider.getSliderValueId()).value).toBe('0');
     slider.updateValueLabel(75);
-    expect(document.getElementById(slider.getSliderValueId()).innerHTML).toBe('prefix 75 cm');
+    expect(document.getElementById(slider.getSliderValueId()).value).toBe('75');
 
     slider.remove(); 
+});
+
+test("Value input stays synchronized with the range slider", () => {
+    document.body.innerHTML =
+    '<div id="parent">' +
+    '</div>';
+
+    let slider = new Slider('1', 'parent', 0, 200, 0, 'Slider 1', 'prefix ', ' cm');
+    const valueInput = document.getElementById(slider.getSliderValueId());
+    const rangeInput = document.getElementById(slider.getSliderRangeId());
+
+    expect(valueInput.tagName).toBe('INPUT');
+    expect(valueInput.value).toBe('0');
+
+    rangeInput.value = '75';
+    rangeInput.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(valueInput.value).toBe('75');
+
+    valueInput.value = '42';
+    valueInput.dispatchEvent(new Event('input', { bubbles: true }));
+    expect(rangeInput.value).toBe('42');
+
+    slider.remove();
 });
 
 test("Remove slider", () =>{
