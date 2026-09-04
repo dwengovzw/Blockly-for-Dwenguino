@@ -123,8 +123,16 @@ let DwenguinoBlockly = {
     delete window.sessionStorage.loadOnceRecording;
 
     //init resizable panels
+    let simWasRunning = false;
     $("#db_blockly").resizable({
       handles: "e",
+      start: function () {
+        const runner = DwenguinoBlockly.simulationEnvironment.simControlsController.simulationRunner;
+        simWasRunning = !!runner.isSimulationRunning;
+        if (simWasRunning) {
+          $("#sim_pause").trigger('click');
+        }
+      },
       resize: function (event, ui) {
         const totalWidth = $("#db_body").width();
         const minSimulatorWidth = totalWidth * DwenguinoBlockly.simulatorMinWidthFraction;
@@ -137,6 +145,11 @@ let DwenguinoBlockly = {
 
         if (ui.size.width > maxBlocklyWidth) {
           ui.size.width = maxBlocklyWidth;
+        }
+      },
+      stop: function () {
+        if (simWasRunning) {
+          $("#sim_start").trigger('click');
         }
       },
     });
