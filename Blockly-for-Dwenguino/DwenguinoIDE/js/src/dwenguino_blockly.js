@@ -1448,11 +1448,11 @@ let DwenguinoBlockly = {
 
   // TODO add param for code to load
   switchToTextualEditor({openTabsCode = [], closeCurrentTabs = false}) {
-    // Turn off simulator
+    // Ensure simulator is turned off and disable toggle while in textual editor
     if (DwenguinoBlockly.simulatorState !== "off") {
       DwenguinoBlockly.toggleSimulator();
-      $("#db_menu_item_simulator").css("pointer-events", "none");
     }
+    $("#db_menu_item_simulator").css("pointer-events", "none");
     DwenguinoBlockly.currentProgrammingContext = "text";
     document.getElementById("blocklyDiv").style.visibility = "hidden";
     document.getElementById("db_code_pane").style.visibility = "visible";
@@ -1474,11 +1474,11 @@ let DwenguinoBlockly = {
     document.getElementById("blocklyDiv").style.visibility = "visible";
     document.getElementById("db_code_pane").style.visibility = "hidden";
     DwenguinoBlockly.textualEditor.looseFocus();
-    // Turn simulator on
+    // Ensure simulator is enabled for blockly view
     if (DwenguinoBlockly.simulatorState === "off") {
       DwenguinoBlockly.toggleSimulator();
-      $("#db_menu_item_simulator").css("pointer-events", "auto");
     }
+    $("#db_menu_item_simulator").css("pointer-events", "auto");
     if (saveState){
       DwenguinoBlockly.saveState();
     }
