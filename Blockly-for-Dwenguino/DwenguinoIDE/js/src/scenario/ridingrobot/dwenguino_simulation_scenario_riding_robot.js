@@ -104,8 +104,8 @@ class DwenguinoSimulationScenarioRidingRobot extends DwenguinoSimulationScenario
 
         $("#sim_container")
             .css("position", "relative")
-            .css("width", "80%")
-            .css("height", "80%")
+            .css("width", "95%")
+            .css("height", "95%")
             .css("box-sizing", "border-box");
 
         $("#sim_animation")
