@@ -68,6 +68,14 @@ class EditorPane{
     }
 
     openTab(code:string = "", title:string|null=null){
+        // If a tab with the exact same code already exists, select it instead of opening a new one
+        for (let existingTab of this.$_tabsInfo){
+            if (existingTab.getCode() === code){
+                this.selectTab(existingTab);
+                return;
+            }
+        }
+
         let newTabInfo = new TabInfo(code, title);
         newTabInfo.addOnSavedStateChangedListener(this.handleTabSavedStateChanged);
         this.$_tabsInfo.push(newTabInfo);
