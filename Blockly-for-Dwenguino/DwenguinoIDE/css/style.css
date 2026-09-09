@@ -1318,7 +1318,7 @@ background-color: #ffffff;
 .slider_value_input {
     width: 40px;
     min-width: 40px;
-    height: 25px;
+    height: 22px;
     line-height: 1;
     text-align: center;
     font-size: 0.95rem;
@@ -1332,10 +1332,30 @@ background-color: #ffffff;
     appearance: textfield;
 }
 
+#sim_sonar_input .slider_value_input {
+    background: #e6e6e6;
+    border-color: #d0d0d0;
+    color: #2b2b2b;
+}
+
+#sim_sonar_input .slider {
+    background: #e6e6e6;
+}
+
 .slider_value_input::-webkit-outer-spin-button,
 .slider_value_input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
+}
+
+.sonar_readonly_input {
+    pointer-events: none;
+    user-select: none;
+    caret-color: transparent;
+}
+
+.sonar_readonly_input:focus {
+    outline: none;
 }
 
 .slidecontainer {
