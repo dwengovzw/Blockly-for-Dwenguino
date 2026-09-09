@@ -112,10 +112,10 @@ static const uint8_t A7  = PIN_A7 ;
 #define D16 (16u)
 
 // Digital pin aliases
-#define SERVO_1 D0
-#define SERVO_2 D1
-#define SERVO_3 D2
-#define SERVO_4 D3
+#define SERVO_0 D0
+#define SERVO_1 D1
+#define SERVO_2 D2
+#define SERVO_3 D3
 
 
 
