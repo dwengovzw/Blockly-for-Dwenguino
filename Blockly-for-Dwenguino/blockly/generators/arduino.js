@@ -115,7 +115,7 @@ var profile = {
               ["SW_N", "SW_N"], ["SW_E", "SW_E"], ["SW_S", "SW_S"], ["SW_W", "SW_W"], ["SW_C", "SW_C"], ["BUZZER", "BUZZER"],
               ["SOUND_1", "SOUND_1"], ["SONAR_1_TRIG", "SONAR_1_TRIG"], ["SONAR_1_ECHO", "SONAR_1_ECHO"], 
               ["SONAR_2_TRIG", "SONAR_2_TRIG"], ["SONAR_2_ECHO", "SONAR_2_ECHO"],
-              ["SERVO_1", "SERVO_1"], ["SERVO_2", "SERVO_2"], ["SERVO_3", "SERVO_3"], 
+              ["SERVO_0", "SERVO_0"], ["SERVO_1", "SERVO_1"], ["SERVO_2", "SERVO_2"], ["SERVO_3", "SERVO_3"], 
               ["SERVO_4", "SERVO_4"], ["SERVO_5", "SERVO_5"], ["SERVO_6", "SERVO_6"],
               ["RGB_1_R", "RGB_1_R"], ["RGB_1_G", "RGB_1_G"], ["RGB_1_B", "RGB_1_B"],
               ["RGB_2_R", "RGB_2_R"], ["RGB_2_G", "RGB_2_G"], ["RGB_2_B", "RGB_2_B"],
