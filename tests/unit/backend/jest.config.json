@@ -1,7 +1,8 @@
 {
   "testEnvironment": "node",
   "moduleNameMapper": {
-    "@exmpl/(.*)": "<rootDir>/src/$1"
+    "@exmpl/(.*)": "<rootDir>/src/$1",
+    "^\\.\\.\\/\\.\\.\\/\\.\\.\\/\\.\\.\\/backend\\/dist\\/(.*)$": "<rootDir>/../../../backend/dist/backend/$1"
   },
   "transform": {
     "^.+\\.(t|j)s$": ["babel-jest", {

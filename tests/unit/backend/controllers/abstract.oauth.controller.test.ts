@@ -124,7 +124,7 @@ describe('AbstractOAuthController', () => {
       const abstractOAuthController = new MockAbstractOAuthController();
 
       // Assertions
-      expect(() => abstractOAuthController.logout(mockReq, mockRes)).toThrowError('This method is abstract');
+      expect(() => abstractOAuthController.logout(mockReq, mockRes)).toThrow('This method is abstract');
     });
   });
 
