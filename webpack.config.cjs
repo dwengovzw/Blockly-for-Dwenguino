@@ -1,6 +1,5 @@
 const path = require("path");
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const CompressionPlugin = require("compression-webpack-plugin");
 const webpack = require("webpack");
 
@@ -108,7 +107,6 @@ module.exports = [
         plugins: [new CompressionPlugin(), new MonacoWebpackPlugin()],
         optimization: {
             minimize: true,
-            minimizer: [new TerserPlugin()],
             chunkIds: "size",
             splitChunks: {
                 chunks: 'async',
@@ -207,7 +205,6 @@ module.exports = [
         ],
         optimization: {
             minimize: true,
-            minimizer: [new TerserPlugin()],
             chunkIds: "size",
             splitChunks: {
                 chunks: 'async',
