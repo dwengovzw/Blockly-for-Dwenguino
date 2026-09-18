@@ -45,7 +45,7 @@ Add a `constraintSolver` section to your kinematics descriptor:
 }
 ```
 
-> **💡 Working with SolidWorks Models:** For precise constraints on edges, faces, or specific points from SolidWorks assemblies, use **datum planes/points/axes** instead of full part nodes. Datum elements export as separate named nodes in your GLB file, allowing sub-element precision. See **[SOLIDWORKS_DATUM_TUTORIAL.md](./SOLIDWORKS_DATUM_TUTORIAL.md)** for a complete guide on creating, naming, and exporting datum reference geometry.
+> **Working with SolidWorks Models:** Prefer descriptor-defined reference points and reference planes over exported datum nodes. The current gripper setup supports legacy datum nodes when they exist, but the maintained workflow is documented in [reference-geometry-guide.md](../scenario/reference-geometry-guide.md).
 
 **Parameters:**
 

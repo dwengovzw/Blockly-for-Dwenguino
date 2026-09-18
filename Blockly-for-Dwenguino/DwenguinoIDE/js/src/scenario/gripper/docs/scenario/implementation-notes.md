@@ -152,7 +152,7 @@ Comprehensive guide explaining:
 
 ### New Files
 
-**example_descriptor_with_reference_points.json**
+**examples/example_descriptor_with_reference_points.json**
 - Complete working example with:
   - 3 parts (jaw_left, jaw_right, base)
   - Reference points and planes per part
@@ -160,7 +160,7 @@ Comprehensive guide explaining:
   - Multiple constraint types using referencePoints
   - Configuration examples
 
-**REFERENCE_GEOMETRY_GUIDE.md**
+**reference-geometry-guide.md**
 - Complete architectural guide
 - Problem/solution explanations
 - API reference for all new methods

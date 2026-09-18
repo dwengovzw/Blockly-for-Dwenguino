@@ -12,7 +12,7 @@ import * as THREE from "three";
  * 4. Writes the force value to boardState via setIoPinState(pin, value)
  */
 class TouchSensorManager {
-    /** @type {import('./ReferenceGeometry.js').default} */
+    /** @type {import('../core/ReferenceGeometry.js').default} */
     refGeometry = null;
 
     /** @type {Array<Object>} Resolved sensor bindings */
@@ -25,7 +25,7 @@ class TouchSensorManager {
     static MAX_FORCE = 1023;
 
     /**
-     * @param {import('./ReferenceGeometry.js').default} refGeometry
+    * @param {import('../core/ReferenceGeometry.js').default} refGeometry
      */
     constructor(refGeometry) {
         this.refGeometry = refGeometry;
@@ -118,7 +118,7 @@ class TouchSensorManager {
      * Update sensor positions and check for contact with a graspable object.
      * Call this after kinematics + constraint solving, before render.
      *
-     * @param {import('./GraspableObject.js').default|null} graspableObject
+    * @param {import('../scene/GraspableObject.js').default|null} graspableObject
      */
     update(graspableObject) {
         // Invalidate ref geometry cache for sensor parts so positions are fresh

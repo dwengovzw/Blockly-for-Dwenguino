@@ -138,9 +138,11 @@ export function applyPointPointCoincident(constraint, refGeometry, config) {
 export function computePointPointCoincidentError(constraint, refGeometry) {
     if (constraint.entities.length < 2) return 0;
     const p0 = resolveConstraintPoint(constraint, 0, refGeometry);
+    if (!p0) return 0;
     let maxError = 0;
     for (let i = 1; i < constraint.entities.length; i++) {
         const pi = resolveConstraintPoint(constraint, i, refGeometry);
+        if (!pi) continue;
         maxError = Math.max(maxError, p0.distanceTo(pi));
     }
     return maxError;

@@ -99,6 +99,10 @@ module.exports = [
                 {
                     test: /\.ttf$/,
                     type: "asset/resource"
+                },
+                {
+                    test: /\.stl$/i,
+                    type: "asset/resource"
                 }
             ]
         },

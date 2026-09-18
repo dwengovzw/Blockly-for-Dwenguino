@@ -24,7 +24,7 @@ A complete SolidWorks constraint system has been integrated into the gripper sce
 - Export as GLB: File > Save As > GLTF Binary (.glb)
 
 ### 2. Create JSON Descriptor
-Use the template: `example_descriptor_with_constraints.json`
+Use the template: `examples/example_descriptor_with_reference_points.json`
 
 ```json
 {
@@ -51,18 +51,18 @@ Use the template: `example_descriptor_with_constraints.json`
   - `applyConstraints()` - Main constraint solver called every frame
   - 9 constraint type implementations (applyHorizontalConstraint, etc.)
 
-- **CONSTRAINTS_DOCUMENTATION.md** - Complete constraint reference
+- **constraints-documentation.md** - Complete constraint reference
   - All 9 constraint types explained
   - Examples for each constraint type
   - Troubleshooting guide
 
-- **SOLIDWORKS_MAPPING_GUIDE.md** - How to export from SolidWorks
-  - Step-by-step translation guide
-  - SolidWorks → JSON mapping
+- **constraints-documentation.md** - Constraint reference plus SolidWorks export workflow
+  - Step-by-step upload and export workflow
+  - SolidWorks → JSON mapping basics
   - Common mistakes to avoid
   - Debugging tips
 
-- **example_descriptor_with_constraints.json** - Template to copy
+- **examples/example_descriptor_with_reference_points.json** - Template to copy
   - Ready-to-use descriptor format
   - Shows servo + constraint definition together
 
@@ -210,19 +210,18 @@ Potential additions (not yet implemented):
 
 ## Documentation Files
 
-Located in: `Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/gripper/`
+Located in: `Blockly-for-Dwenguino/DwenguinoIDE/js/src/scenario/gripper/docs/constraint-solver/`
 
-1. **CONSTRAINTS_DOCUMENTATION.md** (this file in comment form)
+1. **constraints-documentation.md**
    - 9 constraint types explained
    - Complete examples
    - SolidWorks export workflow
 
-2. **SOLIDWORKS_MAPPING_GUIDE.md**
-   - How to translate SolidWorks constraints to JSON
-   - Common mistakes
-   - Debugging checklist
+2. **quick-reference.md**
+  - Short lookup table for the supported constraint concepts
+  - Upload checklist and debugging shortcuts
 
-3. **example_descriptor_with_constraints.json**
+3. **examples/example_descriptor_with_reference_points.json**
    - Copy-paste template
    - All fields documented
 

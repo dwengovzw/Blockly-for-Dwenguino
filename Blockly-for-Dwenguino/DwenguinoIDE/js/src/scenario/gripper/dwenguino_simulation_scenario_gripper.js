@@ -1,13 +1,14 @@
 import DwenguinoSimulationScenario from "../dwenguino_simulation_scenario.js";
-import DEFAULT_KINEMATICS_DESCRIPTOR from "./default_descriptor.js";
-import ReferenceGeometry from "./ReferenceGeometry.js";
-import ConstraintSolver from "./ConstraintSolver.js";
-import KinematicsEngine from "./KinematicsEngine.js";
-import ThreeSceneManager from "./ThreeSceneManager.js";
-import GripperControlPanel from "./GripperControlPanel.js";
-import ModelLoader from "./ModelLoader.js";
-import TouchSensorManager from "./TouchSensorManager.js";
-import GraspableObject from "./GraspableObject.js";
+import DEFAULT_KINEMATICS_DESCRIPTOR from "./descriptors/default_descriptor.js";
+import HALBERD_KINEMATICS_DESCRIPTOR from "./descriptors/halberd_linkage_gripper_assembly_descriptor.json";
+import ReferenceGeometry from "./core/ReferenceGeometry.js";
+import ConstraintSolver from "./core/ConstraintSolver.js";
+import KinematicsEngine from "./core/KinematicsEngine.js";
+import ThreeSceneManager from "./scene/ThreeSceneManager.js";
+import GripperControlPanel from "./ui/GripperControlPanel.js";
+import ModelLoader from "./io/ModelLoader.js";
+import TouchSensorManager from "./sensors/TouchSensorManager.js";
+import GraspableObject from "./scene/GraspableObject.js";
 import * as THREE from "three";
 
 /**
@@ -24,7 +25,7 @@ import * as THREE from "three";
 class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     container = null;
     modelRoot = null;
-    kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+    kinematicsDescriptor = JSON.parse(JSON.stringify(HALBERD_KINEMATICS_DESCRIPTOR));
 
     // Sub-modules (field initializers are evaluated in declaration order)
     sceneManager = new ThreeSceneManager();
@@ -62,11 +63,19 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
             onResetGraspableObject: () => this.graspableObject.resetPosition()
         });
 
-        let defaultModel = this.modelLoader.createDefaultModel();
-        this._setModel(defaultModel);
-        this.kinematicsEngine.seedServoAnglesFromDescriptor(this.kinematicsDescriptor);
-        this.kinematicsEngine.resetUpdateCounter();
-        this.sceneManager.render();
+        this.modelLoader.loadDefaultModel().then((defaultModel) => {
+            this._setModel(defaultModel);
+            this.kinematicsEngine.seedServoAnglesFromDescriptor(this.kinematicsDescriptor);
+            this.kinematicsEngine.resetUpdateCounter();
+            this.sceneManager.render();
+        }).catch((error) => {
+            console.error("[Gripper] Failed to load default STL model at startup, using fallback", error);
+            const fallbackModel = this.modelLoader.createDefaultModel();
+            this._setModel(fallbackModel);
+            this.kinematicsEngine.seedServoAnglesFromDescriptor(this.kinematicsDescriptor);
+            this.kinematicsEngine.resetUpdateCounter();
+            this.sceneManager.render();
+        });
         this.sceneManager.startAnimationLoop();
     }
 
@@ -154,11 +163,17 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
     }
 
     _handleReset() {
-        this.kinematicsDescriptor = JSON.parse(JSON.stringify(DEFAULT_KINEMATICS_DESCRIPTOR));
+        this.kinematicsDescriptor = JSON.parse(JSON.stringify(HALBERD_KINEMATICS_DESCRIPTOR));
         this.modelLoader.resetToDefaults();
-        let defaultModel = this.modelLoader.createDefaultModel();
-        this._setModel(defaultModel);
-        this.sceneManager.render();
+        this.modelLoader.loadDefaultModel().then((defaultModel) => {
+            this._setModel(defaultModel);
+            this.sceneManager.render();
+        }).catch((error) => {
+            console.error("[Gripper] Failed to load default STL model on reset, using fallback", error);
+            const fallbackModel = this.modelLoader.createDefaultModel();
+            this._setModel(fallbackModel);
+            this.sceneManager.render();
+        });
     }
 
     updateScenario(boardState) {
@@ -199,7 +214,7 @@ class DwenguinoSimulationScenarioGripper extends DwenguinoSimulationScenario {
         this.kinematicsEngine.resetSmoothing();
         this.kinematicsEngine.resetUpdateCounter();
 
-        this.modelLoader.reload(DEFAULT_KINEMATICS_DESCRIPTOR, (modelRoot, descriptor) => {
+        this.modelLoader.reload(HALBERD_KINEMATICS_DESCRIPTOR, (modelRoot, descriptor) => {
             this.kinematicsDescriptor = descriptor;
             this._setModel(modelRoot);
             this.kinematicsEngine.seedServoAnglesFromDescriptor(descriptor);

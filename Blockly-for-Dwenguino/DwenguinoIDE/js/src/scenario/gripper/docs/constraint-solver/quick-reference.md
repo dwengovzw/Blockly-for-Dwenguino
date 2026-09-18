@@ -93,11 +93,11 @@ console.log(scenario.constraints)  // Array of constraint objects
 
 ```
 DwenguinoIDE/js/src/scenario/gripper/
-├── dwenguino_simulation_scenario_gripper.js  (main code)
-├── README_CONSTRAINTS.md                     (overview)
-├── CONSTRAINTS_DOCUMENTATION.md              (detailed guide)
-├── SOLIDWORKS_MAPPING_GUIDE.md              (export workflow)
-└── example_descriptor_with_constraints.json (template)
+├── dwenguino_simulation_scenario_gripper.js            (main code)
+├── docs/constraint-solver/constraints-overview.md      (overview)
+├── docs/constraint-solver/constraints-documentation.md (detailed guide)
+├── docs/constraint-solver/quick-reference.md           (this file)
+└── examples/example_descriptor_with_reference_points.json (template)
 ```
 
 ## Getting Part Names from SolidWorks GLB
@@ -196,16 +196,16 @@ Before uploading descriptor JSON:
 
 ## Support Resources
 
-- **Complete Guide**: `CONSTRAINTS_DOCUMENTATION.md`
-- **Export Guide**: `SOLIDWORKS_MAPPING_GUIDE.md`
-- **Example**: `example_descriptor_with_constraints.json`
+- **Complete Guide**: `constraints-documentation.md`
+- **Overview**: `constraints-overview.md`
+- **Example**: `examples/example_descriptor_with_reference_points.json`
 - **Code**: `dwenguino_simulation_scenario_gripper.js` (~1000+ lines, well-commented)
 
 ## Next Steps
 
-1. Read `SOLIDWORKS_MAPPING_GUIDE.md` for export workflow
-2. Review `CONSTRAINTS_DOCUMENTATION.md` for constraint details
-3. Copy `example_descriptor_with_constraints.json` as starting point
+1. Read `constraints-documentation.md` for the export workflow and constraint details
+2. Review `constraints-overview.md` for the high-level system summary
+3. Copy `examples/example_descriptor_with_reference_points.json` as a starting point
 4. Create your SolidWorks model and export GLB
 5. Modify descriptor with your constraints
 6. Upload to simulator and test!

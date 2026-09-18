@@ -116,7 +116,7 @@ scenario.constraints[0].weight = 0;
    - Updated all 9 constraint methods to support weights
    - Enhanced JSDoc documentation
 
-2. **ITERATIVE_SOLVER_GUIDE.md** (new, 600+ lines)
+2. **iterative-solver-guide.md** (new, 600+ lines)
    - Complete guide to new features
    - Configuration examples
    - Weight guidelines
@@ -125,12 +125,12 @@ scenario.constraints[0].weight = 0;
    - Best practices
    - Migration guide
 
-3. **example_descriptor_with_constraints.json** (updated)
+3. **examples/example_descriptor_with_reference_points.json** (updated example descriptor)
    - Added `constraintSolver` configuration
    - Added `weight` property to all constraints
    - Updated descriptions
 
-4. **CONSTRAINT_SOLVER_SUMMARY.md** (this file)
+4. **constraint-solver-summary.md** (this file)
    - Quick reference for developers
 
 ---
@@ -243,7 +243,7 @@ Checks entity constraint count:
 
 For issues or questions:
 1. Check browser console for warnings/errors
-2. Review [ITERATIVE_SOLVER_GUIDE.md](ITERATIVE_SOLVER_GUIDE.md) for detailed documentation
+2. Review [iterative-solver-guide.md](iterative-solver-guide.md) for detailed documentation
 3. Use debugging commands in console
-4. Check [CONSTRAINTS_DOCUMENTATION.md](CONSTRAINTS_DOCUMENTATION.md) for constraint types
-5. Review [SOLIDWORKS_MAPPING_GUIDE.md](SOLIDWORKS_MAPPING_GUIDE.md) for export workflow
+4. Check [constraints-documentation.md](constraints-documentation.md) for constraint types and export workflow
+5. Review [constraints-overview.md](constraints-overview.md) for the high-level system summary

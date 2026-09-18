@@ -80,7 +80,7 @@ Each constraint has:
 
 ### 4. Documentation (4 Files)
 
-**Location**: `DwenguinoIDE/js/src/scenario/gripper/`
+**Location**: `DwenguinoIDE/js/src/scenario/gripper/docs/`
 
 1. **README_CONSTRAINTS.md** (1000+ words)
    - Complete system overview

@@ -1,12 +1,12 @@
 import * as THREE from "three";
-import { applyPointPointCoincident, computePointPointCoincidentError } from "./constraints/PointPointCoincidentConstraint.js";
-import { applyPointPlane, computePointPlaneError } from "./constraints/PointPlaneConstraint.js";
-import { applyPlanePlaneParallel, computePlanePlaneParallelError } from "./constraints/PlanePlaneParallelConstraint.js";
-import { applyHorizontal, computeHorizontalError } from "./constraints/HorizontalConstraint.js";
-import { applyVertical, computeVerticalError } from "./constraints/VerticalConstraint.js";
-import { applyFixed, computeFixedError } from "./constraints/FixedConstraint.js";
-import { applyFixedJoint, computeFixedJointError } from "./constraints/FixedJointConstraint.js";
-import { applyJoint, computeJointError } from "./constraints/JointConstraint.js";
+import { applyPointPointCoincident, computePointPointCoincidentError } from "../constraints/PointPointCoincidentConstraint.js";
+import { applyPointPlane, computePointPlaneError } from "../constraints/PointPlaneConstraint.js";
+import { applyPlanePlaneParallel, computePlanePlaneParallelError } from "../constraints/PlanePlaneParallelConstraint.js";
+import { applyHorizontal, computeHorizontalError } from "../constraints/HorizontalConstraint.js";
+import { applyVertical, computeVerticalError } from "../constraints/VerticalConstraint.js";
+import { applyFixed, computeFixedError } from "../constraints/FixedConstraint.js";
+import { applyFixedJoint, computeFixedJointError } from "../constraints/FixedJointConstraint.js";
+import { applyJoint, computeJointError } from "../constraints/JointConstraint.js";
 
 /**
  * Registry mapping constraint type names (uppercase) to their apply and computeError functions.

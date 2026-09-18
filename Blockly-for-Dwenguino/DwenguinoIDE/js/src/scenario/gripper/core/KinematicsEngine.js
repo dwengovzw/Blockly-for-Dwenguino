@@ -170,15 +170,7 @@ class KinematicsEngine {
                 t = 1 - t;
             }
 
-            // Map [0, 1] → joint angle range
-            let minDeg = descriptor?.minDeg ?? 0;
-            let maxDeg = descriptor?.maxDeg ?? 0;
-            let jointAngleDeg = minDeg + t * (maxDeg - minDeg);
-
-            // Subtract initial angle for relative rotation from base pose
-            jointAngleDeg -= servoInitialAngle;
-
-            // Create rotation axis in world space
+            // Create the joint axis in world space.
             let axisValues = descriptor?.axis ?? [0, 0, 1];
             let axis = new THREE.Vector3(axisValues[0], axisValues[1], axisValues[2]);
             if (axis.length() === 0) {
@@ -197,10 +189,6 @@ class KinematicsEngine {
 
                 axis.applyQuaternion(parentRotationDelta);
             }
-
-            let rotation = new THREE.Quaternion().setFromAxisAngle(
-                axis, THREE.MathUtils.degToRad(jointAngleDeg)
-            );
 
             // For child nodes, recalculate base position based on parent's current transform
             let effectiveBaseWorldPos = jointBinding.baseWorldPosition.clone();
@@ -237,6 +225,35 @@ class KinematicsEngine {
                         .add(effectiveBaseWorldPos);
                 }
             }
+
+            if (descriptor?.type === "prismatic") {
+                const minPosition = descriptor?.minPosition ?? 0;
+                const maxPosition = descriptor?.maxPosition ?? 0;
+                const translationDistance = minPosition + t * (maxPosition - minPosition);
+                const translatedWorldPos = effectiveBaseWorldPos.clone().add(
+                    axis.clone().multiplyScalar(translationDistance)
+                );
+
+                applyWorldTransform(
+                    jointBinding.node,
+                    translatedWorldPos,
+                    effectiveBaseWorldQuat
+                );
+                this.refGeometry.invalidateCache(descriptor?.node);
+                continue;
+            }
+
+            // Map [0, 1] → joint angle range
+            let minDeg = descriptor?.minDeg ?? 0;
+            let maxDeg = descriptor?.maxDeg ?? 0;
+            let jointAngleDeg = minDeg + t * (maxDeg - minDeg);
+
+            // Subtract initial angle for relative rotation from base pose
+            jointAngleDeg -= servoInitialAngle;
+
+            let rotation = new THREE.Quaternion().setFromAxisAngle(
+                axis, THREE.MathUtils.degToRad(jointAngleDeg)
+            );
 
             // Apply rotation around axis point (or center)
             if (effectiveAxisPointWorld) {

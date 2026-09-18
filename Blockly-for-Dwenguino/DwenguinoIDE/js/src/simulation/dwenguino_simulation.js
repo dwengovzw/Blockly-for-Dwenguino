@@ -1,12 +1,24 @@
 import SimulationControlsController from "./simulation_controls_controller.js";
 import DwenguinoSimulationScenarioSocialRobot from "../scenario/socialrobot/dwenguino_simulation_scenario_social_robot.js";
-import DwenguinoSimulationScenarioRidingRobot from "../scenario/ridingrobot/dwenguino_simulation_scenario_riding_robot.js";
+import DwenguinoSimulationScenarioRidingRobot from "../scenario/ridingrobot/dwenguino_simulation_riding_robot.js";
 import DwenguinoSimulationScenarioRidingRobotWithWall from "../scenario/ridingrobot/dwenguino_simulation_scenario_riding_robot_with_wall.js";
 import DwenguinoSimulationScenarioSpyrograph from "../scenario/spyrograph/dwenguino_simulation_scenario_spyrograph.js"
 import DwenguinoSimulationScenarioPlotter from "../scenario/plotter/dwenguino_simulation_scenario_plotter.js";
 import DwenguinoSimulationScenarioConveyor from "../scenario/conveyor/dwenguino_simulation_scenario_conveyor.js";
 import DwenguinoSimulationScenarioGripper from "../scenario/gripper/dwenguino_simulation_scenario_gripper.js";
 import { SCENARIO } from "../../../../../shared/types/saved_state.types"
+
+const FEATURE_FLAGS = {
+    ENABLE_GRIPPER_SCENARIO: false,
+};
+
+const getFeatureFlags = () => {
+    const globalScope = typeof globalThis !== "undefined" ? globalThis : window;
+    const runtimeFlags = globalScope && globalScope.__DWENGUINO_FEATURE_FLAGS__ ? globalScope.__DWENGUINO_FEATURE_FLAGS__ : {};
+    return { ...FEATURE_FLAGS, ...runtimeFlags };
+};
+
+const isFeatureEnabled = (featureName) => Boolean(getFeatureFlags()[featureName]);
 
 export const ScenarioNames = {
     SPYROGRAPH: SCENARIO.SPYROGRAPH,
@@ -24,14 +36,19 @@ class DwenguinoSimulation {
     scenarios = null;
 
     constructor(logger, workspace) {
-        this.scenarios = {
+        const scenarioDefinitions = {
             "spyrograph": new DwenguinoSimulationScenarioSpyrograph(logger, "spyrograph"),
             "moving": new DwenguinoSimulationScenarioRidingRobot(logger, "moving"),
             "wall": new DwenguinoSimulationScenarioRidingRobotWithWall(logger, "wall"),
             "socialrobot": new DwenguinoSimulationScenarioSocialRobot(logger, "socialrobot"),
             "conveyor": new DwenguinoSimulationScenarioConveyor(logger, "conveyor"),
-            "gripper": new DwenguinoSimulationScenarioGripper(logger, "gripper"),
         };
+
+        if (isFeatureEnabled("ENABLE_GRIPPER_SCENARIO")) {
+            scenarioDefinitions["gripper"] = new DwenguinoSimulationScenarioGripper(logger, "gripper");
+        }
+
+        this.scenarios = scenarioDefinitions;
         this.logger = logger;
         this.workspace = workspace;
         this.simControlsController = new SimulationControlsController(this.logger, this.workspace, this.scenarios);

@@ -1,0 +1,130 @@
+{
+  "version": 1,
+  "model": {
+    "upAxis": "Y",
+    "scale": 1.0
+  },
+  "parts": [
+    {
+      "name": "base",
+      "referencePoints": {
+        "origin": { "x": 0, "y": 0, "z": 0 },
+        "left_servo_pivot": { "x": -45, "y": 58, "z": 126 },
+        "right_servo_pivot": { "x": 127, "y": 64, "z": 58 },
+        "left_finger_base_pivot": { "x": 44, "y": 36, "z": 126 },
+        "right_finger_base_pivot": { "x": 122, "y": 69, "z": 126 }
+      },
+      "referencePlanes": {
+        "top": {
+          "normal": [0, 1, 0],
+          "point": [0, 0, 0]
+        }
+      }
+    },
+    {
+      "name": "jaw_left",
+      "referencePoints": {
+        "servo_pivot": { "x": -45, "y": 58, "z": 126 },
+        "coupler_pivot": { "x": -22, "y": 49, "z": 112 },
+        "finger_pivot": { "x": 44, "y": 36, "z": 126 },
+        "gripPoint": { "x": -62, "y": 30, "z": 126 }
+      },
+      "referencePlanes": {
+        "gripFace": {
+          "normal": [1, 0, 0],
+          "point": [-62, 30, 126]
+        }
+      }
+    },
+    {
+      "name": "jaw_right",
+      "referencePoints": {
+        "servo_pivot": { "x": 127, "y": 64, "z": 58 },
+        "coupler_pivot": { "x": 103, "y": 66, "z": 111 },
+        "finger_pivot": { "x": 122, "y": 69, "z": 126 },
+        "gripPoint": { "x": 140, "y": 76, "z": 126 }
+      },
+      "referencePlanes": {
+        "gripFace": {
+          "normal": [-1, 0, 0],
+          "point": [140, 76, 126]
+        }
+      }
+    }
+  ],
+  "joints": [
+    {
+      "name": "left_servo_joint",
+      "node": "jaw_left",
+      "type": "revolute",
+      "axis": [0, 0, -1],
+      "axisPoint": "servo_pivot",
+      "minDeg": 0,
+      "maxDeg": 120,
+      "servo": {
+        "index": 1,
+        "min": 180,
+        "max": 0,
+        "invert": false
+      }
+    },
+    {
+      "name": "right_servo_joint",
+      "node": "jaw_right",
+      "type": "revolute",
+      "axis": [0, 0, 1],
+      "axisPoint": "servo_pivot",
+      "minDeg": 0,
+      "maxDeg": 120,
+      "servo": {
+        "index": 2,
+        "min": 0,
+        "max": 180,
+        "invert": true
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "id": "fixed_base",
+      "type": "Fixed",
+      "entities": ["base"],
+      "weight": 1.0,
+      "description": "Keep STL base fixed in world"
+    },
+    {
+      "id": "left_servo_to_finger_link",
+      "type": "PointPointCoincident",
+      "entities": [
+        { "name": "jaw_left", "referencePoint": "coupler_pivot", "weight": 0.5 },
+        { "name": "jaw_left", "referencePoint": "finger_pivot", "weight": 0.5 }
+      ],
+      "weight": 0.6,
+      "description": "Left four-bar internal coupling scaffold"
+    },
+    {
+      "id": "right_servo_to_finger_link",
+      "type": "PointPointCoincident",
+      "entities": [
+        { "name": "jaw_right", "referencePoint": "coupler_pivot", "weight": 0.5 },
+        { "name": "jaw_right", "referencePoint": "finger_pivot", "weight": 0.5 }
+      ],
+      "weight": 0.6,
+      "description": "Right four-bar internal coupling scaffold"
+    }
+  ],
+  "touchSensors": [],
+  "graspableObject": {
+    "shape": "sphere",
+    "size": 0.015,
+    "spawnPosition": [0, 0.1, 0]
+  },
+  "constraintSolver": {
+    "instantMotion": true,
+    "maxIterations": 20,
+    "convergenceThreshold": 0.001,
+    "enableConflictDetection": true,
+    "referencePointScale": 1.0,
+    "showReferencePoints": true
+  }
+}

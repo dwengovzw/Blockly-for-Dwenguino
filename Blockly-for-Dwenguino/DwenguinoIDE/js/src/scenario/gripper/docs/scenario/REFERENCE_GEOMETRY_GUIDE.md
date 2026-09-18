@@ -350,5 +350,5 @@ Constraints measure at world positions, apply transforms to parts
 
 ## See Also
 
-- `example_descriptor_with_reference_points.json` - Complete working example
+- `examples/example_descriptor_with_reference_points.json` - Complete working example
 - Constraint types: Horizontal, Vertical, Collinear, Perpendicular, Parallel, Tangent, Concentric, Coincident, Equal, Fixed

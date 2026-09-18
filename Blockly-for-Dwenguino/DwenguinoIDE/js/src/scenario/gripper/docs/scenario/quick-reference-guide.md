@@ -212,7 +212,7 @@ this.invalidateReferencePointCache("jaw_left");
 
 ## Learning Resources
 
-- **REFERENCE_GEOMETRY_GUIDE.md** - Complete architectural guide
-- **example_descriptor_with_reference_points.json** - Working example
+- **reference-geometry-guide.md** - Complete architectural guide
+- **examples/example_descriptor_with_reference_points.json** - Working example
 - **setupControlPanel()** documentation - Comprehensive format guide
-- **IMPLEMENTATION_NOTES.md** - Technical implementation details
+- **implementation-notes.md** - Technical implementation details
