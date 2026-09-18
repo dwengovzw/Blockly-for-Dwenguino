@@ -1,6 +1,6 @@
 import SimulationControlsController from "./simulation_controls_controller.js";
 import DwenguinoSimulationScenarioSocialRobot from "../scenario/socialrobot/dwenguino_simulation_scenario_social_robot.js";
-import DwenguinoSimulationScenarioRidingRobot from "../scenario/ridingrobot/dwenguino_simulation_riding_robot.js";
+import DwenguinoSimulationScenarioRidingRobot from "../scenario/ridingrobot/dwenguino_simulation_scenario_riding_robot.js";
 import DwenguinoSimulationScenarioRidingRobotWithWall from "../scenario/ridingrobot/dwenguino_simulation_scenario_riding_robot_with_wall.js";
 import DwenguinoSimulationScenarioSpyrograph from "../scenario/spyrograph/dwenguino_simulation_scenario_spyrograph.js"
 import DwenguinoSimulationScenarioPlotter from "../scenario/plotter/dwenguino_simulation_scenario_plotter.js";
