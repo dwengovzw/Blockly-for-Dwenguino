@@ -52,6 +52,29 @@ console.log("Starting backend index");
 
 console.log(__dirname);
 
+const defaultViewDirectories = [
+    "backend/views",
+    "Blockly-for-Dwenguino",
+];
+
+const resolveViewDirectories = (viewsDirEnv: string | undefined) => {
+    if (!viewsDirEnv) {
+        return defaultViewDirectories.map((entry) => path.resolve(__dirname, entry));
+    }
+
+    try {
+        const parsedValue = JSON.parse(viewsDirEnv);
+        const entries = Array.isArray(parsedValue) ? parsedValue : [parsedValue];
+        return entries.map((entry) => path.resolve(__dirname, String(entry)));
+    } catch {
+        return viewsDirEnv
+            .split(",")
+            .map((entry) => entry.trim())
+            .filter((entry) => entry.length > 0)
+            .map((entry) => path.resolve(__dirname, entry));
+    }
+}
+
 
 // Initialize the app
 let app = express();
@@ -60,8 +83,10 @@ app.use(cors(corsOptions));
 
 // Set view engine
 app.set('view engine', 'ejs');
-console.log(process.env)
-let viewDirs = JSON.parse(process.env.VIEWS_DIR as string).map((elem) => {return __dirname + "/" + elem})
+if (process.env.NODE_ENV !== 'production') {
+    console.log(process.env)
+}
+let viewDirs = resolveViewDirectories(process.env.VIEWS_DIR)
 app.set('views', viewDirs);   // For debug
 
 
