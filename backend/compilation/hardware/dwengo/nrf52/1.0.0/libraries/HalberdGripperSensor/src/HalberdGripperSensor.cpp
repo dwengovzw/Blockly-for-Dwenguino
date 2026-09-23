@@ -134,6 +134,59 @@ bool HalberdGripperSensor::setRangeTimingMs(uint32_t timingBudgetMs, uint32_t in
     return true;
 }
 
+bool HalberdGripperSensor::calibrateDistanceOffsetMm(uint16_t referenceDistanceMm, uint8_t sampleCount, uint32_t timeoutMs) {
+    if (!_tofConnected || sampleCount == 0 || timeoutMs == 0) {
+        return false;
+    }
+
+    uint32_t startMs = millis();
+    uint32_t sumRawMm = 0;
+    uint8_t accepted = 0;
+
+    while (accepted < sampleCount) {
+        if ((uint32_t)(millis() - startMs) >= timeoutMs) {
+            break;
+        }
+
+        if (!distanceReady()) {
+            delay(1);
+            continue;
+        }
+
+        uint16_t rawDistanceMm = 0;
+        bool valid = _tof.read(rawDistanceMm, _lastRangeStatus);
+        if (!valid) {
+            continue;
+        }
+
+        sumRawMm += rawDistanceMm;
+        accepted++;
+    }
+
+    _lastCalibrationSampleCount = accepted;
+    if (accepted == 0) {
+        _lastCalibrationAverageMm = 0;
+        return false;
+    }
+
+    _lastCalibrationAverageMm = (uint16_t)((sumRawMm + (accepted / 2)) / accepted);
+    if (accepted < sampleCount) {
+        return false;
+    }
+
+    int32_t offset = (int32_t)referenceDistanceMm - (int32_t)_lastCalibrationAverageMm;
+    if (offset > 32767) offset = 32767;
+    if (offset < -32768) offset = -32768;
+    _distanceOffsetMm = (int16_t)offset;
+
+    HGS_DEBUG_PRINT((*this), "[HGS] calibration avg raw mm: ");
+    HGS_DEBUG_PRINTLN((*this), _lastCalibrationAverageMm);
+    HGS_DEBUG_PRINT((*this), "[HGS] calibration offset mm: ");
+    HGS_DEBUG_PRINTLN((*this), _distanceOffsetMm);
+
+    return true;
+}
+
 // ---------------------------------------------------------------------------
 // Pressure sensor
 // ---------------------------------------------------------------------------

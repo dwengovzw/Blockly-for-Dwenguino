@@ -95,6 +95,26 @@ class HalberdGripperSensor {
     /** Current signed distance offset in mm. */
     int16_t distanceOffsetMm() const { return _distanceOffsetMm; }
 
+    /**
+     * Calibrate distance offset against a target at a known distance.
+     *
+     * The function collects valid ToF samples, computes their average raw
+     * distance, and stores the offset so corrected distances match
+     * referenceDistanceMm.
+     *
+     * @param referenceDistanceMm  known true distance from sensor face (mm)
+     * @param sampleCount          number of valid samples to average (>= 1)
+     * @param timeoutMs            max time to collect samples (>= 1)
+     * @return true when calibration completed and offset was updated
+     */
+    bool calibrateDistanceOffsetMm(uint16_t referenceDistanceMm, uint8_t sampleCount = 20, uint32_t timeoutMs = 3000);
+
+    /** Average raw distance (mm) from the latest calibration attempt. */
+    uint16_t lastCalibrationAverageMm() const { return _lastCalibrationAverageMm; }
+
+    /** Number of valid samples collected in the latest calibration attempt. */
+    uint8_t lastCalibrationSampleCount() const { return _lastCalibrationSampleCount; }
+
     /** Direct access to the underlying ToF driver for advanced use. */
     VL53L4CD_Mini& tof() { return _tof; }
 
@@ -118,6 +138,8 @@ class HalberdGripperSensor {
     uint32_t _timingBudgetMs = 200;
     uint32_t _interMeasurementMs = 0;
     int16_t _distanceOffsetMm = 0;
+    uint16_t _lastCalibrationAverageMm = 0;
+    uint8_t _lastCalibrationSampleCount = 0;
     bool _debugEnabled = false;
     Stream* _debugStream = &Serial;
 };
