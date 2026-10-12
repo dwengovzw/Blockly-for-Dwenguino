@@ -95,7 +95,7 @@ class DwenguinoSimulationScenarioSpyrograph extends DwenguinoSimulationScenario{
         
         // init board simulation
         this.dwenguinoBoardSimulation.setBoardDisplayWidthWidth("100%");
-        this.dwenguinoBoardSimulation.setComponentsTopOffset("55%");
+        this.dwenguinoBoardSimulation.setComponentsTopOffset("60%");
         this.dwenguinoBoardSimulation.setComponentsRightPosition("55px");
         
         this.dwenguinoBoardSimulation.initSimulationDisplay(boardContainerId);

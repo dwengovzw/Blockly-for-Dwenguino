@@ -296,12 +296,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     sim_background.append("<div id='sim_background_img' class='background1'></div>");
     this.backgroundClassName = "background1";
     this._background = 1;
-    var sensorOptionswidth = $('#sensor_options').width();
-    var parentWidth = $('#sim_background').width() - sensorOptionswidth;
-    var width = $('#sim_background_img').width();
-    var offSet = (parentWidth - width) / 2;
-    $('#sim_background_img').css('top', 0 + 'px');
-    $('#sim_background_img').css('margin-left', offSet + 'px');
     this.fireStateChangedEvent()
   };
 

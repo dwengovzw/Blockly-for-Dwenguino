@@ -186,7 +186,8 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $('#sim_buttons_middle').append('<div id="sim_button_E" class="sim_button"></div>');
         $('#sim_buttons_bottom').append('<div id="sim_button_S" class="sim_button"></div>');
 
-        this.hideSonar();
+        // Keep controls hidden until the simulation starts.
+        this.updateSonarDisplay(this.sonarDistance);
 
         let self = this;
         // push buttons
@@ -254,10 +255,14 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         this.updateScenarioDisplay(dwenguinoState);
     }
 
-    updateScenarioDisplay(board){
-        // Show the sonar value
-        var distance = board.getSonarDistance(11, 12);
-        if (distance <= -1){
+    setIsSimulationRunning(isSimulationRunning){
+        super.setIsSimulationRunning(isSimulationRunning);
+        this.updateSonarDisplay(this.sonarDistance);
+    }
+
+    updateSonarDisplay(distance){
+        this.sonarDistance = distance;
+        if (!this.getIsSimulationRunning() || distance <= -1){
             this.hideSonar();
         } else {
             this.showSonar();
@@ -275,7 +280,11 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
                 }
             }
         }
-    
+    }
+
+    updateScenarioDisplay(board){
+        this.updateSonarDisplay(board.getSonarDistance(11, 12));
+
            // Play audio on the buzzer
            if(this.audiocontext){
             if ((this.muted || board.getTonePlaying() == 0) && this.osc){
