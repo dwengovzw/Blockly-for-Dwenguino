@@ -31,8 +31,11 @@ class Slider {
      * @param {string} valueSuffix | suffix for the value label (e.g. a measuring unit)
      * @param {string} classes | extra css classes for the slider container separated by spaces
      */
-    constructor(id, parentId, minValue, maxValue, initialValue, label='', valuePrefix='', valueSuffix='', classes = ''){
+    constructor(id, parentId, minValue, maxValue, initialValue, label='', valuePrefix='', valueSuffix='', classes = '', commitOnly = false){
 
+        this._commitOnly = commitOnly;
+        this.isEditing = false;
+        this.oncommit = null;
         this._id = id;
         this._parentId = parentId;
 
@@ -93,17 +96,44 @@ class Slider {
                     return Math.min(this.getMaxValue(), Math.max(this.getMinValue(), numericValue));
                 };
 
-                valueInput.addEventListener('input', () => {
-                    const numericValue = clampValue(valueInput.value);
-                    valueInput.value = numericValue;
-                    rangeInput.value = String(numericValue);
-                    rangeInput.dispatchEvent(new Event('input', { bubbles: true }));
-                });
-
-                rangeInput.addEventListener('input', () => {
-                    valueInput.value = rangeInput.value;
-                    this.updateValueLabel(rangeInput.value);
-                });
+                if (this._commitOnly) {
+                    const commit = (value) => {
+                        const numericValue = clampValue(value);
+                        valueInput.value = numericValue;
+                        rangeInput.value = String(numericValue);
+                        this.isEditing = false;
+                        this.oncommit?.(numericValue);
+                    };
+                    valueInput.addEventListener('focus', () => { this.isEditing = true; });
+                    valueInput.addEventListener('input', () => { this.isEditing = true; });
+                    valueInput.addEventListener('blur', () => commit(valueInput.value));
+                    valueInput.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            commit(valueInput.value);
+                        }
+                    });
+                    rangeInput.addEventListener('pointerdown', () => { this.isEditing = true; });
+                    rangeInput.addEventListener('input', () => {
+                        this.isEditing = true;
+                        valueInput.value = rangeInput.value;
+                    });
+                    rangeInput.addEventListener('change', () => commit(rangeInput.value));
+                    rangeInput.addEventListener('pointerup', () => {
+                        if (this.isEditing) commit(rangeInput.value);
+                    });
+                } else {
+                    valueInput.addEventListener('input', () => {
+                        const numericValue = clampValue(valueInput.value);
+                        valueInput.value = numericValue;
+                        rangeInput.value = String(numericValue);
+                        rangeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    });
+                    rangeInput.addEventListener('input', () => {
+                        valueInput.value = rangeInput.value;
+                        this.updateValueLabel(rangeInput.value);
+                    });
+                }
             }
         
         } else {

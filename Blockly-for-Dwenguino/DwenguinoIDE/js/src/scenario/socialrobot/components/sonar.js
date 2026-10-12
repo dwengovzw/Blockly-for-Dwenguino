@@ -23,15 +23,9 @@ class SocialRobotSonar extends RobotComponent{
     initComponent(eventBus, id, pins, state, visible, width, height, offsetLeft, offsetTop, htmlClasses){
         let label = DwenguinoBlocklyLanguageSettings.translate(['sonarSliderLabel']) + " " + id;
         let sliderId = '' + TypesEnum.SONAR + id;
-        this._slider = new Slider(sliderId, 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider');
+        this._slider = new Slider(sliderId, 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider', true);
 
-        var self = this;
-        let sliderElement = this._slider.getSliderElement();
-        sliderElement.oninput = function() {
-            let myid = self.getId();
-            self.changeSonarDistance(this.value, myid);
-            self._slider.updateValueLabel(this.value);
-        }
+        this._slider.oncommit = (value) => this.changeSonarDistance(value);
         
         super.initComponent(eventBus, htmlClasses, id, TypesEnum.SONAR, 'sonar', pins, state, visible, width, height, offsetLeft, offsetTop, `${settings.basepath}DwenguinoIDE/img/board/sonar.png`, 'sim_sonar_canvas' + id);
         
@@ -40,28 +34,16 @@ class SocialRobotSonar extends RobotComponent{
     initComponentFromXml(eventBus, id, xml){
         let label = DwenguinoBlocklyLanguageSettings.translate(['sonarSliderLabel']) + " " + id;
         let sliderId = '' + TypesEnum.SONAR + id;
-        this._slider = new Slider(sliderId, 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider');
+        this._slider = new Slider(sliderId, 'sensor_options', 0, 200, 0, label, '' , ' cm', 'sonar_slider', true);
 
-        var self = this;
-        let sliderElement = this._slider.getSliderElement();
-        sliderElement.oninput = function() {
-            let myid = self.getId();
-            self.changeSonarDistance(this.value, myid);
-            self._slider.updateValueLabel(this.value);
-        }
+        this._slider.oncommit = (value) => this.changeSonarDistance(value);
 
         super.initComponentFromXml(eventBus, `${settings.basepath}DwenguinoIDE/img/board/sonar.png`, id, xml);
     }
 
 
     insertHtml(){
-        var self = this;
-        let sliderElement = this._slider.getSliderElement();
-        sliderElement.oninput = function() {
-            let id = self.getId();
-            self.changeSonarDistance(this.value, id);
-            self._slider.updateValueLabel(this.value);
-        }
+        this._slider.oncommit = (value) => this.changeSonarDistance(value);
         super.insertHtml(DwenguinoBlocklyLanguageSettings.translate(['sonarOptions']));
     }
 

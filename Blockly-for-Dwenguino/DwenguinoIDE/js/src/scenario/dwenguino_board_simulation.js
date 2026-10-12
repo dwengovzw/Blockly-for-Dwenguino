@@ -114,34 +114,12 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
 
         if (this.useSonarSlider) {
-            this.sonarSlider = new Slider('board_sonar', 'sim_sonar_input', 0, 200, 0, 'Sonar ' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['distance']) + ':', '', ' cm', 'board_sonar_slider');
+            this.sonarSlider = new Slider('board_sonar', 'sim_sonar_input', 0, 200, 0, 'Sonar ' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['distance']) + ':', '', ' cm', 'board_sonar_slider', true);
 
-            const sonarRange = this.sonarSlider.getSliderElement();
-            const sonarValue = document.getElementById(this.sonarSlider.getSliderValueId());
-
-            if (sonarRange) {
-                sonarRange.addEventListener('input', (event) => {
-                    const value = parseInt(event.target.value, 10);
-                    if (!Number.isNaN(value)) {
-                        this.sonarDistance = value;
-                        this.sonarInputChanged = true;
-                        this.sonarFieldBeingEdited = false;
-                        this.sonarSlider.updateValueLabel(value);
-                    }
-                });
-            }
-
-            if (sonarValue) {
-                sonarValue.addEventListener('input', (event) => {
-                    const value = parseInt(event.target.value, 10);
-                    if (!Number.isNaN(value)) {
-                        this.sonarDistance = value;
-                        this.sonarInputChanged = true;
-                        this.sonarFieldBeingEdited = false;
-                        this.sonarSlider.updateValueLabel(value);
-                    }
-                });
-            }
+            this.sonarSlider.oncommit = (value) => {
+                this.sonarDistance = value;
+                this.sonarInputChanged = true;
+            };
         } else {
             $('#sim_sonar_input').append('<input type="text" id="sonar_input" size="3" name="sim_sonar_input" readonly tabindex="-1" value="0" aria-readonly="true" class="sonar_readonly_input">&nbsp;cm');
             const sonarValueInput = document.getElementById('sonar_input');
@@ -266,7 +244,7 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
             this.hideSonar();
         } else {
             this.showSonar();
-            if (this.useSonarSlider && this.sonarSlider && !this.sonarFieldBeingEdited) {
+            if (this.useSonarSlider && this.sonarSlider && !this.sonarFieldBeingEdited && !this.sonarSlider.isEditing) {
                 this.sonarSlider.updateValueLabel(distance);
                 const range = document.getElementById(this.sonarSlider.getSliderRangeId());
                 if (range) {
