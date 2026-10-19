@@ -155,7 +155,6 @@ class DwenguinoSimulationScenarioSocialRobot extends DwenguinoSimulationScenario
     scenarioOptions.append(switch_background)
 
     load_scenario.click(function () {
-      self.removeSocialRobotComponents();
       self.scenarioUtils.loadScenario();
     });
 
