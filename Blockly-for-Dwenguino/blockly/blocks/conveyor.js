@@ -26,7 +26,7 @@ goog.require('Blockly.Blocks');
 //goog.require('Blockly.Arduino');
 
 
-var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
+
 
 Blockly.Blocks.conveyor.HUE = 180;
 
@@ -56,9 +56,7 @@ var conveyor_belt_json = {
     "previousStatement": null,
     "nextStatement": null,
     "colour": Blockly.Blocks.conveyor.HUE,
-    "tooltip": "",
-    "helpUrl": "http://www.dwengo.org/tutorials"
-    
+    "tooltip": ""
   };
 
   Blockly.Blocks['conveyor_belt'] = {
@@ -90,8 +88,7 @@ var conv_button_json = {
   ],
   "output": "Number",
   "colour": Blockly.Blocks.conveyor.HUE,
-  "tooltip": "",
-  "helpUrl": DwenguinoHelpUrl
+  "tooltip": ""
 };
 
 Blockly.Blocks['conveyor_button'] = {
@@ -126,8 +123,7 @@ var color_sensor_json = {
   ],
   "output": "Color",
   "colour": Blockly.Blocks.conveyor.HUE,
-  "tooltip": "",
-  "helpUrl": DwenguinoHelpUrl
+  "tooltip": ""
 };
 
 Blockly.Blocks['conveyor_color_sensor'] = {
@@ -199,9 +195,7 @@ var conveyor_ledstrip_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Blocks.conveyor.HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
-  
+  "tooltip": ""
 };
 
 Blockly.Blocks['conveyor_ledstrip'] = {
@@ -237,8 +231,7 @@ var conveyor_color_json = {
     }
   ],
   "output": "Color",
-  "colour": Blockly.Blocks.conveyor.HUE,
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "colour": Blockly.Blocks.conveyor.HUE
 };
 
 Blockly.Blocks['conveyor_color'] = {
@@ -280,10 +273,8 @@ var conveyor_rgb_color_json = {
     "inputsInline": true,
     "output": "Color",
     "colour": Blockly.Blocks.conveyor.HUE,
-    "tooltip": "",
-    "helpUrl": "http://www.dwengo.org/tutorials"
+    "tooltip": ""
   };
-  
   Blockly.Blocks['conveyor_rgb_color'] = {
     init: function() {
       this.jsonInit(conveyor_rgb_color_json);
@@ -302,7 +293,6 @@ var conveyor_rgb_color_with_numbers_json = {
       "min": 0,
       "max": 255,
       "precision": 0
-      
     },
     {
       "type": "input_value",
@@ -324,8 +314,7 @@ var conveyor_rgb_color_with_numbers_json = {
   "inputsInline": true,
   "output": "Color",
   "colour": Blockly.Blocks.conveyor.HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['conveyor_rgb_color_with_numbers'] = {
@@ -359,8 +348,7 @@ var similar_color_json = {
     ],
     "inputsInline": true,
     "output": "Boolean",
-    "colour": Blockly.Blocks.conveyor.HUE,
-    "helpUrl": "http://www.dwengo.org/tutorials"
+    "colour": Blockly.Blocks.conveyor.HUE
 };
 
 Blockly.Blocks['similar_color'] = {

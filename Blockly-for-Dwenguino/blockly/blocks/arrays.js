@@ -43,8 +43,7 @@ Blockly.defineBlocksWithJsonArray([
     "previousStatement": null,
     "nextStatement": null,
     "colour": 260,
-    "tooltip": "%{BKY_ARRAY_CREATE_TOOLTIP}",
-    "helpUrl": ""
+    "tooltip": "%{BKY_ARRAY_CREATE_TOOLTIP}"
   },
   {
     "type": "array_get_index",
@@ -65,8 +64,7 @@ Blockly.defineBlocksWithJsonArray([
     ],
     "output": null,
     "colour": 260,
-    "tooltip": "%{BKY_ARRAY_GET_INDEX_TOOLTIP}",
-    "helpUrl": ""
+    "tooltip": "%{BKY_ARRAY_GET_INDEX_TOOLTIP}"
   },
   {
     "type": "array_set_index",
@@ -92,8 +90,7 @@ Blockly.defineBlocksWithJsonArray([
     "previousStatement": null,
     "nextStatement": null,
     "colour": 260,
-    "tooltip": "%{BKY_ARRAY_SET_INDEX_TOOLTIP}",
-    "helpUrl": ""
+    "tooltip": "%{BKY_ARRAY_SET_INDEX_TOOLTIP}"
   },
   {
     "type": "array_length",
@@ -109,7 +106,6 @@ Blockly.defineBlocksWithJsonArray([
     ],
     "output": "Number",
     "colour": 260,
-    "tooltip": "%{BKY_ARRAY_LENGTH_TOOLTIP}",
-    "helpUrl": ""
+    "tooltip": "%{BKY_ARRAY_LENGTH_TOOLTIP}"
   }
 ]);

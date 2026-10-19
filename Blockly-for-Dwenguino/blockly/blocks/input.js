@@ -21,11 +21,7 @@
  'use strict';
 
  goog.provide('Blockly.Blocks.input');
- 
  goog.require('Blockly.Blocks'); 
- 
- var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
- 
  Blockly.Blocks.input.HUE = 315;
 
   // Sonar sensor
@@ -60,16 +56,13 @@
     ],
     "output": "Number",
     "colour": Blockly.Blocks.input.HUE,
-    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['sonarTooltip']),
-    "helpUrl": DwenguinoHelpUrl
+    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['sonarTooltip'])
   };
-  
   Blockly.Blocks['input_sonar_sensor_select'] = {
     init: function() {
       this.jsonInit(input_sonar_sensor_select_json);
     }
   };
-  
   // Sound sensor
   let sound_select_options = [
     [DwenguinoBlocklyLanguageSettings.translate(['inputSoundDropdownBlock']) + " 1", "SOUND1"]
@@ -100,8 +93,7 @@
   ],
   "output": "Number",
   "colour": Blockly.Blocks.input.HUE,
-  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlockTooltip']),
-  "helpUrl": DwenguinoHelpUrl
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlockTooltip'])
   };
 
   Blockly.Blocks['input_sound_sensor_select'] = {
@@ -136,10 +128,8 @@
     ],
     "output": "Number",
     "colour": Blockly.Blocks.input.HUE,
-    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlockTooltip']),
-    "helpUrl": DwenguinoHelpUrl
+    "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputSoundSensorBlockTooltip'])
   };
-  
   Blockly.Blocks['input_sound_sensor'] = {
     init: function() {
       this.jsonInit(input_sound_sensor_json);
@@ -171,16 +161,13 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputPirBlockTooltip']),
-   "helpUrl": DwenguinoHelpUrl
+   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputPirBlockTooltip'])
  };
- 
  Blockly.Blocks['input_pir_sensor'] = {
    init: function() {
      this.jsonInit(input_pir_sensor_json);
    }
  };
- 
  var input_touch_sensor_json = {
    "id": "input_touch_sensor",
    "message0": DwenguinoBlocklyLanguageSettings.translate(['inputTouchSensorBlock']),
@@ -206,16 +193,13 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputTouchSensorBlockTooltip']),
-   "helpUrl": DwenguinoHelpUrl
+   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputTouchSensorBlockTooltip'])
  };
- 
  Blockly.Blocks['input_touch_sensor'] = {
    init: function() {
      this.jsonInit(input_touch_sensor_json);
    }
  };
- 
  var input_button_json = {
    "id": "input_button",
    "message0": DwenguinoBlocklyLanguageSettings.translate(['inputButtonBlock']),
@@ -241,16 +225,13 @@
    ],
    "output": "Number",
    "colour": Blockly.Blocks.input.HUE,
-   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputButtonBlockTooltip']),
-   "helpUrl": DwenguinoHelpUrl
+   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputButtonBlockTooltip'])
  };
- 
  Blockly.Blocks['input_button'] = {
    init: function() {
      this.jsonInit(input_button_json);
    }
  };
- 
    var input_read_pin_json = {
      "id": "input_read_pin",
      "message0": DwenguinoBlocklyLanguageSettings.translate(['inputReadPinBlock']),
@@ -266,10 +247,8 @@
      ],
      "output": "Number",
      "colour": Blockly.Blocks.input.HUE,
-     "tooltip": "Read pin",
-     "helpUrl": "http://www.dwengo.org/tutorials"
+     "tooltip": "Read pin"
  };
- 
  Blockly.Blocks['input_read_pin'] = {
      init: function(){
          this.jsonInit(input_read_pin_json);
@@ -302,8 +281,7 @@
   ],
   "output": "Number",
   "colour": Blockly.Blocks.input.HUE,
-  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputLightSensorBlockTooltip']),
-  "helpUrl": DwenguinoHelpUrl
+  "tooltip": DwenguinoBlocklyLanguageSettings.translate(['inputLightSensorBlockTooltip'])
 };
 
 Blockly.Blocks['input_light_sensor'] = {
@@ -311,4 +289,3 @@ Blockly.Blocks['input_light_sensor'] = {
     this.jsonInit(input_light_sensor_json);
   }
 };
- 

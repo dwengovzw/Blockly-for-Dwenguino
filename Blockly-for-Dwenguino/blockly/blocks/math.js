@@ -54,7 +54,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "value": 0
     }],
     "output": "Number",
-    "helpUrl": "%{BKY_MATH_NUMBER_HELPURL}",
     "colour": Blockly.Msg.MATH_HUE,
     "tooltip": "%{BKY_MATH_NUMBER_TOOLTIP}",
     "extensions": ["parent_tooltip_when_inline"]
@@ -108,7 +107,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "helpUrl": "%{BKY_MATH_ARITHMETIC_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
 
@@ -138,7 +136,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "helpUrl": "%{BKY_MATH_SINGLE_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
 
@@ -167,7 +164,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "helpUrl": "%{BKY_MATH_TRIG_HELPURL}",
     "extensions": ["math_op_tooltip"]
   },
 
@@ -191,8 +187,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTANT_HELPURL}"
+    "tooltip": "%{BKY_MATH_CONSTANT_TOOLTIP}"
   },
 
   // Block for checking if a number is even, odd, prime, whole, positive,
@@ -246,7 +241,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "nextStatement": null,
     "colour": Blockly.Msg.MATH_HUE,
-    "helpUrl": "%{BKY_MATH_CHANGE_HELPURL}",
     "extensions": ["math_change_tooltip"]
   },
 
@@ -272,7 +266,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "helpUrl": "%{BKY_MATH_ROUND_HELPURL}",
     "tooltip": "%{BKY_MATH_ROUND_TOOLTIP}"
   },
 
@@ -304,7 +297,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "helpUrl": "%{BKY_MATH_ONLIST_HELPURL}",
     "mutator": "math_modes_of_list_mutator",
     "extensions": ["math_op_tooltip"]
   },
@@ -328,8 +320,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_MODULO_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_MODULO_HELPURL}"
+    "tooltip": "%{BKY_MATH_MODULO_TOOLTIP}"
   },
 
   // Block for constraining a number between two limits.
@@ -356,8 +347,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_CONSTRAIN_HELPURL}"
+    "tooltip": "%{BKY_MATH_CONSTRAIN_TOOLTIP}"
   },
 
   // Block for random integer between [X] and [Y].
@@ -379,8 +369,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_INT_HELPURL}"
+    "tooltip": "%{BKY_MATH_RANDOM_INT_TOOLTIP}"
   },
 
   // Block for random integer between [X] and [Y].
@@ -389,8 +378,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "%{BKY_MATH_RANDOM_FLOAT_TITLE_RANDOM}",
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_RANDOM_FLOAT_HELPURL}"
+    "tooltip": "%{BKY_MATH_RANDOM_FLOAT_TOOLTIP}"
   },
 
   // Block for setting the random seed.
@@ -407,8 +395,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "previousStatement": null,
     "nextStatement": null,
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_RANDOM_SEED_TOOLTIP}",
-    "helpUrl": ""
+    "tooltip": "%{BKY_MATH_RANDOM_SEED_TOOLTIP}"
   },
 
   // Block for calculating atan2 of [X] and [Y].
@@ -430,8 +417,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "inputsInline": true,
     "output": "Number",
     "colour": Blockly.Msg.MATH_HUE,
-    "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}",
-    "helpUrl": "%{BKY_MATH_ATAN2_HELPURL}"
+    "tooltip": "%{BKY_MATH_ATAN2_TOOLTIP}"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 

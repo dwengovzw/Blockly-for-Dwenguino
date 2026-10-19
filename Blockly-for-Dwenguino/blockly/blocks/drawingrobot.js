@@ -26,7 +26,7 @@ goog.require('Blockly.Blocks');
 //goog.require('Blockly.Arduino');
 
 
-var DwenguinoHelpUrl = "http://www.dwengo.org/blockly";
+
 
 Blockly.Blocks.drawingrobot.HUE = 330;
 
@@ -61,8 +61,7 @@ var drawingrobot_stepper_motor_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_stepper_motor'] = {
@@ -95,8 +94,7 @@ var drawingrobot_move_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_move'] = {
@@ -124,8 +122,7 @@ var drawingrobot_move_direction_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_move_direction'] = {
@@ -152,8 +149,7 @@ var drawingrobot_move_direction_x_y_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_move_direction_x_y'] = {
@@ -182,8 +178,7 @@ var drawingrobot_line_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_line'] = {
@@ -206,8 +201,7 @@ var drawingrobot_circle_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_circle'] = {
@@ -235,8 +229,7 @@ var drawingrobot_rectangle_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_rectangle'] = {
@@ -251,8 +244,7 @@ var drawingrobot_lift_stylus_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_lift_stylus'] = {
@@ -267,8 +259,7 @@ var drawingrobot_lower_stylus_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_lower_stylus'] = {
@@ -291,8 +282,7 @@ var drawingrobot_color_json = {
   "previousStatement": null,
   "nextStatement": null,
   "colour": Blockly.Msg.DRAWINGROBOT_HUE,
-  "tooltip": "",
-  "helpUrl": "http://www.dwengo.org/tutorials"
+  "tooltip": ""
 };
 
 Blockly.Blocks['drawingrobot_color'] = {
@@ -303,7 +293,6 @@ Blockly.Blocks['drawingrobot_color'] = {
 
 Blockly.Blocks['drawingrobot_motor_number'] = {
   init: function() {
-    this.setHelpUrl(DwenguinoHelpUrl);
     this.setColour(Blockly.Msg.DRAWINGROBOT_HUE);
     this.appendDummyInput()
         .appendField(new Blockly.FieldDropdown([[DwenguinoBlocklyLanguageSettings.translate(['stepperMotorOne']), "33"], [DwenguinoBlocklyLanguageSettings.translate(['stepperMotorTwo']), "34"]]), 'NUMBER')

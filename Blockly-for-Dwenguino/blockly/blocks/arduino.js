@@ -25,7 +25,7 @@ goog.provide('Blockly.Blocks.arduino');
 goog.require('Blockly');
 goog.require('Blockly.Blocks');
 
-var ArduinoHelpUrl = "http://www.arduino.cc";
+
 
 Blockly.Blocks.arduino.HUE = 100;
 
@@ -50,7 +50,6 @@ var setup_loop_arduino_json = {
   ],
   "colour": Blockly.Blocks.arduino.HUE,
   "tooltip": DwenguinoBlocklyLanguageSettings.translate(['dwenguino_main_program_structure']),
-  "helpUrl": ArduinoHelpUrl,
   "data": "testdatastring"
 };
 
@@ -61,7 +60,6 @@ Blockly.Blocks['setup_loop_structure_arduino'] = {
 };
 
 Blockly.Blocks['inout_digital_read'] = {
-  helpUrl: 'http://arduino.cc/en/Reference/DigitalRead',
   init: function() {
     this.setColour(230);
     this.appendDummyInput()
@@ -73,7 +71,6 @@ Blockly.Blocks['inout_digital_read'] = {
 };
 
 Blockly.Blocks['inout_digital_write'] = {
-  helpUrl: 'http://arduino.cc/en/Reference/DigitalWrite',
   init: function() {
     this.setColour(230);
     this.appendDummyInput()

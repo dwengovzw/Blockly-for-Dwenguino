@@ -37,7 +37,6 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
       "colour": Blockly.Msg.COMMENTS_HUE,
       "previousStatement": null,
       "nextStatement": null,
-      "helpUrl": "",
       "tooltip": "",
     },
 ]);

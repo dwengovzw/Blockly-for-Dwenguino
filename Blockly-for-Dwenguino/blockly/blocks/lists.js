@@ -53,8 +53,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "message0": "%{BKY_LISTS_CREATE_EMPTY_TITLE}",
     "output": "Array",
     "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_CREATE_EMPTY_HELPURL}"
+    "tooltip": "%{BKY_LISTS_CREATE_EMPTY_TOOLTIP}"
   },
   // Block for creating a list with one element repeated.
   {
@@ -73,8 +72,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Array",
     "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_REPEAT_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REPEAT_HELPURL}"
+    "tooltip": "%{BKY_LISTS_REPEAT_TOOLTIP}"
   },
   // Block for reversing a list.
   {
@@ -90,8 +88,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     "output": "Array",
     "inputsInline": true,
     "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_REVERSE_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_REVERSE_HELPURL}"
+    "tooltip": "%{BKY_LISTS_REVERSE_TOOLTIP}"
   },
   // Block for checking if a list is empty
   {
@@ -106,8 +103,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Boolean",
     "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_ISEMPTY_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_ISEMPTY_HELPURL}"
+    "tooltip": "%{BKY_LISTS_ISEMPTY_TOOLTIP}"
   },
   // Block for getting the list length
   {
@@ -122,8 +118,7 @@ Blockly.defineBlocksWithJsonArray([  // BEGIN JSON EXTRACT
     ],
     "output": "Number",
     "style": "list_blocks",
-    "tooltip": "%{BKY_LISTS_LENGTH_TOOLTIP}",
-    "helpUrl": "%{BKY_LISTS_LENGTH_HELPURL}"
+    "tooltip": "%{BKY_LISTS_LENGTH_TOOLTIP}"
   }
 ]);  // END JSON EXTRACT (Do not delete this comment.)
 
@@ -133,7 +128,6 @@ Blockly.Blocks['lists_create_with'] = {
    * @this {Blockly.Block}
    */
   init: function() {
-    this.setHelpUrl(Blockly.Msg['LISTS_CREATE_WITH_HELPURL']);
     this.setStyle('list_blocks');
     this.itemCount_ = 3;
     this.updateShape_();
@@ -293,7 +287,6 @@ Blockly.Blocks['lists_indexOf'] = {
           [Blockly.Msg['LISTS_INDEX_OF_FIRST'], 'FIRST'],
           [Blockly.Msg['LISTS_INDEX_OF_LAST'], 'LAST']
         ];
-    this.setHelpUrl(Blockly.Msg['LISTS_INDEX_OF_HELPURL']);
     this.setStyle('list_blocks');
     this.setOutput(true, 'Number');
     this.appendValueInput('VALUE')
@@ -331,7 +324,6 @@ Blockly.Blocks['lists_getIndex'] = {
           [Blockly.Msg['LISTS_GET_INDEX_LAST'], 'LAST'],
           [Blockly.Msg['LISTS_GET_INDEX_RANDOM'], 'RANDOM']
         ];
-    this.setHelpUrl(Blockly.Msg['LISTS_GET_INDEX_HELPURL']);
     this.setStyle('list_blocks');
     var modeMenu = new Blockly.FieldDropdown(MODE, function(value) {
       var isStatement = (value == 'REMOVE');
@@ -515,7 +507,6 @@ Blockly.Blocks['lists_setIndex'] = {
           [Blockly.Msg['LISTS_GET_INDEX_LAST'], 'LAST'],
           [Blockly.Msg['LISTS_GET_INDEX_RANDOM'], 'RANDOM']
         ];
-    this.setHelpUrl(Blockly.Msg['LISTS_SET_INDEX_HELPURL']);
     this.setStyle('list_blocks');
     this.appendValueInput('LIST')
         .setCheck('Array')
@@ -654,7 +645,6 @@ Blockly.Blocks['lists_getSublist'] = {
           [Blockly.Msg['LISTS_GET_SUBLIST_END_FROM_END'], 'FROM_END'],
           [Blockly.Msg['LISTS_GET_SUBLIST_END_LAST'], 'LAST']
         ];
-    this.setHelpUrl(Blockly.Msg['LISTS_GET_SUBLIST_HELPURL']);
     this.setStyle('list_blocks');
     this.appendValueInput('LIST')
         .setCheck('Array')
@@ -780,8 +770,7 @@ Blockly.Blocks['lists_sort'] = {
       ],
       "output": "Array",
       "style": "list_blocks",
-      "tooltip": Blockly.Msg['LISTS_SORT_TOOLTIP'],
-      "helpUrl": Blockly.Msg['LISTS_SORT_HELPURL']
+      "tooltip": Blockly.Msg['LISTS_SORT_TOOLTIP']
     });
   }
 };
@@ -802,7 +791,6 @@ Blockly.Blocks['lists_split'] = {
         function(newMode) {
           thisBlock.updateType_(newMode);
         });
-    this.setHelpUrl(Blockly.Msg['LISTS_SPLIT_HELPURL']);
     this.setStyle('list_blocks');
     this.appendValueInput('INPUT')
         .setCheck('String')
