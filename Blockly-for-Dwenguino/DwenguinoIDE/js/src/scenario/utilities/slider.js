@@ -31,8 +31,11 @@ class Slider {
      * @param {string} valueSuffix | suffix for the value label (e.g. a measuring unit)
      * @param {string} classes | extra css classes for the slider container separated by spaces
      */
-    constructor(id, parentId, minValue, maxValue, initialValue, label='', valuePrefix='', valueSuffix='', classes = ''){
+    constructor(id, parentId, minValue, maxValue, initialValue, label='', valuePrefix='', valueSuffix='', classes = '', commitOnly = false){
 
+        this._commitOnly = commitOnly;
+        this.isEditing = false;
+        this.oncommit = null;
         this._id = id;
         this._parentId = parentId;
 
@@ -68,10 +71,70 @@ class Slider {
             if(this.getLabel() != ''){
                this.insertLabel();
             }
-            
-            $('#' + this.getParentId()).append('<div id="' + this.getSliderValueId() + '" class="">' + this.getValuePrefix() + this.getInitialValue() + this.getValueSuffix() + '</div>');
+
+            const valuePrefix = this.getValuePrefix();
+            const valueSuffix = this.getValueSuffix();
+            const valueInputHtml = [
+                '<input id="' + this.getSliderValueId() + '" type="number" min="' + this.getMinValue() + '" max="' + this.getMaxValue() + '" step="1" value="' + this.getInitialValue() + '" class="slider_value_input"',
+                valuePrefix ? ' data-prefix="' + valuePrefix + '"' : '',
+                valueSuffix ? ' data-suffix="' + valueSuffix + '"' : '',
+                ' />'
+            ].join('');
+            $('#' + this.getParentId()).append(valueInputHtml);
             $('#' + this.getParentId()).append('<div id="' + this.getSliderId() + '" class="slidecontainer '+ this.getClasses() + '"></div>');
             $('#' + this.getSliderId()).append('<input id="' + this.getSliderRangeId() + '" type="range" min="'+this.getMinValue()+'" max="'+this.getMaxValue()+'" value="'+this.getInitialValue()+'" class="slider"></input>');
+
+            const rangeInput = document.getElementById(this.getSliderRangeId());
+            const valueInput = document.getElementById(this.getSliderValueId());
+
+            if (rangeInput && valueInput) {
+                const clampValue = (value) => {
+                    const numericValue = Number(value);
+                    if (!Number.isFinite(numericValue)) {
+                        return this.getInitialValue();
+                    }
+                    return Math.min(this.getMaxValue(), Math.max(this.getMinValue(), numericValue));
+                };
+
+                if (this._commitOnly) {
+                    const commit = (value) => {
+                        const numericValue = clampValue(value);
+                        valueInput.value = numericValue;
+                        rangeInput.value = String(numericValue);
+                        this.isEditing = false;
+                        this.oncommit?.(numericValue);
+                    };
+                    valueInput.addEventListener('focus', () => { this.isEditing = true; });
+                    valueInput.addEventListener('input', () => { this.isEditing = true; });
+                    valueInput.addEventListener('blur', () => commit(valueInput.value));
+                    valueInput.addEventListener('keydown', (event) => {
+                        if (event.key === 'Enter') {
+                            event.preventDefault();
+                            commit(valueInput.value);
+                        }
+                    });
+                    rangeInput.addEventListener('pointerdown', () => { this.isEditing = true; });
+                    rangeInput.addEventListener('input', () => {
+                        this.isEditing = true;
+                        valueInput.value = rangeInput.value;
+                    });
+                    rangeInput.addEventListener('change', () => commit(rangeInput.value));
+                    rangeInput.addEventListener('pointerup', () => {
+                        if (this.isEditing) commit(rangeInput.value);
+                    });
+                } else {
+                    valueInput.addEventListener('input', () => {
+                        const numericValue = clampValue(valueInput.value);
+                        valueInput.value = numericValue;
+                        rangeInput.value = String(numericValue);
+                        rangeInput.dispatchEvent(new Event('input', { bubbles: true }));
+                    });
+                    rangeInput.addEventListener('input', () => {
+                        valueInput.value = rangeInput.value;
+                        this.updateValueLabel(rangeInput.value);
+                    });
+                }
+            }
         
         } else {
             console.debug('already exists');
@@ -88,8 +151,11 @@ class Slider {
 
     updateValueLabel(value) {
         let sliderLabel = document.getElementById(this.getSliderValueId())
-        if (sliderLabel)
-            sliderLabel.innerHTML = this.getValuePrefix() + value + this.getValueSuffix();
+        if (sliderLabel) {
+            const numericValue = Number(value);
+            const safeValue = Number.isFinite(numericValue) ? numericValue : this.getInitialValue();
+            sliderLabel.value = safeValue;
+        }
     }
 
     remove(){

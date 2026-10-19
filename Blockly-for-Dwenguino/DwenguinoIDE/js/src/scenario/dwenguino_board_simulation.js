@@ -1,4 +1,5 @@
 import ButtonMap from "../simulation/button_map.js"
+import Slider from "./utilities/slider.js"
 import DwenguinoSimulationScenario from "./dwenguino_simulation_scenario.js"
 
 /**
@@ -16,6 +17,8 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
     sonarDistance = 0;
     sonarInputChanged = false;
     sonarFieldBeingEdited = false;
+    sonarSlider = null;
+    useSonarSlider = true;
     wasMuted = true;
 
     constructor(logger){
@@ -73,7 +76,9 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         this.rightSimComponentsPosition = position;
     }
 
-    
+    setUseSonarSlider(useSonarSlider){
+        this.useSonarSlider = useSonarSlider;
+    }
 
     initSimulationState(boardState){
         this.updateScenarioState(boardState);
@@ -101,45 +106,35 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
 
         let sonar = $('<div id="sim_sonar" class="sim_sonar"></div>');
         let sonarDist = $('<div id="sim_sonar_distance" class="sim_sonar_distance"></div>');
-        let sonarInput = $('<div id="sim_sonar_input"></div>').text("Sonar " + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['distance']) + ":");
-        let setButton = $('<button id="set_sonar_value"></button>').text("OK");
+        let sonarInput = $('<div id="sim_sonar_input"></div>');
 
         $('#sim_components').append(sonar);
         $('#sim_components').append(sonarDist);
         $('#sim_components').append(sonarInput);
-        $('#sim_components').append(setButton);
         $('#sim_components').css({"margin-top": this.componentsTopOffset, "right": this.rightSimComponentsPosition});
 
-        
-        $('#sim_sonar_input').append('<input type="text" id="sonar_input" size="3" name="sim_sonar_input" onkeypress="return event.charCode >= 48 && event.charCode <= 57">&nbsp;cm');
+        if (this.useSonarSlider) {
+            this.sonarSlider = new Slider('board_sonar', 'sim_sonar_input', 0, 200, 0, 'Sonar ' + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['distance']) + ':', '', ' cm', 'board_sonar_slider', true);
 
-
-        $("#sonar_input").on('keyup', (e) => {
-            if (e.key === 'Enter' || e.keyCode === 13) {
+            this.sonarSlider.oncommit = (value) => {
+                this.sonarDistance = value;
                 this.sonarInputChanged = true;
-                let value = $("#sonar_input").val();
-                this.sonarDistance = parseInt(value.trim());
+            };
+        } else {
+            $('#sim_sonar_input').append('<input type="text" id="sonar_input" size="3" name="sim_sonar_input" readonly tabindex="-1" value="0" aria-readonly="true" class="sonar_readonly_input">&nbsp;cm');
+            const sonarValueInput = document.getElementById('sonar_input');
+            if (sonarValueInput) {
+                sonarValueInput.setAttribute('readonly', 'true');
+                sonarValueInput.setAttribute('aria-readonly', 'true');
+                sonarValueInput.setAttribute('tabindex', '-1');
+                sonarValueInput.setAttribute('unselectable', 'on');
+                sonarValueInput.style.pointerEvents = 'none';
+                sonarValueInput.style.caretColor = 'transparent';
+                sonarValueInput.addEventListener('focus', (event) => {
+                    event.target.blur();
+                });
             }
-        });
-
-        $("#sonar_input").change((e) => {
-            this.sonarInputChanged = true;
-            let value = $("#sonar_input").val();
-            this.sonarDistance = parseInt(value.trim());
-        });
-
-        $('#set_sonar_value').click((e) => {
-            let value = $("#sonar_input").val();
-            this.sonarDistance = parseInt(value.trim());
-        });
-
-        $("#sonar_input").focus(() => {
-            this.sonarFieldBeingEdited = true;
-        });
-
-        $("#sonar_input").focusout(() => {
-            this.sonarFieldBeingEdited = false;
-        });
+        }
 
         $('#sim_board').append('<div class="sim_light sim_light_off" id ="sim_light_13"></div>');
         $('#sim_board').append('<div id="sim_lcds"></div>');
@@ -169,7 +164,8 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $('#sim_buttons_middle').append('<div id="sim_button_E" class="sim_button"></div>');
         $('#sim_buttons_bottom').append('<div id="sim_button_S" class="sim_button"></div>');
 
-        this.hideSonar();
+        // Keep controls hidden until the simulation starts.
+        this.updateSonarDisplay(this.sonarDistance);
 
         let self = this;
         // push buttons
@@ -210,14 +206,12 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         $("#sim_sonar").show();
         $("#sim_sonar_distance").show();
         $("#sim_sonar_input").show();
-        $("#set_sonar_value").show();
     }
 
     hideSonar(){
         $("#sim_sonar").hide();
         $("#sim_sonar_distance").hide();
         $("#sim_sonar_input").hide();
-        $("#set_sonar_value").hide();
     }
 
 
@@ -239,25 +233,36 @@ class DwenguinoBoardSimulation extends DwenguinoSimulationScenario{
         this.updateScenarioDisplay(dwenguinoState);
     }
 
-    updateScenarioDisplay(board){
-        // Show the sonar value
-        var distance = board.getSonarDistance(11, 12);
-        if (distance <= -1){
+    setIsSimulationRunning(isSimulationRunning){
+        super.setIsSimulationRunning(isSimulationRunning);
+        this.updateSonarDisplay(this.sonarDistance);
+    }
+
+    updateSonarDisplay(distance){
+        this.sonarDistance = distance;
+        if (!this.getIsSimulationRunning() || distance <= -1){
             this.hideSonar();
         } else {
             this.showSonar();
-            var sim_sonar  = document.getElementById('sonar_input');
-            
-            if(typeof(sim_sonar) != 'undefined' && sim_sonar != null){
-                // Only change value when not being edited
-                if (!this.sonarFieldBeingEdited){
-                    sim_sonar.value = distance;
+            if (this.useSonarSlider && this.sonarSlider && !this.sonarFieldBeingEdited && !this.sonarSlider.isEditing) {
+                this.sonarSlider.updateValueLabel(distance);
+                const range = document.getElementById(this.sonarSlider.getSliderRangeId());
+                if (range) {
+                    range.value = String(distance);
                 }
             } else {
-                console.log('Sonar input element is undefined');
+                const simSonar = document.getElementById('sonar_input');
+                if (simSonar && !this.sonarFieldBeingEdited) {
+                    const roundedDistance = Math.round(Number(distance));
+                    simSonar.value = String(roundedDistance);
+                }
             }
         }
-    
+    }
+
+    updateScenarioDisplay(board){
+        this.updateSonarDisplay(board.getSonarDistance(11, 12));
+
            // Play audio on the buzzer
            if(this.audiocontext){
             if ((this.muted || board.getTonePlaying() == 0) && this.osc){
