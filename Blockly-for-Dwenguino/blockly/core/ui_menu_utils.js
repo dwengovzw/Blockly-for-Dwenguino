@@ -40,8 +40,9 @@ goog.require('Blockly.utils.style');
 Blockly.utils.uiMenu.getSize = function(menu) {
   var menuDom = menu.getElement();
   var menuSize = Blockly.utils.style.getSize(menuDom);
-  // Recalculate height for the total content, not only box height.
-  menuSize.height = menuDom.scrollHeight;
+  // Include all content and borders so border-box sizing does not clip the menu.
+  menuSize.height = menuDom.scrollHeight +
+      menuDom.offsetHeight - menuDom.clientHeight;
   return menuSize;
 };
 
