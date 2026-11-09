@@ -375,10 +375,13 @@ MSG.simulator = {
   alertDebug: "Stop de simulatie voordat je terug kan programmeren",
   distance: "afstand",
   scenario: "Scenario",
-  scenario_default: "Normale bord",
+  scenario_spyrograph: "Spirograaf",
   scenario_moving: "Bewegende robot",
   scenario_wall: "Bewegende robot met muur",
-  scenario_spyrograph: "Spyrograaf",
+  scenario_socialrobot: "Sociale robot",
+  scenario_conveyor: "Transportband",
+  scenario_gripper: "Grijper",
+  scenario_default: "Normale bord",
   code: "Code",
   pir: "Bewegingssensor",
   pirDescription: "Gebruik deze sensor om beweging te detecteren. In de simulator is een knop voorzien om beweging te simuleren door de knop in te drukken. Bij detectie geeft de sensor een 1 terug, anders een 0.",
@@ -427,7 +430,7 @@ MSG.tutorialMenu = {
   header: "Tutorials",
   catDwenguino: "Leren programmeren<br>met DwenguinoBlockly",
   catDwenguinoComponents: "Handig overzicht met<br>alle Dwenguino-componenten",
-  catDwenguinoConnector: "Pin mapping &<br>expansion connector", catRidingRobot: "Rijdende robot",
+  catDwenguinoConnector: "Pin mapping &<br>expansion connector", catRidingRobot: "Bewegende robot",
   catSocialRobot: "Sociale robot",
   catWeGoStem: "WeGoSTEM",
   chooseCategory: "Kies een categorie",
@@ -549,7 +552,7 @@ MSG.tutorials.blink = {
 
 
 MSG.tutorials.hello_robot = {
-  step1Title: "Rijdende robot",
+  step1Title: "Bewegende robot",
   step1Content: "In deze tutorial programmeer je een tweewielige rijdende robot. Je zal de opdracht krijgen om de robot verschillende patronen te laten rijden.",
   step2Title: "De simulator",
   step2Content: "Klik op de simulator-knop om deze te openen.",

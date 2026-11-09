@@ -323,7 +323,9 @@ class SimulationControlsController {
         document.getElementById('sim_stop').innerHTML = "<span class='fas fa-stop' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['stop']) + "'></span>";
         document.getElementById('sim_pause').innerHTML = "<span class='fas fa-pause' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['pause']) + "'></span>";
         document.getElementById('sim_step').innerHTML = "<span class='fas fa-step-forward' alt='" + DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['step']) + "'></span>";
-        document.getElementById('sim_scenarioTag').textContent = DwenguinoBlocklyLanguageSettings.translateFrom('simulator',['scenario']) + ":";
+        document.getElementById('sim_scenarioTag').textContent =
+            DwenguinoBlocklyLanguageSettings.translateFrom('simulator', ['scenario']) + ": " +
+            DwenguinoBlocklyLanguageSettings.translateFrom('simulator', ['scenario_' + this.scenarioView]);
 
     }
 

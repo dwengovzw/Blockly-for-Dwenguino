@@ -373,10 +373,13 @@ var MSG = {
     alertDebug: "Die Simulation stoppt wenn du weiter programmierst.",
     distance: "Abstand",
     scenario: "Szenario",
-    scenario_default: "Normales Board",
+    scenario_spyrograph: "Spirograph",
     scenario_moving: "Bewegender Roboter",
     scenario_wall: "Bewegender Roboter mit Wand",
-    scenario_socialrobot:"Sozialer Roboter",
+    scenario_socialrobot: "Sozialer Roboter",
+    scenario_conveyor: "Förderband",
+    scenario_gripper: "Greifer",
+    scenario_default: "Normales Board",
     code: "Code",
     pir: "Näherungssensor",
     pirDescription: "Verwende diesen Sensor, um Bewegung zu erkennen. Im Simulator ist eine Taste vorgesehen, um eine Bewegung durch Drücken der Taste zu simulieren. Wenn er erkannt wird, gibt der Sensor eine 1 zurück, andernfalls eine 0.",
@@ -635,7 +638,7 @@ MSG.tutorials.blink = {
 };
 
 MSG.tutorials.hello_robot = {
-  step1Title: "Fahrender Roboter",
+  step1Title: "Bewegender Roboter",
   step1Content: "In diesem Tutorial wirdst du einen zweirädrigen Fahrroboter programmieren. Deine Aufgabe ist es, den Roboter verschiedene Muster fahren zu lassen.",
   step2Title: "Der Simulator",
   step2Content: "Klicke auf die Taste des Simulators, um ihn zu öffnen.",
