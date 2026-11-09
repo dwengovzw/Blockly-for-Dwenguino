@@ -101,6 +101,12 @@ class TextualEditor {
             $(this).next(".my-dropdown").slideToggle();
         })
 
+        $(document).on("click focusin", (event) => {
+            if (!$(event.target).closest(examplesIcon.add(dropdown)).length) {
+                dropdown.stop(true, true).hide();
+            }
+        });
+
         this.$_menuContainer.append(copyItem);
         this.$_menuContainer.append(examplesIcon);
         this.$_menuContainer.append(dropdown);
