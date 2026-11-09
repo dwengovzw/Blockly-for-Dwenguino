@@ -267,7 +267,7 @@ body{
 
 #db_simulator_menu{
     position: relative;
-    flex: 1 0 20px;
+    flex: 0 0 auto;
     border-bottom: black solid 1px;
 }
 
