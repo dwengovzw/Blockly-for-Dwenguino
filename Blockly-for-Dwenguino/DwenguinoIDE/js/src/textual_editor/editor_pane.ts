@@ -134,7 +134,7 @@ class EditorPane{
 
         tabHtml.css({display: "flex", padding: "0 5px", margin: "0 5px", "flex-direction": "row", "justify-content": "space-between", "border-radius": "5px 5px 0 0", "background-color": "rgba(255, 255, 255, 0.2)", "align-items": "center"})
         tabTextEditField.css({display: "none", "background-color": "transparent", color: "inherit", "overflow": "hidden", border: "none", outline: "none", resize: "none", "box-shadow": "none"});
-        tabCloseButton.attr("src", `${DwenguinoBlockly.basepath}DwenguinoIDE/img/icons/xmark-solid.svg`).css({width: "18px", height: "18px", "margin-left": "5px", "z-index": "30"})
+        tabCloseButton.attr("src", `${DwenguinoBlockly.basepath}DwenguinoIDE/img/icons/xmark-solid.svg`).css({width: "18px", height: "18px", "margin-left": "5px"})
 
         // Listen for saved state changes and hide star accordingly
         tabInfo.addOnSavedStateChangedListener((savedState:boolean) => { 
