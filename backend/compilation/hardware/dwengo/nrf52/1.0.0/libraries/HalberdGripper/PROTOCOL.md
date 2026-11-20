@@ -49,6 +49,14 @@ Base UUID: `9B8Exxxx-5C3A-4F1B-B4A2-6C9D0A7E5D10`
 - Exotic grippers declare multiple axes; `open`/`closed` poses keep `open()`/`close()`
   working without the client knowing the kinematics.
 
+  In the [pressure PID example](examples/parallel_gripper_servo_with_sensors_pid/parallel_gripper_servo_with_sensors_pid.ino),
+  the two motion poses are `open` (fully open) and `closed` (regulate pressure).
+  Direct axis moves are unsupported. The `closed` pose finishes once pressure
+  settles at its target, not when width reaches zero. The gripper then keeps
+  regulating pressure until `open`, STOP, or disconnect. Reported jaw width is
+  estimated from the commanded servo angle, not measured by the distance sensor.
+  Pressure and time-of-flight distance are reported separately as sensors.
+
 ## Command frames (Central -> Command characteristic)
 
 All values little-endian. `f32` = IEEE-754 float.

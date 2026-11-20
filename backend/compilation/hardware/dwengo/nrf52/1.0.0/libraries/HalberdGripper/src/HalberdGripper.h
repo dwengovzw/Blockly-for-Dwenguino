@@ -63,6 +63,9 @@ public:
     /** Set the auto-completion tolerance for an axis (default: 2% of range). */
     void setTolerance(uint8_t axisId, float tolerance);
 
+    /** Disable position-based DONE when the sketch completes commands explicitly. */
+    void setAutoCompleteMotion(bool enabled) { _autoCompleteMotion = enabled; }
+
     /** Declare a named pose (one target value per configured axis, in axis order). */
     void definePose(const char* name, const float* axisTargets);
 
@@ -190,6 +193,7 @@ private:
     Sensor _sensors[HG_MAX_SENSORS];
 
     // Active (in-flight) motion command
+    bool    _autoCompleteMotion = true;
     bool    _commandActive = false;
     uint8_t _commandSeq = 0;
 

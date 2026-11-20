@@ -206,7 +206,7 @@ void HalberdGripper::update() {
     }
 
     // Auto-complete the active motion command when all targets are reached.
-    if (_commandActive) {
+    if (_autoCompleteMotion && _commandActive) {
         bool allReached = true;
         bool anyTarget = false;
         for (uint8_t i = 0; i < HG_MAX_AXES; i++) {
