@@ -7,9 +7,6 @@
  * Wire protocol and discovery: see the library's PROTOCOL.md.
  */
 
- // Define the nrF52 board version for the HalberdGripper library.
-#define BOARD_HALBERD_V2 
-
 #include <HalberdGripper.h>
 #include <Dwenguino.h>
 #include <Servo.h>

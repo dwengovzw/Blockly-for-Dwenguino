@@ -15,9 +15,6 @@
  * Output on the serial monitor at 115200 baud.
  */
 
-  // Define the nrF52 board version for the HalberdGripper library.
-#define BOARD_HALBERD_V2 
-
 #include <Dwenguino.h>
 
 #include <Arduino.h>
