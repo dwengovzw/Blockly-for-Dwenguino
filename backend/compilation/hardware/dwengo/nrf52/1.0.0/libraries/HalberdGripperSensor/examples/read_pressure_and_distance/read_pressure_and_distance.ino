@@ -9,6 +9,10 @@
  *
  * Readings are printed on the serial monitor at 115200 baud.
  */
+// Define the nrF52 board version for the HalberdGripper library.
+#define BOARD_HALBERD_V2
+ 
+#include <Dwenguino.h>
 #include <HalberdGripperSensor.h>
 #include <Arduino.h>
 
@@ -29,6 +33,7 @@ void printInitFailure(const char* busName, HalberdGripperSensor& candidate) {
 }
 
 void setup() {
+  initDwenguino();
 
   pinMode(LED_GREEN, OUTPUT);
   pinMode(LED_RED, OUTPUT);

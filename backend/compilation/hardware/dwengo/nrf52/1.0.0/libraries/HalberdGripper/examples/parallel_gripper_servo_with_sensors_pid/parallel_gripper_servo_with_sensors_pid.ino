@@ -6,6 +6,10 @@
  * Tune the pressure setpoint and gains for your gripper. This sensor's ADC
  * reading falls as grip pressure rises, and increasing servo angle closes the jaws.
  */
+ // Define the nrF52 board version for the HalberdGripper library.
+#define BOARD_HALBERD_V2 
+
+#include <Dwenguino.h>
 #include <Arduino.h>
 #include <HalberdGripper.h>
 #include <HalberdGripperSensor.h>
@@ -225,6 +229,8 @@ void updateControl(uint32_t now, float dt, int pressure) {
 
 /** @brief Initialize the sensors, set the servos to open, and advertise the BLE gripper. */
 void setup() {
+  initDwenguino();
+  
   Serial.begin(115200);
   sensors.setDebugOutput(false);
   sensors.setRangeTimingMs(10, 0);

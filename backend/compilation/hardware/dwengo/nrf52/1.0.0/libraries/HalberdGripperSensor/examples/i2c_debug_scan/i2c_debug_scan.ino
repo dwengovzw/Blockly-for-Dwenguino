@@ -14,6 +14,12 @@
  *
  * Output on the serial monitor at 115200 baud.
  */
+
+  // Define the nrF52 board version for the HalberdGripper library.
+#define BOARD_HALBERD_V2 
+
+#include <Dwenguino.h>
+
 #include <Arduino.h>
 #include <Wire.h>
 
@@ -83,6 +89,8 @@ void probeVL53L4CD(TwoWire& bus, const char* name) {
 }
 
 void setup() {
+  initDwenguino();
+
   Serial.begin(115200);
   while (!Serial) {
     delay(10);

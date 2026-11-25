@@ -6,7 +6,12 @@
  *
  * Wire protocol and discovery: see the library's PROTOCOL.md.
  */
+
+ // Define the nrF52 board version for the HalberdGripper library.
+#define BOARD_HALBERD_V2 
+
 #include <HalberdGripper.h>
+#include <Dwenguino.h>
 #include <Servo.h>
 
 // The name airo-mono uses to select THIS gripper. Make it unique in your lab.
@@ -71,6 +76,8 @@ int widthToAngle(float width) {
 
 
 void setup() {
+  initDwenguino();
+
   Serial.begin(115200);
 
   // min/max pulse widths (µs) for your specific servo — adjust to match
