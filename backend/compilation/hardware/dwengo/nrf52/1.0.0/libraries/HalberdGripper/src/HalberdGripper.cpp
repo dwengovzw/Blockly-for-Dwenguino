@@ -100,6 +100,14 @@ bool HalberdGripper::begin(const char* name) {
 
     pinMode(LED_BUILTIN, OUTPUT);
 
+    // Set notification queue size for BLE peripheral
+    Bluefruit.configPrphConn(
+        BLE_GATT_ATT_MTU_DEFAULT,
+        BLE_GAP_EVENT_LENGTH_DEFAULT,
+        4, // notification queue size
+        BLE_GATTC_WRITE_CMD_TX_QUEUE_SIZE_DEFAULT
+    );
+
     if (!Bluefruit.begin()) {
         return false;
     }
@@ -223,8 +231,9 @@ void HalberdGripper::update() {
         }
     }
 
-    // Rate-limited state notification
-    if (_stateDirty && (now - _lastStateNotifyMs) >= HG_STATE_NOTIFY_INTERVAL_MS) {
+    if (Bluefruit.connected() &&
+        (_stateDirty || (now - _lastStateNotifyMs) >= 1000) &&
+        (now - _lastStateNotifyMs) >= HG_STATE_NOTIFY_INTERVAL_MS) {
         notifyState(false);
     }
 
@@ -451,9 +460,15 @@ void HalberdGripper::handleCommand(const uint8_t* data, uint16_t len) {
 // Notifications
 // ---------------------------------------------------------------------------
 
-void HalberdGripper::sendEvent(uint8_t type, uint8_t seq) {
+/*void HalberdGripper::sendEvent(uint8_t type, uint8_t seq) {
     uint8_t frame[2] = { type, seq };
     _eventChr.notify(frame, sizeof(frame));
+}*/
+
+void HalberdGripper::sendEvent(uint8_t type, uint8_t seq) {
+    uint8_t frame[2] = { type, seq };
+    bool sent = _eventChr.notify(frame, sizeof(frame));
+    //Serial.printf("event type=%u seq=%u sent=%d\n", type, seq, sent);
 }
 
 void HalberdGripper::sendEvent(uint8_t type, uint8_t seq, uint8_t payloadByte) {
